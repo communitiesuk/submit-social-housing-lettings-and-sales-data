@@ -1,0 +1,38 @@
+version: '3.6'
+
+volumes:
+  dbdata:
+
+services:
+  db:
+    image: postgres:13.3-alpine
+    restart: always
+    # To preserve data between runs of docker-compose, we mount a folder from the host machine.
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - 5433:5432 # Mapped to 5433 in case Postgres is already running locally on 5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=data_collector
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        GIT_COMMIT_SHA: DOCKER_COMPOSE_GIT_COMMIT_SHA
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=data_collector
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=true
+      - SECRET_KEY_BASE=abcd1234

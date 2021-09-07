@@ -1,0 +1,142 @@
+name: 'CI/CD Pipeline'
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+concurrency: 'Beta - Production'
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13.3
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: data_collector
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        # tmpfs makes DB faster by using RAM
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.0.0
+      DB_HOST: localhost
+      DB_DATABASE: data_collector
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+
+      # Rails verifies the time zone in DB is the same as the time zone of the Rails app
+      TZ: "Europe/London"
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+          working-directory: ./data-collector
+
+      - name: Create DB
+        working-directory: ./data-collector
+        run: |
+          bundle exec rake db:prepare
+
+      - name: Compile Assets
+        working-directory: ./data-collector
+        run: |
+          bundle exec rake assets:precompile
+
+      - name: Run tests
+        working-directory: ./data-collector
+        run: |
+          bundle exec rake
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: 'Beta - Production'
+    needs:
+      - terraform
+      - test
+    timeout-minutes: 30
+    env:
+      AWS_REGION: eu-west-2
+      ECR_REPOSITORY: container-repository
+      ECS_SERVICE: app
+      ECS_CLUSTER: ecs-cluster
+      CONTAINER_NAME: app  # set this to the name of the container in the containerDefinitions section of your task definition
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-image
+      working-directory: ./data-collector
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and push it to ECR
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition app --query taskDefinition > task-definition.json
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
