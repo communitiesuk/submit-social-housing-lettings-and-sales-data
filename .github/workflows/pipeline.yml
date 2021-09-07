@@ -60,20 +60,16 @@ jobs:
         with:
           # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
-          working-directory: ./data-collector
 
       - name: Create DB
-        working-directory: ./data-collector
         run: |
           bundle exec rake db:prepare
 
       - name: Compile Assets
-        working-directory: ./data-collector
         run: |
           bundle exec rake assets:precompile
 
       - name: Run tests
-        working-directory: ./data-collector
         run: |
           bundle exec rake
 
@@ -108,7 +104,6 @@ jobs:
 
     - name: Build, tag, and push the image to Amazon ECR
       id: build-image
-      working-directory: ./data-collector
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
