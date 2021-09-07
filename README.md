@@ -12,10 +12,13 @@ Pre-requisites
 
 ### Setup Quickstart
 
-From the data-collector directory
+Copy the `.env.example` to `.env` and replace the database credentials with your local postgres user credentials.
 
+Create the database
+`rake db:create`
+
+Start the rails server
 ```
-rake db:create
 rails s
 ```
 This starts the rails server on localhost:3000
@@ -31,3 +34,8 @@ docker-compose up
 This exposes the rails server on localhost:8080.
 
 Note docker-compose runs the production docker image (RAILS_ENV=production) as the Dockerfile doesn't include development gems to keep the image size down.
+
+
+### Infrastructure
+
+The cloud infrastructure running this application is set up using the [infrastructure repository](https://github.com/communitiesuk/mhclg-data-collection-beta-infrastructure)
