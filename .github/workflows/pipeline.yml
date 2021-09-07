@@ -82,7 +82,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'Beta - Production'
     needs:
-      - terraform
       - test
     timeout-minutes: 30
     env:
