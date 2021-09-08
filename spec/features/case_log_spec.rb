@@ -6,6 +6,7 @@ RSpec.describe "Test Features" do
 
   it "Displays a tasklist header" do
     visit("/case_logs/342351")
-    expect(page).to have_content("Tasklist for log 342351")
+    expect(page).to have_content("Tasklist for log #{id}")
+    expect(page).to have_content("This submission is #{status}")
   end
 end
