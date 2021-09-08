@@ -25,10 +25,10 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "capybara"
-  gem "pry-byebug"
   gem "dotenv-rails"
-  gem "selenium-webdriver"
   gem "factory_bot_rails"
+  gem "pry-byebug"
+  gem "selenium-webdriver"
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
     gem lib, git: "https://github.com/rspec/#{lib}.git", branch: "main"
   end
@@ -40,12 +40,12 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "listen", "~> 3.3"
+  gem "overcommit", ">= 0.37.0", require: false
   gem "rack-mini-profiler", "~> 2.0"
   gem "rubocop-govuk"
   gem "rubocop-performance", require: false
   gem "rubocop-rails"
   gem "scss_lint-govuk"
-  gem "overcommit", ">= 0.37.0", require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
