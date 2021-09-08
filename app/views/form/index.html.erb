@@ -1,4 +1,5 @@
-<%= form_with url:'/test', builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_number_field :age, label: { text: "Age" } %>
-  <%= f.govuk_submit %>
-<% end %>
+<%= turbo_frame_tag "form" %>
+  <%= form_with url:'/test', builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_number_field :age, label: { text: "Age" } %>
+    <%= f.govuk_submit %>
+  <% end %>

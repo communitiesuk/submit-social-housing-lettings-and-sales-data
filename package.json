@@ -2,6 +2,9 @@
   "name": "data-collector",
   "private": true,
   "dependencies": {
+    "@hotwired/stimulus": "^3.0.0-beta.1",
+    "@hotwired/turbo": "^7.0.0-rc.3",
+    "@hotwired/turbo-rails": "^7.0.0-rc.3",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
