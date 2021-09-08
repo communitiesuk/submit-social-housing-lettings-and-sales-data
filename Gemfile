@@ -28,6 +28,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "dotenv-rails"
   gem "selenium-webdriver"
+  gem "factory_bot_rails"
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
     gem lib, git: "https://github.com/rspec/#{lib}.git", branch: "main"
   end

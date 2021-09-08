@@ -13,6 +13,9 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+require "factory_bot"
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -84,11 +87,14 @@ RSpec.configure do |config|
   #   # order dependency and want to debug it, you can fix the order by providing
   #   # the seed, which is printed after each run.
   #   #     --seed 1234
-  #   config.order = :random
+     config.order = :random
   #
   #   # Seed global randomization in this process using the `--seed` CLI option.
   #   # Setting this allows you to use `--seed` to deterministically reproduce
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+
+  config.include FactoryBot::Syntax::Methods
 end
