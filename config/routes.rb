@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
   get "/", to: "test#index"
   get "form", to: "form#index"
+
+  resources :case_logs
 end
