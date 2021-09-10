@@ -1,0 +1,28 @@
+<%# Placeholder until we have a real form schema %>
+<%
+  sections = {
+    "About the household" => ["Household characteristics", "Household situation", "Household needs"],
+    "Tenancy and property information" => ["Tenancy information", "Property information"],
+    "Rent and charges" => ["Income & benefits", "Rent"],
+    "Local Authority" => ["Local authority"],
+    "Submission" => ["Declaration"]
+  }
+%>
+
+<ol class="app-task-list app-task-list--no-numbers">
+  <% sections.map do |section, subsections| %>
+    <li>
+      <h2 class="app-task-list__section">
+        <span class="app-task-list__section-number"><%= section %></span>
+      </h2>
+      <ul class="app-task-list__items">
+        <% subsections.map do |subsection| %>
+          <li class="app-task-list__item">
+            <a class="task-name" href=""><%= subsection %></a>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ol>
