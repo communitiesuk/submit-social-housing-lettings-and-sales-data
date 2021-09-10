@@ -1,3 +1,29 @@
 <h1 class="govuk-heading-xl">Tasklist for log <%= @case_log.id %></h1>
 
 <h2 class="govuk-heading-s govuk-!-margin-bottom-2">This submission is <%= @case_log.status %></h2>
+
+<br />
+
+<ol class="app-task-list app-task-list--no-numbers">
+  <li>
+    <h2 class="app-task-list__section">
+      <span class="app-task-list__section-number">About the household</span>
+    </h2>
+    <ul class="app-task-list__items">
+      <li class="app-task-list__item">
+        <a class="task-name" href="">Household characteristics</a>
+        <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
+      </li>
+
+      <li class="app-task-list__item">
+        <a class="task-name" href="">Household situation</a>
+        <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
+      </li>
+
+      <li class="app-task-list__item">
+        <a class="task-name" href="">Household needs</a>
+        <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
+      </li>
+    </ul>
+  </li>
+</ol>
