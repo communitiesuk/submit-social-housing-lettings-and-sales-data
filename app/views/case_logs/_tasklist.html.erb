@@ -18,7 +18,7 @@
       <ul class="app-task-list__items">
         <% subsections.map do |subsection| %>
           <li class="app-task-list__item">
-            <a class="task-name" href="#"><%= subsection %></a>
+            <%= link_to subsection, edit_case_log_path, class: "task-name" %>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
           </li>
         <% end %>

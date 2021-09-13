@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Your logs</h1>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+
+    <a href="tasklist" class="govuk-button">Create new Log</a>
+
+    <%= render partial: "log_list", locals: { case_logs: @in_progress_case_logs, title: "Logs you need to complete", date_title: "Last Changed" } %>
+
+    <%= render partial: "log_list", locals: { case_logs: @submitted_case_logs, title: "Logs you've submitted", date_title: "Date Submitted" } %>
+
+    <p><a href="#" class="govuk-link">See all completed logs (<%= @submitted_case_logs.count %>)</a></p>
+  </div>
+</div>
