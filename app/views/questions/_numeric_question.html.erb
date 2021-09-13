@@ -1,4 +1,7 @@
 <div class="govuk-form-group">
     <label for="numeric_input"><%= label %></label>
+    <div id="numeric_hint" class="govuk-hint">
+        <%= hint_text %>
+    </div>
     <input id="numeric_input" class="govuk-input govuk-input--width-20" type="number" min=<%= minimum %> max=<%= maximum %> />
 </div>
