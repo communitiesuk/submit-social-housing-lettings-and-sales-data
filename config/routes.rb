@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
   get "/", to: "test#index"
   get "form", to: "form#index"
+  get "age", to: "form#age"
 
   resources :case_logs
 end
