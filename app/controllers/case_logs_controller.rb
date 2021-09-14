@@ -7,4 +7,21 @@ class CaseLogsController < ApplicationController
   def show
     @case_log = CaseLog.find(params[:id])
   end
+
+  def edit
+    @case_log = CaseLog.find(params[:id])
+    render 'case_logs/household/tenant_code'
+  end
+
+  def update
+    @case_log = CaseLog.find(params[:id])
+    @case_log.update(tenant_code: params[:case_log][:tenant_code]) if params[:case_log]
+    render_next_question(@case_log)
+  end
+
+  private 
+
+  def render_next_question(case_log)
+    render 'case_logs/household/tenant_age'
+  end
 end

@@ -15,4 +15,12 @@ RSpec.describe "Test Features" do
     expect(page).to have_field("age")
     expect(page).to have_button("Continue")
   end
+
+  it "displays the household questions when you click into that section" do
+    visit("/case_logs/#{id}")
+    click_link("Household characteristics")
+    expect(page).to have_field("case-log-tenant-code-field")
+    click_button("Save and continue")
+    expect(page).to have_field("case-log-tenant-age-field")
+  end
 end

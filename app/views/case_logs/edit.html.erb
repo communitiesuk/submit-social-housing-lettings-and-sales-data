@@ -1,8 +1,16 @@
-<%= form_with model: @case_log, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_number_field :age,
-        hint: { text: "More detail" },
-        label: { text: "What is the tenant's age?", size: "l"},
-        min: 0, max: 150, step: 1, width: 20
-  %>
-  <%= f.govuk_submit %>
-<% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Tasklist for log
+      <%= @case_log.id %></h1>
+
+    <h2 class="govuk-heading-s govuk-!-margin-bottom-2">This submission is
+      <%= @case_log.status %></h2>
+    <p class="govuk-body govuk-!-margin-bottom-7">You've completed 0 of 9 sections.</p>
+    <p class="govuk-body govuk-!-margin-bottom-7">
+      <a href="#">Skip to next incomplete section</a>
+    </p>
+
+    <%= render "tasklist" %>
+
+  </div>
+</div>
