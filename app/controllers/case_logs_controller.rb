@@ -7,10 +7,4 @@ class CaseLogsController < ApplicationController
   def show
     @case_log = CaseLog.find(params[:id])
   end
-
-  def edit
-  end
-
-  def new
-  end
 end
