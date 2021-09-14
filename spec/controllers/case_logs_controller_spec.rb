@@ -33,7 +33,6 @@ RSpec.describe CaseLogsController, type: :controller do
     describe "GET #edit" do
       it "returns a success response" do
         get :edit, params: { id: id }
-        puts response
         expect(response).to be_successful
       end
     end

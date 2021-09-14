@@ -30,6 +30,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry-byebug"
   gem "selenium-webdriver"
+  gem "simplecov"
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
     gem lib, git: "https://github.com/rspec/#{lib}.git", branch: "main"
   end
