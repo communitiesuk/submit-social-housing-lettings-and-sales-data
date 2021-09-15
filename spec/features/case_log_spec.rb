@@ -19,10 +19,10 @@ RSpec.describe "Test Features" do
   it "displays the household questions when you click into that section" do
     visit("/case_logs/#{id}")
     click_link("Household characteristics")
-    expect(page).to have_field("case-log-tenant-code-field")
+    expect(page).to have_field("tenant-code-field")
     click_button("Save and continue")
-    expect(page).to have_field("case-log-tenant-age-field")
+    expect(page).to have_field("tenant-age-field")
     click_button("Save and continue")
-    expect(page).to have_field("case-log-tenant-gender-0-field")
+    expect(page).to have_field("tenant-gender-0-field")
   end
 end
