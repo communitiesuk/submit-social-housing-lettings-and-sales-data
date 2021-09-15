@@ -38,7 +38,7 @@ class CaseLogsController < ApplicationController
              else
                previous_question = params[:previous_question]
                answer = params[previous_question]
-               @case_log.update(previous_question => answer)
+               @case_log.update!(previous_question => answer)
                NEXT_QUESTION[previous_question]
              end
     render result, locals: { case_log_id: @case_log.id }
