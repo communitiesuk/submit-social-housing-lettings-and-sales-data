@@ -20,14 +20,14 @@ class CaseLogsController < ApplicationController
   end
 
   FIRST_QUESTION_FOR_SUBSECTION = {
-    "Household characteristics" => "case_logs/household/tenant_code",
+    "Household characteristics" => "form/questions/household/tenant_code",
   }.freeze
 
   NEXT_QUESTION = {
-    "tenant_code" => "case_logs/household/tenant_age",
-    "tenant_age" => "case_logs/household/tenant_gender",
-    "tenant_gender" => "case_logs/household/tenant_ethnic_group",
-    "tenant_ethnic_group" => "case_logs/household/tenant_nationality",
+    "tenant_code" => "form/questions/household/tenant_age",
+    "tenant_age" => "form/questions/household/tenant_gender",
+    "tenant_gender" => "form/questions/household/tenant_ethnic_group",
+    "tenant_ethnic_group" => "form/questions/household/tenant_nationality",
   }.freeze
 
   def next_question
