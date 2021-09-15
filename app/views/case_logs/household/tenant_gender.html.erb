@@ -4,8 +4,11 @@
       OpenStruct.new(id: 2, name: "Non-binary"),
       OpenStruct.new(id: 3, name: "Prefer not to say")
   ] %>
-  
-  <%= form_with model: @case_log, method: "patch", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+
+<%= turbo_frame_tag "case_log_form" do %>
+  <%= form_with action: '/form', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :tenant_gender, genders, :id, :name, legend: { text: "Which of these best describes the tenant's gender identity?", size: "l" } %>
+    <%= f.hidden_field :previous_question, value: :tenant_gender %>
     <%= f.govuk_submit "Save and continue" %>
+  <% end %>
 <% end %>

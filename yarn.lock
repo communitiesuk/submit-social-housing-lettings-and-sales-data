@@ -885,14 +885,14 @@
   resolved "https://registry.npmjs.org/@csstools/convert-colors/-/convert-colors-1.4.0.tgz"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@hotwired/stimulus@^3.0.0-beta.1":
-  version "3.0.0-beta.1"
-  resolved "https://registry.npmjs.org/@hotwired/stimulus/-/stimulus-3.0.0-beta.1.tgz"
-  integrity sha512-CrKSNYwwWJ1rCZiKgPADrLwRlmBQdvdbTgYlATjZP4MaU2SvGQ0wo1vsjjr7qzfEUvP/14GBnuQfMuhvHGrCNQ==
+"@hotwired/stimulus@^3.0.0-beta.2":
+  version "3.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.0-beta.2.tgz#64ca67af9cc473ca97bb99d98fee5bc08e4c3914"
+  integrity sha512-rp2XojlugD0mvqi3qbqM660PbjqS7hnq/8FYa7SK/DL2rvWDu0/Ka3KW8cyXtcB1RiVG4nX5Oh4oq3nmuDjENQ==
 
 "@hotwired/turbo-rails@^7.0.0-rc.3":
   version "7.0.0-rc.3"
-  resolved "https://registry.npmjs.org/@hotwired/turbo-rails/-/turbo-rails-7.0.0-rc.3.tgz"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.0.0-rc.3.tgz#ebb088a0c9f6eed23a99b396c2ae59d0c57644e0"
   integrity sha512-J5NLTGSvlFW86pRxEm2WlYKdNeIkmQT9ZmIo1Rputj7BLymZYDCglaZ2vhMVFnQJ4qXEq4ttS3xeQt3cCG2Tdg==
   dependencies:
     "@hotwired/turbo" "^7.0.0-rc.3"
