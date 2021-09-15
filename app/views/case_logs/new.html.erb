@@ -1,8 +1,0 @@
-<%= form_with model: @case_log, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-  <%= f.govuk_number_field :age,
-        hint: { text: "More detail" },
-        label: { text: "What is the tenant's age?", size: "l"},
-        min: 0, max: 150, step: 1, width: 20
-  %>
-  <%= f.govuk_submit %>
-<% end %>

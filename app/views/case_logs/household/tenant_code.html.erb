@@ -1,11 +1,12 @@
 <%= turbo_frame_tag "case_log_form" do %>
-  <%= form_with action: '/form', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
      <%= f.govuk_text_field :tenant_code,
           hint: { text: "More detail" },
           label: { text: "What is the tenant code?", size: "l"},
           width: 20
     %>
     <%= f.hidden_field :previous_question, value: :tenant_code %>
+    <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
 <% end %>

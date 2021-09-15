@@ -6,9 +6,10 @@
   ] %>
 
 <%= turbo_frame_tag "case_log_form" do %>
-  <%= form_with action: '/form', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :tenant_gender, genders, :id, :name, legend: { text: "Which of these best describes the tenant's gender identity?", size: "l" } %>
     <%= f.hidden_field :previous_question, value: :tenant_gender %>
+    <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue" %>
   <% end %>
 <% end %>
