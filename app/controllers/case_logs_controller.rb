@@ -31,14 +31,16 @@ class CaseLogsController < ApplicationController
   }.freeze
 
   def next_question
-    @subsection = params[:subsection]
-    @case_log_id = params[:case_log_id]
-    result = if @subsection
-               FIRST_QUESTION_FOR_SUBSECTION[@subsection]
+    subsection = params[:subsection]
+    @case_log = CaseLog.find(params[:case_log_id])
+    result = if subsection
+               FIRST_QUESTION_FOR_SUBSECTION[subsection]
              else
-               @previous_question = params[:previous_question]
-               NEXT_QUESTION[@previous_question]
+               previous_question = params[:previous_question]
+               answer = params[previous_question]
+               @case_log.update(previous_question => answer)
+               NEXT_QUESTION[previous_question]
              end
-    render result, locals: { case_log_id: @case_log_id }
+    render result, locals: { case_log_id: @case_log.id }
   end
 end
