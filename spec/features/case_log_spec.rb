@@ -28,6 +28,15 @@ RSpec.describe "Test Features" do
       expect(page).to have_field("tenant-age-field")
       click_button("Save and continue")
       expect(page).to have_field("tenant-gender-0-field")
+      visit page.driver.request.env['HTTP_REFERER']
+      expect(page).to have_field("tenant-age-field")
+    end
+
+    describe "form questions" do
+      it "can be accessed by url" do
+        visit("/case_logs/#{id}/tenant_age")
+        expect(page).to have_field("tenant-age-field")
+      end
     end
   end
 end
