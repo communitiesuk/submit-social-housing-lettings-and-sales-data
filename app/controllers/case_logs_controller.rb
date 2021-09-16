@@ -19,29 +19,24 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:id])
   end
 
-  FIRST_QUESTION_FOR_SUBSECTION = {
-    "Household characteristics" => "form/questions/household/tenant_code",
-    "Household situation" => "case_logs/household_situation/previous_housing_situation"
-  }.freeze
-
-  NEXT_QUESTION = {
-    "tenant_code" => "form/questions/household/tenant_age",
-    "tenant_age" => "form/questions/household/tenant_gender",
-    "tenant_gender" => "form/questions/household/tenant_ethnic_group",
-    "tenant_ethnic_group" => "form/questions/household/tenant_nationality",
-  }.freeze
-
   def next_question
     subsection = params[:subsection]
     @case_log = CaseLog.find(params[:case_log_id])
-    result = if subsection
-               FIRST_QUESTION_FOR_SUBSECTION[subsection]
+    next_question = if subsection
+               Form::FIRST_QUESTION_FOR_SUBSECTION[subsection]
              else
                previous_question = params[:previous_question]
                answer = params[previous_question]
                @case_log.update!(previous_question => answer)
-               NEXT_QUESTION[previous_question]
+               Form::QUESTIONS[previous_question]
              end
-    render result, locals: { case_log_id: @case_log.id }
+    render next_question, locals: { case_log_id: @case_log.id }
+  end
+
+  Form::QUESTIONS.keys.each do |question|
+    define_method(question) do
+      @case_log = CaseLog.find(params[:case_log_id])
+      render "form/questions/#{question}", locals: { case_log_id: @case_log.id }
+    end
   end
 end
