@@ -1,0 +1,33 @@
+  <% genders = [
+      OpenStruct.new(id: 0, name: "Owner occupation (private)"),
+      OpenStruct.new(id: 1, name: "Owner occupation (low cost home ownership)"),
+      OpenStruct.new(id: 2, name: "Private sector tenancy"),
+      OpenStruct.new(id: 3, name: "Tied housing or rented with job"),
+      OpenStruct.new(id: 4, name: "Supported housing"),
+      OpenStruct.new(id: 5, name: "Sheltered accomodation"),
+      OpenStruct.new(id: 6, name: "Residential care home"),
+      OpenStruct.new(id: 7, name: "Living with friends or family"),
+      OpenStruct.new(id: 8, name: "Refuge"),
+      OpenStruct.new(id: 9, name: "Hospital"),
+      OpenStruct.new(id: 10, name: "Prison / Approved Probation Hostel"),
+      OpenStruct.new(id: 11, name: "Direct access hostel"),
+      OpenStruct.new(id: 12, name: "Bed & Breakfast"),
+      OpenStruct.new(id: 13, name: "Mobile home / caravan"),
+      OpenStruct.new(id: 14, name: "Any other temporary accommodation"),
+      OpenStruct.new(id: 15, name: "Home Office Asylum Support"),
+      OpenStruct.new(id: 16, name: "Children’s home / foster care"),
+      OpenStruct.new(id: 17, name: "Rough sleeping"),
+      OpenStruct.new(id: 18, name: "Other"),
+      OpenStruct.new(id: 19, name: "Fixed term Local Authority General Needs tenancy"),
+      OpenStruct.new(id: 20, name: "Lifetime Local Authority General Needs tenancy"),
+      OpenStruct.new(id: 21, name: "Fixed term PRP General Needs tenancy"),
+      OpenStruct.new(id: 22, name: "Lifetime PRP General Needs tenancy"),
+  ] %>
+
+<%= turbo_frame_tag "case_log_form" do %>
+  <%= form_with action: '/form', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_collection_radio_buttons :previous_housing_situation, genders, :id, :name, legend: { text: "What was the tenant’s housing situation immediately before this letting?", size: "l" } %>
+    <%= f.hidden_field :previous_question, value: :previous_housing_situation %>
+    <%= f.govuk_submit "Save and continue" %>
+  <% end %>
+<% end %>

@@ -2,6 +2,7 @@ class FormController < ApplicationController
 
   FIRST_QUESTION_FOR_SUBSECTION = {
     "Household characteristics" => "case_logs/household/tenant_code",
+    "Household situation" => "case_logs/household_situation/previous_housing_situation"
   }
 
   NEXT_QUESTION = {
