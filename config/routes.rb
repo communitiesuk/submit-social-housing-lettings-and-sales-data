@@ -4,10 +4,9 @@ Rails.application.routes.draw do
   get "/", to: "test#index"
 
   resources :case_logs do
-    get "form", to: "case_logs#next_question"
-    post "form", to: "case_logs#next_question"
     Form::QUESTIONS.keys.map do |question|
-      get "#{question}", to: "case_logs##{question}"
+      get question.to_s, to: "case_logs##{question}"
+      post question.to_s, to: "case_logs#next_question"
     end
   end
 end

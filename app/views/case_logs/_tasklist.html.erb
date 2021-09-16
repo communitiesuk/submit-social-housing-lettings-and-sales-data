@@ -1,25 +1,19 @@
-<%# Placeholder until we have a real form schema %>
-<%
-  sections = {
-    "About the household" => ["Household characteristics", "Household situation", "Household needs"],
-    "Tenancy and property information" => ["Tenancy information", "Property information"],
-    "Rent and charges" => ["Income & benefits", "Rent"],
-    "Local Authority" => ["Local authority"],
-    "Submission" => ["Declaration"]
-  }
-%>
-
 <ol class="app-task-list app-task-list--no-numbers">
-  <% sections.map do |section, subsections| %>
+  <% Form::SECTIONS.map do |section, subsections| %>
     <li>
       <h2 class="app-task-list__section">
-        <span class="app-task-list__section-number"><%= section %></span>
+        <span class="app-task-list__section-number">
+          <%= section.gsub('_', ' ').capitalize %>
+        </span>
       </h2>
       <ul class="app-task-list__items">
         <% subsections.map do |subsection| %>
           <li class="app-task-list__item">
-            <%= link_to subsection, case_log_form_path(@case_log, subsection: subsection), class: "task-name" %>
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag">Not started</strong>
+            <% first_question = Form.first_question_for_subsection(subsection) %>
+            <%= link_to subsection.gsub('_', ' ').capitalize, send("case_log_#{first_question}_path", @case_log), class: "task-name" %>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag">
+              Not started
+            </strong>
           </li>
         <% end %>
       </ul>

@@ -23,8 +23,8 @@
       OpenStruct.new(id: 21, name: "Fixed term PRP General Needs tenancy"),
       OpenStruct.new(id: 22, name: "Lifetime PRP General Needs tenancy"),
   ] %>
-  
-<%= turbo_frame_tag "case_log_form" do %>
+
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :previous_housing_situation, situations, :id, :name, legend: { text: "What was the tenant’s housing situation immediately before this letting?", size: "l" } %>
     <%= f.hidden_field :previous_question, value: :previous_housing_situation %>

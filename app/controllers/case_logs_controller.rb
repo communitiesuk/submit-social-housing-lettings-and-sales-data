@@ -20,20 +20,15 @@ class CaseLogsController < ApplicationController
   end
 
   def next_question
-    subsection = params[:subsection]
     @case_log = CaseLog.find(params[:case_log_id])
-    next_question = if subsection
-               Form::FIRST_QUESTION_FOR_SUBSECTION[subsection]
-             else
-               previous_question = params[:previous_question]
-               answer = params[previous_question]
-               @case_log.update!(previous_question => answer)
-               Form::QUESTIONS[previous_question]
-             end
-    render next_question, locals: { case_log_id: @case_log.id }
+    previous_question = params[:previous_question]
+    previous_answer = params[previous_question]
+    @case_log.update!(previous_question => previous_answer)
+    next_question = Form::QUESTIONS[previous_question]
+    redirect_to(send("case_log_#{next_question}_path", @case_log))
   end
 
-  Form::QUESTIONS.keys.each do |question|
+  Form::QUESTIONS.each_key do |question|
     define_method(question) do
       @case_log = CaseLog.find(params[:case_log_id])
       render "form/questions/#{question}", locals: { case_log_id: @case_log.id }
