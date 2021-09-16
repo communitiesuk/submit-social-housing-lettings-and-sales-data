@@ -11,10 +11,16 @@ RSpec.describe CaseLogsController, type: :controller do
       end
     end
 
-    describe "GET #new" do
-      it "returns a success response" do
-        get :new, params: {}, session: valid_session
-        expect(response).to be_successful
+    describe "Post #create" do
+      it "creates a new case log record" do
+        expect {
+          post :create, params: {}, session: valid_session
+        }.to change(CaseLog, :count).by(1)
+      end
+
+      it "redirects to that case log" do
+        post :create, params: {}, session: valid_session
+        expect(response.status).to eq(302)
       end
     end
   end

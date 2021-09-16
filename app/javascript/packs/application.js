@@ -15,3 +15,5 @@ import "@hotwired/turbo-rails"
 Rails.start()
 ActiveStorage.start()
 initAll()
+
+import "controllers"

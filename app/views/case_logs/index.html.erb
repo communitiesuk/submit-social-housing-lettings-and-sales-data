@@ -4,7 +4,7 @@
   </div>
   <div class="govuk-grid-column-two-thirds">
 
-    <a href="tasklist" class="govuk-button">Create new Log</a>
+    <%= link_to "Create new log", case_logs_path, method: :post, class: "govuk-button" %>
 
     <%= render partial: "log_list", locals: { case_logs: @in_progress_case_logs, title: "Logs you need to complete", date_title: "Last Changed" } %>
 
