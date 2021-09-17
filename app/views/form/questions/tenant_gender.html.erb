@@ -1,9 +1,14 @@
-  <% genders = [
-      OpenStruct.new(id: 0, name: "Male"),
-      OpenStruct.new(id: 1, name: "Female"),
-      OpenStruct.new(id: 2, name: "Non-binary"),
-      OpenStruct.new(id: 3, name: "Prefer not to say")
-  ] %>
+<% genders = [
+    OpenStruct.new(id: 0, name: "Male"),
+    OpenStruct.new(id: 1, name: "Female"),
+    OpenStruct.new(id: 2, name: "Non-binary"),
+    OpenStruct.new(id: 3, name: "Prefer not to say")
+] %>
+
+<% previous_question = Form.previous_question("tenant_gender") %>
+<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+  Back
+<% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>

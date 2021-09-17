@@ -14,4 +14,20 @@ RSpec.describe Form, type: :model do
       expect(Form.first_question_for_subsection(subsection)).to eq("tenant_code")
     end
   end
+
+  describe ".previous_question" do
+    context "given a question in the middle of a subsection" do
+      let(:current_question) { "tenant_age" }
+      it "returns the previous question given the current" do
+        expect(Form.previous_question(current_question)).to eq("tenant_code")
+      end
+    end
+
+    context "given the first question in a subsection" do
+      let(:current_question) { "tenant_code" }
+      it "returns empty string" do
+        expect(Form.previous_question(current_question)).to be_nil
+      end
+    end
+  end
 end

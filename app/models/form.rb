@@ -36,4 +36,8 @@ class Form < ApplicationRecord
   def self.next_question(previous_question)
     Form::QUESTIONS[previous_question]
   end
+
+  def self.previous_question(current_question)
+    Hash[QUESTIONS.to_a.map(&:reverse)][current_question]
+  end
 end
