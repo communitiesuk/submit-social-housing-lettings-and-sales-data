@@ -38,19 +38,19 @@ RSpec.describe "Test Features" do
         expect(page).to have_field("tenant-age-field")
       end
     end
-  end
 
-  describe "Back link directs correctly" do
-    it "go back to tasklist page from tenant code" do
-      visit("/case_logs/#{id}/tenant_code")
-      click_link(text: 'Back')
-      expect(page).to have_content("Tasklist for log #{id}")
-    end
+    describe "Back link directs correctly" do
+      it "go back to tasklist page from tenant code" do
+        visit("/case_logs/#{id}/tenant_code")
+        click_link(text: 'Back')
+        expect(page).to have_content("Tasklist for log #{id}")
+      end
 
-    it "go back to tenant code page from tenant age page" do
-      visit("/case_logs/#{id}/tenant_age")
-      click_link(text: 'Back')
-      expect(page).to have_field("tenant-code-field")
+      it "go back to tenant code page from tenant age page" do
+        visit("/case_logs/#{id}/tenant_age")
+        click_link(text: 'Back')
+        expect(page).to have_field("tenant-code-field")
+      end
     end
   end
 end
