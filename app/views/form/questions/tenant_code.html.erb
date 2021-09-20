@@ -1,9 +1,5 @@
-<% previous_question = Form.previous_question("tenant_code") %>
-<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
-  Back
-<% end %>
-
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <%= render GovukComponent::BackLinkComponent.new(href: "/case_logs/#{case_log_id}", text: 'Back') do %><% end %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
      <%= f.govuk_text_field :tenant_code,
           hint: { text: "More detail" },
