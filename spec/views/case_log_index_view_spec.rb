@@ -1,7 +1,7 @@
 require "rails_helper"
 RSpec.describe "case_logs/index" do
-  let(:in_progress_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:submitted_log) { FactoryBot.create(:case_log, :submitted) }
+  let(:in_progress_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:submitted_log) { FactoryBot.build(:case_log, :submitted) }
 
   context 'given an in progress log list' do
     it 'renders a table for in progress logs only' do
