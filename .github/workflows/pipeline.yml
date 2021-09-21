@@ -77,6 +77,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: 'Beta - Production'
+    if: github.ref == 'refs/heads/main'
     needs:
       - test
     timeout-minutes: 30
