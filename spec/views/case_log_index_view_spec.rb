@@ -3,8 +3,8 @@ RSpec.describe "case_logs/index" do
   let(:in_progress_log) { FactoryBot.build(:case_log, :in_progress) }
   let(:submitted_log) { FactoryBot.build(:case_log, :submitted) }
 
-  context 'given an in progress log list' do
-    it 'renders a table for in progress logs only' do
+  context "given an in progress log list" do
+    it "renders a table for in progress logs only" do
       assign(:in_progress_case_logs, [in_progress_log])
       assign(:submitted_case_logs, [])
       render
@@ -16,8 +16,8 @@ RSpec.describe "case_logs/index" do
     end
   end
 
-  context 'given a submitted log list' do
-    it 'renders a table for in progress logs only' do
+  context "given a submitted log list" do
+    it "renders a table for in progress logs only" do
       assign(:in_progress_case_logs, [])
       assign(:submitted_case_logs, [submitted_log])
       render
@@ -29,8 +29,8 @@ RSpec.describe "case_logs/index" do
     end
   end
 
-  context 'given a submitted log list and an in_progress log list' do
-    it 'renders two tables, one for each status' do
+  context "given a submitted log list and an in_progress log list" do
+    it "renders two tables, one for each status" do
       assign(:in_progress_case_logs, [in_progress_log])
       assign(:submitted_case_logs, [submitted_log])
       render

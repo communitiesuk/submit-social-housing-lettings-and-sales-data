@@ -11,7 +11,7 @@ FactoryBot.define do
       tenant_code { "BZ737" }
       postcode { "NW1 7TY" }
     end
-    created_at { Time.now }
-    updated_at { Time.now }
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
   end
 end
