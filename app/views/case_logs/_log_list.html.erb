@@ -15,8 +15,10 @@
         <%= link_to log.id, case_log_path(log) %>
       </th>
       <td class="govuk-table__cell govuk-table__cell">
+        <%= log.postcode %>
       </td>
       <td class="govuk-table__cell govuk-table__cell">
+        <%= log.tenant_code %>
       </td>
       <td id="last-changed" class="govuk-table__cell">
         <%= log.updated_at.strftime("%d %b %Y") %>

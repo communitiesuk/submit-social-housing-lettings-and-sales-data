@@ -1,6 +1,6 @@
 require "rails_helper"
 RSpec.describe "Test Features" do
-  let!(:case_log) { FactoryBot.create(:case_log) }
+  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 
@@ -8,14 +8,14 @@ RSpec.describe "Test Features" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
       click_link("Create new log")
-      id = CaseLog.first.id
+      id = CaseLog.order(created_at: :desc).first.id
       expect(page).to have_content("Tasklist for log #{id}")
     end
   end
 
   describe "Viewing a log" do
     it "displays a tasklist header" do
-      visit("/case_logs/342351")
+      visit("/case_logs/#{id}")
       expect(page).to have_content("Tasklist for log #{id}")
       expect(page).to have_content("This submission is #{status}")
     end
