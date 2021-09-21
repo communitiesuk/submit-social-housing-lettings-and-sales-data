@@ -28,7 +28,7 @@ RSpec.describe "Test Features" do
       expect(page).to have_field("tenant-age-field")
       click_button("Save and continue")
       expect(page).to have_field("tenant-gender-0-field")
-      visit page.driver.request.env['HTTP_REFERER']
+      visit page.driver.request.env["HTTP_REFERER"]
       expect(page).to have_field("tenant-age-field")
     end
 
@@ -42,13 +42,13 @@ RSpec.describe "Test Features" do
     describe "Back link directs correctly" do
       it "go back to tasklist page from tenant code" do
         visit("/case_logs/#{id}/tenant_code")
-        click_link(text: 'Back')
+        click_link(text: "Back")
         expect(page).to have_content("Tasklist for log #{id}")
       end
 
       it "go back to tenant code page from tenant age page" do
         visit("/case_logs/#{id}/tenant_age")
-        click_link(text: 'Back')
+        click_link(text: "Back")
         expect(page).to have_field("tenant-code-field")
       end
     end
