@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_09_22_103729) do
     t.integer "person_8_age"
     t.string "person_8_gender"
     t.string "person_8_economic"
+    t.string "postcode"
   end
 
 end

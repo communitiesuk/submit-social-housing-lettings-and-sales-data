@@ -1,6 +1,8 @@
 <% previous_question = Form.previous_question("tenant_age") %>
-<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
-  Back
+<% content_for :before_content do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+    Back
+  <% end %>
 <% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
