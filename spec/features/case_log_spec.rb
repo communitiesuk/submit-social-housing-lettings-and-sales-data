@@ -3,6 +3,7 @@ RSpec.describe "Test Features" do
   let!(:case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
+  pages = ['tenant_code', 'tenant_age', 'tenant_gender', 'tenant_ethnic_group', 'tenant_nationality', 'economic_status', 'other_household_members']
 
   describe "Create new log" do
     it "redirects to the task list for the new log" do
@@ -51,6 +52,17 @@ RSpec.describe "Test Features" do
       visit("/case_logs/#{id}/tenant_age")
       click_link(text: 'Back')
       expect(page).to have_field("tenant-code-field")
+    end
+  end
+
+  describe "Form flow is correct" do
+    it "given an ordered list of pages make sure each leads to the next one in order" do
+      pages[0..-2].each_with_index {
+        |val, index|
+        visit("/case_logs/#{id}/#{val}")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/case_logs/#{id}/#{pages[index+1]}")
+      }
     end
   end
 end

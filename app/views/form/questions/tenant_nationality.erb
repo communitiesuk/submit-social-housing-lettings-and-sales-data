@@ -1,0 +1,32 @@
+<% nationalities = [
+    OpenStruct.new(id: 0, ethnicity: "UK national resident in UK"),
+    OpenStruct.new(id: 1, ethnicity: "A current or former reserve in the UK Armed Forces (exc. National Service)"),
+    OpenStruct.new(id: 2, ethnicity: "UK national returning from residence overseas"),
+    OpenStruct.new(id: 3, ethnicity: "Czech Republic"),
+    OpenStruct.new(id: 4, ethnicity: "Estonia"),
+    OpenStruct.new(id: 5, ethnicity: "Hungary"),
+    OpenStruct.new(id: 6, ethnicity: "Latvia"),
+    OpenStruct.new(id: 7, ethnicity: "Lithuania"),
+    OpenStruct.new(id: 8, ethnicity: "Poland"),
+    OpenStruct.new(id: 9, ethnicity: "Slovakia"),
+    OpenStruct.new(id: 10, ethnicity: "Bulgaria"),
+    OpenStruct.new(id: 11, ethnicity: "Romania"),
+    OpenStruct.new(id: 12, ethnicity: "Ireland"),
+    OpenStruct.new(id: 13, ethnicity: "Other EU Economic Area (EEA country)"),
+    OpenStruct.new(id: 14, ethnicity: "Any other country"),
+    OpenStruct.new(id: 15, ethnicity: "Prefer not to say")
+] %>
+
+<% previous_question = Form.previous_question("tenant_nationality") %>
+<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+  Back
+<% end %>
+
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_collection_radio_buttons :tenant_nationality, nationalities, :id, :ethnicity, legend: { text: "What is the tenant’s ethnic group?", size: "l" } %>
+    <%= f.hidden_field :previous_question, value: :tenant_nationality %>
+    <%= f.hidden_field :case_log_id, value: case_log_id %>
+    <%= f.govuk_submit "Save and continue" %>
+  <% end %>
+<% end %>

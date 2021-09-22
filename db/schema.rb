@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_101759) do
+ActiveRecord::Schema.define(version: 2021_09_22_103729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,36 @@ ActiveRecord::Schema.define(version: 2021_09_14_101759) do
     t.string "previous_housing_situation"
     t.integer "prior_homelessness"
     t.string "armed_forces"
+    t.string "economic_status"
+    t.integer "number_of_other_members"
+    t.string "person_2_relationship"
+    t.integer "person_2_age"
+    t.string "person_2_gender"
+    t.string "person_2_economic"
+    t.string "person_3_relationship"
+    t.integer "person_3_age"
+    t.string "person_3_gender"
+    t.string "person_3_economic"
+    t.string "person_4_relationship"
+    t.integer "person_4_age"
+    t.string "person_4_gender"
+    t.string "person_4_economic"
+    t.string "person_5_relationship"
+    t.integer "person_5_age"
+    t.string "person_5_gender"
+    t.string "person_5_economic"
+    t.string "person_6_relationship"
+    t.integer "person_6_age"
+    t.string "person_6_gender"
+    t.string "person_6_economic"
+    t.string "person_7_relationship"
+    t.integer "person_7_age"
+    t.string "person_7_gender"
+    t.string "person_7_economic"
+    t.string "person_8_relationship"
+    t.integer "person_8_age"
+    t.string "person_8_gender"
+    t.string "person_8_economic"
   end
 
 end

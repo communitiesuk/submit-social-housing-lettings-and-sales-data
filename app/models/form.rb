@@ -26,6 +26,9 @@ class Form < ApplicationRecord
     "tenant_age" => "tenant_gender",
     "tenant_gender" => "tenant_ethnic_group",
     "tenant_ethnic_group" => "tenant_nationality",
+    "tenant_nationality" => "economic_status",
+    "economic_status" => "other_household_members",
+    "other_household_members" => "other_household_members",
     "previous_housing_situation" => "previous_housing_situation",
   }.freeze
 
