@@ -5,13 +5,13 @@ RSpec.describe "Test Features" do
   let(:status) { case_log.status }
 
   question_answers = {
-    tenant_code: {type: "text", answer: "BZ737"},
-    tenant_age: {type: "numeric", answer: 25},
-    tenant_gender: {type: "radio", answer: "1"},
-    tenant_ethnic_group: {type: "radio", answer: "2"},
-    tenant_nationality: {type: "radio", answer: "0"},
-    tenant_economic_status: {type: "radio", answer: "4"},
-    household_number_of_other_members: {type: "numeric", answer: 2},
+    tenant_code: { type: "text", answer: "BZ737" },
+    tenant_age: { type: "numeric", answer: 25 },
+    tenant_gender: { type: "radio", answer: "1" },
+    tenant_ethnic_group: { type: "radio", answer: "2" },
+    tenant_nationality: { type: "radio", answer: "0" },
+    tenant_economic_status: { type: "radio", answer: "4" },
+    household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
   describe "Create new log" do
@@ -56,14 +56,14 @@ RSpec.describe "Test Features" do
           visit("/case_logs/#{id}/#{question}")
           case type
           when "text"
-            fill_in("#{question}", with: answer)
+            fill_in(question.to_s, with: answer)
           when "radio"
-            choose("#{question.to_s.gsub('_', '-')}-#{answer}-field")
+            choose("#{question.to_s.tr('_', '-')}-#{answer}-field")
           else
-            fill_in("#{question}", with: answer)
+            fill_in(question.to_s, with: answer)
           end
           expect { click_button("Save and continue") }.to change {
-            case_log.reload.send("#{question}")
+            case_log.reload.send(question.to_s)
           }.from(original_value).to(answer)
         end
       end

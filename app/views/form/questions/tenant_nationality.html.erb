@@ -1,20 +1,20 @@
 <% nationalities = [
-    OpenStruct.new(id: 0, nationality: "UK national resident in UK"),
-    OpenStruct.new(id: 1, nationality: "A current or former reserve in the UK Armed Forces (exc. National Service)"),
-    OpenStruct.new(id: 2, nationality: "UK national returning from residence overseas"),
-    OpenStruct.new(id: 3, nationality: "Czech Republic"),
-    OpenStruct.new(id: 4, nationality: "Estonia"),
-    OpenStruct.new(id: 5, nationality: "Hungary"),
-    OpenStruct.new(id: 6, nationality: "Latvia"),
-    OpenStruct.new(id: 7, nationality: "Lithuania"),
-    OpenStruct.new(id: 8, nationality: "Poland"),
-    OpenStruct.new(id: 9, nationality: "Slovakia"),
-    OpenStruct.new(id: 10, nationality: "Bulgaria"),
-    OpenStruct.new(id: 11, nationality: "Romania"),
-    OpenStruct.new(id: 12, nationality: "Ireland"),
-    OpenStruct.new(id: 13, nationality: "Other EU Economic Area (EEA country)"),
-    OpenStruct.new(id: 14, nationality: "Any other country"),
-    OpenStruct.new(id: 15, nationality: "Prefer not to say")
+    OpenStruct.new(id: 0, value: "UK national resident in UK"),
+    OpenStruct.new(id: 1, value: "A current or former reserve in the UK Armed Forces (exc. National Service)"),
+    OpenStruct.new(id: 2, value: "UK national returning from residence overseas"),
+    OpenStruct.new(id: 3, value: "Czech Republic"),
+    OpenStruct.new(id: 4, value: "Estonia"),
+    OpenStruct.new(id: 5, value: "Hungary"),
+    OpenStruct.new(id: 6, value: "Latvia"),
+    OpenStruct.new(id: 7, value: "Lithuania"),
+    OpenStruct.new(id: 8, value: "Poland"),
+    OpenStruct.new(id: 9, value: "Slovakia"),
+    OpenStruct.new(id: 10, value: "Bulgaria"),
+    OpenStruct.new(id: 11, value: "Romania"),
+    OpenStruct.new(id: 12, value: "Ireland"),
+    OpenStruct.new(id: 13, value: "Other EU Economic Area (EEA country)"),
+    OpenStruct.new(id: 14, value: "Any other country"),
+    OpenStruct.new(id: 15, value: "Prefer not to say")
 ] %>
 
 <% previous_question = Form.previous_question("tenant_nationality") %>
@@ -26,7 +26,7 @@
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-    <%= f.govuk_collection_radio_buttons :tenant_nationality, nationalities, :id, legend: { text: "What is the tenant’s ethnic group?", size: "l" } %>
+    <%= f.govuk_collection_radio_buttons :tenant_nationality, nationalities, :id, :value, legend: { text: "What is the tenant’s ethnic group?", size: "l" } %>
     <%= f.hidden_field :previous_question, value: :tenant_nationality %>
     <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue" %>

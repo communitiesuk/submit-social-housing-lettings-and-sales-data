@@ -1,8 +1,8 @@
 <% genders = [
-    OpenStruct.new(id: 0, name: "Male"),
-    OpenStruct.new(id: 1, name: "Female"),
-    OpenStruct.new(id: 2, name: "Non-binary"),
-    OpenStruct.new(id: 3, name: "Prefer not to say")
+    OpenStruct.new(id: 0, value: "Male"),
+    OpenStruct.new(id: 1, value: "Female"),
+    OpenStruct.new(id: 2, value: "Non-binary"),
+    OpenStruct.new(id: 3, value: "Prefer not to say")
 ] %>
 
 <% previous_question = Form.previous_question("tenant_gender") %>
@@ -14,7 +14,7 @@
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
-    <%= f.govuk_collection_radio_buttons :tenant_gender, genders, :id, legend: { text: "Which of these best describes the tenant's gender identity?", size: "l" } %>
+    <%= f.govuk_collection_radio_buttons :tenant_gender, genders, :id, :value, legend: { text: "Which of these best describes the tenant's gender identity?", size: "l" } %>
     <%= f.hidden_field :previous_question, value: :tenant_gender %>
     <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue" %>
