@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2021_09_22_103729) do
     t.string "previous_housing_situation"
     t.integer "prior_homelessness"
     t.string "armed_forces"
+    t.string "postcode"
     t.string "economic_status"
     t.integer "number_of_other_members"
     t.string "person_2_relationship"
@@ -57,7 +58,6 @@ ActiveRecord::Schema.define(version: 2021_09_22_103729) do
     t.integer "person_8_age"
     t.string "person_8_gender"
     t.string "person_8_economic"
-    t.string "postcode"
   end
 
 end

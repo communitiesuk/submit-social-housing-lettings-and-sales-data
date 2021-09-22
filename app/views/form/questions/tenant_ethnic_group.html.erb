@@ -21,9 +21,12 @@
 ] %>
 
 <% previous_question = Form.previous_question("tenant_ethnic_group") %>
-<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
-  Back
+<% content_for :before_content do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+    Back
+  <% end %>
 <% end %>
+
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>

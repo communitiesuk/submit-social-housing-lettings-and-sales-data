@@ -13,9 +13,12 @@
 ] %>
 
 <% previous_question = Form.previous_question("economic_status") %>
-<%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
-  Back
+<% content_for :before_content do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+    Back
+  <% end %>
 <% end %>
+
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :economic_status, economic_statuses, :id, :ethnicity, legend: { text: "Which of these best describes the tenant's working situation?", size: "l" } %>
