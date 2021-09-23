@@ -1,0 +1,8 @@
+<%= f.govuk_number_field question_key,
+    hint: { text: question["hint_text"] },
+    label: { text: question["header"], size: "l"},
+    min: question["min"], max: question["max"], step: question["step"], width: 20
+%>
+<%= f.hidden_field :previous_page, value: question_key %>
+<%= f.hidden_field :case_log_id, value: case_log_id %>
+<%= f.govuk_submit "Save and continue"  %>

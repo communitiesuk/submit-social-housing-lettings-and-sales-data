@@ -29,7 +29,8 @@
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150
+                  "max": 150,
+                  "step": 1
                 }
               }
             },
@@ -42,10 +43,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Female",
-                    "2": "Male",
-                    "3": "Non-binary",
-                    "4": "Prefer not to say"
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
                   }
                 }
               }
@@ -144,7 +145,8 @@
                   "hint_text": "The maximum number of others is 7",
                   "type": "numeric",
                   "min": 0,
-                  "max": 7
+                  "max": 7,
+                  "step": 1
                 }
               }
             }

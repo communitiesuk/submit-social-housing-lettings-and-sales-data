@@ -1,0 +1,14 @@
+<% previous_page = form.previous_page(page_key) %>
+<% content_for :before_content do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_page}" do %>
+    Back
+  <% end %>
+<% end %>
+
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <% page_info["questions"].map do |question_key, question| %>
+      <%= render partial: "form/#{question["type"]}_question", locals: { case_log_id: case_log_id, question_key: question_key, question: question, f: f } %>
+    <% end %>
+  <% end %>
+<% end %>
