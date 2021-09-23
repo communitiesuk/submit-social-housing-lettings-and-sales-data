@@ -32,6 +32,11 @@ class Form
     all_subsections[subsection]["pages"]
   end
 
+  # Returns a hash with the questions as keys
+  def questions_for_page(page)
+    all_pages[page]["questions"]
+  end
+
   def first_page_for_subsection(subsection)
     pages_for_subsection(subsection).keys.first
   end
