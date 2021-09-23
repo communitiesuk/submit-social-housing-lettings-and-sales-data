@@ -24,10 +24,15 @@ class CaseLogsController < ApplicationController
     form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:case_log_id])
     previous_page = params[:previous_page]
-    previous_answer = params[previous_page]
-    @case_log.update!(previous_page => previous_answer)
+    questions_for_page = form.questions_for_page(previous_page).keys
+    answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
+    @case_log.update!(answers_for_page)
     next_page = form.next_page(previous_page)
     redirect_to(send("case_log_#{next_page}_path", @case_log))
+  end
+
+  def page_params(questions_for_page)
+    params.permit(questions_for_page)
   end
 
   form = Form.new(2021, 2022)

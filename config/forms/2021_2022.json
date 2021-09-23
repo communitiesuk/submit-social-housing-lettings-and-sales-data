@@ -169,12 +169,12 @@
         "household_needs": {
           "label": "Household needs",
           "pages": {
-            "tenant_code":{
+            "previous_housing_situation":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
-                  "header": "What is the tenant code?",
+                "previous_housing_situation": {
+                  "header": "What was the tenant’s housing situation immediately before this letting?",
                   "hint_text": "",
                   "type": "text"
                 }
@@ -190,11 +190,11 @@
         "tenancy_information": {
           "label": "Tenancy information",
           "pages": {
-            "tenant_code":{
+            "tenant_code_1":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_1": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -206,11 +206,11 @@
         "property_information": {
           "label": "Property information",
           "pages": {
-            "tenant_code":{
+            "tenant_code_2":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_2": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -227,11 +227,11 @@
         "income_and_benefits": {
           "label": "Income and benefits",
           "pages": {
-            "tenant_code":{
+            "tenant_code_3":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_3": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -243,11 +243,11 @@
         "rent": {
           "label": "Rent",
           "pages": {
-            "tenant_code":{
+            "tenant_code_4":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_4": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -264,11 +264,11 @@
         "local_authority": {
           "label": "Local authority",
           "pages": {
-            "tenant_code":{
+            "tenant_code_5":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_5": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -285,11 +285,11 @@
         "declaration": {
           "label": "Declaration",
           "pages": {
-            "tenant_code":{
+            "tenant_code_6":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
+                "tenant_code_6": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
