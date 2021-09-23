@@ -36,10 +36,10 @@ class CaseLogsController < ApplicationController
   end
 
   form = Form.new(2021, 2022)
-  form.all_pages.keys.map do |page|
-    define_method(page) do
+  form.all_pages.map do |page_key, page_info|
+    define_method(page_key) do
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/pages/#{page}", locals: { case_log_id: @case_log.id, form: form }
+      render "form/page", locals: { case_log_id: @case_log.id, form: form, page_key: page_key, page_info: page_info }
     end
   end
 end
