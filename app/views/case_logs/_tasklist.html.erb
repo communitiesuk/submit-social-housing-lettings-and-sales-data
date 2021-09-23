@@ -1,16 +1,16 @@
 <ol class="app-task-list app-task-list--no-numbers">
-  <% Form::SECTIONS.map do |section, subsections| %>
+  <% @form.all_sections.map do |section_key, section_value| %>
     <li>
       <h2 class="app-task-list__section">
         <span class="app-task-list__section-number">
-          <%= section.gsub('_', ' ').capitalize %>
+          <%= section_value["label"] %>
         </span>
       </h2>
       <ul class="app-task-list__items">
-        <% subsections.map do |subsection| %>
+        <% section_value["subsections"].map do |subsection_key, subsection_value| %>
           <li class="app-task-list__item">
-            <% first_question = Form.first_question_for_subsection(subsection) %>
-            <%= link_to subsection.gsub('_', ' ').capitalize, send("case_log_#{first_question}_path", @case_log), class: "task-name" %>
+            <% first_page = @form.first_page_for_subsection(subsection_key) %>
+            <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name" %>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag">
               Not started
             </strong>

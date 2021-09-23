@@ -24,17 +24,17 @@
     OpenStruct.new(id: 22, value: "Lifetime PRP General Needs tenancy"),
 ] %>
 
-<% previous_question = Form.previous_question("previous_housing_situation") %>
+<% previous_page = form.previous_page("previous_housing_situation") %>
 <% content_for :before_content do %>
-  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_page}" do %>
     Back
   <% end %>
 <% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
-  <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :previous_housing_situation, situations, :id, :value, legend: { text: "What was the tenant’s housing situation immediately before this letting?", size: "l" } %>
-    <%= f.hidden_field :previous_question, value: :previous_housing_situation %>
+    <%= f.hidden_field :previous_page, value: :previous_housing_situation %>
     <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue" %>
   <% end %>

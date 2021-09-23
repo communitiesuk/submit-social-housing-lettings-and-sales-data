@@ -1,0 +1,304 @@
+{
+  "form_type": "lettings",
+  "start_year": 2021,
+  "end_year": 2022,
+  "sections": {
+    "household": {
+      "label": "About the household",
+      "subsections": {
+        "household_characteristics": {
+          "label": "Household characteristics",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            },
+            "tenant_age":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_age": {
+                  "header": "What is the tenant's age?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150
+                }
+              }
+            },
+            "tenant_gender":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_gender": {
+                  "header": "Which of these best describes the tenant's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": "Female",
+                    "2": "Male",
+                    "3": "Non-binary",
+                    "4": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "tenant_ethnic_group":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_ethnic_group": {
+                  "header": "What is the tenant's ethnic group?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "White: English/Scottish/Welsh/Northern Irish/British",
+                    "1": "White: Irish",
+                    "2": "White: Gypsy/Irish Traveller",
+                    "3": "White: Other",
+                    "4": "Mixed: White & Black Caribbean",
+                    "5": "Mixed: White & Black African",
+                    "6": "Mixed: White & Asian",
+                    "7": "Mixed: Other",
+                    "8": "Asian or Asian British: Indian",
+                    "9": "Asian or Asian British: Pakistani",
+                    "10": "Asian or Asian British: Bangladeshi",
+                    "11": "Asian or Asian British: Chinese",
+                    "12": "Asian or Asian British: Other",
+                    "13": "Black: Caribbean",
+                    "14": "Black: African",
+                    "15": "Black: Other",
+                    "16": "Other Ethnic Group: Arab",
+                    "17": "Other Ethnic Group: Other",
+                    "18": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "tenant_nationality":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_nationality": {
+                  "header": "What is the tenant's nationality?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "UK national resident in UK",
+                    "1": "A current or former reserve in the UK Armed Forces (exc. National Service)",
+                    "2": "UK national returning from residence overseas",
+                    "3": "Czech Republic",
+                    "4": "Estonia",
+                    "5": "Hungary",
+                    "6": "Latvia",
+                    "7": "Lithuania",
+                    "8": "Poland",
+                    "9": "Slovakia",
+                    "10": "Bulgaria",
+                    "11": "Romania",
+                    "12": "Ireland",
+                    "13": "Other EU Economic Area (EEA country)",
+                    "14": "Any other country",
+                    "15": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "tenant_economic_status":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_economic_status": {
+                  "header": "Which of these best describes the tenant's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "household_number_of_other_members":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "household_number_of_other_members": {
+                  "header": "How many other people are there in the household?",
+                  "hint_text": "The maximum number of others is 7",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 7
+                }
+              }
+            }
+          }
+        },
+        "household_situation": {
+          "label": "Household situation",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        },
+        "household_needs": {
+          "label": "Household needs",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tenancy_and_property": {
+      "label": "Tenancy and property information",
+      "subsections": {
+        "tenancy_information": {
+          "label": "Tenancy information",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        },
+        "property_information": {
+          "label": "Property information",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "rent_and_charges": {
+      "label": "Rent and charges",
+      "subsections": {
+        "income_and_benefits": {
+          "label": "Income and benefits",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        },
+        "rent": {
+          "label": "Rent",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "local_authority": {
+      "label": "Local authority",
+      "subsections": {
+        "local_authority": {
+          "label": "Local authority",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "submission": {
+      "label": "Submission",
+      "subsections": {
+        "declaration": {
+          "label": "Declaration",
+          "pages": {
+            "tenant_code":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "tenant_code": {
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

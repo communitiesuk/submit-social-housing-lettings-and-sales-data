@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   get "/", to: "test#index"
 
   resources :case_logs do
-    Form::QUESTIONS.keys.map do |question|
-      get question.to_s, to: "case_logs##{question}"
-      post question.to_s, to: "case_logs#next_question"
+    Form.new(2021, 2022).all_pages.keys.map do |page|
+      get page.to_s, to: "case_logs##{page}"
+      post page.to_s, to: "case_logs#next_page"
     end
   end
 end

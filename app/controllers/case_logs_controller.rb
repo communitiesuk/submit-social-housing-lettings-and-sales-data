@@ -11,27 +11,30 @@ class CaseLogsController < ApplicationController
 
   # We don't have a dedicated non-editable show view
   def show
-    @case_log = CaseLog.find(params[:id])
-    render :edit
+    edit
   end
 
   def edit
+    @form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
+    render :edit, locals: { form: @form }
   end
 
-  def next_question
+  def next_page
+    form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:case_log_id])
-    previous_question = params[:previous_question]
-    previous_answer = params[previous_question]
-    @case_log.update!(previous_question => previous_answer)
-    next_question = Form::QUESTIONS[previous_question]
-    redirect_to(send("case_log_#{next_question}_path", @case_log))
+    previous_page = params[:previous_page]
+    previous_answer = params[previous_page]
+    @case_log.update!(previous_page => previous_answer)
+    next_page = form.next_page(previous_page)
+    redirect_to(send("case_log_#{next_page}_path", @case_log))
   end
 
-  Form::QUESTIONS.each_key do |question|
-    define_method(question) do
+  form = Form.new(2021, 2022)
+  form.all_pages.keys.map do |page|
+    define_method(page) do
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/questions/#{question}", locals: { case_log_id: @case_log.id }
+      render "form/pages/#{page}", locals: { case_log_id: @case_log.id, form: form }
     end
   end
 end
