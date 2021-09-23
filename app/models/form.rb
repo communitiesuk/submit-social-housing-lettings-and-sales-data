@@ -1,46 +1,59 @@
-class Form < ApplicationRecord
-  self.abstract_class = true
+class Form
 
-  SECTIONS = {
-    "About the household" => %w[household_characteristics household_situation household_needs],
-    "Tenancy and property information" => %w[tenancy_information property_information],
-    "Rent and charges" => %w[income_and_benefits rent],
-    "Local Authority" => %w[local_authority],
-    "Submission" => %w[declaration],
-  }.freeze
+  attr_reader :form_definition, :all_sections, :all_subsections, :all_pages
 
-  SUBSECTIONS = {
-    "household_characteristics" => "tenant_code",
-    "household_situation" => "previous_housing_situation",
-    "household_needs" => "tenant_code",
-    "tenancy_information" => "tenant_code",
-    "property_information" => "tenant_code",
-    "income_and_benefits" => "tenant_code",
-    "rent" => "tenant_code",
-    "local_authority" => "tenant_code",
-    "declaration" => "tenant_code",
-  }.freeze
+  def initialize(start_year, end_year)
+    form_json = "config/forms/#{start_year}_#{end_year}.json"
+    raise "No form definition file exists for given year".freeze unless File.exist?(form_json)
 
-  QUESTIONS = {
-    "tenant_code" => "tenant_age",
-    "tenant_age" => "tenant_gender",
-    "tenant_gender" => "tenant_ethnic_group",
-    "tenant_ethnic_group" => "tenant_nationality",
-    "tenant_nationality" => "tenant_economic_status",
-    "tenant_economic_status" => "household_number_of_other_members",
-    "household_number_of_other_members" => "household_number_of_other_members",
-    "previous_housing_situation" => "previous_housing_situation",
-  }.freeze
-
-  def self.first_question_for_subsection(subsection)
-    SUBSECTIONS[subsection]
+    @form_definition = JSON.load(File.new(form_json))
   end
 
-  def self.next_question(previous_question)
-    Form::QUESTIONS[previous_question]
+  # Returns a hash with sections as keys
+  def all_sections
+    @sections ||= @form_definition["sections"]
   end
 
-  def self.previous_question(current_question)
-    Hash[QUESTIONS.to_a.map(&:reverse)][current_question]
+  # Returns a hash with subsections as keys
+  def all_subsections
+    @subsections ||= all_sections.map do |section_key, section_value|
+      section_value["subsections"]
+    end.reduce(:merge)
+  end
+
+  # Returns a hash with pages as keys
+  def all_pages
+    @all_pages ||= all_subsections.map do |subsection_key, subsection_value|
+      subsection_value["pages"]
+    end.reduce(:merge)
+  end
+
+  # Returns a hash with the pages as keys
+  def pages_for_subsection(subsection)
+    all_subsections[subsection]["pages"]
+  end
+
+  def first_page_for_subsection(subsection)
+    pages_for_subsection(subsection).keys.first
+  end
+
+  def subsection_for_page(page)
+    all_subsections.find do |subsection_key, subsection_value|
+      subsection_value["pages"].keys.include?(page)
+    end.first
+  end
+
+  def next_page(previous_page)
+    subsection = subsection_for_page(previous_page)
+    previous_page_idx = pages_for_subsection(subsection).keys.index(previous_page)
+    pages_for_subsection(subsection).keys[previous_page_idx + 1] || previous_page # Placeholder until we have a check answers page
+  end
+
+  def previous_page(current_page)
+    subsection = subsection_for_page(current_page)
+    current_page_idx = pages_for_subsection(subsection).keys.index(current_page)
+    return unless current_page_idx > 0
+
+    pages_for_subsection(subsection).keys[current_page_idx - 1]
   end
 end

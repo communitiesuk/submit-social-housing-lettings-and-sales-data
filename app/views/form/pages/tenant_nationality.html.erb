@@ -17,17 +17,17 @@
     OpenStruct.new(id: 15, value: "Prefer not to say")
 ] %>
 
-<% previous_question = Form.previous_question("tenant_nationality") %>
+<% previous_page = form.previous_page("tenant_nationality") %>
 <% content_for :before_content do %>
-  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_question}" do %>
+  <%= govuk_back_link href: "/case_logs/#{case_log_id}/#{previous_page}" do %>
     Back
   <% end %>
 <% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
-  <%= form_with action: '/case_logs', method: "next_question", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_collection_radio_buttons :tenant_nationality, nationalities, :id, :value, legend: { text: "What is the tenant’s ethnic group?", size: "l" } %>
-    <%= f.hidden_field :previous_question, value: :tenant_nationality %>
+    <%= f.hidden_field :previous_page, value: :tenant_nationality %>
     <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue" %>
   <% end %>
