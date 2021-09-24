@@ -155,14 +155,115 @@
         "household_situation": {
           "label": "Household situation",
           "pages": {
-            "tenant_code":{
+            "previous_housing_situation":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code": {
-                  "header": "What is the tenant code?",
+                "previous_housing_situation": {
+                  "header": "What was the tenant’s housing situation immediately before this letting?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Owner occupation (private) ",
+                    "1": "Owner occupation (low cost home ownership)",
+                    "2": "Private sector tenancy",
+                    "3": "Tied housing or rented with job",
+                    "4": "Supported housing",
+                    "5": "Sheltered accomodation",
+                    "6": "Residential care home",
+                    "7": "Living with friends or family",
+                    "8": "Refuge",
+                    "9": "Hospital",
+                    "10": "Prison / approved probation hostel",
+                    "11": "Direct access hostel",
+                    "12": "Bed & Breakfast",
+                    "13": "Mobile home / caravan",
+                    "14": "Any other temporary accommodation",
+                    "15": "Home Office Asylum Support",
+                    "16": "Children’s home / foster care",
+                    "17": "Rough sleeping",
+                    "18": "Other",
+                    "19": "Fixed term Local Authority General Needs tenancy",
+                    "20": "Lifetime Local Authority General Needs tenancy",
+                    "21": "Fixed term PRP General Needs tenancy",
+                    "22": "Lifetime PRP General Needs tenancy"
+                  }
+                }
+              }
+            },
+            "homelessness":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "homelessness": {
+                  "header": "Did the tenant experience homelessness immediately before this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days",
+                    "1": "Yes - other homelessness ",
+                    "2": "No"
+                  }
+                }
+              }
+            },
+            "last_settled_home":{
+              "header": "Leaving their last settled home",
+              "description": "",
+              "questions":{
+                "last_settled_home": {
+                  "header": "What is the tenant’s main reason for leaving?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Permanently decanted from another property owned by this landlord",
+                    "1": "Left home country as a refugee",
+                    "2": "Loss of tied accommodation",
+                    "3": "Domestic abuse",
+                    "4": "(Non violent) relationship breakdown with partner",
+                    "5": "Asked to leave by family or friends",
+                    "6": "Racial harassment",
+                    "7": "Other problems with neighbours",
+                    "8": "Property unsuitable because of overcrowding",
+                    "9": "End of assured shorthold tenancy - no fault",
+                    "10": "End of assured shorthold tenancy - tenant's fault",
+                    "11": "End of fixed term tenancy - no fault",
+                    "12": "End of fixed term tenancy - tenant's fault",
+                    "13": "Repossession",
+                    "14": "Under occupation - offered incentive to downsize",
+                    "15": "Under occupation - no incentive",
+                    "16": "Property unsuitable because of ill health / disability",
+                    "17": "Property unsuitable because of poor condition",
+                    "18": "Couldn't afford fees attached to renewing the tenancy",
+                    "19": "Couldn't afford increase in rent",
+                    "20": "Couldn't afford rent or mortgage - welfare reforms",
+                    "21": "Couldn't afford rent or mortgage - employment",
+                    "22": "Couldn't afford rent or mortgage - other",
+                    "23": "To move nearer to family / friends / school",
+                    "24": "To move nearer to work",
+                    "25": "To move to accomodation with support",
+                    "26": "To move to independent accomodation",
+                    "27": "Hate crime",
+                    "28": "Death of household member in last settled accomodation",
+                    "29": "Discharged from prison",
+                    "30": "Discharged from long stay hospital or similar institution",
+                    "31": "Other",
+                    "32": "Do not know",
+                    "33": "Prefer not to say"
+                  }
+                },
+                "benefit_cap_spare_room_subsidy": {
+                  "header": "Was the reason for leaving because of the benefit cap or removal of the spare room subsidy?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes - benefit cap",
+                    "1": "Yes - removal of the spare room subsidy",
+                    "2": "Yes - both the benefit cap and the removal of the spare room subsidy",
+                    "3": "No",
+                    "4": "Do not know",
+                    "5": "Prefer not to say"
+                  }
                 }
               }
             }
@@ -171,12 +272,12 @@
         "household_needs": {
           "label": "Household needs",
           "pages": {
-            "previous_housing_situation":{
+            "tenant_code_0":{
               "header": "",
               "description": "",
               "questions":{
-                "previous_housing_situation": {
-                  "header": "What was the tenant’s housing situation immediately before this letting?",
+                "tenant_code_0": {
+                  "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
                 }

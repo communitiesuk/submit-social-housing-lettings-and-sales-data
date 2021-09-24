@@ -10,5 +10,6 @@
     <% page_info["questions"].map do |question_key, question| %>
       <%= render partial: "form/#{question["type"]}_question", locals: { case_log_id: case_log_id, question_key: question_key, question: question, f: f } %>
     <% end %>
+    <%= f.govuk_submit "Save and continue"  %>
   <% end %>
 <% end %>
