@@ -1,6 +1,7 @@
 require "rails_helper"
 RSpec.describe "Test Features" do
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let!(:check_answers_case_log) { FactoryBot.create(:case_log, :near_check_answers_household_characteristics) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 
@@ -93,6 +94,24 @@ RSpec.describe "Test Features" do
           click_button("Save and continue")
           expect(page).to have_current_path("/case_logs/#{id}/#{pages[index + 1]}")
         end
+      end
+    end
+  end
+
+  describe "check answers page" do
+    let(:subsection) { "household_characteristics" }
+
+    context "only one questions remains to be answered for the household characteristics section" do
+      # it "redirects to the check answers page when answering the last question and clicking save and continue" do
+      #   visit("/case_logs/#{check_answers_case_log.id}/household_number_of_other_members")
+      #   fill_in("household_number_of_other_members", with: 0)
+      #   click_button("Save and continue")
+      #   expect(page).to have_current_path("/case_logs/#{check_answers_case_log.id}/check-answers")
+      # end
+
+      it "can be visited by URL" do
+        visit("case_logs/#{case_log.id}/#{subsection}/check_answers")
+        expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
       end
     end
   end

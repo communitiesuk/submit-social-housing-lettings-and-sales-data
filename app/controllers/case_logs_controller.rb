@@ -31,6 +31,11 @@ class CaseLogsController < ApplicationController
     redirect_to(send("case_log_#{next_page}_path", @case_log))
   end
 
+  def check_answers
+    @case_log = CaseLog.find(params[:case_log_id])
+    render "form/check_answers", locals: { case_log_id: @case_log.id }
+  end
+
   form = Form.new(2021, 2022)
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do

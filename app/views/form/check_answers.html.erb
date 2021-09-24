@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <h1 class="govuk-heading-l">Check the answers you gave for household characteristics</h1>
+  <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+    <%= f.govuk_submit "Save and continue"  %>
+  <% end %>
+<% end %>
