@@ -1,5 +1,5 @@
 <% answer_options = question["answer_options"].map { |k, v| OpenStruct.new(id: k.to_i, value: v) } %>
 
-<%= f.govuk_collection_radio_buttons question_key, answer_options, :id, :value, legend: { text: question["header"], size: "l" }, hint: { text: question["hint_text"] } %>
+<%= f.govuk_collection_check_boxes question_key, answer_options, :id, :value, legend: { text: question["header"], size: "l" }, hint: { text: question["hint_text"] } %>
 <%= f.hidden_field :previous_page, value: page_key %>
 <%= f.hidden_field :case_log_id, value: case_log_id %>

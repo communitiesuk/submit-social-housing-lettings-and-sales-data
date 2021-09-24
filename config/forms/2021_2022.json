@@ -272,14 +272,129 @@
         "household_needs": {
           "label": "Household needs",
           "pages": {
-            "tenant_code_0":{
+            "armed_forces":{
+              "header": "Experience of the UK Armed Forces",
+              "description": "",
+              "questions":{
+                "armed_forces": {
+                  "header": "Has the tenant ever served in the UK armed forces?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes - a regular",
+                    "1": "Yes - a reserve",
+                    "2": "No",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "armed_forces_active": {
+                  "header": "Are they still serving?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No - they left up to 5 years ago",
+                    "2": "No - they left more than 5 years ago",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "armed_forces_injured": {
+                  "header": "Were they seriously injured or ill as a result of their service?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Prefer not to say"
+                  }
+                },
+                "armed_forces_partner": {
+                  "header": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes - was the spouse or civil partner of a UK Armed Forces member and have separated within the last 2 years",
+                    "1": "Yes - was the spouse or civil partner of a UK Armed Forces member who died within the last 2 years",
+                    "2": "No",
+                    "3": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "medical_conditions": {
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code_0": {
-                  "header": "What is the tenant code?",
+                "medical_conditions": {
+                  "header": "Does anyone in the household have a physical condition, mental health condition, or other illness that they expect to last for 12 months or more?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Do not know",
+                    "3": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "pregnancy": {
+              "header": "",
+              "description": "",
+              "questions":{
+                "pregnancy": {
+                  "header": "Is anyone in the household pregnant?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "accessibility_requirements": {
+              "header": "",
+              "description": "",
+              "questions":{
+                "accessibility_requirements": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Fully wheelchair accessible housing",
+                    "1": "Wheelchair access to essential rooms",
+                    "2": "Level access housing",
+                    "3": "Other disability requirements",
+                    "4": "No disability requirements",
+                    "5": "Do not know",
+                    "6": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "condition_effects": {
+              "header": "",
+              "description": "",
+              "questions":{
+                "condition_effects": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Vision - such as blindness or partial sight ",
+                    "1": "Hearing - such as deafness or partial hearing ",
+                    "2": "Mobility - such as walking short distances or climbing stairs ",
+                    "3": "Dexterity - such as lifting and carrying objects or using a keyboard ",
+                    "4": "Stamina or breathing or fatigue",
+                    "5": "Learning or understanding or concentrating",
+                    "6": "Memory",
+                    "7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
+                    "8": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
                 }
               }
             }

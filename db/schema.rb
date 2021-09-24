@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_085939) do
+ActiveRecord::Schema.define(version: 2021_09_24_103433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,15 @@ ActiveRecord::Schema.define(version: 2021_09_24_085939) do
     t.string "person_8_gender"
     t.string "person_8_economic"
     t.string "homelessness"
+    t.string "last_settled_home"
+    t.string "benefit_cap_spare_room_subsidy"
+    t.string "armed_forces_active"
+    t.string "armed_forces_injured"
+    t.string "armed_forces_partner"
+    t.string "medical_conditions"
+    t.string "pregnancy"
+    t.string "accessibility_requirements"
+    t.string "condition_effects"
   end
 
 end
