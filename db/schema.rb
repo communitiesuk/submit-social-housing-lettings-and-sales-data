@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_115154) do
+ActiveRecord::Schema.define(version: 2021_09_24_143031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,26 @@ ActiveRecord::Schema.define(version: 2021_09_24_115154) do
     t.string "property_major_repairs_date"
     t.string "property_number_of_times_relet"
     t.string "property_wheelchair_accessible"
+    t.string "net_income"
+    t.string "net_income_frequency"
+    t.string "net_income_uc_proportion"
+    t.string "housing_benefit"
+    t.string "rent_frequency"
+    t.string "basic_rent"
+    t.string "service_charge"
+    t.string "personal_service_charge"
+    t.string "support_charge"
+    t.string "total_charge"
+    t.string "outstanding_amount"
+    t.string "time_lived_in_la"
+    t.string "time_on_la_waiting_list"
+    t.string "previous_la"
+    t.string "property_postcode"
+    t.string "reasonable_preference"
+    t.string "reasonable_preference_reason"
+    t.string "cbl_letting"
+    t.string "chr_letting"
+    t.string "cap_letting"
   end
 
 end

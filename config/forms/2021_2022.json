@@ -843,12 +843,12 @@
                 }
               }
             },
-            "previous_postcode":{
+            "property_postcode":{
               "header": "",
               "description": "",
               "questions":{
-                "previous_postcode": {
-                  "header": "What was the previous postcode?",
+                "property_postcode": {
+                  "header": "What is the property's postcode?",
                   "hint_text": "",
                   "type": "text"
                 }
@@ -1007,14 +1007,63 @@
         "income_and_benefits": {
           "label": "Income and benefits",
           "pages": {
-            "tenant_code_3":{
+            "net_income":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code_3": {
-                  "header": "What is the tenant code?",
+                "net_income": {
+                  "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1"
+                },
+                "net_income_frequency": {
+                  "header": "How often do they receive this income?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Weekly",
+                    "1": "Monthly",
+                    "2": "Yearly"
+                  }
+                }
+              }
+            },
+            "net_income_uc_proportion":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "net_income_uc_proportion": {
+                  "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "All",
+                    "1": "Some",
+                    "2": "None",
+                    "3": "Do not know"
+                  }
+                }
+              }
+            },
+            "housing_benefit":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "housing_benefit": {
+                  "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Housing Benefit, but not Universal Credit",
+                    "1": "Universal Credit with housing element, but not Housing Benefit",
+                    "2": "Universal Credit without housing element and no Housing Benefit",
+                    "3": "Universal Credit and Housing Benefit",
+                    "4": "Not Housing Benefit or Universal Credit",
+                    "5": "Do not know",
+                    "6": "Prefer not to say"
+                  }
                 }
               }
             }
@@ -1023,14 +1072,70 @@
         "rent": {
           "label": "Rent",
           "pages": {
-            "tenant_code_4":{
+            "rent":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code_4": {
-                  "header": "What is the tenant code?",
+                "rent_frequency": {
+                  "header": "Which period are rent and other charges due?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Weekly for 52 weeks",
+                    "1": "Fortnightly",
+                    "2": "Four-weekly",
+                    "3": "Calendar monthly",
+                    "4": "Weekly for 50 weeks",
+                    "5": "Weekly for 49 weeks",
+                    "6": "Weekly for 48 weeks",
+                    "7": "Weekly for 47 weeks",
+                    "8": "Weekly for 46 weeks",
+                    "9": "Weekly for 53 weeks"
+                  }
+                },
+                "basic_rent": {
+                  "header": "What is the basic rent?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
+                },
+                "service_charge": {
+                  "header": "What is the service charge?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
+                },
+                "personal_service_charge": {
+                  "header": "What is the personal service charge?",
+                  "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
+                },
+                "support_charge": {
+                  "header": "What is the support charge?",
+                  "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
+                },
+                "total_charge": {
+                  "header": "Total charge?",
+                  "hint_text": "This is the total of rent and all charges",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
+                },
+                "outstanding_amount": {
+                  "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
                 }
               }
             }
@@ -1044,14 +1149,442 @@
         "local_authority": {
           "label": "Local authority",
           "pages": {
-            "tenant_code_5":{
+            "time_lived_in_la":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code_5": {
-                  "header": "What is the tenant code?",
+                "time_lived_in_la": {
+                  "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Just moved to local authority area",
+                    "1": "Less than 1 year",
+                    "2": "1 to 2 years",
+                    "3": "2 to 3 years",
+                    "4": "3 to 4 years",
+                    "5": "4 to 5 years",
+                    "6": "5 years or more",
+                    "7": "Do not know"
+                  }
+                }
+              }
+            },
+            "time_on_la_waiting_list":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "time_on_la_waiting_list": {
+                  "header": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Just moved to local authority area",
+                    "1": "Less than 1 year",
+                    "2": "1 to 2 years",
+                    "3": "2 to 3 years",
+                    "4": "3 to 4 years",
+                    "5": "4 to 5 years",
+                    "6": "5 years or more",
+                    "7": "Do not know"
+                  }
+                }
+              }
+            },
+            "previous_la":{
+              "header": "",
+              "description": "",
+              "questions":{
+                "previous_la": {
+                  "header": "Which local authority area did the household live in immediately before this letting?",
+                  "hint_text": "Includes temporary accommodation",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Adur",
+                    "1": "Allerdale",
+                    "2": "Amber Valley",
+                    "3": "Arun",
+                    "4": "Ashfield",
+                    "5": "Ashford",
+                    "6": "Babergh",
+                    "7": "Barking & Dagenham",
+                    "8": "Barnet",
+                    "9": "Barnsley",
+                    "10": "Barrow-in-Furness",
+                    "11": "Basildon",
+                    "12": "Basingstoke & Deane",
+                    "13": "Bassetlaw",
+                    "14": "Bath & NE Somerset",
+                    "15": "Bedford Borough Council",
+                    "16": "Bexley",
+                    "17": "Birmingham",
+                    "18": "Blaby",
+                    "19": "Blackburn",
+                    "20": "Blackpool",
+                    "21": "Bolsover",
+                    "22": "Bolton",
+                    "23": "Boston",
+                    "24": "Bournemouth & Christchurch & Poole",
+                    "25": "Bracknell Forest",
+                    "26": "Bradford",
+                    "27": "Braintree",
+                    "28": "Breckland",
+                    "29": "Brent",
+                    "30": "Brentwood",
+                    "31": "Brighton & Hove",
+                    "32": "Bristol",
+                    "33": "Broadland",
+                    "34": "Bromley",
+                    "35": "Bromsgrove",
+                    "36": "Broxbourne",
+                    "37": "Broxtowe",
+                    "38": "Buckinghamshire",
+                    "39": "Burnley",
+                    "40": "Bury",
+                    "41": "Calderdale",
+                    "42": "Cambridge",
+                    "43": "Camden",
+                    "44": "Cannock Chase",
+                    "45": "Canterbury",
+                    "46": "Carlisle",
+                    "47": "Castle Point",
+                    "48": "Central Bedfordshire",
+                    "49": "Charnwood",
+                    "50": "Chelmsford",
+                    "51": "Cheltenham",
+                    "52": "Cherwell",
+                    "53": "Cheshire West & Chester",
+                    "54": "Chesterfield",
+                    "55": "Chichester",
+                    "56": "Chorley",
+                    "57": "City of London",
+                    "58": "Colchester",
+                    "59": "Copeland",
+                    "60": "Cornwall",
+                    "61": "Cotswold",
+                    "62": "Coventry",
+                    "63": "Craven",
+                    "64": "Crawley",
+                    "65": "Croydon",
+                    "66": "Dacorum",
+                    "67": "Darlington",
+                    "68": "Dartford",
+                    "69": "Derby",
+                    "70": "Derbyshire Dales",
+                    "71": "Doncaster",
+                    "72": "Dorset",
+                    "73": "Dover",
+                    "74": "Dudley",
+                    "75": "Durham",
+                    "76": "Ealing",
+                    "77": "East Cambridgeshire",
+                    "78": "East Cheshire",
+                    "79": "East Devon",
+                    "80": "East Hampshire",
+                    "81": "East Herts",
+                    "82": "East Lindsey",
+                    "83": "East Riding",
+                    "84": "East Staffordshire",
+                    "85": "East Suffolk",
+                    "86": "Eastbourne",
+                    "87": "Eastleigh",
+                    "88": "Eden",
+                    "89": "Elmbridge",
+                    "90": "Enfield",
+                    "91": "Epping Forest",
+                    "92": "Epsom & Ewell",
+                    "93": "Erewash",
+                    "94": "Exeter",
+                    "95": "Fareham",
+                    "96": "Fenland",
+                    "97": "Folkestone & Hythe",
+                    "98": "Forest of Dean",
+                    "99": "Fylde",
+                    "100": "Gateshead",
+                    "101": "Gedling",
+                    "102": "Gloucester",
+                    "103": "Gosport",
+                    "104": "Gravesham",
+                    "105": "Great Yarmouth",
+                    "106": "Greenwich",
+                    "107": "Guildford",
+                    "108": "Hackney",
+                    "109": "Halton",
+                    "110": "Hambleton",
+                    "111": "Hammersmith & Fulham",
+                    "112": "Harborough",
+                    "113": "Haringey",
+                    "114": "Harlow",
+                    "115": "Harrogate",
+                    "116": "Harrow",
+                    "117": "Hart",
+                    "118": "Hartlepool",
+                    "119": "Hastings",
+                    "120": "Havant",
+                    "121": "Havering",
+                    "122": "Herefordshire",
+                    "123": "Hertsmere",
+                    "124": "High Peak",
+                    "125": "Hillingdon",
+                    "126": "Hinckley & Bosworth",
+                    "127": "Horsham",
+                    "128": "Hounslow",
+                    "129": "Huntingdonshire",
+                    "130": "Hyndburn",
+                    "131": "Ipswich",
+                    "132": "Isle of Wight",
+                    "133": "Isles of Scilly",
+                    "134": "Islington",
+                    "135": "Kensington & Chelsea",
+                    "136": "Kings Lynn & West Norfolk",
+                    "137": "Kingston-upon-Hull",
+                    "138": "Kingston-upon-Thames",
+                    "139": "Kirklees",
+                    "140": "Knowsley",
+                    "141": "Lambeth",
+                    "142": "Lancaster",
+                    "143": "Leeds",
+                    "144": "Leicester",
+                    "145": "Lewes",
+                    "146": "Lewisham",
+                    "147": "Lichfield",
+                    "148": "Lincoln",
+                    "149": "Liverpool",
+                    "150": "Luton",
+                    "151": "Maidstone",
+                    "152": "Maldon",
+                    "153": "Malvern Hills",
+                    "154": "Manchester",
+                    "155": "Mansfield",
+                    "156": "Medway",
+                    "157": "Melton",
+                    "158": "Mendip",
+                    "159": "Merton",
+                    "160": "Mid Devon",
+                    "161": "Mid Suffolk",
+                    "162": "Mid Sussex",
+                    "163": "Middlesbrough",
+                    "164": "Milton Keynes",
+                    "165": "Mole Valley",
+                    "166": "N. Ireland",
+                    "167": "New Forest",
+                    "168": "Newark",
+                    "169": "Newcastle-under-Lyme",
+                    "170": "Newcastle-upon-Tyne",
+                    "171": "Newham",
+                    "172": "North Devon",
+                    "173": "North East Derbyshire",
+                    "174": "North East Lincolnshire",
+                    "175": "North Hertfordshire",
+                    "176": "North Kesteven",
+                    "177": "North Lincolnshire",
+                    "178": "North Norfolk",
+                    "179": "North Northamptonshire",
+                    "180": "North Somerset",
+                    "181": "North Tyneside",
+                    "182": "North Warwickshire",
+                    "183": "North West Leics",
+                    "184": "Northumberland",
+                    "185": "Norwich",
+                    "186": "Nottingham",
+                    "187": "Nuneaton & Bedworth",
+                    "188": "Oadby & Wigston",
+                    "189": "Oldham",
+                    "190": "Outside UK",
+                    "191": "Oxford",
+                    "192": "Pendle",
+                    "193": "Peterborough",
+                    "194": "Plymouth",
+                    "195": "Portsmouth",
+                    "196": "Preston",
+                    "197": "Reading",
+                    "198": "Redbridge",
+                    "199": "Redcar & Cleveland",
+                    "200": "Redditch",
+                    "201": "Reigate & Banstead",
+                    "202": "Ribble Valley",
+                    "203": "Richmond-upon-Thames",
+                    "204": "Richmondshire",
+                    "205": "Rochdale",
+                    "206": "Rochford",
+                    "207": "Rossendale",
+                    "208": "Rother",
+                    "209": "Rotherham",
+                    "210": "Rugby",
+                    "211": "Runnymede",
+                    "212": "Rushcliffe",
+                    "213": "Rushmoor",
+                    "214": "Rutland",
+                    "215": "Ryedale",
+                    "216": "Salford",
+                    "217": "Sandwell",
+                    "218": "Scarborough",
+                    "219": "Scotland",
+                    "220": "Sedgemoor",
+                    "221": "Sefton",
+                    "222": "Selby",
+                    "223": "Sevenoaks",
+                    "224": "Sheffield",
+                    "225": "Shropshire",
+                    "226": "Slough",
+                    "227": "Solihull",
+                    "228": "Somerset West & Taunton",
+                    "229": "South Cambridgeshire",
+                    "230": "South Derbyshire",
+                    "231": "South Gloucestershire",
+                    "232": "South Hams",
+                    "233": "South Holland",
+                    "234": "South Kesteven",
+                    "235": "South Lakeland",
+                    "236": "South Norfolk",
+                    "237": "South Oxfordshire",
+                    "238": "South Ribble",
+                    "239": "South Somerset",
+                    "240": "South Staffordshire",
+                    "241": "South Tyneside",
+                    "242": "Southampton",
+                    "243": "Southend-on-Sea",
+                    "244": "Southwark",
+                    "245": "Spelthorne",
+                    "246": "St Albans",
+                    "247": "St Helens",
+                    "248": "Stafford",
+                    "249": "Staffordshire Moorlands",
+                    "250": "Stevenage",
+                    "251": "Stockport",
+                    "252": "Stockton-on-Tees",
+                    "253": "Stoke-on-Trent",
+                    "254": "Stratford-on-Avon",
+                    "255": "Stroud",
+                    "256": "Sunderland",
+                    "257": "Surrey Heath",
+                    "258": "Sutton",
+                    "259": "Swale",
+                    "260": "Swindon",
+                    "261": "Tameside",
+                    "262": "Tamworth",
+                    "263": "Tandridge",
+                    "264": "Teignbridge",
+                    "265": "Telford & Wrekin",
+                    "266": "Tendring",
+                    "267": "Test Valley",
+                    "268": "Tewkesbury",
+                    "269": "Thanet",
+                    "270": "Three Rivers",
+                    "271": "Thurrock",
+                    "272": "Tonbridge & Malling",
+                    "273": "Torbay",
+                    "274": "Torridge",
+                    "275": "Tower Hamlets",
+                    "276": "Trafford",
+                    "277": "Tunbridge Wells",
+                    "278": "Uttlesford",
+                    "279": "Vale of White Horse",
+                    "280": "Wakefield",
+                    "281": "Wales",
+                    "282": "Walsall",
+                    "283": "Waltham Forest",
+                    "284": "Wandsworth",
+                    "285": "Warrington",
+                    "286": "Warwick",
+                    "287": "Watford",
+                    "288": "Waverley",
+                    "289": "Wealden",
+                    "290": "Welwyn Hatfield",
+                    "291": "West Berkshire",
+                    "292": "West Devon",
+                    "293": "West Lancashire",
+                    "294": "West Lindsey",
+                    "295": "West Northamptonshire",
+                    "296": "West Oxfordshire",
+                    "297": "West Suffolk",
+                    "298": "Westminster",
+                    "299": "Wigan",
+                    "300": "Wiltshire",
+                    "301": "Winchester",
+                    "302": "Windsor & Maidenhead",
+                    "303": "Wirral",
+                    "304": "Woking",
+                    "305": "Wokingham",
+                    "306": "Wolverhampton",
+                    "307": "Worcester",
+                    "308": "Worthing",
+                    "309": "Wychavon",
+                    "310": "Wyre",
+                    "311": "Wyre Forest",
+                    "312": "York"
+                  }
+                }
+              }
+            },
+            "previous_postcode": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "previous_postcode": {
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text"
+                }
+              }
+            },
+            "reasonable_preference": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "reasonable_preference": {
+                  "header": "Was the household given reasonable preference by the local authority?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                },
+                "reasonable_preference_reason": {
+                  "header": "Why were they given reasonable preference?",
+                  "hint_text": "Select all that apply",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Homeless or about to lose their home (within 56 days)",
+                    "1": "Living in insanitary or overcrowded or unsatisfactory housing",
+                    "2": "A need to move on medical and welfare grounds (including a disability)",
+                    "3": "A need to move to avoid hardship to themselves or others",
+                    "4": "Do not know"
+                  }
+                }
+              }
+            },
+            "lettings_policy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "cbl_letting": {
+                  "header": "Was the letting made under choice-based lettings (CBL)? ",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                },
+                "chr_letting": {
+                  "header": "Was the letting made under common housing register (CHR)? ",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                },
+                "cap_letting": {
+                  "header": "Was the letting made under common allocation policy (CAP)? ",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
                 }
               }
             }
@@ -1065,11 +1598,11 @@
         "declaration": {
           "label": "Declaration",
           "pages": {
-            "tenant_code_6":{
+            "declaration":{
               "header": "",
               "description": "",
               "questions":{
-                "tenant_code_6": {
+                "declaration": {
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
