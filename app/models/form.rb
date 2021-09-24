@@ -27,7 +27,7 @@ class Form
     }.reduce(:merge)
   end
 
-  # Returns a hash with the pages as keys
+  # Returns a hash with the pages of a subsection as keys
   def pages_for_subsection(subsection)
     all_subsections[subsection]["pages"]
   end
