@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_103433) do
+ActiveRecord::Schema.define(version: 2021_09_24_115154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,26 @@ ActiveRecord::Schema.define(version: 2021_09_24_103433) do
     t.string "pregnancy"
     t.string "accessibility_requirements"
     t.string "condition_effects"
+    t.string "tenancy_code"
+    t.string "tenancy_start_date"
+    t.string "starter_tenancy"
+    t.string "fixed_term_tenancy"
+    t.string "tenancy_type"
+    t.string "letting_type"
+    t.string "letting_provider"
+    t.string "property_location"
+    t.string "previous_postcode"
+    t.string "property_relet"
+    t.string "property_vacancy_reason"
+    t.string "property_reference"
+    t.string "property_unit_type"
+    t.string "property_building_type"
+    t.string "property_number_of_bedrooms"
+    t.string "property_void_date"
+    t.string "property_major_repairs"
+    t.string "property_major_repairs_date"
+    t.string "property_number_of_times_relet"
+    t.string "property_wheelchair_accessible"
   end
 
 end
