@@ -368,9 +368,9 @@
                     "2": "Level access housing",
                     "3": "Other disability requirements",
                     "4": "No disability requirements",
-                    "divider": true,
+                    "divider_a": true,
                     "5": "Do not know",
-                    "divider": true,
+                    "divider_b": true,
                     "6": "Prefer not to say"
                   }
                 }
