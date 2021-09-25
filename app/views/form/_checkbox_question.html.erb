@@ -1,5 +1,15 @@
-<% answer_options = question["answer_options"].map { |k, v| OpenStruct.new(id: k.to_i, value: v) } %>
+<%= f.govuk_check_boxes_fieldset question_key,
+    legend: { text: question["header"], size: "l" },
+    hint: { text: question["hint_text"] } do %>
 
-<%= f.govuk_collection_check_boxes question_key, answer_options, :id, :value, legend: { text: question["header"], size: "l" }, hint: { text: question["hint_text"] } %>
+    <% question["answer_options"].map do |key, val| %>
+      <% if key == "divider" %>
+        <%= f.govuk_check_box_divider %>
+      <% else %>
+        <%= f.govuk_check_box question_key, key, label: { text: val } %>
+      <% end %>
+    <% end %>
+<% end %>
+
 <%= f.hidden_field :previous_page, value: page_key %>
 <%= f.hidden_field :case_log_id, value: case_log_id %>

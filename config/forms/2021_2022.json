@@ -368,7 +368,9 @@
                     "2": "Level access housing",
                     "3": "Other disability requirements",
                     "4": "No disability requirements",
+                    "divider": true,
                     "5": "Do not know",
+                    "divider": true,
                     "6": "Prefer not to say"
                   }
                 }
@@ -393,6 +395,7 @@
                     "7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
                     "8": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
                     "9": "Other",
+                    "divider": true,
                     "10": "Prefer not to say"
                   }
                 }
@@ -1550,6 +1553,7 @@
                     "1": "Living in insanitary or overcrowded or unsatisfactory housing",
                     "2": "A need to move on medical and welfare grounds (including a disability)",
                     "3": "A need to move to avoid hardship to themselves or others",
+                    "divider": true,
                     "4": "Do not know"
                   }
                 }
