@@ -361,7 +361,7 @@
                 "accessibility_requirements": {
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
-                  "type": "select",
+                  "type": "checkbox",
                   "answer_options": {
                     "0": "Fully wheelchair accessible housing",
                     "1": "Wheelchair access to essential rooms",
@@ -381,7 +381,7 @@
                 "condition_effects": {
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
-                  "type": "select",
+                  "type": "checkbox",
                   "answer_options": {
                     "0": "Vision - such as blindness or partial sight",
                     "1": "Hearing - such as deafness or partial hearing",
@@ -1544,7 +1544,7 @@
                 "reasonable_preference_reason": {
                   "header": "Why were they given reasonable preference?",
                   "hint_text": "Select all that apply",
-                  "type": "select",
+                  "type": "checkbox",
                   "answer_options": {
                     "0": "Homeless or about to lose their home (within 56 days)",
                     "1": "Living in insanitary or overcrowded or unsatisfactory housing",

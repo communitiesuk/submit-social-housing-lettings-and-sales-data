@@ -66,11 +66,11 @@ The JSON should follow the structure:
                 snake case question name string: {
                   header: string,
                   hint_text: string,
-                  type: [text / numeric / radio / select / date ],
+                  type: [text / numeric / radio / checkbox / date ],
                   min: integer, (numeric only),
                   max: integer, (numeric only),
                   step: integer (numeric only),
-                  answer_options: { (select and radio only)
+                  answer_options: { (checkbox and radio only)
                     "0": string,
                     "1": string
                   }
