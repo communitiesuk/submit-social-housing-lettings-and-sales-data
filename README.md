@@ -38,7 +38,19 @@ Note docker-compose runs the production docker image (RAILS_ENV=production) as t
 
 ### Infrastructure
 
-The cloud infrastructure running this application is set up using the [infrastructure repository](https://github.com/communitiesuk/mhclg-data-collection-beta-infrastructure)
+This application is running on [Gov PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
+
+- Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (sandbox/production).
+- Install the cloudfoundry cli https://docs.cloudfoundry.org/cf-cli/install-go-cli.html
+
+- Login <br/>
+`cf login -a api.london.cloud.service.gov.uk -u <your_username>`
+
+- Set your deployment target (sandbox/production) <br/>
+`cf target -o dluhc-core -s <deploy_environment>`
+
+- Deploy <br/>
+`cf push dluhc-core --strategy rolling`. This will use the [manifest file](manifest.yml)
 
 
 ### Single log submission
