@@ -14,8 +14,14 @@ Pre-requisites
 
 Copy the `.env.example` to `.env` and replace the database credentials with your local postgres user credentials.
 
+Install the dependencies
+`bundle install`
+
 Create the database
 `rake db:create`
+
+Run the database migrations
+`rake db:migrate`
 
 Start the rails server
 ```
