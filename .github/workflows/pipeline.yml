@@ -76,6 +76,7 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: 'sandbox'
+    if: github.ref == 'refs/heads/main'
     needs: test
 
     steps:
