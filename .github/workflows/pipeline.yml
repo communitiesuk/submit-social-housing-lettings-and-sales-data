@@ -6,8 +6,6 @@ on:
     - main
   pull_request:
 
-concurrency: 'sandbox'
-
 defaults:
   run:
     shell: bash
@@ -17,6 +15,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    concurrency: 'sandbox'
 
     services:
       postgres:
@@ -76,6 +75,7 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: 'sandbox'
+    concurrency: 'sandbox'
 
     steps:
     - name: Checkout code
