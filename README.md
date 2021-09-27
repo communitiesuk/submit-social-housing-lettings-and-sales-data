@@ -52,6 +52,9 @@ This application is running on [Gov PaaS](https://www.cloud.service.gov.uk/). To
 - Deploy <br/>
 `cf push dluhc-core --strategy rolling`. This will use the [manifest file](manifest.yml)
 
+- Get a rails console <br/>
+`cf ssh dluhc-core -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
+
 
 ### Single log submission
 

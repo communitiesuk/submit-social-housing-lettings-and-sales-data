@@ -7,10 +7,8 @@ applications:
       RAILS_ENV: sandbox
     processes:
       - type: web
-        # command: bundle exec rake cf:on_first_instance db:migrate && rails s
         command: rake db:migrate && bin/rails server
         instances: 2
         memory: 512M
-        random-route: true
     services:
       - dluhc-core-sandbox-postgres
