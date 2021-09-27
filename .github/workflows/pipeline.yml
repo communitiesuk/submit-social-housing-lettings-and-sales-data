@@ -4,8 +4,8 @@ on:
   push:
     branches:
     - main
-    - gov_paas
   pull_request:
+    - gov_paas
 
 concurrency: 'sandbox'
 
@@ -76,6 +76,7 @@ jobs:
     name: Deploy
 
     runs-on: ubuntu-latest
+    environment: 'sandbox'
 
     steps:
     - name: Checkout code
