@@ -50,7 +50,7 @@ class Form
   def next_page(previous_page)
     subsection = subsection_for_page(previous_page)
     previous_page_idx = pages_for_subsection(subsection).keys.index(previous_page)
-    pages_for_subsection(subsection).keys[previous_page_idx + 1] || previous_page # Placeholder until we have a check answers page
+    pages_for_subsection(subsection).keys[previous_page_idx + 1] || :check_answers
   end
 
   def previous_page(current_page)

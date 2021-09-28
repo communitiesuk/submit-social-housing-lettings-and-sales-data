@@ -28,7 +28,14 @@ class CaseLogsController < ApplicationController
     answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
     @case_log.update!(answers_for_page)
     next_page = form.next_page(previous_page)
-    redirect_to(send("case_log_#{next_page}_path", @case_log))
+    redirect_path = if next_page == :check_answers 
+      subsection = form.subsection_for_page(previous_page)
+      "case_log_#{subsection}_check_answers_path"
+    else  
+      "case_log_#{next_page}_path"
+    end
+      
+    redirect_to(send(redirect_path, @case_log))
   end
 
   def check_answers
