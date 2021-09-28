@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: 94dfb29265fbadb1216a0aaf97cd343396c942c3
+  revision: 053fcfeb6b0b6627edf7261737553a6f7df8cc14
   branch: main
   specs:
     rspec-core (3.11.0.pre)
@@ -297,7 +297,7 @@ GEM
     stimulus-rails (0.6.0)
       rails (>= 6.0.0)
     thor (1.1.0)
-    turbo-rails (0.8.0)
+    turbo-rails (0.8.1)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
