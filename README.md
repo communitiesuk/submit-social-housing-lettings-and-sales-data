@@ -64,6 +64,16 @@ Once the app is deployed:
 `cf ssh dluhc-core -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
 
 
+### CI/CD
+
+When a commit is made to `main` the following Github action jobs are triggered:
+
+1. Test - RSpec runs our test suite
+2. Deploy - If the Test stage passes, this deploys the app to our Gov PaaS account using the cloudfoundry cli
+
+When a pull request is opened to `main` only the test stage runs.
+
+
 ### Single log submission
 
 The form for this is driven by a json file in `/config/forms/{start_year}_{end_year}.json`
