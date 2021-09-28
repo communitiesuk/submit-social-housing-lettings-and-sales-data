@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: dluhc-core-app
+  - name: dluhc-core
     buildpacks:
       - https://github.com/cloudfoundry/ruby-buildpack.git
     env:
