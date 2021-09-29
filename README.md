@@ -126,3 +126,20 @@ Assumptions made by the format:
 - All pages have at least 1 question
 - The ActiveRecord case log model has a field for each question name (must match)
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
+
+
+### Useful documentation (external dependencies)
+
+##### DfE Form Builder Gem
+
+- [Examples](https://govuk-form-builder.netlify.app/)
+- [Technical Docs](https://www.rubydoc.info/gems/govuk_design_system_formbuilder/)
+- [GitHub repository](https://github.com/DFE-Digital/govuk-formbuilder)
+
+##### Alpha Gov UK frontend gem
+
+- [GitHub repository](https://github.com/alphagov/govuk-frontend)
+
+##### Hotwire (Turbo/Stimulus)
+
+- [Docs](https://turbo.hotwired.dev/)
