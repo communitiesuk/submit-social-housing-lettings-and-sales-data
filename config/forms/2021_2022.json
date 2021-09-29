@@ -10,6 +10,7 @@
           "label": "Household characteristics",
           "pages": {
             "tenant_code":{
+              "check_answer_label": "Tenant code",
               "header": "",
               "description": "",
               "questions":{
@@ -21,6 +22,7 @@
               }
             },
             "tenant_age":{
+              "check_answer_label": "Tenant's age",
               "header": "",
               "description": "",
               "questions":{
@@ -35,6 +37,7 @@
               }
             },
             "tenant_gender":{
+              "check_answer_label": "Tenant's gender",
               "header": "",
               "description": "",
               "questions":{
@@ -52,6 +55,7 @@
               }
             },
             "tenant_ethnic_group":{
+              "check_answer_label": "Ethnicity",
               "header": "",
               "description": "",
               "questions":{
@@ -84,6 +88,7 @@
               }
             },
             "tenant_nationality":{
+              "check_answer_label": "Nationality",
               "header": "",
               "description": "",
               "questions":{
@@ -113,6 +118,7 @@
               }
             },
             "tenant_economic_status":{
+              "check_answer_label": "Work",
               "header": "",
               "description": "",
               "questions":{
@@ -137,6 +143,7 @@
               }
             },
             "household_number_of_other_members":{
+              "check_answer_label": "Number of Other Household Members",
               "header": "",
               "description": "",
               "questions":{

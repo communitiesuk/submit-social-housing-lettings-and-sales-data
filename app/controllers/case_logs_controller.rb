@@ -40,7 +40,11 @@ class CaseLogsController < ApplicationController
 
   def check_answers
     @case_log = CaseLog.find(params[:case_log_id])
-    render "form/check_answers", locals: { case_log_id: @case_log.id }
+    form = Form.new(2021, 2022)
+    current_url = request.env['PATH_INFO']
+    subsection = current_url.split('/')[-2]
+    subsection_pages = form.pages_for_subsection(subsection)
+    render "form/check_answers", locals: { case_log_id: @case_log.id, subsection_pages: subsection_pages }
   end
 
   form = Form.new(2021, 2022)

@@ -113,6 +113,17 @@ RSpec.describe "Test Features" do
         click_button("Save and continue")
         expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
       end
+
+      it "has question headings based on the subsection" do
+        visit("case_logs/#{id}/#{subsection}/check_answers")
+        expect(page).to have_content("Tenant code")
+        expect(page).to have_content("Tenant's age")
+        expect(page).to have_content("Tenant's gender")
+        expect(page).to have_content("Ethnicity")
+        expect(page).to have_content("Nationality")
+        expect(page).to have_content("Work")
+        expect(page).to have_content("Number of Other Household Members")
+      end 
     end
   end
 end

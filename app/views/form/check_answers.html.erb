@@ -1,5 +1,14 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <h1 class="govuk-heading-l">Check the answers you gave for household characteristics</h1>
+  <% subsection_pages.each do |page, page_info| %>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          <%= page_info["check_answer_label"].to_s %>
+        <dt>
+      </div>
+    </dl>
+  <% end %>
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
