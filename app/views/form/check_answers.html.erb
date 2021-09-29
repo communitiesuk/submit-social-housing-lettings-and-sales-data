@@ -6,6 +6,9 @@
         <dt class="govuk-summary-list__key">
           <%= page_info["check_answer_label"].to_s %>
         <dt>
+        <dd class="govuk-summary-list__value">
+          <%= case_log[page] %>
+        </dd>
       </div>
     </dl>
   <% end %>

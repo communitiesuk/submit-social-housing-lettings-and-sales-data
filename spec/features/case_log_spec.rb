@@ -7,10 +7,10 @@ RSpec.describe "Test Features" do
   question_answers = {
     tenant_code: { type: "text", answer: "BZ737" },
     tenant_age: { type: "numeric", answer: 25 },
-    tenant_gender: { type: "radio", answer: "1" },
-    tenant_ethnic_group: { type: "radio", answer: "2" },
-    tenant_nationality: { type: "radio", answer: "0" },
-    tenant_economic_status: { type: "radio", answer: "4" },
+    tenant_gender: { type: "radio", answer: "Female" },
+    tenant_ethnic_group: { type: "radio", answer: "Prefer not to say" },
+    tenant_nationality: { type: "radio", answer: "Lithuania" },
+    tenant_economic_status: { type: "radio", answer: "Jobseeker" },
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
@@ -37,7 +37,7 @@ RSpec.describe "Test Features" do
       click_button("Save and continue")
       expect(page).to have_field("tenant-age-field")
       click_button("Save and continue")
-      expect(page).to have_field("tenant-gender-0-field")
+      expect(page).to have_field("tenant-gender-male-field")
       visit page.driver.request.env["HTTP_REFERER"]
       expect(page).to have_field("tenant-age-field")
     end
@@ -58,7 +58,7 @@ RSpec.describe "Test Features" do
           when "text"
             fill_in(question.to_s, with: answer)
           when "radio"
-            choose("#{question.to_s.tr('_', '-')}-#{answer}-field")
+            choose("#{question.to_s.tr('_', '-')}-#{answer.parameterize}-field")
           else
             fill_in(question.to_s, with: answer)
           end
@@ -123,6 +123,17 @@ RSpec.describe "Test Features" do
         expect(page).to have_content("Nationality")
         expect(page).to have_content("Work")
         expect(page).to have_content("Number of Other Household Members")
+      end
+      
+      it "should display answers given by the user for the question in the subsection" do
+        visit("/case_logs/#{id}/tenant_age")
+        fill_in("tenant_age", with: 28)
+        click_button("Save and continue")
+        choose("tenant-gender-non-binary-field")
+        click_button("Save and continue")
+        visit("/case_logs/#{id}/#{subsection}/check_answers")
+        expect(page).to have_content("28")
+        expect(page).to have_content("Non-binary")
       end 
     end
   end
