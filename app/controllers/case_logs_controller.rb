@@ -1,4 +1,5 @@
 class CaseLogsController < ApplicationController
+
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
     @in_progress_case_logs = CaseLog.where(status: 0)
@@ -17,7 +18,7 @@ class CaseLogsController < ApplicationController
   def edit
     @form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
-    render :edit, locals: { form: @form }
+    render :edit
   end
 
   def next_page
@@ -31,15 +32,17 @@ class CaseLogsController < ApplicationController
     redirect_to(send("case_log_#{next_page}_path", @case_log))
   end
 
-  def page_params(questions_for_page)
-    params.permit(questions_for_page)
-  end
-
   form = Form.new(2021, 2022)
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do
       @case_log = CaseLog.find(params[:case_log_id])
       render "form/page", locals: { case_log_id: @case_log.id, form: form, page_key: page_key, page_info: page_info }
     end
+  end
+
+  private
+
+  def page_params(questions_for_page)
+    params.permit(questions_for_page)
   end
 end

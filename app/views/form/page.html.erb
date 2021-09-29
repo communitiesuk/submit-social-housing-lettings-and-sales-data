@@ -12,9 +12,13 @@
     </h1>
   <% end %>
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+
     <% page_info["questions"].map do |question_key, question| %>
-      <%= render partial: "form/#{question["type"]}_question", locals: { case_log_id: case_log_id, page_key: page_key, question_key: question_key, question: question, f: f } %>
+      <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
     <% end %>
+
+    <%= f.hidden_field :previous_page, value: page_key %>
+    <%= f.hidden_field :case_log_id, value: case_log_id %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
 <% end %>
