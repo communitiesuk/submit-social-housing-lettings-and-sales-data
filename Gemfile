@@ -42,11 +42,11 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem "listen", "~> 3.3"
-  gem "overcommit", ">= 0.37.0", require: false
+  gem "overcommit", ">= 0.37.0"
   gem "rack-mini-profiler", "~> 2.0"
-  gem "rubocop-govuk"
+  gem "rubocop-govuk", require: false
   gem "rubocop-performance", require: false
-  gem "rubocop-rails"
+  gem "rubocop-rails", require: false
   gem "scss_lint-govuk"
 end
 
