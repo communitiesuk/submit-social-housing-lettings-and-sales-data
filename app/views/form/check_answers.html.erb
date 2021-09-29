@@ -9,6 +9,13 @@
         <dd class="govuk-summary-list__value">
           <%= case_log[page] %>
         </dd>
+        <dd class="govuk-summary-list__actions">
+          <% if case_log[page].blank? %>
+            <%= link_to "Answer", "/case_logs/#{case_log_id}/#{page}", class: "govuk-link" %>
+          <% else %>
+            <%= link_to "Change", "/case_logs/#{case_log_id}/#{page}", class: "govuk-link" %>
+          <% end %>
+        </dd>
       </div>
     </dl>
   <% end %>

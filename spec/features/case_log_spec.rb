@@ -1,6 +1,7 @@
 require "rails_helper"
 RSpec.describe "Test Features" do
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 
@@ -134,6 +135,23 @@ RSpec.describe "Test Features" do
         visit("/case_logs/#{id}/#{subsection}/check_answers")
         expect(page).to have_content("28")
         expect(page).to have_content("Non-binary")
+      end 
+      
+      it "should have an answer link for questions missing an answer" do
+        visit("case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+        assert_selector "a", text: "Answer", count: 7
+        assert_selector "a", text: "Change", count: 0
+        expect(page).to have_link('Answer', href: "/case_logs/#{empty_case_log.id}/tenant_age")
+      end
+
+      it "should have a change link for answered questions" do 
+        visit("/case_logs/#{empty_case_log.id}/tenant_age")
+        fill_in("tenant_age", with: 28)
+        click_button("Save and continue")
+        visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+        assert_selector "a", text: "Answer", count: 6
+        assert_selector "a", text: "Change", count: 1
+        expect(page).to have_link('Change', href: "/case_logs/#{empty_case_log.id}/tenant_age")
       end 
     end
   end
