@@ -1,5 +1,7 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <h1 class="govuk-heading-l">Check the answers you gave for household characteristics</h1>
+  <p>You answered <%= get_answered_questions_total(subsection_pages, case_log)  %> of <%= subsection_pages.count %> questions</p>
+  <%= create_next_missing_question_link(case_log_id, subsection_pages, case_log) %>
   <% subsection_pages.each do |page, page_info| %>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       <div class="govuk-summary-list__row">
@@ -10,11 +12,7 @@
           <%= case_log[page] %>
         </dd>
         <dd class="govuk-summary-list__actions">
-          <% if case_log[page].blank? %>
-            <%= link_to "Answer", "/case_logs/#{case_log_id}/#{page}", class: "govuk-link" %>
-          <% else %>
-            <%= link_to "Change", "/case_logs/#{case_log_id}/#{page}", class: "govuk-link" %>
-          <% end %>
+          <%= create_update_answer_link(case_log[page], case_log_id, page)%>
         </dd>
       </div>
     </dl>
@@ -23,3 +21,4 @@
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
 <% end %>
+
