@@ -13,8 +13,8 @@ module CheckAnswersHelper
     link_to(link_name, "/case_logs/#{case_log_id}/#{page}", class: "govuk-link").html_safe
   end
 
-  def create_next_missing_question_link(case_log_id, subsections, case_log)
-    empty_question = subsections.keys.find{|x| case_log[x].blank? }
+  def create_next_missing_question_link(case_log_id, subsection_pages, case_log)
+    empty_question = subsection_pages.keys.find{|x| case_log[x].blank? }
 
     url = "/case_logs/#{case_log_id}/#{empty_question}"
     link_to('Answer the missing questions', url, class: "govuk-link").html_safe

@@ -59,7 +59,7 @@ RSpec.describe "Test Features" do
           when "text"
             fill_in(question.to_s, with: answer)
           when "radio"
-            choose("#{question.to_s.tr('_', '-')}-#{answer.parameterize}-field")
+            choose("#{question.to_s.dasherize}-#{answer.parameterize}-field")
           else
             fill_in(question.to_s, with: answer)
           end

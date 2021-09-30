@@ -1,24 +1,11 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <h1 class="govuk-heading-l">Check the answers you gave for household characteristics</h1>
   <p>You answered <%= get_answered_questions_total(subsection_pages, case_log)  %> of <%= subsection_pages.count %> questions</p>
-  <%= create_next_missing_question_link(case_log_id, subsection_pages, case_log) %>
+  <%= create_next_missing_question_link(case_log["id"], subsection_pages, case_log) %>
   <% subsection_pages.each do |page, page_info| %>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          <%= page_info["check_answer_label"].to_s %>
-        <dt>
-        <dd class="govuk-summary-list__value">
-          <%= case_log[page] %>
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <%= create_update_answer_link(case_log[page], case_log_id, page)%>
-        </dd>
-      </div>
-    </dl>
+    <%= render partial: 'form/check_answers_table', locals: { page: page, page_info: page_info, case_log: case_log } %>
   <% end %>
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
 <% end %>
-
