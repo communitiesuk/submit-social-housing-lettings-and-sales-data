@@ -421,6 +421,7 @@
             "tenancy_code":{
               "header": "",
               "description": "",
+              "check_answer_label": "What is the tenancy code?",
               "questions":{
                 "tenancy_code": {
                   "header": "What is the tenancy code?",
@@ -432,6 +433,7 @@
             "tenancy_start_date": {
               "header": "",
               "description": "",
+              "check_answer_label": "When is the tenancy start date?",
               "questions": {
                 "tenancy_start_date": {
                   "header": "What is the tenancy start date?",
@@ -443,6 +445,7 @@
             "starter_tenancy": {
               "header": "",
               "description": "",
+              "check_answer_label": "Is this a starter or introductory tenancy?",
               "questions": {
                 "starter_tenancy": {
                   "header": "Is this a starter tenancy?",
@@ -458,6 +461,7 @@
             "fixed_term_tenancy":{
               "header": "",
               "description": "",
+              "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
               "questions":{
                 "fixed_term_tenancy": {
                   "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
@@ -472,6 +476,7 @@
             "tenancy_type": {
               "header": "",
               "description": "",
+              "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
               "questions": {
                 "tenancy_type": {
                   "header": "What is the type of tenancy after the starter period has ended?",
@@ -491,6 +496,7 @@
             "letting_type": {
               "header": "",
               "description": "",
+              "check_answer_label": "Type of letting",
               "questions": {
                 "letting_type": {
                   "header": "Which type of letting is this?",
@@ -510,6 +516,7 @@
             "letting_provider": {
               "header": "",
               "description": "",
+              "check_answer_label": "Provider",
               "questions": {
                 "letting_provider": {
                   "header": "Who is the letting provider?",
@@ -530,6 +537,7 @@
             "property_location":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "property_location": {
                   "header": "Property location",
@@ -1020,6 +1028,7 @@
             "net_income":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "net_income": {
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
@@ -1043,6 +1052,7 @@
             "net_income_uc_proportion":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "net_income_uc_proportion": {
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
@@ -1060,6 +1070,7 @@
             "housing_benefit":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "housing_benefit": {
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
@@ -1085,6 +1096,7 @@
             "rent":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "rent_frequency": {
                   "header": "Which period are rent and other charges due?",
@@ -1162,6 +1174,7 @@
             "time_lived_in_la":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "time_lived_in_la": {
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
@@ -1183,6 +1196,7 @@
             "time_on_la_waiting_list":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "time_on_la_waiting_list": {
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
@@ -1204,6 +1218,7 @@
             "previous_la":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "previous_la": {
                   "header": "Which local authority area did the household live in immediately before this letting?",
@@ -1530,6 +1545,7 @@
             "previous_postcode": {
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions": {
                 "previous_postcode": {
                   "header": "Postcode for the previous accommodation",
@@ -1541,6 +1557,7 @@
             "reasonable_preference": {
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions": {
                 "reasonable_preference": {
                   "header": "Was the household given reasonable preference by the local authority?",
@@ -1569,6 +1586,7 @@
             "lettings_policy": {
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions": {
                 "cbl_letting": {
                   "header": "Was the letting made under choice-based lettings (CBL)? ",
@@ -1612,6 +1630,7 @@
             "declaration":{
               "header": "",
               "description": "",
+              "check_answer_label": "",
               "questions":{
                 "declaration": {
                   "header": "What is the tenant code?",
