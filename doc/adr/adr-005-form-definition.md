@@ -11,7 +11,7 @@ This should also mean that in the future it could be possible to create a UI tha
 Since initially the JSON config will not create database migrations or ActiveRecord model validations, it will instead assume that these have been correctly created for the config provided. The reasoning for this is the following assumptions:
 
 - The form will be tweaked regularly (amending questions wording, changing the order of questions or the page a question is displayed on)
-- The actual data collected will change very infrequently. Time series continuity is very important to ADD so the actual data collected should stay largely consistent.
+- The actual data collected will change very infrequently. Time series continuity is very important to ADD (Analysis and Data Directorate) so the actual data collected should stay largely consistent i.e. in general we can change the question wording in ways that makes the intent clearer or easier to understand, but not in ways that would make the data provider give a different answer. 
 
 A form parser class will parse this config into ruby objects/methods that can be used as an API by the rest of the application, such that we could change the underlying config if needed (for example swap JSON for YAML or for DataBase objects) without needing to change the rest of the application.
 
