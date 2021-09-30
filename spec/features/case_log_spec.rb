@@ -102,6 +102,12 @@ RSpec.describe "Test Features" do
     let(:subsection) { "household_characteristics" }
 
     context "when the user needs to check their answers for a subsection" do
+      def fill_in_number_question(case_log_id, question, value)
+        visit("/case_logs/#{case_log_id}/#{question}")
+        fill_in("#{question}", with: value)
+        click_button("Save and continue")
+      end
+
       it "can be visited by URL" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
         expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
@@ -109,30 +115,23 @@ RSpec.describe "Test Features" do
 
       let(:last_question_for_subsection) { "household_number_of_other_members" }
       it "redirects to the check answers page when answering the last question and clicking save and continue" do
-        visit("/case_logs/#{id}/#{last_question_for_subsection}")
-        fill_in(last_question_for_subsection, with: 0)
-        click_button("Save and continue")
+        fill_in_number_question(id, last_question_for_subsection, 0)
         expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
       end
 
       it "has question headings based on the subsection" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
-        expect(page).to have_content("Tenant code")
-        expect(page).to have_content("Tenant's age")
-        expect(page).to have_content("Tenant's gender")
-        expect(page).to have_content("Ethnicity")
-        expect(page).to have_content("Nationality")
-        expect(page).to have_content("Work")
-        expect(page).to have_content("Number of Other Household Members")
+        question_labels = ["Tenant code", "Tenant's age", "Tenant's gender", "Ethnicity", "Nationality", "Work", "Number of Other Household Members"]
+        question_labels.each do |label|
+          expect(page).to have_content(label)
+        end 
       end
       
       it "should display answers given by the user for the question in the subsection" do
-        visit("/case_logs/#{id}/tenant_age")
-        fill_in("tenant_age", with: 28)
-        click_button("Save and continue")
+        fill_in_number_question(empty_case_log.id, "tenant_age", 28)
         choose("tenant-gender-non-binary-field")
         click_button("Save and continue")
-        visit("/case_logs/#{id}/#{subsection}/check_answers")
+        visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("28")
         expect(page).to have_content("Non-binary")
       end 
@@ -145,9 +144,7 @@ RSpec.describe "Test Features" do
       end
 
       it "should have a change link for answered questions" do 
-        visit("/case_logs/#{empty_case_log.id}/tenant_age")
-        fill_in("tenant_age", with: 28)
-        click_button("Save and continue")
+        fill_in_number_question(empty_case_log.id, "tenant_age", 28)
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: "Answer", count: 6
         assert_selector "a", text: "Change", count: 1
