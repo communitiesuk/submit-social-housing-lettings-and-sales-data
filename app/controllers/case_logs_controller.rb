@@ -1,5 +1,4 @@
 class CaseLogsController < ApplicationController
-
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
     @in_progress_case_logs = CaseLog.where(status: 0)
@@ -40,7 +39,7 @@ class CaseLogsController < ApplicationController
     end
   end
 
-  private
+private
 
   def page_params(questions_for_page)
     params.permit(questions_for_page)
