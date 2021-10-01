@@ -158,11 +158,11 @@ RSpec.describe "Test Features" do
       end
 
       it "should have a link pointing to the next empty question if some questions are answered" do
-        fill_in_number_question(empty_case_log.id, "tenant_code", 0)
+        fill_in_number_question(empty_case_log.id, "net_income", 18000)
 
-        visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
-        expect(page).to have_content('You answered 1 of 7 questions')
-        expect(page).to have_link('Answer the missing questions', href: "/case_logs/#{empty_case_log.id}/tenant_age")
+        visit("/case_logs/#{empty_case_log.id}/income_and_benefits/check_answers")
+        expect(page).to have_content('You answered 1 of 4 questions')
+        expect(page).to have_link('Answer the missing questions', href: "/case_logs/#{empty_case_log.id}/net_income")
       end
     end
   end

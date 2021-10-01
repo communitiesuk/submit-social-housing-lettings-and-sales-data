@@ -13,10 +13,19 @@ module CheckAnswersHelper
   end
 
   def create_next_missing_question_link(case_log_id, subsection_pages, case_log)
-    empty_question = subsection_pages.keys.find{|x| case_log[x].blank? }
-
-    url = "/case_logs/#{case_log_id}/#{empty_question}"
-    link_to('Answer the missing questions', url, class: "govuk-link").html_safe
+      pages_to_fill_in = []
+      subsection_pages.each do |page_title, page_info|
+        page_info["questions"].any? { |q| case_log["q"].blank?}
+        pages_to_fill_in << page_title
+      end
+      url = "/case_logs/#{case_log_id}/#{pages_to_fill_in.first}"
+      link_to('Answer the missing questions', url, class: "govuk-link").html_safe
   end
 
+  def get_total_number_of_questions(subsection_pages)
+    questions = subsection_pages.values.flat_map do |page| 
+      page["questions"].keys 
+    end
+    questions.count
+  end
 end

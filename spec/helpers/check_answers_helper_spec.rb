@@ -15,4 +15,14 @@ RSpec.describe CheckAnswersHelper do
       expect(get_answered_questions_total(subsection_pages, case_log)).to equal(1)
     end
   end
+
+  describe "Get total number of questions" do
+    let!(:case_log) { FactoryBot.create(:case_log) }
+    @form = Form.new(2021, 2022)
+    subsection_pages = @form.pages_for_subsection("income_and_benefits")
+
+    it "returns the total number of questions for a subsection" do
+       expect(get_total_number_of_questions(subsection_pages)).to eq(4)
+    end
+  end
 end
