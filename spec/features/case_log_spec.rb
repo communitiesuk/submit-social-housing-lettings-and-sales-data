@@ -104,13 +104,13 @@ RSpec.describe "Test Features" do
     context "when the user needs to check their answers for a subsection" do
       def fill_in_number_question(case_log_id, question, value)
         visit("/case_logs/#{case_log_id}/#{question}")
-        fill_in("#{question}", with: value)
+        fill_in(question.to_s, with: value)
         click_button("Save and continue")
       end
 
       def answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}/net_income")
-        fill_in("net_income", with: 18000)
+        fill_in("net_income", with: 18_000)
         choose("net-income-frequency-yearly-field")
         click_button("Save and continue")
         choose("net-income-uc-proportion-all-field")
@@ -151,7 +151,7 @@ RSpec.describe "Test Features" do
         visit("case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: /Answer\z/, count: 7
         assert_selector "a", text: "Change", count: 0
-        expect(page).to have_link('Answer', href: "/case_logs/#{empty_case_log.id}/tenant_age")
+        expect(page).to have_link("Answer", href: "/case_logs/#{empty_case_log.id}/tenant_age")
       end
 
       it "should have a change link for answered questions" do
@@ -159,28 +159,28 @@ RSpec.describe "Test Features" do
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: /Answer\z/, count: 6
         assert_selector "a", text: "Change", count: 1
-        expect(page).to have_link('Change', href: "/case_logs/#{empty_case_log.id}/tenant_age")
+        expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/tenant_age")
       end
 
       it "should have a link pointing to the first question if no questions are answered" do
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
-        expect(page).to have_content('You answered 0 of 7 questions')
-        expect(page).to have_link('Answer the missing questions', href: "/case_logs/#{empty_case_log.id}/tenant_code")
+        expect(page).to have_content("You answered 0 of 7 questions")
+        expect(page).to have_link("Answer the missing questions", href: "/case_logs/#{empty_case_log.id}/tenant_code")
       end
 
       it "should have a link pointing to the next empty question if some questions are answered" do
-        fill_in_number_question(empty_case_log.id, "net_income", 18000)
+        fill_in_number_question(empty_case_log.id, "net_income", 18_000)
 
         visit("/case_logs/#{empty_case_log.id}/income_and_benefits/check_answers")
-        expect(page).to have_content('You answered 1 of 4 questions')
-        expect(page).to have_link('Answer the missing questions', href: "/case_logs/#{empty_case_log.id}/net_income")
+        expect(page).to have_content("You answered 1 of 4 questions")
+        expect(page).to have_link("Answer the missing questions", href: "/case_logs/#{empty_case_log.id}/net_income")
       end
 
       it "should not display the missing answer questions link if all questions are answered" do
         answer_all_questions_in_income_subsection
-        expect(page).to have_content('You answered all the questions')
+        expect(page).to have_content("You answered all the questions")
         assert_selector "a", text: "Answer the missing questions", count: 0
-      end 
+      end
     end
   end
 end

@@ -22,7 +22,7 @@ RSpec.describe CheckAnswersHelper do
     subsection_pages = @form.pages_for_subsection("income_and_benefits")
 
     it "returns the total number of questions for a subsection" do
-       expect(get_total_number_of_questions(subsection_pages)).to eq(4)
+      expect(get_total_number_of_questions(subsection_pages)).to eq(4)
     end
   end
 end
