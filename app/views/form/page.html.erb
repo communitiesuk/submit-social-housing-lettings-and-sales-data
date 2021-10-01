@@ -17,6 +17,11 @@
       <div id=<%= "#{question_key}_div" %> >
         <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
       </div>
+      <% if conditional_questions_for_page(page_info).include?(question_key) %>
+      <style>
+        <%= "##{question_key}_div" %> { display: none; }
+      </style>
+      <% end %>
     <% end %>
 
     <%= f.hidden_field :previous_page, value: page_key %>
