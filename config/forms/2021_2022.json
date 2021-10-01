@@ -303,6 +303,9 @@
                     "1": "No - they left up to 5 years ago",
                     "2": "No - they left more than 5 years ago",
                     "3": "Prefer not to say"
+                  },
+                  "show_if": {
+                    "armed_forces": ["0", "1"]
                   }
                 },
                 "armed_forces_injured": {
@@ -313,6 +316,9 @@
                     "0": "Yes",
                     "1": "No",
                     "2": "Prefer not to say"
+                  },
+                  "show_if": {
+                    "armed_forces": ["0", "1"]
                   }
                 },
                 "armed_forces_partner": {

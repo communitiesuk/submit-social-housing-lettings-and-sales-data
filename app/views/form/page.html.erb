@@ -14,7 +14,9 @@
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
 
     <% page_info["questions"].map do |question_key, question| %>
-      <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
+      <div id=<%= "#{question_key}_div" %> >
+        <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
+      </div>
     <% end %>
 
     <%= f.hidden_field :previous_page, value: page_key %>
