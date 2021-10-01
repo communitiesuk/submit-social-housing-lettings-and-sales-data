@@ -21,7 +21,7 @@ module CheckAnswersHelper
   def create_next_missing_question_link(case_log_id, subsection_pages, case_log)
     pages_to_fill_in = []
     subsection_pages.each do |page_title, page_info|
-      page_info["questions"].any? { |_q| case_log["q"].blank? }
+      page_info["questions"].any? { |question| case_log[question].blank? }
       pages_to_fill_in << page_title
     end
     url = "/case_logs/#{case_log_id}/#{pages_to_fill_in.first}"
