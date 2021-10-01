@@ -8,8 +8,8 @@
         <%= f.govuk_radio_divider %>
       <% elsif question["conditional_for"] %>
         <%= f.govuk_radio_button question_key, key, label: { text: val },
-            "data-controller": "#{question_key.dasherize}",
-            "data-action": "click->#{question_key.dasherize}#displayConditional",
+            "data-controller": "conditional",
+            "data-action": "click->conditional#displayConditional",
             "data-info": "#{question["conditional_for"].to_json}"
         %>
       <% else %>
