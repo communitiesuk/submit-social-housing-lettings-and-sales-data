@@ -1,4 +1,4 @@
-### ADR - 005: Saving values to the database
+### ADR - 006: Saving values to the database
 
 We have opted to save values to the database directly instead of saving keys/numbers that need to be converted with enums in models using active record.
 
