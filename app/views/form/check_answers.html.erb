@@ -3,7 +3,9 @@
   <p>You answered <%= get_answered_questions_total(subsection_pages, case_log)  %> of <%= subsection_pages.count %> questions</p>
   <%= create_next_missing_question_link(case_log["id"], subsection_pages, case_log) %>
   <% subsection_pages.each do |page, page_info| %>
-    <%= render partial: 'form/check_answers_table', locals: { page: page, page_info: page_info, case_log: case_log } %>
+    <% page_info["questions"].each do |question_title, question_info| %>
+      <%= render partial: 'form/check_answers_table', locals: { question_title: question_title, question_info: question_info, case_log: case_log } %>
+    <%end %>
   <% end %>
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
     <%= f.govuk_submit "Save and continue"  %>

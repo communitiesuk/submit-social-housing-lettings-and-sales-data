@@ -10,11 +10,11 @@
           "label": "Household characteristics",
           "pages": {
             "tenant_code":{
-              "check_answer_label": "Tenant code",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_code": {
+                  "check_answer_label": "Tenant code",
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -22,11 +22,11 @@
               }
             },
             "tenant_age":{
-              "check_answer_label": "Tenant's age",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_age": {
+                  "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "hint_text": "",
                   "type": "numeric",
@@ -37,11 +37,11 @@
               }
             },
             "tenant_gender":{
-              "check_answer_label": "Tenant's gender",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_gender": {
+                  "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -55,11 +55,11 @@
               }
             },
             "tenant_ethnic_group":{
-              "check_answer_label": "Ethnicity",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_ethnic_group": {
+                  "check_answer_label": "Ethnicity",
                   "header": "What is the tenant's ethnic group?",
                   "hint_text": "",
                   "type": "radio",
@@ -88,11 +88,11 @@
               }
             },
             "tenant_nationality":{
-              "check_answer_label": "Nationality",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_nationality": {
+                  "check_answer_label": "Nationality",
                   "header": "What is the tenant's nationality?",
                   "hint_text": "",
                   "type": "radio",
@@ -118,11 +118,11 @@
               }
             },
             "tenant_economic_status":{
-              "check_answer_label": "Work",
               "header": "",
               "description": "",
               "questions":{
                 "tenant_economic_status": {
+                  "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -143,11 +143,11 @@
               }
             },
             "household_number_of_other_members":{
-              "check_answer_label": "Number of Other Household Members",
               "header": "",
               "description": "",
               "questions":{
                 "household_number_of_other_members": {
+                  "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 7",
                   "type": "numeric",

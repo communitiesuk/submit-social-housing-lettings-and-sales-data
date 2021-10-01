@@ -1,13 +1,13 @@
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      <%= page_info["check_answer_label"].to_s %>
+      <%= question_info["check_answer_label"].to_s %>
     <dt>
     <dd class="govuk-summary-list__value">
-      <%= case_log[page] %>
+      <%= case_log[question_title] %>
     </dd>
     <dd class="govuk-summary-list__actions">
-      <%= create_update_answer_link(case_log[page], case_log["id"], page)%>
+      <%= create_update_answer_link(case_log[question_title], case_log["id"], question_title)%>
     </dd>
   </div>
 </dl>

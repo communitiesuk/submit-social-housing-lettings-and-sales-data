@@ -10,9 +10,9 @@ RSpec.describe CheckAnswersHelper do
       expect(get_answered_questions_total(subsection_pages, case_log)).to equal(0)
     end
 
-    it "returns 0 if only 1 question on a page gets answered" do
+    it "returns 1 if 1 question gets answered" do
       case_log["net_income"] = "123"
-      expect(get_answered_questions_total(subsection_pages, case_log)).to equal(0)
+      expect(get_answered_questions_total(subsection_pages, case_log)).to equal(1)
     end
   end
 end
