@@ -108,6 +108,17 @@ RSpec.describe "Test Features" do
         click_button("Save and continue")
       end
 
+      def answer_all_questions_in_income_subsection
+        visit("/case_logs/#{empty_case_log.id}/net_income")
+        fill_in("net_income", with: 18000)
+        choose("net-income-frequency-yearly-field")
+        click_button("Save and continue")
+        choose("net-income-uc-proportion-all-field")
+        click_button("Save and continue")
+        choose("housing-benefit-housing-benefit-but-not-universal-credit-field")
+        click_button("Save and continue")
+      end
+
       it "can be visited by URL" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
         expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
@@ -164,6 +175,12 @@ RSpec.describe "Test Features" do
         expect(page).to have_content('You answered 1 of 4 questions')
         expect(page).to have_link('Answer the missing questions', href: "/case_logs/#{empty_case_log.id}/net_income")
       end
+
+      it "should not display the missing answer questions link if all questions are answered" do
+        answer_all_questions_in_income_subsection
+        expect(page).to have_content('You answered all the questions')
+        assert_selector "a", text: "Answer the missing questions", count: 0
+      end 
     end
   end
 end
