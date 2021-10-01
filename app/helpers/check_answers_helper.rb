@@ -30,9 +30,9 @@ module CheckAnswersHelper
 
   def display_answered_questions_summary(subsection_pages, case_log)
     if get_answered_questions_total(subsection_pages, case_log) == get_total_number_of_questions(subsection_pages)
-      "<p>You answered all the questions</p>".html_safe
+      '<p class="govuk-body govuk-!-margin-bottom-7">You answered all the questions</p>'.html_safe
     else
-      "<p>You answered #{get_answered_questions_total(subsection_pages, case_log)} of #{get_total_number_of_questions(subsection_pages)} questions</p>
+      "<p class=\"govuk-body govuk-!-margin-bottom-7\">You answered #{get_answered_questions_total(subsection_pages, case_log)} of #{get_total_number_of_questions(subsection_pages)} questions</p>
       #{create_next_missing_question_link(case_log['id'], subsection_pages, case_log)}".html_safe
     end
   end
