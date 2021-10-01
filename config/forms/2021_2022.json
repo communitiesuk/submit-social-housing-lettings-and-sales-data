@@ -421,9 +421,9 @@
             "tenancy_code":{
               "header": "",
               "description": "",
-              "check_answer_label": "What is the tenancy code?",
               "questions":{
                 "tenancy_code": {
+                  "check_answer_label": "What is the tenancy code?",
                   "header": "What is the tenancy code?",
                   "hint_text": "",
                   "type": "text"
@@ -433,9 +433,9 @@
             "tenancy_start_date": {
               "header": "",
               "description": "",
-              "check_answer_label": "When is the tenancy start date?",
               "questions": {
                 "tenancy_start_date": {
+                  "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -445,9 +445,9 @@
             "starter_tenancy": {
               "header": "",
               "description": "",
-              "check_answer_label": "Is this a starter or introductory tenancy?",
               "questions": {
                 "starter_tenancy": {
+                  "check_answer_label": "Is this a starter or introductory tenancy?",
                   "header": "Is this a starter tenancy?",
                   "hint_text": "",
                   "type": "radio",
@@ -461,9 +461,9 @@
             "fixed_term_tenancy":{
               "header": "",
               "description": "",
-              "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
               "questions":{
                 "fixed_term_tenancy": {
+                  "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
                   "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
                   "hint_text": "To the nearest year",
                   "type": "numeric",
@@ -476,9 +476,9 @@
             "tenancy_type": {
               "header": "",
               "description": "",
-              "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
               "questions": {
                 "tenancy_type": {
+                  "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
                   "header": "What is the type of tenancy after the starter period has ended?",
                   "hint_text": "",
                   "type": "radio",
@@ -496,9 +496,9 @@
             "letting_type": {
               "header": "",
               "description": "",
-              "check_answer_label": "Type of letting",
               "questions": {
                 "letting_type": {
+                  "check_answer_label": "Type of letting",
                   "header": "Which type of letting is this?",
                   "hint_text": "",
                   "type": "radio",
@@ -516,9 +516,9 @@
             "letting_provider": {
               "header": "",
               "description": "",
-              "check_answer_label": "Provider",
               "questions": {
                 "letting_provider": {
+                  "check_answer_label": "Provider",
                   "header": "Who is the letting provider?",
                   "hint_text": "",
                   "type": "radio",
@@ -537,9 +537,9 @@
             "property_location":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "property_location": {
+                  "check_answer_label": "Property Location",
                   "header": "Property location",
                   "hint_text": "",
                   "type": "radio",
@@ -866,6 +866,7 @@
               "description": "",
               "questions":{
                 "property_postcode": {
+                  "check_answer_label": "What was the previous postcode?",
                   "header": "What is the property's postcode?",
                   "hint_text": "",
                   "type": "text"
@@ -877,6 +878,7 @@
               "description": "",
               "questions": {
                 "property_relet": {
+                  "check_answer_label": "Which type was the property most recently let as?",
                   "header": "Is this property a relet?",
                   "hint_text": "",
                   "type": "radio",
@@ -892,6 +894,7 @@
               "description": "",
               "questions": {
                 "property_vacancy_reason": {
+                  "check_answer_label": "What is the reason for the property vacancy?",
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
@@ -919,6 +922,7 @@
               "description": "",
               "questions":{
                 "property_reference": {
+                  "check_answer_label": "What’s the property reference?",
                   "header": "What's the property reference?",
                   "hint_text": "",
                   "type": "text"
@@ -930,6 +934,7 @@
               "description": "",
               "questions": {
                 "property_unit_type": {
+                  "check_answer_label": "Which type of unit is the property?",
                   "header": "Which type of unit is the property?",
                   "hint_text": "",
                   "type": "radio",
@@ -951,6 +956,7 @@
               "description": "",
               "questions":{
                 "property_number_of_bedrooms": {
+                  "check_answer_label": "How many bedrooms are there in the property?",
                   "header": "How many bedrooms are there in the property?",
                   "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
                   "type": "numeric",
@@ -965,6 +971,7 @@
               "description": "",
               "questions": {
                 "property_major_repairs": {
+                  "check_answer_label": "Were major repairs carried out during the void period?",
                   "header": "Were any major repairs completed during the void period?",
                   "hint_text": "",
                   "type": "radio",
@@ -980,6 +987,7 @@
               "description": "",
               "questions": {
                 "property_major_repairs": {
+                  "check_answer_label": "What was the major repairs completion date?",
                   "header": "What was the major repairs completion date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -991,6 +999,7 @@
               "description": "",
               "questions":{
                 "property_number_of_times_relet": {
+                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
                   "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
                   "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
                   "type": "numeric",
@@ -1005,6 +1014,7 @@
               "description": "",
               "questions": {
                 "property_wheelchair_accessible": {
+                  "check_answer_label": "Is property built or adapted to wheelchair user standards?",
                   "header": "Is property built or adapted to wheelchair user standards?",
                   "hint_text": "",
                   "type": "radio",
@@ -1028,9 +1038,9 @@
             "net_income":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "net_income": {
+                  "check_answer_label": "",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1052,9 +1062,9 @@
             "net_income_uc_proportion":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "net_income_uc_proportion": {
+                  "check_answer_label": "",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1070,9 +1080,9 @@
             "housing_benefit":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "housing_benefit": {
+                  "check_answer_label": "",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1096,9 +1106,9 @@
             "rent":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "rent_frequency": {
+                  "check_answer_label": "Rent Period",
                   "header": "Which period are rent and other charges due?",
                   "hint_text": "",
                   "type": "radio",
@@ -1116,6 +1126,7 @@
                   }
                 },
                 "basic_rent": {
+                  "check_answer_label": "Basic Rent",
                   "header": "What is the basic rent?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
@@ -1123,6 +1134,7 @@
                   "step": 1
                 },
                 "service_charge": {
+                  "check_answer_label": "Service Charge",
                   "header": "What is the service charge?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
@@ -1130,6 +1142,7 @@
                   "step": 1
                 },
                 "personal_service_charge": {
+                  "check_answer_label": "Personal Service Charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
@@ -1137,6 +1150,7 @@
                   "step": 1
                 },
                 "support_charge": {
+                  "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
                   "type": "numeric",
@@ -1144,6 +1158,7 @@
                   "step": 1
                 },
                 "total_charge": {
+                  "check_answer_label": "Total Charge",
                   "header": "Total charge?",
                   "hint_text": "This is the total of rent and all charges",
                   "type": "numeric",
@@ -1151,6 +1166,7 @@
                   "step": 1
                 },
                 "outstanding_amount": {
+                  "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "hint_text": "",
                   "type": "radio",
@@ -1174,9 +1190,9 @@
             "time_lived_in_la":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "time_lived_in_la": {
+                  "check_answer_label": "",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1196,9 +1212,9 @@
             "time_on_la_waiting_list":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "time_on_la_waiting_list": {
+                  "check_answer_label": "",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1218,9 +1234,9 @@
             "previous_la":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "previous_la": {
+                  "check_answer_label": "",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
                   "type": "radio",
@@ -1545,8 +1561,8 @@
             "previous_postcode": {
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions": {
+                "check_answer_label": "",
                 "previous_postcode": {
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
@@ -1557,9 +1573,9 @@
             "reasonable_preference": {
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions": {
                 "reasonable_preference": {
+                  "check_answer_label": "",
                   "header": "Was the household given reasonable preference by the local authority?",
                   "hint_text": "",
                   "type": "radio",
@@ -1586,9 +1602,9 @@
             "lettings_policy": {
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions": {
                 "cbl_letting": {
+                  "check_answer_label": "",
                   "header": "Was the letting made under choice-based lettings (CBL)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1630,9 +1646,9 @@
             "declaration":{
               "header": "",
               "description": "",
-              "check_answer_label": "",
               "questions":{
                 "declaration": {
+                  "check_answer_label": "",
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
