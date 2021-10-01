@@ -1,10 +1,9 @@
 module CheckAnswersHelper
   def get_answered_questions_total(subsection_pages, case_log)
-    questions = []
-    subsection_pages.keys.each do |page|
-      questions << page
+    questions = subsection_pages.values.map do |page|
+      page["questions"].keys
     end
-    return questions.count {|question| !(case_log[question].blank?)}
+    return questions.count {|questions_for_page| questions_for_page.none? { |question| case_log[question].blank?}}
   end
 
 
