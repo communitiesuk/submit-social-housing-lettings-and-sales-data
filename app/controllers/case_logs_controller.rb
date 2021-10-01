@@ -44,7 +44,7 @@ class CaseLogsController < ApplicationController
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
     subsection_pages = form.pages_for_subsection(subsection)
-    render "form/check_answers", locals: { case_log: @case_log, subsection_pages: subsection_pages }
+    render "form/check_answers", locals: { case_log: @case_log, subsection_pages: subsection_pages, subsection: subsection }
   end
 
   form = Form.new(2021, 2022)
