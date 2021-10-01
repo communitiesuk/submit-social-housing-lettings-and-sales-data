@@ -34,7 +34,6 @@ module CheckAnswersHelper
     else
       "<p>You answered #{get_answered_questions_total(subsection_pages, case_log)} of #{get_total_number_of_questions(subsection_pages)} questions</p>
       #{create_next_missing_question_link(case_log['id'], subsection_pages, case_log)}".html_safe
-
     end
   end
 end
