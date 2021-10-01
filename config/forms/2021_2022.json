@@ -1040,7 +1040,7 @@
               "description": "",
               "questions":{
                 "net_income": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1048,6 +1048,7 @@
                   "step": "1"
                 },
                 "net_income_frequency": {
+                  "check_answer_label": "Income Frequency",
                   "header": "How often do they receive this income?",
                   "hint_text": "",
                   "type": "radio",
@@ -1064,7 +1065,7 @@
               "description": "",
               "questions":{
                 "net_income_uc_proportion": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Benefits as a proportion of income",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1082,7 +1083,7 @@
               "description": "",
               "questions":{
                 "housing_benefit": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Universal Credit & Housing Benefit\t",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1192,7 +1193,7 @@
               "description": "",
               "questions":{
                 "time_lived_in_la": {
-                  "check_answer_label": "",
+                  "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1214,7 +1215,7 @@
               "description": "",
               "questions":{
                 "time_on_la_waiting_list": {
-                  "check_answer_label": "",
+                  "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1236,7 +1237,7 @@
               "description": "",
               "questions":{
                 "previous_la": {
-                  "check_answer_label": "",
+                  "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
                   "type": "radio",
@@ -1562,8 +1563,8 @@
               "header": "",
               "description": "",
               "questions": {
-                "check_answer_label": "",
                 "previous_postcode": {
+                  "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text"
@@ -1575,7 +1576,7 @@
               "description": "",
               "questions": {
                 "reasonable_preference": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Was the household given Reasonable Preference (i.e. priority) for housing by the Local Authority?",
                   "header": "Was the household given reasonable preference by the local authority?",
                   "hint_text": "",
                   "type": "radio",
@@ -1585,6 +1586,7 @@
                   }
                 },
                 "reasonable_preference_reason": {
+                  "check_answer_label": "Reason for reasonable preference",
                   "header": "Why were they given reasonable preference?",
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
@@ -1604,7 +1606,7 @@
               "description": "",
               "questions": {
                 "cbl_letting": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Choice-based letting?",
                   "header": "Was the letting made under choice-based lettings (CBL)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1614,6 +1616,7 @@
                   }
                 },
                 "chr_letting": {
+                  "check_answer_label": "Common housing register letting?",
                   "header": "Was the letting made under common housing register (CHR)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1623,6 +1626,7 @@
                   }
                 },
                 "cap_letting": {
+                  "check_answer_label": "Common allocation policy letting?",
                   "header": "Was the letting made under common allocation policy (CAP)? ",
                   "hint_text": "",
                   "type": "radio",
