@@ -96,4 +96,13 @@ RSpec.describe "Test Features" do
       end
     end
   end
+
+  describe "Conditional questions" do
+    context "given a page where some questions are only conditionally shown, depending on how you answer the first question" do
+      it "initially hides conditional questions" do
+        visit("/case_logs/#{id}/armed_forces")
+        expect(page).to have_selector("#armed_forces_injured_div", visible: :hidden)
+      end
+    end
+  end
 end
