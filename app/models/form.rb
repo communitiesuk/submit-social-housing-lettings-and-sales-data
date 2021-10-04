@@ -60,4 +60,8 @@ class Form
 
     pages_for_subsection(subsection).keys[current_page_idx - 1]
   end
+
+  def questions_for_subsection(subsection)
+    pages_for_subsection(subsection).map { |title, _value| questions_for_page(title) }.reduce(:merge)
+  end
 end

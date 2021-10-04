@@ -15,6 +15,17 @@ RSpec.describe "Test Features" do
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
+  def answer_all_questions_in_income_subsection
+    visit("/case_logs/#{empty_case_log.id}/net_income")
+    fill_in("net_income", with: 18_000)
+    choose("net-income-frequency-yearly-field")
+    click_button("Save and continue")
+    choose("net-income-uc-proportion-all-field")
+    click_button("Save and continue")
+    choose("housing-benefit-housing-benefit-but-not-universal-credit-field")
+    click_button("Save and continue")
+  end
+
   describe "Create new log" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
@@ -25,10 +36,45 @@ RSpec.describe "Test Features" do
   end
 
   describe "Viewing a log" do
-    it "displays a tasklist header" do
-      visit("/case_logs/#{id}")
-      expect(page).to have_content("Tasklist for log #{id}")
-      expect(page).to have_content("This submission is #{status}")
+    context "tasklist page" do
+      it "displays a tasklist header" do
+        visit("/case_logs/#{id}")
+        expect(page).to have_content("Tasklist for log #{id}")
+        expect(page).to have_content("This submission is #{status}")
+      end
+
+      it "displays a section status" do
+        visit("/case_logs/#{empty_case_log.id}")
+
+        assert_selector ".govuk-tag", text: /Not started/, count: 8
+        assert_selector ".govuk-tag", text: /Completed/, count: 0
+        assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
+      end
+
+      it "shows the correct status if one section is completed" do
+        answer_all_questions_in_income_subsection
+        visit("/case_logs/#{empty_case_log.id}")
+
+        assert_selector ".govuk-tag", text: /Not started/, count: 7
+        assert_selector ".govuk-tag", text: /Completed/, count: 1
+        assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
+      end
+
+      it "skips to the first section if no answers are completed" do
+        visit("/case_logs/#{empty_case_log.id}")
+        expect(page).to have_link("Skip to next incomplete section", href: /#household_characteristics/)
+      end
+
+      it "shows the number of completed sections if no sections are completed" do
+        visit("/case_logs/#{empty_case_log.id}")
+        expect(page).to have_content("You've completed 0 of 9 sections.")
+      end
+
+      it "shows the number of completed sections if one section is completed" do
+        answer_all_questions_in_income_subsection
+        visit("/case_logs/#{empty_case_log.id}")
+        expect(page).to have_content("You've completed 1 of 9 sections.")
+      end
     end
 
     it "displays the household questions when you click into that section" do
@@ -105,17 +151,6 @@ RSpec.describe "Test Features" do
       def fill_in_number_question(case_log_id, question, value)
         visit("/case_logs/#{case_log_id}/#{question}")
         fill_in(question.to_s, with: value)
-        click_button("Save and continue")
-      end
-
-      def answer_all_questions_in_income_subsection
-        visit("/case_logs/#{empty_case_log.id}/net_income")
-        fill_in("net_income", with: 18_000)
-        choose("net-income-frequency-yearly-field")
-        click_button("Save and continue")
-        choose("net-income-uc-proportion-all-field")
-        click_button("Save and continue")
-        choose("housing-benefit-housing-benefit-but-not-universal-credit-field")
         click_button("Save and continue")
       end
 

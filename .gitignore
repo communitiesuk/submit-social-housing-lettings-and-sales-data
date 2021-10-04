@@ -39,3 +39,7 @@ yarn-debug.log*
 
 # Code coverage results
 /coverage
+
+#IDE specific files
+/.idea
+/.idea/*

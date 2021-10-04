@@ -6,9 +6,9 @@
 
       <h2 class="govuk-heading-s govuk-!-margin-bottom-2">This submission is
         <%= @case_log.status %></h2>
-      <p class="govuk-body govuk-!-margin-bottom-7">You've completed 0 of 9 sections.</p>
+      <p class="govuk-body govuk-!-margin-bottom-7">You've completed <%= get_sections_count(@form, @case_log, :completed) %> of <%= get_sections_count(@form, @case_log, :all) %> sections.</p>
       <p class="govuk-body govuk-!-margin-bottom-7">
-        <a href="#">Skip to next incomplete section</a>
+        <a href="#<%= get_next_incomplete_section(@form, @case_log) %>">Skip to next incomplete section</a>
       </p>
 
       <%= render "tasklist", locals: { form: @form } %>
