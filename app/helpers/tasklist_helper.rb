@@ -29,15 +29,26 @@ module TasklistHelper
     :in_progress
   end
 
-  def all_questions_completed(case_log)
-    case_log.attributes.all? { |_question, answer| answer.present?}
-  end
-
   def get_status_style(status_label)
     STYLES[status_label]
   end
 
   def get_status_label(status)
     STATUSES[status]
+  end
+
+  def get_next_incomplete_section(form, case_log)
+    subsections = form.all_subsections.keys
+    return subsections.find { |subsection| is_incomplete?(subsection, case_log) }
+  end
+
+  private
+  def all_questions_completed(case_log)
+    case_log.attributes.all? { |_question, answer| answer.present?}
+  end
+
+  def is_incomplete?(subsection, case_log)
+    status = get_subsection_status(subsection, case_log)
+    return status == :not_started || status == :in_progress
   end
 end

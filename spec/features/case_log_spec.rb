@@ -39,6 +39,11 @@ RSpec.describe "Test Features" do
         assert_selector ".govuk-tag", text: /Completed/, count: 0
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
+
+      it "skips to the first section if no answers are completed" do
+        visit("/case_logs/#{empty_case_log.id}")
+        expect(page).to have_link("Skip to next incomplete section", :href => /#household_characteristics/)
+      end
     end
 
     it "displays the household questions when you click into that section" do

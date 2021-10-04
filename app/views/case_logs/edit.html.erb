@@ -8,7 +8,7 @@
         <%= @case_log.status %></h2>
       <p class="govuk-body govuk-!-margin-bottom-7">You've completed 0 of 9 sections.</p>
       <p class="govuk-body govuk-!-margin-bottom-7">
-        <a href="#">Skip to next incomplete section</a>
+        <a href="#<%= get_next_incomplete_section(@form, @case_log) %>">Skip to next incomplete section</a>
       </p>
 
       <%= render "tasklist", locals: { form: @form } %>
