@@ -62,6 +62,6 @@ class Form
   end
 
   def questions_for_subsection(subsection)
-    pages_for_subsection(subsection).map {|title, _value| questions_for_page(title)}.reduce(:merge)
+    pages_for_subsection(subsection).map { |title, _value| questions_for_page(title) }.reduce(:merge)
   end
 end

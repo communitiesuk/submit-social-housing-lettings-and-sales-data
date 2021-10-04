@@ -26,7 +26,6 @@ RSpec.describe "Test Features" do
     click_button("Save and continue")
   end
 
-
   describe "Create new log" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
@@ -63,7 +62,7 @@ RSpec.describe "Test Features" do
 
       it "skips to the first section if no answers are completed" do
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_link("Skip to next incomplete section", :href => /#household_characteristics/)
+        expect(page).to have_link("Skip to next incomplete section", href: /#household_characteristics/)
       end
 
       it "shows the number of completed sections if no sections are completed" do
