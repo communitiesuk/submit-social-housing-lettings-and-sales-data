@@ -51,4 +51,34 @@ RSpec.describe TasklistHelper do
       expect(get_next_incomplete_section(@form, case_log)).to eq("household_characteristics")
     end
   end
+
+  describe "get sections count" do
+    let!(:empty_case_log) { FactoryBot.create(:case_log) }
+    let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+
+    it "returns the total of sections if no status is given" do
+      @form = Form.new(2021, 2022)
+      expect(get_sections_count(@form, empty_case_log)).to eq(9)
+    end
+
+    it "returns 0 sections for completed sections if no sections are completed" do
+      @form = Form.new(2021, 2022)
+      expect(get_sections_count(@form, empty_case_log, :completed)).to eq(0)
+    end
+
+    it "returns the number of not started sections" do
+      @form = Form.new(2021, 2022)
+      expect(get_sections_count(@form, empty_case_log, :not_started)).to eq(8)
+    end
+
+    it "returns the number of sections in progress" do
+      @form = Form.new(2021, 2022)
+      expect(get_sections_count(@form, case_log, :in_progress)).to eq(1)
+    end
+
+    it "returns 0 for invalid state" do
+      @form = Form.new(2021, 2022)
+      expect(get_sections_count(@form, case_log, :fake)).to eq(0)
+    end
+  end
 end

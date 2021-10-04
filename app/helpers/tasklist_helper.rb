@@ -39,6 +39,14 @@ module TasklistHelper
     return subsections.find { |subsection| is_incomplete?(subsection, case_log, form.questions_for_subsection(subsection).keys) }
   end
 
+  def get_sections_count(form, case_log, status = :all)
+    subsections = form.all_subsections.keys
+    if status == :all
+      return subsections.count
+    end
+    return subsections.count { |subsection| get_subsection_status(subsection, case_log, form.questions_for_subsection(subsection).keys) == status }
+  end
+
   private
   def all_questions_completed(case_log)
     case_log.attributes.all? { |_question, answer| answer.present?}
