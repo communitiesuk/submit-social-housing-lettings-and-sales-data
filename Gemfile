@@ -29,7 +29,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "pry-byebug"
-  # gem "selenium-webdriver", require: false
+  gem "selenium-webdriver", require: false
   gem "simplecov", require: false
   %w[rspec-core rspec-expectations rspec-mocks rspec-rails rspec-support].each do |lib|
     gem lib, git: "https://github.com/rspec/#{lib}.git", branch: "main", require: false

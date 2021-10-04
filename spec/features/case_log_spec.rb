@@ -223,7 +223,15 @@ RSpec.describe "Test Features" do
     context "given a page where some questions are only conditionally shown, depending on how you answer the first question" do
       it "initially hides conditional questions" do
         visit("/case_logs/#{id}/armed_forces")
-        expect(page).to have_selector("#armed_forces_injured_div", visible: :hidden)
+        expect(page).not_to have_selector("#armed_forces_injured_div")
+      end
+
+      it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
+        visit("/case_logs/#{id}/armed_forces")
+        find(:xpath, "//label[@for='armed-forces-0-field']").click
+        expect(page).to have_selector("#armed_forces_injured_div")
+        find(:xpath, "//label[@for='armed-forces-2-field']").click
+        expect(page).not_to have_selector("#armed_forces_injured_div")
       end
     end
   end
