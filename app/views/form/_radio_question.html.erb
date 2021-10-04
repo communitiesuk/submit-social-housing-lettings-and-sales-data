@@ -9,7 +9,7 @@
       <% elsif question["conditional_for"] %>
         <%= f.govuk_radio_button question_key, val, label: { text: val },
             "data-controller": "conditional-question",
-            "data-action": "click->conditional-question#displayConditional",
+            "data-action": "conditional-question#displayConditional",
             "data-info": question["conditional_for"].to_json
         %>
       <% else %>
