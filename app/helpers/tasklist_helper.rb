@@ -33,15 +33,13 @@ module TasklistHelper
 
   def get_next_incomplete_section(form, case_log)
     subsections = form.all_subsections.keys
-    return subsections.find { |subsection| is_incomplete?(subsection, case_log, form.questions_for_subsection(subsection).keys) }
+    subsections.find { |subsection| is_incomplete?(subsection, case_log, form.questions_for_subsection(subsection).keys) }
   end
 
   def get_sections_count(form, case_log, status = :all)
     subsections = form.all_subsections.keys
-    if status == :all
-      return subsections.count
-    end
-    return subsections.count { |subsection| get_subsection_status(subsection, case_log, form.questions_for_subsection(subsection).keys) == status }
+    return subsections.count if status == :all
+    subsections.count { |subsection| get_subsection_status(subsection, case_log, form.questions_for_subsection(subsection).keys) == status }
   end
 
   private
@@ -51,6 +49,6 @@ module TasklistHelper
 
   def is_incomplete?(subsection, case_log, questions)
     status = get_subsection_status(subsection, case_log, questions)
-    return status == :not_started || status == :in_progress
+    status == :not_started || status == :in_progress
   end
 end
