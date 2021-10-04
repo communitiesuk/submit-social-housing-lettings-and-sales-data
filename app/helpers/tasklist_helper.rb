@@ -13,10 +13,7 @@ module TasklistHelper
     :in_progress => "govuk-tag--blue"
   }
 
-  def get_subsection_status(subsection_name, case_log)
-    @form = Form.new(2021, 2022)
-    questions = @form.questions_for_subsection(subsection_name).keys
-
+  def get_subsection_status(subsection_name, case_log, questions)
     if subsection_name == "declaration"
       return all_questions_completed(case_log) ? :not_started : :cannot_start_yet
     end
@@ -39,7 +36,7 @@ module TasklistHelper
 
   def get_next_incomplete_section(form, case_log)
     subsections = form.all_subsections.keys
-    return subsections.find { |subsection| is_incomplete?(subsection, case_log) }
+    return subsections.find { |subsection| is_incomplete?(subsection, case_log, form.questions_for_subsection(subsection).keys) }
   end
 
   private
@@ -47,8 +44,8 @@ module TasklistHelper
     case_log.attributes.all? { |_question, answer| answer.present?}
   end
 
-  def is_incomplete?(subsection, case_log)
-    status = get_subsection_status(subsection, case_log)
+  def is_incomplete?(subsection, case_log, questions)
+    status = get_subsection_status(subsection, case_log, questions)
     return status == :not_started || status == :in_progress
   end
 end

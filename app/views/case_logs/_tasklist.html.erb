@@ -10,8 +10,8 @@
         <% section_value["subsections"].map do |subsection_key, subsection_value| %>
           <li class="app-task-list__item" id=<%= subsection_key %>>
             <% first_page = @form.first_page_for_subsection(subsection_key) %>
-            <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name" %>
-            <% subsection_status=get_subsection_status(subsection_key, @case_log) %>
+            <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name govuk-link" %>
+            <% subsection_status=get_subsection_status(subsection_key, @case_log, @form.questions_for_subsection(subsection_key)) %>
             <strong class="govuk-tag app-task-list__tag <%= get_status_style(subsection_status) %>">
               <%= get_status_label(subsection_status) %>
             </strong>
