@@ -12,8 +12,8 @@
             <% first_page = @form.first_page_for_subsection(subsection_key) %>
             <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name" %>
             <% subsection_status=get_subsection_status(subsection_key, @case_log) %>
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag">
-              <%= subsection_status %>
+            <strong class="govuk-tag app-task-list__tag <%= get_status_style(subsection_status) %>">
+              <%= get_status_label(subsection_status) %>
             </strong>
           </li>
         <% end %>
