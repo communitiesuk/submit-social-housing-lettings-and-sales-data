@@ -17,12 +17,9 @@ module TasklistHelper
     if subsection_name == "declaration"
       return all_questions_completed(case_log) ? :not_started : :cannot_start_yet
     end
-    if questions.all? {|question| case_log[question].blank?}
-      return :not_started
-    end
-    if questions.all? {|question| case_log[question].present?}
-      return :completed
-    end
+
+    return :not_started if questions.all? {|question| case_log[question].blank?}
+    return :completed if questions.all? {|question| case_log[question].present?}
     :in_progress
   end
 
