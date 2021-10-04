@@ -294,8 +294,8 @@
                     "3": "Prefer not to say"
                   },
                   "conditional_for": {
-                    "armed_forces_active": ["0", "1"],
-                    "armed_forces_injured": ["0", "1"]
+                    "armed_forces_active": ["Yes - a regular", "Yes - a reserve"],
+                    "armed_forces_injured": ["Yes - a regular", "Yes - a reserve"]
                   }
                 },
                 "armed_forces_active": {

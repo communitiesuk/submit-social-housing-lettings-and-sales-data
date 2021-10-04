@@ -229,14 +229,14 @@ RSpec.describe "Test Features" do
       it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
         visit("/case_logs/#{id}/armed_forces")
         # Someting about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
-        choose("armed-forces-0-field", allow_label_click: true)
+        choose("armed-forces-yes-a-regular-field", allow_label_click: true)
         expect(page).to have_selector("#armed_forces_injured_div")
-        choose("armed-forces-injured-1-field", allow_label_click: true)
-        expect(find_field("armed-forces-injured-1-field", visible: false).checked?).to be_truthy
-        choose("armed-forces-2-field", allow_label_click: true)
+        choose("armed-forces-injured-no-field", allow_label_click: true)
+        expect(find_field("armed-forces-injured-no-field", visible: false).checked?).to be_truthy
+        choose("armed-forces-no-field", allow_label_click: true)
         expect(page).not_to have_selector("#armed_forces_injured_div")
-        choose("armed-forces-0-field", allow_label_click: true)
-        expect(find_field("armed-forces-injured-1-field", visible: false).checked?).to be_falsey
+        choose("armed-forces-yes-a-regular-field", allow_label_click: true)
+        expect(find_field("armed-forces-injured-no-field", visible: false).checked?).to be_falsey
       end
     end
   end

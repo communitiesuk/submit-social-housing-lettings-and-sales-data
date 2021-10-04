@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/DFE-Digital/govuk-formbuilder.git
+  revision: 353af59081f0d53cc30d7d91cf86e03dd3cbd1f0
+  branch: whitelist-mergeable-html-attributes
+  specs:
+    govuk_design_system_formbuilder (2.7.4)
+      actionview (>= 6.0)
+      activemodel (>= 6.0)
+      activesupport (>= 6.0)
+      deep_merge (~> 1.2.1)
+
+GIT
   remote: https://github.com/rspec/rspec-core.git
   revision: 053fcfeb6b0b6627edf7261737553a6f7df8cc14
   branch: main
@@ -147,11 +158,6 @@ GEM
       activemodel (>= 6.0)
       railties (>= 6.0)
       view_component (~> 2.39.0)
-    govuk_design_system_formbuilder (2.7.4)
-      actionview (>= 6.0)
-      activemodel (>= 6.0)
-      activesupport (>= 6.0)
-      deep_merge (~> 1.2.1)
     hotwire-rails (0.1.3)
       rails (>= 6.0.0)
       stimulus-rails
@@ -175,6 +181,8 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
+    nokogiri (1.12.4-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
     overcommit (0.58.0)
@@ -332,7 +340,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   govuk-components
-  govuk_design_system_formbuilder
+  govuk_design_system_formbuilder!
   hotwire-rails
   jbuilder (~> 2.7)
   listen (~> 3.3)

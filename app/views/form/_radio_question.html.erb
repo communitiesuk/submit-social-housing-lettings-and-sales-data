@@ -7,7 +7,7 @@
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
       <% elsif question["conditional_for"] %>
-        <%= f.govuk_radio_button question_key, key, label: { text: val },
+        <%= f.govuk_radio_button question_key, val, label: { text: val },
             "data-controller": "conditional-question",
             "data-action": "click->conditional-question#displayConditional",
             "data-info": question["conditional_for"].to_json

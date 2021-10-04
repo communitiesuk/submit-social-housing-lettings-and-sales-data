@@ -19,7 +19,7 @@ gem "jbuilder", "~> 2.7"
 gem "bootsnap", ">= 1.4.4", require: false
 # Gov.UK frontend components
 gem "govuk-components"
-gem "govuk_design_system_formbuilder"
+gem "govuk_design_system_formbuilder", git: "https://github.com/DFE-Digital/govuk-formbuilder.git", branch: "whitelist-mergeable-html-attributes"
 gem "hotwire-rails"
 
 group :development, :test do
