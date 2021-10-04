@@ -175,8 +175,6 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
-    nokogiri (1.12.4-x86_64-darwin)
-      racc (~> 1.4)
     nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
     overcommit (0.58.0)
@@ -267,6 +265,7 @@ GEM
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
+    rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -276,6 +275,9 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     simplecov (0.21.2)
       docile (~> 1.1)
@@ -349,6 +351,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   scss_lint-govuk
+  selenium-webdriver
   simplecov
   tzinfo-data
   web-console (>= 4.1.0)
