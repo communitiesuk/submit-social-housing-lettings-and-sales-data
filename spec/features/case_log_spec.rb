@@ -25,10 +25,20 @@ RSpec.describe "Test Features" do
   end
 
   describe "Viewing a log" do
-    it "displays a tasklist header" do
-      visit("/case_logs/#{id}")
-      expect(page).to have_content("Tasklist for log #{id}")
-      expect(page).to have_content("This submission is #{status}")
+    context "tasklist page" do
+      it "displays a tasklist header" do
+        visit("/case_logs/#{id}")
+        expect(page).to have_content("Tasklist for log #{id}")
+        expect(page).to have_content("This submission is #{status}")
+      end
+
+      it "displays a section status" do
+        visit("/case_logs/#{empty_case_log.id}")
+
+        assert_selector ".govuk-tag", text: /Not started/, count: 8
+        assert_selector ".govuk-tag", text: /Completed/, count: 0
+        assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
+      end
     end
 
     it "displays the household questions when you click into that section" do
