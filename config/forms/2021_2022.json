@@ -1187,7 +1187,7 @@
                   "step": 1,
                   "readonly": true
                 },
-                "outstanding_amount": {
+                "outstanding_rent_or_charges": {
                   "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "hint_text": "",
@@ -1195,7 +1195,18 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
+                  },
+                  "conditional_for": {
+                    "outstanding_amount": ["Yes"]
                   }
+                },
+                "outstanding_amount": {
+                  "check_answer_label": "Outstanding amount",
+                  "header": "What do you expect the amount to be?",
+                  "hint_text": "If the amount is unknown you can estimate",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1
                 }
               }
             }
