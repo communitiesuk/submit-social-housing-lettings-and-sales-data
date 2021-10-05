@@ -337,7 +337,7 @@
               "description": "",
               "questions":{
                 "medical_conditions": {
-                  "header": "Does anyone in the household have a physical condition, mental health condition, or other illness that they expect to last for 12 months or more?",
+                  "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
