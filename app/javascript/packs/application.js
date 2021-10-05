@@ -17,5 +17,3 @@ ActiveStorage.start()
 initAll()
 
 import "controllers"
-import './tasklist'
-
