@@ -1620,6 +1620,9 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
+                  },
+                  "conditional_for": {
+                    "reasonable_preference_reason": ["Yes"]
                   }
                 },
                 "reasonable_preference_reason": {
