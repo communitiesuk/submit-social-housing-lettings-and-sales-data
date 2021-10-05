@@ -1,5 +1,6 @@
 <%= f.govuk_text_field question_key,
     hint: { text: question["hint_text"] },
     label: { text: question["header"].html_safe, size: "l"},
-    width: 20
+    width: 20,
+    **conditional_html_attributes(question)
 %>

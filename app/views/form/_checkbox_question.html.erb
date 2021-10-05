@@ -6,7 +6,7 @@
       <% if key.starts_with?("divider") %>
         <%= f.govuk_check_box_divider %>
       <% else %>
-        <%= f.govuk_check_box question_key, val, label: { text: val } %>
+        <%= f.govuk_check_box question_key, val, label: { text: val }, **conditional_html_attributes(question) %>
       <% end %>
     <% end %>
 <% end %>

@@ -6,13 +6,25 @@ export default class extends Controller {
   }
 
   displayConditional() {
+    switch(this.element.type) {
+      case "number":
+        this.displayConditionalNumeric()
+      case "radio":
+        this.displayConditionalRadio()
+      default:
+        console.log("Not yet implemented for " + this.element.type)
+        break;
+    }
+  }
+
+  displayConditionalRadio() {
     if(this.element.checked) {
-      let selected = this.element.value
+      let value = this.element.value
       let conditional_for = JSON.parse(this.element.dataset.info)
 
       Object.entries(conditional_for).forEach(([key, values]) => {
         let div = document.getElementById(key + "_div")
-        if(values.includes(selected)) {
+        if(values.includes(value)) {
           div.style.display = "block"
         } else {
           div.style.display = "none"
@@ -23,5 +35,19 @@ export default class extends Controller {
         }
       })
     }
+  }
+
+  displayConditionalNumeric() {
+    let value = this.element.value
+    let conditional_for = JSON.parse(this.element.dataset.info)
+
+    Object.entries(conditional_for).forEach(([key, values]) => {
+      let div = document.getElementById(key + "_div")
+      if(eval((value + values))) {
+        div.style.display = "block"
+      } else {
+        div.style.display = "none"
+      }
+    })
   }
 }
