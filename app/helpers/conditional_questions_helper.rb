@@ -1,7 +1,7 @@
 module ConditionalQuestionsHelper
   def conditional_questions_for_page(page)
-    page["questions"].values.map do |question|
+    page["questions"].values.map { |question|
       question["conditional_for"]
-    end.compact.map(&:keys).flatten
+    }.compact.map(&:keys).flatten
   end
 end

@@ -11,11 +11,11 @@ export default class extends Controller {
       let conditional_for = JSON.parse(this.element.dataset.info)
 
       Object.entries(conditional_for).forEach(([key, values]) => {
-        let el = document.getElementById(key + "_div")
+        let div = document.getElementById(key + "_div")
         if(values.includes(selected)) {
-          el.style.display = "block"
+          div.style.display = "block"
         } else {
-          el.style.display = "none"
+          div.style.display = "none"
           let buttons = document.getElementsByName(key)
           Object.entries(buttons).forEach(([idx, button]) => {
             button.checked = false;
