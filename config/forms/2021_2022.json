@@ -158,7 +158,31 @@
                     "person_2_relationship": ">0",
                     "person_2_age": ">0",
                     "person_2_gender": ">0",
-                    "person_2_economic_status": ">0"
+                    "person_2_economic_status": ">0",
+                    "person_3_relationship": ">1",
+                    "person_3_age": ">1",
+                    "person_3_gender": ">1",
+                    "person_3_economic_status": ">1",
+                    "person_4_relationship": ">2",
+                    "person_4_age": ">2",
+                    "person_4_gender": ">2",
+                    "person_4_economic_status": ">2",
+                    "person_5_relationship": ">3",
+                    "person_5_age": ">3",
+                    "person_5_gender": ">3",
+                    "person_5_economic_status": ">3",
+                    "person_6_relationship": ">4",
+                    "person_6_age": ">4",
+                    "person_6_gender": ">4",
+                    "person_6_economic_status": ">4",
+                    "person_7_relationship": ">5",
+                    "person_7_age": ">5",
+                    "person_7_gender": ">5",
+                    "person_7_economic_status": ">5",
+                    "person_8_relationship": ">6",
+                    "person_8_age": ">6",
+                    "person_8_gender": ">6",
+                    "person_8_economic_status": ">6"
                   }
                 },
                 "person_2_relationship": {
@@ -197,6 +221,318 @@
                 "person_2_economic_status": {
                   "check_answer_label": "Person 2's Work",
                   "header": "Which of these best describes person 2's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_3_relationship": {
+                  "check_answer_label": "Person 3's relationship to lead tenant",
+                  "header": "What's person 3's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_3_age": {
+                  "check_answer_label": "Person 3's age",
+                  "header": "What's person 3's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_3_gender": {
+                  "check_answer_label": "Person 3's gender",
+                  "header": "Which of these best describes person 3's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_3_economic_status": {
+                  "check_answer_label": "Person 3's Work",
+                  "header": "Which of these best describes person 3's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_4_relationship": {
+                  "check_answer_label": "Person 4's relationship to lead tenant",
+                  "header": "What's person 4's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_4_age": {
+                  "check_answer_label": "Person 4's age",
+                  "header": "What's person 4's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_4_gender": {
+                  "check_answer_label": "Person 4's gender",
+                  "header": "Which of these best describes person 4's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_4_economic_status": {
+                  "check_answer_label": "Person 4's Work",
+                  "header": "Which of these best describes person 4's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_5_relationship": {
+                  "check_answer_label": "Person 5's relationship to lead tenant",
+                  "header": "What's person 5's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_5_age": {
+                  "check_answer_label": "Person 5's age",
+                  "header": "What's person 5's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_5_gender": {
+                  "check_answer_label": "Person 5's gender",
+                  "header": "Which of these best describes person 5's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_5_economic_status": {
+                  "check_answer_label": "Person 5's Work",
+                  "header": "Which of these best describes person 5's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_6_relationship": {
+                  "check_answer_label": "Person 6's relationship to lead tenant",
+                  "header": "What's person 6's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_6_age": {
+                  "check_answer_label": "Person 6's age",
+                  "header": "What's person 6's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_6_gender": {
+                  "check_answer_label": "Person 6's gender",
+                  "header": "Which of these best describes person 6's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_6_economic_status": {
+                  "check_answer_label": "Person 6's Work",
+                  "header": "Which of these best describes person 6's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_7_relationship": {
+                  "check_answer_label": "Person 7's relationship to lead tenant",
+                  "header": "What's person 7's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_7_age": {
+                  "check_answer_label": "Person 7's age",
+                  "header": "What's person 7's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_7_gender": {
+                  "check_answer_label": "Person 7's gender",
+                  "header": "Which of these best describes person 7's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_7_economic_status": {
+                  "check_answer_label": "Person 7's Work",
+                  "header": "Which of these best describes person 7's working situation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Part-time - Less than 30 hours",
+                    "1": "Full-time - 30 hours or more",
+                    "2": "In government training into work, such as New Deal",
+                    "3": "Jobseeker",
+                    "4": "Retired",
+                    "5": "Not seeking work",
+                    "6": "Full-time student",
+                    "7": "Unable to work because of long term sick or disability",
+                    "8": "Child under 16",
+                    "9": "Other",
+                    "10": "Prefer not to say"
+                  }
+                },
+                "person_8_relationship": {
+                  "check_answer_label": "Person 8's relationship to lead tenant",
+                  "header": "What's person 8's relationship to lead tenant",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Partner",
+                    "1": "Child - includes young adult and grown-up",
+                    "2": "Other",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_8_age": {
+                  "check_answer_label": "Person 8's age",
+                  "header": "What's person 8's age",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_8_gender": {
+                  "check_answer_label": "Person 8's gender",
+                  "header": "Which of these best describes person 8's gender identity?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_8_economic_status": {
+                  "check_answer_label": "Person 8's Work",
+                  "header": "Which of these best describes person 8's working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
