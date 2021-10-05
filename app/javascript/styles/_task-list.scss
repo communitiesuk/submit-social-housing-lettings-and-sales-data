@@ -85,3 +85,9 @@
 //   display: block;
 //   border: 1px solid blue
 // }
+
+.app-task-list__item:target,
+.tasklist_item_highligh{
+  background-color: $govuk-focus-colour;
+  box-shadow: 0 -2px  $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+}
