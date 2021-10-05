@@ -1,5 +1,5 @@
 <%= f.govuk_radio_buttons_fieldset question_key,
-    legend: { text: question["header"], size: "l" },
+    legend: { text: question["header"].html_safe, size: "l" },
     hint: { text: question["hint_text"] },
     small: (question["answer_options"].size > 5) do %>
 

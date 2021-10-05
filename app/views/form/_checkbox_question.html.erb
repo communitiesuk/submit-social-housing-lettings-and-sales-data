@@ -1,5 +1,5 @@
 <%= f.govuk_check_boxes_fieldset question_key,
-    legend: { text: question["header"], size: "l" },
+    legend: { text: question["header"].html_safe, size: "l" },
     hint: { text: question["hint_text"] } do %>
 
     <% question["answer_options"].map do |key, val| %>
