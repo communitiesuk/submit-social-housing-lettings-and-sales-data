@@ -9,10 +9,10 @@
         "household_characteristics": {
           "label": "Household characteristics",
           "pages": {
-            "tenant_code":{
+            "tenant_code": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_code": {
                   "check_answer_label": "Tenant code",
                   "header": "What is the tenant code?",
@@ -21,10 +21,10 @@
                 }
               }
             },
-            "tenant_age":{
+            "tenant_age": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_age": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
@@ -36,10 +36,10 @@
                 }
               }
             },
-            "tenant_gender":{
+            "tenant_gender": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_gender": {
                   "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
@@ -54,10 +54,10 @@
                 }
               }
             },
-            "tenant_ethnic_group":{
+            "tenant_ethnic_group": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_ethnic_group": {
                   "check_answer_label": "Ethnicity",
                   "header": "What is the tenant's ethnic group?",
@@ -87,10 +87,10 @@
                 }
               }
             },
-            "tenant_nationality":{
+            "tenant_nationality": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_nationality": {
                   "check_answer_label": "Nationality",
                   "header": "What is the tenant's nationality?",
@@ -117,10 +117,10 @@
                 }
               }
             },
-            "tenant_economic_status":{
+            "tenant_economic_status": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenant_economic_status": {
                   "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
@@ -142,10 +142,10 @@
                 }
               }
             },
-            "household_number_of_other_members":{
+            "household_number_of_other_members": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "household_number_of_other_members": {
                   "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
@@ -162,10 +162,10 @@
         "household_situation": {
           "label": "Household situation",
           "pages": {
-            "previous_housing_situation":{
+            "previous_housing_situation": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "previous_housing_situation": {
                   "header": "What was the tenant’s housing situation immediately before this letting?",
                   "hint_text": "",
@@ -198,10 +198,10 @@
                 }
               }
             },
-            "homelessness":{
+            "homelessness": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "homelessness": {
                   "header": "Did the tenant experience homelessness immediately before this letting?",
                   "hint_text": "",
@@ -214,10 +214,10 @@
                 }
               }
             },
-            "reason_for_leaving_last_settled_home":{
+            "reason_for_leaving_last_settled_home": {
               "header": "Leaving their last settled home",
               "description": "",
-              "questions":{
+              "questions": {
                 "last_settled_home": {
                   "header": "What is the tenant’s main reason for leaving?",
                   "hint_text": "",
@@ -287,10 +287,10 @@
         "household_needs": {
           "label": "Household needs",
           "pages": {
-            "armed_forces":{
+            "armed_forces": {
               "header": "Experience of the UK Armed Forces",
               "description": "",
-              "questions":{
+              "questions": {
                 "armed_forces": {
                   "header": "Has the tenant ever served in the UK armed forces?",
                   "hint_text": "",
@@ -347,7 +347,7 @@
             "medical_conditions": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "medical_conditions": {
                   "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
@@ -365,7 +365,7 @@
             "pregnancy": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "pregnancy": {
                   "header": "Is anyone in the household pregnant?",
                   "hint_text": "",
@@ -382,7 +382,7 @@
             "accessibility_requirements": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "accessibility_requirements": {
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
@@ -405,7 +405,7 @@
             "condition_effects": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "condition_effects": {
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
@@ -438,10 +438,10 @@
         "tenancy_information": {
           "label": "Tenancy information",
           "pages": {
-            "tenancy_code":{
+            "tenancy_code": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "tenancy_code": {
                   "check_answer_label": "What is the tenancy code?",
                   "header": "What is the tenancy code?",
@@ -478,10 +478,10 @@
                 }
               }
             },
-            "fixed_term_tenancy":{
+            "fixed_term_tenancy": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "fixed_term_tenancy": {
                   "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
                   "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
@@ -554,10 +554,10 @@
         "property_information": {
           "label": "Property information",
           "pages": {
-            "property_location":{
+            "property_location": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "property_location": {
                   "check_answer_label": "Property Location",
                   "header": "Property location",
@@ -881,10 +881,10 @@
                 }
               }
             },
-            "property_postcode":{
+            "property_postcode": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "property_postcode": {
                   "check_answer_label": "What was the previous postcode?",
                   "header": "What is the property's postcode?",
@@ -940,7 +940,7 @@
             "property_reference": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "property_reference": {
                   "check_answer_label": "What’s the property reference?",
                   "header": "What's the property reference?",
@@ -974,7 +974,7 @@
             "property_number_of_bedrooms": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "property_number_of_bedrooms": {
                   "check_answer_label": "How many bedrooms are there in the property?",
                   "header": "How many bedrooms are there in the property?",
@@ -1014,7 +1014,7 @@
             "property_number_of_times_relet": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "property_number_of_times_relet": {
                   "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
                   "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
@@ -1052,10 +1052,10 @@
         "income_and_benefits": {
           "label": "Income and benefits",
           "pages": {
-            "net_income":{
+            "net_income": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "net_income": {
                   "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
@@ -1077,10 +1077,10 @@
                 }
               }
             },
-            "net_income_uc_proportion":{
+            "net_income_uc_proportion": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "net_income_uc_proportion": {
                   "check_answer_label": "Benefits as a proportion of income",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
@@ -1095,10 +1095,10 @@
                 }
               }
             },
-            "housing_benefit":{
+            "housing_benefit": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "housing_benefit": {
                   "check_answer_label": "Universal Credit & Housing Benefit\t",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
@@ -1121,10 +1121,10 @@
         "rent": {
           "label": "Rent",
           "pages": {
-            "rent":{
+            "rent": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "rent_frequency": {
                   "check_answer_label": "Rent Period",
                   "header": "Which period are rent and other charges due?",
@@ -1225,10 +1225,10 @@
         "local_authority": {
           "label": "Local authority",
           "pages": {
-            "time_lived_in_la":{
+            "time_lived_in_la": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "time_lived_in_la": {
                   "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
@@ -1247,10 +1247,10 @@
                 }
               }
             },
-            "time_on_la_waiting_list":{
+            "time_on_la_waiting_list": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "time_on_la_waiting_list": {
                   "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
@@ -1269,10 +1269,10 @@
                 }
               }
             },
-            "previous_la":{
+            "previous_la": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "previous_la": {
                   "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
@@ -1687,10 +1687,10 @@
         "declaration": {
           "label": "Declaration",
           "pages": {
-            "declaration":{
+            "declaration": {
               "header": "",
               "description": "",
-              "questions":{
+              "questions": {
                 "declaration": {
                   "check_answer_label": "",
                   "header": "What is the tenant code?",
