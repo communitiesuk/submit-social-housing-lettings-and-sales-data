@@ -990,15 +990,12 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
+                  },
+                  "conditional_for": {
+                    "property_major_repairs_date": ["Yes"]
                   }
-                }
-              }
-            },
-            "property_major_repairs_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "property_major_repairs": {
+                },
+                "property_major_repairs_date": {
                   "check_answer_label": "What was the major repairs completion date?",
                   "header": "What was the major repairs completion date?",
                   "hint_text": "For example, 27 3 2007",
