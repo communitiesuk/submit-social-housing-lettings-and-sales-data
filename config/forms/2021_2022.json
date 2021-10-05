@@ -214,7 +214,7 @@
                 }
               }
             },
-            "last_settled_home":{
+            "reason_for_leaving_last_settled_home":{
               "header": "Leaving their last settled home",
               "description": "",
               "questions":{
@@ -257,7 +257,15 @@
                     "31": "Other",
                     "32": "Do not know",
                     "33": "Prefer not to say"
+                  },
+                  "conditional_for": {
+                    "other_reason_for_leaving_last_settled_home": ["Other"]
                   }
+                },
+                "other_reason_for_leaving_last_settled_home": {
+                  "header": "Please state the reason for leaving last settled home",
+                  "hint_text": "",
+                  "type": "text"
                 },
                 "benefit_cap_spare_room_subsidy": {
                   "header": "Was the reason for leaving because of the benefit cap or removal of the spare room subsidy?",

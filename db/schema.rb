@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_115813) do
     t.string "person_8_gender"
     t.string "person_8_economic"
     t.string "homelessness"
-    t.string "last_settled_home"
+    t.string "reason_for_leaving_last_settled_home"
     t.string "benefit_cap_spare_room_subsidy"
     t.string "armed_forces_active"
     t.string "armed_forces_injured"
