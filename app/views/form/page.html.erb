@@ -14,11 +14,7 @@
   <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
 
     <% page_info["questions"].map do |question_key, question| %>
-      <% if conditional_questions_for_page(page_info).include?(question_key) %>
-        <div id=<%= "#{question_key}_div" %> style="display:none;">
-      <% else %>
-        <div id=<%= "#{question_key}_div" %> >
-      <% end %>
+      <%= display_question_key_div(page_info, question_key)%>
         <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
       </div>
     <% end %>

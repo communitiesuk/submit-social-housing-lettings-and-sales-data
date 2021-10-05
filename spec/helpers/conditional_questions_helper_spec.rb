@@ -12,4 +12,17 @@ RSpec.describe ConditionalQuestionsHelper do
       expect(conditional_questions_for_page(page)).to eq(conditional_pages)
     end
   end
+
+  describe "display question key div" do
+    let(:question_key) { "armed_forces" }
+    let(:conditional_question_key) { "armed_forces_injured" }
+
+    it "returns a non visible div for conditional questions" do
+      expect(display_question_key_div(page, conditional_question_key)).to match("style='display:none;'")
+    end
+
+    it "returns a visible div for conditional questions" do
+      expect(display_question_key_div(page, question_key)).not_to match("style='display:none;'")
+    end
+  end
 end
