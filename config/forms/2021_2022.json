@@ -292,6 +292,10 @@
                     "1": "Yes - a reserve",
                     "2": "No",
                     "3": "Prefer not to say"
+                  },
+                  "conditional_for": {
+                    "armed_forces_active": ["Yes - a regular", "Yes - a reserve"],
+                    "armed_forces_injured": ["Yes - a regular", "Yes - a reserve"]
                   }
                 },
                 "armed_forces_active": {
