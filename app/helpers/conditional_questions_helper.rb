@@ -10,12 +10,12 @@ module ConditionalQuestionsHelper
   end
 
   def conditional_html_attributes(question)
-    return {} unless question["conditional_for"].present?
+    return {} if question["conditional_for"].blank?
 
     {
       "data-controller": "conditional-question",
       "data-action": "conditional-question#displayConditional",
-      "data-info": question["conditional_for"].to_json
+      "data-info": question["conditional_for"].to_json,
     }
   end
 end
