@@ -1,3 +1,5 @@
+[![CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml/badge.svg?branch=main&event=push)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml)
+
 # Data Collection App
 This is the codebase for the Ruby/Rails app that will handle the submission of Lettings and Sales of Social Housing in England data.
 
