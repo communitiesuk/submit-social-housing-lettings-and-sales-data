@@ -8,11 +8,12 @@
       </h2>
       <ul class="app-task-list__items">
         <% section_value["subsections"].map do |subsection_key, subsection_value| %>
-          <li class="app-task-list__item">
+          <li class="app-task-list__item" id=<%= subsection_key %>>
             <% first_page = @form.first_page_for_subsection(subsection_key) %>
-            <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name" %>
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag">
-              Not started
+            <%= link_to subsection_value["label"], send("case_log_#{first_page}_path", @case_log), class: "task-name govuk-link" %>
+            <% subsection_status=get_subsection_status(subsection_key, @case_log, @form.questions_for_subsection(subsection_key).keys) %>
+            <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
+              <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
           </li>
         <% end %>

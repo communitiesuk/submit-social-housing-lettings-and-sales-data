@@ -1,15 +1,12 @@
 <%= f.govuk_check_boxes_fieldset question_key,
-    legend: { text: question["header"], size: "l" },
+    legend: { text: question["header"].html_safe, size: "l" },
     hint: { text: question["hint_text"] } do %>
 
     <% question["answer_options"].map do |key, val| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_check_box_divider %>
       <% else %>
-        <%= f.govuk_check_box question_key, key, label: { text: val } %>
+        <%= f.govuk_check_box question_key, val, label: { text: val } %>
       <% end %>
     <% end %>
 <% end %>
-
-<%= f.hidden_field :previous_page, value: page_key %>
-<%= f.hidden_field :case_log_id, value: case_log.id %>

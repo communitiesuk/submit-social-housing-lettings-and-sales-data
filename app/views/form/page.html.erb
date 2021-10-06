@@ -19,7 +19,9 @@
     <% end %>
 
     <% page_info["questions"].map do |question_key, question| %>
-      <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
+      <%= display_question_key_div(page_info, question_key)%>
+        <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
+      </div>
     <% end %>
 
     <%= f.hidden_field :previous_page, value: page_key %>

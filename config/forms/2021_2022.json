@@ -14,6 +14,7 @@
               "description": "",
               "questions":{
                 "tenant_code": {
+                  "check_answer_label": "Tenant code",
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"
@@ -25,6 +26,7 @@
               "description": "",
               "questions":{
                 "tenant_age": {
+                  "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "hint_text": "",
                   "type": "numeric",
@@ -39,6 +41,7 @@
               "description": "",
               "questions":{
                 "tenant_gender": {
+                  "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -56,6 +59,7 @@
               "description": "",
               "questions":{
                 "tenant_ethnic_group": {
+                  "check_answer_label": "Ethnicity",
                   "header": "What is the tenant's ethnic group?",
                   "hint_text": "",
                   "type": "radio",
@@ -88,6 +92,7 @@
               "description": "",
               "questions":{
                 "tenant_nationality": {
+                  "check_answer_label": "Nationality",
                   "header": "What is the tenant's nationality?",
                   "hint_text": "",
                   "type": "radio",
@@ -117,6 +122,7 @@
               "description": "",
               "questions":{
                 "tenant_economic_status": {
+                  "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -141,6 +147,7 @@
               "description": "",
               "questions":{
                 "household_number_of_other_members": {
+                  "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 7",
                   "type": "numeric",
@@ -285,6 +292,10 @@
                     "1": "Yes - a reserve",
                     "2": "No",
                     "3": "Prefer not to say"
+                  },
+                  "conditional_for": {
+                    "armed_forces_active": ["Yes - a regular", "Yes - a reserve"],
+                    "armed_forces_injured": ["Yes - a regular", "Yes - a reserve"]
                   }
                 },
                 "armed_forces_active": {
@@ -326,7 +337,7 @@
               "description": "",
               "questions":{
                 "medical_conditions": {
-                  "header": "Does anyone in the household have a physical condition, mental health condition, or other illness that they expect to last for 12 months or more?",
+                  "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -416,6 +427,7 @@
               "description": "",
               "questions":{
                 "tenancy_code": {
+                  "check_answer_label": "What is the tenancy code?",
                   "header": "What is the tenancy code?",
                   "hint_text": "",
                   "type": "text"
@@ -427,6 +439,7 @@
               "description": "",
               "questions": {
                 "tenancy_start_date": {
+                  "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -438,6 +451,7 @@
               "description": "",
               "questions": {
                 "starter_tenancy": {
+                  "check_answer_label": "Is this a starter or introductory tenancy?",
                   "header": "Is this a starter tenancy?",
                   "hint_text": "",
                   "type": "radio",
@@ -453,6 +467,7 @@
               "description": "",
               "questions":{
                 "fixed_term_tenancy": {
+                  "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
                   "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
                   "hint_text": "To the nearest year",
                   "type": "numeric",
@@ -467,6 +482,7 @@
               "description": "",
               "questions": {
                 "tenancy_type": {
+                  "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
                   "header": "What is the type of tenancy after the starter period has ended?",
                   "hint_text": "",
                   "type": "radio",
@@ -486,6 +502,7 @@
               "description": "",
               "questions": {
                 "letting_type": {
+                  "check_answer_label": "Type of letting",
                   "header": "Which type of letting is this?",
                   "hint_text": "",
                   "type": "radio",
@@ -505,6 +522,7 @@
               "description": "",
               "questions": {
                 "letting_provider": {
+                  "check_answer_label": "Provider",
                   "header": "Who is the letting provider?",
                   "hint_text": "",
                   "type": "radio",
@@ -525,6 +543,7 @@
               "description": "",
               "questions":{
                 "property_location": {
+                  "check_answer_label": "Property Location",
                   "header": "Property location",
                   "hint_text": "",
                   "type": "radio",
@@ -851,6 +870,7 @@
               "description": "",
               "questions":{
                 "property_postcode": {
+                  "check_answer_label": "What was the previous postcode?",
                   "header": "What is the property's postcode?",
                   "hint_text": "",
                   "type": "text"
@@ -862,6 +882,7 @@
               "description": "",
               "questions": {
                 "property_relet": {
+                  "check_answer_label": "Which type was the property most recently let as?",
                   "header": "Is this property a relet?",
                   "hint_text": "",
                   "type": "radio",
@@ -877,6 +898,7 @@
               "description": "",
               "questions": {
                 "property_vacancy_reason": {
+                  "check_answer_label": "What is the reason for the property vacancy?",
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
@@ -904,6 +926,7 @@
               "description": "",
               "questions":{
                 "property_reference": {
+                  "check_answer_label": "What’s the property reference?",
                   "header": "What's the property reference?",
                   "hint_text": "",
                   "type": "text"
@@ -915,6 +938,7 @@
               "description": "",
               "questions": {
                 "property_unit_type": {
+                  "check_answer_label": "Which type of unit is the property?",
                   "header": "Which type of unit is the property?",
                   "hint_text": "",
                   "type": "radio",
@@ -936,6 +960,7 @@
               "description": "",
               "questions":{
                 "property_number_of_bedrooms": {
+                  "check_answer_label": "How many bedrooms are there in the property?",
                   "header": "How many bedrooms are there in the property?",
                   "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
                   "type": "numeric",
@@ -950,6 +975,7 @@
               "description": "",
               "questions": {
                 "property_major_repairs": {
+                  "check_answer_label": "Were major repairs carried out during the void period?",
                   "header": "Were any major repairs completed during the void period?",
                   "hint_text": "",
                   "type": "radio",
@@ -965,6 +991,7 @@
               "description": "",
               "questions": {
                 "property_major_repairs": {
+                  "check_answer_label": "What was the major repairs completion date?",
                   "header": "What was the major repairs completion date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -976,6 +1003,7 @@
               "description": "",
               "questions":{
                 "property_number_of_times_relet": {
+                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
                   "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
                   "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
                   "type": "numeric",
@@ -990,6 +1018,7 @@
               "description": "",
               "questions": {
                 "property_wheelchair_accessible": {
+                  "check_answer_label": "Is property built or adapted to wheelchair user standards?",
                   "header": "Is property built or adapted to wheelchair user standards?",
                   "hint_text": "",
                   "type": "radio",
@@ -1015,6 +1044,7 @@
               "description": "",
               "questions":{
                 "net_income": {
+                  "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1022,6 +1052,7 @@
                   "step": "1"
                 },
                 "net_income_frequency": {
+                  "check_answer_label": "Income Frequency",
                   "header": "How often do they receive this income?",
                   "hint_text": "",
                   "type": "radio",
@@ -1038,6 +1069,7 @@
               "description": "",
               "questions":{
                 "net_income_uc_proportion": {
+                  "check_answer_label": "Benefits as a proportion of income",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1055,6 +1087,7 @@
               "description": "",
               "questions":{
                 "housing_benefit": {
+                  "check_answer_label": "Universal Credit & Housing Benefit\t",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1080,6 +1113,7 @@
               "description": "",
               "questions":{
                 "rent_frequency": {
+                  "check_answer_label": "Rent Period",
                   "header": "Which period are rent and other charges due?",
                   "hint_text": "",
                   "type": "radio",
@@ -1097,6 +1131,7 @@
                   }
                 },
                 "basic_rent": {
+                  "check_answer_label": "Basic Rent",
                   "header": "What is the basic rent?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
@@ -1104,6 +1139,7 @@
                   "step": 1
                 },
                 "service_charge": {
+                  "check_answer_label": "Service Charge",
                   "header": "What is the service charge?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
@@ -1111,6 +1147,7 @@
                   "step": 1
                 },
                 "personal_service_charge": {
+                  "check_answer_label": "Personal Service Charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
@@ -1118,6 +1155,7 @@
                   "step": 1
                 },
                 "support_charge": {
+                  "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
                   "type": "numeric",
@@ -1125,6 +1163,7 @@
                   "step": 1
                 },
                 "total_charge": {
+                  "check_answer_label": "Total Charge",
                   "header": "Total charge?",
                   "hint_text": "This is the total of rent and all charges",
                   "type": "numeric",
@@ -1132,6 +1171,7 @@
                   "step": 1
                 },
                 "outstanding_amount": {
+                  "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "hint_text": "",
                   "type": "radio",
@@ -1157,6 +1197,7 @@
               "description": "",
               "questions":{
                 "time_lived_in_la": {
+                  "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1178,6 +1219,7 @@
               "description": "",
               "questions":{
                 "time_on_la_waiting_list": {
+                  "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "hint_text": "",
                   "type": "radio",
@@ -1199,6 +1241,7 @@
               "description": "",
               "questions":{
                 "previous_la": {
+                  "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
                   "type": "radio",
@@ -1525,6 +1568,7 @@
               "description": "",
               "questions": {
                 "previous_postcode": {
+                  "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text"
@@ -1536,6 +1580,7 @@
               "description": "",
               "questions": {
                 "reasonable_preference": {
+                  "check_answer_label": "Was the household given Reasonable Preference (i.e. priority) for housing by the Local Authority?",
                   "header": "Was the household given reasonable preference by the local authority?",
                   "hint_text": "",
                   "type": "radio",
@@ -1545,6 +1590,7 @@
                   }
                 },
                 "reasonable_preference_reason": {
+                  "check_answer_label": "Reason for reasonable preference",
                   "header": "Why were they given reasonable preference?",
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
@@ -1564,6 +1610,7 @@
               "description": "",
               "questions": {
                 "cbl_letting": {
+                  "check_answer_label": "Choice-based letting?",
                   "header": "Was the letting made under choice-based lettings (CBL)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1573,6 +1620,7 @@
                   }
                 },
                 "chr_letting": {
+                  "check_answer_label": "Common housing register letting?",
                   "header": "Was the letting made under common housing register (CHR)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1582,6 +1630,7 @@
                   }
                 },
                 "cap_letting": {
+                  "check_answer_label": "Common allocation policy letting?",
                   "header": "Was the letting made under common allocation policy (CAP)? ",
                   "hint_text": "",
                   "type": "radio",
@@ -1607,6 +1656,7 @@
               "description": "",
               "questions":{
                 "declaration": {
+                  "check_answer_label": "",
                   "header": "What is the tenant code?",
                   "hint_text": "",
                   "type": "text"

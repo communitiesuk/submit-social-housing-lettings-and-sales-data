@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">Check the answers you gave for <%= subsection %></h1>
+      <%= display_answered_questions_summary(subsection_pages, case_log) %>
+      <% subsection_pages.each do |page, page_info| %>
+        <% page_info["questions"].each do |question_title, question_info| %>
+          <%= render partial: 'form/check_answers_table', locals: { question_title: question_title, question_info: question_info, case_log: case_log, page: page } %>
+        <%end %>
+      <% end %>
+      <%= form_with action: '/case_logs', method: "next_page", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+        <%= f.govuk_submit "Save and continue"  %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

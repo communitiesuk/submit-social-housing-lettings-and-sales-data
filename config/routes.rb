@@ -3,10 +3,14 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
   get "/", to: "test#index"
 
+  form = Form.new(2021, 2022)
   resources :case_logs do
-    Form.new(2021, 2022).all_pages.keys.map do |page|
+    form.all_pages.keys.map do |page|
       get page.to_s, to: "case_logs##{page}"
       post page.to_s, to: "case_logs#next_page"
+      form.all_subsections.keys.map do |subsection|
+        get "#{subsection}/check_answers", to: "case_logs#check_answers"
+      end
     end
   end
 end
