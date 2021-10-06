@@ -1168,7 +1168,8 @@
                   "hint_text": "This is the total of rent and all charges",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "readonly": true
                 },
                 "outstanding_amount": {
                   "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
