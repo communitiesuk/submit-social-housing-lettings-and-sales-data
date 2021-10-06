@@ -114,6 +114,23 @@ RSpec.describe "Test Features" do
           }.from(original_value).to(answer)
         end
       end
+
+      it "updates total value of the rent", js: true do
+        visit("/case_logs/#{id}/rent")
+
+        fill_in("basic_rent", with: 3)
+        expect(page).to have_field("total-charge-field", with: "3")
+
+        fill_in("service_charge", with: 2)
+        expect(page).to have_field("total-charge-field", with: "5")
+
+        fill_in("personal_service_charge", with: 1)
+        expect(page).to have_field("total-charge-field", with: "6")
+
+        fill_in("support_charge", with: 4)
+        expect(page).to have_field("total-charge-field", with: "10")
+      end
+
     end
 
     describe "Back link directs correctly" do

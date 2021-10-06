@@ -1144,7 +1144,9 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "result-field": "total_charge"
                 },
                 "service_charge": {
                   "check_answer_label": "Service Charge",
@@ -1152,7 +1154,9 @@
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "result-field": "total_charge"
                 },
                 "personal_service_charge": {
                   "check_answer_label": "Personal Service Charge",
@@ -1160,7 +1164,9 @@
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "result-field": "total_charge"
                 },
                 "support_charge": {
                   "check_answer_label": "Support Charge",
@@ -1168,7 +1174,9 @@
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "result-field": "total_charge"
                 },
                 "total_charge": {
                   "check_answer_label": "Total Charge",
