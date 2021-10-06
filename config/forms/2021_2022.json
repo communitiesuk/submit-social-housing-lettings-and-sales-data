@@ -287,6 +287,7 @@
                   "header": "Has the tenant ever served in the UK armed forces?",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "Armed Forces",
                   "answer_options": {
                     "0": "Yes - a regular",
                     "1": "Yes - a reserve",
@@ -302,6 +303,7 @@
                   "header": "Are they still serving?",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "When did they leave the Armed Forces?",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No - they left up to 5 years ago",
@@ -313,6 +315,7 @@
                   "header": "Were they seriously injured or ill as a result of their service?",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "Has anyone in the household been seriously injured or ill as a result of their service in the armed forces?",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
@@ -323,6 +326,7 @@
                   "header": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
                   "answer_options": {
                     "0": "Yes - was the spouse or civil partner of a UK Armed Forces member and have separated within the last 2 years",
                     "1": "Yes - was the spouse or civil partner of a UK Armed Forces member who died within the last 2 years",
@@ -340,6 +344,7 @@
                   "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "Physical, mental health or illness in the household",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
@@ -357,6 +362,7 @@
                   "header": "Is anyone in the household pregnant?",
                   "hint_text": "",
                   "type": "radio",
+                  "check_answer_label": "Pregnancy in the household",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
@@ -373,6 +379,7 @@
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
+                  "check_answer_label": "Disability requirements",
                   "answer_options": {
                     "0": "Fully wheelchair accessible housing",
                     "1": "Wheelchair access to essential rooms",
@@ -395,6 +402,7 @@
                   "header": "Are any of these affected by their condition or illness?",
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
+                  "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
                     "0": "Vision - such as blindness or partial sight",
                     "1": "Hearing - such as deafness or partial hearing",
