@@ -24,21 +24,27 @@ class CaseLogsController < ApplicationController
   def next_page
     form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:case_log_id])
+    
     previous_page = params[:previous_page]
     questions_for_page = form.questions_for_page(previous_page).keys
     answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
-    if @case_log.valid?
+
+    @case_log_temp = CaseLog.new(answers_for_page)
+    if @case_log_temp.valid?
       @case_log.update!(answers_for_page)
       next_page = form.next_page(previous_page)
       redirect_to(send("case_log_#{next_page}_path", @case_log))
+    else
+      @errors = @case_log_temp.errors.full_messages
+      redirect_to(send("case_log_#{previous_page}_path", @case_log, errors: @errors))
     end
   end
 
   form = Form.new(2021, 2022)
   form.all_pages.map do |page_key, page_info|
-    define_method(page_key) do
+    define_method(page_key) do |errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/page", locals: { case_log_id: @case_log.id, form: form, page_key: page_key, page_info: page_info }
+      render "form/page", locals: { case_log_id: @case_log.id, form: form, page_key: page_key, page_info: page_info, errors: errors }
     end
   end
 

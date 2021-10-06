@@ -5,11 +5,12 @@ class CaseLogValidator < ActiveModel::Validator
     elsif record.tenant_age > 120
       record.errors.add :base, "Age needs to be below 120"
     end
-    binding.pry
   end
 
   def validate(record)
-    validate_tenant_age(record)
+    if record.tenant_age?
+      validate_tenant_age(record)
+    end
   end
 end
 
