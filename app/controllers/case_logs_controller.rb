@@ -39,7 +39,7 @@ class CaseLogsController < ApplicationController
       redirect_to(send(redirect_path, @case_log))
     rescue ActiveRecord::RecordInvalid
       page_info = form.all_pages[previous_page]
-      render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }
+      render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
     end
   end
 
