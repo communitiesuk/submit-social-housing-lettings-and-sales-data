@@ -65,6 +65,9 @@ Once the app is deployed:
 - Get a rails console <br/>
 `cf ssh dluhc-core -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
 
+- Check logs <br />
+`cf logs dluhc-core --recent`
+
 
 ### CI/CD
 
