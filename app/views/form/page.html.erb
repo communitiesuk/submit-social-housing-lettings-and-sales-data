@@ -5,6 +5,7 @@
   <% end %>
 <% end %>
 
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <% if page_info["header"].present? %>
     <h1 class="govuk-heading-xl">
       <%= page_info["header"] %>
@@ -21,3 +22,4 @@
     <%= f.hidden_field :previous_page, value: page_key %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>
+<% end %>
