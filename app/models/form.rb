@@ -53,6 +53,16 @@ class Form
     pages_for_subsection(subsection).keys[previous_page_idx + 1] || :check_answers
   end
 
+  def next_page_redirect_path(previous_page)
+    next_page = next_page(previous_page)
+    if next_page == :check_answers
+      subsection = subsection_for_page(previous_page)
+      "case_log_#{subsection}_check_answers_path"
+    else
+      "case_log_#{next_page}_path"
+    end
+  end
+
   def previous_page(current_page)
     subsection = subsection_for_page(current_page)
     current_page_idx = pages_for_subsection(subsection).keys.index(current_page)

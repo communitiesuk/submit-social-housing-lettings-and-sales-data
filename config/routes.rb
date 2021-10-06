@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
   get "/", to: "test#index"
 
-  post '/case_logs/:id', to: "case_logs#next_page"
+  post '/case_logs/:id', to: "case_logs#submit_form"
 
   form = Form.new(2021, 2022)
   resources :case_logs do

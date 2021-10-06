@@ -6,6 +6,6 @@ module ConditionalQuestionsHelper
   end
 
   def display_question_key_div(page_info, question_key)
-    "style='display:none;'" if conditional_questions_for_page(page_info).include?(question_key)
+    "style='display:none;'".html_safe if conditional_questions_for_page(page_info).include?(question_key)
   end
 end
