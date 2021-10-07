@@ -138,15 +138,11 @@ RSpec.describe "Test Features" do
       end
 
       it "displays number answers in inputs if they are already saved" do
-        fill_in_number_question(id, "previous_postcode", "P0 5ST")
-
         visit("/case_logs/#{id}/previous_postcode")
         expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
       end
 
       it "displays text answers in inputs if they are already saved" do
-        fill_in_number_question(id, "tenant_age", "12")
-
         visit("/case_logs/#{id}/tenant_age")
         expect(page).to have_field("case-log-tenant-age-field", with: "12")
       end
