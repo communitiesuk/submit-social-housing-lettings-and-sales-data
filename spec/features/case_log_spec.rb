@@ -130,7 +130,6 @@ RSpec.describe "Test Features" do
         fill_in("support_charge", with: 4)
         expect(page).to have_field("total-charge-field", with: "10")
       end
-
     end
 
     describe "Back link directs correctly" do

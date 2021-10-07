@@ -3,8 +3,5 @@
     label: { text: question["header"].html_safe, size: "l"},
     min: question["min"], max: question["max"], step: question["step"],
     width: 20, :readonly => question["readonly"],
-    :"data-controller" => "number-question",
-    :"data-action"=> "number-question#calculateFields",
-    :"data-affected" => "#{question["result-field"].to_s.dasherize}-field",
-    :"data-calculated" => question["fields-to-add"].to_json
+   **numeric_question_html_attributes(question)
 %>
