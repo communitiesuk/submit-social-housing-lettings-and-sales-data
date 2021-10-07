@@ -1,22 +1,23 @@
 class CaseLogValidator < ActiveModel::Validator
 
-  def validate_tenant_age(record)
+  def validate_tenant_age(record, validation_regex)
+    regexp = Regexp.new validation_regex
     if !record.tenant_age?
       record.errors.add :base, "Tenant age can't be blank"
-    elsif !(record.tenant_age.to_s =~ /^[1-9][0-9]?$|^100$/)
+    elsif !(record.tenant_age.to_s =~ regexp)
       record.errors.add :base, "Tenant age must be between 0 and 100"
     end
   end
 
   def validate(record)
     question_to_validate = options[:previous_page]
-
+    validation_regex = options[:validation]
     if question_to_validate == "tenant_code"
       if !record.tenant_code?
         record.errors.add :base, "Tenant code can't be blank"
       end
     elsif question_to_validate == "tenant_age"
-        validate_tenant_age(record)
+        validate_tenant_age(record, validation_regex)
     end
   end
 end
