@@ -13,7 +13,7 @@ RSpec.describe NumericQuestionsHelper do
       expect(numeric_question_html_attributes(questions["basic_rent"])).to eq({
         "data-controller": "numeric-question",
         "data-action": "numeric-question#calculateFields",
-        "data-target": "#{questions['basic_rent']['result-field'].to_s.dasherize}-field",
+        "data-target": "case-log-#{questions['basic_rent']['result-field'].to_s.dasherize}-field",
         "data-calculated": questions["basic_rent"]["fields-to-add"].to_json,
       })
     end
