@@ -118,17 +118,17 @@ RSpec.describe "Test Features" do
       it "updates total value of the rent", js: true do
         visit("/case_logs/#{id}/rent")
 
-        fill_in("basic_rent", with: 3)
-        expect(page).to have_field("total-charge-field", with: "3")
+        fill_in("case-log-basic-rent-field", with: 3)
+        expect(page).to have_field("case-log-total-charge-field", with: "3")
 
-        fill_in("service_charge", with: 2)
-        expect(page).to have_field("total-charge-field", with: "5")
+        fill_in("case-log-service-charge-field", with: 2)
+        expect(page).to have_field("case-log-total-charge-field", with: "5")
 
-        fill_in("personal_service_charge", with: 1)
-        expect(page).to have_field("total-charge-field", with: "6")
+        fill_in("case-log-personal-service-charge-field", with: 1)
+        expect(page).to have_field("case-log-total-charge-field", with: "6")
 
-        fill_in("support_charge", with: 4)
-        expect(page).to have_field("total-charge-field", with: "10")
+        fill_in("case-log-support-charge-field", with: 4)
+        expect(page).to have_field("case-log-total-charge-field", with: "10")
       end
     end
 
