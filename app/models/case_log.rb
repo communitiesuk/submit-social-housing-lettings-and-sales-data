@@ -3,10 +3,8 @@ class CaseLogValidator < ActiveModel::Validator
   def validate_tenant_age(record)
     if !record.tenant_age?
       record.errors.add :base, "Tenant age can't be blank"
-    elsif record.tenant_age < 0
-      record.errors.add :base, "Age needs to be above 0"
-    elsif record.tenant_age > 120
-      record.errors.add :base, "Age needs to be below 120"
+    elsif !(record.tenant_age.to_s =~ /^[1-9][0-9]?$|^100$/)
+      record.errors.add :base, "Tenant age must be between 0 and 100"
     end
   end
 
