@@ -16,7 +16,7 @@ export default class extends Controller {
           div.style.display = "block"
         } else {
           div.style.display = "none"
-          let buttons = document.getElementsByName(key)
+          let buttons = document.getElementsByName(`case_log[${key}]`)
           Object.entries(buttons).forEach(([idx, button]) => {
             button.checked = false;
           })

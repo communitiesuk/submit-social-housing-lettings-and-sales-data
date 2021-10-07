@@ -20,22 +20,19 @@ class CaseLogsController < ApplicationController
     render :edit
   end
 
-  def next_page
+  def submit_form
     form = Form.new(2021, 2022)
-    @case_log = CaseLog.find(params[:case_log_id])
-    previous_page = params[:previous_page]
+    @case_log = CaseLog.find(params[:id])
+    previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page).keys
     answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
-    @case_log.update!(answers_for_page)
-    next_page = form.next_page(previous_page)
-    redirect_path = if next_page == :check_answers
-                      subsection = form.subsection_for_page(previous_page)
-                      "case_log_#{subsection}_check_answers_path"
-                    else
-                      "case_log_#{next_page}_path"
-                    end
-
-    redirect_to(send(redirect_path, @case_log))
+    if @case_log.update(answers_for_page)
+      redirect_path = form.next_page_redirect_path(previous_page)
+      redirect_to(send(redirect_path, @case_log))
+    else
+      page_info = form.all_pages[previous_page]
+      render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
+    end
   end
 
   def check_answers
@@ -51,13 +48,13 @@ class CaseLogsController < ApplicationController
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/page", locals: { case_log_id: @case_log.id, form: form, page_key: page_key, page_info: page_info }
+      render "form/page", locals: { form: form, page_key: page_key, page_info: page_info }
     end
   end
 
 private
 
   def page_params(questions_for_page)
-    params.permit(questions_for_page)
+    params.require(:case_log).permit(questions_for_page)
   end
 end
