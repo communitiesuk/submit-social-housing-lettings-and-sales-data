@@ -5,6 +5,8 @@ FactoryBot.define do
       status { 0 }
       tenant_code { "TH356" }
       postcode { "SW2 6HI" }
+      previous_postcode { "P0 5ST" }
+      tenant_age { "12" }
     end
     trait :submitted do
       status { 1 }
