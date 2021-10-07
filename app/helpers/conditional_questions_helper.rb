@@ -8,14 +8,4 @@ module ConditionalQuestionsHelper
   def display_question_key_div(page_info, question_key)
     "style='display:none;'".html_safe if conditional_questions_for_page(page_info).include?(question_key)
   end
-
-  def conditional_html_attributes(question)
-    return {} if question["conditional_for"].blank?
-
-    {
-      "data-controller": "conditional-question",
-      "data-action": "conditional-question#displayConditional",
-      "data-info": question["conditional_for"].to_json,
-    }
-  end
 end
