@@ -5,7 +5,7 @@ module NumericQuestionsHelper
     {
       "data-controller": "numeric-question",
       "data-action": "numeric-question#calculateFields",
-      "data-affected": "#{question['result-field'].to_s.dasherize}-field",
+      "data-target": "#{question['result-field'].to_s.dasherize}-field",
       "data-calculated": question["fields-to-add"].to_json,
     }
   end
