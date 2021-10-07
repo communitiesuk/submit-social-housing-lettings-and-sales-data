@@ -1,5 +1,7 @@
 <%= f.govuk_number_field question_key,
     hint: { text: question["hint_text"] },
     label: { text: question["header"].html_safe, size: "l"},
-    min: question["min"], max: question["max"], step: question["step"], width: 20
+    min: question["min"], max: question["max"], step: question["step"],
+    width: 20, :readonly => question["readonly"],
+   **numeric_question_html_attributes(question)
 %>
