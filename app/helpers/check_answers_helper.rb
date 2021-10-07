@@ -1,16 +1,36 @@
 module CheckAnswersHelper
-  def get_answered_questions_total(subsection_pages, case_log)
-    questions = subsection_pages.values.flat_map do |page|
-      page["questions"].keys
+  def total_answered_questions(subsection, case_log)
+    total_questions(subsection, case_log).keys.count do |question_key|
+      case_log[question_key].present?
     end
-    questions.count { |question| case_log[question].present? }
   end
 
-  def get_total_number_of_questions(subsection_pages)
-    questions = subsection_pages.values.flat_map do |page|
-      page["questions"].keys
+  def total_number_of_questions(subsection, case_log)
+    total_questions(subsection, case_log).count
+  end
+
+  def total_questions(subsection, case_log)
+    form = Form.new(2021, 2022)
+    questions = form.questions_for_subsection(subsection)
+    question_keys = questions.keys
+    questions_not_applicable = []
+    questions.reject do |question_key, question|
+      question.fetch("conditional_for", []).map do |conditional_question_key, condition|
+        if condition_not_met(case_log, question_key, condition)
+          questions_not_applicable << conditional_question_key
+        end
+      end
+      questions_not_applicable.include?(question_key)
     end
-    questions.count
+  end
+
+  def condition_not_met(case_log, question_key, condition)
+    case_log[question_key].blank? || !(eval(case_log[question_key].to_s + condition))
+  end
+
+  def subsection_pages(subsection)
+    @form ||= Form.new(2021, 2022)
+    @subsection_pages ||= @form.pages_for_subsection(subsection)
   end
 
   def create_update_answer_link(case_log_answer, case_log_id, page)
@@ -18,9 +38,9 @@ module CheckAnswersHelper
     link_to(link_name, "/case_logs/#{case_log_id}/#{page}", class: "govuk-link").html_safe
   end
 
-  def create_next_missing_question_link(case_log_id, subsection_pages, case_log)
+  def create_next_missing_question_link(case_log_id, subsection, case_log)
     pages_to_fill_in = []
-    subsection_pages.each do |page_title, page_info|
+    subsection_pages(subsection).each do |page_title, page_info|
       page_info["questions"].any? { |question| case_log[question].blank? }
       pages_to_fill_in << page_title
     end
@@ -28,12 +48,13 @@ module CheckAnswersHelper
     link_to("Answer the missing questions", url, class: "govuk-link").html_safe
   end
 
-  def display_answered_questions_summary(subsection_pages, case_log)
-    if get_answered_questions_total(subsection_pages, case_log) == get_total_number_of_questions(subsection_pages)
+  def display_answered_questions_summary(subsection, case_log)
+    # binding.pry
+    if total_answered_questions(subsection, case_log) == total_number_of_questions(subsection, case_log)
       '<p class="govuk-body govuk-!-margin-bottom-7">You answered all the questions</p>'.html_safe
     else
-      "<p class=\"govuk-body govuk-!-margin-bottom-7\">You answered #{get_answered_questions_total(subsection_pages, case_log)} of #{get_total_number_of_questions(subsection_pages)} questions</p>
-      #{create_next_missing_question_link(case_log['id'], subsection_pages, case_log)}".html_safe
+      "<p class=\"govuk-body govuk-!-margin-bottom-7\">You answered #{total_answered_questions(subsection, case_log)} of #{total_number_of_questions(subsection, case_log)} questions</p>
+      #{create_next_missing_question_link(case_log['id'], subsection, case_log)}".html_safe
     end
   end
 end
