@@ -7,7 +7,7 @@ RSpec.describe CheckAnswersHelper do
       :case_log,
       :in_progress,
       household_number_of_other_members: 2,
-      person_2_relationship: "Partner"
+      person_2_relationship: "Partner",
     )
   end
   let(:case_log_with_met_radio_condition) do
@@ -83,19 +83,18 @@ RSpec.describe CheckAnswersHelper do
 
     context "conditional questions with type that hasn't been implemented yet" do
       let(:unimplemented_conditional) do
-        {"question_1"=>
-          {"header"=>"The actual question?",
-           "hint_text"=>"",
-           "type"=>"date",
-           "check_answer_label"=>"Question Label",
-           "conditional_for"=>{"question_2"=>["12-12-2021"]}},
-         "question_2"=>
-          {"header"=>"The second actual question?",
-           "hint_text"=>"",
-           "type"=>"radio",
-           "check_answer_label"=>"The second question label",
-           "answer_options"=>{"0"=>"Yes", "1"=>"No"}}
-        }
+        { "question_1" =>
+          { "header" => "The actual question?",
+            "hint_text" => "",
+            "type" => "date",
+            "check_answer_label" => "Question Label",
+            "conditional_for" => { "question_2" => %w[12-12-2021] } },
+          "question_2" =>
+          { "header" => "The second actual question?",
+            "hint_text" => "",
+            "type" => "radio",
+            "check_answer_label" => "The second question label",
+            "answer_options" => { "0" => "Yes", "1" => "No" } } }
       end
 
       it "raises an error" do
