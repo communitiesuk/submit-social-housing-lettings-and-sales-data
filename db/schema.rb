@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_143031) do
+ActiveRecord::Schema.define(version: 2021_10_07_160908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,13 @@ ActiveRecord::Schema.define(version: 2021_09_24_143031) do
     t.string "cbl_letting"
     t.string "chr_letting"
     t.string "cap_letting"
+    t.boolean "accessibility_requirements_fully_wheelchair_accessible_housing"
+    t.boolean "accessibility_requirements_wheelchair_access_to_essential_rooms"
+    t.boolean "accessibility_requirements_level_access_housing"
+    t.boolean "accessibility_requirements_other_disability_requirements"
+    t.boolean "accessibility_requirements_no_disability_requirements"
+    t.boolean "accessibility_requirements_do_not_know"
+    t.boolean "accessibility_requirements_prefer_not_to_say"
   end
 
 end

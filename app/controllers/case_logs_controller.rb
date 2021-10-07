@@ -25,8 +25,10 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page).keys
+    checked_answers = get_checked_answers(questions_for_page, params[:case_log])
+
     answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
-    if @case_log.update(answers_for_page)
+    if @case_log.update(checked_answers) && @case_log.update(answers_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
     else
@@ -34,6 +36,16 @@ class CaseLogsController < ApplicationController
       render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
     end
   end
+
+  def get_checked_answers(questions_for_page, case_log_params)
+    checked_questions = questions_for_page.map do |question|
+      if case_log_params[question].is_a?(Array)
+        case_log_params[question].reject(&:empty?).map { |answer| { "#{question}_#{answer.parameterize(separator: '_')}" => true } }
+      end
+    end
+    checked_questions.flatten.reject(&:nil?).reduce({}, :merge)
+  end
+
 
   def check_answers
     @case_log = CaseLog.find(params[:case_log_id])

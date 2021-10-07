@@ -43,4 +43,21 @@ RSpec.describe CaseLogsController, type: :controller do
       end
     end
   end
+
+  describe "submit_form" do
+    let!(:case_log) { FactoryBot.create(:case_log) }
+    let(:id) { case_log.id }
+
+    it "returns a success response" do
+      case_log_to_submit = { "accessibility_requirements" =>
+                               ["Fully wheelchair accessible housing", "Wheelchair access to essential rooms", "Level access housing"],
+                             "previous_page" => "accessibility_requirements" }
+      post :submit_form, params: { id: id, case_log: case_log_to_submit }
+      CaseLog.find(id)
+
+      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
+      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
+      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
+    end
+  end
 end
