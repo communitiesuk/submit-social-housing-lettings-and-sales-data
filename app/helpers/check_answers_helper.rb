@@ -12,7 +12,6 @@ module CheckAnswersHelper
   def total_questions(subsection, case_log)
     form = Form.new(2021, 2022)
     questions = form.questions_for_subsection(subsection)
-    question_keys = questions.keys
     questions_not_applicable = []
     questions.reject do |question_key, question|
       question.fetch("conditional_for", []).map do |conditional_question_key, condition|
@@ -25,12 +24,12 @@ module CheckAnswersHelper
   end
 
   def condition_not_met(case_log, question_key, condition)
-    case_log[question_key].blank? || !(eval(case_log[question_key].to_s + condition))
+    case_log[question_key].blank? || !eval(case_log[question_key].to_s + condition)
   end
 
   def subsection_pages(subsection)
-    @form ||= Form.new(2021, 2022)
-    @subsection_pages ||= @form.pages_for_subsection(subsection)
+    form = Form.new(2021, 2022)
+    form.pages_for_subsection(subsection)
   end
 
   def create_update_answer_link(case_log_answer, case_log_id, page)
@@ -49,7 +48,6 @@ module CheckAnswersHelper
   end
 
   def display_answered_questions_summary(subsection, case_log)
-    # binding.pry
     if total_answered_questions(subsection, case_log) == total_number_of_questions(subsection, case_log)
       '<p class="govuk-body govuk-!-margin-bottom-7">You answered all the questions</p>'.html_safe
     else

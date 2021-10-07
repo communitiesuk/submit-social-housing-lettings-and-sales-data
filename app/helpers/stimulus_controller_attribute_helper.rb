@@ -2,12 +2,12 @@ module StimulusControllerAttributeHelper
   def stimulus_html_attributes(question)
     attribs = [
       numeric_question_html_attributes(question),
-      conditional_html_attributes(question)
+      conditional_html_attributes(question),
     ]
     merge_controller_attributes(*attribs)
   end
 
-  private
+private
 
   def numeric_question_html_attributes(question)
     return {} if question["fields-to-add"].blank? || question["result-field"].blank?

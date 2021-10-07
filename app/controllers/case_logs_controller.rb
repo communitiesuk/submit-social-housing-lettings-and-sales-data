@@ -37,7 +37,6 @@ class CaseLogsController < ApplicationController
 
   def check_answers
     @case_log = CaseLog.find(params[:case_log_id])
-    form = Form.new(2021, 2022)
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
     render "form/check_answers", locals: { case_log: @case_log, subsection: subsection }
