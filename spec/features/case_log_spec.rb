@@ -15,6 +15,12 @@ RSpec.describe "Test Features" do
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
+  def fill_in_number_question(case_log_id, question, value)
+    visit("/case_logs/#{case_log_id}/#{question}")
+    fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
+    click_button("Save and continue")
+  end
+
   def answer_all_questions_in_income_subsection
     visit("/case_logs/#{empty_case_log.id}/net_income")
     fill_in("case-log-net-income-field", with: 18_000)
@@ -130,6 +136,20 @@ RSpec.describe "Test Features" do
         fill_in("case-log-support-charge-field", with: 4)
         expect(page).to have_field("case-log-total-charge-field", with: "10")
       end
+
+      it "displays number answers in inputs if they are already saved" do
+        fill_in_number_question(id, "previous_postcode", "P0 5ST")
+
+        visit("/case_logs/#{id}/previous_postcode")
+        expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
+      end
+
+      it "displays text answers in inputs if they are already saved" do
+        fill_in_number_question(id, "tenant_age", "12")
+
+        visit("/case_logs/#{id}/tenant_age")
+        expect(page).to have_field("case-log-tenant-age-field", with: "12")
+      end
     end
 
     describe "Back link directs correctly" do
@@ -164,12 +184,6 @@ RSpec.describe "Test Features" do
     let(:subsection) { "household_characteristics" }
 
     context "when the user needs to check their answers for a subsection" do
-      def fill_in_number_question(case_log_id, question, value)
-        visit("/case_logs/#{case_log_id}/#{question}")
-        fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
-        click_button("Save and continue")
-      end
-
       it "can be visited by URL" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
         expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
