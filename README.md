@@ -1,116 +1,116 @@
 [![CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml/badge.svg?branch=main&event=push)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml)
 
 # Data Collection App
-This is the codebase for the Ruby/Rails app that will handle the submission of Lettings and Sales of Social Housing in England data.
+
+This is the codebase for the Ruby on Rails app that will handle the submission of Lettings and Sales of Social Housing in England data.
 
 ## Required Setup
 
-Pre-requisites
+Pre-requisites:
 
 - Ruby
 - Rails
 - Postgres
 
+### Quick start
 
-### Setup Quickstart
+1. Copy the `.env.example` to `.env` and replace the database credentials with your local postgres user credentials.
 
-Copy the `.env.example` to `.env` and replace the database credentials with your local postgres user credentials.
+2. Install the dependencies:\
+  `bundle install`
 
-Install the dependencies
-`bundle install`
+3. Create the database:\
+  `rake db:create`
 
-Create the database
-`rake db:create`
+4. Run the database migrations:\
+  `rake db:migrate`
 
-Run the database migrations
-`rake db:migrate`
+5. Install the frontend depenencies:\
+  `yarn install`
 
-Start the rails server
-```
-rails s
-```
-This starts the rails server on localhost:3000
+6. Start the Rails server:\
+  `bundle exec rails s`
 
-or using Docker
+The Rails server will start on <http://localhost:3000>.
 
-```
+### Using Docker
+
+```sh
 docker-compose build
 docker-compose run --rm app rails db:create
 docker-compose up
 ```
 
-This exposes the rails server on localhost:8080.
+The Rails server will start on <http://localhost:8080>.
 
-Note docker-compose runs the production docker image (RAILS_ENV=production) as the Dockerfile doesn't include development gems to keep the image size down.
+Note `docker-compose` runs the production docker image (`RAILS_ENV=production`) as the Dockerfile doesn’t include development gems to keep the image size down.
 
+## Infrastructure
 
-### Infrastructure
+This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
 
-This application is running on [Gov PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
+1. Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (sandbox/production).
 
-- Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (sandbox/production).
-- Install the cloudfoundry cli https://docs.cloudfoundry.org/cf-cli/install-go-cli.html
+2. [Install the Cloud Foundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
 
-- Login <br/>
+3. Login:\
 `cf login -a api.london.cloud.service.gov.uk -u <your_username>`
 
-- Set your deployment target (sandbox/production) <br/>
+4. Set your deployment target (sandbox/production):\
 `cf target -o dluhc-core -s <deploy_environment>`
 
-- Deploy <br/>
+5. Deploy:\
 `cf push dluhc-core --strategy rolling`. This will use the [manifest file](manifest.yml)
 
 Once the app is deployed:
 
-- Get a rails console <br/>
+1. Get a Rails console:\
 `cf ssh dluhc-core -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
 
-- Check logs <br />
+2. Check logs:\
 `cf logs dluhc-core --recent`
 
+## CI/CD
 
-### CI/CD
+When a commit is made to `main` the following GitHub action jobs are triggered:
 
-When a commit is made to `main` the following Github action jobs are triggered:
+1. **Test**: RSpec runs our test suite
+2. **Deploy**: If the Test stage passes, this job will deploy the app to our GOV.UK PaaS account using the Cloud Foundry CLI
 
-1. Test - RSpec runs our test suite
-2. Deploy - If the Test stage passes, this deploys the app to our Gov PaaS account using the cloudfoundry cli
+When a pull request is opened to `main` only the Test stage runs.
 
-When a pull request is opened to `main` only the test stage runs.
+## Single log submission
 
-
-### Single log submission
-
-The form for this is driven by a json file in `/config/forms/{start_year}_{end_year}.json`
+The form for this is driven by a JSON file in `/config/forms/{start_year}_{end_year}.json`
 
 The JSON should follow the structure:
 
-```
+```jsonc
 {
-  form_type: [lettings/sales]
-  start_year: yyyy
-  end_year: yyyy
-  sections: {
-    snake case section name string: {
-      label: string,
-      subsections: {
-        snake case subsection name string: {
-          label: string,
-          pages: {
-            snake case page name string: {
-              header: string,
-              description: string,
-              questions: {
-                snake case question name string: {
-                  header: string,
-                  hint_text: string,
-                  type: [text / numeric / radio / checkbox / date ],
-                  min: integer, (numeric only),
-                  max: integer, (numeric only),
-                  step: integer (numeric only),
-                  answer_options: { (checkbox and radio only)
-                    "0": string,
-                    "1": string
+  "form_type": "lettings" / "sales",
+  "start_year": Integer, // i.e. 2020
+  "end_year": Integer, // i.e. 2021
+  "sections": {
+    "[snake_case_section_name_string]": {
+      "label": String,
+      "subsections": {
+        "[snake_case_subsection_name_string]": {
+          "label": String,
+          "pages": {
+            "[snake_case_page_name_string]": {
+              "header": String,
+              "description": String,
+              "questions": {
+                "[snake_case_question_name_string]": {
+                  "header": String,
+                  "hint_text": String,
+                  "type": "text" / "numeric" / "radio" / "checkbox" / "date",
+                  "min": Integer, // numeric only
+                  "max": Integer, // numeric only
+                  "step": Integer, // numeric only
+                  "answer_options": { // checkbox and radio only
+                    "0": String,
+                    "1": String
                   }
                 }
               }
@@ -132,19 +132,18 @@ Assumptions made by the format:
 - The ActiveRecord case log model has a field for each question name (must match)
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
 
+## Useful documentation (external dependencies)
 
-### Useful documentation (external dependencies)
-
-##### DfE Form Builder Gem
+### GOV.UK Design System Form Builder for Rails
 
 - [Examples](https://govuk-form-builder.netlify.app/)
-- [Technical Docs](https://www.rubydoc.info/gems/govuk_design_system_formbuilder/)
+- [Technical docs](https://www.rubydoc.info/gems/govuk_design_system_formbuilder/)
 - [GitHub repository](https://github.com/DFE-Digital/govuk-formbuilder)
 
-##### Alpha Gov UK frontend gem
+### GOV.UK Frontend
 
 - [GitHub repository](https://github.com/alphagov/govuk-frontend)
 
-##### Hotwire (Turbo/Stimulus)
+### Hotwire (Turbo/Stimulus)
 
 - [Docs](https://turbo.hotwired.dev/)

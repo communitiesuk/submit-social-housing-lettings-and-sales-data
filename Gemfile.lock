@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 211d7d990e9762e229d8a86249b88c2a7604e8b0
+  revision: fdcd1df0b13f9b6547336b4d37dffb66f70f7228
   branch: main
   specs:
     rspec-rails (5.1.0.pre)
@@ -143,7 +143,7 @@ GEM
     ffi (1.15.4)
     globalid (0.5.2)
       activesupport (>= 5.0)
-    govuk-components (2.1.1)
+    govuk-components (2.1.2)
       activemodel (>= 6.0)
       railties (>= 6.0)
       view_component (~> 2.39.0)
@@ -175,9 +175,9 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
-    nokogiri (1.12.4-x86_64-darwin)
+    nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     overcommit (0.58.0)
       childprocess (>= 0.6.3, < 5)
@@ -294,7 +294,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stimulus-rails (0.6.0)
+    stimulus-rails (0.6.1)
       rails (>= 6.0.0)
     thor (1.1.0)
     turbo-rails (0.8.1)

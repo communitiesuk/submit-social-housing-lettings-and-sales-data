@@ -17,12 +17,12 @@ RSpec.describe "Test Features" do
 
   def answer_all_questions_in_income_subsection
     visit("/case_logs/#{empty_case_log.id}/net_income")
-    fill_in("net_income", with: 18_000)
-    choose("net-income-frequency-yearly-field")
+    fill_in("case-log-net-income-field", with: 18_000)
+    choose("case-log-net-income-frequency-yearly-field")
     click_button("Save and continue")
-    choose("net-income-uc-proportion-all-field")
+    choose("case-log-net-income-uc-proportion-all-field")
     click_button("Save and continue")
-    choose("housing-benefit-housing-benefit-but-not-universal-credit-field")
+    choose("case-log-housing-benefit-housing-benefit-but-not-universal-credit-field")
     click_button("Save and continue")
   end
 
@@ -80,19 +80,19 @@ RSpec.describe "Test Features" do
     it "displays the household questions when you click into that section" do
       visit("/case_logs/#{id}")
       click_link("Household characteristics")
-      expect(page).to have_field("tenant-code-field")
+      expect(page).to have_field("case-log-tenant-code-field")
       click_button("Save and continue")
-      expect(page).to have_field("tenant-age-field")
+      expect(page).to have_field("case-log-tenant-age-field")
       click_button("Save and continue")
-      expect(page).to have_field("tenant-gender-male-field")
+      expect(page).to have_field("case-log-tenant-gender-male-field")
       visit page.driver.request.env["HTTP_REFERER"]
-      expect(page).to have_field("tenant-age-field")
+      expect(page).to have_field("case-log-tenant-age-field")
     end
 
     describe "form questions" do
       it "can be accessed by url" do
         visit("/case_logs/#{id}/tenant_age")
-        expect(page).to have_field("tenant-age-field")
+        expect(page).to have_field("case-log-tenant-age-field")
       end
 
       it "updates model attributes correctly for each question" do
@@ -103,16 +103,32 @@ RSpec.describe "Test Features" do
           visit("/case_logs/#{id}/#{question}")
           case type
           when "text"
-            fill_in(question.to_s, with: answer)
+            fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
           when "radio"
-            choose("#{question.to_s.dasherize}-#{answer.parameterize}-field")
+            choose("case-log-#{question.to_s.dasherize}-#{answer.parameterize}-field")
           else
-            fill_in(question.to_s, with: answer)
+            fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
           end
           expect { click_button("Save and continue") }.to change {
             case_log.reload.send(question.to_s)
           }.from(original_value).to(answer)
         end
+      end
+
+      it "updates total value of the rent", js: true do
+        visit("/case_logs/#{id}/rent")
+
+        fill_in("basic_rent", with: 3)
+        expect(page).to have_field("total-charge-field", with: "3")
+
+        fill_in("service_charge", with: 2)
+        expect(page).to have_field("total-charge-field", with: "5")
+
+        fill_in("personal_service_charge", with: 1)
+        expect(page).to have_field("total-charge-field", with: "6")
+
+        fill_in("support_charge", with: 4)
+        expect(page).to have_field("total-charge-field", with: "10")
       end
     end
 
@@ -126,7 +142,7 @@ RSpec.describe "Test Features" do
       it "go back to tenant code page from tenant age page" do
         visit("/case_logs/#{id}/tenant_age")
         click_link(text: "Back")
-        expect(page).to have_field("tenant-code-field")
+        expect(page).to have_field("case-log-tenant-code-field")
       end
     end
   end
@@ -150,7 +166,7 @@ RSpec.describe "Test Features" do
     context "when the user needs to check their answers for a subsection" do
       def fill_in_number_question(case_log_id, question, value)
         visit("/case_logs/#{case_log_id}/#{question}")
-        fill_in(question.to_s, with: value)
+        fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
         click_button("Save and continue")
       end
 
@@ -175,7 +191,7 @@ RSpec.describe "Test Features" do
 
       it "should display answers given by the user for the question in the subsection" do
         fill_in_number_question(empty_case_log.id, "tenant_age", 28)
-        choose("tenant-gender-non-binary-field")
+        choose("case-log-tenant-gender-non-binary-field")
         click_button("Save and continue")
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("28")
@@ -229,14 +245,14 @@ RSpec.describe "Test Features" do
       it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
         visit("/case_logs/#{id}/armed_forces")
         # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
-        choose("armed-forces-yes-a-regular-field", allow_label_click: true)
+        choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
         expect(page).to have_selector("#armed_forces_injured_div")
-        choose("armed-forces-injured-no-field", allow_label_click: true)
-        expect(find_field("armed-forces-injured-no-field", visible: false).checked?).to be_truthy
-        choose("armed-forces-no-field", allow_label_click: true)
+        choose("case-log-armed-forces-injured-no-field", allow_label_click: true)
+        expect(find_field("case-log-armed-forces-injured-no-field", visible: false).checked?).to be_truthy
+        choose("case-log-armed-forces-no-field", allow_label_click: true)
         expect(page).not_to have_selector("#armed_forces_injured_div")
-        choose("armed-forces-yes-a-regular-field", allow_label_click: true)
-        expect(find_field("armed-forces-injured-no-field", visible: false).checked?).to be_falsey
+        choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
+        expect(find_field("case-log-armed-forces-injured-no-field", visible: false).checked?).to be_falsey
       end
     end
   end
