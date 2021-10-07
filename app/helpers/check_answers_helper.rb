@@ -15,7 +15,7 @@ module CheckAnswersHelper
     questions_not_applicable = []
     questions.reject do |question_key, question|
       question.fetch("conditional_for", []).map do |conditional_question_key, condition|
-        if condition_not_met(case_log, question_key, condition)
+        if condition_not_met(case_log, question_key, question, condition)
           questions_not_applicable << conditional_question_key
         end
       end
@@ -23,8 +23,15 @@ module CheckAnswersHelper
     end
   end
 
-  def condition_not_met(case_log, question_key, condition)
-    case_log[question_key].blank? || !eval(case_log[question_key].to_s + condition)
+  def condition_not_met(case_log, question_key, question, condition)
+    case question["type"]
+    when "numeric"
+      case_log[question_key].blank? || !eval(case_log[question_key].to_s + condition)
+    when "radio"
+      case_log[question_key].blank? || !condition.include?(case_log[question_key])
+    else
+      raise "Not implemented yet"
+    end
   end
 
   def subsection_pages(subsection)
