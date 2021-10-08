@@ -1612,12 +1612,12 @@
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
                   "answer_options": {
-                    "0": "Homeless or about to lose their home (within 56 days)",
-                    "1": "Living in insanitary or overcrowded or unsatisfactory housing",
-                    "2": "A need to move on medical and welfare grounds (including a disability)",
-                    "3": "A need to move to avoid hardship to themselves or others",
+                    "reasonable_preference_reason_homeless": "Homeless or about to lose their home (within 56 days)",
+                    "reasonable_preference_reason_unsatisfactory_housing": "Living in insanitary or overcrowded or unsatisfactory housing",
+                    "reasonable_preference_reason_medical_grounds": "A need to move on medical and welfare grounds (including a disability)",
+                    "reasonable_preference_reason_avoid_hardship": "A need to move to avoid hardship to themselves or others",
                     "divider": true,
-                    "4": "Do not know"
+                    "reasonable_preference_reason_do_not_know": "Do not know"
                   }
                 }
               }

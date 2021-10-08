@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_08_105117) do
+ActiveRecord::Schema.define(version: 2021_10_08_110444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,6 +126,11 @@ ActiveRecord::Schema.define(version: 2021_10_08_105117) do
     t.boolean "condition_effects_social_or_behavioral"
     t.boolean "condition_effects_other"
     t.boolean "condition_effects_prefer_not_to_say"
+    t.boolean "reasonable_preference_reason_homeless"
+    t.boolean "reasonable_preference_reason_unsatisfactory_housing"
+    t.boolean "reasonable_preference_reason_medical_grounds"
+    t.boolean "reasonable_preference_reason_avoid_hardship"
+    t.boolean "reasonable_preference_reason_do_not_know"
   end
 
 end
