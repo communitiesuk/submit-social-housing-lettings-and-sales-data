@@ -48,7 +48,7 @@ RSpec.describe CaseLogsController, type: :controller do
     let!(:case_log) { FactoryBot.create(:case_log) }
     let(:id) { case_log.id }
 
-    it "returns a success response" do
+    it "sets checked items to true" do
       case_log_to_submit = { "accessibility_requirements" =>
                                ["Fully wheelchair accessible housing", "Wheelchair access to essential rooms", "Level access housing"],
                              "previous_page" => "accessibility_requirements" }
@@ -56,8 +56,27 @@ RSpec.describe CaseLogsController, type: :controller do
       CaseLog.find(id)
 
       expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
-      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
-      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
+      expect(CaseLog.find(id)["accessibility_requirements_wheelchair_access_to_essential_rooms"]).to eq(true)
+      expect(CaseLog.find(id)["accessibility_requirements_level_access_housing"]).to eq(true)
+    end
+
+    it "sets previously submitted items to false when resubmitted with new values" do
+      case_log_to_submit = { "accessibility_requirements" =>
+                               ["Fully wheelchair accessible housing", "Wheelchair access to essential rooms", "Level access housing"],
+                             "previous_page" => "accessibility_requirements" }
+      post :submit_form, params: { id: id, case_log: case_log_to_submit }
+      CaseLog.find(id)
+
+      new_case_log_to_submit = { "accessibility_requirements" =>
+                               ["Level access housing"],
+                                 "previous_page" => "accessibility_requirements" }
+
+      post :submit_form, params: { id: id, case_log: new_case_log_to_submit }
+      CaseLog.find(id)
+
+      expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(false)
+      expect(CaseLog.find(id)["accessibility_requirements_wheelchair_access_to_essential_rooms"]).to eq(false)
+      expect(CaseLog.find(id)["accessibility_requirements_level_access_housing"]).to eq(true)
     end
   end
 end
