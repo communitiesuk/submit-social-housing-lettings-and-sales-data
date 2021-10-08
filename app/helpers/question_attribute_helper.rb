@@ -1,4 +1,4 @@
-module StimulusControllerAttributeHelper
+module QuestionAttributeHelper
   def stimulus_html_attributes(question)
     attribs = [
       numeric_question_html_attributes(question),

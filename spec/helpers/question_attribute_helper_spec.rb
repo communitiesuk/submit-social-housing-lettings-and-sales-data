@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StimulusControllerAttributeHelper do
+RSpec.describe QuestionAttributeHelper do
   let(:form) { Form.new(2021, 2022) }
   let(:questions) { form.questions_for_page("rent") }
 

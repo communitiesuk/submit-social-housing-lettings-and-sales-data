@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: fdcd1df0b13f9b6547336b4d37dffb66f70f7228
+  revision: 3f0e35085f5765decf96fee179ec9a2e132a67c1
   branch: main
   specs:
     rspec-rails (5.1.0.pre)
@@ -294,7 +294,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stimulus-rails (0.6.1)
+    stimulus-rails (0.7.0)
       rails (>= 6.0.0)
     thor (1.1.0)
     turbo-rails (0.8.1)
