@@ -47,12 +47,16 @@ RSpec.describe CaseLogsController, type: :controller do
   describe "submit_form" do
     let!(:case_log) { FactoryBot.create(:case_log) }
     let(:id) { case_log.id }
+    let(:case_log_to_submit) do
+      { "accessibility_requirements" =>
+                             %w[ accessibility_requirements_fully_wheelchair_accessible_housing
+                                 accessibility_requirements_wheelchair_access_to_essential_rooms
+                                 accessibility_requirements_level_access_housing],
+        "previous_page" => "accessibility_requirements" }
+    end
 
     it "sets checked items to true" do
-      case_log_to_submit = { "accessibility_requirements" =>
-                               ["Fully wheelchair accessible housing", "Wheelchair access to essential rooms", "Level access housing"],
-                             "previous_page" => "accessibility_requirements" }
-      post :submit_form, params: { id: id, case_log: case_log_to_submit }
+      get :submit_form, params: { id: id, case_log: case_log_to_submit }
       CaseLog.find(id)
 
       expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(true)
@@ -61,17 +65,14 @@ RSpec.describe CaseLogsController, type: :controller do
     end
 
     it "sets previously submitted items to false when resubmitted with new values" do
-      case_log_to_submit = { "accessibility_requirements" =>
-                               ["Fully wheelchair accessible housing", "Wheelchair access to essential rooms", "Level access housing"],
-                             "previous_page" => "accessibility_requirements" }
       post :submit_form, params: { id: id, case_log: case_log_to_submit }
       CaseLog.find(id)
 
       new_case_log_to_submit = { "accessibility_requirements" =>
-                               ["Level access housing"],
+                               %w[accessibility_requirements_level_access_housing],
                                  "previous_page" => "accessibility_requirements" }
 
-      post :submit_form, params: { id: id, case_log: new_case_log_to_submit }
+      get :submit_form, params: { id: id, case_log: new_case_log_to_submit }
       CaseLog.find(id)
 
       expect(CaseLog.find(id)["accessibility_requirements_fully_wheelchair_accessible_housing"]).to eq(false)

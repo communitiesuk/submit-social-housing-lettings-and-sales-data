@@ -42,8 +42,8 @@ class CaseLogsController < ApplicationController
     checkbox_questions = questions_for_page.select { |_title, question| question["type"] == "checkbox" }
     checkbox_questions.each do |title, question|
       valid_answer_options = question["answer_options"].reject { |key, _value| key.match?(/divider/) }
-      valid_answer_options.each do |_key, value|
-        checked_questions["#{title}_#{value.parameterize(separator: '_')}"] = case_log_params[title].include?(value) ? true : false
+      valid_answer_options.each do |value, _label|
+        checked_questions[value] = case_log_params[title].include?(value) ? true : false
       end
     end
     checked_questions

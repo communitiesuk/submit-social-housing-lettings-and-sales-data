@@ -381,15 +381,15 @@
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
-                    "0": "Fully wheelchair accessible housing",
-                    "1": "Wheelchair access to essential rooms",
-                    "2": "Level access housing",
-                    "3": "Other disability requirements",
-                    "4": "No disability requirements",
+                    "accessibility_requirements_fully_wheelchair_accessible_housing": "Fully wheelchair accessible housing",
+                    "accessibility_requirements_wheelchair_access_to_essential_rooms": "Wheelchair access to essential rooms",
+                    "accessibility_requirements_level_access_housing": "Level access housing",
+                    "accessibility_requirements_other_disability_requirements": "Other disability requirements",
+                    "accessibility_requirements_no_disability_requirements": "No disability requirements",
                     "divider_a": true,
-                    "5": "Do not know",
+                    "accessibility_requirements_do_not_know": "Do not know",
                     "divider_b": true,
-                    "6": "Prefer not to say"
+                    "accessibility_requirements_prefer_not_to_say": "Prefer not to say"
                   }
                 }
               }
