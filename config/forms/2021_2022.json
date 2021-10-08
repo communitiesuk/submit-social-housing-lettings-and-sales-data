@@ -404,18 +404,18 @@
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
-                    "0": "Vision - such as blindness or partial sight",
-                    "1": "Hearing - such as deafness or partial hearing",
-                    "2": "Mobility - such as walking short distances or climbing stairs",
-                    "3": "Dexterity - such as lifting and carrying objects or using a keyboard",
-                    "4": "Stamina or breathing or fatigue",
-                    "5": "Learning or understanding or concentrating",
-                    "6": "Memory",
-                    "7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
-                    "8": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
-                    "9": "Other",
+                    "condition_effects_vision": "Vision - such as blindness or partial sight",
+                    "condition_effects_hearing": "Hearing - such as deafness or partial hearing",
+                    "condition_effects_mobility": "Mobility - such as walking short distances or climbing stairs",
+                    "condition_effects_dexterity": "Dexterity - such as lifting and carrying objects or using a keyboard",
+                    "condition_effects_stamina": "Stamina or breathing or fatigue",
+                    "condition_effects_learning": "Learning or understanding or concentrating",
+                    "condition_effects_memory": "Memory",
+                    "condition_effects_mental_health": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
+                    "condition_effects_social_or_behavioral": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
+                    "condition_effects_other": "Other",
                     "divider": true,
-                    "10": "Prefer not to say"
+                    "condition_effects_prefer_not_to_say": "Prefer not to say"
                   }
                 }
               }
