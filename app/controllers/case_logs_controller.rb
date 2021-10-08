@@ -27,7 +27,7 @@ class CaseLogsController < ApplicationController
     questions_for_page = form.questions_for_page(previous_page)
     checked_answers = get_checked_answers(params[:case_log], questions_for_page)
 
-    answers_for_page = page_params(questions_for_page.keys).select { |k, _v| questions_for_page.keys.include?(k) }
+    answers_for_page = page_params(questions_for_page.keys).select { |k, _v| questions_for_page.key?(k) }
     if @case_log.update(checked_answers) && @case_log.update(answers_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
@@ -39,11 +39,11 @@ class CaseLogsController < ApplicationController
 
   def get_checked_answers(case_log_params, questions_for_page)
     checked_questions = {}
-    checkbox_questions = questions_for_page.select {|_title, question| question["type"] == "checkbox" }
+    checkbox_questions = questions_for_page.select { |_title, question| question["type"] == "checkbox" }
     checkbox_questions.each do |title, question|
-      valid_answer_options = question["answer_options"].select {|key, _value| !key.match?(/divider/) }
+      valid_answer_options = question["answer_options"].reject { |key, _value| key.match?(/divider/) }
       valid_answer_options.each do |_key, value|
-          checked_questions["#{title}_#{value.parameterize(separator: '_')}"] = case_log_params[title].include?(value) ? true : false
+        checked_questions["#{title}_#{value.parameterize(separator: '_')}"] = case_log_params[title].include?(value) ? true : false
       end
     end
     checked_questions
