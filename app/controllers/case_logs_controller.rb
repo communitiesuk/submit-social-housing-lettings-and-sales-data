@@ -25,9 +25,8 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
-    checked_answers = get_checked_answers(params[:case_log], questions_for_page)
-
     answers_for_page = page_params(questions_for_page.keys).select { |k, _v| questions_for_page.key?(k) }
+    checked_answers = get_checked_answers(params[:case_log], questions_for_page)
     if @case_log.update(checked_answers) && @case_log.update(answers_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
