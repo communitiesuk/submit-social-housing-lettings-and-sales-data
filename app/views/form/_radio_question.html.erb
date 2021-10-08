@@ -6,14 +6,8 @@
     <% question["answer_options"].map do |key, val| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
-      <% elsif question["conditional_for"] %>
-        <%= f.govuk_radio_button question_key, val, label: { text: val },
-            "data-controller": "conditional-question",
-            "data-action": "conditional-question#displayConditional",
-            "data-info": question["conditional_for"].to_json
-        %>
       <% else %>
-        <%= f.govuk_radio_button question_key, val, label: { text: val } %>
+        <%= f.govuk_radio_button question_key, val, label: { text: val }, **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>
 <% end %>

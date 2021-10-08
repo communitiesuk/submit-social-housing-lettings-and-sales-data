@@ -1,5 +1,6 @@
 <%= f.govuk_date_field question_key,
     hint: { text: question["hint_text"] },
     legend: { text: question["header"].html_safe, size: "l"},
-    width: 20
+    width: 20,
+    **stimulus_html_attributes(question)
 %>

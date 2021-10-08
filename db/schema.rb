@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_143031) do
+ActiveRecord::Schema.define(version: 2021_10_05_115813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_143031) do
     t.string "person_8_economic"
     t.string "postcode"
     t.string "homelessness"
-    t.string "last_settled_home"
+    t.string "reason_for_leaving_last_settled_home"
     t.string "benefit_cap_spare_room_subsidy"
     t.string "armed_forces_active"
     t.string "armed_forces_injured"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2021_09_24_143031) do
     t.string "cbl_letting"
     t.string "chr_letting"
     t.string "cap_letting"
+    t.string "outstanding_rent_or_charges"
   end
 
 end

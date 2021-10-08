@@ -111,6 +111,10 @@ The JSON should follow the structure:
                   "answer_options": { // checkbox and radio only
                     "0": String,
                     "1": String
+                  },
+                  "conditional_for": {
+                    "[snake_case_question_to_enable_1_name_string]": ["condition-that-enables"],
+                    "[snake_case_question_to_enable_2_name_string]": ["condition-that-enables"]
                   }
                 }
               }
@@ -131,6 +135,9 @@ Assumptions made by the format:
 - All pages have at least 1 question
 - The ActiveRecord case log model has a field for each question name (must match)
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
+- For conditionally shown questions conditions that have been implemented and can be used are:
+  - Radio question answer option selected matches one of conditional e.g. ["answer-options-1-string", "answer-option-3-string"]
+  - Numeric question value matches condition e.g. [">2"], ["<7"] or ["== 6"]
 
 ## Useful documentation (external dependencies)
 

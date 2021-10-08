@@ -37,6 +37,11 @@ class Form
     all_pages[page]["questions"]
   end
 
+  # Returns a hash with the questions as keys
+  def questions_for_subsection(subsection)
+    pages_for_subsection(subsection).map { |title, _value| questions_for_page(title) }.reduce(:merge)
+  end
+
   def first_page_for_subsection(subsection)
     pages_for_subsection(subsection).keys.first
   end
@@ -69,9 +74,5 @@ class Form
     return unless current_page_idx.positive?
 
     pages_for_subsection(subsection).keys[current_page_idx - 1]
-  end
-
-  def questions_for_subsection(subsection)
-    pages_for_subsection(subsection).map { |title, _value| questions_for_page(title) }.reduce(:merge)
   end
 end

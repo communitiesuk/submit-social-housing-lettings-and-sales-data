@@ -15,6 +15,12 @@ RSpec.describe "Test Features" do
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
+  def fill_in_number_question(case_log_id, question, value)
+    visit("/case_logs/#{case_log_id}/#{question}")
+    fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
+    click_button("Save and continue")
+  end
+
   def answer_all_questions_in_income_subsection
     visit("/case_logs/#{empty_case_log.id}/net_income")
     fill_in("case-log-net-income-field", with: 18_000)
@@ -118,17 +124,27 @@ RSpec.describe "Test Features" do
       it "updates total value of the rent", js: true do
         visit("/case_logs/#{id}/rent")
 
-        fill_in("basic_rent", with: 3)
-        expect(page).to have_field("total-charge-field", with: "3")
+        fill_in("case-log-basic-rent-field", with: 3)
+        expect(page).to have_field("case-log-total-charge-field", with: "3")
 
-        fill_in("service_charge", with: 2)
-        expect(page).to have_field("total-charge-field", with: "5")
+        fill_in("case-log-service-charge-field", with: 2)
+        expect(page).to have_field("case-log-total-charge-field", with: "5")
 
-        fill_in("personal_service_charge", with: 1)
-        expect(page).to have_field("total-charge-field", with: "6")
+        fill_in("case-log-personal-service-charge-field", with: 1)
+        expect(page).to have_field("case-log-total-charge-field", with: "6")
 
-        fill_in("support_charge", with: 4)
-        expect(page).to have_field("total-charge-field", with: "10")
+        fill_in("case-log-support-charge-field", with: 4)
+        expect(page).to have_field("case-log-total-charge-field", with: "10")
+      end
+
+      it "displays number answers in inputs if they are already saved" do
+        visit("/case_logs/#{id}/previous_postcode")
+        expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
+      end
+
+      it "displays text answers in inputs if they are already saved" do
+        visit("/case_logs/#{id}/tenant_age")
+        expect(page).to have_field("case-log-tenant-age-field", with: "12")
       end
     end
 
@@ -164,12 +180,6 @@ RSpec.describe "Test Features" do
     let(:subsection) { "household_characteristics" }
 
     context "when the user needs to check their answers for a subsection" do
-      def fill_in_number_question(case_log_id, question, value)
-        visit("/case_logs/#{case_log_id}/#{question}")
-        fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
-        click_button("Save and continue")
-      end
-
       it "can be visited by URL" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
         expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
