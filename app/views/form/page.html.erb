@@ -15,7 +15,7 @@
     <%= f.govuk_error_summary %>
     <% page_info["questions"].map do |question_key, question| %>
       <div id=<%= question_key + "_div " %><%= display_question_key_div(page_info, question_key) %> >
-        <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key, question: question, f: f } %>
+        <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key.to_sym, question: question, f: f } %>
       </div>
     <% end %>
 
