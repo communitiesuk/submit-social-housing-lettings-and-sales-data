@@ -12,7 +12,7 @@ RSpec.describe "case_logs/index" do
       expect(rendered).to match(/Logs you need to complete/)
       expect(rendered).not_to match(/Logs you&#39;ve submitted/)
       expect(rendered).to match(in_progress_log.tenant_code)
-      expect(rendered).to match(in_progress_log.postcode)
+      expect(rendered).to match(in_progress_log.property_postcode)
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe "case_logs/index" do
       expect(rendered).to match(/Logs you&#39;ve submitted/)
       expect(rendered).not_to match(/Logs you need to complete/)
       expect(rendered).to match(submitted_log.tenant_code)
-      expect(rendered).to match(submitted_log.postcode)
+      expect(rendered).to match(submitted_log.property_postcode)
     end
   end
 

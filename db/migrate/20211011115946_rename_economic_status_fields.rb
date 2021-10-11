@@ -8,6 +8,7 @@ class RenameEconomicStatusFields < ActiveRecord::Migration[6.1]
       t.rename :person_6_economic, :person_6_economic_status
       t.rename :person_7_economic, :person_7_economic_status
       t.rename :person_8_economic, :person_8_economic_status
+      t.rename :postcode, :property_postcode
     end
   end
 end

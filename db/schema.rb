@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 2021_10_11_115946) do
     t.string "previous_housing_situation"
     t.integer "prior_homelessness"
     t.string "armed_forces"
-    t.string "postcode"
     t.string "tenant_economic_status"
     t.integer "household_number_of_other_members"
     t.string "person_2_relationship"
@@ -102,7 +101,6 @@ ActiveRecord::Schema.define(version: 2021_10_11_115946) do
     t.string "time_lived_in_la"
     t.string "time_on_la_waiting_list"
     t.string "previous_la"
-    t.string "property_postcode"
     t.string "reasonable_preference"
     t.string "reasonable_preference_reason"
     t.string "cbl_letting"
@@ -132,6 +130,7 @@ ActiveRecord::Schema.define(version: 2021_10_11_115946) do
     t.boolean "reasonable_preference_reason_medical_grounds"
     t.boolean "reasonable_preference_reason_avoid_hardship"
     t.boolean "reasonable_preference_reason_do_not_know"
+    t.string "property_postcode"
   end
 
 end
