@@ -1,32 +1,39 @@
 class CaseLogValidator < ActiveModel::Validator
 
-  def validate_tenant_age(record, validation_regex)
-    regexp = Regexp.new validation_regex
-    if !record.tenant_age?
+  # Methods need to be named 'validate_' followed by field name
+  # this is how the metaprogramming of the method name being 
+  # call in the validate method works.
+
+  def validate_tenant_code(record)
+    if record.tenant_code.blank?
+      record.errors.add :tenant_code, "Tenant code can't be blank"
+    end
+  end
+
+  def validate_tenant_age(record)
+    if record.tenant_age.blank?
       record.errors.add :tenant_age, "Tenant age can't be blank"
-    elsif !(record.tenant_age.to_s =~ regexp)
+    elsif !(record.tenant_age.to_s =~ /^[1-9][0-9]?$|^100$/)
       record.errors.add :tenant_age, "Tenant age must be between 0 and 100"
     end
   end
 
   def validate(record)
     question_to_validate = options[:previous_page]
-    validation_regex = options[:validation]
-    if question_to_validate == "tenant_code"
-      if !record.tenant_code?
-        record.errors.add :tenant_code, "Tenant code can't be blank"
-      end
-    elsif question_to_validate == "tenant_age"
-        validate_tenant_age(record, validation_regex)
-    end
+    public_send("validate_#{question_to_validate}", record)
   end
 end
 
 class CaseLog < ApplicationRecord 
   validate :instance_validations
-  attr_accessor :custom_validator_options
+  @previous_page
   enum status: { "in progress" => 0, "submitted" => 1 }
+
+  def previous_page(value)
+    @previous_page = value
+  end
+
   def instance_validations
-    validates_with CaseLogValidator, (custom_validator_options || {})
+    validates_with CaseLogValidator, ({ previous_page: @previous_page } || {})
   end
 end

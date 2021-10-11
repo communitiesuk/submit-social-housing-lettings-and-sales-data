@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 2021_10_05_115813) do
     t.string "chr_letting"
     t.string "cap_letting"
     t.string "outstanding_rent_or_charges"
+    t.string "other_reason_for_leaving_last_settled_home"
   end
 
 end
