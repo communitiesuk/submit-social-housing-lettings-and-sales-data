@@ -77,12 +77,10 @@ class Form
   end
 
   def checkbox_questions_for_page(page)
-    questions = {}
-    questions_for_page = all_pages[page]["questions"]
-    checkbox_questions = questions_for_page.select { |_title, question| question["type"] == "checkbox" }
-    checkbox_questions.each { |title, question|
-      questions[title] = question["answer_options"].keys.reject { |key, _value| key.match?(/divider/) } }
-    questions.map { |_key, value| value }.flatten
+    checkbox_questions = questions_for_page(page).select { |_title, question| question["type"] == "checkbox" }
+    checkbox_questions.flat_map do |title, question|
+      question["answer_options"].keys.reject { |key, _value| key.match?(/divider/) }
+    end
   end
 
 end
