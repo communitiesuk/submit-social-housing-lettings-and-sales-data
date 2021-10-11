@@ -20,7 +20,9 @@ class CaseLogValidator < ActiveModel::Validator
 
   def validate(record)
     question_to_validate = options[:previous_page]
-    public_send("validate_#{question_to_validate}", record)
+    if question_to_validate.present?
+      public_send("validate_#{question_to_validate}", record)
+    end
   end
 end
 
