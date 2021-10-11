@@ -20,32 +20,39 @@ class CaseLogsController < ApplicationController
     render :edit
   end
 
+  def update_checkbox_responses(case_log, questions_for_page)
+    result = {}
+    case_log.each do |question, answer|
+      if question == "previous_page"
+        result[question] = answer
+      elsif questions_for_page[question]["type"] == "checkbox"
+        questions_for_page[question]["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
+          result[option] = case_log[question].include?(option) ? true : false
+        end
+      else
+        result[question] = answer
+      end
+    end
+    result
+  end
+
   def submit_form
     form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
-    answers_for_page = page_params(questions_for_page.keys).select { |k, _v| questions_for_page.key?(k) }
-    checked_answers = get_checked_answers(params[:case_log], questions_for_page)
-    if @case_log.update(checked_answers) && @case_log.update(answers_for_page)
+    checkbox_questions_for_page = form.checkbox_questions_for_page(previous_page)
+    all_question_keys = questions_for_page.keys + checkbox_questions_for_page
+    params[:case_log] = update_checkbox_responses(params[:case_log], questions_for_page)
+
+    answers_for_page = page_params(all_question_keys).select { |k, _v| all_question_keys.include?(k) }
+    if @case_log.update(answers_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[previous_page]
       render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
     end
-  end
-
-  def get_checked_answers(case_log_params, questions_for_page)
-    checked_questions = {}
-    checkbox_questions = questions_for_page.select { |_title, question| question["type"] == "checkbox" }
-    checkbox_questions.each do |title, question|
-      valid_answer_options = question["answer_options"].reject { |key, _value| key.match?(/divider/) }
-      valid_answer_options.each do |value, _label|
-        checked_questions[value] = case_log_params[title].include?(value) ? true : false
-      end
-    end
-    checked_questions
   end
 
   def check_answers
