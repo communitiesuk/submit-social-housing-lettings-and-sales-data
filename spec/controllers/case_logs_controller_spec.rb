@@ -48,11 +48,18 @@ RSpec.describe CaseLogsController, type: :controller do
     let!(:case_log) { FactoryBot.create(:case_log) }
     let(:id) { case_log.id }
     let(:case_log_form_params) do
-      { "accessibility_requirements" =>
+      { accessibility_requirements:
                              %w[ accessibility_requirements_fully_wheelchair_accessible_housing
                                  accessibility_requirements_wheelchair_access_to_essential_rooms
                                  accessibility_requirements_level_access_housing],
-        "previous_page" => "accessibility_requirements" }
+        previous_page: "accessibility_requirements" }
+    end
+
+    let(:new_case_log_form_params) do
+      {
+        accessibility_requirements: %w[accessibility_requirements_level_access_housing],
+        previous_page: "accessibility_requirements",
+      }
     end
 
     it "sets checked items to true" do
@@ -66,10 +73,6 @@ RSpec.describe CaseLogsController, type: :controller do
 
     it "sets previously submitted items to false when resubmitted with new values" do
       post :submit_form, params: { id: id, case_log: case_log_form_params }
-
-      new_case_log_form_params = { "accessibility_requirements" =>
-                               %w[accessibility_requirements_level_access_housing],
-                                 "previous_page" => "accessibility_requirements" }
 
       get :submit_form, params: { id: id, case_log: new_case_log_form_params }
       case_log.reload

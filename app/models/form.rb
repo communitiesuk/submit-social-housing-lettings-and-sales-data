@@ -75,12 +75,4 @@ class Form
 
     pages_for_subsection(subsection).keys[current_page_idx - 1]
   end
-
-  def checkbox_questions_for_page(page)
-    checkbox_questions = questions_for_page(page).select { |_title, question| question["type"] == "checkbox" }
-    checkbox_questions.flat_map do |title, question|
-      question["answer_options"].keys.reject { |key, _value| key.match?(/divider/) }
-    end
-  end
-
 end

@@ -20,33 +20,14 @@ class CaseLogsController < ApplicationController
     render :edit
   end
 
-  def update_checkbox_responses(case_log, questions_for_page)
-    result = {}
-    case_log.each do |question, answer|
-      if question == "previous_page"
-        result[question] = answer
-      elsif questions_for_page[question]["type"] == "checkbox"
-        questions_for_page[question]["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
-          result[option] = case_log[question].include?(option) ? true : false
-        end
-      else
-        result[question] = answer
-      end
-    end
-    result
-  end
-
   def submit_form
     form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
-    checkbox_questions_for_page = form.checkbox_questions_for_page(previous_page)
-    all_question_keys = questions_for_page.keys + checkbox_questions_for_page
-    params[:case_log] = update_checkbox_responses(params[:case_log], questions_for_page)
+    responses_for_page = question_responses(questions_for_page)
 
-    answers_for_page = page_params(all_question_keys).select { |k, _v| all_question_keys.include?(k) }
-    if @case_log.update(answers_for_page)
+    if @case_log.update(responses_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
     else
@@ -72,7 +53,17 @@ class CaseLogsController < ApplicationController
 
 private
 
-  def page_params(questions_for_page)
-    params.require(:case_log).permit(questions_for_page)
+  def question_responses(questions_for_page)
+    questions_for_page.each_with_object({}) do |(question_key, question_info), result|
+      question_params = params["case_log"][question_key]
+      if question_info["type"] == "checkbox"
+        question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
+          result[option] = question_params.include?(option)
+        end
+      else
+        result[question_key] = question_params
+      end
+      result
+    end
   end
 end
