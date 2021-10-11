@@ -160,15 +160,15 @@ RSpec.describe "Test Features" do
         # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
         expect(page).to have_checked_field(
           "case-log-accessibility-requirements-accessibility-requirements-fully-wheelchair-accessible-housing-field",
-          visible: false
+          visible: false,
         )
         expect(page).to have_unchecked_field(
           "case-log-accessibility-requirements-accessibility-requirements-wheelchair-access-to-essential-rooms-field",
-          visible: false
+          visible: false,
         )
         expect(page).to have_checked_field(
           "case-log-accessibility-requirements-accessibility-requirements-level-access-housing-field",
-          visible: false
+          visible: false,
         )
       end
     end

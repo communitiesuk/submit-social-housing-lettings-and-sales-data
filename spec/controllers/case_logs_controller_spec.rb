@@ -91,26 +91,24 @@ RSpec.describe CaseLogsController, type: :controller do
           previous_page: "accessibility_requirements" }
       end
       let(:questions_for_page) do
-        {"accessibility_requirements"=>
+        { "accessibility_requirements" =>
           {
-           "type"=>"checkbox",
-           "answer_options"=>
-            {"accessibility_requirements_fully_wheelchair_accessible_housing"=>"Fully wheelchair accessible housing",
-             "accessibility_requirements_wheelchair_access_to_essential_rooms"=>"Wheelchair access to essential rooms",
-             "accessibility_requirements_level_access_housing"=>"Level access housing",
-             "accessibility_requirements_other_disability_requirements"=>"Other disability requirements",
-             "accessibility_requirements_no_disability_requirements"=>"No disability requirements",
-             "divider_a"=>true,
-             "accessibility_requirements_do_not_know"=>"Do not know",
-             "divider_b"=>true,
-             "accessibility_requirements_prefer_not_to_say"=>"Prefer not to say"
-            }
+            "type" => "checkbox",
+            "answer_options" =>
+            { "accessibility_requirements_fully_wheelchair_accessible_housing" => "Fully wheelchair accessible housing",
+              "accessibility_requirements_wheelchair_access_to_essential_rooms" => "Wheelchair access to essential rooms",
+              "accessibility_requirements_level_access_housing" => "Level access housing",
+              "accessibility_requirements_other_disability_requirements" => "Other disability requirements",
+              "accessibility_requirements_no_disability_requirements" => "No disability requirements",
+              "divider_a" => true,
+              "accessibility_requirements_do_not_know" => "Do not know",
+              "divider_b" => true,
+              "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
           },
-          "tenant_code"=>
+          "tenant_code" =>
           {
-            "type"=>"text"
-          }
-        }
+            "type" => "text",
+          } }
       end
 
       it "updates both question fields" do
