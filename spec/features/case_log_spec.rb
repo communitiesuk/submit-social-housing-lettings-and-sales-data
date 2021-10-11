@@ -96,6 +96,14 @@ RSpec.describe "Test Features" do
     end
 
     describe "form questions" do
+      let(:case_log_with_checkbox_questions_answered) do
+        FactoryBot.create(
+          :case_log, :in_progress,
+          accessibility_requirements_fully_wheelchair_accessible_housing: true,
+          accessibility_requirements_level_access_housing: true
+        )
+      end
+
       it "can be accessed by url" do
         visit("/case_logs/#{id}/tenant_age")
         expect(page).to have_field("case-log-tenant-age-field")
@@ -145,6 +153,23 @@ RSpec.describe "Test Features" do
       it "displays text answers in inputs if they are already saved" do
         visit("/case_logs/#{id}/tenant_age")
         expect(page).to have_field("case-log-tenant-age-field", with: "12")
+      end
+
+      it "displays checkbox answers in inputs if they are already saved" do
+        visit("/case_logs/#{case_log_with_checkbox_questions_answered.id}/accessibility_requirements")
+        # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
+        expect(page).to have_checked_field(
+          "case-log-accessibility-requirements-accessibility-requirements-fully-wheelchair-accessible-housing-field",
+          visible: false
+        )
+        expect(page).to have_unchecked_field(
+          "case-log-accessibility-requirements-accessibility-requirements-wheelchair-access-to-essential-rooms-field",
+          visible: false
+        )
+        expect(page).to have_checked_field(
+          "case-log-accessibility-requirements-accessibility-requirements-level-access-housing-field",
+          visible: false
+        )
       end
     end
 
@@ -258,11 +283,11 @@ RSpec.describe "Test Features" do
         choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
         expect(page).to have_selector("#armed_forces_injured_div")
         choose("case-log-armed-forces-injured-no-field", allow_label_click: true)
-        expect(find_field("case-log-armed-forces-injured-no-field", visible: false).checked?).to be_truthy
+        expect(page).to have_checked_field("case-log-armed-forces-injured-no-field", visible: false)
         choose("case-log-armed-forces-no-field", allow_label_click: true)
         expect(page).not_to have_selector("#armed_forces_injured_div")
         choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
-        expect(find_field("case-log-armed-forces-injured-no-field", visible: false).checked?).to be_falsey
+        expect(page).to have_unchecked_field("case-log-armed-forces-injured-no-field", visible: false)
       end
     end
   end
