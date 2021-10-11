@@ -73,7 +73,7 @@ RSpec.describe TasklistHelper do
 
     it "returns the number of sections in progress" do
       @form = Form.new(2021, 2022)
-      expect(get_sections_count(@form, case_log, :in_progress)).to eq(2)
+      expect(get_sections_count(@form, case_log, :in_progress)).to eq(3)
     end
 
     it "returns 0 for invalid state" do

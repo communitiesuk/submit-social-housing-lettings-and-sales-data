@@ -783,15 +783,15 @@
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
-                    "0": "Fully wheelchair accessible housing",
-                    "1": "Wheelchair access to essential rooms",
-                    "2": "Level access housing",
-                    "3": "Other disability requirements",
-                    "4": "No disability requirements",
+                    "accessibility_requirements_fully_wheelchair_accessible_housing": "Fully wheelchair accessible housing",
+                    "accessibility_requirements_wheelchair_access_to_essential_rooms": "Wheelchair access to essential rooms",
+                    "accessibility_requirements_level_access_housing": "Level access housing",
+                    "accessibility_requirements_other_disability_requirements": "Other disability requirements",
+                    "accessibility_requirements_no_disability_requirements": "No disability requirements",
                     "divider_a": true,
-                    "5": "Do not know",
+                    "accessibility_requirements_do_not_know": "Do not know",
                     "divider_b": true,
-                    "6": "Prefer not to say"
+                    "accessibility_requirements_prefer_not_to_say": "Prefer not to say"
                   }
                 }
               }
@@ -806,18 +806,18 @@
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
-                    "0": "Vision - such as blindness or partial sight",
-                    "1": "Hearing - such as deafness or partial hearing",
-                    "2": "Mobility - such as walking short distances or climbing stairs",
-                    "3": "Dexterity - such as lifting and carrying objects or using a keyboard",
-                    "4": "Stamina or breathing or fatigue",
-                    "5": "Learning or understanding or concentrating",
-                    "6": "Memory",
-                    "7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
-                    "8": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
-                    "9": "Other",
+                    "condition_effects_vision": "Vision - such as blindness or partial sight",
+                    "condition_effects_hearing": "Hearing - such as deafness or partial hearing",
+                    "condition_effects_mobility": "Mobility - such as walking short distances or climbing stairs",
+                    "condition_effects_dexterity": "Dexterity - such as lifting and carrying objects or using a keyboard",
+                    "condition_effects_stamina": "Stamina or breathing or fatigue",
+                    "condition_effects_learning": "Learning or understanding or concentrating",
+                    "condition_effects_memory": "Memory",
+                    "condition_effects_mental_health": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
+                    "condition_effects_social_or_behavioral": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
+                    "condition_effects_other": "Other",
                     "divider": true,
-                    "10": "Prefer not to say"
+                    "condition_effects_prefer_not_to_say": "Prefer not to say"
                   }
                 }
               }
@@ -2025,12 +2025,12 @@
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
                   "answer_options": {
-                    "0": "Homeless or about to lose their home (within 56 days)",
-                    "1": "Living in insanitary or overcrowded or unsatisfactory housing",
-                    "2": "A need to move on medical and welfare grounds (including a disability)",
-                    "3": "A need to move to avoid hardship to themselves or others",
+                    "reasonable_preference_reason_homeless": "Homeless or about to lose their home (within 56 days)",
+                    "reasonable_preference_reason_unsatisfactory_housing": "Living in insanitary or overcrowded or unsatisfactory housing",
+                    "reasonable_preference_reason_medical_grounds": "A need to move on medical and welfare grounds (including a disability)",
+                    "reasonable_preference_reason_avoid_hardship": "A need to move to avoid hardship to themselves or others",
                     "divider": true,
-                    "4": "Do not know"
+                    "reasonable_preference_reason_do_not_know": "Do not know"
                   }
                 }
               }
