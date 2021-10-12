@@ -9,9 +9,9 @@ Rails.application.routes.draw do
   resources :case_logs do
     form.all_pages.keys.map do |page|
       get page.to_s, to: "case_logs##{page}"
-      form.all_subsections.keys.map do |subsection|
-        get "#{subsection}/check_answers", to: "case_logs#check_answers"
-      end
+    end
+    form.all_subsections.keys.map do |subsection|
+      get "#{subsection}/check_answers", to: "case_logs#check_answers"
     end
   end
 end
