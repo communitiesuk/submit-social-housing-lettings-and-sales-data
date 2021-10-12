@@ -12,7 +12,7 @@ class CaseLogsController < ApplicationController
       format.html { redirect_to @case_log }
       format.json do
         if @case_log.persisted?
-          render json: @case_log , status: :created
+          render json: @case_log, status: :created
         else
           render json: { errors: @case_log.errors.full_messages }, status: :unprocessable_entity
         end
@@ -79,7 +79,7 @@ private
   end
 
   def create_params
-    return {} unless params.dig(:case_log)
+    return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.new.attributes.keys)
   end
