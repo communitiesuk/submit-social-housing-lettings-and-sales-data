@@ -7,10 +7,16 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    @case_log = CaseLog.create!(create_params)
+    @case_log = CaseLog.create(create_params)
     respond_to do |format|
       format.html { redirect_to @case_log }
-      format.json { render json: @case_log }
+      format.json do
+        if @case_log.persisted?
+          render json: @case_log , status: :created
+        else
+          render json: { errors: @case_log.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
     end
   end
 
