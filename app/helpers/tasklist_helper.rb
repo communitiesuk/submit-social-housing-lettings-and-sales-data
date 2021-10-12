@@ -36,6 +36,15 @@ module TasklistHelper
     subsections.count { |subsection| get_subsection_status(subsection, case_log, form.questions_for_subsection(subsection).keys) == status }
   end
 
+  def get_first_page_or_check_answers(subsection, case_log, form, questions)
+    path = if is_started?(subsection, case_log, questions)
+             "case_log_#{subsection}_check_answers_path"
+           else
+             "case_log_#{form.first_page_for_subsection(subsection)}_path"
+           end
+    send(path, case_log)
+  end
+
 private
 
   def all_questions_completed(case_log)
@@ -45,5 +54,10 @@ private
   def is_incomplete?(subsection, case_log, questions)
     status = get_subsection_status(subsection, case_log, questions)
     %i[not_started in_progress].include?(status)
+  end
+
+  def is_started?(subsection, case_log, questions)
+    status = get_subsection_status(subsection, case_log, questions)
+    %i[in_progress completed].include?(status)
   end
 end
