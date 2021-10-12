@@ -291,4 +291,24 @@ RSpec.describe "Test Features" do
       end
     end
   end
+
+  describe "Question validation" do
+    context "given an invalid tenant age" do
+      it " of less than 0 it shows validation" do
+        visit("/case_logs/#{id}/tenant_age")
+        fill_in_number_question(empty_case_log.id, "tenant_age", -5)
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#case-log-tenant-age-error")
+        expect(page).to have_selector("#case-log-tenant-age-field-error")
+      end
+
+      it " of greater than 100 it shows validation" do
+        visit("/case_logs/#{id}/tenant_age")
+        fill_in_number_question(empty_case_log.id, "tenant_age", 120)
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#case-log-tenant-age-error")
+        expect(page).to have_selector("#case-log-tenant-age-field-error")
+      end
+    end
+  end
 end
