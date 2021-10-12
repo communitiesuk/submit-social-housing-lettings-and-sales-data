@@ -2,8 +2,10 @@ class Form
   attr_reader :form_definition
 
   def initialize(start_year, end_year)
+    ENV["RAILS_ENV"]
     form_json = "config/forms/#{start_year}_#{end_year}.json"
-    raise "No form definition file exists for given year".freeze unless File.exist?(form_json)
+    # binding.pry
+    # raise "No form definition file exists for given year".freeze unless File.exist?(form_json)
 
     @form_definition = JSON.parse(File.open(form_json).read)
   end

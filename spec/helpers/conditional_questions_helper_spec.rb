@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ConditionalQuestionsHelper do
-  let(:form) { Form.new(2021, 2022) }
+  let(:form) { Form.new("test", "form") }
   let(:page_key) { "armed_forces" }
   let(:page) { form.all_pages[page_key] }
 

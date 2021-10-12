@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
-  let(:form) { Form.new(2021, 2022) }
+  let(:form) { Form.new("test", "form") }
 
   describe ".next_page" do
     let(:previous_page) { "tenant_age" }

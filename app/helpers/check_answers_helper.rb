@@ -10,7 +10,7 @@ module CheckAnswersHelper
   end
 
   def total_questions(subsection, case_log)
-    form = Form.new(2021, 2022)
+    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022) #form should be passed in
     questions = form.questions_for_subsection(subsection)
     questions_not_applicable = []
     questions.reject do |question_key, question|
@@ -37,7 +37,7 @@ module CheckAnswersHelper
   end
 
   def subsection_pages(subsection)
-    form = Form.new(2021, 2022)
+    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022) #form should be passed in
     form.pages_for_subsection(subsection)
   end
 

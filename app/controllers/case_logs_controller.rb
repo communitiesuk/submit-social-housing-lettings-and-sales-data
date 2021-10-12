@@ -27,13 +27,13 @@ class CaseLogsController < ApplicationController
   end
 
   def edit
-    @form = Form.new(2021, 2022)
+    @form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
     render :edit
   end
 
   def submit_form
-    form = Form.new(2021, 2022)
+    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
@@ -55,7 +55,7 @@ class CaseLogsController < ApplicationController
     render "form/check_answers", locals: { case_log: @case_log, subsection: subsection }
   end
 
-  form = Form.new(2021, 2022)
+  form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])

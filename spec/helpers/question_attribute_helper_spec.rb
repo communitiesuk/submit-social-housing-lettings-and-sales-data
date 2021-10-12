@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe QuestionAttributeHelper do
-  let(:form) { Form.new(2021, 2022) }
+  let(:form) { Form.new("test", "form") }
   let(:questions) { form.questions_for_page("rent") }
 
   describe "html attributes" do
