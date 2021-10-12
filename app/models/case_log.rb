@@ -1,7 +1,6 @@
 class CaseLogValidator < ActiveModel::Validator
-
   # Methods need to be named 'validate_' followed by field name
-  # this is how the metaprogramming of the method name being 
+  # this is how the metaprogramming of the method name being
   # call in the validate method works.
 
   def validate_tenant_code(record)
@@ -13,7 +12,7 @@ class CaseLogValidator < ActiveModel::Validator
   def validate_tenant_age(record)
     if record.tenant_age.blank?
       record.errors.add :tenant_age, "Tenant age can't be blank"
-    elsif !(record.tenant_age.to_s =~ /^[1-9][0-9]?$|^100$/)
+    elsif !/^[1-9][0-9]?$|^100$/.match?(record.tenant_age.to_s)
       record.errors.add :tenant_age, "Tenant age must be between 0 and 100"
     end
   end
@@ -26,9 +25,10 @@ class CaseLogValidator < ActiveModel::Validator
   end
 end
 
-class CaseLog < ApplicationRecord 
+class CaseLog < ApplicationRecord
   validate :instance_validations
   attr_writer :previous_page
+
   enum status: { "in progress" => 0, "submitted" => 1 }
 
   def instance_validations
