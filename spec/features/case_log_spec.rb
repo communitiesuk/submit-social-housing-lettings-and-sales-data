@@ -83,18 +83,6 @@ RSpec.describe "Test Features" do
       end
     end
 
-    it "displays the household questions when you click into that section" do
-      visit("/case_logs/#{empty_case_log.id}")
-      click_link("Household characteristics")
-      expect(page).to have_field("case-log-tenant-code-field")
-      click_button("Save and continue")
-      expect(page).to have_field("case-log-tenant-age-field")
-      click_button("Save and continue")
-      expect(page).to have_field("case-log-tenant-gender-male-field")
-      visit page.driver.request.env["HTTP_REFERER"]
-      expect(page).to have_field("case-log-tenant-age-field")
-    end
-
     describe "form questions" do
       let(:case_log_with_checkbox_questions_answered) do
         FactoryBot.create(
