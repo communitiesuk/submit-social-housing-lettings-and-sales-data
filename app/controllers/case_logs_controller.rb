@@ -49,10 +49,11 @@ class CaseLogsController < ApplicationController
   end
 
   def check_answers
+    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:case_log_id])
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
-    render "form/check_answers", locals: { case_log: @case_log, subsection: subsection }
+    render "form/check_answers", locals: { case_log: @case_log, subsection: subsection, form: form }
   end
 
   form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)

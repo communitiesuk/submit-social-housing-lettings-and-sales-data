@@ -16,32 +16,34 @@ RSpec.describe CheckAnswersHelper do
   let(:subsection) { "income_and_benefits" }
   let(:subsection_with_numeric_conditionals) { "household_characteristics" }
   let(:subsection_with_radio_conditionals) { "household_needs" }
+  let(:form) { Form.new("test", "form") }
 
   describe "Get answered questions total" do
     it "returns 0 if no questions are answered" do
-      expect(total_answered_questions(subsection, case_log)).to equal(0)
+      expect(total_answered_questions(subsection, case_log, form)).to equal(0)
     end
 
     it "returns 1 if 1 question gets answered" do
       case_log["net_income"] = "123"
-      expect(total_answered_questions(subsection, case_log)).to equal(1)
+      expect(total_answered_questions(subsection, case_log, form)).to equal(1)
     end
 
     it "ignores questions with unmet numeric conditions" do
       case_log["tenant_code"] = "T1234"
-      expect(total_answered_questions(subsection_with_numeric_conditionals, case_log)).to equal(1)
+      expect(total_answered_questions(subsection_with_numeric_conditionals, case_log, form)).to equal(1)
     end
 
     it "includes conditional questions with met numeric conditions" do
       expect(total_answered_questions(
                subsection_with_numeric_conditionals,
                case_log_with_met_numeric_condition,
+               form,
              )).to equal(4)
     end
 
     it "ignores questions with unmet radio conditions" do
       case_log["armed_forces"] = "No"
-      expect(total_answered_questions(subsection_with_radio_conditionals, case_log)).to equal(1)
+      expect(total_answered_questions(subsection_with_radio_conditionals, case_log, form)).to equal(1)
     end
 
     it "includes conditional questions with met radio conditions" do
@@ -50,34 +52,37 @@ RSpec.describe CheckAnswersHelper do
       expect(total_answered_questions(
                subsection_with_radio_conditionals,
                case_log_with_met_radio_condition,
+               form,
              )).to equal(3)
     end
   end
 
   describe "Get total number of questions" do
     it "returns the total number of questions for a subsection" do
-      expect(total_number_of_questions(subsection, case_log)).to eq(4)
+      expect(total_number_of_questions(subsection, case_log, form)).to eq(4)
     end
 
     it "ignores questions with unmet numeric conditions" do
-      expect(total_number_of_questions(subsection_with_numeric_conditionals, case_log)).to eq(7)
+      expect(total_number_of_questions(subsection_with_numeric_conditionals, case_log, form)).to eq(7)
     end
 
     it "includes conditional questions with met numeric conditions" do
       expect(total_number_of_questions(
                subsection_with_numeric_conditionals,
                case_log_with_met_numeric_condition,
+               form,
              )).to eq(15)
     end
 
     it "ignores questions with unmet radio conditions" do
-      expect(total_number_of_questions(subsection_with_radio_conditionals, case_log)).to eq(6)
+      expect(total_number_of_questions(subsection_with_radio_conditionals, case_log, form)).to eq(6)
     end
 
     it "includes conditional questions with met radio conditions" do
       expect(total_number_of_questions(
                subsection_with_radio_conditionals,
                case_log_with_met_radio_condition,
+               form,
              )).to eq(8)
     end
 
@@ -99,7 +104,7 @@ RSpec.describe CheckAnswersHelper do
 
       it "raises an error" do
         allow_any_instance_of(Form).to receive(:questions_for_subsection).and_return(unimplemented_conditional)
-        expect { total_number_of_questions(subsection, case_log) }.to raise_error(RuntimeError, "Not implemented yet")
+        expect { total_number_of_questions(subsection, case_log, form) }.to raise_error(RuntimeError, "Not implemented yet")
       end
     end
   end

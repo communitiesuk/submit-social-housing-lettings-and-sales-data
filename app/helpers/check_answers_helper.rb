@@ -1,16 +1,15 @@
 module CheckAnswersHelper
-  def total_answered_questions(subsection, case_log)
-    total_questions(subsection, case_log).keys.count do |question_key|
+  def total_answered_questions(subsection, case_log, form)
+    total_questions(subsection, case_log, form).keys.count do |question_key|
       case_log[question_key].present?
     end
   end
 
-  def total_number_of_questions(subsection, case_log)
-    total_questions(subsection, case_log).count
+  def total_number_of_questions(subsection, case_log, form)
+    total_questions(subsection, case_log, form).count
   end
 
-  def total_questions(subsection, case_log)
-    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022) #form should be passed in
+  def total_questions(subsection, case_log, form)
     questions = form.questions_for_subsection(subsection)
     questions_not_applicable = []
     questions.reject do |question_key, question|
@@ -36,19 +35,14 @@ module CheckAnswersHelper
     end
   end
 
-  def subsection_pages(subsection)
-    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022) #form should be passed in
-    form.pages_for_subsection(subsection)
-  end
-
   def create_update_answer_link(case_log_answer, case_log_id, page)
     link_name = case_log_answer.blank? ? "Answer" : "Change"
     link_to(link_name, "/case_logs/#{case_log_id}/#{page}", class: "govuk-link").html_safe
   end
 
-  def create_next_missing_question_link(case_log_id, subsection, case_log)
+  def create_next_missing_question_link(case_log_id, subsection, case_log, form)
     pages_to_fill_in = []
-    subsection_pages(subsection).each do |page_title, page_info|
+    form.pages_for_subsection(subsection).each do |page_title, page_info|
       page_info["questions"].any? { |question| case_log[question].blank? }
       pages_to_fill_in << page_title
     end
@@ -56,12 +50,12 @@ module CheckAnswersHelper
     link_to("Answer the missing questions", url, class: "govuk-link").html_safe
   end
 
-  def display_answered_questions_summary(subsection, case_log)
-    if total_answered_questions(subsection, case_log) == total_number_of_questions(subsection, case_log)
+  def display_answered_questions_summary(subsection, case_log, form)
+    if total_answered_questions(subsection, case_log, form) == total_number_of_questions(subsection, case_log, form)
       '<p class="govuk-body govuk-!-margin-bottom-7">You answered all the questions</p>'.html_safe
     else
-      "<p class=\"govuk-body govuk-!-margin-bottom-7\">You answered #{total_answered_questions(subsection, case_log)} of #{total_number_of_questions(subsection, case_log)} questions</p>
-      #{create_next_missing_question_link(case_log['id'], subsection, case_log)}".html_safe
+      "<p class=\"govuk-body govuk-!-margin-bottom-7\">You answered #{total_answered_questions(subsection, case_log, form)} of #{total_number_of_questions(subsection, case_log, form)} questions</p>
+      #{create_next_missing_question_link(case_log['id'], subsection, case_log, form)}".html_safe
     end
   end
 end
