@@ -5,8 +5,11 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    @case_log = CaseLog.create!
-    redirect_to @case_log
+    @case_log = CaseLog.create!(create_params)
+    respond_to do |format|
+      format.html { redirect_to @case_log }
+      format.json { render json: @case_log }
+    end
   end
 
   # We don't have a dedicated non-editable show view
@@ -65,5 +68,11 @@ private
       end
       result
     end
+  end
+
+  def create_params
+    return {} unless params.dig(:case_log)
+
+    params.require(:case_log).permit(CaseLog.new.attributes.keys)
   end
 end
