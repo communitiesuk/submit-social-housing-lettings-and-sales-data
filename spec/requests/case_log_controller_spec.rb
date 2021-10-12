@@ -5,7 +5,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:headers) do
       {
        "Content-Type" => "application/json",
-       "ACCEPT" => "application/json"
+       "Accept" => "application/json"
       }
     end
 

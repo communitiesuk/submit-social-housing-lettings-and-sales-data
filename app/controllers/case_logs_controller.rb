@@ -1,4 +1,6 @@
 class CaseLogsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
     @in_progress_case_logs = CaseLog.where(status: 0)
