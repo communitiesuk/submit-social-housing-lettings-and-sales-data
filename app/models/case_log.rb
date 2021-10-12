@@ -28,12 +28,8 @@ end
 
 class CaseLog < ApplicationRecord 
   validate :instance_validations
-  @previous_page
+  attr_writer :previous_page
   enum status: { "in progress" => 0, "submitted" => 1 }
-
-  def previous_page(value)
-    @previous_page = value
-  end
 
   def instance_validations
     validates_with CaseLogValidator, ({ previous_page: @previous_page } || {})
