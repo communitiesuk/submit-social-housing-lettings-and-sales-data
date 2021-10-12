@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
   describe "POST #create" do
     let(:headers) do
       {
-       "Content-Type" => "application/json",
-       "Accept" => "application/json"
+        "Content-Type" => "application/json",
+        "Accept" => "application/json",
       }
     end
 
@@ -17,7 +17,7 @@ RSpec.describe CaseLogsController, type: :request do
       {
         "tenant_code": tenant_code,
         "tenant_age": 35,
-        "property_postcode": property_postcode
+        "property_postcode": property_postcode,
       }
     end
 

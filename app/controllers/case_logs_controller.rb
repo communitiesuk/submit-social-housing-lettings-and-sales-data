@@ -73,7 +73,7 @@ private
   end
 
   def create_params
-    return {} unless params.dig(:case_log)
+    return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.new.attributes.keys)
   end
