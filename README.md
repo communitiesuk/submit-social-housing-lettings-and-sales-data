@@ -133,7 +133,7 @@ Assumptions made by the format:
 - All sections have at least 1 subsection
 - All subsections have at least 1 page
 - All pages have at least 1 question
-- The ActiveRecord case log model has a field for each question name (must match)
+- The ActiveRecord case log model has a field for each question name (must match). In the case of checkbox questions it must have one field for every answer option (again names must match).
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
 - For conditionally shown questions conditions that have been implemented and can be used are:
   - Radio question answer option selected matches one of conditional e.g. ["answer-options-1-string", "answer-option-3-string"]

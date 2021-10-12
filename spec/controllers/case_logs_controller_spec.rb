@@ -43,4 +43,84 @@ RSpec.describe CaseLogsController, type: :controller do
       end
     end
   end
+
+  describe "submit_form" do
+    let!(:case_log) { FactoryBot.create(:case_log) }
+    let(:id) { case_log.id }
+    let(:case_log_form_params) do
+      { accessibility_requirements:
+                             %w[ accessibility_requirements_fully_wheelchair_accessible_housing
+                                 accessibility_requirements_wheelchair_access_to_essential_rooms
+                                 accessibility_requirements_level_access_housing],
+        previous_page: "accessibility_requirements" }
+    end
+
+    let(:new_case_log_form_params) do
+      {
+        accessibility_requirements: %w[accessibility_requirements_level_access_housing],
+        previous_page: "accessibility_requirements",
+      }
+    end
+
+    it "sets checked items to true" do
+      post :submit_form, params: { id: id, case_log: case_log_form_params }
+      case_log.reload
+
+      expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(true)
+      expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(true)
+      expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+    end
+
+    it "sets previously submitted items to false when resubmitted with new values" do
+      post :submit_form, params: { id: id, case_log: new_case_log_form_params }
+      case_log.reload
+
+      expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(false)
+      expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(false)
+      expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+    end
+
+    context "given a page with checkbox and non-checkbox questions" do
+      let(:tenant_code) { "BZ355" }
+      let(:case_log_form_params) do
+        { accessibility_requirements:
+                               %w[ accessibility_requirements_fully_wheelchair_accessible_housing
+                                   accessibility_requirements_wheelchair_access_to_essential_rooms
+                                   accessibility_requirements_level_access_housing],
+          tenant_code: tenant_code,
+          previous_page: "accessibility_requirements" }
+      end
+      let(:questions_for_page) do
+        { "accessibility_requirements" =>
+          {
+            "type" => "checkbox",
+            "answer_options" =>
+            { "accessibility_requirements_fully_wheelchair_accessible_housing" => "Fully wheelchair accessible housing",
+              "accessibility_requirements_wheelchair_access_to_essential_rooms" => "Wheelchair access to essential rooms",
+              "accessibility_requirements_level_access_housing" => "Level access housing",
+              "accessibility_requirements_other_disability_requirements" => "Other disability requirements",
+              "accessibility_requirements_no_disability_requirements" => "No disability requirements",
+              "divider_a" => true,
+              "accessibility_requirements_do_not_know" => "Do not know",
+              "divider_b" => true,
+              "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
+          },
+          "tenant_code" =>
+          {
+            "type" => "text",
+          } }
+      end
+
+      it "updates both question fields" do
+        allow_any_instance_of(Form).to receive(:questions_for_page).and_return(questions_for_page)
+        post :submit_form, params: { id: id, case_log: case_log_form_params }
+        case_log.reload
+
+        expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(true)
+        expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(true)
+        expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+        expect(case_log.tenant_code).to eq(tenant_code)
+      end
+    end
+  end
 end

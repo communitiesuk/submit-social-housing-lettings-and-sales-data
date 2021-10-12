@@ -24,10 +24,10 @@ class CaseLogsController < ApplicationController
     form = Form.new(2021, 2022)
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
-    questions_for_page = form.questions_for_page(previous_page).keys
-    answers_for_page = page_params(questions_for_page).select { |k, _v| questions_for_page.include?(k) }
+    questions_for_page = form.questions_for_page(previous_page)
+    responses_for_page = question_responses(questions_for_page)
     @case_log.previous_page = previous_page
-    if @case_log.update(answers_for_page)
+    if @case_log.update(responses_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
     else
@@ -53,7 +53,17 @@ class CaseLogsController < ApplicationController
 
 private
 
-  def page_params(questions_for_page)
-    params.require(:case_log).permit(questions_for_page)
+  def question_responses(questions_for_page)
+    questions_for_page.each_with_object({}) do |(question_key, question_info), result|
+      question_params = params["case_log"][question_key]
+      if question_info["type"] == "checkbox"
+        question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
+          result[option] = question_params.include?(option)
+        end
+      else
+        result[question_key] = question_params
+      end
+      result
+    end
   end
 end
