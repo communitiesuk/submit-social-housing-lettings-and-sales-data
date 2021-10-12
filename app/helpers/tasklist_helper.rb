@@ -37,11 +37,12 @@ module TasklistHelper
   end
 
   def get_first_page_or_check_answers(subsection, case_log, form, questions)
-    if is_started?(subsection, case_log, questions)
-      send("case_log_#{subsection}_check_answers_path", case_log)
-    else
-      send("case_log_#{form.first_page_for_subsection(subsection)}_path", case_log)
-    end
+    path = if is_started?(subsection, case_log, questions)
+             "case_log_#{subsection}_check_answers_path"
+           else
+             "case_log_#{form.first_page_for_subsection(subsection)}_path"
+           end
+    send(path, case_log)
   end
 
 private
