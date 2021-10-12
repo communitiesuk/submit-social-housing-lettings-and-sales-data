@@ -1,5 +1,5 @@
 class CaseLogsController < ApplicationController
-  skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, only: [:create], if: :json_request?
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -70,6 +70,10 @@ private
       end
       result
     end
+  end
+
+  def json_request?
+    request.format.json?
   end
 
   def create_params
