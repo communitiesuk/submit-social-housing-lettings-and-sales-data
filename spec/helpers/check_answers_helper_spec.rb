@@ -6,7 +6,7 @@ RSpec.describe CheckAnswersHelper do
     FactoryBot.create(
       :case_log,
       :in_progress,
-      household_number_of_other_members: 2,
+      household_number_of_other_members: 1,
       person_2_relationship: "Partner",
     )
   end
@@ -71,7 +71,7 @@ RSpec.describe CheckAnswersHelper do
                subsection_with_numeric_conditionals,
                case_log_with_met_numeric_condition,
                form,
-             )).to eq(15)
+             )).to eq(11)
     end
 
     it "ignores questions with unmet radio conditions" do

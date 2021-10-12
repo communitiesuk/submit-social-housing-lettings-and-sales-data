@@ -53,7 +53,7 @@ RSpec.describe TasklistHelper do
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_sections_count(form, empty_case_log)).to eq(9)
+      expect(get_sections_count(form, empty_case_log)).to eq(8)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do
@@ -61,7 +61,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of not started sections" do
-      expect(get_sections_count(form, empty_case_log, :not_started)).to eq(8)
+      expect(get_sections_count(form, empty_case_log, :not_started)).to eq(7)
     end
 
     it "returns the number of sections in progress" do

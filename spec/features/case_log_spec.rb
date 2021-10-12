@@ -10,8 +10,8 @@ RSpec.describe "Test Features" do
     tenant_age: { type: "numeric", answer: 25 },
     tenant_gender: { type: "radio", answer: "Female" },
     tenant_ethnic_group: { type: "radio", answer: "Prefer not to say" },
-    tenant_nationality: { type: "radio", answer: "Lithuania" },
-    tenant_economic_status: { type: "radio", answer: "Jobseeker" },
+    tenant_nationality: { type: "radio", answer: "UK" },
+    tenant_economic_status: { type: "radio", answer: "Other" },
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
@@ -52,7 +52,7 @@ RSpec.describe "Test Features" do
       it "displays a section status" do
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 8
+        assert_selector ".govuk-tag", text: /Not started/, count: 7
         assert_selector ".govuk-tag", text: /Completed/, count: 0
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -61,7 +61,7 @@ RSpec.describe "Test Features" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 7
+        assert_selector ".govuk-tag", text: /Not started/, count: 6
         assert_selector ".govuk-tag", text: /Completed/, count: 1
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -73,13 +73,13 @@ RSpec.describe "Test Features" do
 
       it "shows the number of completed sections if no sections are completed" do
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 0 of 9 sections.")
+        expect(page).to have_content("You've completed 0 of 8 sections.")
       end
 
       it "shows the number of completed sections if one section is completed" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 1 of 9 sections.")
+        expect(page).to have_content("You've completed 1 of 8 sections.")
       end
     end
 
