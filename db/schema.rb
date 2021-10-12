@@ -101,12 +101,14 @@ ActiveRecord::Schema.define(version: 2021_10_11_115946) do
     t.string "time_lived_in_la"
     t.string "time_on_la_waiting_list"
     t.string "previous_la"
+    t.string "property_postcode"
     t.string "reasonable_preference"
     t.string "reasonable_preference_reason"
     t.string "cbl_letting"
     t.string "chr_letting"
     t.string "cap_letting"
     t.string "outstanding_rent_or_charges"
+    t.string "other_reason_for_leaving_last_settled_home"
     t.boolean "accessibility_requirements_fully_wheelchair_accessible_housing"
     t.boolean "accessibility_requirements_wheelchair_access_to_essential_rooms"
     t.boolean "accessibility_requirements_level_access_housing"
@@ -130,7 +132,6 @@ ActiveRecord::Schema.define(version: 2021_10_11_115946) do
     t.boolean "reasonable_preference_reason_medical_grounds"
     t.boolean "reasonable_preference_reason_avoid_hardship"
     t.boolean "reasonable_preference_reason_do_not_know"
-    t.string "property_postcode"
   end
 
 end

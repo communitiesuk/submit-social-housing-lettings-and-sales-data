@@ -26,7 +26,7 @@ class CaseLogsController < ApplicationController
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
     responses_for_page = question_responses(questions_for_page)
-
+    @case_log.previous_page = previous_page
     if @case_log.update(responses_for_page)
       redirect_path = form.next_page_redirect_path(previous_page)
       redirect_to(send(redirect_path, @case_log))
@@ -45,7 +45,7 @@ class CaseLogsController < ApplicationController
 
   form = Form.new(2021, 2022)
   form.all_pages.map do |page_key, page_info|
-    define_method(page_key) do
+    define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
       render "form/page", locals: { form: form, page_key: page_key, page_info: page_info }
     end
