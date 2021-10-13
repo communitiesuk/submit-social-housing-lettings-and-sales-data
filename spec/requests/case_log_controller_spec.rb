@@ -2,16 +2,23 @@ require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
   describe "POST #create" do
+    let(:tenant_code) { "T365" }
+    let(:tenant_age) { 35 }
+    let(:property_postcode) { "SE11 6TY" }
+    let(:api_username) { "test_user" }
+    let(:api_password) { "test_password" }
+    let(:basic_credentials) do
+      ActionController::HttpAuthentication::Basic
+                          .encode_credentials(api_username, api_password)
+    end
+
     let(:headers) do
       {
         "Content-Type" => "application/json",
         "Accept" => "application/json",
+        "Authorization" => basic_credentials,
       }
     end
-
-    let(:tenant_code) { "T365" }
-    let(:tenant_age) { 35 }
-    let(:property_postcode) { "SE11 6TY" }
 
     let(:params) do
       {
@@ -22,6 +29,9 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
+      allow(ENV).to receive(:[])
+      allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
+      allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
       post "/case_logs", headers: headers, params: params.to_json
     end
 
@@ -48,6 +58,16 @@ RSpec.describe CaseLogsController, type: :request do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response["errors"]).to eq(["Tenant age Tenant age must be between 0 and 100"])
+      end
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
