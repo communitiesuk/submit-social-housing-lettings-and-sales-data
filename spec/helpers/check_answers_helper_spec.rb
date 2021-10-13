@@ -63,7 +63,7 @@ RSpec.describe CheckAnswersHelper do
     end
 
     it "ignores questions with unmet numeric conditions" do
-      expect(total_number_of_questions(subsection_with_numeric_conditionals, case_log, form)).to eq(7)
+      expect(total_number_of_questions(subsection_with_numeric_conditionals, case_log, form)).to eq(4)
     end
 
     it "includes conditional questions with met numeric conditions" do
@@ -71,7 +71,7 @@ RSpec.describe CheckAnswersHelper do
                subsection_with_numeric_conditionals,
                case_log_with_met_numeric_condition,
                form,
-             )).to eq(11)
+             )).to eq(8)
     end
 
     it "ignores questions with unmet radio conditions" do

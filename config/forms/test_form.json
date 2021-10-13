@@ -43,45 +43,6 @@
                 }
               }
             },
-            "tenant_ethnic_group": {
-              "questions": {
-                "tenant_ethnic_group": {
-                  "check_answer_label": "Ethnicity",
-                  "header": "What is the tenant's ethnic group?",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Other",
-                    "1": "Prefer not to say"
-                  }
-                }
-              }
-            },
-            "tenant_nationality": {
-              "questions": {
-                "tenant_nationality": {
-                  "check_answer_label": "Nationality",
-                  "header": "What is the tenant's nationality?",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "UK",
-                    "1": "Prefer not to say"
-                  }
-                }
-              }
-            },
-            "tenant_economic_status": {
-              "questions": {
-                "tenant_economic_status": {
-                  "check_answer_label": "Work",
-                  "header": "Which of these best describes the tenant's working situation?",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Other",
-                    "1": "Prefer not to say"
-                  }
-                }
-              }
-            },
             "household_number_of_other_members": {
               "questions": {
                 "household_number_of_other_members": {
@@ -337,9 +298,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "All",
-                    "1": "Some",
-                    "2": "None",
-                    "3": "Do not know"
+                    "1": "Some"
                   }
                 }
               }
@@ -347,17 +306,12 @@
             "housing_benefit": {
               "questions": {
                 "housing_benefit": {
-                  "check_answer_label": "Universal Credit & Housing Benefit\t",
+                  "check_answer_label": "Universal Credit & Housing Benefit",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "type": "radio",
                   "answer_options": {
                     "0": "Housing Benefit, but not Universal Credit",
-                    "1": "Universal Credit with housing element, but not Housing Benefit",
-                    "2": "Universal Credit without housing element and no Housing Benefit",
-                    "3": "Universal Credit and Housing Benefit",
-                    "4": "Not Housing Benefit or Universal Credit",
-                    "5": "Do not know",
-                    "6": "Prefer not to say"
+                    "1": "Prefer not to say"
                   }
                 }
               }
@@ -375,15 +329,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Weekly for 52 weeks",
-                    "1": "Fortnightly",
-                    "2": "Four-weekly",
-                    "3": "Calendar monthly",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks",
-                    "9": "Weekly for 53 weeks"
+                    "1": "Fortnightly"
                   }
                 },
                 "basic_rent": {
@@ -454,26 +400,6 @@
                   "min": 0,
                   "step": 1,
                   "readonly": true
-                },
-                "outstanding_rent_or_charges": {
-                  "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
-                  "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
-                  },
-                  "conditional_for": {
-                    "outstanding_amount": ["Yes"]
-                  }
-                },
-                "outstanding_amount": {
-                  "check_answer_label": "Outstanding amount",
-                  "header": "What do you expect the amount to be?",
-                  "hint_text": "If the amount is unknown you can estimate",
-                  "type": "numeric",
-                  "min": 0,
-                  "step": 1
                 }
               }
             }
