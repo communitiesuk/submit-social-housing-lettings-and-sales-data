@@ -23,7 +23,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:params) do
       {
         "tenant_code": tenant_code,
-        "tenant_age": 35,
+        "tenant_age": tenant_age,
         "property_postcode": property_postcode,
       }
     end
