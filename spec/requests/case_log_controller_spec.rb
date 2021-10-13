@@ -11,6 +11,8 @@ RSpec.describe CaseLogsController, type: :request do
       ActionController::HttpAuthentication::Basic
                           .encode_credentials(api_username, api_password)
     end
+    let(:in_progress) { "in progress" }
+    let(:submitted) { "submitted" }
 
     let(:headers) do
       {
@@ -57,7 +59,30 @@ RSpec.describe CaseLogsController, type: :request do
       it "validates case log parameters" do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to eq(["Tenant age Tenant age must be between 0 and 100"])
+        expect(json_response["errors"]).to eq(["Tenant age must be between 0 and 120"])
+      end
+    end
+
+    context "partial case log submission" do
+      it "marks the record as in_progress" do
+        json_response = JSON.parse(response.body)
+        expect(json_response["status"]).to eq(in_progress)
+      end
+    end
+
+    context "complete case log submission" do
+      let(:params) do
+        {
+          "tenant_code": tenant_code,
+          "tenant_age": tenant_age,
+          "property_postcode": property_postcode,
+          "tenant_nationality": "Latvian",
+        }
+      end
+
+      it "marks the record as submitted" do
+        json_response = JSON.parse(response.body)
+        expect(json_response["status"]).to eq(submitted)
       end
     end
 

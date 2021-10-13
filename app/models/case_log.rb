@@ -3,20 +3,9 @@ class CaseLogValidator < ActiveModel::Validator
   # this is how the metaprogramming of the method name being
   # call in the validate method works.
 
-  def validate_tenant_code(record)
-    if record.tenant_code.blank?
-      # record.errors.add :tenant_code, "Tenant code can't be blank"
-    end
-  end
-
   def validate_tenant_age(record)
-    # if record.tenant_age.blank?
-    #   record.errors.add :tenant_age, "Tenant age can't be blank"
-    # elsif !/^[1-9][0-9]?$|^100$/.match?(record.tenant_age.to_s)
-    #   record.errors.add :tenant_age, "Tenant age must be between 0 and 100"
-    # end
-    if record.tenant_age && !/^[1-9][0-9]?$|^100$/.match?(record.tenant_age.to_s)
-      record.errors.add :tenant_age, "Tenant age must be between 0 and 100"
+    if record.tenant_age && !/^[1-9][0-9]?$|^120$/.match?(record.tenant_age.to_s)
+      record.errors.add :tenant_age, "must be between 0 and 120"
     end
   end
 
@@ -33,11 +22,25 @@ end
 
 class CaseLog < ApplicationRecord
   validate :instance_validations
+  before_save :update_status!
+
   attr_writer :previous_page
 
   enum status: { "in progress" => 0, "submitted" => 1 }
 
   def instance_validations
     validates_with CaseLogValidator, ({ previous_page: @previous_page } || {})
+  end
+
+  def update_status!
+    self.status = if all_fields_completed? && errors.empty?
+                    "submitted"
+                  else
+                    "in progress"
+                  end
+  end
+
+  def all_fields_completed?
+    tenant_age.present? && tenant_code.present? && tenant_nationality.present?
   end
 end
