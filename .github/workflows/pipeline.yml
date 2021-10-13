@@ -97,8 +97,12 @@ jobs:
         CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
         CF_SPACE: ${{ secrets.CF_SPACE }}
         CF_ORG: ${{ secrets.CF_ORG }}
+        API_USER: ${{ secrets.API_USER }}
+        API_KEY: ${{ secrets.API_KEY }}
+        APP_NAME: dluhc-core
       run: |
         cf7 api $CF_API_ENDPOINT
         cf7 auth
         cf7 target -o $CF_ORG -s $CF_SPACE
+        cf7 set-env $APP_NAME $API_USER $API_KEY
         cf7 push --strategy rolling
