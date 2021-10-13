@@ -148,17 +148,6 @@
                     "1": "No",
                     "2": "Prefer not to say"
                   }
-                },
-                "armed_forces_partner": {
-                  "header": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
-                  "type": "radio",
-                  "check_answer_label": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
-                  "answer_options": {
-                    "0": "Yes - was the spouse or civil partner of a UK Armed Forces member and have separated within the last 2 years",
-                    "1": "Yes - was the spouse or civil partner of a UK Armed Forces member who died within the last 2 years",
-                    "2": "No",
-                    "3": "Prefer not to say"
-                  }
                 }
               }
             },
@@ -173,20 +162,6 @@
                     "1": "No",
                     "2": "Do not know",
                     "3": "Prefer not to say"
-                  }
-                }
-              }
-            },
-            "pregnancy": {
-              "questions": {
-                "pregnancy": {
-                  "header": "Is anyone in the household pregnant?",
-                  "type": "radio",
-                  "check_answer_label": "Pregnancy in the household",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "2": "Prefer not to say"
                   }
                 }
               }

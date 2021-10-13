@@ -75,7 +75,7 @@ RSpec.describe CheckAnswersHelper do
     end
 
     it "ignores questions with unmet radio conditions" do
-      expect(total_number_of_questions(subsection_with_radio_conditionals, case_log, form)).to eq(6)
+      expect(total_number_of_questions(subsection_with_radio_conditionals, case_log, form)).to eq(4)
     end
 
     it "includes conditional questions with met radio conditions" do
@@ -83,7 +83,7 @@ RSpec.describe CheckAnswersHelper do
                subsection_with_radio_conditionals,
                case_log_with_met_radio_condition,
                form,
-             )).to eq(8)
+             )).to eq(6)
     end
 
     context "conditional questions with type that hasn't been implemented yet" do
