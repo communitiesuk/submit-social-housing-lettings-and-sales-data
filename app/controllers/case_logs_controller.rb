@@ -1,12 +1,18 @@
 class CaseLogsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:create], if: :json_request?
+  before_action :authenticate, only: [:create], if: :json_request?
+
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
     @in_progress_case_logs = CaseLog.where(status: 0)
   end
 
   def create
-    @case_log = CaseLog.create!
-    redirect_to @case_log
+    @case_log = CaseLog.create!(create_params)
+    respond_to do |format|
+      format.html { redirect_to @case_log }
+      format.json { render json: @case_log }
+    end
   end
 
   # We don't have a dedicated non-editable show view
@@ -65,5 +71,19 @@ private
       end
       result
     end
+  end
+
+  def json_request?
+    request.format.json?
+  end
+
+  def authenticate
+    http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
+  end
+
+  def create_params
+    return {} unless params[:case_log]
+
+    params.require(:case_log).permit(CaseLog.new.attributes.keys)
   end
 end
