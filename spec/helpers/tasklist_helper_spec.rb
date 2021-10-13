@@ -65,7 +65,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of sections in progress" do
-      expect(get_sections_count(form, case_log, :in_progress)).to eq(3)
+      expect(get_sections_count(form, case_log, :in_progress)).to eq(2)
     end
 
     it "returns 0 for invalid state" do
