@@ -72,12 +72,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "complete case log submission" do
       let(:params) do
-        {
-          "tenant_code": tenant_code,
-          "tenant_age": tenant_age,
-          "property_postcode": property_postcode,
-          "tenant_nationality": "Latvian",
-        }
+        JSON.parse(File.open("spec/fixtures/complete_case_log.json").read)
       end
 
       it "marks the record as submitted" do

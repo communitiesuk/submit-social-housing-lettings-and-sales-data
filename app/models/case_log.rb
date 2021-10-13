@@ -33,14 +33,12 @@ class CaseLog < ApplicationRecord
   end
 
   def update_status!
-    self.status = if all_fields_completed? && errors.empty?
-                    "submitted"
-                  else
-                    "in progress"
-                  end
+    self.status = (all_fields_completed? && errors.empty? ? "submitted" : "in progress")
   end
 
   def all_fields_completed?
-    tenant_age.present? && tenant_code.present? && tenant_nationality.present?
+    non_mandatory_fields = %w[status created_at updated_at id]
+    mandatory_fields = attributes.except(*non_mandatory_fields)
+    mandatory_fields.none? { |_key, val| val.nil? }
   end
 end
