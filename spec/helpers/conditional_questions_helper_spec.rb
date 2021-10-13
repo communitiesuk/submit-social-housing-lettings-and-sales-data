@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ConditionalQuestionsHelper do
-  let(:form) { Form.new("test", "form") }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
   let(:page_key) { "armed_forces" }
   let(:page) { form.all_pages[page_key] }
 

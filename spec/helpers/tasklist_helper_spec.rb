@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe TasklistHelper do
   let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:form) { Form.new("test", "form") }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
 
   describe "get subsection status" do
     let(:section) { "income_and_benefits" }

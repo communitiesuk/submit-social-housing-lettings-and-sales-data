@@ -1,6 +1,7 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_create_request?
   before_action :authenticate, if: :json_create_request?
+  @@form_handler = FormHandler.instance
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -56,7 +57,7 @@ class CaseLogsController < ApplicationController
     render "form/check_answers", locals: { case_log: @case_log, subsection: subsection, form: form }
   end
 
-  form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
+  form = ENV["RAILS_ENV"] == "test" ? @@form_handler.get_form("test_form") : @@form_handler.get_form("2021_2022")
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
@@ -95,6 +96,6 @@ private
   end 
   
   def use_form
-    ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
+    ENV["RAILS_ENV"] == "test" ? @@form_handler.get_form("test_form") : @@form_handler.get_form("2021_2022")
   end
 end

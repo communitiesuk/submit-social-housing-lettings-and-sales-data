@@ -16,7 +16,8 @@ RSpec.describe CheckAnswersHelper do
   let(:subsection) { "income_and_benefits" }
   let(:subsection_with_numeric_conditionals) { "household_characteristics" }
   let(:subsection_with_radio_conditionals) { "household_needs" }
-  let(:form) { Form.new("test", "form") }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
 
   describe "Get answered questions total" do
     it "returns 0 if no questions are answered" do

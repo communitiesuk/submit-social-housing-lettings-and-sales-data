@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe QuestionAttributeHelper do
-  let(:form) { Form.new("test", "form") }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
   let(:questions) { form.questions_for_page("rent") }
 
   describe "html attributes" do

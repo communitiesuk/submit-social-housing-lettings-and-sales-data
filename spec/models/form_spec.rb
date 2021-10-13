@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
-  let(:form) { Form.new("test", "form") }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
 
   describe ".next_page" do
     let(:previous_page) { "tenant_age" }
