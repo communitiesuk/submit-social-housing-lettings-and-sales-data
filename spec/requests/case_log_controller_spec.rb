@@ -51,6 +51,16 @@ RSpec.describe CaseLogsController, type: :request do
       expect(json_response["property_postcode"]).to eq(property_postcode)
     end
 
+    context "invalid json params" do
+      let(:tenant_age) { 2000 }
+
+      it "validates case log parameters" do
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(json_response["errors"]).to eq(["Tenant age Tenant age must be between 0 and 100"])
+      end
+    end
+
     context "request with invalid credentials" do
       let(:basic_credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
