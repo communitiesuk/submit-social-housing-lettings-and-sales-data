@@ -1,6 +1,6 @@
 class CaseLogsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:create], if: :json_request?
-  before_action :authenticate, only: [:create], if: :json_request?
+  skip_before_action :verify_authenticity_token, if: :json_create_request?
+  before_action :authenticate, if: :json_create_request?
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -8,10 +8,16 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    @case_log = CaseLog.create!(create_params)
+    case_log = CaseLog.create(create_params)
     respond_to do |format|
-      format.html { redirect_to @case_log }
-      format.json { render json: @case_log }
+      format.html { redirect_to case_log }
+      format.json do
+        if case_log.persisted?
+          render json: case_log, status: :created
+        else
+          render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -73,8 +79,8 @@ private
     end
   end
 
-  def json_request?
-    request.format.json?
+  def json_create_request?
+    (request["action"] == "create") && request.format.json?
   end
 
   def authenticate
@@ -84,6 +90,6 @@ private
   def create_params
     return {} unless params[:case_log]
 
-    params.require(:case_log).permit(CaseLog.new.attributes.keys)
+    params.require(:case_log).permit(CaseLog.editable_fields)
   end
 end
