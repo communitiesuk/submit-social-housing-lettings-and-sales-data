@@ -27,13 +27,13 @@ class CaseLogsController < ApplicationController
   end
 
   def edit
-    @form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
+    @form = use_form
     @case_log = CaseLog.find(params[:id])
     render :edit
   end
 
   def submit_form
-    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
+    form = use_form
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
@@ -49,7 +49,7 @@ class CaseLogsController < ApplicationController
   end
 
   def check_answers
-    form = ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
+    form = use_form
     @case_log = CaseLog.find(params[:case_log_id])
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
@@ -92,5 +92,9 @@ private
     return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.editable_fields)
+  end 
+  
+  def use_form
+    ENV["RAILS_ENV"] == "test" ? Form.new("test", "form") : Form.new(2021, 2022)
   end
 end
