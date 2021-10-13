@@ -1,6 +1,6 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create], if: :json_request?
-  http_basic_authenticate_with name: ENV["API_USER"], password: ENV["API_KEY"], only: [:create], if: :json_request?
+  before_action :authenticate, only: [:create], if: :json_request?
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -75,6 +75,10 @@ private
 
   def json_request?
     request.format.json?
+  end
+
+  def authenticate
+    http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
   end
 
   def create_params
