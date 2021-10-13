@@ -10,10 +10,15 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
   def validate(record)
+    # If we've come from the form UI we only want to validate the specific fields
+    # that have just been submitted. If we're submitting a log via API or Bulk Upload
+    # we want to validate all data fields.
     question_to_validate = options[:previous_page]
     if question_to_validate && respond_to?("validate_#{question_to_validate}")
       public_send("validate_#{question_to_validate}", record)
     else
+      # This assumes that all methods in this class other than this one are
+      # validations to be run
       validation_methods = public_methods(false) - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
     end
