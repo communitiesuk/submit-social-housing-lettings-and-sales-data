@@ -6,8 +6,8 @@ class CaseLogsController < ApplicationController
   # rubocop:enable Style/ClassVars
 
   def index
-    @submitted_case_logs = CaseLog.where(status: 1)
-    @in_progress_case_logs = CaseLog.where(status: 0)
+    @completed_case_logs = CaseLog.where(status: 2)
+    @in_progress_case_logs = CaseLog.where(status: 1)
   end
 
   def create
@@ -63,6 +63,18 @@ class CaseLogsController < ApplicationController
     end
   end
 
+  def destroy
+    if case_log = CaseLog.find_by(id: params[:id])
+      if case_log.discard
+        head :no_content
+      else
+        render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+    end
+  end
+
   def check_answers
     form = @@form_handler.get_form("2021_2022")
     @case_log = CaseLog.find(params[:case_log_id])
@@ -81,7 +93,7 @@ class CaseLogsController < ApplicationController
 
 private
 
-  API_ACTIONS = %w[create update].freeze
+  API_ACTIONS = %w[create update destroy].freeze
 
   def question_responses(questions_for_page)
     questions_for_page.each_with_object({}) do |(question_key, question_info), result|

@@ -26,8 +26,8 @@ RSpec.describe CaseLogsController, type: :request do
     let(:tenant_code) { "T365" }
     let(:tenant_age) { 35 }
     let(:property_postcode) { "SE11 6TY" }
-    let(:in_progress) { "in progress" }
-    let(:submitted) { "submitted" }
+    let(:in_progress) { "in_progress" }
+    let(:completed) { "completed" }
 
     let(:params) do
       {
@@ -79,9 +79,9 @@ RSpec.describe CaseLogsController, type: :request do
         JSON.parse(File.open("spec/fixtures/complete_case_log.json").read)
       end
 
-      it "marks the record as submitted" do
+      it "marks the record as completed" do
         json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(submitted)
+        expect(json_response["status"]).to eq(completed)
       end
     end
 
@@ -162,6 +162,44 @@ RSpec.describe CaseLogsController, type: :request do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
       expect(case_log.property_postcode).to eq("Old Value")
+    end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "DELETE" do
+    let!(:case_log) do
+      FactoryBot.create(:case_log, :in_progress)
+    end
+    let(:id) { case_log.id }
+
+    before do
+      delete "/case_logs/#{id}", headers: headers
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "soft deletes the case log" do
+      expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
     end
 
     context "invalid case log id" do

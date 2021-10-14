@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_13_113607) do
+ActiveRecord::Schema.define(version: 2021_10_14_154616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2021_10_13_113607) do
     t.boolean "reasonable_preference_reason_medical_grounds"
     t.boolean "reasonable_preference_reason_avoid_hardship"
     t.boolean "reasonable_preference_reason_do_not_know"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
 end
