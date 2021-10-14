@@ -1,6 +1,6 @@
 class CaseLogsController < ApplicationController
-  skip_before_action :verify_authenticity_token, if: :json_create_request?
-  before_action :authenticate, if: :json_create_request?
+  skip_before_action :verify_authenticity_token, if: :json_api_request?
+  before_action :authenticate, if: :json_api_request?
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -8,7 +8,7 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    case_log = CaseLog.create(create_params)
+    case_log = CaseLog.create(api_case_log_params)
     respond_to do |format|
       format.html { redirect_to case_log }
       format.json do
@@ -18,6 +18,15 @@ class CaseLogsController < ApplicationController
           render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
         end
       end
+    end
+  end
+
+  def update
+    @case_log = CaseLog.find(params[:id])
+    if @case_log.update(api_case_log_params)
+      render json: @case_log, status: :ok
+    else
+      render json: { errors: @case_log.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -65,6 +74,8 @@ class CaseLogsController < ApplicationController
 
 private
 
+  API_ACTIONS = %w[create update].freeze
+
   def question_responses(questions_for_page)
     questions_for_page.each_with_object({}) do |(question_key, question_info), result|
       question_params = params["case_log"][question_key]
@@ -79,15 +90,15 @@ private
     end
   end
 
-  def json_create_request?
-    (request["action"] == "create") && request.format.json?
+  def json_api_request?
+    API_ACTIONS.include?(request["action"]) && request.format.json?
   end
 
   def authenticate
     http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
   end
 
-  def create_params
+  def api_case_log_params
     return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.editable_fields)

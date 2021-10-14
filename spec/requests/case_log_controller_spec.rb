@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
-
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -106,13 +105,27 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
-      post "/case_logs/#{case_log.id}", headers: headers, params: params.to_json
+      patch "/case_logs/#{case_log.id}", headers: headers, params: params.to_json
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
     end
 
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
       expect(case_log.property_postcode).to eq("Old Value")
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 end
