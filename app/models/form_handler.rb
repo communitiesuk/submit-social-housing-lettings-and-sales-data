@@ -3,6 +3,7 @@ class FormHandler
 
   def initialize
     @forms = {}
+    get_all_forms
   end
 
   def get_form(form)
@@ -11,11 +12,15 @@ class FormHandler
   end
 
   def get_all_forms
-    Dir.foreach("config/forms") do |filename|
-      next if (filename == ".") || (filename == "..")
+    directories = ["config/forms", "spec/fixtures/forms"]
+    directories.each do |directory|
+      Dir.foreach(directory) do |filename|
+        next if (filename == ".") || (filename == "..")
 
-      form_name = filename.sub(".json", "")
-      @forms[form_name] = Form.new(form_name)
+        form_name = filename.sub(".json", "")
+        form_path = "#{directory}/#{filename}"
+        @forms[form_name] = Form.new(form_path)
+      end
     end
     @forms
   end

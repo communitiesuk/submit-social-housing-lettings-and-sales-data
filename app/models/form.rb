@@ -1,11 +1,10 @@
 class Form
   attr_reader :form_definition
 
-  def initialize(filename)
-    form_json = "config/forms/#{filename}.json"
-    raise "No form definition file exists for given year".freeze unless File.exist?(form_json)
+  def initialize(form_path)
+    raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
-    @form_definition = JSON.parse(File.open(form_json).read)
+    @form_definition = JSON.parse(File.open(form_path).read)
   end
 
   # Returns a hash with sections as keys
