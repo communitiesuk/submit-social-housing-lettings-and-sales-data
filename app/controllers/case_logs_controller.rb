@@ -51,6 +51,20 @@ class CaseLogsController < ApplicationController
     end
   end
 
+  def self.get_next_page_path(form, previous_page, responses_for_page={})
+    questions_for_page = form.questions_for_page(previous_page)
+    questions_for_page.each do |question, content| 
+      if(content.key?("conditional_route_to"))
+        content["conditional_route_to"].each do |route, answer|
+          if responses_for_page[question.to_sym] == answer
+            return "case_log_#{route.to_s}_path"
+          end
+        end
+      end
+    end
+    form.next_page_redirect_path(previous_page)
+  end
+
   def check_answers
     form = @@form_handler.get_form("2021_2022")
     @case_log = CaseLog.find(params[:case_log_id])

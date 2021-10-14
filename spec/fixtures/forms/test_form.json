@@ -235,6 +235,54 @@
               }
             }
           }
+        },
+        "conditional_question": {
+          "label": "Conditional question",
+          "pages": {
+            "conditional_question": {
+              "questions": {
+                "pregnancy": {
+                  "check_answer_label": "Has the condition been met?",
+                  "header": "Has the condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  },
+                  "conditional_route_to": {
+                    "conditional_question_yes_page": "Yes",
+                    "conditional_question_no_page": "No"
+                  }
+                }
+              }
+            },
+            "conditional_question_yes_page": {
+              "questions": {
+                "conditional_question_yes_question": {
+                  "check_answer_label": "Has the next condition been met?",
+                  "header": "Has the next condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            },
+            "conditional_question_no_page": {
+              "questions": {
+                "conditional_question_no_question": {
+                  "check_answer_label": "Has the condition not been met?",
+                  "header": "Has the next condition not been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

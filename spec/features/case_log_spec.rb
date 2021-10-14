@@ -296,4 +296,19 @@ RSpec.describe "Test Features" do
       end
     end
   end
+
+  describe "conditional page routing" do
+    it "can route the user to a different page based on their answer on the current page" do
+      visit("case_logs/#{id}/conditional_question")
+      # using a question name that is already in the db to avoid
+      # having to add a new column to the db for this test
+      choose("case-log-pregnancy-yes-field") 
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
+      click_link(text: "Back")
+      choose("case-log-pregnancy-no-field")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
+    end
+  end 
 end
