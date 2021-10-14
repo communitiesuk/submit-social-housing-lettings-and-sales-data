@@ -104,5 +104,6 @@ jobs:
         cf7 api $CF_API_ENDPOINT
         cf7 auth
         cf7 target -o $CF_ORG -s $CF_SPACE
-        cf7 set-env $APP_NAME $API_USER $API_KEY
+        cf7 set-env $APP_NAME API_USER $API_USER
+        cf7 set-env $APP_NAME API_KEY $API_KEY
         cf7 push --strategy rolling
