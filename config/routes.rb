@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   post "/case_logs/:id", to: "case_logs#submit_form"
 
   form_handler = FormHandler.instance
-  form = ENV["RAILS_ENV"] == "test" ? form_handler.get_form("test_form") : form_handler.get_form("2021_2022")
+  form = form_handler.get_form("2021_2022")
   resources :case_logs do
     form.all_pages.keys.map do |page|
       get page.to_s, to: "case_logs##{page}"
