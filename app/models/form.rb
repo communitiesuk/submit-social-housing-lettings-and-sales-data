@@ -5,7 +5,6 @@ class Form
     form_json = "config/forms/#{filename}.json"
     raise "No form definition file exists for given year".freeze unless File.exist?(form_json)
 
-
     @form_definition = JSON.parse(File.open(form_json).read)
   end
 

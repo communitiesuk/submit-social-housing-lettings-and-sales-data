@@ -1,7 +1,9 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_create_request?
   before_action :authenticate, if: :json_create_request?
+  # rubocop:disable Style/ClassVars
   @@form_handler = FormHandler.instance
+  # rubocop:enable Style/ClassVars
 
   def index
     @submitted_case_logs = CaseLog.where(status: 1)
@@ -93,8 +95,8 @@ private
     return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.editable_fields)
-  end 
-  
+  end
+
   def use_form
     ENV["RAILS_ENV"] == "test" ? @@form_handler.get_form("test_form") : @@form_handler.get_form("2021_2022")
   end
