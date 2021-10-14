@@ -1,26 +1,34 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
+
+  let(:api_username) { "test_user" }
+  let(:api_password) { "test_password" }
+  let(:basic_credentials) do
+    ActionController::HttpAuthentication::Basic
+                        .encode_credentials(api_username, api_password)
+  end
+
+  let(:headers) do
+    {
+      "Content-Type" => "application/json",
+      "Accept" => "application/json",
+      "Authorization" => basic_credentials,
+    }
+  end
+
+  before do
+    allow(ENV).to receive(:[])
+    allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
+    allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
+  end
+
   describe "POST #create" do
     let(:tenant_code) { "T365" }
     let(:tenant_age) { 35 }
     let(:property_postcode) { "SE11 6TY" }
-    let(:api_username) { "test_user" }
-    let(:api_password) { "test_password" }
-    let(:basic_credentials) do
-      ActionController::HttpAuthentication::Basic
-                          .encode_credentials(api_username, api_password)
-    end
     let(:in_progress) { "in progress" }
     let(:submitted) { "submitted" }
-
-    let(:headers) do
-      {
-        "Content-Type" => "application/json",
-        "Accept" => "application/json",
-        "Authorization" => basic_credentials,
-      }
-    end
 
     let(:params) do
       {
@@ -31,9 +39,6 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
-      allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
       post "/case_logs", headers: headers, params: params.to_json
     end
 
@@ -89,6 +94,25 @@ RSpec.describe CaseLogsController, type: :request do
       it "returns 401" do
         expect(response).to have_http_status(:unauthorized)
       end
+    end
+  end
+
+  describe "PATCH" do
+    let(:case_log) do
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
+    end
+    let(:params) do
+      { tenant_code: "New Value" }
+    end
+
+    before do
+      post "/case_logs/#{case_log.id}", headers: headers, params: params.to_json
+    end
+
+    it "updates the case log with the given fields and keeps original values where none are passed" do
+      case_log.reload
+      expect(case_log.tenant_code).to eq("New Value")
+      expect(case_log.property_postcode).to eq("Old Value")
     end
   end
 end
