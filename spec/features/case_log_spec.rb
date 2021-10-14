@@ -9,9 +9,6 @@ RSpec.describe "Test Features" do
     tenant_code: { type: "text", answer: "BZ737" },
     tenant_age: { type: "numeric", answer: 25 },
     tenant_gender: { type: "radio", answer: "Female" },
-    tenant_ethnic_group: { type: "radio", answer: "Prefer not to say" },
-    tenant_nationality: { type: "radio", answer: "Lithuania" },
-    tenant_economic_status: { type: "radio", answer: "Jobseeker" },
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
@@ -52,7 +49,7 @@ RSpec.describe "Test Features" do
       it "displays a section status" do
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 8
+        assert_selector ".govuk-tag", text: /Not started/, count: 7
         assert_selector ".govuk-tag", text: /Completed/, count: 0
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -61,7 +58,7 @@ RSpec.describe "Test Features" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 7
+        assert_selector ".govuk-tag", text: /Not started/, count: 6
         assert_selector ".govuk-tag", text: /Completed/, count: 1
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -73,13 +70,13 @@ RSpec.describe "Test Features" do
 
       it "shows the number of completed sections if no sections are completed" do
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 0 of 9 sections.")
+        expect(page).to have_content("You've completed 0 of 8 sections.")
       end
 
       it "shows the number of completed sections if one section is completed" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 1 of 9 sections.")
+        expect(page).to have_content("You've completed 1 of 8 sections.")
       end
     end
 
@@ -206,7 +203,7 @@ RSpec.describe "Test Features" do
 
       it "has question headings based on the subsection" do
         visit("case_logs/#{id}/#{subsection}/check_answers")
-        question_labels = ["Tenant code", "Tenant's age", "Tenant's gender", "Ethnicity", "Nationality", "Work", "Number of Other Household Members"]
+        question_labels = ["Tenant code", "Tenant's age", "Tenant's gender", "Number of Other Household Members"]
         question_labels.each do |label|
           expect(page).to have_content(label)
         end
@@ -223,7 +220,7 @@ RSpec.describe "Test Features" do
 
       it "should have an answer link for questions missing an answer" do
         visit("case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
-        assert_selector "a", text: /Answer\z/, count: 7
+        assert_selector "a", text: /Answer\z/, count: 4
         assert_selector "a", text: "Change", count: 0
         expect(page).to have_link("Answer", href: "/case_logs/#{empty_case_log.id}/tenant_age")
       end
@@ -231,14 +228,14 @@ RSpec.describe "Test Features" do
       it "should have a change link for answered questions" do
         fill_in_number_question(empty_case_log.id, "tenant_age", 28)
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
-        assert_selector "a", text: /Answer\z/, count: 6
+        assert_selector "a", text: /Answer\z/, count: 3
         assert_selector "a", text: "Change", count: 1
         expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/tenant_age")
       end
 
       it "should have a link pointing to the first question if no questions are answered" do
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
-        expect(page).to have_content("You answered 0 of 7 questions")
+        expect(page).to have_content("You answered 0 of 4 questions")
         expect(page).to have_link("Answer the missing questions", href: "/case_logs/#{empty_case_log.id}/tenant_code")
       end
 

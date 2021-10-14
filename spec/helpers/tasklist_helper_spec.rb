@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe TasklistHelper do
   let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:form) { Form.new(2021, 2022) }
+  form_handler = FormHandler.instance
+  let(:form) { form_handler.get_form("test_form") }
 
   describe "get subsection status" do
     let(:section) { "income_and_benefits" }
@@ -53,7 +54,7 @@ RSpec.describe TasklistHelper do
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_sections_count(form, empty_case_log)).to eq(9)
+      expect(get_sections_count(form, empty_case_log)).to eq(8)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do
@@ -61,11 +62,11 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of not started sections" do
-      expect(get_sections_count(form, empty_case_log, :not_started)).to eq(8)
+      expect(get_sections_count(form, empty_case_log, :not_started)).to eq(7)
     end
 
     it "returns the number of sections in progress" do
-      expect(get_sections_count(form, case_log, :in_progress)).to eq(3)
+      expect(get_sections_count(form, case_log, :in_progress)).to eq(2)
     end
 
     it "returns 0 for invalid state" do
