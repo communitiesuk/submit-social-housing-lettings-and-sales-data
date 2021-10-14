@@ -18,11 +18,8 @@ class FormHandler
     forms = {}
     directories = ["config/forms", "spec/fixtures/forms"]
     directories.each do |directory|
-      Dir.foreach(directory) do |filename|
-        next if (filename == ".") || (filename == "..")
-
-        form_name = filename.sub(".json", "")
-        form_path = "#{directory}/#{filename}"
+      Dir.glob("#{directory}/*.json").each do |form_path|
+        form_name = form_path.sub(".json", "").split("/")[-1]
         forms[form_name] = Form.new(form_path)
       end
     end
