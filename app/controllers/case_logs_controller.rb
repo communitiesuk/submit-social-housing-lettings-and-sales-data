@@ -22,11 +22,14 @@ class CaseLogsController < ApplicationController
   end
 
   def update
-    @case_log = CaseLog.find(params[:id])
-    if @case_log.update(api_case_log_params)
-      render json: @case_log, status: :ok
+    if case_log = CaseLog.find_by(id: params[:id])
+      if case_log.update(api_case_log_params)
+        render json: case_log, status: :ok
+      else
+        render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: { errors: @case_log.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
     end
   end
 
@@ -61,7 +64,7 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:case_log_id])
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
-    render "form/check_answers", locals: { case_log: @case_log, subsection: subsection }
+    render "form/check_answers", locals: { subsection: subsection }
   end
 
   form = Form.new(2021, 2022)

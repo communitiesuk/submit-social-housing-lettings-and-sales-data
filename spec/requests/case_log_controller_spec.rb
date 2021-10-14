@@ -103,9 +103,10 @@ RSpec.describe CaseLogsController, type: :request do
     let(:params) do
       { tenant_code: "New Value" }
     end
+    let(:id) { case_log.id }
 
     before do
-      patch "/case_logs/#{case_log.id}", headers: headers, params: params.to_json
+      patch "/case_logs/#{id}", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -116,6 +117,14 @@ RSpec.describe CaseLogsController, type: :request do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
       expect(case_log.property_postcode).to eq("Old Value")
+    end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context "request with invalid credentials" do
