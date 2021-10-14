@@ -1,9 +1,9 @@
 class FormHandler
   include Singleton
+  attr_reader :forms
 
   def initialize
-    @forms = {}
-    get_all_forms
+    @forms = get_all_forms
   end
 
   def get_form(form)
@@ -12,7 +12,10 @@ class FormHandler
     @forms[form] ||= Form.new(form)
   end
 
+
+  private
   def get_all_forms
+    forms = {}
     directories = ["config/forms", "spec/fixtures/forms"]
     directories.each do |directory|
       Dir.foreach(directory) do |filename|
@@ -20,9 +23,9 @@ class FormHandler
 
         form_name = filename.sub(".json", "")
         form_path = "#{directory}/#{filename}"
-        @forms[form_name] = Form.new(form_path)
+        forms[form_name] = Form.new(form_path)
       end
     end
-    @forms
+    forms
   end
 end

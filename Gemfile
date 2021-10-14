@@ -21,7 +21,6 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "govuk-components"
 gem "govuk_design_system_formbuilder"
 gem "hotwire-rails"
-gem "singleton"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -4,7 +4,7 @@ RSpec.describe FormHandler do
   describe "Get all forms" do
     it "should be able to load all the forms" do
       form_handler = FormHandler.instance
-      all_forms = form_handler.get_all_forms
+      all_forms = form_handler.forms
       expect(all_forms.count).to be >= 1
       expect(all_forms["test_form"]).to be_a(Form)
     end
