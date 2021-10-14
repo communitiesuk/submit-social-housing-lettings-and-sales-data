@@ -1,0 +1,463 @@
+{
+  "form_type": "lettings",
+  "sections": {
+    "household": {
+      "label": "About the household",
+      "subsections": {
+        "household_characteristics": {
+          "label": "Household characteristics",
+          "pages": {
+            "tenant_code": {
+              "questions": {
+                "tenant_code": {
+                  "check_answer_label": "Tenant code",
+                  "header": "What is the tenant code?",
+                  "type": "text"
+                }
+              }
+            },
+            "tenant_age": {
+              "questions": {
+                "tenant_age": {
+                  "check_answer_label": "Tenant's age",
+                  "header": "What is the tenant's age?",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              }
+            },
+            "tenant_gender": {
+              "questions": {
+                "tenant_gender": {
+                  "check_answer_label": "Tenant's gender",
+                  "header": "Which of these best describes the tenant's gender identity?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "household_number_of_other_members": {
+              "questions": {
+                "household_number_of_other_members": {
+                  "check_answer_label": "Number of Other Household Members",
+                  "header": "How many other people are there in the household?",
+                  "hint_text": "The maximum number of others is 1",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 1,
+                  "step": 1,
+                  "conditional_for": {
+                    "person_2_relationship": ">0",
+                    "person_2_age": ">0",
+                    "person_2_gender": ">0",
+                    "person_2_economic_status": ">0"
+                  }
+                },
+                "person_2_relationship": {
+                  "check_answer_label": "Person 2's relationship to lead tenant",
+                  "header": "What's person 2's relationship to lead tenant",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Other",
+                    "1": "Prefer not to say"
+                  }
+                },
+                "person_2_age": {
+                  "check_answer_label": "Person 2's age",
+                  "header": "What's person 2's age",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                },
+                "person_2_gender": {
+                  "check_answer_label": "Person 2's gender",
+                  "header": "Which of these best describes person 2's gender identity?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Female",
+                    "1": "Male",
+                    "2": "Non-binary",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "person_2_economic_status": {
+                  "check_answer_label": "Person 2's Work",
+                  "header": "Which of these best describes person 2's working situation?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Other",
+                    "1": "Prefer not to say"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "household_needs": {
+          "label": "Household needs",
+          "pages": {
+            "armed_forces": {
+              "header": "Experience of the UK Armed Forces",
+              "questions": {
+                "armed_forces": {
+                  "header": "Has the tenant ever served in the UK armed forces?",
+                  "type": "radio",
+                  "check_answer_label": "Armed Forces",
+                  "answer_options": {
+                    "0": "Yes - a regular",
+                    "1": "Yes - a reserve",
+                    "2": "No",
+                    "3": "Prefer not to say"
+                  },
+                  "conditional_for": {
+                    "armed_forces_active": [
+                      "Yes - a regular",
+                      "Yes - a reserve"
+                    ],
+                    "armed_forces_injured": [
+                      "Yes - a regular",
+                      "Yes - a reserve"
+                    ]
+                  }
+                },
+                "armed_forces_active": {
+                  "header": "Are they still serving?",
+                  "type": "radio",
+                  "check_answer_label": "When did they leave the Armed Forces?",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No - they left up to 5 years ago",
+                    "2": "No - they left more than 5 years ago",
+                    "3": "Prefer not to say"
+                  }
+                },
+                "armed_forces_injured": {
+                  "header": "Were they seriously injured or ill as a result of their service?",
+                  "type": "radio",
+                  "check_answer_label": "Has anyone in the household been seriously injured or ill as a result of their service in the armed forces?",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "medical_conditions": {
+              "questions": {
+                "medical_conditions": {
+                  "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
+                  "type": "radio",
+                  "check_answer_label": "Physical, mental health or illness in the household",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Do not know",
+                    "3": "Prefer not to say"
+                  }
+                }
+              }
+            },
+            "accessibility_requirements": {
+              "questions": {
+                "accessibility_requirements": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "checkbox",
+                  "check_answer_label": "Disability requirements",
+                  "answer_options": {
+                    "accessibility_requirements_fully_wheelchair_accessible_housing": "Fully wheelchair accessible housing",
+                    "accessibility_requirements_wheelchair_access_to_essential_rooms": "Wheelchair access to essential rooms",
+                    "accessibility_requirements_level_access_housing": "Level access housing",
+                    "divider_a": true,
+                    "accessibility_requirements_do_not_know": "Do not know"
+                  }
+                }
+              }
+            },
+            "condition_effects": {
+              "questions": {
+                "condition_effects": {
+                  "header": "Are any of these affected by their condition or illness?",
+                  "hint_text": "Select all that apply",
+                  "type": "checkbox",
+                  "check_answer_label": "Conditions or illnesses",
+                  "answer_options": {
+                    "condition_effects_vision": "Vision - such as blindness or partial sight",
+                    "condition_effects_hearing": "Hearing - such as deafness or partial hearing"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tenancy_and_property": {
+      "label": "Tenancy and property information",
+      "subsections": {
+        "tenancy_information": {
+          "label": "Tenancy information",
+          "pages": {
+            "tenancy_code": {
+              "questions": {
+                "tenancy_code": {
+                  "check_answer_label": "What is the tenancy code?",
+                  "header": "What is the tenancy code?",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        },
+        "property_information": {
+          "label": "Property information",
+          "pages": {
+            "property_wheelchair_accessible": {
+              "questions": {
+                "property_wheelchair_accessible": {
+                  "check_answer_label": "Is property built or adapted to wheelchair user standards?",
+                  "header": "Is property built or adapted to wheelchair user standards?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "rent_and_charges": {
+      "label": "Rent and charges",
+      "subsections": {
+        "income_and_benefits": {
+          "label": "Income and benefits",
+          "pages": {
+            "net_income": {
+              "questions": {
+                "net_income": {
+                  "check_answer_label": "Income",
+                  "header": "What is the tenant’s /and partner’s combined income after tax?",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1"
+                },
+                "net_income_frequency": {
+                  "check_answer_label": "Income Frequency",
+                  "header": "How often do they receive this income?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Weekly",
+                    "1": "Monthly",
+                    "2": "Yearly"
+                  }
+                }
+              }
+            },
+            "net_income_uc_proportion": {
+              "questions": {
+                "net_income_uc_proportion": {
+                  "check_answer_label": "Benefits as a proportion of income",
+                  "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "All",
+                    "1": "Some"
+                  }
+                }
+              }
+            },
+            "housing_benefit": {
+              "questions": {
+                "housing_benefit": {
+                  "check_answer_label": "Universal Credit & Housing Benefit",
+                  "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Housing Benefit, but not Universal Credit",
+                    "1": "Prefer not to say"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "rent": {
+          "label": "Rent",
+          "pages": {
+            "rent": {
+              "questions": {
+                "rent_frequency": {
+                  "check_answer_label": "Rent Period",
+                  "header": "Which period are rent and other charges due?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Weekly for 52 weeks",
+                    "1": "Fortnightly"
+                  }
+                },
+                "basic_rent": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
+                  "result-field": "total_charge"
+                },
+                "service_charge": {
+                  "check_answer_label": "Service Charge",
+                  "header": "What is the service charge?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
+                  "result-field": "total_charge"
+                },
+                "personal_service_charge": {
+                  "check_answer_label": "Personal Service Charge",
+                  "header": "What is the personal service charge?",
+                  "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
+                  "result-field": "total_charge"
+                },
+                "support_charge": {
+                  "check_answer_label": "Support Charge",
+                  "header": "What is the support charge?",
+                  "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
+                  "result-field": "total_charge"
+                },
+                "total_charge": {
+                  "check_answer_label": "Total Charge",
+                  "header": "Total charge?",
+                  "hint_text": "This is the total of rent and all charges",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "readonly": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "local_authority": {
+      "label": "Local authority",
+      "subsections": {
+        "local_authority": {
+          "label": "Local authority",
+          "pages": {
+            "time_lived_in_la": {
+              "questions": {
+                "time_lived_in_la": {
+                  "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Just moved to local authority area",
+                    "1": "Less than 1 year",
+                    "2": "1 to 2 years",
+                    "3": "2 to 3 years",
+                    "4": "3 to 4 years",
+                    "5": "4 to 5 years",
+                    "6": "5 years or more",
+                    "7": "Do not know"
+                  }
+                }
+              }
+            },
+            "time_on_la_waiting_list": {
+              "questions": {
+                "time_on_la_waiting_list": {
+                  "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "header": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Just moved to local authority area",
+                    "1": "Less than 1 year",
+                    "2": "1 to 2 years",
+                    "3": "2 to 3 years",
+                    "4": "3 to 4 years",
+                    "5": "4 to 5 years",
+                    "6": "5 years or more",
+                    "7": "Do not know"
+                  }
+                }
+              }
+            },
+            "previous_postcode": {
+              "questions": {
+                "previous_postcode": {
+                  "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "submission": {
+      "label": "Submission",
+      "subsections": {
+        "declaration": {
+          "label": "Declaration",
+          "pages": {
+            "declaration": {
+              "questions": {
+                "declaration": {
+                  "check_answer_label": "",
+                  "header": "What is the tenant code?",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

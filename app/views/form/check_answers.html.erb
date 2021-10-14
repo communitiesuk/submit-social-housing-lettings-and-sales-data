@@ -2,10 +2,10 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-l">Check the answers you gave for <%= subsection.humanize(capitalize: false) %></h1>
-      <%= display_answered_questions_summary(subsection, @case_log) %>
-      <% subsection_pages(subsection).each do |page, page_info| %>
+      <%= display_answered_questions_summary(subsection, @case_log, form) %>
+      <% form.pages_for_subsection(subsection).each do |page, page_info| %>
         <% page_info["questions"].each do |question_title, question_info| %>
-          <% if total_questions(subsection, @case_log).include?(question_title) %>
+          <% if total_questions(subsection, case_log, form).include?(question_title) %>
             <%= render partial: 'form/check_answers_table', locals: { question_title: question_title, question_info: question_info, case_log: @case_log, page: page } %>
           <%end %>
         <%end %>
