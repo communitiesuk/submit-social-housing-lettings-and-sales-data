@@ -15,7 +15,7 @@ module TasklistHelper
 
   def get_subsection_status(subsection_name, case_log, questions)
     if subsection_name == "declaration"
-      return all_questions_completed(case_log) ? :not_started : :cannot_start_yet
+      return case_log.completed? ? :not_started : :cannot_start_yet
     end
 
     return :not_started if questions.all? { |question| case_log[question].blank? }
@@ -46,10 +46,6 @@ module TasklistHelper
   end
 
 private
-
-  def all_questions_completed(case_log)
-    case_log.attributes.all? { |_question, answer| answer.present? }
-  end
 
   def is_incomplete?(subsection, case_log, questions)
     status = get_subsection_status(subsection, case_log, questions)

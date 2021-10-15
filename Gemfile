@@ -19,8 +19,12 @@ gem "jbuilder", "~> 2.7"
 gem "bootsnap", ">= 1.4.4", require: false
 # Gov.UK frontend components
 gem "govuk-components"
+# Gov.UK component form builder DSL
 gem "govuk_design_system_formbuilder"
+# Turbo & Stimulus
 gem "hotwire-rails"
+# Soft delete ActiveRecords objects
+gem "discard"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
