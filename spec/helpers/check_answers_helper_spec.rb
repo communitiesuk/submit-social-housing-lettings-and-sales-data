@@ -16,6 +16,7 @@ RSpec.describe CheckAnswersHelper do
   let(:subsection) { "income_and_benefits" }
   let(:subsection_with_numeric_conditionals) { "household_characteristics" }
   let(:subsection_with_radio_conditionals) { "household_needs" }
+  let(:conditional_routing_subsection) { "conditional_question" }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
 
@@ -108,5 +109,12 @@ RSpec.describe CheckAnswersHelper do
         expect { total_number_of_questions(subsection, case_log, form) }.to raise_error(RuntimeError, "Not implemented yet")
       end
     end
+
+    context "conditional routing" do
+      it "ignores not visited questions when no questions are answered" do
+        expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(1)
+      end
+    end
+
   end
 end
