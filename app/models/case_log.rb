@@ -21,7 +21,7 @@ class CaseLogValidator < ActiveModel::Validator
     # we want to validate all data fields.
     question_to_validate = options[:previous_page]
     if question_to_validate && respond_to?("validate_#{question_to_validate}")
-        public_send("validate_#{question_to_validate}", record)
+      public_send("validate_#{question_to_validate}", record)
     else
       # This assumes that all methods in this class other than this one are
       # validations to be run
