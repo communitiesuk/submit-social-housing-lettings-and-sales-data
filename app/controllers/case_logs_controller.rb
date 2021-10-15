@@ -43,26 +43,12 @@ class CaseLogsController < ApplicationController
     responses_for_page = question_responses(questions_for_page)
     @case_log.previous_page = previous_page
     if @case_log.update(responses_for_page)
-      redirect_path = form.next_page_redirect_path(previous_page)
+      redirect_path = get_next_page_path(form, previous_page, responses_for_page)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[previous_page]
       render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
     end
-  end
-
-  def self.get_next_page_path(form, previous_page, responses_for_page={})
-    questions_for_page = form.questions_for_page(previous_page)
-    questions_for_page.each do |question, content| 
-      if(content.key?("conditional_route_to"))
-        content["conditional_route_to"].each do |route, answer|
-          if responses_for_page[question.to_sym] == answer
-            return "case_log_#{route.to_s}_path"
-          end
-        end
-      end
-    end
-    form.next_page_redirect_path(previous_page)
   end
 
   def check_answers
@@ -109,5 +95,19 @@ private
     return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.editable_fields)
+  end
+
+  def get_next_page_path(form, previous_page, responses_for_page={})
+    questions_for_page = form.questions_for_page(previous_page)
+    questions_for_page.each do |question, content|
+      if(content.key?("conditional_route_to"))
+        content["conditional_route_to"].each do |route, answer|
+          if responses_for_page[question] == answer
+            return "case_log_#{route.to_s}_path"
+          end
+        end
+      end
+    end
+    form.next_page_redirect_path(previous_page)
   end
 end

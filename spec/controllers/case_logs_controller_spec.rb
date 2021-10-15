@@ -154,18 +154,20 @@ RSpec.describe CaseLogsController, type: :controller do
     let(:previous_conditional_page) { "conditional_question" }
     let(:form_handler) { FormHandler.instance }
     let(:form) { form_handler.get_form("test_form") }
-    let(:responses_for_page) { { "pregnancy": "No" } }
+    let(:case_log_controller) { CaseLogsController.new }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(CaseLogsController.get_next_page_path(form, previous_page)).to eq("case_log_net_income_uc_proportion_path")
+      expect(case_log_controller.send(:get_next_page_path, form, previous_page)).to eq("case_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do
-      expect(CaseLogsController.get_next_page_path(form, last_previous_page)).to eq("case_log_income_and_benefits_check_answers_path")
+      expect(case_log_controller.send(:get_next_page_path, form, last_previous_page)).to eq("case_log_income_and_benefits_check_answers_path")
     end
 
     it "returns a correct page path if there is conditional routing" do
-      expect(CaseLogsController.get_next_page_path(form, previous_conditional_page, responses_for_page)).to eq("case_log_conditional_question_no_page_path")
+      responses_for_page = {}
+      responses_for_page["pregnancy"] = "No"
+      expect(case_log_controller.send(:get_next_page_path, form, previous_conditional_page, responses_for_page)).to eq("case_log_conditional_question_no_page_path")
     end
   end
 end
