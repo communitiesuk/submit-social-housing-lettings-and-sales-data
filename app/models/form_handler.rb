@@ -12,8 +12,8 @@ class FormHandler
     @forms[form] ||= Form.new(form)
   end
 
+private
 
-  private
   def get_all_forms
     forms = {}
     directories = ["config/forms", "spec/fixtures/forms"]

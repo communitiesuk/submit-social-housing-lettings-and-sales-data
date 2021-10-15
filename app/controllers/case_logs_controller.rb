@@ -25,7 +25,7 @@ class CaseLogsController < ApplicationController
   end
 
   def update
-    if case_log = CaseLog.find_by(id: params[:id])
+    if (case_log = CaseLog.find_by(id: params[:id]))
       if case_log.update(api_case_log_params)
         render json: case_log, status: :ok
       else
@@ -64,7 +64,7 @@ class CaseLogsController < ApplicationController
   end
 
   def destroy
-    if case_log = CaseLog.find_by(id: params[:id])
+    if (case_log = CaseLog.find_by(id: params[:id]))
       if case_log.discard
         head :no_content
       else

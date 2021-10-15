@@ -58,16 +58,16 @@ class CaseLog < ApplicationRecord
     status == "in_progress"
   end
 
-  private
+private
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
-      "completed"
-    elsif all_fields_nil?
-      "not_started"
-    else
-      "in_progress"
-    end
+                    "completed"
+                  elsif all_fields_nil?
+                    "not_started"
+                  else
+                    "in_progress"
+                  end
   end
 
   def all_fields_completed?

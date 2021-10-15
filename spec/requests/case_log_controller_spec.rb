@@ -128,7 +128,7 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "invalid case log params" do
-      let(:params) { {tenant_age: 200} }
+      let(:params) { { tenant_age: 200 } }
 
       it "returns 422" do
         expect(response).to have_http_status(:unprocessable_entity)
