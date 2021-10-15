@@ -25,9 +25,7 @@ module CheckAnswersHelper
   def condition_not_met(case_log, question_key, question, condition)
     case question["type"]
     when "numeric"
-      # rubocop:disable Security/Eval
-      case_log[question_key].blank? || !eval(case_log[question_key].to_s + condition)
-    # rubocop:enable Security/Eval
+      case_log[question_key].blank? || !case_log[question_key].send(condition[0].to_sym, condition[1].to_i)
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else

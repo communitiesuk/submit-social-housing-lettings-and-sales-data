@@ -1,9 +1,6 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
-  # rubocop:disable Style/ClassVars
-  @@form_handler = FormHandler.instance
-  # rubocop:enable Style/ClassVars
 
   def index
     @completed_case_logs = CaseLog.where(status: 2)
@@ -42,13 +39,13 @@ class CaseLogsController < ApplicationController
   end
 
   def edit
-    @form = @@form_handler.get_form("2021_2022")
+    @form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
     render :edit
   end
 
   def submit_form
-    form = @@form_handler.get_form("2021_2022")
+    form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
     previous_page = params[:case_log][:previous_page]
     questions_for_page = form.questions_for_page(previous_page)
@@ -76,14 +73,14 @@ class CaseLogsController < ApplicationController
   end
 
   def check_answers
-    form = @@form_handler.get_form("2021_2022")
+    form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:case_log_id])
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
     render "form/check_answers", locals: { subsection: subsection, form: form }
   end
 
-  form = @@form_handler.get_form("2021_2022")
+  form = FormHandler.instance.get_form("2021_2022")
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
