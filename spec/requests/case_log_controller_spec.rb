@@ -1,26 +1,33 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
+  let(:api_username) { "test_user" }
+  let(:api_password) { "test_password" }
+  let(:basic_credentials) do
+    ActionController::HttpAuthentication::Basic
+                        .encode_credentials(api_username, api_password)
+  end
+
+  let(:headers) do
+    {
+      "Content-Type" => "application/json",
+      "Accept" => "application/json",
+      "Authorization" => basic_credentials,
+    }
+  end
+
+  before do
+    allow(ENV).to receive(:[])
+    allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
+    allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
+  end
+
   describe "POST #create" do
     let(:tenant_code) { "T365" }
     let(:tenant_age) { 35 }
     let(:property_postcode) { "SE11 6TY" }
-    let(:api_username) { "test_user" }
-    let(:api_password) { "test_password" }
-    let(:basic_credentials) do
-      ActionController::HttpAuthentication::Basic
-                          .encode_credentials(api_username, api_password)
-    end
-    let(:in_progress) { "in progress" }
-    let(:submitted) { "submitted" }
-
-    let(:headers) do
-      {
-        "Content-Type" => "application/json",
-        "Accept" => "application/json",
-        "Authorization" => basic_credentials,
-      }
-    end
+    let(:in_progress) { "in_progress" }
+    let(:completed) { "completed" }
 
     let(:params) do
       {
@@ -31,9 +38,6 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
-      allow(ENV).to receive(:[])
-      allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
-      allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
       post "/case_logs", headers: headers, params: params.to_json
     end
 
@@ -75,9 +79,134 @@ RSpec.describe CaseLogsController, type: :request do
         JSON.parse(File.open("spec/fixtures/complete_case_log.json").read)
       end
 
-      it "marks the record as submitted" do
+      it "marks the record as completed" do
         json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(submitted)
+        expect(json_response["status"]).to eq(completed)
+      end
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "PATCH" do
+    let(:case_log) do
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
+    end
+    let(:params) do
+      { tenant_code: "New Value" }
+    end
+    let(:id) { case_log.id }
+
+    before do
+      patch "/case_logs/#{id}", headers: headers, params: params.to_json
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "updates the case log with the given fields and keeps original values where none are passed" do
+      case_log.reload
+      expect(case_log.tenant_code).to eq("New Value")
+      expect(case_log.property_postcode).to eq("Old Value")
+    end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  # We don't really have any meaningful distinction between PUT and PATCH here since you can update some or all
+  # fields in both cases, and both route to #Update. Rails generally recommends PATCH as it more closely matches
+  # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
+  describe "PUT" do
+    let(:case_log) do
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
+    end
+    let(:params) do
+      { tenant_code: "New Value" }
+    end
+    let(:id) { case_log.id }
+
+    before do
+      put "/case_logs/#{id}", headers: headers, params: params.to_json
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "updates the case log with the given fields and keeps original values where none are passed" do
+      case_log.reload
+      expect(case_log.tenant_code).to eq("New Value")
+      expect(case_log.property_postcode).to eq("Old Value")
+    end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "request with invalid credentials" do
+      let(:basic_credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+      end
+
+      it "returns 401" do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "DELETE" do
+    let!(:case_log) do
+      FactoryBot.create(:case_log, :in_progress)
+    end
+    let(:id) { case_log.id }
+
+    before do
+      delete "/case_logs/#{id}", headers: headers
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "soft deletes the case log" do
+      expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
+    end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
 
