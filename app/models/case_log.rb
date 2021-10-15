@@ -51,11 +51,11 @@ class CaseLog < ApplicationRecord
   end
 
   def not_started?
-    status == "not started"
+    status == "not_started"
   end
 
   def in_progress?
-    status == "in progress"
+    status == "in_progress"
   end
 
   private
