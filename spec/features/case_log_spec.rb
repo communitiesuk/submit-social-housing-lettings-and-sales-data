@@ -49,7 +49,7 @@ RSpec.describe "Test Features" do
       it "displays a section status" do
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 7
+        assert_selector ".govuk-tag", text: /Not started/, count: 8
         assert_selector ".govuk-tag", text: /Completed/, count: 0
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -58,7 +58,7 @@ RSpec.describe "Test Features" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 6
+        assert_selector ".govuk-tag", text: /Not started/, count: 7
         assert_selector ".govuk-tag", text: /Completed/, count: 1
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -70,13 +70,13 @@ RSpec.describe "Test Features" do
 
       it "shows the number of completed sections if no sections are completed" do
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 0 of 8 sections.")
+        expect(page).to have_content("You've completed 0 of 9 sections.")
       end
 
       it "shows the number of completed sections if one section is completed" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 1 of 8 sections.")
+        expect(page).to have_content("You've completed 1 of 9 sections.")
       end
     end
 
@@ -302,7 +302,7 @@ RSpec.describe "Test Features" do
       visit("case_logs/#{id}/conditional_question")
       # using a question name that is already in the db to avoid
       # having to add a new column to the db for this test
-      choose("case-log-pregnancy-yes-field") 
+      choose("case-log-pregnancy-yes-field")
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
       click_link(text: "Back")
@@ -310,5 +310,5 @@ RSpec.describe "Test Features" do
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
     end
-  end 
+  end
 end
