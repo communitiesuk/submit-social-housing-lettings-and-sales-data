@@ -13,6 +13,18 @@ RSpec.describe Form, type: :model do
     it "validates age is over 0" do
       expect { CaseLog.create!(tenant_age: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
+
+    it "validates number of relets is a number" do
+      expect { CaseLog.create!(property_number_of_times_relet: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "validates number of relets is under 20" do
+      expect { CaseLog.create!(property_number_of_times_relet: 21) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it "validates number of relets is over 0" do
+      expect { CaseLog.create!(property_number_of_times_relet: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe "status" do
