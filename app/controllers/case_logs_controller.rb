@@ -3,8 +3,8 @@ class CaseLogsController < ApplicationController
   before_action :authenticate, if: :json_api_request?
 
   def index
-    @completed_case_logs = CaseLog.where(status: 2)
-    @in_progress_case_logs = CaseLog.where(status: 1)
+    @completed_case_logs = CaseLog.completed
+    @in_progress_case_logs = CaseLog.in_progress
   end
 
   def create

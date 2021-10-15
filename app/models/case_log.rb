@@ -28,6 +28,8 @@ end
 class CaseLog < ApplicationRecord
   include Discard::Model
   default_scope -> { kept }
+  scope :in_progress, -> { where(status: "in_progress") }
+  scope :completed, -> { where(status: "completed") }
 
   validate :instance_validations
   before_save :update_status!
