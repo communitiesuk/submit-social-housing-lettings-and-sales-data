@@ -25,6 +25,7 @@ RSpec.describe CaseLogsController, type: :request do
   describe "POST #create" do
     let(:tenant_code) { "T365" }
     let(:tenant_age) { 35 }
+    let(:property_number_of_times_relet) { 12 }
     let(:property_postcode) { "SE11 6TY" }
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
@@ -34,6 +35,7 @@ RSpec.describe CaseLogsController, type: :request do
         "tenant_code": tenant_code,
         "tenant_age": tenant_age,
         "property_postcode": property_postcode,
+        "property_number_of_times_relet": property_number_of_times_relet
       }
     end
 
@@ -59,11 +61,12 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "invalid json params" do
       let(:tenant_age) { 2000 }
+      let(:property_number_of_times_relet) { 21 }
 
       it "validates case log parameters" do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to eq(["Tenant age must be between 0 and 120"])
+        expect(json_response["errors"]).to match_array(["Tenant age must be between 0 and 120", "Property number of times relet must be between 0 and 20"])
       end
     end
 
