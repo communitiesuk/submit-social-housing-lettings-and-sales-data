@@ -70,6 +70,16 @@ Once the app is deployed:
 2. Check logs:\
 `cf logs dluhc-core --recent`
 
+#### Troubleshooting deployments
+
+A failed Github deployment action will occasionally leave a Cloud Foundry deployment in a broken state. As a result all subsequent Github deployment actions will also fail with the message `Cannot update this process while a deployment is in flight`.
+
+`
+cf cancel-deployment dluhc-core
+`
+
+You'd then need to check the logs and fix the issue that caused the initial deployment to fail.
+
 ## CI/CD
 
 When a commit is made to `main` the following GitHub action jobs are triggered:
