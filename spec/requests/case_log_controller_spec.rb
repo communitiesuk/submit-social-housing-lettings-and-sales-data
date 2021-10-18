@@ -35,7 +35,7 @@ RSpec.describe CaseLogsController, type: :request do
         "tenant_code": tenant_code,
         "tenant_age": tenant_age,
         "property_postcode": property_postcode,
-        "property_number_of_times_relet": property_number_of_times_relet
+        "property_number_of_times_relet": property_number_of_times_relet,
       }
     end
 

@@ -1,5 +1,5 @@
 class CaseLogValidator < ActiveModel::Validator
-  # Methods to be used on save and continue need to be named 'validate_' 
+  # Methods to be used on save and continue need to be named 'validate_'
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
 
