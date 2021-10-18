@@ -158,14 +158,17 @@ RSpec.describe "Test Features" do
       end
     end
 
-    describe "Back link directs correctly" do
+    describe "Back link directs correctly", js: true do
       it "go back to tasklist page from tenant code" do
+        visit("/case_logs/#{id}")
         visit("/case_logs/#{id}/tenant_code")
         click_link(text: "Back")
         expect(page).to have_content("Tasklist for log #{id}")
       end
 
-      it "go back to tenant code page from tenant age page" do
+      it "go back to tenant code page from tenant age page", js: true do
+        visit("/case_logs/#{id}/tenant_code")
+        click_button("Save and continue")
         visit("/case_logs/#{id}/tenant_age")
         click_link(text: "Back")
         expect(page).to have_field("case-log-tenant-code-field")
@@ -297,16 +300,17 @@ RSpec.describe "Test Features" do
     end
   end
 
-  describe "conditional page routing" do
+  describe "conditional page routing", js: true do
     it "can route the user to a different page based on their answer on the current page" do
       visit("case_logs/#{id}/conditional_question")
       # using a question name that is already in the db to avoid
       # having to add a new column to the db for this test
-      choose("case-log-pregnancy-yes-field")
+      choose("case-log-pregnancy-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
       click_link(text: "Back")
-      choose("case-log-pregnancy-no-field")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question")
+      choose("case-log-pregnancy-no-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
     end
