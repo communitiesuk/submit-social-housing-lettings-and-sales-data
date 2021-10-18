@@ -25,6 +25,8 @@ gem "govuk_design_system_formbuilder"
 gem "hotwire-rails"
 # Soft delete ActiveRecords objects
 gem "discard"
+# Multi-threaded, Postgres-based, ActiveJob backend for Ruby on Rails
+gem "good_job"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
