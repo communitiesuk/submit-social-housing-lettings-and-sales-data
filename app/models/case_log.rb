@@ -15,6 +15,16 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_other_reason_for_leaving_last_settled_home(record)
+    if record.reason_for_leaving_last_settled_home == "Other" && record.other_reason_for_leaving_last_settled_home.blank?
+      record.errors.add :other_reason_for_leaving_last_settled_home, "If reason for leaving settled home is other then the other reason must be provided"
+    end
+
+    if record.reason_for_leaving_last_settled_home != "Other" && record.other_reason_for_leaving_last_settled_home.present?
+      record.errors.add :other_reason_for_leaving_last_settled_home, "The other reason must not be provided if the reason for leaving settled home was not other"
+    end
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
