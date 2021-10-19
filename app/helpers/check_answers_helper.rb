@@ -25,7 +25,9 @@ module CheckAnswersHelper
   def condition_not_met(case_log, question_key, question, condition)
     case question["type"]
     when "numeric"
-      case_log[question_key].blank? || !case_log[question_key].send(condition[0].to_sym, condition[1].to_i)
+      operator = condition[/[<>=]+/].to_sym
+      operand = condition[/\d+/].to_i
+      case_log[question_key].blank? || !case_log[question_key].send(operator, operand)
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
