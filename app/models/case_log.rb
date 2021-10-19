@@ -15,13 +15,33 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_api_reasonable_preference(record)
+    if record.reasonable_preference == "No"
+      if record.reasonable_preference_reason_homeless || record.reasonable_preference_reason_unsatisfactory_housing || record.reasonable_preference_reason_medical_grounds || record.reasonable_preference_reason_avoid_hardship || record.reasonable_preference_reason_do_not_know
+        record.errors.add :reasonable_preference_reason, "- no resasons can be set to true, if reasonable preference is No"
+      end
+    end
+  end
+
+  def validate_reasonable_preference(record)
+    if record.homelessness == "No" && record.reasonable_preference == "Yes"
+      record.errors.add :reasonable_preference, "can not be Yes if Not Homesless imediately prior to this letting has been selected"
+    elsif record.reasonable_preference == "Yes"
+      if !record.reasonable_preference_reason_homeless && !record.reasonable_preference_reason_unsatisfactory_housing && !record.reasonable_preference_reason_medical_grounds && !record.reasonable_preference_reason_avoid_hardship && !record.reasonable_preference_reason_do_not_know
+        record.errors.add :reasonable_preference_reason, "- if reasonable preference is Yes, a reason must be given"
+      end
+    end
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
     # we want to validate all data fields.
     question_to_validate = options[:previous_page]
-    if question_to_validate && respond_to?("validate_#{question_to_validate}")
-      public_send("validate_#{question_to_validate}", record)
+    if question_to_validate 
+      if respond_to?("validate_#{question_to_validate}")
+        public_send("validate_#{question_to_validate}", record)
+      end 
     else
       # This assumes that all methods in this class other than this one are
       # validations to be run
