@@ -111,10 +111,19 @@ RSpec.describe CheckAnswersHelper do
     end
 
     context "conditional routing" do
-      xit "ignores not visited questions when no questions are answered" do
+      it "ignores not visited questions when no questions are answered" do
         expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(1)
       end
-    end
 
+      it "counts correct questions when the conditional question is answered" do
+        case_log["pregnancy"] = "Yes"
+        expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(2)
+      end
+
+      it "counts correct questions when the conditional question is answered" do
+        case_log["pregnancy"] = "No"
+        expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(2)
+      end
+    end
   end
 end

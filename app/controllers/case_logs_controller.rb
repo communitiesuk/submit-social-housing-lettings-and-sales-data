@@ -97,14 +97,14 @@ private
     params.require(:case_log).permit(CaseLog.editable_fields)
   end
 
-  def get_next_page_path(form, previous_page, responses_for_page={})
+  def get_next_page_path(form, previous_page, responses_for_page = {})
     questions_for_page = form.questions_for_page(previous_page)
     questions_for_page.each do |question, content|
-      if(content.key?("conditional_route_to"))
-        content["conditional_route_to"].each do |route, answer|
-          if responses_for_page[question] == answer
-            return "case_log_#{route.to_s}_path"
-          end
+      next unless content.key?("conditional_route_to")
+
+      content["conditional_route_to"].each do |route, answer|
+        if responses_for_page[question] == answer
+          return "case_log_#{route}_path"
         end
       end
     end

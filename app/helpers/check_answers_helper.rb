@@ -18,6 +18,11 @@ module CheckAnswersHelper
           questions_not_applicable << conditional_question_key
         end
       end
+      question.fetch("conditional_route_to", []).map do |conditional_page_key, condition|
+        if condition_not_met(case_log, question_key, question, condition)
+          questions_not_applicable += form.questions_for_page(conditional_page_key).keys
+        end
+      end
       questions_not_applicable.include?(question_key)
     end
   end
