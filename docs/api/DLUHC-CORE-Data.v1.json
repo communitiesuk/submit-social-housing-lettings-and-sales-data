@@ -24,7 +24,8 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Case-Log"
-                }
+                },
+                "examples": {}
               }
             }
           },
@@ -79,6 +80,26 @@
                   "properties": {}
                 },
                 "examples": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "Invalid Age": {
+                    "value": {
+                      "errors": [
+                        "Tenant age must be between 0 and 120"
+                      ]
+                    }
+                  }
+                }
               }
             }
           }
@@ -147,11 +168,25 @@
               }
             }
           },
-          "400": {
-            "description": "Missing Required Information"
-          },
-          "409": {
-            "description": "Email Already Taken"
+          "422": {
+            "description": "Unprocessable Entity ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "Invalid Age": {
+                    "value": {
+                      "errors": [
+                        "Tenant age must be between 0 and 120"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "requestBody": {
