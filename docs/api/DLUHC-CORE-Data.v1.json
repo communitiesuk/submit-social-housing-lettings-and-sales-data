@@ -7,7 +7,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://dluhc-core.london.cloudapps.digital",
+      "description": "Sandbox"
     }
   ],
   "paths": {
