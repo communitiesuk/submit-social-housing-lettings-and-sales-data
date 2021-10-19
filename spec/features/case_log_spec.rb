@@ -191,6 +191,7 @@ RSpec.describe "Test Features" do
 
   describe "check answers page" do
     let(:subsection) { "household_characteristics" }
+    let(:conditional_subsection) { "conditional_question" }
 
     context "when the user needs to check their answers for a subsection" do
       it "can be visited by URL" do
@@ -254,6 +255,35 @@ RSpec.describe "Test Features" do
         answer_all_questions_in_income_subsection
         expect(page).to have_content("You answered all the questions")
         assert_selector "a", text: "Answer the missing questions", count: 0
+      end
+
+      it "does not display conditional questions that were not visited" do
+        visit("case_logs/#{id}/#{conditional_subsection}/check_answers")
+        question_labels = ["Has the condition been met?"]
+        question_labels.each do |label|
+          expect(page).to have_content(label)
+        end
+
+        excluded_question_labels = ["Has the next condition been met?", "Has the condition not been met?"]
+        excluded_question_labels.each do |label|
+          expect(page).not_to have_content(label)
+        end
+      end
+
+      it "displays conditional question that were visited" do
+        visit("/case_logs/#{id}/conditional_question")
+        choose("case-log-pregnancy-no-field")
+        click_button("Save and continue")
+        visit("/case_logs/#{id}/#{conditional_subsection}/check_answers")
+        question_labels = ["Has the condition been met?", "Has the condition not been met?"]
+        question_labels.each do |label|
+          expect(page).to have_content(label)
+        end
+
+        excluded_question_labels = ["Has the next condition been met?"]
+        excluded_question_labels.each do |label|
+          expect(page).not_to have_content(label)
+        end
       end
     end
   end
