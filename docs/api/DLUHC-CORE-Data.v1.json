@@ -262,25 +262,191 @@
       "Case-Log": {
         "description": "",
         "type": "object",
+        "x-examples": {
+          "example-1": {
+            "tenant_code": "T657",
+            "tenant_age": 35,
+            "tenant_gender": "Female",
+            "tenant_ethnic_group": "White: English/Scottish/Welsh/Northern Irish/British",
+            "tenant_nationality": "UK national resident in UK",
+            "previous_housing_situation": "Private sector tenancy",
+            "armed_forces": "Yes - a regular",
+            "tenant_economic_status": "Full-time - 30 hours or more",
+            "household_number_of_other_members": 7,
+            "person_2_relationship": "Partner",
+            "person_2_age": 32,
+            "person_2_gender": "Male",
+            "person_2_economic_status": "Not seeking work",
+            "person_3_relationship": "Child - includes young adult and grown-up",
+            "person_3_age": 12,
+            "person_3_gender": "Male",
+            "person_3_economic_status": "Child under 16",
+            "person_4_relationship": "Child - includes young adult and grown-up",
+            "person_4_age": 12,
+            "person_4_gender": "Female",
+            "person_4_economic_status": "Child under 16",
+            "person_5_relationship": "Child - includes young adult and grown-up",
+            "person_5_age": 10,
+            "person_5_gender": "Non-binary",
+            "person_5_economic_status": "Child under 16",
+            "person_6_relationship": "Child - includes young adult and grown-up",
+            "person_6_age": 5,
+            "person_6_gender": "Prefer not to say",
+            "person_6_economic_status": "Child under 16",
+            "person_7_relationship": "Child - includes young adult and grown-up",
+            "person_7_age": 5,
+            "person_7_gender": "Prefer not to say",
+            "person_7_economic_status": "Child under 16",
+            "person_8_relationship": "Child - includes young adult and grown-up",
+            "person_8_age": 2,
+            "person_8_gender": "Prefer not to say",
+            "person_8_economic_status": "Child under 16",
+            "homelessness": "No",
+            "reason_for_leaving_last_settled_home": "Other problems with neighbours",
+            "benefit_cap_spare_room_subsidy": "No",
+            "armed_forces_active": "No",
+            "armed_forces_injured": "No",
+            "armed_forces_partner": "No",
+            "medical_conditions": "Yes",
+            "pregnancy": "No",
+            "accessibility_requirements": "No",
+            "condition_effects": "dummy",
+            "tenancy_code": "BZ757",
+            "tenancy_start_date": "12/03/2019",
+            "starter_tenancy": "No",
+            "fixed_term_tenancy": "No",
+            "tenancy_type": "Fixed term – Secure",
+            "letting_type": "Affordable Rent - General Needs",
+            "letting_provider": "This landlord",
+            "property_location": "Barnet",
+            "previous_postcode": "NW1 5TY",
+            "property_relet": "No",
+            "property_vacancy_reason": "Relet - tenant abandoned property",
+            "property_reference": "P9876",
+            "property_unit_type": "House",
+            "property_building_type": "dummy",
+            "property_number_of_bedrooms": 3,
+            "property_void_date": "03/11/2019",
+            "property_major_repairs": "Yes",
+            "property_major_repairs_date": "05/05/2020",
+            "property_number_of_times_relet": 2,
+            "property_wheelchair_accessible": true,
+            "net_income": 1000,
+            "net_income_frequency": "Monthly",
+            "net_income_uc_proportion": "Some",
+            "housing_benefit": "Universal Credit with housing element, but not Housing Benefit",
+            "rent_frequency": "Weekly",
+            "basic_rent": 200,
+            "service_charge": 50,
+            "personal_service_charge": 40,
+            "support_charge": 35,
+            "total_charge": 325,
+            "outstanding_amount": "Yes",
+            "time_lived_in_la": "1 to 2 years",
+            "time_on_la_waiting_list": "Less than 1 year",
+            "previous_la": "Ashford",
+            "property_postcode": "SE2 6RT",
+            "reasonable_preference": "Yes",
+            "reasonable_preference_reason": "dummy",
+            "cbl_letting": true,
+            "chr_letting": false,
+            "cap_letting": false,
+            "outstanding_rent_or_charges": 25,
+            "other_reason_for_leaving_last_settled_home": "Other reason",
+            "accessibility_requirements_fully_wheelchair_accessible_housing": true,
+            "accessibility_requirements_wheelchair_access_to_essential_rooms": false,
+            "accessibility_requirements_level_access_housing": false,
+            "accessibility_requirements_other_disability_requirements": false,
+            "accessibility_requirements_no_disability_requirements": false,
+            "accessibility_requirements_do_not_know": false,
+            "accessibility_requirements_prefer_not_to_say": false,
+            "condition_effects_vision": false,
+            "condition_effects_hearing": true,
+            "condition_effects_mobility": false,
+            "condition_effects_dexterity": false,
+            "condition_effects_stamina": false,
+            "condition_effects_learning": false,
+            "condition_effects_memory": false,
+            "condition_effects_mental_health": false,
+            "condition_effects_social_or_behavioral": false,
+            "condition_effects_other": false,
+            "condition_effects_prefer_not_to_say": false,
+            "reasonable_preference_reason_homeless": false,
+            "reasonable_preference_reason_unsatisfactory_housing": false,
+            "reasonable_preference_reason_medical_grounds": false,
+            "reasonable_preference_reason_avoid_hardship": false,
+            "reasonable_preference_reason_do_not_know": true
+          }
+        },
+        "title": "Case Log",
+        "x-internal": false,
         "properties": {
           "tenant_code": {
             "type": "string",
             "minLength": 1
           },
           "tenant_age": {
-            "type": "number"
+            "type": "number",
+            "description": "The age of the lead tenant",
+            "maximum": 120,
+            "minimum": 0
           },
           "tenant_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "tenant_ethnic_group": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "White: English/Scottish/Welsh/Northern Irish/British",
+              "White: Irish",
+              "White: Gypsy/Irish Traveller",
+              "White: Other",
+              "Mixed: White & Black Caribbean",
+              "Mixed: White & Black African",
+              "Mixed: White & Asian",
+              "Mixed: Other",
+              "Asian or Asian British: Indian",
+              "Asian or Asian British: Pakistani",
+              "Asian or Asian British: Bangladeshi",
+              "Asian or Asian British: Chinese",
+              "Asian or Asian British: Other",
+              "Black: Caribbean",
+              "Black: African",
+              "Black: Other",
+              "Other Ethnic Group: Arab",
+              "Other Ethnic Group: Other",
+              "Prefer not to say"
+            ]
           },
           "tenant_nationality": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "UK national resident in UK",
+              "A current or former reserve in the UK Armed Forces (exc. National Service)",
+              "UK national returning from residence overseas",
+              "Czech Republic",
+              "Estonia",
+              "Hungary",
+              "Latvia",
+              "Lithuania",
+              "Poland",
+              "Slovakia",
+              "Bulgaria",
+              "Romania",
+              "Ireland",
+              "Other EU Economic Area (EEA country)",
+              "Any other country",
+              "Prefer not to say"
+            ]
           },
           "previous_housing_situation": {
             "type": "string",
@@ -292,115 +458,319 @@
           },
           "tenant_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "household_number_of_other_members": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0,
+            "maximum": 7
           },
           "person_2_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_2_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_2_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_2_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_3_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_3_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_3_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_3_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_4_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_4_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_4_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_4_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_5_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_5_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_5_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_5_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_6_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_6_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_6_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_6_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_7_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_7_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_7_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_7_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_8_relationship": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Partner",
+              "Child - includes young adult and grown-up",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "person_8_age": {
-            "type": "number"
+            "type": "number",
+            "maximum": 120,
+            "minimum": 0
           },
           "person_8_gender": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Female",
+              "Male",
+              "Non-binary",
+              "Prefer not to say"
+            ]
           },
           "person_8_economic_status": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Part-time - Less than 30 hours",
+              "Full-time - 30 hours or more",
+              "In government training into work, such as New Deal",
+              "Jobseeker",
+              "Retired",
+              "Not seeking work",
+              "Full-time student",
+              "Unable to work because of long term sick or disability",
+              "Child under 16",
+              "Other",
+              "Prefer not to say"
+            ]
           },
           "homelessness": {
             "type": "string",
@@ -780,125 +1150,7 @@
           "reasonable_preference_reason_medical_grounds",
           "reasonable_preference_reason_avoid_hardship",
           "reasonable_preference_reason_do_not_know"
-        ],
-        "x-examples": {
-          "example-1": {
-            "tenant_code": "T657",
-            "tenant_age": 35,
-            "tenant_gender": "Female",
-            "tenant_ethnic_group": "White: English/Scottish/Welsh/Northern Irish/British",
-            "tenant_nationality": "UK national resident in UK",
-            "previous_housing_situation": "Private sector tenancy",
-            "armed_forces": "Yes - a regular",
-            "tenant_economic_status": "Full-time - 30 hours or more",
-            "household_number_of_other_members": 7,
-            "person_2_relationship": "Partner",
-            "person_2_age": 32,
-            "person_2_gender": "Male",
-            "person_2_economic_status": "Not seeking work",
-            "person_3_relationship": "Child - includes young adult and grown-up",
-            "person_3_age": 12,
-            "person_3_gender": "Male",
-            "person_3_economic_status": "Child under 16",
-            "person_4_relationship": "Child - includes young adult and grown-up",
-            "person_4_age": 12,
-            "person_4_gender": "Female",
-            "person_4_economic_status": "Child under 16",
-            "person_5_relationship": "Child - includes young adult and grown-up",
-            "person_5_age": 10,
-            "person_5_gender": "Non-binary",
-            "person_5_economic_status": "Child under 16",
-            "person_6_relationship": "Child - includes young adult and grown-up",
-            "person_6_age": 5,
-            "person_6_gender": "Prefer not to say",
-            "person_6_economic_status": "Child under 16",
-            "person_7_relationship": "Child - includes young adult and grown-up",
-            "person_7_age": 5,
-            "person_7_gender": "Prefer not to say",
-            "person_7_economic_status": "Child under 16",
-            "person_8_relationship": "Child - includes young adult and grown-up",
-            "person_8_age": 2,
-            "person_8_gender": "Prefer not to say",
-            "person_8_economic_status": "Child under 16",
-            "homelessness": "No",
-            "reason_for_leaving_last_settled_home": "Other problems with neighbours",
-            "benefit_cap_spare_room_subsidy": "No",
-            "armed_forces_active": "No",
-            "armed_forces_injured": "No",
-            "armed_forces_partner": "No",
-            "medical_conditions": "Yes",
-            "pregnancy": "No",
-            "accessibility_requirements": "No",
-            "condition_effects": "dummy",
-            "tenancy_code": "BZ757",
-            "tenancy_start_date": "12/03/2019",
-            "starter_tenancy": "No",
-            "fixed_term_tenancy": "No",
-            "tenancy_type": "Fixed term – Secure",
-            "letting_type": "Affordable Rent - General Needs",
-            "letting_provider": "This landlord",
-            "property_location": "Barnet",
-            "previous_postcode": "NW1 5TY",
-            "property_relet": "No",
-            "property_vacancy_reason": "Relet - tenant abandoned property",
-            "property_reference": "P9876",
-            "property_unit_type": "House",
-            "property_building_type": "dummy",
-            "property_number_of_bedrooms": 3,
-            "property_void_date": "03/11/2019",
-            "property_major_repairs": "Yes",
-            "property_major_repairs_date": "05/05/2020",
-            "property_number_of_times_relet": 2,
-            "property_wheelchair_accessible": true,
-            "net_income": 1000,
-            "net_income_frequency": "Monthly",
-            "net_income_uc_proportion": "Some",
-            "housing_benefit": "Universal Credit with housing element, but not Housing Benefit",
-            "rent_frequency": "Weekly",
-            "basic_rent": 200,
-            "service_charge": 50,
-            "personal_service_charge": 40,
-            "support_charge": 35,
-            "total_charge": 325,
-            "outstanding_amount": "Yes",
-            "time_lived_in_la": "1 to 2 years",
-            "time_on_la_waiting_list": "Less than 1 year",
-            "previous_la": "Ashford",
-            "property_postcode": "SE2 6RT",
-            "reasonable_preference": "Yes",
-            "reasonable_preference_reason": "dummy",
-            "cbl_letting": true,
-            "chr_letting": false,
-            "cap_letting": false,
-            "outstanding_rent_or_charges": 25,
-            "other_reason_for_leaving_last_settled_home": "Other reason",
-            "accessibility_requirements_fully_wheelchair_accessible_housing": true,
-            "accessibility_requirements_wheelchair_access_to_essential_rooms": false,
-            "accessibility_requirements_level_access_housing": false,
-            "accessibility_requirements_other_disability_requirements": false,
-            "accessibility_requirements_no_disability_requirements": false,
-            "accessibility_requirements_do_not_know": false,
-            "accessibility_requirements_prefer_not_to_say": false,
-            "condition_effects_vision": false,
-            "condition_effects_hearing": true,
-            "condition_effects_mobility": false,
-            "condition_effects_dexterity": false,
-            "condition_effects_stamina": false,
-            "condition_effects_learning": false,
-            "condition_effects_memory": false,
-            "condition_effects_mental_health": false,
-            "condition_effects_social_or_behavioral": false,
-            "condition_effects_other": false,
-            "condition_effects_prefer_not_to_say": false,
-            "reasonable_preference_reason_homeless": false,
-            "reasonable_preference_reason_unsatisfactory_housing": false,
-            "reasonable_preference_reason_medical_grounds": false,
-            "reasonable_preference_reason_avoid_hardship": false,
-            "reasonable_preference_reason_do_not_know": true
-          }
-        },
-        "title": "Case Log",
-        "x-internal": false
+        ]
       }
     },
     "securitySchemes": {}

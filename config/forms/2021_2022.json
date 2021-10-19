@@ -31,7 +31,7 @@
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
+                  "max": 120,
                   "step": 1
                 }
               }
