@@ -38,11 +38,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "application/json"
             },
             "in": "header",
             "name": "Accept",
-            "description": "application/json",
             "required": true
           }
         ]
@@ -110,11 +110,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "application/json"
             },
             "in": "header",
             "name": "Accept",
-            "description": "application/json",
             "required": true
           }
         ]
@@ -134,11 +134,12 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "application/json"
             },
             "in": "header",
             "name": "Accept",
-            "description": "application/json"
+            "required": true
           }
         ]
       }
@@ -195,11 +196,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "application/json"
             },
             "in": "header",
             "name": "Accept",
-            "description": "application/json",
             "required": true
           }
         ]
@@ -850,6 +851,7 @@
         "title": "Case Log",
         "x-internal": false
       }
-    }
+    },
+    "securitySchemes": {}
   }
 }
