@@ -45,16 +45,7 @@
             "description": "application/json",
             "required": true
           }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Case-Log"
-              }
-            }
-          }
-        }
+        ]
       },
       "patch": {
         "summary": "Update Case Log Information",
