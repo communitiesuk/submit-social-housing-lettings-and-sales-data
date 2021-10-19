@@ -14,7 +14,7 @@
     "/case_logs/:id": {
       "parameters": [],
       "get": {
-        "summary": "Get User Info by User ID",
+        "summary": "Get Case Log Info by Case Log ID",
         "tags": [],
         "responses": {
           "200": {
@@ -683,7 +683,7 @@
         ]
       },
       "patch": {
-        "summary": "Update User Information",
+        "summary": "Update Case Log Information",
         "operationId": "patch-case_logs-case_logs-:id",
         "responses": {
           "200": {
@@ -1998,7 +1998,7 @@
         ]
       },
       "delete": {
-        "summary": "",
+        "summary": "Delete a Case Log by Case Log ID",
         "operationId": "delete-case_logs-:id",
         "responses": {
           "204": {
