@@ -104,10 +104,15 @@ private
 
       content["conditional_route_to"].each do |route, answer|
         if responses_for_page[question] == answer
+          if route == "check_answers"
+            subsection = subsection_for_page(previous_page)
+            return "case_log_#{subsection}_check_answers_path"
+          end
           return "case_log_#{route}_path"
         end
       end
     end
+
     form.next_page_redirect_path(previous_page)
   end
 end

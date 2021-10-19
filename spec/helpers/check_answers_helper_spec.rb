@@ -122,7 +122,7 @@ RSpec.describe CheckAnswersHelper do
 
       it "counts correct questions when the conditional question is answered" do
         case_log["pregnancy"] = "No"
-        expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(2)
+        expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(3)
       end
     end
   end
