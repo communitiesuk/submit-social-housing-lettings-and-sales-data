@@ -30,7 +30,22 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "Not found": {
+                    "value": {
+                      "error": "Case Log 67 not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "operationId": "get-case_logs-case_logs-:id",
@@ -70,7 +85,13 @@
                   "type": "object",
                   "properties": {}
                 },
-                "examples": {}
+                "examples": {
+                  "Not found": {
+                    "value": {
+                      "error": "Case Log 67 not found"
+                    }
+                  }
+                }
               }
             }
           },
@@ -127,7 +148,22 @@
             "description": "No Content"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "examples": {
+                  "Not found": {
+                    "value": {
+                      "error": "Case Log 67 not found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "description": "Delete a case log",

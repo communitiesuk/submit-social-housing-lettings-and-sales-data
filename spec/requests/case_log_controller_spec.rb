@@ -99,6 +99,24 @@ RSpec.describe CaseLogsController, type: :request do
     end
   end
 
+  describe "GET" do
+    let(:case_log) { FactoryBot.create(:case_log, :completed) }
+    let(:id) { case_log.id }
+
+    before do
+      get "/case_logs/#{id}", headers: headers
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "returns a serialized Case Log" do
+      json_response = JSON.parse(response.body)
+      expect(json_response["status"]).to eq(case_log.status)
+    end
+  end
+
   describe "PATCH" do
     let(:case_log) do
       FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
