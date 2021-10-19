@@ -54,7 +54,10 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "application/json"
+              "enum": [
+                "application/json"
+              ],
+              "default": "application/json"
             },
             "in": "header",
             "name": "Accept",
@@ -132,7 +135,10 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "application/json"
+              "default": "application/json",
+              "enum": [
+                "application/json"
+              ]
             },
             "in": "header",
             "name": "Accept",
@@ -171,7 +177,10 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "application/json"
+              "default": "application/json",
+              "enum": [
+                "application/json"
+              ]
             },
             "in": "header",
             "name": "Accept",
@@ -233,7 +242,11 @@
           {
             "schema": {
               "type": "string",
-              "pattern": "application/json"
+              "pattern": "application/json",
+              "default": "application/json",
+              "enum": [
+                "application/json"
+              ]
             },
             "in": "header",
             "name": "Accept",
