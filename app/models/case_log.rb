@@ -17,14 +17,14 @@ class CaseLogValidator < ActiveModel::Validator
 
   def validate_reasonable_preference(record)
     if record.homelessness == "No" && record.reasonable_preference == "Yes"
-      record.errors.add :reasonable_preference, "can not be Yes if Not Homesless imediately prior to this letting has been selected"
+      record.errors.add :reasonable_preference, "can not be Yes if Not Homeless immediately prior to this letting has been selected"
     elsif record.reasonable_preference == "Yes"
       if !record.reasonable_preference_reason_homeless && !record.reasonable_preference_reason_unsatisfactory_housing && !record.reasonable_preference_reason_medical_grounds && !record.reasonable_preference_reason_avoid_hardship && !record.reasonable_preference_reason_do_not_know
         record.errors.add :reasonable_preference_reason, "- if reasonable preference is Yes, a reason must be given"
       end
     elsif record.reasonable_preference == "No"
       if record.reasonable_preference_reason_homeless || record.reasonable_preference_reason_unsatisfactory_housing || record.reasonable_preference_reason_medical_grounds || record.reasonable_preference_reason_avoid_hardship || record.reasonable_preference_reason_do_not_know
-        record.errors.add :reasonable_preference_reason, "- if reasonable preference is no, no reasons should be given"
+        record.errors.add :reasonable_preference_reason, "- if reasonable preference is No, no reasons should be given"
       end
     end
   end

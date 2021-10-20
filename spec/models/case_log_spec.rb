@@ -39,7 +39,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "if not previously homesless reasonable preference should not be selected" do
+      it "if not previously homeless reasonable preference should not be selected" do
         expect { 
           CaseLog.create!(
             homelessness: "No",
