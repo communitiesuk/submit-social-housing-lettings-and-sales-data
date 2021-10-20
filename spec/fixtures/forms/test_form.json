@@ -254,7 +254,8 @@
                     "conditional_question_no_page": "No"
                   }
                 }
-              }
+              },
+              "default_next_page": "check_answers"
             },
             "conditional_question_yes_page": {
               "questions": {
@@ -265,12 +266,10 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
-                  },
-                  "conditional_route_to": {
-                    "check_answers": ["Yes", "No"]
                   }
                 }
-              }
+              },
+              "default_next_page": "check_answers"
             },
             "conditional_question_no_page": {
               "questions": {
@@ -281,12 +280,10 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
-                  },
-                  "conditional_route_to": {
-                    "conditional_question_no_second_page": ["Yes", "No"]
                   }
                 }
-              }
+              },
+              "default_next_page": "conditional_question_no_second_page"
             },
             "conditional_question_no_second_page": {
               "questions": {
@@ -297,9 +294,6 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
-                  },
-                  "include_page_condition": {
-                    "pregnancy": "No"
                   }
                 }
               }

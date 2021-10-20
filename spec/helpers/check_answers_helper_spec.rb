@@ -17,6 +17,7 @@ RSpec.describe CheckAnswersHelper do
   let(:subsection_with_numeric_conditionals) { "household_characteristics" }
   let(:subsection_with_radio_conditionals) { "household_needs" }
   let(:conditional_routing_subsection) { "conditional_question" }
+  let(:conditional_page_subsection) { "household_needs" }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
 
@@ -123,6 +124,45 @@ RSpec.describe CheckAnswersHelper do
       it "counts correct questions when the conditional question is answered" do
         case_log["pregnancy"] = "No"
         expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(3)
+      end
+    end
+
+    context "total questions" do
+      it "returns total questions" do
+        result = total_questions(subsection, case_log, form)
+        expect(result.class).to eq(Hash)
+        expected_keys = %w[net_income net_income_frequency net_income_uc_proportion housing_benefit]
+        expect(result.keys).to eq(expected_keys)
+      end
+
+      context "conditional questions on the same page" do
+        it "it filters out conditional questions that were not displayed" do
+          result = total_questions(conditional_page_subsection, case_log, form)
+          expected_keys = %w[armed_forces medical_conditions accessibility_requirements condition_effects]
+          expect(result.keys).to eq(expected_keys)
+        end
+
+        it "it includes conditional questions that were displayed" do
+          case_log["armed_forces"] = "Yes - a regular"
+          result = total_questions(conditional_page_subsection, case_log, form)
+          expected_keys = %w[armed_forces armed_forces_active armed_forces_injured medical_conditions accessibility_requirements condition_effects]
+          expect(result.keys).to eq(expected_keys)
+        end
+      end
+
+      context "conditional routing" do
+        it "it ignores skipped pages and the questions therein when conditional routing" do
+          result = total_questions(conditional_routing_subsection, case_log, form)
+          expected_keys = %w[pregnancy]
+          expect(result.keys).to match_array(expected_keys)
+        end
+
+        it "it includes conditional pages and questions that were displayed" do
+          case_log["pregnancy"] = "Yes"
+          result = total_questions(conditional_routing_subsection, case_log, form)
+          expected_keys = %w[pregnancy cbl_letting]
+          expect(result.keys).to match_array(expected_keys)
+        end
       end
     end
   end
