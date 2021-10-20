@@ -26,6 +26,38 @@ RSpec.describe Form, type: :model do
       expect { CaseLog.create!(property_number_of_times_relet: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    describe "reasonable preference validation" do
+      it "if given reasonable preference is yes a reason must be selected" do
+        expect { 
+          CaseLog.create!(reasonable_preference: "Yes",
+            reasonable_preference_reason_homeless: nil,
+            reasonable_preference_reason_unsatisfactory_housing: nil,
+            reasonable_preference_reason_medical_grounds: nil,
+            reasonable_preference_reason_avoid_hardship: nil,
+            reasonable_preference_reason_do_not_know: nil
+          ) 
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "if not previously homeless reasonable preference should not be selected" do
+        expect { 
+          CaseLog.create!(
+            homelessness: "No",
+            reasonable_preference: "Yes"
+          ) 
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "if not given reasonable preference a reason should not be selected" do
+        expect { 
+          CaseLog.create!(
+            homelessness: "Yes",
+            reasonable_preference: "No",
+            reasonable_preference_reason_homeless: true
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
     context "other reason for leaving last settled home validation" do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
