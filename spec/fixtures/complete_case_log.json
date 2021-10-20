@@ -89,7 +89,7 @@
       "chr_letting": false,
       "cap_letting": false,
       "outstanding_rent_or_charges": 25,
-      "other_reason_for_leaving_last_settled_home": "Other reason",
+      "other_reason_for_leaving_last_settled_home": null,
       "accessibility_requirements_fully_wheelchair_accessible_housing": true,
       "accessibility_requirements_wheelchair_access_to_essential_rooms": false,
       "accessibility_requirements_level_access_housing": false,

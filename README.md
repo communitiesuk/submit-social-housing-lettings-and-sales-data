@@ -4,6 +4,12 @@
 
 This is the codebase for the Ruby on Rails app that will handle the submission of Lettings and Sales of Social Housing in England data.
 
+
+## API documentation
+
+API documentation can be found here: https://communitiesuk.github.io/mhclg-data-collection-beta/. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
+
+
 ## Required Setup
 
 Pre-requisites:

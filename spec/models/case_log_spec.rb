@@ -54,7 +54,22 @@ RSpec.describe Form, type: :model do
             homelessness: "Yes",
             reasonable_preference: "No",
             reasonable_preference_reason_homeless: true
-          ) 
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+    context "other reason for leaving last settled home validation" do
+      it "must be provided if main reason for leaving last settled home was given as other" do
+        expect {
+          CaseLog.create!(reason_for_leaving_last_settled_home: "Other",
+                          other_reason_for_leaving_last_settled_home: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must not be provided if the main reason for leaving settled home is not other" do
+        expect {
+          CaseLog.create!(reason_for_leaving_last_settled_home: "Repossession",
+                          other_reason_for_leaving_last_settled_home: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end

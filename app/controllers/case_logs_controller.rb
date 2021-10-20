@@ -33,9 +33,18 @@ class CaseLogsController < ApplicationController
     end
   end
 
-  # We don't have a dedicated non-editable show view
   def show
-    edit
+    respond_to do |format|
+      # We don't have a dedicated non-editable show view
+      format.html { edit }
+      format.json do
+        if (case_log = CaseLog.find_by(id: params[:id]))
+          render json: case_log, status: :ok
+        else
+          render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+        end
+      end
+    end
   end
 
   def edit
@@ -90,7 +99,7 @@ class CaseLogsController < ApplicationController
 
 private
 
-  API_ACTIONS = %w[create update destroy].freeze
+  API_ACTIONS = %w[create show update destroy].freeze
 
   def question_responses(questions_for_page)
     questions_for_page.each_with_object({}) do |(question_key, question_info), result|
