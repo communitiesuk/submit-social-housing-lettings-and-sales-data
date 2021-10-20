@@ -105,6 +105,10 @@ private
       dynamically_not_required << "other_reason_for_leaving_last_settled_home"
     end
 
+    if net_income.to_i == 0
+     dynamically_not_required << "net_income_frequency" 
+    end
+
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
   end
 end
