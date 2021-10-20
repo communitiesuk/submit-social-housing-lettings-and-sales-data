@@ -35,7 +35,7 @@ class CaseLogsController < ApplicationController
 
   def show
     respond_to do |format|
-        # We don't have a dedicated non-editable show view
+      # We don't have a dedicated non-editable show view
       format.html { edit }
       format.json do
         if (case_log = CaseLog.find_by(id: params[:id]))
