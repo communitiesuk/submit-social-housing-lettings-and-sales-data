@@ -347,13 +347,10 @@ RSpec.describe "Test Features" do
 
 
     it "can route based on page inclusion rules" do
-      visit("case_logs/#{id}/conditional_question")
-      choose("case-log-pregnancy-yes-field", allow_label_click: true)
-      click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
+      visit("/case_logs/#{id}/conditional_question_yes_page")
       choose("case-log-cbl-letting-yes-field", allow_label_click: true)
       click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/conditional_question/check_answers")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
   end
 end

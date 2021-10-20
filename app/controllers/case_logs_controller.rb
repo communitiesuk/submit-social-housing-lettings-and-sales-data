@@ -98,14 +98,18 @@ private
   end
 
   def get_next_page_path(form, previous_page, responses_for_page = {})
+    # binding.pry
     questions_for_page = form.questions_for_page(previous_page)
     questions_for_page.each do |question, content|
+
       next unless content.key?("conditional_route_to")
 
       content["conditional_route_to"].each do |route, answer|
-        if responses_for_page[question] == answer
+        # binding.pry
+        if answer.include?(responses_for_page[question])
+
           if route == "check_answers"
-            subsection = subsection_for_page(previous_page)
+            subsection = form.subsection_for_page(previous_page)
             return "case_log_#{subsection}_check_answers_path"
           end
           return "case_log_#{route}_path"

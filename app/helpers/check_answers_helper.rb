@@ -18,12 +18,15 @@ module CheckAnswersHelper
           questions_not_applicable << conditional_question_key
         end
       end
-      question.fetch("conditional_route_to", []).map do |conditional_page_key, condition|
+      #check_answers is not a real page
+      question.fetch("conditional_route_to", []).reject { |q| q == "check_answers" }.map do |conditional_page_key, condition|
         if condition_not_met(case_log, question_key, question, condition)
           questions_not_applicable += form.questions_for_page(conditional_page_key).keys
         end
       end
+      # binding.pry
       questions_not_applicable.include?(question_key)
+
     end
   end
 
