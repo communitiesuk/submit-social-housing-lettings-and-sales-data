@@ -134,10 +134,8 @@ private
     questions_for_page.each do |question, content|
       if content.key?("conditional_route_to")
         content["conditional_route_to"].each do |route, answer|
-          if !responses_for_page[question].nil?
-            if answer.include?(responses_for_page[question])
-              return "case_log_#{route}_path"
-            end
+          if responses_for_page[question].present? && answer.include?(responses_for_page[question])
+            return "case_log_#{route}_path"
           end
         end
       end
