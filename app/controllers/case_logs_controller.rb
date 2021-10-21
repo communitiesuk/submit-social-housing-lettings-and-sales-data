@@ -132,22 +132,13 @@ private
   def get_next_page_path(form, previous_page, responses_for_page = {})
     questions_for_page = form.questions_for_page(previous_page)
     questions_for_page.each do |question, content|
-      if content.key?("conditional_route_to")
-        content["conditional_route_to"].each do |route, answer|
-          if responses_for_page[question].present? && answer.include?(responses_for_page[question])
-            return "case_log_#{route}_path"
-          end
+      next unless content.key?("conditional_route_to")
+
+      content["conditional_route_to"].each do |route, answer|
+        if responses_for_page[question].present? && answer.include?(responses_for_page[question])
+          return "case_log_#{route}_path"
         end
       end
-
-      next unless content.key?("next_page")
-
-      next_page = content["next_page"]
-      if next_page == "check_answers"
-        subsection = form.subsection_for_page(previous_page)
-        return "case_log_#{subsection}_check_answers_path"
-      end
-      return "case_log_#{content[]}_path"
     end
 
     form.next_page_redirect_path(previous_page)

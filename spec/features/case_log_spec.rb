@@ -351,5 +351,11 @@ RSpec.describe "Test Features" do
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
+
+    it "can route to the default next page" do
+      visit("/case_logs/#{id}/conditional_question")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
+    end
   end
 end
