@@ -250,8 +250,8 @@
                     "1": "No"
                   },
                   "conditional_route_to": {
-                    "conditional_question_yes_page": "Yes",
-                    "conditional_question_no_page": "No"
+                    "conditional_question_yes_page": {"pregnancy": "Yes"},
+                    "conditional_question_no_page": {"pregnancy": "No"}
                   }
                 }
               },
