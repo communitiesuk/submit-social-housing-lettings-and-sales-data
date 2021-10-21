@@ -10,10 +10,10 @@
       <%= render partial: "log_list", locals: { case_logs: @in_progress_case_logs, title: "Logs you need to complete", date_title: "Last Changed" } %>
     <% end %>
 
-    <% if @submitted_case_logs.present? %>
-      <%= render partial: "log_list", locals: { case_logs: @submitted_case_logs, title: "Logs you've submitted", date_title: "Date Submitted" } %>
+    <% if @completed_case_logs.present? %>
+      <%= render partial: "log_list", locals: { case_logs: @completed_case_logs, title: "Logs you've submitted", date_title: "Date Submitted" } %>
     <% end %>
 
-    <p><a href="#" class="govuk-link">See all completed logs (<%= @submitted_case_logs.count %>)</a></p>
+    <p><a href="#" class="govuk-link">See all completed logs (<%= @completed_case_logs.count %>)</a></p>
   </div>
 </div>

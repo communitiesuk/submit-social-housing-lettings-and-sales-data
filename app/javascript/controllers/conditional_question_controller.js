@@ -28,7 +28,10 @@ export default class extends Controller {
           div.style.display = "block"
         } else {
           div.style.display = "none"
-          let buttons = document.getElementsByName(`case_log[${targetQuestion}]`)
+          let buttons = document.getElementsByName(`case_log[${targetQuestion}]`);
+          if (buttons.length == 0){
+            buttons = document.getElementsByName(`case_log[${targetQuestion}][]`);
+          }
           Object.entries(buttons).forEach(([idx, button]) => {
             button.checked = false;
           })

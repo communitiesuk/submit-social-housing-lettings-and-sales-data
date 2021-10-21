@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let!(:empty_case_log) { FactoryBot.create(:case_log) }
-  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:empty_case_log) { FactoryBot.build(:case_log) }
+  let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
 
@@ -35,7 +36,6 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns not started if the subsection is declaration and all the questions are completed" do
-      completed_case_log = CaseLog.new(case_log.attributes.map { |key, value| Hash[key, value || "value"] }.reduce(:merge))
       status = get_subsection_status("declaration", completed_case_log, declaration_questions)
       expect(status).to eq(:not_started)
     end
