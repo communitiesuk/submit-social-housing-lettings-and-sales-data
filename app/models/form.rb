@@ -52,6 +52,13 @@ class Form
   end
 
   def next_page(previous_page)
+    if all_pages[previous_page].key?("default_next_page")
+      next_page = all_pages[previous_page]["default_next_page"]
+      return :check_answers if next_page == "check_answers"
+
+      return next_page
+    end
+
     subsection = subsection_for_page(previous_page)
     previous_page_idx = pages_for_subsection(subsection).keys.index(previous_page)
     pages_for_subsection(subsection).keys[previous_page_idx + 1] || :check_answers

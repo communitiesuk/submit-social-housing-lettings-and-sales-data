@@ -41,19 +41,15 @@ module CheckAnswersHelper
   end
 
   def get_next_page_name(form, page_name, appliccable_questions, question_key, case_log, question_value)
-    new_page_name = form.next_page(page_name)
-    if form.all_pages[page_name].key?("default_next_page")
-      new_page_name = form.all_pages[page_name]["default_next_page"]
-    end
-
     if appliccable_questions[question_key].key?("conditional_route_to")
       appliccable_questions[question_key]["conditional_route_to"].each do |conditional_page_key, condition|
         unless condition_not_met(case_log, question_key, question_value, condition)
-          new_page_name = conditional_page_key
+          return conditional_page_key
         end
       end
     end
-    new_page_name
+
+    form.next_page(page_name)
   end
 
   def condition_not_met(case_log, question_key, question, condition)
