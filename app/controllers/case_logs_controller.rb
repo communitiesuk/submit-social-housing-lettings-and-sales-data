@@ -130,14 +130,14 @@ private
   end
 
   def get_next_page_path(form, previous_page, responses_for_page = {})
-    # binding.pry
     questions_for_page = form.questions_for_page(previous_page)
     questions_for_page.each do |question, content|
       if content.key?("conditional_route_to")
         content["conditional_route_to"].each do |route, answer|
-          # binding.pry
-          if answer.include?(responses_for_page[question])
-            return "case_log_#{route}_path"
+          if !responses_for_page[question].nil?
+            if answer.include?(responses_for_page[question])
+              return "case_log_#{route}_path"
+            end
           end
         end
       end
