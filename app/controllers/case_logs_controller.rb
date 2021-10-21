@@ -4,7 +4,7 @@ class CaseLogsController < ApplicationController
 
   def index
     @completed_case_logs = CaseLog.completed
-    @in_progress_case_logs = CaseLog.in_progress
+    @in_progress_case_logs = CaseLog.not_completed
   end
 
   def create

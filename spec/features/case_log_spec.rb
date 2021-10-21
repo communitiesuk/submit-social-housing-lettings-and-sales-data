@@ -32,6 +32,10 @@ RSpec.describe "Test Features" do
   describe "Create new log" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
+      # Ensure that we've finished creating both case logs before running the
+      # Capybara click part to ensure we don't get creation race conditions
+      expect(page).to have_link(nil, href: "/case_logs/#{case_log.id}")
+      expect(page).to have_link(nil, href: "/case_logs/#{empty_case_log.id}")
       click_link("Create new log")
       id = CaseLog.order(created_at: :desc).first.id
       expect(page).to have_content("Tasklist for log #{id}")
