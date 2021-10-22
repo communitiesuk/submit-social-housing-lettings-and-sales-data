@@ -122,5 +122,52 @@ RSpec.describe CaseLogsController, type: :controller do
         expect(case_log.tenant_code).to eq(tenant_code)
       end
     end
+
+    context "conditional routing" do
+      let(:case_log_form_conditional_question_yes_params) do
+        {
+          pregnancy: "Yes",
+          previous_page: "conditional_question",
+        }
+      end
+
+      let(:case_log_form_conditional_question_no_params) do
+        {
+          pregnancy: "No",
+          previous_page: "conditional_question",
+        }
+      end
+
+      it "routes to the appropriate conditional page based on the question answer of the current page" do
+        post :submit_form, params: { id: id, case_log: case_log_form_conditional_question_yes_params }
+        expect(response).to redirect_to("/case_logs/#{id}/conditional_question_yes_page")
+
+        post :submit_form, params: { id: id, case_log: case_log_form_conditional_question_no_params }
+        expect(response).to redirect_to("/case_logs/#{id}/conditional_question_no_page")
+      end
+    end
+  end
+
+  describe "get_next_page_path" do
+    let(:previous_page) { "net_income" }
+    let(:last_previous_page) { "housing_benefit" }
+    let(:previous_conditional_page) { "conditional_question" }
+    let(:form_handler) { FormHandler.instance }
+    let(:form) { form_handler.get_form("test_form") }
+    let(:case_log_controller) { CaseLogsController.new }
+
+    it "returns a correct page path if there is no conditional routing" do
+      expect(case_log_controller.send(:get_next_page_path, form, previous_page)).to eq("case_log_net_income_uc_proportion_path")
+    end
+
+    it "returns a check answers page if previous page is the last page" do
+      expect(case_log_controller.send(:get_next_page_path, form, last_previous_page)).to eq("case_log_income_and_benefits_check_answers_path")
+    end
+
+    it "returns a correct page path if there is conditional routing" do
+      responses_for_page = {}
+      responses_for_page["pregnancy"] = "No"
+      expect(case_log_controller.send(:get_next_page_path, form, previous_conditional_page, responses_for_page)).to eq("case_log_conditional_question_no_page_path")
+    end
   end
 end

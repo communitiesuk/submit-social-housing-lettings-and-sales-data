@@ -15,7 +15,7 @@ RSpec.describe FormHandler do
       form_handler = FormHandler.instance
       form = form_handler.get_form("test_form")
       expect(form).to be_a(Form)
-      expect(form.all_pages.count).to eq(18)
+      expect(form.all_pages.count).to eq(22)
     end
   end
 

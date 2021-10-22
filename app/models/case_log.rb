@@ -28,7 +28,7 @@ class CaseLogValidator < ActiveModel::Validator
       end
     end
   end
-  
+
   def validate_other_reason_for_leaving_last_settled_home(record)
     if record.reason_for_leaving_last_settled_home == "Other" && record.other_reason_for_leaving_last_settled_home.blank?
       record.errors.add :other_reason_for_leaving_last_settled_home, "If reason for leaving settled home is other then the other reason must be provided"
@@ -50,10 +50,10 @@ class CaseLogValidator < ActiveModel::Validator
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
     # we want to validate all data fields.
     question_to_validate = options[:previous_page]
-    if question_to_validate 
+    if question_to_validate
       if respond_to?("validate_#{question_to_validate}")
         public_send("validate_#{question_to_validate}", record)
-      end 
+      end
     else
       # This assumes that all methods in this class other than this one are
       # validations to be run

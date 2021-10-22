@@ -43,3 +43,6 @@ yarn-debug.log*
 #IDE specific files
 /.idea
 /.idea/*
+.DS_Store
+.generators
+.rakeTasks

@@ -53,7 +53,7 @@ RSpec.describe "Test Features" do
       it "displays a section status" do
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 7
+        assert_selector ".govuk-tag", text: /Not started/, count: 8
         assert_selector ".govuk-tag", text: /Completed/, count: 0
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -62,7 +62,7 @@ RSpec.describe "Test Features" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
 
-        assert_selector ".govuk-tag", text: /Not started/, count: 6
+        assert_selector ".govuk-tag", text: /Not started/, count: 7
         assert_selector ".govuk-tag", text: /Completed/, count: 1
         assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
       end
@@ -74,13 +74,13 @@ RSpec.describe "Test Features" do
 
       it "shows the number of completed sections if no sections are completed" do
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 0 of 8 sections.")
+        expect(page).to have_content("You've completed 0 of 9 sections.")
       end
 
       it "shows the number of completed sections if one section is completed" do
         answer_all_questions_in_income_subsection
         visit("/case_logs/#{empty_case_log.id}")
-        expect(page).to have_content("You've completed 1 of 8 sections.")
+        expect(page).to have_content("You've completed 1 of 9 sections.")
       end
     end
 
@@ -162,14 +162,17 @@ RSpec.describe "Test Features" do
       end
     end
 
-    describe "Back link directs correctly" do
+    describe "Back link directs correctly", js: true do
       it "go back to tasklist page from tenant code" do
+        visit("/case_logs/#{id}")
         visit("/case_logs/#{id}/tenant_code")
         click_link(text: "Back")
         expect(page).to have_content("Tasklist for log #{id}")
       end
 
-      it "go back to tenant code page from tenant age page" do
+      it "go back to tenant code page from tenant age page", js: true do
+        visit("/case_logs/#{id}/tenant_code")
+        click_button("Save and continue")
         visit("/case_logs/#{id}/tenant_age")
         click_link(text: "Back")
         expect(page).to have_field("case-log-tenant-code-field")
@@ -192,6 +195,7 @@ RSpec.describe "Test Features" do
 
   describe "check answers page" do
     let(:subsection) { "household_characteristics" }
+    let(:conditional_subsection) { "conditional_question" }
 
     context "when the user needs to check their answers for a subsection" do
       it "can be visited by URL" do
@@ -256,6 +260,35 @@ RSpec.describe "Test Features" do
         expect(page).to have_content("You answered all the questions")
         assert_selector "a", text: "Answer the missing questions", count: 0
       end
+
+      it "does not display conditional questions that were not visited" do
+        visit("case_logs/#{id}/#{conditional_subsection}/check_answers")
+        question_labels = ["Has the condition been met?"]
+        question_labels.each do |label|
+          expect(page).to have_content(label)
+        end
+
+        excluded_question_labels = ["Has the next condition been met?", "Has the condition not been met?"]
+        excluded_question_labels.each do |label|
+          expect(page).not_to have_content(label)
+        end
+      end
+
+      it "displays conditional question that were visited" do
+        visit("/case_logs/#{id}/conditional_question")
+        choose("case-log-pregnancy-no-field")
+        click_button("Save and continue")
+        visit("/case_logs/#{id}/#{conditional_subsection}/check_answers")
+        question_labels = ["Has the condition been met?", "Has the condition not been met?"]
+        question_labels.each do |label|
+          expect(page).to have_content(label)
+        end
+
+        excluded_question_labels = ["Has the next condition been met?"]
+        excluded_question_labels.each do |label|
+          expect(page).not_to have_content(label)
+        end
+      end
     end
   end
 
@@ -298,6 +331,35 @@ RSpec.describe "Test Features" do
         expect(page).to have_selector("#case-log-tenant-age-error")
         expect(page).to have_selector("#case-log-tenant-age-field-error")
       end
+    end
+  end
+
+  describe "conditional page routing", js: true do
+    it "can route the user to a different page based on their answer on the current page" do
+      visit("case_logs/#{id}/conditional_question")
+      # using a question name that is already in the db to avoid
+      # having to add a new column to the db for this test
+      choose("case-log-pregnancy-yes-field", allow_label_click: true)
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
+      click_link(text: "Back")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question")
+      choose("case-log-pregnancy-no-field", allow_label_click: true)
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
+    end
+
+    it "can route based on page inclusion rules" do
+      visit("/case_logs/#{id}/conditional_question_yes_page")
+      choose("case-log-cbl-letting-yes-field", allow_label_click: true)
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
+    end
+
+    it "can route to the default next page" do
+      visit("/case_logs/#{id}/conditional_question")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
   end
 end

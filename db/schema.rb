@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.string "property_void_date"
     t.string "property_major_repairs"
     t.string "property_major_repairs_date"
+    t.integer "property_number_of_times_relet"
     t.string "property_wheelchair_accessible"
     t.string "net_income"
     t.string "net_income_frequency"

@@ -235,6 +235,70 @@
               }
             }
           }
+        },
+        "conditional_question": {
+          "label": "Conditional question",
+          "pages": {
+            "conditional_question": {
+              "questions": {
+                "pregnancy": {
+                  "check_answer_label": "Has the condition been met?",
+                  "header": "Has the condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  },
+                  "conditional_route_to": {
+                    "conditional_question_yes_page": "Yes",
+                    "conditional_question_no_page": "No"
+                  }
+                }
+              },
+              "default_next_page": "check_answers"
+            },
+            "conditional_question_yes_page": {
+              "questions": {
+                "cbl_letting": {
+                  "check_answer_label": "Has the next condition been met?",
+                  "header": "Has the next condition been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "default_next_page": "check_answers"
+            },
+            "conditional_question_no_page": {
+              "questions": {
+                "conditional_question_no_question": {
+                  "check_answer_label": "Has the condition not been met?",
+                  "header": "Has the next condition not been met?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "default_next_page": "conditional_question_no_second_page"
+            },
+            "conditional_question_no_second_page": {
+              "questions": {
+                "conditional_question_no_second_question": {
+                  "check_answer_label": "Has the condition not been met again?",
+                  "header": "Has the next condition not been met again?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -432,7 +496,8 @@
                   "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
-                  "type": "text"
+                  "type": "text",
+                  "conditional_for": { "faake_key": "fake_condition" }
                 }
               }
             }

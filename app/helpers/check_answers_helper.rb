@@ -10,16 +10,46 @@ module CheckAnswersHelper
   end
 
   def total_questions(subsection, case_log, form)
-    questions = form.questions_for_subsection(subsection)
-    questions_not_applicable = []
-    questions.reject do |question_key, question|
-      question.fetch("conditional_for", []).map do |conditional_question_key, condition|
-        if condition_not_met(case_log, question_key, question, condition)
-          questions_not_applicable << conditional_question_key
+    total_questions = {}
+    page_name = form.pages_for_subsection(subsection).keys.first
+
+    while page_name.to_s != "check_answers"
+      questions = form.questions_for_page(page_name)
+      question_key = questions.keys[0]
+      question_value = questions.values[0]
+
+      applicable_questions = filter_conditional_questions(questions, case_log)
+      total_questions = total_questions.merge(applicable_questions)
+
+      page_name = get_next_page_name(form, page_name, applicable_questions, question_key, case_log, question_value)
+    end
+
+    total_questions
+  end
+
+  def filter_conditional_questions(questions, case_log)
+    applicable_questions = questions
+
+    questions.each do |k, question|
+      question.fetch("conditional_for", []).each do |conditional_question_key, condition|
+        if condition_not_met(case_log, k, question, condition)
+          applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
         end
       end
-      questions_not_applicable.include?(question_key)
     end
+    applicable_questions
+  end
+
+  def get_next_page_name(form, page_name, applicable_questions, question_key, case_log, question_value)
+    if applicable_questions[question_key].key?("conditional_route_to")
+      applicable_questions[question_key]["conditional_route_to"].each do |conditional_page_key, condition|
+        unless condition_not_met(case_log, question_key, question_value, condition)
+          return conditional_page_key
+        end
+      end
+    end
+
+    form.next_page(page_name)
   end
 
   def condition_not_met(case_log, question_key, question, condition)

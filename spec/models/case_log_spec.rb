@@ -28,32 +28,31 @@ RSpec.describe Form, type: :model do
 
     describe "reasonable preference validation" do
       it "if given reasonable preference is yes a reason must be selected" do
-        expect { 
+        expect {
           CaseLog.create!(reasonable_preference: "Yes",
-            reasonable_preference_reason_homeless: nil,
-            reasonable_preference_reason_unsatisfactory_housing: nil,
-            reasonable_preference_reason_medical_grounds: nil,
-            reasonable_preference_reason_avoid_hardship: nil,
-            reasonable_preference_reason_do_not_know: nil
-          ) 
+                          reasonable_preference_reason_homeless: nil,
+                          reasonable_preference_reason_unsatisfactory_housing: nil,
+                          reasonable_preference_reason_medical_grounds: nil,
+                          reasonable_preference_reason_avoid_hardship: nil,
+                          reasonable_preference_reason_do_not_know: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "if not previously homeless reasonable preference should not be selected" do
-        expect { 
+        expect {
           CaseLog.create!(
             homelessness: "No",
-            reasonable_preference: "Yes"
-          ) 
+            reasonable_preference: "Yes",
+          )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "if not given reasonable preference a reason should not be selected" do
-        expect { 
+        expect {
           CaseLog.create!(
             homelessness: "Yes",
             reasonable_preference: "No",
-            reasonable_preference_reason_homeless: true
+            reasonable_preference_reason_homeless: true,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
