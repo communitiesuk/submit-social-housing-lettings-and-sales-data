@@ -111,9 +111,9 @@ class CaseLog < ApplicationRecord
     when "Weekly"
       net_income
     when "Monthly"
-      net_income / 4
+      ((net_income * 12) / 52.0).round(0)
     when "Yearly"
-      net_income / 12
+      (net_income / 12.0).round(0)
     else
       nil
     end

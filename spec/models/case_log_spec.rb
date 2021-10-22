@@ -103,4 +103,24 @@ RSpec.describe Form, type: :model do
       expect(in_progress_case_log.completed?).to be(false)
     end
   end
+
+  describe "weekly_net_income" do
+    let(:net_income) { 5000 }
+    let(:case_log) { FactoryBot.build(:case_log, net_income: net_income) }
+
+    it "returns input income if frequency is already weekly" do
+      case_log.net_income_frequency = "Weekly"
+      expect(case_log.weekly_net_income).to eq(net_income)
+    end
+
+    it "calculates the correct weekly income from monthly income" do
+      case_log.net_income_frequency = "Monthly"
+      expect(case_log.weekly_net_income).to eq(1154)
+    end
+
+    it "calculates the correct weekly income from yearly income" do
+      case_log.net_income_frequency = "Yearly"
+      expect(case_log.weekly_net_income).to eq(417)
+    end
+  end
 end
