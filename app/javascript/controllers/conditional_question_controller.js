@@ -12,7 +12,6 @@ export default class extends Controller {
       case "radio":
         this.displayConditionalRadio()
       default:
-        console.log("Not yet implemented for " + this.element.type)
         break;
     }
   }
@@ -41,7 +40,7 @@ export default class extends Controller {
   }
 
   displayConditionalNumeric() {
-    let enteredValue = this.element.value
+    let enteredValue = this.element.value || 0
     let conditional_for = JSON.parse(this.element.dataset.info)
 
     Object.entries(conditional_for).forEach(([targetQuestion, condition]) => {
