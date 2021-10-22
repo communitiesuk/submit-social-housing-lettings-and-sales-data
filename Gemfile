@@ -13,8 +13,6 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.0"
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.7"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # Gov.UK frontend components
@@ -25,6 +23,10 @@ gem "govuk_design_system_formbuilder"
 gem "hotwire-rails"
 # Soft delete ActiveRecords objects
 gem "discard"
+# Administration framework
+gem "activeadmin"
+# Authentication
+gem "devise"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
