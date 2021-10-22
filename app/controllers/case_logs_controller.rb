@@ -15,7 +15,7 @@ class CaseLogsController < ApplicationController
         if case_log.persisted?
           render json: case_log, status: :created
         else
-          render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+          render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
         end
       end
     end
@@ -26,7 +26,7 @@ class CaseLogsController < ApplicationController
       if case_log.update(api_case_log_params)
         render json: case_log, status: :ok
       else
-        render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
       render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
@@ -74,7 +74,7 @@ class CaseLogsController < ApplicationController
       if case_log.discard
         head :no_content
       else
-        render json: { errors: case_log.errors.full_messages }, status: :unprocessable_entity
+        render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
       render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
