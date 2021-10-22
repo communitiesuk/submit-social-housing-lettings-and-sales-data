@@ -11,9 +11,10 @@ module CheckAnswersHelper
 
   def total_questions(subsection, case_log, form)
     total_questions = {}
-    page_name = form.pages_for_subsection(subsection).keys.first
+    subsection_keys = form.pages_for_subsection(subsection).keys
+    page_name = subsection_keys.first
 
-    while page_name.to_s != "check_answers"
+    while page_name.to_s != "check_answers" && subsection_keys.include?(page_name)
       questions = form.questions_for_page(page_name)
       question_key = questions.keys[0]
       question_value = questions.values[0]
@@ -21,7 +22,7 @@ module CheckAnswersHelper
       applicable_questions = filter_conditional_questions(questions, case_log)
       total_questions = total_questions.merge(applicable_questions)
 
-      page_name = get_next_page_name(form, page_name, applicable_questions, question_key, case_log, question_value)
+      page_name = get_next_page_name(form, page_name, case_log)
     end
 
     total_questions
@@ -40,15 +41,15 @@ module CheckAnswersHelper
     applicable_questions
   end
 
-  def get_next_page_name(form, page_name, applicable_questions, question_key, case_log, question_value)
-    if applicable_questions[question_key].key?("conditional_route_to")
-      applicable_questions[question_key]["conditional_route_to"].each do |conditional_page_key, condition|
-        unless condition.any? { |k, v| condition_not_met(case_log, k, question_value, v) }
-          return conditional_page_key
+  def get_next_page_name(form, page_name, case_log)
+    page = form.all_pages[page_name]
+    if page.key?("conditional_route_to")    
+      page["conditional_route_to"].each do |conditional_page_name, condition|
+        unless condition.any? { |field, value| condition_not_met(case_log, field, form.questions_for_page[field], value) }
+          return conditional_page_name
         end
       end
     end
-
     form.next_page(page_name)
   end
 
