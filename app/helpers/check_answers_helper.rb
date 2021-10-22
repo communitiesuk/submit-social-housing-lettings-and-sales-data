@@ -43,9 +43,9 @@ module CheckAnswersHelper
 
   def get_next_page_name(form, page_name, case_log)
     page = form.all_pages[page_name]
-    if page.key?("conditional_route_to")    
+    if page.key?("conditional_route_to")
       page["conditional_route_to"].each do |conditional_page_name, condition|
-        unless condition.any? { |field, value| condition_not_met(case_log, field, form.questions_for_page[field], value) }
+        unless condition.any? { |field, value| case_log[field].blank? || !value.include?(case_log[field]) }
           return conditional_page_name
         end
       end
