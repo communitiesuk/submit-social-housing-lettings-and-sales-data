@@ -39,6 +39,18 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_net_income(record)
+    return unless record.tenant_economic_status && record.weekly_net_income
+
+    applicable_income_range = IncomeRange.find_by(economic_status: record.tenant_economic_status)
+    if record.weekly_net_income > applicable_income_range.hard_max
+      record.errors.add :net_income, "Net income cannot be greater than #{applicable_income_range.hard_max} given the tenant's working situation"
+    end
+    if record.weekly_net_income < applicable_income_range.hard_max
+      record.errors.add :net_income, "Net income cannot be less than #{applicable_income_range.hard_min} given the tenant's working situation"
+    end
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -92,6 +104,19 @@ class CaseLog < ApplicationRecord
 
   def in_progress?
     status == "in_progress"
+  end
+
+  def weekly_net_income
+    case net_income_frequency
+    when "Weekly"
+      net_income
+    when "Monthly"
+      net_income / 4
+    when "Yearly"
+      net_income / 12
+    else
+      nil
+    end
   end
 
 private

@@ -26,6 +26,19 @@ RSpec.describe Form, type: :model do
       expect { CaseLog.create!(property_number_of_times_relet: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    context "income ranges" do
+      let!(:income_range){ FactoryBot.create(:income_range, :full_time) }
+
+      it "validates net income maximum" do
+        expect {
+          CaseLog.create!(
+            tenant_economic_status: "full_time",
+            net_income: 5000,
+            net_income_frequency: "Weekly"
+          ) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     describe "reasonable preference validation" do
       it "if given reasonable preference is yes a reason must be selected" do
         expect {
