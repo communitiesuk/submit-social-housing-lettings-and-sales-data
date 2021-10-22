@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :income_range do
-    sequence(:id) { |i| i }
     trait :full_time do
       economic_status { "Full-time - 30 hours or more" }
       soft_min { 143 }
