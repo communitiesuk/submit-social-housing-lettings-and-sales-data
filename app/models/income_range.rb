@@ -1,3 +1,2 @@
 class IncomeRange < ApplicationRecord
-
 end
