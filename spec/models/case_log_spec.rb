@@ -27,15 +27,16 @@ RSpec.describe Form, type: :model do
     end
 
     context "income ranges" do
-      let!(:income_range){ FactoryBot.create(:income_range, :full_time) }
+      let!(:income_range) { FactoryBot.create(:income_range, :full_time) }
 
       it "validates net income maximum" do
         expect {
           CaseLog.create!(
             tenant_economic_status: "Full-time - 30 hours or more",
             net_income: 5000,
-            net_income_frequency: "Weekly"
-          ) }.to raise_error(ActiveRecord::RecordInvalid)
+            net_income_frequency: "Weekly",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validates net income minimum" do
@@ -43,12 +44,13 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             tenant_economic_status: "Full-time - 30 hours or more",
             net_income: 1,
-            net_income_frequency: "Weekly"
-          ) }.to raise_error(ActiveRecord::RecordInvalid)
+            net_income_frequency: "Weekly",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
-    describe "reasonable preference validation" do
+    context "reasonable preference validation" do
       it "if given reasonable preference is yes a reason must be selected" do
         expect {
           CaseLog.create!(reasonable_preference: "Yes",
@@ -79,6 +81,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
     context "other reason for leaving last settled home validation" do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
@@ -91,6 +94,22 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(reason_for_leaving_last_settled_home: "Repossession",
                           other_reason_for_leaving_last_settled_home: "the other reason provided")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "armed forces injured validation" do
+      it "must be anwered if tenant was a regular or reserve in armed forces" do
+        expect {
+          CaseLog.create!(armed_forces: "Yes - a regular",
+                          armed_forces_injured: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must be anwered if tenant was not a regular or reserve in armed forces" do
+        expect {
+          CaseLog.create!(armed_forces: "No",
+                          armed_forces_injured: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end

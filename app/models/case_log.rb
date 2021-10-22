@@ -43,11 +43,23 @@ class CaseLogValidator < ActiveModel::Validator
     return unless record.tenant_economic_status && record.weekly_net_income
 
     applicable_income_range = IncomeRange.find_by(economic_status: record.tenant_economic_status)
+
     if record.weekly_net_income > applicable_income_range.hard_max
       record.errors.add :net_income, "Net income cannot be greater than #{applicable_income_range.hard_max} given the tenant's working situation"
     end
+
     if record.weekly_net_income < applicable_income_range.hard_max
       record.errors.add :net_income, "Net income cannot be less than #{applicable_income_range.hard_min} given the tenant's working situation"
+    end
+  end
+
+  def validate_armed_forces_injured(record)
+    if (record.armed_forces == "Yes - a regular" || record.armed_forces == "Yes - a reserve") && record.armed_forces_injured.blank?
+      record.errors.add :armed_forces_injured, "You must answer the armed forces injury question if the tenant has served in the armed forces"
+    end
+
+    if (record.armed_forces == "No" || record.armed_forces == "Prefer not to say") && record.armed_forces_injured.present?
+      record.errors.add :armed_forces_injured, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
     end
   end
 
@@ -114,8 +126,6 @@ class CaseLog < ApplicationRecord
       ((net_income * 12) / 52.0).round(0)
     when "Yearly"
       (net_income / 12.0).round(0)
-    else
-      nil
     end
   end
 
