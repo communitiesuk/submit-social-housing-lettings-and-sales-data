@@ -39,6 +39,16 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_armed_forces_injured(record)
+    if (record.armed_forces == "Yes - a regular" || record.armed_forces == "Yes - a reserve") && record.armed_forces_injured.blank?
+      record.errors.add :armed_forces_injured, "You must answer the armed forces injury question if the tenant has served in the armed forces"
+    end
+
+    if (record.armed_forces == "No" || record.armed_forces == "Prefer not to say") && record.armed_forces_injured.present?
+      record.errors.add :armed_forces_injured, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
+    end
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
