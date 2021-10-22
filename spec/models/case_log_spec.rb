@@ -37,6 +37,15 @@ RSpec.describe Form, type: :model do
             net_income_frequency: "Weekly"
           ) }.to raise_error(ActiveRecord::RecordInvalid)
       end
+
+      it "validates net income minimum" do
+        expect {
+          CaseLog.create!(
+            tenant_economic_status: "Full-time - 30 hours or more",
+            net_income: 1,
+            net_income_frequency: "Weekly"
+          ) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
 
     describe "reasonable preference validation" do
