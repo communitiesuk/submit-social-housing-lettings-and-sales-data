@@ -43,7 +43,7 @@ module CheckAnswersHelper
   def get_next_page_name(form, page_name, applicable_questions, question_key, case_log, question_value)
     if applicable_questions[question_key].key?("conditional_route_to")
       applicable_questions[question_key]["conditional_route_to"].each do |conditional_page_key, condition|
-        unless condition_not_met(case_log, condition.keys[0], question_value, condition.values[0])
+        unless condition.any? { |k, v| condition_not_met(case_log, k, question_value, v) }
           return conditional_page_key
         end
       end

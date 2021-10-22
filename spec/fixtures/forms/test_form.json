@@ -250,9 +250,9 @@
                     "1": "No"
                   },
                   "conditional_route_to": {
+                    "rent": { "pregnancy": "Yes", "tenant_gender": "Female" },
                     "conditional_question_yes_page": { "pregnancy": "Yes" },
-                    "conditional_question_no_page": { "pregnancy": "No" },
-                    "basic_rent": { "pregnancy": "Yes", "tenant_gender": "Female" }
+                    "conditional_question_no_page": { "pregnancy": "No" }
                   }
                 }
               },

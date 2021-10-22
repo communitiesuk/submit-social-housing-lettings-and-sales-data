@@ -61,7 +61,7 @@ class CaseLogsController < ApplicationController
     responses_for_page = question_responses(questions_for_page)
     @case_log.previous_page = previous_page
     if @case_log.update(responses_for_page)
-      redirect_path = get_next_page_path(form, previous_page, responses_for_page)
+      redirect_path = get_next_page_path(form, previous_page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[previous_page]
@@ -129,13 +129,13 @@ private
     params.require(:case_log).permit(CaseLog.editable_fields)
   end
 
-  def get_next_page_path(form, previous_page, responses_for_page = {})
+  def get_next_page_path(form, previous_page, case_log = {})
     questions_for_page = form.questions_for_page(previous_page)
     questions_for_page.each do |_question, content|
       next unless content.key?("conditional_route_to")
 
       content["conditional_route_to"].each do |route, conditions|
-        if responses_for_page[conditions.keys[0]].present? && conditions.values[0].include?(responses_for_page[conditions.keys[0]])
+        if conditions.keys.all? { |x| case_log[x].present? } && conditions.all? { |k, v| v.include?(case_log[k]) }
           return "case_log_#{route}_path"
         end
       end
