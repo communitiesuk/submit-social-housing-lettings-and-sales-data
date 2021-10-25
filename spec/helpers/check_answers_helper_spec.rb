@@ -153,8 +153,16 @@ RSpec.describe CheckAnswersHelper do
 
         it "it includes conditional pages and questions that were displayed" do
           case_log["pregnancy"] = "Yes"
+          case_log["tenant_gender"] = "Female"
           result = total_questions(conditional_routing_subsection, case_log, form)
-          expected_keys = %w[pregnancy cbl_letting]
+          expected_keys = %w[pregnancy]
+          expect(result.keys).to match_array(expected_keys)
+        end
+
+        it "it includes conditional pages and questions that were displayed" do
+          case_log["pregnancy"] = "No"
+          result = total_questions(conditional_routing_subsection, case_log, form)
+          expected_keys = %w[pregnancy conditional_question_no_question conditional_question_no_second_question]
           expect(result.keys).to match_array(expected_keys)
         end
       end
