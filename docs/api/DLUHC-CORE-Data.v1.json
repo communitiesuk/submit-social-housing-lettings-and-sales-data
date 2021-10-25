@@ -108,9 +108,11 @@
                 "examples": {
                   "Invalid Age": {
                     "value": {
-                      "errors": [
-                        "Tenant age must be between 0 and 120"
-                      ]
+                      "errors": {
+                        "tenant_age": [
+                          "Tenant age must be between 0 and 120"
+                        ]
+                      }
                     }
                   }
                 }
@@ -211,11 +213,16 @@
                   "properties": {}
                 },
                 "examples": {
-                  "Invalid Age": {
+                  "Invalid Age & Reasonable Preference": {
                     "value": {
-                      "errors": [
-                        "Tenant age must be between 0 and 120"
-                      ]
+                      "errors": {
+                        "reasonable_preference_reason": [
+                          "If reasonable preference is Yes, a reason must be given"
+                        ],
+                        "tenant_age": [
+                          "Tenant age must be between 0 and 120"
+                        ]
+                      }
                     }
                   }
                 }
