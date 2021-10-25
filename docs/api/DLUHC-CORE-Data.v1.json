@@ -901,7 +901,13 @@
           },
           "net_income_uc_proportion": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "All",
+              "Some",
+              "None",
+              "Do not know"
+            ]
           },
           "housing_benefit": {
             "type": "string",
