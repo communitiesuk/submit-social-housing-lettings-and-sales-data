@@ -57,7 +57,14 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
-
+    context "reason for leaving last settled home validation" do
+      it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
+        expect {
+          CaseLog.create!(reason_for_leaving_last_settled_home: "Do not know",
+                          benefit_cap_spare_room_subsidy: "Yes - benefit cap")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
     context "other reason for leaving last settled home validation" do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
