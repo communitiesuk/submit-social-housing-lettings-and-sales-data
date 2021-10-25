@@ -248,12 +248,13 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
-                  },
-                  "conditional_route_to": {
-                    "conditional_question_yes_page": "Yes",
-                    "conditional_question_no_page": "No"
                   }
                 }
+              },
+              "conditional_route_to": {
+                "rent": { "pregnancy": "Yes", "tenant_gender": "Female" },
+                "conditional_question_yes_page": { "pregnancy": "Yes" },
+                "conditional_question_no_page": { "pregnancy": "No" }
               },
               "default_next_page": "check_answers"
             },

@@ -361,5 +361,15 @@ RSpec.describe "Test Features" do
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
+
+    it "can route based on multiple conditions" do
+      visit("/case_logs/#{id}/tenant_gender")
+      choose("case-log-tenant-gender-female-field", allow_label_click: true)
+      click_button("Save and continue")
+      visit("/case_logs/#{id}/conditional_question")
+      choose("case-log-pregnancy-yes-field", allow_label_click: true)
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/rent")
+    end
   end
 end
