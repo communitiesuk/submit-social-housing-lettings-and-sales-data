@@ -53,9 +53,14 @@ class CaseLogValidator < ActiveModel::Validator
     if ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(record.tenant_economic_status) && record.net_income_uc_proportion == "All"
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if person works part or full time"
     end
-    check_partner_net_income_uc_proportion(record.person_2_economic_status, record.person_2_relationship, record)
-    check_partner_net_income_uc_proportion(record.person_3_economic_status, record.person_3_relationship, record)
-    check_partner_net_income_uc_proportion(record.person_4_economic_status, record.person_4_relationship, record)
+
+    fields = [{status: record.person_2_economic_status, relationship: record.person_2_relationship},
+              {status: record.person_3_economic_status, relationship: record.person_3_relationship},
+              {status: record.person_4_economic_status, relationship: record.person_4_relationship}]
+
+    if (fields.any? {|field| ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(field[:status]) && field[:relationship] == "Partner"}) && record.net_income_uc_proportion == "All"
+      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
+    end
   end
 
   def validate(record)
@@ -72,14 +77,6 @@ class CaseLogValidator < ActiveModel::Validator
       # validations to be run
       validation_methods = public_methods(false) - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
-    end
-  end
-
-private
-
-  def check_partner_net_income_uc_proportion(person_field, relationship_field, record)
-    if ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(person_field) && relationship_field == "Partner" && record.net_income_uc_proportion == "All"
-      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
     end
   end
 end
