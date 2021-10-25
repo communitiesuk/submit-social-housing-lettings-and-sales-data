@@ -16,9 +16,6 @@ module CheckAnswersHelper
 
     while page_name.to_s != "check_answers" && subsection_keys.include?(page_name)
       questions = form.questions_for_page(page_name)
-      question_key = questions.keys[0]
-      question_value = questions.values[0]
-
       applicable_questions = filter_conditional_questions(questions, case_log)
       total_questions = total_questions.merge(applicable_questions)
 
