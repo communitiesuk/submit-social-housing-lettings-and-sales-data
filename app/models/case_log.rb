@@ -42,14 +42,12 @@ class CaseLogValidator < ActiveModel::Validator
   def validate_net_income(record)
     return unless record.tenant_economic_status && record.weekly_net_income
 
-    applicable_income_range = IncomeRange.find_by(economic_status: record.tenant_economic_status)
-
-    if record.weekly_net_income > applicable_income_range.hard_max
-      record.errors.add :net_income, "Net income cannot be greater than #{applicable_income_range.hard_max} given the tenant's working situation"
+    if record.weekly_net_income > record.applicable_income_range.hard_max
+      record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
     end
 
-    if record.weekly_net_income < applicable_income_range.hard_max
-      record.errors.add :net_income, "Net income cannot be less than #{applicable_income_range.hard_min} given the tenant's working situation"
+    if record.weekly_net_income < record.applicable_income_range.hard_max
+      record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
     end
   end
 
@@ -127,6 +125,10 @@ class CaseLog < ApplicationRecord
     when "Yearly"
       (net_income / 12.0).round(0)
     end
+  end
+
+  def applicable_income_range
+    IncomeRange.find_by(economic_status: record.tenant_economic_status)
   end
 
 private
