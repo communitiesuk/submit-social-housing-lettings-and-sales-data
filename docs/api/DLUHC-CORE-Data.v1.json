@@ -193,7 +193,7 @@
         "summary": "Create New Case Log",
         "operationId": "post-caselog",
         "responses": {
-          "200": {
+          "201": {
             "description": "Case Log Created",
             "content": {
               "application/json": {
