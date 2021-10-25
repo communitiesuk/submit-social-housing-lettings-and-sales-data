@@ -128,7 +128,7 @@ class CaseLog < ApplicationRecord
   end
 
   def applicable_income_range
-    IncomeRange.find_by(economic_status: record.tenant_economic_status)
+    IncomeRange.find_by(economic_status: tenant_economic_status)
   end
 
 private
