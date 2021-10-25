@@ -71,7 +71,6 @@ class CaseLogValidator < ActiveModel::Validator
       end
       p += 1
     end
-    return false
   end
 
   def validate(record)
