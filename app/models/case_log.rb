@@ -54,11 +54,11 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if person works part or full time"
     end
 
-    fields = [{status: record.person_2_economic_status, relationship: record.person_2_relationship},
-              {status: record.person_3_economic_status, relationship: record.person_3_relationship},
-              {status: record.person_4_economic_status, relationship: record.person_4_relationship}]
+    fields = [{ status: record.person_2_economic_status, relationship: record.person_2_relationship },
+              { status: record.person_3_economic_status, relationship: record.person_3_relationship },
+              { status: record.person_4_economic_status, relationship: record.person_4_relationship }]
 
-    if (fields.any? {|field| ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(field[:status]) && field[:relationship] == "Partner"}) && record.net_income_uc_proportion == "All"
+    if (fields.any? { |field| ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(field[:status]) && field[:relationship] == "Partner" }) && record.net_income_uc_proportion == "All"
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
     end
   end
