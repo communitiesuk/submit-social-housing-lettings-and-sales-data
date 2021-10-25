@@ -49,6 +49,31 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_household_pregnancy(record)
+    if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
+      record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"
+    end
+  end
+
+  def women_of_child_bearing_age_in_household(record)
+    unless record.tenant_gender.nil? || record.tenant_age.nil?
+      if record.tenant_gender == "Female" && record.tenant_age >= 16 && record.tenant_age <= 50
+        return true
+      end
+    end
+
+    p = 2
+    while p <= 8
+      unless record["person_#{p}_gender"].nil? || record["person_#{p}_age"].nil?
+        if record["person_#{p}_gender"] == "Female" && record["person_#{p}_age"] >= 16 && record["person_#{p}_age"] <= 50
+          return true
+        end
+      end
+      p += 1
+    end
+    return false
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload

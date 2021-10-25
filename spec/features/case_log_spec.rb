@@ -93,6 +93,38 @@ RSpec.describe "Test Features" do
         )
       end
 
+      context "Validate pregnancy questions" do
+        it "Cannot answer yes if no female tenants" do
+          expect {
+            CaseLog.create!(pregnancy: "Yes", tenant_gender: "Male", tenant_age: 20)
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+
+        it "Cannot answer yes if no female tenants within age range" do
+          expect {
+            CaseLog.create!(pregnancy: "Yes", tenant_gender: "Female", tenant_age: 51)
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+
+        it "Cannot answer prefer not to say if no valid tenants" do
+          expect {
+            CaseLog.create!(pregnancy: "Prefer not to say", tenant_gender: "Male", tenant_age: 20)
+          }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+
+        # it "Can answer yes if valid tenants" do
+        #   expect {
+        #     CaseLog.create!(pregnancy: "Yes", tenant_gender: "Female", tenant_age: 20)
+        #   }.to raise_error(ActiveRecord::RecordInvalid)
+        # end
+
+        # it "Can answer yes if valid second tenant" do
+        #   expect {
+        #     CaseLog.create!(pregnancy: "Yes", tenant_gender: "Male", tenant_age: 99, person_2_gender: "Female", person_2_age: 20)
+        #   }.to raise_error(ActiveRecord::RecordInvalid)
+        # end
+      end
+
       it "can be accessed by url" do
         visit("/case_logs/#{id}/tenant_age")
         expect(page).to have_field("case-log-tenant-age-field")
