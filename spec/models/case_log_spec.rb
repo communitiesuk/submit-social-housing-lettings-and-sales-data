@@ -96,6 +96,31 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context "armed forces active validation" do
+      it "must be answered if ever served in the forces as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "Yes - a regular",
+                          armed_forces_active: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must not be answered if not ever served as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "No",
+                          armed_forces_active: "Yes")
+        }.to raise_error()
+      end
+
+      #Crossover over tests here as injured must be answered as well for no error
+      it "must be answered if ever served in the forces as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "Yes - a regular",
+                          armed_forces_active: "Yes",
+                          armed_forces_injured: "Yes")
+        }.not_to raise_error()
+      end
+    end
   end
 
   describe "status" do
