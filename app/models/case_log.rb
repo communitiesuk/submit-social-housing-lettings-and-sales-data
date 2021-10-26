@@ -55,13 +55,6 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
-  def women_of_child_bearing_age_in_household(record)
-    (1..8).any? do |n|
-      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
-        record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
-    end
-  end
-
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -76,6 +69,15 @@ class CaseLogValidator < ActiveModel::Validator
       # validations to be run
       validation_methods = public_methods(false) - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
+    end
+  end
+
+  private
+
+  def women_of_child_bearing_age_in_household(record)
+    (1..8).any? do |n|
+      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
+        record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end
