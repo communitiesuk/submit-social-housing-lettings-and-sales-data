@@ -3,9 +3,9 @@ class CaseLogValidator < ActiveModel::Validator
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
 
-  def validate_tenant_age(record)
-    if record.tenant_age && !/^[1-9][0-9]?$|^120$/.match?(record.tenant_age.to_s)
-      record.errors.add :tenant_age, "Tenant age must be between 0 and 120"
+  def validate_person_1_age(record)
+    if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
+      record.errors.add :person_1_age, "Tenant age must be between 0 and 120"
     end
   end
 
@@ -56,11 +56,7 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
   def women_of_child_bearing_age_in_household(record)
-    unless record.tenant_gender.nil? || record.tenant_age.nil?
-      return record.tenant_gender == "Female" && (record.tenant_age >= 16 && record.tenant_age <= 50)
-    end
-
-    (2..8).any? do |n|
+    (1..8).any? do |n|
       next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
         record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end

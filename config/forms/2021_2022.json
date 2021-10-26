@@ -21,11 +21,11 @@
                 }
               }
             },
-            "tenant_age": {
+            "person_1_age": {
               "header": "",
               "description": "",
               "questions": {
-                "tenant_age": {
+                "person_1_age": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "hint_text": "",
@@ -36,11 +36,11 @@
                 }
               }
             },
-            "tenant_gender": {
+            "person_1_gender": {
               "header": "",
               "description": "",
               "questions": {
-                "tenant_gender": {
+                "person_1_gender": {
                   "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "hint_text": "",

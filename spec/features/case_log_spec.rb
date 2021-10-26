@@ -7,8 +7,8 @@ RSpec.describe "Test Features" do
 
   question_answers = {
     tenant_code: { type: "text", answer: "BZ737" },
-    tenant_age: { type: "numeric", answer: 25 },
-    tenant_gender: { type: "radio", answer: "Female" },
+    person_1_age: { type: "numeric", answer: 25 },
+    person_1_gender: { type: "radio", answer: "Female" },
     household_number_of_other_members: { type: "numeric", answer: 2 },
   }
 
@@ -97,39 +97,39 @@ RSpec.describe "Test Features" do
         it "Cannot answer yes if no female tenants" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              tenant_gender: "Male",
-              tenant_age: 20)
+              person_1_gender: "Male",
+              person_1_age: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer yes if no female tenants within age range" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              tenant_gender: "Female",
-              tenant_age: 51)
+              person_1_gender: "Female",
+              person_1_age: 51)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer prefer not to say if no valid tenants" do
           expect {
             CaseLog.create!(pregnancy: "Prefer not to say",
-              tenant_gender: "Male",
-              tenant_age: 20)
+              person_1_gender: "Male",
+              person_1_age: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Can answer yes if valid tenants" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              tenant_gender: "Female",
-              tenant_age: 20)
+              person_1_gender: "Female",
+              person_1_age: 20)
           }.not_to raise_error
         end
 
         it "Can answer yes if valid second tenant" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              tenant_gender: "Male", tenant_age: 99,
+              person_1_gender: "Male", person_1_age: 99,
               person_2_gender: "Female",
               person_2_age: 20)
           }.not_to raise_error
@@ -137,8 +137,8 @@ RSpec.describe "Test Features" do
       end
 
       it "can be accessed by url" do
-        visit("/case_logs/#{id}/tenant_age")
-        expect(page).to have_field("case-log-tenant-age-field")
+        visit("/case_logs/#{id}/person_1_age")
+        expect(page).to have_field("case-log-person-1-age-field")
       end
 
       it "updates model attributes correctly for each question" do
@@ -183,8 +183,8 @@ RSpec.describe "Test Features" do
       end
 
       it "displays text answers in inputs if they are already saved" do
-        visit("/case_logs/#{id}/tenant_age")
-        expect(page).to have_field("case-log-tenant-age-field", with: "12")
+        visit("/case_logs/#{id}/person_1_age")
+        expect(page).to have_field("case-log-person-1-age-field", with: "12")
       end
 
       it "displays checkbox answers in inputs if they are already saved" do
@@ -216,7 +216,7 @@ RSpec.describe "Test Features" do
       it "go back to tenant code page from tenant age page", js: true do
         visit("/case_logs/#{id}/tenant_code")
         click_button("Save and continue")
-        visit("/case_logs/#{id}/tenant_age")
+        visit("/case_logs/#{id}/person_1_age")
         click_link(text: "Back")
         expect(page).to have_field("case-log-tenant-code-field")
       end
@@ -261,8 +261,8 @@ RSpec.describe "Test Features" do
       end
 
       it "should display answers given by the user for the question in the subsection" do
-        fill_in_number_question(empty_case_log.id, "tenant_age", 28)
-        choose("case-log-tenant-gender-non-binary-field")
+        fill_in_number_question(empty_case_log.id, "person_1_age", 28)
+        choose("case-log-person-1-gender-non-binary-field")
         click_button("Save and continue")
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("28")
@@ -273,15 +273,15 @@ RSpec.describe "Test Features" do
         visit("case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: /Answer\z/, count: 4
         assert_selector "a", text: "Change", count: 0
-        expect(page).to have_link("Answer", href: "/case_logs/#{empty_case_log.id}/tenant_age")
+        expect(page).to have_link("Answer", href: "/case_logs/#{empty_case_log.id}/person_1_age")
       end
 
       it "should have a change link for answered questions" do
-        fill_in_number_question(empty_case_log.id, "tenant_age", 28)
+        fill_in_number_question(empty_case_log.id, "person_1_age", 28)
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: /Answer\z/, count: 3
         assert_selector "a", text: "Change", count: 1
-        expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/tenant_age")
+        expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/person_1_age")
       end
 
       it "should have a link pointing to the first question if no questions are answered" do
@@ -360,19 +360,19 @@ RSpec.describe "Test Features" do
   describe "Question validation" do
     context "given an invalid tenant age" do
       it " of less than 0 it shows validation" do
-        visit("/case_logs/#{id}/tenant_age")
-        fill_in_number_question(empty_case_log.id, "tenant_age", -5)
+        visit("/case_logs/#{id}/person_1_age")
+        fill_in_number_question(empty_case_log.id, "person_1_age", -5)
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-tenant-age-error")
-        expect(page).to have_selector("#case-log-tenant-age-field-error")
+        expect(page).to have_selector("#case-log-person-1-age-error")
+        expect(page).to have_selector("#case-log-person-1-age-field-error")
       end
 
       it " of greater than 120 it shows validation" do
-        visit("/case_logs/#{id}/tenant_age")
-        fill_in_number_question(empty_case_log.id, "tenant_age", 121)
+        visit("/case_logs/#{id}/person_1_age")
+        fill_in_number_question(empty_case_log.id, "person_1_age", 121)
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-tenant-age-error")
-        expect(page).to have_selector("#case-log-tenant-age-field-error")
+        expect(page).to have_selector("#case-log-person-1-age-error")
+        expect(page).to have_selector("#case-log-person-1-age-field-error")
       end
     end
   end
@@ -406,8 +406,8 @@ RSpec.describe "Test Features" do
     end
 
     it "can route based on multiple conditions" do
-      visit("/case_logs/#{id}/tenant_gender")
-      choose("case-log-tenant-gender-female-field", allow_label_click: true)
+      visit("/case_logs/#{id}/person_1_gender")
+      choose("case-log-person-1-gender-female-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/case_logs/#{id}/conditional_question")
       choose("case-log-pregnancy-yes-field", allow_label_click: true)

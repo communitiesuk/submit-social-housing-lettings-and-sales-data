@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_090040) do
+ActiveRecord::Schema.define(version: 2021_10_26_123542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "tenant_code"
-    t.integer "tenant_age"
-    t.string "tenant_gender"
+    t.integer "person_1_age"
+    t.string "person_1_gender"
     t.string "tenant_ethnic_group"
     t.string "tenant_nationality"
     t.string "previous_housing_situation"
@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.string "property_void_date"
     t.string "property_major_repairs"
     t.string "property_major_repairs_date"
-    t.integer "property_number_of_times_relet"
     t.string "property_wheelchair_accessible"
     t.string "net_income"
     t.string "net_income_frequency"
@@ -106,6 +105,8 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.string "cbl_letting"
     t.string "chr_letting"
     t.string "cap_letting"
+    t.string "conditional_page_option"
+    t.string "continue_option"
     t.string "outstanding_rent_or_charges"
     t.string "other_reason_for_leaving_last_settled_home"
     t.boolean "accessibility_requirements_fully_wheelchair_accessible_housing"
@@ -132,6 +133,12 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.boolean "reasonable_preference_reason_avoid_hardship"
     t.boolean "reasonable_preference_reason_do_not_know"
     t.datetime "discarded_at"
+    t.integer "property_number_of_times_relet"
+    t.string "is_postcode_known"
+    t.string "select_your_la"
+    t.string "why_is_la_unkown"
+    t.string "do_you_know_la"
+    t.string "is_property_a_relet"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
