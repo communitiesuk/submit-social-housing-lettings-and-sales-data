@@ -57,23 +57,12 @@ class CaseLogValidator < ActiveModel::Validator
 
   def women_of_child_bearing_age_in_household(record)
     unless record.tenant_gender.nil? || record.tenant_age.nil?
-      record.tenant_gender == "Female" && record.tenant_age >= 16 && record.tenant_age <= 50
-        return true
-      end
+      return record.tenant_gender == "Female" && (record.tenant_age >= 16 && record.tenant_age <= 50)
     end
 
-(2..8).map do |n|
-  next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
-  
-  record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
-end
-    while p <= 8
-      unless record["person_#{p}_gender"].nil? || record["person_#{p}_age"].nil?
-        if record["person_#{p}_gender"] == "Female" && record["person_#{p}_age"] >= 16 && record["person_#{p}_age"] <= 50
-          return true
-        end
-      end
-      p += 1
+    (2..8).any? do |n|
+      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
+        record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 

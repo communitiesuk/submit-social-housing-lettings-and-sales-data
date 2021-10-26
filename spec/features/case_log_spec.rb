@@ -123,7 +123,7 @@ RSpec.describe "Test Features" do
             CaseLog.create!(pregnancy: "Yes",
               tenant_gender: "Female",
               tenant_age: 20)
-          }.not_to raise_error(ActiveRecord::RecordInvalid)
+          }.not_to raise_error
         end
 
         it "Can answer yes if valid second tenant" do
@@ -132,7 +132,7 @@ RSpec.describe "Test Features" do
               tenant_gender: "Male", tenant_age: 99,
               person_2_gender: "Female",
               person_2_age: 20)
-          }.not_to raise_error(ActiveRecord::RecordInvalid)
+          }.not_to raise_error
         end
       end
 
