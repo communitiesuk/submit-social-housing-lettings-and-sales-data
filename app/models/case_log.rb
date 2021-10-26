@@ -72,12 +72,13 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
-  private
+private
 
   def women_of_child_bearing_age_in_household(record)
     (1..8).any? do |n|
       next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
-        record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
+
+      record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end

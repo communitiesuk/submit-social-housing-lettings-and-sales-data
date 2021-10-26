@@ -97,41 +97,41 @@ RSpec.describe "Test Features" do
         it "Cannot answer yes if no female tenants" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              person_1_gender: "Male",
-              person_1_age: 20)
+                            person_1_gender: "Male",
+                            person_1_age: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer yes if no female tenants within age range" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              person_1_gender: "Female",
-              person_1_age: 51)
+                            person_1_gender: "Female",
+                            person_1_age: 51)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer prefer not to say if no valid tenants" do
           expect {
             CaseLog.create!(pregnancy: "Prefer not to say",
-              person_1_gender: "Male",
-              person_1_age: 20)
+                            person_1_gender: "Male",
+                            person_1_age: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Can answer yes if valid tenants" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              person_1_gender: "Female",
-              person_1_age: 20)
+                            person_1_gender: "Female",
+                            person_1_age: 20)
           }.not_to raise_error
         end
 
         it "Can answer yes if valid second tenant" do
           expect {
             CaseLog.create!(pregnancy: "Yes",
-              person_1_gender: "Male", person_1_age: 99,
-              person_2_gender: "Female",
-              person_2_age: 20)
+                            person_1_gender: "Male", person_1_age: 99,
+                            person_2_gender: "Female",
+                            person_2_age: 20)
           }.not_to raise_error
         end
       end
