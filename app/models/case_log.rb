@@ -57,7 +57,7 @@ class CaseLogValidator < ActiveModel::Validator
 
   def women_of_child_bearing_age_in_household(record)
     unless record.tenant_gender.nil? || record.tenant_age.nil?
-      if record.tenant_gender == "Female" && record.tenant_age >= 16 && record.tenant_age <= 50
+      record.tenant_gender == "Female" && record.tenant_age >= 16 && record.tenant_age <= 50
         return true
       end
     end
