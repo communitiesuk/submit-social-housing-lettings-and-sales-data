@@ -109,16 +109,16 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(armed_forces: "No",
                           armed_forces_active: "Yes")
-        }.to raise_error()
+        }.to raise_error
       end
 
-      #Crossover over tests here as injured must be answered as well for no error
+      # Crossover over tests here as injured must be answered as well for no error
       it "must be answered if ever served in the forces as a regular" do
         expect {
           CaseLog.create!(armed_forces: "Yes - a regular",
                           armed_forces_active: "Yes",
                           armed_forces_injured: "Yes")
-        }.not_to raise_error()
+        }.not_to raise_error
       end
     end
   end

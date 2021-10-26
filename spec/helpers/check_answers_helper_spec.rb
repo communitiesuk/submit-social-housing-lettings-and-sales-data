@@ -12,8 +12,8 @@ RSpec.describe CheckAnswersHelper do
   end
   let(:case_log_with_met_radio_condition) do
     FactoryBot.create(:case_log, armed_forces: "Yes - a regular",
-      armed_forces_injured: "No",
-      armed_forces_active: "Yes")
+                                 armed_forces_injured: "No",
+                                 armed_forces_active: "Yes")
   end
   let(:subsection) { "income_and_benefits" }
   let(:subsection_with_numeric_conditionals) { "household_characteristics" }
