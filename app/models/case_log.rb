@@ -38,7 +38,7 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :other_reason_for_leaving_last_settled_home, "The other reason must not be provided if the reason for leaving settled home was not other"
     end
   end
-  
+
   def validate_reason_for_leaving_last_settled_home(record)
     if record.reason_for_leaving_last_settled_home == "Do not know" && record.benefit_cap_spare_room_subsidy != "Do not know"
       record.errors.add :benefit_cap_spare_room_subsidy, "must be do not know if tenant’s main reason for leaving is do not know"
