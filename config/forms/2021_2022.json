@@ -121,7 +121,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenant_economic_status": {
+                "person_1_economic_status": {
                   "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
                   "hint_text": "",

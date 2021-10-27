@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_26_123542) do
+ActiveRecord::Schema.define(version: 2021_10_27_091521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_10_26_123542) do
     t.string "tenant_nationality"
     t.string "previous_housing_situation"
     t.string "armed_forces"
-    t.string "tenant_economic_status"
+    t.string "person_1_economic_status"
     t.integer "household_number_of_other_members"
     t.string "person_2_relationship"
     t.integer "person_2_age"

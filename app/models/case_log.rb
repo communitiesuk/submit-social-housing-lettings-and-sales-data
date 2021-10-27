@@ -54,6 +54,19 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :armed_forces_injured, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
     end
   end
+  
+  EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
+  def validate_net_income_uc_proportion(record)
+    (1..8).any? do |n|
+      economic_status = record["person_#{n}_economic_status"]
+      is_employed = EMPLOYED_STATUSES.include?(economic_status)
+      relationship = record["person_#{n}_relationship"]
+      is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
+      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
+        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      end
+    end
+  end
 
   def validate_armed_forces_active_response(record)
     if record.armed_forces == "Yes - a regular" && record.armed_forces_active.blank?
@@ -69,6 +82,20 @@ class CaseLogValidator < ActiveModel::Validator
     if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
       record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"
     end
+  end
+
+  def validate_fixed_term_tenancy(record)
+    is_present = record.fixed_term_tenancy.present?
+    is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
+    is_secure = record.tenancy_type == "Fixed term – Secure"
+    is_ast = record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)"
+    conditions = [
+      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
+      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
+      { condition: is_secure && (!is_in_range && is_present), error: "Fixed term – Secure should be between 2 and 99 years or not specified" },
+    ]
+
+    conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
   end
 
   def validate(record)
@@ -167,6 +194,10 @@ private
 
     if net_income.to_i.zero?
       dynamically_not_required << "net_income_frequency"
+    end
+
+    if tenancy_type == "Fixed term – Secure"
+      dynamically_not_required << "fixed_term_tenancy"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
