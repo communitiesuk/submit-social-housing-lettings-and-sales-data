@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_090040) do
+ActiveRecord::Schema.define(version: 2021_10_27_091521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,13 +20,13 @@ ActiveRecord::Schema.define(version: 2021_10_15_090040) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "tenant_code"
-    t.integer "tenant_age"
-    t.string "tenant_gender"
+    t.integer "person_1_age"
+    t.string "person_1_gender"
     t.string "tenant_ethnic_group"
     t.string "tenant_nationality"
     t.string "previous_housing_situation"
     t.string "armed_forces"
-    t.string "tenant_economic_status"
+    t.string "person_1_economic_status"
     t.integer "household_number_of_other_members"
     t.string "person_2_relationship"
     t.integer "person_2_age"

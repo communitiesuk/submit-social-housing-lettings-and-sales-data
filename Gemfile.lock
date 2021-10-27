@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 3f0e35085f5765decf96fee179ec9a2e132a67c1
+  revision: cfe4db707cc5a0c9437aa90e3059256f30368da4
   branch: main
   specs:
     rspec-rails (5.1.0.pre)
@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-support.git
-  revision: 28526172c42302858c18681d7d7580490d885b4d
+  revision: 2a17194b9fc868a4b4a41d7168103dca825c3004
   branch: main
   specs:
     rspec-support (3.11.0.pre)
@@ -115,8 +115,9 @@ GEM
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
-    capybara (3.35.3)
+    capybara (3.36.0)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
       rack (>= 1.6.0)
@@ -127,6 +128,10 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     deep_merge (1.2.1)
     diff-lcs (1.4.4)
     discard (1.2.0)
@@ -145,7 +150,7 @@ GEM
     ffi (1.15.4)
     globalid (0.5.2)
       activesupport (>= 5.0)
-    govuk-components (2.1.3)
+    govuk-components (2.1.4)
       activemodel (>= 6.0)
       railties (>= 6.0)
       view_component (~> 2.39.0)
@@ -172,6 +177,7 @@ GEM
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
+    matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.14.4)
@@ -334,6 +340,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capybara
+  database_cleaner-active_record
   discard
   dotenv-rails
   factory_bot_rails
