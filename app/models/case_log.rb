@@ -76,7 +76,17 @@ class CaseLogValidator < ActiveModel::Validator
       end
     end
   end
-  
+
+  def validate_armed_forces_active_response(record)
+    if record.armed_forces == "Yes - a regular" && record.armed_forces_active.blank?
+      record.errors.add :armed_forces_active, "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
+    end
+
+    if record.armed_forces != "Yes - a regular" && record.armed_forces_active.present?
+      record.errors.add :armed_forces_active, "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
+    end
+  end
+
   def validate_household_pregnancy(record)
     if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
       record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"

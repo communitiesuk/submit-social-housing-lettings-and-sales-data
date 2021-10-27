@@ -6,7 +6,7 @@ require File.expand_path("../config/environment", __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
 require "capybara/rspec"
-require 'database_cleaner/active_record'
+require "database_cleaner/active_record"
 
 # Comment to run `js: true specs` with visible browser interaction
 Capybara.javascript_driver = :selenium_headless
@@ -58,6 +58,7 @@ RSpec.configure do |config|
         uncommitted transaction data setup over the spec's database connection.
       MSG
     end
+
     DatabaseCleaner.clean_with(:truncation)
   end
 
