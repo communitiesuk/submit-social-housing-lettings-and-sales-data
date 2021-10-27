@@ -61,6 +61,23 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_shared_housing_rooms(record)
+    number_of_tenants = people_in_household(record)
+    if record.property_unit_type == "Bed-sit" && record.property_number_of_bedrooms != 1
+      record.errors.add :property_unit_type, "A bedsit can only have one bedroom"
+    end
+
+    if people_in_household(record) > 1
+      if record.property_unit_type.include? == "Shared" && (record.property_number_of_bedrooms == 0 && record.property_number_of_bedrooms > 7)
+        record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
+      end
+    else
+      if record.property_unit_type.include? == "Shared" && (record.property_number_of_bedrooms == 0 && record.property_number_of_bedrooms > 3)
+        record.errors.add :property_unit_type, "A shared house with one tenant must have 1 to 3 bedrooms"
+      end
+    end
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -85,6 +102,14 @@ private
       next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
 
       record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
+    end
+  end
+
+  def people_in_household(record)
+    count = 0
+    (1..8).any? do |n|
+      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
+      count += 1
     end
   end
 end
