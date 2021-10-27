@@ -24,7 +24,7 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "POST #create" do
     let(:tenant_code) { "T365" }
-    let(:tenant_age) { 35 }
+    let(:person_1_age) { 35 }
     let(:property_number_of_times_relet) { 12 }
     let(:property_postcode) { "SE11 6TY" }
     let(:in_progress) { "in_progress" }
@@ -33,7 +33,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:params) do
       {
         "tenant_code": tenant_code,
-        "tenant_age": tenant_age,
+        "person_1_age": person_1_age,
         "property_postcode": property_postcode,
         "property_number_of_times_relet": property_number_of_times_relet,
       }
@@ -55,18 +55,18 @@ RSpec.describe CaseLogsController, type: :request do
     it "creates a case log with the values passed" do
       json_response = JSON.parse(response.body)
       expect(json_response["tenant_code"]).to eq(tenant_code)
-      expect(json_response["tenant_age"]).to eq(tenant_age)
+      expect(json_response["person_1_age"]).to eq(person_1_age)
       expect(json_response["property_postcode"]).to eq(property_postcode)
     end
 
     context "invalid json params" do
-      let(:tenant_age) { 2000 }
+      let(:person_1_age) { 2000 }
       let(:property_number_of_times_relet) { 21 }
 
       it "validates case log parameters" do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to match_array([["property_number_of_times_relet", ["Must be between 0 and 20"]], ["tenant_age", ["Tenant age must be between 0 and 120"]]])
+        expect(json_response["errors"]).to match_array([["property_number_of_times_relet", ["Must be between 0 and 20"]], ["person_1_age", ["Tenant age must be between 0 and 120"]]])
       end
     end
 
@@ -149,7 +149,7 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "invalid case log params" do
-      let(:params) { { tenant_age: 200 } }
+      let(:params) { { person_1_age: 200 } }
 
       it "returns 422" do
         expect(response).to have_http_status(:unprocessable_entity)
@@ -157,7 +157,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "returns an error message" do
         json_response = JSON.parse(response.body)
-        expect(json_response["errors"]).to eq({ "tenant_age" => ["Tenant age must be between 0 and 120"] })
+        expect(json_response["errors"]).to eq({ "person_1_age" => ["Tenant age must be between 0 and 120"] })
       end
     end
 
