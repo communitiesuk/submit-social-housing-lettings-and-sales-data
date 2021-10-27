@@ -46,7 +46,7 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
   def validate_net_income(record)
-    return unless record.tenant_economic_status && record.weekly_net_income
+    return unless record.person_1_economic_status && record.weekly_net_income
 
     if record.weekly_net_income > record.applicable_income_range.hard_max
       record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
@@ -176,8 +176,16 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def person_1_economic_status=(value)
+    # We override the default method so that when the value for this is changed we
+    # also reset the applicable income range used for validation, while still being
+    # able to cache it when this field hasn't changed
+    @applicable_income_range = nil
+    super(value)
+  end
+
   def applicable_income_range
-    IncomeRange.find_by(economic_status: tenant_economic_status)
+    @applicable_income_range ||= IncomeRange.find_by(economic_status: person_1_economic_status)
   end
 
 private
