@@ -32,7 +32,7 @@ RSpec.describe Form, type: :model do
       it "validates net income maximum" do
         expect {
           CaseLog.create!(
-            tenant_economic_status: "Full-time - 30 hours or more",
+            person_1_economic_status: "Full-time - 30 hours or more",
             net_income: 5000,
             net_income_frequency: "Weekly",
           )
@@ -42,7 +42,7 @@ RSpec.describe Form, type: :model do
       it "validates net income minimum" do
         expect {
           CaseLog.create!(
-            tenant_economic_status: "Full-time - 30 hours or more",
+            person_1_status: "Full-time - 30 hours or more",
             net_income: 1,
             net_income_frequency: "Weekly",
           )
