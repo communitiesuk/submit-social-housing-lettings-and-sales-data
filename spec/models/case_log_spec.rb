@@ -121,6 +121,22 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "outstanding rent or charges validation" do
+      it "must be anwered if answered yes to outstanding rent or charges" do
+        expect {
+          CaseLog.create!(outstanding_rent_or_charges: "Yes",
+                          outstanding_amount: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must be not be anwered if answered no to outstanding rent or charges" do
+        expect {
+          CaseLog.create!(outstanding_rent_or_charges: "No",
+                          outstanding_amount: 99)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "tenant’s income is from Universal Credit, state pensions or benefits" do
       it "Cannot be All if person 1 works full time" do
         expect {
@@ -140,6 +156,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
     context "fixed term tenancy length" do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
@@ -184,6 +201,31 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(tenancy_type: "Fixed term – Secure",
                           fixed_term_tenancy: 2)
+        }.not_to raise_error
+      end
+    end
+
+    context "armed forces active validation" do
+      it "must be answered if ever served in the forces as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "Yes - a regular",
+                          armed_forces_active: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must not be answered if not ever served as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "No",
+                          armed_forces_active: "Yes")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      # Crossover over tests here as injured must be answered as well for no error
+      it "must be answered if ever served in the forces as a regular" do
+        expect {
+          CaseLog.create!(armed_forces: "Yes - a regular",
+                          armed_forces_active: "Yes",
+                          armed_forces_injured: "Yes")
         }.not_to raise_error
       end
     end

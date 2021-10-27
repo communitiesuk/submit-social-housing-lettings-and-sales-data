@@ -67,6 +67,15 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_outstanding_rent_amount(record)
+    if record.outstanding_rent_or_charges == "Yes" && record.outstanding_amount.blank?
+      record.errors.add :outstanding_amount, "You must answer the oustanding amout question if you have outstanding rent or charges."
+    end
+    if record.outstanding_rent_or_charges == "No" && record.outstanding_amount.present?
+      record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
+    end
+  end
+
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|
@@ -77,6 +86,16 @@ class CaseLogValidator < ActiveModel::Validator
       if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
         record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       end
+    end
+  end
+
+  def validate_armed_forces_active_response(record)
+    if record.armed_forces == "Yes - a regular" && record.armed_forces_active.blank?
+      record.errors.add :armed_forces_active, "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
+    end
+
+    if record.armed_forces != "Yes - a regular" && record.armed_forces_active.present?
+      record.errors.add :armed_forces_active, "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
     end
   end
 
