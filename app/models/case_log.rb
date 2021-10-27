@@ -52,7 +52,7 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
     end
 
-    if record.weekly_net_income < record.applicable_income_range.hard_max
+    if record.weekly_net_income < record.applicable_income_range.hard_min
       record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
     end
   end
