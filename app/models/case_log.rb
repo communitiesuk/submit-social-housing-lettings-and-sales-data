@@ -209,6 +209,10 @@ private
       dynamically_not_required << "fixed_term_tenancy"
     end
 
+    if tenancy_type != "Other"
+      dynamically_not_required << "other_tenancy_type"
+    end
+
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
   end
 end
