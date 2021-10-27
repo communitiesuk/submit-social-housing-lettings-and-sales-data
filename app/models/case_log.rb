@@ -59,7 +59,7 @@ class CaseLogValidator < ActiveModel::Validator
     if record.outstanding_rent_or_charges == "Yes" && record.outstanding_amount.blank?
       record.errors.add :outstanding_amount, "You must answer the oustanding amout question if you have outstanding rent or charges."
     end
-    if record.outstanding_rent_or_charges == "No" && !record.outstanding_amount.blank?
+    if record.outstanding_rent_or_charges == "No" && record.outstanding_amount.present?
       record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
     end
   end
