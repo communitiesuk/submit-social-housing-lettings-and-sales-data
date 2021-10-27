@@ -1089,6 +1089,10 @@
           },
           "reasonable_preference_reason_do_not_know": {
             "type": "boolean"
+          },
+          "other_tenancy-type": {
+            "type": "string",
+            "example": "private tenancy"
           }
         },
         "required": [
@@ -1203,7 +1207,8 @@
           "reasonable_preference_reason_unsatisfactory_housing",
           "reasonable_preference_reason_medical_grounds",
           "reasonable_preference_reason_avoid_hardship",
-          "reasonable_preference_reason_do_not_know"
+          "reasonable_preference_reason_do_not_know",
+          "other_tenancy-type"
         ]
       }
     },
