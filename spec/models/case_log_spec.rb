@@ -3,15 +3,15 @@ require "rails_helper"
 RSpec.describe Form, type: :model do
   describe "#new" do
     it "validates age is a number" do
-      expect { CaseLog.create!(tenant_age: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(person_1_age: "random") }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is under 120" do
-      expect { CaseLog.create!(tenant_age: 121) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(person_1_age: 121) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is over 0" do
-      expect { CaseLog.create!(tenant_age: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(person_1_age: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is a number" do
@@ -106,18 +106,85 @@ RSpec.describe Form, type: :model do
     end
 
     context "armed forces injured validation" do
-      it "must be anwered if tenant was a regular or reserve in armed forces" do
+      it "must be answered if tenant was a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armed_forces: "Yes - a regular",
                           armed_forces_injured: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "must be anwered if tenant was not a regular or reserve in armed forces" do
+      it "must be answered if tenant was not a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armed_forces: "No",
                           armed_forces_injured: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "tenant’s income is from Universal Credit, state pensions or benefits" do
+      it "Cannot be All if person 1 works full time" do
+        expect {
+          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Full-time - 30 hours or more")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot be All if person 1 works part time" do
+        expect {
+          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Part-time - Less than 30 hours")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
+        expect {
+          CaseLog.create!(net_income_uc_proportion: "All", person_2_relationship: "Partner", person_2_economic_status: "Part-time - Less than 30 hours")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+    context "fixed term tenancy length" do
+      it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
+        expect {
+          CaseLog.create!(tenancy_type: "Other",
+                          fixed_term_tenancy: 10)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Must be completed and between 2 and 99 if type of tenancy is Assured shorthold" do
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          fixed_term_tenancy: 1)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          fixed_term_tenancy: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          fixed_term_tenancy: 2)
+        }.not_to raise_error
+      end
+
+      it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Secure",
+                          fixed_term_tenancy: 1)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Secure",
+                          fixed_term_tenancy: 100)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Secure",
+                          fixed_term_tenancy: nil)
+        }.not_to raise_error
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed term – Secure",
+                          fixed_term_tenancy: 2)
+        }.not_to raise_error
       end
     end
   end

@@ -274,7 +274,7 @@
             "tenant_nationality": "UK national resident in UK",
             "previous_housing_situation": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
-            "tenant_economic_status": "Full-time - 30 hours or more",
+            "person_1_economic_status": "Full-time - 30 hours or more",
             "household_number_of_other_members": 7,
             "person_2_relationship": "Partner",
             "person_2_age": 32,
@@ -388,13 +388,13 @@
             "type": "string",
             "minLength": 1
           },
-          "tenant_age": {
+          "person_1_age": {
             "type": "number",
             "description": "The age of the lead tenant",
             "maximum": 120,
             "minimum": 0
           },
-          "tenant_gender": {
+          "person_1_gender": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -459,7 +459,7 @@
             "type": "string",
             "minLength": 1
           },
-          "tenant_economic_status": {
+          "person_1_economic_status": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -873,7 +873,8 @@
           },
           "fixed_term_tenancy": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "pattern": "((?!1|0)([0-9][0-9]))+"
           },
           "tenancy_type": {
             "type": "string",
@@ -945,7 +946,13 @@
           },
           "net_income_uc_proportion": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "All",
+              "Some",
+              "None",
+              "Do not know"
+            ]
           },
           "housing_benefit": {
             "type": "string",
@@ -1086,13 +1093,13 @@
         },
         "required": [
           "tenant_code",
-          "tenant_age",
-          "tenant_gender",
+          "person_1_age",
+          "person_1_gender",
           "tenant_ethnic_group",
           "tenant_nationality",
           "previous_housing_situation",
           "armed_forces",
-          "tenant_economic_status",
+          "person_1_economic_status",
           "household_number_of_other_members",
           "person_2_relationship",
           "person_2_age",

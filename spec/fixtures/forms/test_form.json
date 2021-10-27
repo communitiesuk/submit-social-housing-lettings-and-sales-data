@@ -16,9 +16,9 @@
                 }
               }
             },
-            "tenant_age": {
+            "person_1_age": {
               "questions": {
-                "tenant_age": {
+                "person_1_age": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "type": "numeric",
@@ -28,9 +28,9 @@
                 }
               }
             },
-            "tenant_gender": {
+            "person_1_gender": {
               "questions": {
-                "tenant_gender": {
+                "person_1_gender": {
                   "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "type": "radio",
@@ -252,7 +252,7 @@
                 }
               },
               "conditional_route_to": {
-                "rent": { "pregnancy": "Yes", "tenant_gender": "Female" },
+                "rent": { "pregnancy": "Yes", "person_1_gender": "Female" },
                 "conditional_question_yes_page": { "pregnancy": "Yes" },
                 "conditional_question_no_page": { "pregnancy": "No" }
               },

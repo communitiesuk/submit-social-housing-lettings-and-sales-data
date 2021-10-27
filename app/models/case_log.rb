@@ -3,9 +3,9 @@ class CaseLogValidator < ActiveModel::Validator
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
 
-  def validate_tenant_age(record)
-    if record.tenant_age && !/^[1-9][0-9]?$|^120$/.match?(record.tenant_age.to_s)
-      record.errors.add :tenant_age, "Tenant age must be between 0 and 120"
+  def validate_person_1_age(record)
+    if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
+      record.errors.add :person_1_age, "Tenant age must be between 0 and 120"
     end
   end
 
@@ -67,6 +67,39 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
+  def validate_net_income_uc_proportion(record)
+    (1..8).any? do |n|
+      economic_status = record["person_#{n}_economic_status"]
+      is_employed = EMPLOYED_STATUSES.include?(economic_status)
+      relationship = record["person_#{n}_relationship"]
+      is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
+      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
+        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      end
+    end
+  end
+
+  def validate_household_pregnancy(record)
+    if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
+      record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"
+    end
+  end
+
+  def validate_fixed_term_tenancy(record)
+    is_present = record.fixed_term_tenancy.present?
+    is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
+    is_secure = record.tenancy_type == "Fixed term – Secure"
+    is_ast = record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)"
+    conditions = [
+      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
+      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
+      { condition: is_secure && (!is_in_range && is_present), error: "Fixed term – Secure should be between 2 and 99 years or not specified" },
+    ]
+
+    conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -81,6 +114,16 @@ class CaseLogValidator < ActiveModel::Validator
       # validations to be run
       validation_methods = public_methods(false) - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
+    end
+  end
+
+private
+
+  def women_of_child_bearing_age_in_household(record)
+    (1..8).any? do |n|
+      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
+
+      record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end
@@ -168,6 +211,10 @@ private
 
     if net_income.to_i.zero?
       dynamically_not_required << "net_income_frequency"
+    end
+
+    if tenancy_type == "Fixed term – Secure"
+      dynamically_not_required << "fixed_term_tenancy"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
