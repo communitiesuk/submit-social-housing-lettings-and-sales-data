@@ -57,10 +57,15 @@ class CaseLogValidator < ActiveModel::Validator
 
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
-    if EMPLOYED_STATUSES.include?(record.tenant_economic_status) && record.net_income_uc_proportion == "All"
-      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if person works part or full time"
+    (1..8).any? do |n|
+      economic_status = record["person_#{n}_economic_status"]
+      is_employed = EMPLOYED_STATUSES.include?(economic_status)
+      relationship = record["person_#{n}_relationship"]
+      is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
+      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
+        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      end
     end
-    (2..8).any? { |n| check_partner_net_income_uc_proportion(n, record) }
   end
 
   def validate_household_pregnancy(record)
@@ -87,14 +92,6 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
 private
-
-  def check_partner_net_income_uc_proportion(person_num, record)
-    economic_status = record["person_#{person_num}_economic_status"]
-    relationship = record["person_#{person_num}_relationship"]
-    if EMPLOYED_STATUSES.include?(economic_status) && relationship == "Partner" && record.net_income_uc_proportion == "All"
-      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
-    end
-  end
 
   def women_of_child_bearing_age_in_household(record)
     (1..8).any? do |n|

@@ -100,13 +100,13 @@ RSpec.describe Form, type: :model do
     context "tenant’s income is from Universal Credit, state pensions or benefits" do
       it "Cannot be All if person 1 works full time" do
         expect {
-          CaseLog.create!(net_income_uc_proportion: "All", tenant_economic_status: "Full-time - 30 hours or more")
+          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Full-time - 30 hours or more")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Cannot be All if person 1 works part time" do
         expect {
-          CaseLog.create!(net_income_uc_proportion: "All", tenant_economic_status: "Part-time - Less than 30 hours")
+          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Part-time - Less than 30 hours")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
