@@ -111,6 +111,7 @@ private
       next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
       count += 1
     end
+    return count
   end
 end
 

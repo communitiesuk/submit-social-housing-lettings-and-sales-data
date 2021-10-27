@@ -96,6 +96,36 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context "Shared accomodation bedrooms validation" do
+      it "you must have more than zero bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared house",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 8)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 2)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe "status" do
