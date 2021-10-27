@@ -101,6 +101,10 @@ class CaseLogValidator < ActiveModel::Validator
     conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
   end
 
+  def validate_other_tenancy_type(record)
+    validate_other_field(record, "tenancy_type", "other_tenancy_type")
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload

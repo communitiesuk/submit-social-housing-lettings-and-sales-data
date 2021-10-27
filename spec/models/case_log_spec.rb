@@ -201,7 +201,32 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(armed_forces: "Yes - a regular",
                           armed_forces_active: "Yes",
-                          armed_forces_injured: "Yes")
+                          armed_forces_injured: "Yes")}
+      end
+    end
+
+    context "other tenancy type validation" do
+      it "must be provided if tenancy type was given as other" do
+        expect {
+          CaseLog.create!(tenancy_type: "Other",
+                          other_tenancy_type: nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Other",
+                          other_tenancy_type: "type")
+        }.not_to raise_error
+      end
+
+      it "must not be provided if tenancy type is not other" do
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed",
+                          other_tenancy_type: "the other reason provided")
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(tenancy_type: "Fixed",
+                          other_tenancy_type: nil)
         }.not_to raise_error
       end
     end
