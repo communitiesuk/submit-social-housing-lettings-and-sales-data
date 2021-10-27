@@ -75,17 +75,17 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
   def validate_fixed_term_tenancy(record)
-    if !(record.tenancy_type == "Fixed term – Secure" || record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)") && record.fixed_term_tenancy.present?
-      record.errors.add :fixed_term_tenancy, "You must only answer the fixed term tenancy length question if the tenancy type is fixed term"
-    end
+    is_present = record.fixed_term_tenancy.present?
+    is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
+    is_secure = record.tenancy_type == "Fixed term – Secure"
+    is_ast = record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)"
+    conditions = [
+      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
+      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
+      { condition: is_secure && (!is_in_range && is_present), error: "Fixed term – Secure should be between 2 and 99 years or not specified" },
+    ]
 
-    if record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)" && !record.fixed_term_tenancy.to_i.between?(2, 99)
-      record.errors.add :fixed_term_tenancy, "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years"
-    end
-
-    if record.tenancy_type == "Fixed term – Secure" && (!record.fixed_term_tenancy.to_i.between?(2, 99) && record.fixed_term_tenancy.present?)
-      record.errors.add :fixed_term_tenancy, "Fixed term – Secure should be between 2 and 99 years or not specified"
-    end
+    conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
   end
 
   def validate(record)
