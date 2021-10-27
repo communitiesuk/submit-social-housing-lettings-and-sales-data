@@ -115,7 +115,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
-    
+
     context "fixed term tenancy length" do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
@@ -163,7 +163,7 @@ RSpec.describe Form, type: :model do
         }.not_to raise_error
       end
     end
-  
+
     context "armed forces active validation" do
       it "must be answered if ever served in the forces as a regular" do
         expect {
@@ -176,7 +176,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(armed_forces: "No",
                           armed_forces_active: "Yes")
-        }.to raise_error
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       # Crossover over tests here as injured must be answered as well for no error
@@ -185,7 +185,7 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(armed_forces: "Yes - a regular",
                           armed_forces_active: "Yes",
                           armed_forces_injured: "Yes")
-          }.not_to raise_error
+        }.not_to raise_error
       end
     end
   end

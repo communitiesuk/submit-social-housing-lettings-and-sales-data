@@ -54,7 +54,7 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :armed_forces_injured, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
     end
   end
-  
+
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|
