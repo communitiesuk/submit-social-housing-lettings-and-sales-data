@@ -873,7 +873,8 @@
           },
           "fixed_term_tenancy": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "pattern": "((?!1|0)([0-9][0-9]))+"
           },
           "tenancy_type": {
             "type": "string",
