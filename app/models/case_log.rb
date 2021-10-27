@@ -196,9 +196,8 @@ class CaseLog < ApplicationRecord
   end
 
   def person_1_economic_status=(value)
-    # We override the default method so that when the value for this is changed we
-    # also reset the applicable income range used for validation, while still being
-    # able to cache it when this field hasn't changed
+    # When the value for this is changed we also reset the applicable income range
+    # used for validation, while still being able to cache it when this field hasn't changed
     @applicable_income_range = nil
     super(value)
   end
