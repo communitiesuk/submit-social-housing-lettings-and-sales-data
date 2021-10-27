@@ -55,6 +55,19 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
+  def validate_net_income_uc_proportion(record)
+    (1..8).any? do |n|
+      economic_status = record["person_#{n}_economic_status"]
+      is_employed = EMPLOYED_STATUSES.include?(economic_status)
+      relationship = record["person_#{n}_relationship"]
+      is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
+      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
+        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      end
+    end
+  end
+
   def validate_household_pregnancy(record)
     if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
       record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"

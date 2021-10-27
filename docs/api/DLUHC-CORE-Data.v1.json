@@ -274,7 +274,7 @@
             "tenant_nationality": "UK national resident in UK",
             "previous_housing_situation": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
-            "tenant_economic_status": "Full-time - 30 hours or more",
+            "person_1_economic_status": "Full-time - 30 hours or more",
             "household_number_of_other_members": 7,
             "person_2_relationship": "Partner",
             "person_2_age": 32,
@@ -459,7 +459,7 @@
             "type": "string",
             "minLength": 1
           },
-          "tenant_economic_status": {
+          "person_1_economic_status": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -945,7 +945,13 @@
           },
           "net_income_uc_proportion": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "All",
+              "Some",
+              "None",
+              "Do not know"
+            ]
           },
           "housing_benefit": {
             "type": "string",
@@ -1092,7 +1098,7 @@
           "tenant_nationality",
           "previous_housing_situation",
           "armed_forces",
-          "tenant_economic_status",
+          "person_1_economic_status",
           "household_number_of_other_members",
           "person_2_relationship",
           "person_2_age",
