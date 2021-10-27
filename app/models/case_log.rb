@@ -63,7 +63,7 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
     end
   end
-      
+
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|
