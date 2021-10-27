@@ -74,6 +74,20 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_fixed_term_tenancy(record)
+    is_present = record.fixed_term_tenancy.present?
+    is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
+    is_secure = record.tenancy_type == "Fixed term – Secure"
+    is_ast = record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)"
+    conditions = [
+      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
+      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
+      { condition: is_secure && (!is_in_range && is_present), error: "Fixed term – Secure should be between 2 and 99 years or not specified" },
+    ]
+
+    conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -170,6 +184,10 @@ private
 
     if net_income.to_i.zero?
       dynamically_not_required << "net_income_frequency"
+    end
+
+    if tenancy_type == "Fixed term – Secure"
+      dynamically_not_required << "fixed_term_tenancy"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
