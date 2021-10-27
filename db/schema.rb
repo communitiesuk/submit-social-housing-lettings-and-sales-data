@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 2021_10_27_091521) do
     t.boolean "reasonable_preference_reason_avoid_hardship"
     t.boolean "reasonable_preference_reason_do_not_know"
     t.datetime "discarded_at"
+    t.boolean "override_net_income_validation"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
