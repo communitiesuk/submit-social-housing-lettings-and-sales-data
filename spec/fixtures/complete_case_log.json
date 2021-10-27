@@ -2,8 +2,8 @@
   "case_log":
     {
       "tenant_code": "T657",
-      "tenant_age": 35,
-      "tenant_gender": "Female",
+      "person_1_age": 35,
+      "person_1_gender": "Female",
       "tenant_ethnic_group": "White: English/Scottish/Welsh/Northern Irish/British",
       "tenant_nationality": "UK national resident in UK",
       "previous_housing_situation": "Private sector tenancy",

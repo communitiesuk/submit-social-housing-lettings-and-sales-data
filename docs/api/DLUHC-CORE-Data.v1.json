@@ -193,7 +193,7 @@
         "summary": "Create New Case Log",
         "operationId": "post-caselog",
         "responses": {
-          "200": {
+          "201": {
             "description": "Case Log Created",
             "content": {
               "application/json": {
@@ -388,13 +388,13 @@
             "type": "string",
             "minLength": 1
           },
-          "tenant_age": {
+          "person_1_age": {
             "type": "number",
             "description": "The age of the lead tenant",
             "maximum": 120,
             "minimum": 0
           },
-          "tenant_gender": {
+          "person_1_gender": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -781,11 +781,55 @@
           },
           "reason_for_leaving_last_settled_home": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Permanently decanted from another property owned by this landlord",
+              "Left home country as a refugee",
+              "Loss of tied accommodation",
+              "Domestic abuse",
+              "(Non violent) relationship breakdown with partner",
+              "Asked to leave by family or friends",
+              "Racial harassment",
+              "Other problems with neighbours",
+              "Property unsuitable because of overcrowding",
+              "End of assured shorthold tenancy - no fault",
+              "End of assured shorthold tenancy - tenant's fault",
+              "End of fixed term tenancy - no fault",
+              "End of fixed term tenancy - tenant's fault",
+              "Repossession",
+              "Under occupation - offered incentive to downsize",
+              "Under occupation - no incentive",
+              "Property unsuitable because of ill health / disability",
+              "Property unsuitable because of poor condition",
+              "Couldn't afford fees attached to renewing the tenancy",
+              "Couldn't afford increase in rent",
+              "Couldn't afford rent or mortgage - welfare reforms",
+              "Couldn't afford rent or mortgage - employment",
+              "Couldn't afford rent or mortgage - other",
+              "To move nearer to family / friends / school",
+              "To move nearer to work",
+              "To move to accomodation with support",
+              "To move to independent accomodation",
+              "Hate crime",
+              "Death of household member in last settled accomodation",
+              "Discharged from prison",
+              "Discharged from long stay hospital or similar institution",
+              "Other",
+              "Do not know",
+              "Prefer not to say"
+            ]
           },
           "benefit_cap_spare_room_subsidy": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "Yes - benefit cap",
+              "Yes - removal of the spare room subsidy",
+              "Yes - both the benefit cap and the removal of the spare room subsidy",
+              "No",
+              "Do not know",
+              "Prefer not to say"
+            ]
           },
           "armed_forces_active": {
             "type": "string",
@@ -1048,8 +1092,8 @@
         },
         "required": [
           "tenant_code",
-          "tenant_age",
-          "tenant_gender",
+          "person_1_age",
+          "person_1_gender",
           "tenant_ethnic_group",
           "tenant_nationality",
           "previous_housing_situation",

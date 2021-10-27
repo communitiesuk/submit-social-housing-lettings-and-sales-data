@@ -3,9 +3,9 @@ class CaseLogValidator < ActiveModel::Validator
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
 
-  def validate_tenant_age(record)
-    if record.tenant_age && !/^[1-9][0-9]?$|^120$/.match?(record.tenant_age.to_s)
-      record.errors.add :tenant_age, "Tenant age must be between 0 and 120"
+  def validate_person_1_age(record)
+    if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
+      record.errors.add :person_1_age, "Tenant age must be between 0 and 120"
     end
   end
 
@@ -39,6 +39,12 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_reason_for_leaving_last_settled_home(record)
+    if record.reason_for_leaving_last_settled_home == "Do not know" && record.benefit_cap_spare_room_subsidy != "Do not know"
+      record.errors.add :benefit_cap_spare_room_subsidy, "must be do not know if tenant’s main reason for leaving is do not know"
+    end
+  end
+
   def validate_armed_forces_injured(record)
     if (record.armed_forces == "Yes - a regular" || record.armed_forces == "Yes - a reserve") && record.armed_forces_injured.blank?
       record.errors.add :armed_forces_injured, "You must answer the armed forces injury question if the tenant has served in the armed forces"
@@ -55,6 +61,12 @@ class CaseLogValidator < ActiveModel::Validator
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if person works part or full time"
     end
     (2..8).any? { |n| check_partner_net_income_uc_proportion(n, record) }
+  end
+
+  def validate_household_pregnancy(record)
+    if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
+      record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"
+    end
   end
 
   def validate(record)
@@ -81,6 +93,14 @@ private
     relationship = record["person_#{person_num}_relationship"]
     if EMPLOYED_STATUSES.include?(economic_status) && relationship == "Partner" && record.net_income_uc_proportion == "All"
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
+    end
+  end
+
+  def women_of_child_bearing_age_in_household(record)
+    (1..8).any? do |n|
+      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
+
+      record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end
