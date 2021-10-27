@@ -5,9 +5,9 @@ RSpec.describe Form, type: :model do
   let(:form) { form_handler.get_form("test_form") }
 
   describe ".next_page" do
-    let(:previous_page) { "tenant_age" }
+    let(:previous_page) { "person_1_age" }
     it "returns the next page given the previous" do
-      expect(form.next_page(previous_page)).to eq("tenant_gender")
+      expect(form.next_page(previous_page)).to eq("person_1_gender")
     end
   end
 
@@ -20,7 +20,7 @@ RSpec.describe Form, type: :model do
 
   describe ".previous_page" do
     context "given a page in the middle of a subsection" do
-      let(:current_page) { "tenant_age" }
+      let(:current_page) { "person_1_age" }
       it "returns the previous page given the current" do
         expect(form.previous_page(current_page)).to eq("tenant_code")
       end
