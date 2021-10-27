@@ -55,6 +55,15 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  def validate_outstanding_rent_amount(record)
+    if record.outstanding_rent_or_charges == "Yes" && record.outstanding_amount.blank?
+      record.errors.add :outstanding_amount, "You must answer the oustanding amout question if you have outstanding rent or charges."
+    end
+    if record.outstanding_rent_or_charges == "No" && record.outstanding_amount.present?
+      record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
+    end
+  end
+      
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|

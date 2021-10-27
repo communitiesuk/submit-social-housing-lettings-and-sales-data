@@ -1207,6 +1207,17 @@
         ]
       }
     },
-    "securitySchemes": {}
+    "securitySchemes": {
+      "API Key - 1": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "query"
+      },
+      "API Key - 2": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "query"
+      }
+    }
   }
 }
