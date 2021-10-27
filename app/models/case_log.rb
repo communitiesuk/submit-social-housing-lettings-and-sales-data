@@ -49,18 +49,12 @@ class CaseLogValidator < ActiveModel::Validator
     end
   end
 
+  EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
-    if ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(record.tenant_economic_status) && record.net_income_uc_proportion == "All"
+    if EMPLOYED_STATUSES.include?(record.tenant_economic_status) && record.net_income_uc_proportion == "All"
       record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if person works part or full time"
     end
-
-    fields = [{ status: record.person_2_economic_status, relationship: record.person_2_relationship },
-              { status: record.person_3_economic_status, relationship: record.person_3_relationship },
-              { status: record.person_4_economic_status, relationship: record.person_4_relationship }]
-
-    if (fields.any? { |field| ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].include?(field[:status]) && field[:relationship] == "Partner" }) && record.net_income_uc_proportion == "All"
-      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
-    end
+    (2..8).any? { |n| check_partner_net_income_uc_proportion(n, record) }
   end
 
   def validate(record)
@@ -77,6 +71,16 @@ class CaseLogValidator < ActiveModel::Validator
       # validations to be run
       validation_methods = public_methods(false) - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
+    end
+  end
+
+private
+
+  def check_partner_net_income_uc_proportion(person_num, record)
+    economic_status = record["person_#{person_num}_economic_status"]
+    relationship = record["person_#{person_num}_relationship"]
+    if EMPLOYED_STATUSES.include?(economic_status) && relationship == "Partner" && record.net_income_uc_proportion == "All"
+      record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the partner works part or full time"
     end
   end
 end
