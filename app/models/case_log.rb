@@ -165,10 +165,6 @@ class CaseLog < ApplicationRecord
   include Discard::Model
   include SoftValidations
   default_scope -> { kept }
-  scope :not_started, -> { where(status: "not_started") }
-  scope :in_progress, -> { where(status: "in_progress") }
-  scope :not_completed, -> { where.not(status: "completed") }
-  scope :completed, -> { where(status: "completed") }
 
   validate :instance_validations
   before_save :update_status!
