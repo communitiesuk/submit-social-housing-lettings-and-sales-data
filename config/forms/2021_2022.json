@@ -1466,7 +1466,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
-                    "2": "Tenant prefers no to say"
+                    "2": "Tenant prefers not to say"
                   },
                   "conditional_for": {
                     "net_income": ["Yes"],
