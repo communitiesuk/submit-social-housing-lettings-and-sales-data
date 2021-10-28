@@ -109,7 +109,7 @@
                   "Invalid Age": {
                     "value": {
                       "errors": {
-                        "tenant_age": [
+                        "person_1_age": [
                           "Tenant age must be between 0 and 120"
                         ]
                       }
@@ -219,7 +219,7 @@
                         "reasonable_preference_reason": [
                           "If reasonable preference is Yes, a reason must be given"
                         ],
-                        "tenant_age": [
+                        "person_1_age": [
                           "Tenant age must be between 0 and 120"
                         ]
                       }
@@ -268,13 +268,13 @@
         "x-examples": {
           "example-1": {
             "tenant_code": "T657",
-            "tenant_age": 35,
-            "tenant_gender": "Female",
+            "person_1_age": 35,
+            "person_1_gender": "Female",
             "tenant_ethnic_group": "White: English/Scottish/Welsh/Northern Irish/British",
             "tenant_nationality": "UK national resident in UK",
             "previous_housing_situation": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
-            "tenant_economic_status": "Full-time - 30 hours or more",
+            "person_1_economic_status": "Full-time - 30 hours or more",
             "household_number_of_other_members": 7,
             "person_2_relationship": "Partner",
             "person_2_age": 32,
@@ -459,7 +459,7 @@
             "type": "string",
             "minLength": 1
           },
-          "tenant_economic_status": {
+          "person_1_economic_status": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -873,7 +873,8 @@
           },
           "fixed_term_tenancy": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "pattern": "((?!1|0)([0-9][0-9]))+"
           },
           "tenancy_type": {
             "type": "string",
@@ -945,7 +946,13 @@
           },
           "net_income_uc_proportion": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "enum": [
+              "All",
+              "Some",
+              "None",
+              "Do not know"
+            ]
           },
           "housing_benefit": {
             "type": "string",
@@ -1082,6 +1089,10 @@
           },
           "reasonable_preference_reason_do_not_know": {
             "type": "boolean"
+          },
+          "other_tenancy-type": {
+            "type": "string",
+            "example": "private tenancy"
           }
         },
         "required": [
@@ -1092,7 +1103,7 @@
           "tenant_nationality",
           "previous_housing_situation",
           "armed_forces",
-          "tenant_economic_status",
+          "person_1_economic_status",
           "household_number_of_other_members",
           "person_2_relationship",
           "person_2_age",
@@ -1196,10 +1207,22 @@
           "reasonable_preference_reason_unsatisfactory_housing",
           "reasonable_preference_reason_medical_grounds",
           "reasonable_preference_reason_avoid_hardship",
-          "reasonable_preference_reason_do_not_know"
+          "reasonable_preference_reason_do_not_know",
+          "other_tenancy-type"
         ]
       }
     },
-    "securitySchemes": {}
+    "securitySchemes": {
+      "API Key - 1": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "query"
+      },
+      "API Key - 2": {
+        "name": "API Key",
+        "type": "apiKey",
+        "in": "query"
+      }
+    }
   }
 }

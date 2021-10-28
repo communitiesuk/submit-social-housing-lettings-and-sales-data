@@ -121,7 +121,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenant_economic_status": {
+                "person_1_economic_status": {
                   "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
                   "hint_text": "",
@@ -903,7 +903,15 @@
                     "3": "Lifetime – Assured",
                     "4": "License agreement",
                     "5": "Other"
+                  },
+                  "conditional_for": {
+                    "other_tenancy_type": ["Other"]
                   }
+                },
+                "other_tenancy_type": {
+                  "header": "Please state the tenancy type",
+                  "hint_text": "",
+                  "type": "text"
                 }
               }
             },
