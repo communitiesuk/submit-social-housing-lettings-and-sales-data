@@ -248,8 +248,13 @@ private
       dynamically_not_required << "fixed_term_tenancy"
     end
 
-    if tenancy_type != "Other"
+    unless tenancy_type == "Other"
       dynamically_not_required << "other_tenancy_type"
+    end
+
+    unless net_income_known == "Yes"
+      dynamically_not_required << "net_income"
+      dynamically_not_required << "net_income_frequency"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
