@@ -385,6 +385,7 @@ RSpec.describe "Test Features" do
 
       it "prompts the user to confirm the value is correct" do
         visit("/case_logs/#{case_log.id}/net_income")
+        choose("case-log-net-income-known-yes-field", allow_label_click: true)
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
         click_button("Save and continue")
@@ -396,6 +397,7 @@ RSpec.describe "Test Features" do
 
       it "does not require confirming the value if the value is amended" do
         visit("/case_logs/#{case_log.id}/net_income")
+        choose("case-log-net-income-known-yes-field", allow_label_click: true)
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
         click_button("Save and continue")
@@ -408,6 +410,7 @@ RSpec.describe "Test Features" do
 
       xit "clears the confirmation question if the page is returned to using the back button" do
         visit("/case_logs/#{case_log.id}/net_income")
+        choose("case-log-net-income-known-yes-field", allow_label_click: true)
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
         click_button("Save and continue")
