@@ -4,6 +4,8 @@ class CaseLogValidator < ActiveModel::Validator
   # name being call in the validate method works.
   include HouseholdValidations
   include PropertyValidations
+  include FinancialValidations
+  include TenancyValidations
 
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
@@ -19,6 +21,20 @@ class CaseLogValidator < ActiveModel::Validator
       # validations to be run
       validation_methods = public_methods.select { |method| method.starts_with?("validate") } - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
+    end
+  end
+
+private
+
+  def validate_other_field(record, main_field, other_field)
+    main_field_label = main_field.humanize(capitalize: false)
+    other_field_label = other_field.humanize(capitalize: false)
+    if record[main_field] == "Other" && record[other_field].blank?
+      record.errors.add other_field.to_sym, "If #{main_field_label} is other then #{other_field_label} must be provided"
+    end
+
+    if record[main_field] != "Other" && record[other_field].present?
+      record.errors.add other_field.to_sym, "#{other_field_label} must not be provided if #{main_field_label} was not other"
     end
   end
 end
