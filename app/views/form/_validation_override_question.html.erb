@@ -1,0 +1,9 @@
+<%= f.govuk_check_boxes_fieldset :override_net_income_validation,
+    legend: { text: @case_log.soft_errors.values.first.message, size: "l" },
+    hint: { text: @case_log.soft_errors.values.first.hint_text } do %>
+
+    <%= f.govuk_check_box :override_net_income_validation, "override_net_income_validation",
+      label: { text: "Yes" },
+      checked: f.object.send("override_net_income_validation")
+    %>
+<% end %>

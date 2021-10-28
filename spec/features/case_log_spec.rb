@@ -377,6 +377,22 @@ RSpec.describe "Test Features" do
     end
   end
 
+  describe "Soft Validation" do
+    context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
+      let!(:case_log){ FactoryBot.create(:case_log, :in_progress, person_1_economic_status: "Full-time - 30 hours or more") }
+      let(:income_over_soft_limit) { 750 }
+
+      it "prompts the user to confirm the value is correct" do
+        visit("/case_logs/#{case_log.id}/net_income")
+        fill_in("case-log-net-income-field", with: income_over_soft_limit)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income")
+        expect(page).to have_unchecked_field("case-log-override-net-income-validation-override-net-income-validation-field")
+      end
+    end
+  end
+
   describe "conditional page routing", js: true do
     it "can route the user to a different page based on their answer on the current page" do
       visit("case_logs/#{id}/conditional_question")

@@ -17,6 +17,10 @@
       </div>
     <% end %>
 
+    <% if @case_log.soft_errors.present? %>
+      <%= render partial: "form/validation_override_question", locals: { f: f } %>
+    <% end %>
+
     <%= f.hidden_field :previous_page, value: page_key %>
     <%= f.govuk_submit "Save and continue"  %>
   <% end %>

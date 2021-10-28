@@ -1477,6 +1477,15 @@
                     "2": "Yearly"
                   }
                 }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
+                  }
+                }
               }
             },
             "net_income_uc_proportion": {

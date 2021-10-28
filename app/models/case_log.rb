@@ -111,6 +111,10 @@ class CaseLogValidator < ActiveModel::Validator
     if record.weekly_net_income < record.applicable_income_range.hard_min
       record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
     end
+
+    if record.soft_errors.present? && record.override_net_income_validation.blank?
+      record.errors.add :override_net_income_validation, "For net incomes that fall outside the expected range you must confirm they're correct"
+    end
   end
 
   def validate_other_tenancy_type(record)
@@ -211,6 +215,24 @@ class CaseLog < ApplicationRecord
     IncomeRange::ALLOWED[person_1_economic_status.to_sym]
   end
 
+  def soft_errors()
+    soft_errors = {}
+    if weekly_net_income && person_1_economic_status && override_net_income_validation.blank?
+      if weekly_net_income < applicable_income_range.soft_min && weekly_net_income > applicable_income_range.hard_min
+        soft_errors["weekly_net_income"] = OpenStruct.new(
+          message: "Net income is lower than expected based on the main tenant's working situation. Are you sure this is correct?",
+          hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}"
+        )
+      elsif weekly_net_income > applicable_income_range.soft_max && weekly_net_income < applicable_income_range.hard_max
+        soft_errors["weekly_net_income"] = OpenStruct.new(
+          message: "Net income is higher than expected based on the main tenant's working situation. Are you sure this is correct?",
+          hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}"
+        )
+      end
+    end
+    soft_errors
+  end
+
 private
 
   def update_status!
@@ -250,6 +272,10 @@ private
 
     if tenancy_type != "Other"
       dynamically_not_required << "other_tenancy_type"
+    end
+
+    if soft_errors.empty?
+      dynamically_not_required << "override_net_income_validation"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
