@@ -30,13 +30,7 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
   def validate_other_reason_for_leaving_last_settled_home(record)
-    if record.reason_for_leaving_last_settled_home == "Other" && record.other_reason_for_leaving_last_settled_home.blank?
-      record.errors.add :other_reason_for_leaving_last_settled_home, "If reason for leaving settled home is other then the other reason must be provided"
-    end
-
-    if record.reason_for_leaving_last_settled_home != "Other" && record.other_reason_for_leaving_last_settled_home.present?
-      record.errors.add :other_reason_for_leaving_last_settled_home, "The other reason must not be provided if the reason for leaving settled home was not other"
-    end
+    validate_other_field(record, "reason_for_leaving_last_settled_home", "other_reason_for_leaving_last_settled_home")
   end
 
   def validate_reason_for_leaving_last_settled_home(record)
@@ -107,6 +101,10 @@ class CaseLogValidator < ActiveModel::Validator
     conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
   end
 
+  def validate_other_tenancy_type(record)
+    validate_other_field(record, "tenancy_type", "other_tenancy_type")
+  end
+
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
@@ -125,6 +123,18 @@ class CaseLogValidator < ActiveModel::Validator
   end
 
 private
+
+  def validate_other_field(record, main_field, other_field)
+    main_field_label = main_field.humanize(capitalize: false)
+    other_field_label = other_field.humanize(capitalize: false)
+    if record[main_field] == "Other" && record[other_field].blank?
+      record.errors.add other_field.to_sym, "If #{main_field_label} is other then #{other_field_label} must be provided"
+    end
+
+    if record[main_field] != "Other" && record[other_field].present?
+      record.errors.add other_field.to_sym, "#{other_field_label} must not be provided if #{main_field_label} was not other"
+    end
+  end
 
   def women_of_child_bearing_age_in_household(record)
     (1..8).any? do |n|
@@ -207,6 +217,10 @@ private
 
     if tenancy_type == "Fixed term – Secure"
       dynamically_not_required << "fixed_term_tenancy"
+    end
+
+    if tenancy_type != "Other"
+      dynamically_not_required << "other_tenancy_type"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
