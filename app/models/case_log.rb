@@ -270,12 +270,17 @@ private
       dynamically_not_required << "fixed_term_tenancy"
     end
 
-    if tenancy_type != "Other"
+    if soft_errors.empty?
+      dynamically_not_required << "override_net_income_validation"
+    end
+
+    unless tenancy_type == "Other"
       dynamically_not_required << "other_tenancy_type"
     end
 
-    if soft_errors.empty?
-      dynamically_not_required << "override_net_income_validation"
+    unless net_income_known == "Yes"
+      dynamically_not_required << "net_income"
+      dynamically_not_required << "net_income_frequency"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }

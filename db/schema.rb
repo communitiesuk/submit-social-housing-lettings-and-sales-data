@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_28_090049) do
+ActiveRecord::Schema.define(version: 2021_10_28_095000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2021_10_28_090049) do
     t.datetime "discarded_at"
     t.string "other_tenancy_type"
     t.boolean "override_net_income_validation"
+    t.string "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
