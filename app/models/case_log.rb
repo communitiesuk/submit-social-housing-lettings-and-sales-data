@@ -3,6 +3,7 @@ class CaseLogValidator < ActiveModel::Validator
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
   include HouseholdValidations
+  include PropertyValidations
 
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
