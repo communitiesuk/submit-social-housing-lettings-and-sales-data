@@ -63,17 +63,20 @@ class CaseLogValidator < ActiveModel::Validator
 
   def validate_shared_housing_rooms(record)
     number_of_tenants = people_in_household(record)
-    if record.property_unit_type == "Bed-sit" && record.property_number_of_bedrooms != 1
-      record.errors.add :property_unit_type, "A bedsit can only have one bedroom"
-    end
 
-    if people_in_household(record) > 1
-      if record.property_unit_type.include? == "Shared" && (record.property_number_of_bedrooms == 0 && record.property_number_of_bedrooms > 7)
-        record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
+    unless record.property_unit_type.nil?
+      if record.property_unit_type == "Bed-sit" && record.property_number_of_bedrooms != 1
+        record.errors.add :property_unit_type, "A bedsit can only have one bedroom"
       end
-    else
-      if record.property_unit_type.include? == "Shared" && (record.property_number_of_bedrooms == 0 && record.property_number_of_bedrooms > 3)
-        record.errors.add :property_unit_type, "A shared house with one tenant must have 1 to 3 bedrooms"
+
+      if people_in_household(record) > 1
+        if record.property_unit_type.include?("Shared") && (record.property_number_of_bedrooms.to_i == 0 || record.property_number_of_bedrooms.to_i > 7)
+          record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
+        end
+      end
+
+      if record.property_unit_type.include?("Shared")  && (record.property_number_of_bedrooms.to_i == 0 || record.property_number_of_bedrooms.to_i > 3)
+        record.errors.add :property_unit_type, "A shared house with less than two tenants must have 1 to 3 bedrooms"
       end
     end
   end
