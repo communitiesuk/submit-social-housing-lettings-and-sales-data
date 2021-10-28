@@ -101,6 +101,18 @@ class CaseLogValidator < ActiveModel::Validator
     conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
   end
 
+  def validate_net_income(record)
+    return unless record.person_1_economic_status && record.weekly_net_income
+
+    if record.weekly_net_income > record.applicable_income_range.hard_max
+      record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
+    end
+
+    if record.weekly_net_income < record.applicable_income_range.hard_min
+      record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
+    end
+  end
+
   def validate_other_tenancy_type(record)
     validate_other_field(record, "tenancy_type", "other_tenancy_type")
   end
@@ -180,6 +192,23 @@ class CaseLog < ApplicationRecord
 
   def in_progress?
     status == "in_progress"
+  end
+
+  def weekly_net_income
+    case net_income_frequency
+    when "Weekly"
+      net_income
+    when "Monthly"
+      ((net_income * 12) / 52.0).round(0)
+    when "Yearly"
+      (net_income / 12.0).round(0)
+    end
+  end
+
+  def applicable_income_range
+    return unless person_1_economic_status
+
+    IncomeRange::ALLOWED[person_1_economic_status.to_sym]
   end
 
 private

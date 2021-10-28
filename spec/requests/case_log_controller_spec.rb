@@ -115,6 +115,14 @@ RSpec.describe CaseLogsController, type: :request do
       json_response = JSON.parse(response.body)
       expect(json_response["status"]).to eq(case_log.status)
     end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "PATCH" do
