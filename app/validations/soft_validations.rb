@@ -1,6 +1,5 @@
 module SoftValidations
   def soft_errors
-    @soft_errors = {}.merge(net_income_validations)
     {}.merge(net_income_validations)
   end
 
