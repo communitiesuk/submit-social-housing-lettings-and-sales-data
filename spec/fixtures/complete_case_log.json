@@ -68,6 +68,7 @@
       "property_major_repairs_date": "05/05/2020",
       "property_number_of_times_relet": 2,
       "property_wheelchair_accessible": true,
+      "net_income_known": "Yes",
       "net_income": 0,
       "net_income_frequency": null,
       "net_income_uc_proportion": "Some",
