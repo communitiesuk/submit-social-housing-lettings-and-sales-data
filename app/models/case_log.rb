@@ -2,120 +2,7 @@ class CaseLogValidator < ActiveModel::Validator
   # Methods to be used on save and continue need to be named 'validate_'
   # followed by field name this is how the metaprogramming of the method
   # name being call in the validate method works.
-
-  def validate_person_1_age(record)
-    if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
-      record.errors.add :person_1_age, "Tenant age must be between 0 and 120"
-    end
-  end
-
-  def validate_property_number_of_times_relet(record)
-    if record.property_number_of_times_relet && !/^[1-9]$|^0[1-9]$|^1[0-9]$|^20$/.match?(record.property_number_of_times_relet.to_s)
-      record.errors.add :property_number_of_times_relet, "Must be between 0 and 20"
-    end
-  end
-
-  def validate_reasonable_preference(record)
-    if record.homelessness == "No" && record.reasonable_preference == "Yes"
-      record.errors.add :reasonable_preference, "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
-    elsif record.reasonable_preference == "Yes"
-      if !record.reasonable_preference_reason_homeless && !record.reasonable_preference_reason_unsatisfactory_housing && !record.reasonable_preference_reason_medical_grounds && !record.reasonable_preference_reason_avoid_hardship && !record.reasonable_preference_reason_do_not_know
-        record.errors.add :reasonable_preference_reason, "If reasonable preference is Yes, a reason must be given"
-      end
-    elsif record.reasonable_preference == "No"
-      if record.reasonable_preference_reason_homeless || record.reasonable_preference_reason_unsatisfactory_housing || record.reasonable_preference_reason_medical_grounds || record.reasonable_preference_reason_avoid_hardship || record.reasonable_preference_reason_do_not_know
-        record.errors.add :reasonable_preference_reason, "If reasonable preference is No, no reasons should be given"
-      end
-    end
-  end
-
-  def validate_other_reason_for_leaving_last_settled_home(record)
-    validate_other_field(record, "reason_for_leaving_last_settled_home", "other_reason_for_leaving_last_settled_home")
-  end
-
-  def validate_reason_for_leaving_last_settled_home(record)
-    if record.reason_for_leaving_last_settled_home == "Do not know" && record.benefit_cap_spare_room_subsidy != "Do not know"
-      record.errors.add :benefit_cap_spare_room_subsidy, "must be do not know if tenant’s main reason for leaving is do not know"
-    end
-  end
-
-  def validate_armed_forces_injured(record)
-    if (record.armed_forces == "Yes - a regular" || record.armed_forces == "Yes - a reserve") && record.armed_forces_injured.blank?
-      record.errors.add :armed_forces_injured, "You must answer the armed forces injury question if the tenant has served in the armed forces"
-    end
-
-    if (record.armed_forces == "No" || record.armed_forces == "Prefer not to say") && record.armed_forces_injured.present?
-      record.errors.add :armed_forces_injured, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
-    end
-  end
-
-  def validate_outstanding_rent_amount(record)
-    if record.outstanding_rent_or_charges == "Yes" && record.outstanding_amount.blank?
-      record.errors.add :outstanding_amount, "You must answer the oustanding amout question if you have outstanding rent or charges."
-    end
-    if record.outstanding_rent_or_charges == "No" && record.outstanding_amount.present?
-      record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
-    end
-  end
-
-  EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
-  def validate_net_income_uc_proportion(record)
-    (1..8).any? do |n|
-      economic_status = record["person_#{n}_economic_status"]
-      is_employed = EMPLOYED_STATUSES.include?(economic_status)
-      relationship = record["person_#{n}_relationship"]
-      is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
-      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
-        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
-      end
-    end
-  end
-
-  def validate_armed_forces_active_response(record)
-    if record.armed_forces == "Yes - a regular" && record.armed_forces_active.blank?
-      record.errors.add :armed_forces_active, "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
-    end
-
-    if record.armed_forces != "Yes - a regular" && record.armed_forces_active.present?
-      record.errors.add :armed_forces_active, "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
-    end
-  end
-
-  def validate_household_pregnancy(record)
-    if (record.pregnancy == "Yes" || record.pregnancy == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
-      record.errors.add :pregnancy, "You must answer no as there are no female tenants aged 16-50 in the property"
-    end
-  end
-
-  def validate_fixed_term_tenancy(record)
-    is_present = record.fixed_term_tenancy.present?
-    is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
-    is_secure = record.tenancy_type == "Fixed term – Secure"
-    is_ast = record.tenancy_type == "Fixed term – Assured Shorthold Tenancy (AST)"
-    conditions = [
-      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
-      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
-      { condition: is_secure && (!is_in_range && is_present), error: "Fixed term – Secure should be between 2 and 99 years or not specified" },
-    ]
-
-    conditions.each { |condition| condition[:condition] ? (record.errors.add :fixed_term_tenancy, condition[:error]) : nil }
-  end
-
-  def validate_net_income(record)
-    return unless record.person_1_economic_status && record.weekly_net_income
-
-    if record.weekly_net_income > record.applicable_income_range.hard_max
-      record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
-    end
-
-    if record.weekly_net_income < record.applicable_income_range.hard_min
-      record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
-    end
-  end
-
-  def validate_other_tenancy_type(record)
-    validate_other_field(record, "tenancy_type", "other_tenancy_type")
-  end
+  include HouseholdValidations
 
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
@@ -129,30 +16,8 @@ class CaseLogValidator < ActiveModel::Validator
     else
       # This assumes that all methods in this class other than this one are
       # validations to be run
-      validation_methods = public_methods(false) - [__callee__]
+      validation_methods = public_methods.select { |method| method.starts_with?("validate") } - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
-    end
-  end
-
-private
-
-  def validate_other_field(record, main_field, other_field)
-    main_field_label = main_field.humanize(capitalize: false)
-    other_field_label = other_field.humanize(capitalize: false)
-    if record[main_field] == "Other" && record[other_field].blank?
-      record.errors.add other_field.to_sym, "If #{main_field_label} is other then #{other_field_label} must be provided"
-    end
-
-    if record[main_field] != "Other" && record[other_field].present?
-      record.errors.add other_field.to_sym, "#{other_field_label} must not be provided if #{main_field_label} was not other"
-    end
-  end
-
-  def women_of_child_bearing_age_in_household(record)
-    (1..8).any? do |n|
-      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
-
-      record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end
