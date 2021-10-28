@@ -1,4 +1,5 @@
 module HouseholdValidations
+  # Validations methods need to be called 'validate_' to run on model save
   def validate_person_1_age(record)
     if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
       record.errors.add :person_1_age, "Tenant age must be between 0 and 120"

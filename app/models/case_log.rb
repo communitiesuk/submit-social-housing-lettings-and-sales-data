@@ -1,7 +1,5 @@
 class CaseLogValidator < ActiveModel::Validator
-  # Methods to be used on save and continue need to be named 'validate_'
-  # followed by field name this is how the metaprogramming of the method
-  # name being call in the validate method works.
+  # Validations methods need to be called 'validate_' to run on model save
   include HouseholdValidations
   include PropertyValidations
   include FinancialValidations
@@ -17,8 +15,6 @@ class CaseLogValidator < ActiveModel::Validator
         public_send("validate_#{question_to_validate}", record)
       end
     else
-      # This assumes that all methods in this class other than this one are
-      # validations to be run
       validation_methods = public_methods.select { |method| method.starts_with?("validate") } - [__callee__]
       validation_methods.each { |meth| public_send(meth, record) }
     end

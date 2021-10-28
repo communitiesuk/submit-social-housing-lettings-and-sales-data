@@ -1,4 +1,5 @@
 module TenancyValidations
+  # Validations methods need to be called 'validate_' to run on model save
   def validate_fixed_term_tenancy(record)
     is_present = record.fixed_term_tenancy.present?
     is_in_range = record.fixed_term_tenancy.to_i.between?(2, 99)
