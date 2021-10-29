@@ -15,7 +15,7 @@ class CaseLogValidator < ActiveModel::Validator
         public_send("validate_#{question_to_validate}", record)
       end
     else
-      validation_methods = public_methods.select { |method| method.starts_with?("validate") } - [__callee__]
+      validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
       validation_methods.each { |meth| public_send(meth, record) }
     end
   end
