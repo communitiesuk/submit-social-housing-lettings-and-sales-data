@@ -105,6 +105,12 @@ class CaseLogValidator < ActiveModel::Validator
     validate_other_field(record, "tenancy_type", "other_tenancy_type")
   end
 
+  # Validations methods need to be called 'validate_' to run on model save
+  include HouseholdValidations
+  include PropertyValidations
+  include FinancialValidations
+  include TenancyValidations
+
   def validate_shared_housing_rooms(record)
     unless record.property_unit_type.nil?
       if record.property_unit_type == "Bed-sit" && record.property_number_of_bedrooms != 1
@@ -135,9 +141,7 @@ class CaseLogValidator < ActiveModel::Validator
         public_send("validate_#{question_to_validate}", record)
       end
     else
-      # This assumes that all methods in this class other than this one are
-      # validations to be run
-      validation_methods = public_methods(false) - [__callee__]
+      validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
       validation_methods.each { |meth| public_send(meth, record) }
     end
   end
@@ -153,14 +157,6 @@ private
 
     if record[main_field] != "Other" && record[other_field].present?
       record.errors.add other_field.to_sym, "#{other_field_label} must not be provided if #{main_field_label} was not other"
-    end
-  end
-
-  def women_of_child_bearing_age_in_household(record)
-    (1..8).any? do |n|
-      next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
-
-      record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
     end
   end
 end
@@ -202,6 +198,23 @@ class CaseLog < ApplicationRecord
     status == "in_progress"
   end
 
+  def weekly_net_income
+    case net_income_frequency
+    when "Weekly"
+      net_income
+    when "Monthly"
+      ((net_income * 12) / 52.0).round(0)
+    when "Yearly"
+      (net_income / 12.0).round(0)
+    end
+  end
+
+  def applicable_income_range
+    return unless person_1_economic_status
+
+    IncomeRange::ALLOWED[person_1_economic_status.to_sym]
+  end
+
 private
 
   def update_status!
@@ -239,8 +252,13 @@ private
       dynamically_not_required << "fixed_term_tenancy"
     end
 
-    if tenancy_type != "Other"
+    unless tenancy_type == "Other"
       dynamically_not_required << "other_tenancy_type"
+    end
+
+    unless net_income_known == "Yes"
+      dynamically_not_required << "net_income"
+      dynamically_not_required << "net_income_frequency"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }

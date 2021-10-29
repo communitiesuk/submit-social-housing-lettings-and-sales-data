@@ -937,6 +937,15 @@
           "property_wheelchair_accessible": {
             "type": "boolean"
           },
+          "net_income_known": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "Yes",
+              "No",
+              "Tenant prefers not to say"
+            ]
+          },
           "net_income": {
             "type": "number"
           },
@@ -1208,7 +1217,8 @@
           "reasonable_preference_reason_medical_grounds",
           "reasonable_preference_reason_avoid_hardship",
           "reasonable_preference_reason_do_not_know",
-          "other_tenancy-type"
+          "other_tenancy-type",
+          "net_income_known"
         ]
       }
     },
