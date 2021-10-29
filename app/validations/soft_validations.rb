@@ -9,12 +9,12 @@ private
     net_income_errors = {}
     if weekly_net_income && person_1_economic_status && override_net_income_validation.blank?
       if weekly_net_income < applicable_income_range.soft_min && weekly_net_income > applicable_income_range.hard_min
-        net_income_errors["weekly_net_income"] = OpenStruct.new(
+        net_income_errors["override_net_income_validation"] = OpenStruct.new(
           message: "Net income is lower than expected based on the main tenant's working situation. Are you sure this is correct?",
           hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}",
         )
       elsif weekly_net_income > applicable_income_range.soft_max && weekly_net_income < applicable_income_range.hard_max
-        net_income_errors["weekly_net_income"] = OpenStruct.new(
+        net_income_errors["override_net_income_validation"] = OpenStruct.new(
           message: "Net income is higher than expected based on the main tenant's working situation. Are you sure this is correct?",
           hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}",
         )
