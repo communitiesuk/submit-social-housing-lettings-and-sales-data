@@ -57,6 +57,7 @@ module HouseholdValidations
       validate_person_age_matches_economic_status(record, n)
       validate_person_age_matches_relationship(record, n)
       validate_person_age_and_gender_match_economic_status(record, n)
+      validate_person_age_and_relationship_matches_economic_status(record, n)
     end
     validate_partner_count(record)
   end
@@ -95,9 +96,6 @@ private
     if age < 16 && economic_status != "Child under 16"
       record.errors.add "person_#{person_num}_economic_status", "Tenant #{person_num} economic status must be Child under 16 if their age is under 16"
     end
-    if age >= 16 && age <= 19 && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
-      record.errors.add "person_#{person_num}_economic_status", "If age is between 16 and 19 - tenant #{person_num} must be a full time student or prefer not to say."
-    end
   end
 
   def validate_person_age_matches_relationship(record, person_num)
@@ -107,6 +105,17 @@ private
 
     if age < 16 && relationship != "Child - includes young adult and grown-up"
       record.errors.add "person_#{person_num}_relationship", "Tenant #{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
+    end
+  end
+
+  def validate_person_age_and_relationship_matches_economic_status(record, person_num)
+    age = record.public_send("person_#{person_num}_age")
+    economic_status = record.public_send("person_#{person_num}_economic_status")
+    relationship = record.public_send("person_#{person_num}_relationship")
+    return unless age && economic_status && relationship
+
+    if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
+      record.errors.add "person_#{person_num}_economic_status", "If age is between 16 and 19 - tenant #{person_num} must be a full time student or prefer not to say."
     end
   end
 
