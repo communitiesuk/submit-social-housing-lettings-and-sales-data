@@ -427,10 +427,12 @@ RSpec.describe "Test Features" do
   end
 
   describe "conditional page routing", js: true do
+    before do
+      allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+    end
+
     it "can route the user to a different page based on their answer on the current page" do
       visit("case_logs/#{id}/conditional_question")
-      # using a question name that is already in the db to avoid
-      # having to add a new column to the db for this test
       choose("case-log-pregnancy-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")

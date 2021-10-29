@@ -56,15 +56,17 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    page = params[:case_log][:previous_page]
-    @case_log.previous_page = page
+    page = params[:case_log][:page]
+    @case_log.current_page = page
     responses_for_page = responses_for_page(page)
-    if @case_log.update(responses_for_page) && @case_log.soft_errors.empty?
+    if @case_log.update(responses_for_page) && (@case_log.soft_errors.empty? || @case_log.soft_errors_overridden?)
+      @case_log.previous_page = page
       redirect_path = get_next_page_path(form, page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[page]
-      render "form/page", locals: { form: form, page_key: page, page_info: page_info }, status: :unprocessable_entity
+      back_path = get_previous_page_path(form, page, @case_log)
+      render "form/page", locals: { form: form, back_path: back_path, page_key: page, page_info: page_info }, status: :unprocessable_entity
     end
   end
 
@@ -92,7 +94,8 @@ class CaseLogsController < ApplicationController
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/page", locals: { form: form, page_key: page_key, page_info: page_info }
+      back_path = get_previous_page_path(form, page_key, @case_log)
+      render "form/page", locals: { form: form, back_path: back_path, page_key: page_key, page_info: page_info }
     end
   end
 
@@ -135,8 +138,8 @@ private
     params.require(:case_log).permit(CaseLog.editable_fields)
   end
 
-  def get_next_page_path(form, previous_page, case_log = {})
-    content = form.all_pages[previous_page]
+  def get_next_page_path(form, page, case_log = {})
+    content = form.all_pages[page]
 
     if content.key?("conditional_route_to")
       content["conditional_route_to"].each do |route, conditions|
@@ -145,6 +148,11 @@ private
         end
       end
     end
-    form.next_page_redirect_path(previous_page)
+    form.next_page_redirect_path(page)
+  end
+
+  def get_previous_page_path(form, current_page, case_log = {})
+    return case_log.previous_page if case_log.previous_page
+    return form.previous_page(current_page) if current_page
   end
 end
