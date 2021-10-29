@@ -1,0 +1,5 @@
+<%= f.govuk_collection_select question_key, question["answer_options"],
+:id,
+:name,
+label: { text: question["header"].html_safe, size: "l" },
+hint: { text: question["hint_text"] } %>

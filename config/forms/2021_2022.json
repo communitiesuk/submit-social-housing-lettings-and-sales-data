@@ -3,6 +3,84 @@
   "start_year": 2021,
   "end_year": 2022,
   "sections": {
+    "about_this_log": {
+      "label": "About this log",
+      "subsections": {
+        "about_this_log": {
+          "label": "About this log",
+          "pages": {
+            "gdpr_acceptance": {
+              "header": "About this log",
+              "description": "About this log",
+              "questions": {
+                "gdpr_acceptance": {
+                  "check_answer_label": "",
+                  "header": "Has the tenant or buyer seen the DLUHC privacy notice?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "conditional_route_to": {
+                "organisation_details": { "gdpr_acceptance": "Yes" }
+              },
+              "default_next_page": "gdpr_declined"
+            },
+            "gdpr_declined": {
+              "header": "You cannot use this service",
+              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
+              "questions": {
+              }
+            },
+            "organisation_details": {
+              "header": "About this log",
+              "description": "Organisation Details",
+              "questions": {
+                "property_owner_organisation": {
+                  "check_answer_label": "",
+                  "header": "Which organisation owns this property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "A",
+                    "1": "B"
+                  }
+                },
+                "property_manager_organisation": {
+                  "check_answer_label": "",
+                  "header": "Which organisation manages this property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "A",
+                    "1": "B"
+                  }
+                }
+              }
+            },
+            "sale_or_letting": {
+              "header": "About this log",
+              "description": "Is this a sale or a letting?",
+              "questions": {
+                "sale_or_letting": {
+                  "check_answer_label": "",
+                  "header": "Is this a sale or a letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Sale",
+                    "1": "Letting"
+                  }
+                }
+              }
+            }  
+          }
+        }
+      }
+    },
     "household": {
       "label": "About the household",
       "subsections": {
