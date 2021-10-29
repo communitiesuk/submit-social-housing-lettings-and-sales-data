@@ -1,5 +1,6 @@
 module HouseholdValidations
-  # Validations methods need to be called 'validate_' to run on model save
+  # Validations methods need to be called 'validate_<page_name>' to run on model save
+  # or 'validate_' to run on submit as well
   def validate_reasonable_preference(record)
     if record.homelessness == "No" && record.reasonable_preference == "Yes"
       record.errors.add :reasonable_preference, "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
@@ -50,14 +51,18 @@ module HouseholdValidations
     end
   end
 
-  def validate_other_household_members(record)
-    (1..8).each do |n|
+  def validate_household_number_of_other_members(record)
+    (2..8).each do |n|
       validate_person_age(record, n)
       validate_person_age_matches_economic_status(record, n)
-      validate_person_age_matches_relationship(record, n) if n > 1
+      validate_person_age_matches_relationship(record, n)
       validate_person_age_and_gender_match_economic_status(record, n)
     end
     validate_partner_count(record)
+  end
+
+  def validate_person_1_age(record)
+    validate_person_age(record, 1)
   end
 
 private
@@ -72,8 +77,8 @@ private
 
   def validate_person_age(record, person_num)
     age = record.public_send("person_#{person_num}_age")
-    return unless age 
-    
+    return unless age
+
     if !age.is_a?(Integer) || age < 1 || age > 120
       record.errors.add "person_#{person_num}_age".to_sym, "Tenant age must be an integer between 0 and 120"
     end
@@ -98,7 +103,7 @@ private
   def validate_person_age_matches_relationship(record, person_num)
     age = record.public_send("person_#{person_num}_age")
     relationship = record.public_send("person_#{person_num}_relationship")
-    return unless age && relationship 
+    return unless age && relationship
 
     if age < 16 && relationship != "Child - includes young adult and grown-up"
       record.errors.add "person_#{person_num}_relationship", "Tenant #{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
@@ -122,9 +127,9 @@ private
 
   def validate_partner_count(record)
     # TODO probably need to keep track of which specific field is wrong so we can highlight it in the UI
-    partner_count = (2..8).map { |n| record.public_send("person_#{n}_relationship") }.uniq.count
+    partner_count = (2..8).select { |n| record.public_send("person_#{n}_relationship") == "Partner" }.count
     if partner_count > 1
-      record.errors.add :base, "Number of partners cannot be greater than 1" 
+      record.errors.add :base, "Number of partners cannot be greater than 1"
     end
   end
 end

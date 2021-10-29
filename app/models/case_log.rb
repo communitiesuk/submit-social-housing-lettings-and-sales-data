@@ -1,5 +1,6 @@
 class CaseLogValidator < ActiveModel::Validator
-  # Validations methods need to be called 'validate_' to run on model save
+  # Validations methods need to be called 'validate_<page_name>' to run on model save
+  # or 'validate_' to run on submit as well
   include HouseholdValidations
   include PropertyValidations
   include FinancialValidations
@@ -132,7 +133,7 @@ private
       dynamically_not_required << "net_income"
       dynamically_not_required << "net_income_frequency"
     end
-    
+
     start_range = (household_number_of_other_members || 0) + 2
     (start_range..8).each do |n|
       dynamically_not_required << "person_#{n}_age"
