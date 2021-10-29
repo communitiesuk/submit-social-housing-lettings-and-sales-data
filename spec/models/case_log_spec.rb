@@ -206,6 +206,12 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "household_member_validations" do 
+      # it "validate that persons aged under 16 must have relationship Child" do
+      #   expect { CaseLog.create!(person_2_age: 14, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      # end
+    end
+
     context "other tenancy type validation" do
       it "must be provided if tenancy type was given as other" do
         expect {

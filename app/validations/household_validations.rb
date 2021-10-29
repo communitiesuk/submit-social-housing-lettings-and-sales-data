@@ -1,11 +1,5 @@
 module HouseholdValidations
   # Validations methods need to be called 'validate_' to run on model save
-  def validate_person_1_age(record)
-    if record.person_1_age && !/^[1-9][0-9]?$|^120$/.match?(record.person_1_age.to_s)
-      record.errors.add :person_1_age, "Tenant age must be between 0 and 120"
-    end
-  end
-
   def validate_reasonable_preference(record)
     if record.homelessness == "No" && record.reasonable_preference == "Yes"
       record.errors.add :reasonable_preference, "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
@@ -56,6 +50,16 @@ module HouseholdValidations
     end
   end
 
+  def validate_other_household_members(record)
+    (1..8).each do |n|
+      validate_person_age(record, n)
+      validate_person_age_matches_economic_status(record, n)
+      validate_person_age_matches_relationship(record, n) if n > 1
+      validate_person_age_and_gender_match_economic_status(record, n)
+    end
+    validate_partner_count(record)
+  end
+
 private
 
   def women_of_child_bearing_age_in_household(record)
@@ -63,6 +67,64 @@ private
       next if record["person_#{n}_gender"].nil? || record["person_#{n}_age"].nil?
 
       record["person_#{n}_gender"] == "Female" && record["person_#{n}_age"] >= 16 && record["person_#{n}_age"] <= 50
+    end
+  end
+
+  def validate_person_age(record, person_num)
+    age = record.public_send("person_#{person_num}_age")
+    return unless age 
+    
+    if !age.is_a?(Integer) || age < 1 || age > 120
+      record.errors.add "person_#{person_num}_age".to_sym, "Tenant age must be an integer between 0 and 120"
+    end
+  end
+
+  def validate_person_age_matches_economic_status(record, person_num)
+    age = record.public_send("person_#{person_num}_age")
+    economic_status = record.public_send("person_#{person_num}_economic_status")
+    return unless age && economic_status
+
+    if age > 70 && economic_status != "Retired"
+      record.errors.add "person_#{person_num}_economic_status", "Tenant #{person_num} must be retired if over 70"
+    end
+    if age < 16 && economic_status != "Child under 16"
+      record.errors.add "person_#{person_num}_economic_status", "Tenant #{person_num} economic status must be Child under 16 if their age is under 16"
+    end
+    if age >= 16 && age <= 19 && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
+      record.errors.add "person_#{person_num}_economic_status", "If age is between 16 and 19 - tenant #{person_num} must be a full time student or prefer not to say."
+    end
+  end
+
+  def validate_person_age_matches_relationship(record, person_num)
+    age = record.public_send("person_#{person_num}_age")
+    relationship = record.public_send("person_#{person_num}_relationship")
+    return unless age && relationship 
+
+    if age < 16 && relationship != "Child - includes young adult and grown-up"
+      record.errors.add "person_#{person_num}_relationship", "Tenant #{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
+    end
+  end
+
+  def validate_person_age_and_gender_match_economic_status(record, person_num)
+    age = record.public_send("person_#{person_num}_age")
+    gender = record.public_send("person_#{person_num}_gender")
+    economic_status = record.public_send("person_#{person_num}_economic_status")
+    return unless age && economic_status && gender
+
+
+    if gender == "Male" && economic_status == "Retired" && age < 65
+      record.errors.add "person_#{person_num}_age", "Male tenant who is retired must be 65 or over"
+    end
+    if gender == "Female" && economic_status == "Retired" && age < 60
+      record.errors.add "person_#{person_num}_age", "Female tenant who is retired must be 60 or over"
+    end
+  end
+
+  def validate_partner_count(record)
+    # TODO probably need to keep track of which specific field is wrong so we can highlight it in the UI
+    partner_count = (2..8).map { |n| record.public_send("person_#{n}_relationship") }.uniq.count
+    if partner_count > 1
+      record.errors.add :base, "Number of partners cannot be greater than 1" 
     end
   end
 end
