@@ -153,6 +153,7 @@ private
 
   def get_previous_page_path(form, current_page, case_log = {})
     return case_log.previous_page if case_log.previous_page
+    return request.referer.split("/")[-2..-1].join("/") if request.referer&.ends_with?("check_answers")
     return form.previous_page(current_page) if current_page
   end
 end
