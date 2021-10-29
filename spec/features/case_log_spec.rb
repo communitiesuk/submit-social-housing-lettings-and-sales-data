@@ -32,10 +32,6 @@ RSpec.describe "Test Features" do
   describe "Create new log" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
-      # Ensure that we've finished creating both case logs before running the
-      # Capybara click part to ensure we don't get creation race conditions
-      expect(page).to have_link(nil, href: "/case_logs/#{case_log.id}")
-      expect(page).to have_link(nil, href: "/case_logs/#{empty_case_log.id}")
       click_link("Create new log")
       id = CaseLog.order(created_at: :desc).first.id
       expect(page).to have_content("Tasklist for log #{id}")
@@ -406,7 +402,7 @@ RSpec.describe "Test Features" do
         expect(case_log.override_net_income_validation).to be_nil
       end
 
-      xit "clears the confirmation question if the page is returned to using the back button" do
+      it "clears the confirmation question if the page is returned to using the back button" do
         visit("/case_logs/#{case_log.id}/net_income")
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
