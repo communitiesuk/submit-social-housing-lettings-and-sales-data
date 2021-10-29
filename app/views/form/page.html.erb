@@ -19,7 +19,7 @@
       </div>
     <% end %>
 
-    <% if @case_log.soft_errors.present? %>
+    <% if @case_log.soft_errors.present? && @case_log.soft_errors.keys.first == page_info["soft_validations"]&.keys&.first %>
       <%= render partial: "form/validation_override_question", locals: { f: f } %>
     <% end %>
 
