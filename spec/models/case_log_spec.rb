@@ -108,7 +108,16 @@ RSpec.describe Form, type: :model do
       it "you must answer less than 8 bedrooms" do
         expect {
           CaseLog.create!(property_unit_type: "Shared bungalow",
-                          property_number_of_bedrooms: 8)
+                          property_number_of_bedrooms: 8,
+                          household_number_of_other_members: 1)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 4,
+                          household_number_of_other_members: 0)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
