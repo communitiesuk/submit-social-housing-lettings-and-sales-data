@@ -10,6 +10,6 @@ class IncomeRange
     "Unable to work because of long term sick or disability": OpenStruct.new(soft_min: 54, soft_max: 460, hard_min: 10, hard_max: 820),
     "Child under 16": OpenStruct.new(soft_min: 50, soft_max: 450, hard_min: 10, hard_max: 750),
     "Other": OpenStruct.new(soft_min: 50, soft_max: 580, hard_min: 10, hard_max: 1040),
-    "Prefer not to say": OpenStruct.new(soft_min: 47, soft_max: 730, hard_min: 10, hard_max: 1300)
-  }
+    "Prefer not to say": OpenStruct.new(soft_min: 47, soft_max: 730, hard_min: 10, hard_max: 1300),
+  }.freeze
 end
