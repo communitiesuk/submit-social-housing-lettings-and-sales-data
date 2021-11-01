@@ -9,10 +9,10 @@ class CaseLogValidator < ActiveModel::Validator
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
     # we want to validate all data fields.
-    question_to_validate = options[:page]
-    if question_to_validate
-      if respond_to?("validate_#{question_to_validate}")
-        public_send("validate_#{question_to_validate}", record)
+    page_to_validate = options[:page]
+    if page_to_validate
+      if respond_to?("validate_#{page_to_validate}")
+        public_send("validate_#{page_to_validate}", record)
       end
     else
       validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
@@ -39,6 +39,7 @@ class CaseLog < ApplicationRecord
   include Discard::Model
   include SoftValidations
   default_scope -> { kept }
+  scope :not_completed, -> { where.not(status: "completed") }
 
   validates_with  CaseLogValidator, ({ page: @current_page } || {})
   before_save :update_status!
@@ -118,10 +119,6 @@ private
 
     if tenancy_type == "Fixed term – Secure"
       dynamically_not_required << "fixed_term_tenancy"
-    end
-
-    unless net_income_in_soft_max_range? || net_income_in_soft_min_range?
-      dynamically_not_required << "override_net_income_validation"
     end
 
     unless tenancy_type == "Other"
