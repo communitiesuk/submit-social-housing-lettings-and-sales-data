@@ -122,6 +122,7 @@ GEM
       activesupport (>= 3.0.0, < 6.2)
       ruby2_keywords (>= 0.0.2, < 1.0)
     ast (2.4.2)
+    bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.9.1)
       msgpack (~> 1.0)
@@ -146,6 +147,12 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     deep_merge (1.2.1)
+    devise (4.8.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.4.4)
     discard (1.2.0)
       activerecord (>= 4.2, < 7)
@@ -227,6 +234,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
+    orm_adapter (0.5.0)
     overcommit (0.58.0)
       childprocess (>= 0.6.3, < 5)
       iniparse (~> 1.4)
@@ -362,6 +370,8 @@ GEM
     view_component (2.39.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     web-console (4.1.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -391,6 +401,7 @@ DEPENDENCIES
   capybara
   chartkick
   database_cleaner-active_record
+  devise
   discard
   dotenv-rails
   factory_bot_rails

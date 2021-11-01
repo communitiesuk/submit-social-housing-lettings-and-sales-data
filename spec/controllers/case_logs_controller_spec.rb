@@ -1,7 +1,9 @@
 require "rails_helper"
+require_relative "../support/devise"
 
 RSpec.describe CaseLogsController, type: :controller do
   let(:valid_session) { {} }
+  login_user
 
   context "Collection routes" do
     describe "GET #index" do
