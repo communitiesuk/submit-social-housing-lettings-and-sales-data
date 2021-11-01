@@ -76,7 +76,95 @@
                   }
                 }
               }
-            }  
+            },
+            "tenant_same_property_renewal": {
+              "header": "About this log",
+              "description": "Is this a renewal to the same tenant in the same property?",
+              "questions": {
+                "sale_or_letting": {
+                  "check_answer_label": "",
+                  "header": "Is this a renewal to the same tenant in the same property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            },
+            "tenancy_start_date": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "sale_or_letting": {
+                  "check_answer_label": "When is the tenancy start date?",
+                  "header": "What is the tenancy start date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
+                }
+              }
+            },
+            "letting_type": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "rent_type": {
+                  "check_answer_label": "What is the rent type?",
+                  "header": "What is the rent type?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Social Rent",
+                    "1": "Affordable Rent",
+                    "2": "London Affordable Rent",
+                    "3": "Rent To Buy",
+                    "4": "London Living Rent",
+                    "5": "Other Intermediate Rent Product"
+                },
+                "intermediate_rent_product_name": {
+                  "check_answer_label": "Enter the product name",
+                  "header": "What is intermediate rent product name?",
+                  "type": "text",
+                  "conditional_for": {
+                    "rent_type": "Other Intermediate Rent Product"
+                  }
+                },
+                "needs_type": {
+                  "check_answer_label": "What is the needs type?",
+                  "header": "What is the needs type?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Supported Housing",
+                    "1": "General Needs"
+                }
+              }
+            },
+            "sale_completion_date": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "sale_completion_date": {
+                  "check_answer_label": "What is the sale completion date?",
+                  "header": "What is the sale completion date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
+                }
+              }
+            },
+            "purchaser_code": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "purchaser_code": {
+                  "check_answer_label": "What is the purchaser code?",
+                  "header": "What is the purchaser code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
           }
         }
       }

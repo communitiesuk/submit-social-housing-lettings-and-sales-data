@@ -1,5 +1,11 @@
-<%= f.govuk_collection_select question_key, question["answer_options"],
-:id,
-:name,
-label: { text: question["header"].html_safe, size: "l" },
-hint: { text: question["hint_text"] } %>
+
+<%= answers = question["answer_options"].map {|key, value| OpenStruct.new(id:key, name: value)}
+ f.govuk_collection_select :answer_id,
+    answers,
+    :id,
+    :name,
+    label: { text: question["header"]},
+    hint: { text: question["hint_text"] }
+ %>
+
+
