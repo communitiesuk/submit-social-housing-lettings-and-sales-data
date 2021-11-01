@@ -101,11 +101,7 @@ private
 
   def responses_for_page(page)
     form = FormHandler.instance.get_form("2021_2022")
-    initial_questions_for_page = form.questions_for_page(page)
-    soft_validations = form.soft_validations_for_page(page)
-    questions_for_page = initial_questions_for_page.merge(soft_validations || {})
-
-    questions_for_page.each_with_object({}) do |(question_key, question_info), result|
+    form.expected_responses_for_page(page).each_with_object({}) do |(question_key, question_info), result|
       question_params = params["case_log"][question_key]
       next unless question_params
 
