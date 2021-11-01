@@ -44,7 +44,6 @@ class CaseLog < ApplicationRecord
   validates_with  CaseLogValidator, ({ page: @page } || {})
   before_save :update_status!
 
-  attr_accessor :previous_page
   attr_accessor :page
 
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }

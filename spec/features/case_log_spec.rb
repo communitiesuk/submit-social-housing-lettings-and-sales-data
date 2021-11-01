@@ -411,7 +411,7 @@ RSpec.describe "Test Features" do
         expect(case_log.override_net_income_validation).to be_nil
       end
 
-      it "clears the confirmation question if the amount was amended and the page is returned to using the back button" do
+      it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
@@ -422,7 +422,7 @@ RSpec.describe "Test Features" do
         expect(page).not_to have_content("Are you sure this is correct?")
       end
 
-      it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit" do
+      it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)

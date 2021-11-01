@@ -59,13 +59,11 @@ class CaseLogsController < ApplicationController
     @case_log.page = params[:case_log][:page]
     responses_for_page = responses_for_page(@case_log.page)
     if @case_log.update(responses_for_page) && (@case_log.soft_errors.empty? || @case_log.soft_errors_overridden?)
-      @case_log.previous_page = @case_log.page
       redirect_path = get_next_page_path(form, @case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[@case_log.page]
-      back_path = get_previous_page_path(form, @case_log.page, @case_log)
-      render "form/page", locals: { form: form, back_path: back_path, page_key: @case_log.page, page_info: page_info }, status: :unprocessable_entity
+      render "form/page", locals: { form: form, page_key: @case_log.page, page_info: page_info }, status: :unprocessable_entity
     end
   end
 
@@ -93,8 +91,7 @@ class CaseLogsController < ApplicationController
   form.all_pages.map do |page_key, page_info|
     define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
-      back_path = get_previous_page_path(form, page_key, @case_log)
-      render "form/page", locals: { form: form, back_path: back_path, page_key: page_key, page_info: page_info }
+      render "form/page", locals: { form: form, page_key: page_key, page_info: page_info }
     end
   end
 
@@ -148,11 +145,5 @@ private
       end
     end
     form.next_page_redirect_path(page)
-  end
-
-  def get_previous_page_path(form, current_page, case_log = {})
-    return case_log.previous_page if case_log.previous_page
-    return request.referer.split("/")[-2..-1].join("/") if request.referer&.ends_with?("check_answers")
-    return form.previous_page(current_page) if current_page
   end
 end
