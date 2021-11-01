@@ -1,9 +1,13 @@
 require "rails_helper"
-RSpec.describe "Test Features" do
+RSpec.describe "Form Features" do
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
+
+  before do
+    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+  end
 
   question_answers = {
     tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
