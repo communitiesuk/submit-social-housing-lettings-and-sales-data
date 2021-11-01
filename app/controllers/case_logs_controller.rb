@@ -56,17 +56,16 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    page = params[:case_log][:page]
-    @case_log.current_page = page
-    responses_for_page = responses_for_page(page)
+    @case_log.page = params[:case_log][:page]
+    responses_for_page = responses_for_page(@case_log.page)
     if @case_log.update(responses_for_page) && (@case_log.soft_errors.empty? || @case_log.soft_errors_overridden?)
-      @case_log.previous_page = page
-      redirect_path = get_next_page_path(form, page, @case_log)
+      @case_log.previous_page = @case_log.page
+      redirect_path = get_next_page_path(form, @case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
-      page_info = form.all_pages[page]
-      back_path = get_previous_page_path(form, page, @case_log)
-      render "form/page", locals: { form: form, back_path: back_path, page_key: page, page_info: page_info }, status: :unprocessable_entity
+      page_info = form.all_pages[@case_log.page]
+      back_path = get_previous_page_path(form, @case_log.page, @case_log)
+      render "form/page", locals: { form: form, back_path: back_path, page_key: @case_log.page, page_info: page_info }, status: :unprocessable_entity
     end
   end
 

@@ -41,11 +41,11 @@ class CaseLog < ApplicationRecord
   default_scope -> { kept }
   scope :not_completed, -> { where.not(status: "completed") }
 
-  validates_with  CaseLogValidator, ({ page: @current_page } || {})
+  validates_with  CaseLogValidator, ({ page: @page } || {})
   before_save :update_status!
 
   attr_accessor :previous_page
-  attr_writer :current_page
+  attr_accessor :page
 
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }
 
@@ -119,6 +119,10 @@ private
 
     if tenancy_type == "Fixed term – Secure"
       dynamically_not_required << "fixed_term_tenancy"
+    end
+
+    unless net_income_in_soft_max_range? || net_income_in_soft_min_range?
+      dynamically_not_required << "override_net_income_validation"
     end
 
     unless tenancy_type == "Other"
