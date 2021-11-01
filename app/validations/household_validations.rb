@@ -62,15 +62,11 @@ module HouseholdValidations
         record.errors.add :property_unit_type, "A bedsit can only have one bedroom"
       end
 
-      unless record.household_number_of_other_members.nil?
-        if record.household_number_of_other_members > 0
-          if record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 7)
-            record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
-          end
-        end
+      if !record.household_number_of_other_members.nil? && record.household_number_of_other_members.positive? && (record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 7))
+        record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
       end
 
-      if record.property_unit_type.include?("Shared")  && !record.property_number_of_bedrooms.to_i.between?(1, 3)
+      if record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 3)
         record.errors.add :property_unit_type, "A shared house with less than two tenants must have 1 to 3 bedrooms"
       end
     end

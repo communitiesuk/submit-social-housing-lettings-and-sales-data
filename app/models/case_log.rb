@@ -41,7 +41,7 @@ class CaseLog < ApplicationRecord
   default_scope -> { kept }
   scope :not_completed, -> { where.not(status: "completed") }
 
-  validates_with  CaseLogValidator, ({ page: @page } || {})
+  validates_with CaseLogValidator, ({ page: @page } || {})
   before_save :update_status!
 
   attr_accessor :page

@@ -233,7 +233,7 @@ RSpec.describe "Test Features" do
       context "when changing an answer from the check answers page" do
         it "the back button routes correctly" do
           visit("/case_logs/#{id}/household_characteristics/check_answers")
-          first("a", text:  /Answer/).click
+          first("a", text: /Answer/).click
           click_link("Back")
           expect(page).to have_current_path("/case_logs/#{id}/household_characteristics/check_answers")
         end
