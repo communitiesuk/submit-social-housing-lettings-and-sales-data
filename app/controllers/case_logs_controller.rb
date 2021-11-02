@@ -58,7 +58,7 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:id])
     @case_log.page = params[:case_log][:page]
     responses_for_page = responses_for_page(@case_log.page)
-    if @case_log.update(responses_for_page) && (@case_log.soft_errors.empty? || @case_log.soft_errors_overridden?)
+    if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
       redirect_path = get_next_page_path(form, @case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else

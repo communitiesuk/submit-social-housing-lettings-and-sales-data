@@ -1,4 +1,8 @@
 module SoftValidations
+  def has_no_unresolved_soft_errors?
+    soft_errors.empty? || soft_errors_overridden?
+  end
+
   def soft_errors
     {}.merge(net_income_validations)
   end
