@@ -56,16 +56,14 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    previous_page = params[:case_log][:previous_page]
-    questions_for_page = form.questions_for_page(previous_page)
-    responses_for_page = question_responses(questions_for_page)
-    @case_log.previous_page = previous_page
-    if @case_log.update(responses_for_page)
-      redirect_path = get_next_page_path(form, previous_page, @case_log)
+    @case_log.page = params[:case_log][:page]
+    responses_for_page = responses_for_page(@case_log.page)
+    if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+      redirect_path = get_next_page_path(form, @case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
-      page_info = form.all_pages[previous_page]
-      render "form/page", locals: { form: form, page_key: previous_page, page_info: page_info }, status: :unprocessable_entity
+      page_info = form.all_pages[@case_log.page]
+      render "form/page", locals: { form: form, page_key: @case_log.page, page_info: page_info }, status: :unprocessable_entity
     end
   end
 
@@ -101,9 +99,12 @@ private
 
   API_ACTIONS = %w[create show update destroy].freeze
 
-  def question_responses(questions_for_page)
-    questions_for_page.each_with_object({}) do |(question_key, question_info), result|
+  def responses_for_page(page)
+    form = FormHandler.instance.get_form("2021_2022")
+    form.expected_responses_for_page(page).each_with_object({}) do |(question_key, question_info), result|
       question_params = params["case_log"][question_key]
+      next unless question_params
+
       if question_info["type"] == "checkbox"
         question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
           result[option] = question_params.include?(option)
@@ -129,8 +130,8 @@ private
     params.require(:case_log).permit(CaseLog.editable_fields)
   end
 
-  def get_next_page_path(form, previous_page, case_log = {})
-    content = form.all_pages[previous_page]
+  def get_next_page_path(form, page, case_log = {})
+    content = form.all_pages[page]
 
     if content.key?("conditional_route_to")
       content["conditional_route_to"].each do |route, conditions|
@@ -139,6 +140,6 @@ private
         end
       end
     end
-    form.next_page_redirect_path(previous_page)
+    form.next_page_redirect_path(page)
   end
 end

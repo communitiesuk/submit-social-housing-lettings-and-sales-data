@@ -1,0 +1,11 @@
+<div class="govuk-form-group govuk-form-group--error">
+  <%= f.govuk_check_boxes_fieldset @case_log.soft_errors.keys.first,
+      legend: { text: @case_log.soft_errors.values.first.message, size: "l" },
+      hint: { text: @case_log.soft_errors.values.first.hint_text } do %>
+
+      <%= f.govuk_check_box @case_log.soft_errors.keys.first, @case_log.soft_errors.keys.first,
+        label: { text: "Yes" },
+        checked: f.object.send(@case_log.soft_errors.keys.first)
+      %>
+  <% end %>
+</div>

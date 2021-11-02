@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 2021_10_28_095000) do
     t.boolean "reasonable_preference_reason_do_not_know"
     t.datetime "discarded_at"
     t.string "other_tenancy_type"
+    t.boolean "override_net_income_validation"
     t.string "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
