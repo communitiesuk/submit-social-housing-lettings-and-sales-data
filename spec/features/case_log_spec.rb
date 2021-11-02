@@ -184,7 +184,7 @@ RSpec.describe "Test Features" do
 
       it "displays text answers in inputs if they are already saved" do
         visit("/case_logs/#{id}/person_1_age")
-        expect(page).to have_field("case-log-person-1-age-field", with: "12")
+        expect(page).to have_field("case-log-person-1-age-field", with: "18")
       end
 
       it "displays checkbox answers in inputs if they are already saved" do
