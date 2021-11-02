@@ -64,6 +64,7 @@ module HouseholdValidations
 
   def validate_person_1_age(record)
     return unless record.person_1_age
+
     if !record.person_1_age.is_a?(Integer) || record.person_1_age < 16 || record.person_1_age > 120
       record.errors.add "person_1_age", "Tenant age must be an integer between 16 and 120"
     end
@@ -71,23 +72,19 @@ module HouseholdValidations
 
   def validate_person_1_economic(record)
     validate_person_age_matches_economic_status(record, 1)
-  end 
-  
+  end
+
   def validate_shared_housing_rooms(record)
     unless record.property_unit_type.nil?
       if record.property_unit_type == "Bed-sit" && record.property_number_of_bedrooms != 1
         record.errors.add :property_unit_type, "A bedsit can only have one bedroom"
       end
 
-      unless record.household_number_of_other_members.nil?
-        if record.household_number_of_other_members > 0
-          if record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 7)
-            record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
-          end
-        end
+      if !record.household_number_of_other_members.nil? && record.household_number_of_other_members.positive? && (record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 7))
+        record.errors.add :property_unit_type, "A shared house must have 1 to 7 bedrooms"
       end
 
-      if record.property_unit_type.include?("Shared")  && !record.property_number_of_bedrooms.to_i.between?(1, 3)
+      if record.property_unit_type.include?("Shared") && !record.property_number_of_bedrooms.to_i.between?(1, 3)
         record.errors.add :property_unit_type, "A shared house with less than two tenants must have 1 to 3 bedrooms"
       end
     end
@@ -152,7 +149,6 @@ private
     economic_status = record.public_send("person_#{person_num}_economic_status")
     return unless age && economic_status && gender
 
-
     if gender == "Male" && economic_status == "Retired" && age < 65
       record.errors.add "person_#{person_num}_age", "Male tenant who is retired must be 65 or over"
     end
@@ -162,8 +158,8 @@ private
   end
 
   def validate_partner_count(record)
-    # TODO probably need to keep track of which specific field is wrong so we can highlight it in the UI
-    partner_count = (2..8).select { |n| record.public_send("person_#{n}_relationship") == "Partner" }.count
+    # TODO: probably need to keep track of which specific field is wrong so we can highlight it in the UI
+    partner_count = (2..8).count { |n| record.public_send("person_#{n}_relationship") == "Partner" }
     if partner_count > 1
       record.errors.add :base, "Number of partners cannot be greater than 1"
     end
