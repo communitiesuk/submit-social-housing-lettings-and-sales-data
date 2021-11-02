@@ -21,11 +21,11 @@
                 }
               }
             },
-            "person_1_age": {
+            "AGE1": {
               "header": "",
               "description": "",
               "questions": {
-                "person_1_age": {
+                "AGE1": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "hint_text": "",
@@ -36,11 +36,11 @@
                 }
               }
             },
-            "person_1_gender": {
+            "SEX1": {
               "header": "",
               "description": "",
               "questions": {
-                "person_1_gender": {
+                "SEX1": {
                   "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "hint_text": "",
@@ -58,7 +58,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenant_ethnic_group": {
+                "ETHNIC": {
                   "check_answer_label": "Ethnicity",
                   "header": "What is the tenant's ethnic group?",
                   "hint_text": "",
@@ -91,7 +91,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenant_nationality": {
+                "NATIONAL": {
                   "check_answer_label": "Nationality",
                   "header": "What is the tenant's nationality?",
                   "hint_text": "",
@@ -121,7 +121,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "person_1_economic_status": {
+                "ECSTAT1": {
                   "check_answer_label": "Work",
                   "header": "Which of these best describes the tenant's working situation?",
                   "hint_text": "",
@@ -146,7 +146,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "household_number_of_other_members": {
+                "HHMEMB": {
                   "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 7",
@@ -185,7 +185,7 @@
                     "person_8_economic_status": ">6"
                   }
                 },
-                "person_2_relationship": {
+                "RELAT2": {
                   "check_answer_label": "Person 2's relationship to lead tenant",
                   "header": "What's person 2's relationship to lead tenant",
                   "hint_text": "",
@@ -197,7 +197,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_2_age": {
+                "AGE2": {
                   "check_answer_label": "Person 2's age",
                   "header": "What's person 2's age",
                   "hint_text": "",
@@ -206,7 +206,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_2_gender": {
+                "SEX2": {
                   "check_answer_label": "Person 2's gender",
                   "header": "Which of these best describes person 2's gender identity?",
                   "hint_text": "",
@@ -218,7 +218,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_2_economic_status": {
+                "ECSTAT2": {
                   "check_answer_label": "Person 2's Work",
                   "header": "Which of these best describes person 2's working situation?",
                   "hint_text": "",
@@ -237,7 +237,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_3_relationship": {
+                "RELAT3": {
                   "check_answer_label": "Person 3's relationship to lead tenant",
                   "header": "What's person 3's relationship to lead tenant",
                   "hint_text": "",
@@ -249,7 +249,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_3_age": {
+                "AGE3": {
                   "check_answer_label": "Person 3's age",
                   "header": "What's person 3's age",
                   "hint_text": "",
@@ -258,7 +258,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_3_gender": {
+                "SEX3": {
                   "check_answer_label": "Person 3's gender",
                   "header": "Which of these best describes person 3's gender identity?",
                   "hint_text": "",
@@ -270,7 +270,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_3_economic_status": {
+                "ECSTAT3": {
                   "check_answer_label": "Person 3's Work",
                   "header": "Which of these best describes person 3's working situation?",
                   "hint_text": "",
@@ -289,7 +289,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_4_relationship": {
+                "RELAT4": {
                   "check_answer_label": "Person 4's relationship to lead tenant",
                   "header": "What's person 4's relationship to lead tenant",
                   "hint_text": "",
@@ -301,7 +301,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_4_age": {
+                "AGE4": {
                   "check_answer_label": "Person 4's age",
                   "header": "What's person 4's age",
                   "hint_text": "",
@@ -310,7 +310,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_4_gender": {
+                "SEX4": {
                   "check_answer_label": "Person 4's gender",
                   "header": "Which of these best describes person 4's gender identity?",
                   "hint_text": "",
@@ -322,7 +322,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_4_economic_status": {
+                "ECSTAT4": {
                   "check_answer_label": "Person 4's Work",
                   "header": "Which of these best describes person 4's working situation?",
                   "hint_text": "",
@@ -341,7 +341,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_5_relationship": {
+                "RELAT5": {
                   "check_answer_label": "Person 5's relationship to lead tenant",
                   "header": "What's person 5's relationship to lead tenant",
                   "hint_text": "",
@@ -353,7 +353,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_5_age": {
+                "AGE5": {
                   "check_answer_label": "Person 5's age",
                   "header": "What's person 5's age",
                   "hint_text": "",
@@ -362,7 +362,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_5_gender": {
+                "SEX5": {
                   "check_answer_label": "Person 5's gender",
                   "header": "Which of these best describes person 5's gender identity?",
                   "hint_text": "",
@@ -374,7 +374,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_5_economic_status": {
+                "ECSTAT5": {
                   "check_answer_label": "Person 5's Work",
                   "header": "Which of these best describes person 5's working situation?",
                   "hint_text": "",
@@ -393,7 +393,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_6_relationship": {
+                "RELAT6": {
                   "check_answer_label": "Person 6's relationship to lead tenant",
                   "header": "What's person 6's relationship to lead tenant",
                   "hint_text": "",
@@ -405,7 +405,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_6_age": {
+                "AGE6": {
                   "check_answer_label": "Person 6's age",
                   "header": "What's person 6's age",
                   "hint_text": "",
@@ -414,7 +414,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_6_gender": {
+                "SEX6": {
                   "check_answer_label": "Person 6's gender",
                   "header": "Which of these best describes person 6's gender identity?",
                   "hint_text": "",
@@ -426,7 +426,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_6_economic_status": {
+                "ECSTAT6": {
                   "check_answer_label": "Person 6's Work",
                   "header": "Which of these best describes person 6's working situation?",
                   "hint_text": "",
@@ -445,7 +445,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_7_relationship": {
+                "RELAT7": {
                   "check_answer_label": "Person 7's relationship to lead tenant",
                   "header": "What's person 7's relationship to lead tenant",
                   "hint_text": "",
@@ -457,7 +457,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_7_age": {
+                "AGE7": {
                   "check_answer_label": "Person 7's age",
                   "header": "What's person 7's age",
                   "hint_text": "",
@@ -466,7 +466,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_7_gender": {
+                "SEX7": {
                   "check_answer_label": "Person 7's gender",
                   "header": "Which of these best describes person 7's gender identity?",
                   "hint_text": "",
@@ -478,7 +478,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_7_economic_status": {
+                "ECSTAT7": {
                   "check_answer_label": "Person 7's Work",
                   "header": "Which of these best describes person 7's working situation?",
                   "hint_text": "",
@@ -497,7 +497,7 @@
                     "10": "Prefer not to say"
                   }
                 },
-                "person_8_relationship": {
+                "RELAT8": {
                   "check_answer_label": "Person 8's relationship to lead tenant",
                   "header": "What's person 8's relationship to lead tenant",
                   "hint_text": "",
@@ -509,7 +509,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_8_age": {
+                "AGE8": {
                   "check_answer_label": "Person 8's age",
                   "header": "What's person 8's age",
                   "hint_text": "",
@@ -518,7 +518,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_8_gender": {
+                "SEX8": {
                   "check_answer_label": "Person 8's gender",
                   "header": "Which of these best describes person 8's gender identity?",
                   "hint_text": "",
@@ -530,7 +530,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_8_economic_status": {
+                "ECSTAT8": {
                   "check_answer_label": "Person 8's Work",
                   "header": "Which of these best describes person 8's working situation?",
                   "hint_text": "",
@@ -560,7 +560,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "previous_housing_situation": {
+                "PREVTEN": {
                   "header": "What was the tenant’s housing situation immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -596,7 +596,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "homelessness": {
+                "HOMELESS": {
                   "header": "Did the tenant experience homelessness immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -661,7 +661,7 @@
                   "hint_text": "",
                   "type": "text"
                 },
-                "benefit_cap_spare_room_subsidy": {
+                "UNDEROCCUPATION_BENEFITCAP": {
                   "header": "Was the reason for leaving because of the benefit cap or removal of the spare room subsidy?",
                   "hint_text": "",
                   "type": "radio",
@@ -697,11 +697,17 @@
                     "3": "Prefer not to say"
                   },
                   "conditional_for": {
-                    "armed_forces_active": ["Yes - a regular", "Yes - a reserve"],
-                    "armed_forces_injured": ["Yes - a regular", "Yes - a reserve"]
+                    "armed_forces_active": [
+                      "Yes - a regular",
+                      "Yes - a reserve"
+                    ],
+                    "armed_forces_injured": [
+                      "Yes - a regular",
+                      "Yes - a reserve"
+                    ]
                   }
                 },
-                "armed_forces_active": {
+                "LEFTREG": {
                   "header": "Are they still serving?",
                   "hint_text": "",
                   "type": "radio",
@@ -713,7 +719,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "armed_forces_injured": {
+                "RESERVIST": {
                   "header": "Were they seriously injured or ill as a result of their service?",
                   "hint_text": "",
                   "type": "radio",
@@ -742,7 +748,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "medical_conditions": {
+                "ILLNESS": {
                   "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
                   "type": "radio",
@@ -760,7 +766,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "pregnancy": {
+                "PREG_OCC": {
                   "header": "Is anyone in the household pregnant?",
                   "hint_text": "",
                   "type": "radio",
@@ -783,13 +789,13 @@
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
-                    "accessibility_requirements_fully_wheelchair_accessible_housing": "Fully wheelchair accessible housing",
-                    "accessibility_requirements_wheelchair_access_to_essential_rooms": "Wheelchair access to essential rooms",
-                    "accessibility_requirements_level_access_housing": "Level access housing",
-                    "accessibility_requirements_other_disability_requirements": "Other disability requirements",
-                    "accessibility_requirements_no_disability_requirements": "No disability requirements",
+                    "HousingNeeds_A": "Fully wheelchair accessible housing",
+                    "HousingNeeds_B": "Wheelchair access to essential rooms",
+                    "HousingNeeds_C": "Level access housing",
+                    "HousingNeeds_F": "Other disability requirements",
+                    "HousingNeeds_G": "No disability requirements",
                     "divider_a": true,
-                    "accessibility_requirements_do_not_know": "Do not know",
+                    "HousingNeeds_H": "Do not know",
                     "divider_b": true,
                     "accessibility_requirements_prefer_not_to_say": "Prefer not to say"
                   }
@@ -806,16 +812,16 @@
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
-                    "condition_effects_vision": "Vision - such as blindness or partial sight",
-                    "condition_effects_hearing": "Hearing - such as deafness or partial hearing",
-                    "condition_effects_mobility": "Mobility - such as walking short distances or climbing stairs",
-                    "condition_effects_dexterity": "Dexterity - such as lifting and carrying objects or using a keyboard",
-                    "condition_effects_stamina": "Stamina or breathing or fatigue",
-                    "condition_effects_learning": "Learning or understanding or concentrating",
-                    "condition_effects_memory": "Memory",
-                    "condition_effects_mental_health": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
-                    "condition_effects_social_or_behavioral": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
-                    "condition_effects_other": "Other",
+                    "ILLNESS_TYPE_1": "Vision - such as blindness or partial sight",
+                    "ILLNESS_TYPE_2": "Hearing - such as deafness or partial hearing",
+                    "ILLNESS_TYPE_3": "Mobility - such as walking short distances or climbing stairs",
+                    "ILLNESS_TYPE_4": "Dexterity - such as lifting and carrying objects or using a keyboard",
+                    "ILLNESS_TYPE_8": "Stamina or breathing or fatigue",
+                    "ILLNESS_TYPE_5": "Learning or understanding or concentrating",
+                    "ILLNESS_TYPE_6": "Memory",
+                    "ILLNESS_TYPE_7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
+                    "ILLNESS_TYPE_9": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
+                    "ILLNESS_TYPE_10": "Other",
                     "divider": true,
                     "condition_effects_prefer_not_to_say": "Prefer not to say"
                   }
@@ -848,7 +854,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenancy_start_date": {
+                "STARTDATE": {
                   "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
@@ -860,7 +866,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "starter_tenancy": {
+                "STARTERTENANCY": {
                   "check_answer_label": "Is this a starter or introductory tenancy?",
                   "header": "Is this a starter tenancy?",
                   "hint_text": "",
@@ -876,7 +882,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "fixed_term_tenancy": {
+                "TENANCYLENGTH": {
                   "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
                   "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
                   "hint_text": "To the nearest year",
@@ -891,7 +897,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "tenancy_type": {
+                "TENANCY": {
                   "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
                   "header": "What is the type of tenancy after the starter period has ended?",
                   "hint_text": "",
@@ -908,7 +914,7 @@
                     "other_tenancy_type": ["Other"]
                   }
                 },
-                "other_tenancy_type": {
+                "TENANCYOTHER": {
                   "header": "Please state the tenancy type",
                   "hint_text": "",
                   "type": "text"
@@ -919,7 +925,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "letting_type": {
+                "LETTYPE": {
                   "check_answer_label": "Type of letting",
                   "header": "Which type of letting is this?",
                   "hint_text": "",
@@ -939,7 +945,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "letting_provider": {
+                "LANDLORD": {
                   "check_answer_label": "Provider",
                   "header": "Who is the letting provider?",
                   "hint_text": "",
@@ -1315,7 +1321,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_vacancy_reason": {
+                "RSNVAC": {
                   "check_answer_label": "What is the reason for the property vacancy?",
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
@@ -1355,7 +1361,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_unit_type": {
+                "UNITTYPE_GN": {
                   "check_answer_label": "Which type of unit is the property?",
                   "header": "Which type of unit is the property?",
                   "hint_text": "",
@@ -1377,7 +1383,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_number_of_bedrooms": {
+                "BEDS": {
                   "check_answer_label": "How many bedrooms are there in the property?",
                   "header": "How many bedrooms are there in the property?",
                   "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
@@ -1417,7 +1423,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_number_of_times_relet": {
+                "OFFERED": {
                   "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
                   "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
                   "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
@@ -1432,7 +1438,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_wheelchair_accessible": {
+                "WCHAIR": {
                   "check_answer_label": "Is property built or adapted to wheelchair user standards?",
                   "header": "Is property built or adapted to wheelchair user standards?",
                   "hint_text": "",
@@ -1473,7 +1479,7 @@
                     "net_income_frequency": ["Yes"]
                   }
                 },
-                "net_income": {
+                "EARNINGS": {
                   "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "hint_text": "",
@@ -1481,7 +1487,7 @@
                   "min": 0,
                   "step": "1"
                 },
-                "net_income_frequency": {
+                "INCFREQ": {
                   "check_answer_label": "Income Frequency",
                   "header": "How often do they receive this income?",
                   "hint_text": "",
@@ -1507,7 +1513,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "net_income_uc_proportion": {
+                "BENEFITS": {
                   "check_answer_label": "Benefits as a proportion of income",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "",
@@ -1526,7 +1532,7 @@
               "description": "",
               "questions": {
                 "housing_benefit": {
-                  "check_answer_label": "Universal Credit & Housing Benefit\t",
+                  "check_answer_label": "Universal Credit & Housing Benefit",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1551,7 +1557,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "rent_frequency": {
+                "PERIOD": {
                   "check_answer_label": "Rent Period",
                   "header": "Which period are rent and other charges due?",
                   "hint_text": "",
@@ -1569,47 +1575,67 @@
                     "9": "Weekly for 53 weeks"
                   }
                 },
-                "basic_rent": {
+                "BRENT": {
                   "check_answer_label": "Basic Rent",
                   "header": "What is the basic rent?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
                   "result-field": "total_charge"
                 },
-                "service_charge": {
+                "SCHARGE": {
                   "check_answer_label": "Service Charge",
                   "header": "What is the service charge?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
                   "result-field": "total_charge"
                 },
-                "personal_service_charge": {
+                "PSCHARGE": {
                   "check_answer_label": "Personal Service Charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
                   "result-field": "total_charge"
                 },
-                "support_charge": {
+                "SUPCHARGE": {
                   "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": ["basic_rent", "service_charge", "personal_service_charge", "support_charge"],
+                  "fields-to-add": [
+                    "basic_rent",
+                    "service_charge",
+                    "personal_service_charge",
+                    "support_charge"
+                  ],
                   "result-field": "total_charge"
                 },
-                "total_charge": {
+                "TCHARGE": {
                   "check_answer_label": "Total Charge",
                   "header": "Total charge?",
                   "hint_text": "This is the total of rent and all charges",
@@ -1655,7 +1681,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "time_lived_in_la": {
+                "LAYEAR": {
                   "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "hint_text": "",
@@ -1677,7 +1703,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "time_on_la_waiting_list": {
+                "LAWAITLIST": {
                   "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "hint_text": "",
@@ -2038,7 +2064,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "reasonable_preference": {
+                "REASONPREF": {
                   "check_answer_label": "Was the household given Reasonable Preference (i.e. priority) for housing by the Local Authority?",
                   "header": "Was the household given reasonable preference by the local authority?",
                   "hint_text": "",
@@ -2057,12 +2083,12 @@
                   "hint_text": "Select all that apply",
                   "type": "checkbox",
                   "answer_options": {
-                    "reasonable_preference_reason_homeless": "Homeless or about to lose their home (within 56 days)",
-                    "reasonable_preference_reason_unsatisfactory_housing": "Living in insanitary or overcrowded or unsatisfactory housing",
-                    "reasonable_preference_reason_medical_grounds": "A need to move on medical and welfare grounds (including a disability)",
-                    "reasonable_preference_reason_avoid_hardship": "A need to move to avoid hardship to themselves or others",
+                    "RP_HOMELESS": "Homeless or about to lose their home (within 56 days)",
+                    "RP_INSAN_UNSAT": "Living in insanitary or overcrowded or unsatisfactory housing",
+                    "RP_MEDWEL": "A need to move on medical and welfare grounds (including a disability)",
+                    "RP_HARDSHIP": "A need to move to avoid hardship to themselves or others",
                     "divider": true,
-                    "reasonable_preference_reason_do_not_know": "Do not know"
+                    "RP_DONTKNOW": "Do not know"
                   }
                 }
               }
@@ -2071,7 +2097,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "cbl_letting": {
+                "CBL": {
                   "check_answer_label": "Choice-based letting?",
                   "header": "Was the letting made under choice-based lettings (CBL)? ",
                   "hint_text": "",
@@ -2081,7 +2107,7 @@
                     "1": "No"
                   }
                 },
-                "chr_letting": {
+                "CHR": {
                   "check_answer_label": "Common housing register letting?",
                   "header": "Was the letting made under common housing register (CHR)? ",
                   "hint_text": "",
@@ -2091,7 +2117,7 @@
                     "1": "No"
                   }
                 },
-                "cap_letting": {
+                "CAP": {
                   "check_answer_label": "Common allocation policy letting?",
                   "header": "Was the letting made under common allocation policy (CAP)? ",
                   "hint_text": "",
