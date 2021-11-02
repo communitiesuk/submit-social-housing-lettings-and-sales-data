@@ -63,7 +63,14 @@ module HouseholdValidations
   end
 
   def validate_person_1_age(record)
-    validate_person_age(record, 1)
+    return unless record.person_1_age
+    if !record.person_1_age.is_a?(Integer) || record.person_1_age < 16 || record.person_1_age > 120
+      record.errors.add "person_1_age", "Tenant age must be an integer between 16 and 120"
+    end
+  end
+
+  def validate_person_1_economic(record)
+    validate_person_age_matches_economic_status(record, 1)
   end
 
 private
