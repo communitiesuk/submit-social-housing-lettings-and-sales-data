@@ -1,5 +1,6 @@
 class CaseLogValidator < ActiveModel::Validator
-  # Validations methods need to be called 'validate_' to run on model save
+  # Validations methods need to be called 'validate_<page_name>' to run on model save
+  # or 'validate_' to run on submit as well
   include HouseholdValidations
   include PropertyValidations
   include FinancialValidations
@@ -11,9 +12,7 @@ class CaseLogValidator < ActiveModel::Validator
     # we want to validate all data fields.
     page_to_validate = options[:page]
     if page_to_validate
-      if respond_to?("validate_#{page_to_validate}")
-        public_send("validate_#{page_to_validate}", record)
-      end
+      public_send("validate_#{page_to_validate}", record) if respond_to?("validate_#{page_to_validate}")
     else
       validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
       validation_methods.each { |meth| public_send(meth, record) }
@@ -131,6 +130,14 @@ private
     unless net_income_known == "Yes"
       dynamically_not_required << "net_income"
       dynamically_not_required << "net_income_frequency"
+    end
+
+    start_range = (household_number_of_other_members || 0) + 2
+    (start_range..8).each do |n|
+      dynamically_not_required << "person_#{n}_age"
+      dynamically_not_required << "person_#{n}_gender"
+      dynamically_not_required << "person_#{n}_relationship"
+      dynamically_not_required << "person_#{n}_economic_status"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }

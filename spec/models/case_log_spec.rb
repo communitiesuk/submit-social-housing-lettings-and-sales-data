@@ -245,6 +245,40 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "household_member_validations" do
+      it "validate that persons aged under 16 must have relationship Child" do
+        expect { CaseLog.create!(person_2_age: 14, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged over 70 must be retired" do
+        expect { CaseLog.create!(person_2_age: 71, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that a male, retired persons must be over 65" do
+        expect { CaseLog.create!(person_2_age: 64, person_2_gender: "Male", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that a female, retired persons must be over 60" do
+        expect { CaseLog.create!(person_2_age: 59, person_2_gender: "Female", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged under 16 must be a child (economically speaking)" do
+        expect { CaseLog.create!(person_2_age: 15, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged between 16 and 19 that are a child must be a full time student or economic status refused" do
+        expect { CaseLog.create!(person_2_age: 17, person_2_relationship: "Child - includes young adult and grown-up", person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged under 16 must be a child relationship" do
+        expect { CaseLog.create!(person_2_age: 15, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that no more than 1 partner relationship exists" do
+        expect { CaseLog.create!(person_2_relationship: "Partner", person_3_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "other tenancy type validation" do
       it "must be provided if tenancy type was given as other" do
         expect {
