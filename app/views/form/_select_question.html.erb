@@ -1,8 +1,8 @@
 
 <%= answers = question["answer_options"].map {|key, value| OpenStruct.new(id:key, name: value)}
- f.govuk_collection_select :answer_id,
+ f.govuk_collection_select question_key,
     answers,
-    :id,
+    :name,
     :name,
     label: { text: question["header"]},
     hint: { text: question["hint_text"] }

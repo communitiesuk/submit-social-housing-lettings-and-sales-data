@@ -10,14 +10,14 @@
           "label": "About this log",
           "pages": {
             "gdpr_acceptance": {
-              "header": "About this log",
-              "description": "About this log",
+              "header": "DLUHC Privacy Notice Acceptance",
+              "description": "",
               "questions": {
                 "gdpr_acceptance": {
-                  "check_answer_label": "",
+                  "check_answer_label": "GDPR acceptance",
                   "header": "Has the tenant or buyer seen the DLUHC privacy notice?",
                   "hint_text": "",
-                  "type": "select",
+                  "type": "radio",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
@@ -31,9 +31,12 @@
             },
             "gdpr_declined": {
               "header": "You cannot use this service",
+              "hint_text": "",
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
               "questions": {
-              }
+
+              },
+              "default_next_page" : "check_answers"
             },
             "organisation_details": {
               "header": "About this log",
@@ -74,14 +77,19 @@
                     "0": "Sale",
                     "1": "Letting"
                   }
-                }
+                },
+                "conditional_route_to": {
+                  "sale_completion_date": { "sale_or_letting": "Sale" },
+                  "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
+                },
+                "default_next_page" : "check_answers"
               }
             },
             "tenant_same_property_renewal": {
               "header": "About this log",
               "description": "Is this a renewal to the same tenant in the same property?",
               "questions": {
-                "sale_or_letting": {
+                "tenant_same_property_renewal": {
                   "check_answer_label": "",
                   "header": "Is this a renewal to the same tenant in the same property?",
                   "hint_text": "",
@@ -97,7 +105,7 @@
               "header": "About this log",
               "description": "",
               "questions": {
-                "sale_or_letting": {
+                "tenancy_start_date": {
                   "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
@@ -121,6 +129,7 @@
                     "3": "Rent To Buy",
                     "4": "London Living Rent",
                     "5": "Other Intermediate Rent Product"
+                  }
                 },
                 "intermediate_rent_product_name": {
                   "check_answer_label": "Enter the product name",
@@ -138,6 +147,7 @@
                   "answer_options": {
                     "0": "Supported Housing",
                     "1": "General Needs"
+                  }
                 }
               }
             },

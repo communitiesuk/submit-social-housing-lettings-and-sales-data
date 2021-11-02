@@ -136,7 +136,7 @@ private
       content["conditional_route_to"].each do |route, conditions|
         if conditions.keys.all? { |x| case_log[x].present? } && conditions.all? { |k, v| v.include?(case_log[k]) }
           return "case_log_#{route}_path"
-        end
+        end      
       end
     end
     form.next_page_redirect_path(previous_page)
