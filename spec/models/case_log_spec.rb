@@ -3,46 +3,46 @@ require "rails_helper"
 RSpec.describe Form, type: :model do
   describe "#new" do
     it "validates age is a number" do
-      expect { CaseLog.create!(person_1_age: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age1: "random") }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is under 120" do
-      expect { CaseLog.create!(person_1_age: 121) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age1: 121) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is over 0" do
-      expect { CaseLog.create!(person_1_age: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age1: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is a number" do
-      expect { CaseLog.create!(property_number_of_times_relet: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(offered: "random") }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is under 20" do
-      expect { CaseLog.create!(property_number_of_times_relet: 21) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(offered: 21) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is over 0" do
-      expect { CaseLog.create!(property_number_of_times_relet: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(offered: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     context "reasonable preference validation" do
       it "if given reasonable preference is yes a reason must be selected" do
         expect {
-          CaseLog.create!(reasonable_preference: "Yes",
-                          reasonable_preference_reason_homeless: nil,
-                          reasonable_preference_reason_unsatisfactory_housing: nil,
-                          reasonable_preference_reason_medical_grounds: nil,
-                          reasonable_preference_reason_avoid_hardship: nil,
-                          reasonable_preference_reason_do_not_know: nil)
+          CaseLog.create!(reasonpref: "Yes",
+                          rp_homeless: nil,
+                          rp_insan_unsat: nil,
+                          rp_medwel: nil,
+                          rp_hardship: nil,
+                          rp_dontknow: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "if not previously homeless reasonable preference should not be selected" do
         expect {
           CaseLog.create!(
-            homelessness: "No",
-            reasonable_preference: "Yes",
+            homeless: "No",
+            reasonpref: "Yes",
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -50,9 +50,9 @@ RSpec.describe Form, type: :model do
       it "if not given reasonable preference a reason should not be selected" do
         expect {
           CaseLog.create!(
-            homelessness: "Yes",
-            reasonable_preference: "No",
-            reasonable_preference_reason_homeless: true,
+            homeless: "Yes",
+            reasonpref: "No",
+            rp_homeless: true,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -61,7 +61,7 @@ RSpec.describe Form, type: :model do
       it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
         expect {
           CaseLog.create!(reason_for_leaving_last_settled_home: "Do not know",
-                          benefit_cap_spare_room_subsidy: "Yes - benefit cap")
+                          underoccupation_benefitcap: "Yes - benefit cap")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -85,14 +85,14 @@ RSpec.describe Form, type: :model do
       it "must be answered if tenant was a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armed_forces: "Yes - a regular",
-                          armed_forces_injured: nil)
+                          reservist: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must be answered if tenant was not a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armed_forces: "No",
-                          armed_forces_injured: "Yes")
+                          reservist: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -100,38 +100,38 @@ RSpec.describe Form, type: :model do
     context "Shared accomodation bedrooms validation" do
       it "you must have more than zero bedrooms" do
         expect {
-          CaseLog.create!(property_unit_type: "Shared house",
-                          property_number_of_bedrooms: 0)
+          CaseLog.create!(unittype_gn: "Shared house",
+                          beds: 0)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "you must answer less than 8 bedrooms" do
         expect {
-          CaseLog.create!(property_unit_type: "Shared bungalow",
-                          property_number_of_bedrooms: 8,
-                          household_number_of_other_members: 1)
+          CaseLog.create!(unittype_gn: "Shared bungalow",
+                          beds: 8,
+                          hhmemb: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "you must answer less than 8 bedrooms" do
         expect {
-          CaseLog.create!(property_unit_type: "Shared bungalow",
-                          property_number_of_bedrooms: 4,
-                          household_number_of_other_members: 0)
+          CaseLog.create!(unittype_gn: "Shared bungalow",
+                          beds: 4,
+                          hhmemb: 0)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "A bedsit must only have one room" do
         expect {
-          CaseLog.create!(property_unit_type: "Bed-sit",
-                          property_number_of_bedrooms: 2)
+          CaseLog.create!(unittype_gn: "Bed-sit",
+                          beds: 2)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "A bedsit must only have one room" do
         expect {
-          CaseLog.create!(property_unit_type: "Bed-sit",
-                          property_number_of_bedrooms: 0)
+          CaseLog.create!(unittype_gn: "Bed-sit",
+                          beds: 0)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -155,19 +155,19 @@ RSpec.describe Form, type: :model do
     context "tenant’s income is from Universal Credit, state pensions or benefits" do
       it "Cannot be All if person 1 works full time" do
         expect {
-          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Full-time - 30 hours or more")
+          CaseLog.create!(benefits: "All", ecstat1: "Full-time - 30 hours or more")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Cannot be All if person 1 works part time" do
         expect {
-          CaseLog.create!(net_income_uc_proportion: "All", person_1_economic_status: "Part-time - Less than 30 hours")
+          CaseLog.create!(benefits: "All", ecstat1: "Part-time - Less than 30 hours")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
         expect {
-          CaseLog.create!(net_income_uc_proportion: "All", person_2_relationship: "Partner", person_2_economic_status: "Part-time - Less than 30 hours")
+          CaseLog.create!(benefits: "All", relat2: "Partner", ecstat2: "Part-time - Less than 30 hours")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -175,47 +175,47 @@ RSpec.describe Form, type: :model do
     context "fixed term tenancy length" do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
-          CaseLog.create!(tenancy_type: "Other",
-                          fixed_term_tenancy: 10)
+          CaseLog.create!(tenancy: "Other",
+                          tenancylength: 10)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Must be completed and between 2 and 99 if type of tenancy is Assured shorthold" do
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
-                          fixed_term_tenancy: 1)
+          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
-                          fixed_term_tenancy: nil)
+          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          tenancylength: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Assured Shorthold Tenancy (AST)",
-                          fixed_term_tenancy: 2)
+          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+                          tenancylength: 2)
         }.not_to raise_error
       end
 
       it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Secure",
-                          fixed_term_tenancy: 1)
+          CaseLog.create!(tenancy: "Fixed term – Secure",
+                          tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Secure",
-                          fixed_term_tenancy: 100)
+          CaseLog.create!(tenancy: "Fixed term – Secure",
+                          tenancylength: 100)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Secure",
-                          fixed_term_tenancy: nil)
+          CaseLog.create!(tenancy: "Fixed term – Secure",
+                          tenancylength: nil)
         }.not_to raise_error
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed term – Secure",
-                          fixed_term_tenancy: 2)
+          CaseLog.create!(tenancy: "Fixed term – Secure",
+                          tenancylength: 2)
         }.not_to raise_error
       end
     end
@@ -224,14 +224,14 @@ RSpec.describe Form, type: :model do
       it "must be answered if ever served in the forces as a regular" do
         expect {
           CaseLog.create!(armed_forces: "Yes - a regular",
-                          armed_forces_active: nil)
+                          leftreg: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must not be answered if not ever served as a regular" do
         expect {
           CaseLog.create!(armed_forces: "No",
-                          armed_forces_active: "Yes")
+                          leftreg: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -239,8 +239,8 @@ RSpec.describe Form, type: :model do
       it "must be answered if ever served in the forces as a regular" do
         expect do
           CaseLog.create!(armed_forces: "Yes - a regular",
-                          armed_forces_active: "Yes",
-                          armed_forces_injured: "Yes")
+                          leftreg: "Yes",
+                          reservist: "Yes")
         end
       end
     end
@@ -282,25 +282,25 @@ RSpec.describe Form, type: :model do
     context "other tenancy type validation" do
       it "must be provided if tenancy type was given as other" do
         expect {
-          CaseLog.create!(tenancy_type: "Other",
-                          other_tenancy_type: nil)
+          CaseLog.create!(tenancy: "Other",
+                          tenancyother: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Other",
-                          other_tenancy_type: "type")
+          CaseLog.create!(tenancy: "Other",
+                          tenancyother: "type")
         }.not_to raise_error
       end
 
       it "must not be provided if tenancy type is not other" do
         expect {
-          CaseLog.create!(tenancy_type: "Fixed",
-                          other_tenancy_type: "the other reason provided")
+          CaseLog.create!(tenancy: "Fixed",
+                          tenancyother: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy_type: "Fixed",
-                          other_tenancy_type: nil)
+          CaseLog.create!(tenancy: "Fixed",
+                          tenancyother: nil)
         }.not_to raise_error
       end
     end
@@ -309,9 +309,9 @@ RSpec.describe Form, type: :model do
       it "validates net income maximum" do
         expect {
           CaseLog.create!(
-            person_1_economic_status: "Full-time - 30 hours or more",
-            net_income: 5000,
-            net_income_frequency: "Weekly",
+            ecstat1: "Full-time - 30 hours or more",
+            earnings: 5000,
+            incfreq: "Weekly",
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -319,9 +319,9 @@ RSpec.describe Form, type: :model do
       it "validates net income minimum" do
         expect {
           CaseLog.create!(
-            person_1_economic_status: "Full-time - 30 hours or more",
-            net_income: 1,
-            net_income_frequency: "Weekly",
+            ecstat1: "Full-time - 30 hours or more",
+            earnings: 1,
+            incfreq: "Weekly",
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -347,20 +347,20 @@ RSpec.describe Form, type: :model do
 
   describe "weekly_net_income" do
     let(:net_income) { 5000 }
-    let(:case_log) { FactoryBot.build(:case_log, net_income: net_income) }
+    let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
 
     it "returns input income if frequency is already weekly" do
-      case_log.net_income_frequency = "Weekly"
+      case_log.incfreq = "Weekly"
       expect(case_log.weekly_net_income).to eq(net_income)
     end
 
     it "calculates the correct weekly income from monthly income" do
-      case_log.net_income_frequency = "Monthly"
+      case_log.incfreq = "Monthly"
       expect(case_log.weekly_net_income).to eq(1154)
     end
 
     it "calculates the correct weekly income from yearly income" do
-      case_log.net_income_frequency = "Yearly"
+      case_log.incfreq = "Yearly"
       expect(case_log.weekly_net_income).to eq(417)
     end
   end

@@ -18,7 +18,7 @@
             },
             "person_1_age": {
               "questions": {
-                "person_1_age": {
+                "age1": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "type": "numeric",
@@ -30,7 +30,7 @@
             },
             "person_1_gender": {
               "questions": {
-                "person_1_gender": {
+                "sex1": {
                   "check_answer_label": "Tenant's gender",
                   "header": "Which of these best describes the tenant's gender identity?",
                   "type": "radio",
@@ -45,7 +45,7 @@
             },
             "household_number_of_other_members": {
               "questions": {
-                "household_number_of_other_members": {
+                "hhmemb": {
                   "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 1",
@@ -54,13 +54,13 @@
                   "max": 1,
                   "step": 1,
                   "conditional_for": {
-                    "person_2_relationship": ">0",
-                    "person_2_age": ">0",
-                    "person_2_gender": ">0",
-                    "person_2_economic_status": ">0"
+                    "relat2": ">0",
+                    "age2": ">0",
+                    "sex2": ">0",
+                    "ecstat2": ">0"
                   }
                 },
-                "person_2_relationship": {
+                "relat2": {
                   "check_answer_label": "Person 2's relationship to lead tenant",
                   "header": "What's person 2's relationship to lead tenant",
                   "type": "radio",
@@ -69,7 +69,7 @@
                     "1": "Prefer not to say"
                   }
                 },
-                "person_2_age": {
+                "age2": {
                   "check_answer_label": "Person 2's age",
                   "header": "What's person 2's age",
                   "type": "numeric",
@@ -77,7 +77,7 @@
                   "max": 150,
                   "step": 1
                 },
-                "person_2_gender": {
+                "sex2": {
                   "check_answer_label": "Person 2's gender",
                   "header": "Which of these best describes person 2's gender identity?",
                   "type": "radio",
@@ -88,7 +88,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "person_2_economic_status": {
+                "ecstat2": {
                   "check_answer_label": "Person 2's Work",
                   "header": "Which of these best describes person 2's working situation?",
                   "type": "radio",
@@ -118,17 +118,11 @@
                     "3": "Prefer not to say"
                   },
                   "conditional_for": {
-                    "armed_forces_active": [
-                      "Yes - a regular",
-                      "Yes - a reserve"
-                    ],
-                    "armed_forces_injured": [
-                      "Yes - a regular",
-                      "Yes - a reserve"
-                    ]
+                    "leftreg": ["Yes - a regular", "Yes - a reserve"],
+                    "reservist": ["Yes - a regular", "Yes - a reserve"]
                   }
                 },
-                "armed_forces_active": {
+                "leftreg": {
                   "header": "Are they still serving?",
                   "type": "radio",
                   "check_answer_label": "When did they leave the Armed Forces?",
@@ -139,7 +133,7 @@
                     "3": "Prefer not to say"
                   }
                 },
-                "armed_forces_injured": {
+                "reservist": {
                   "header": "Were they seriously injured or ill as a result of their service?",
                   "type": "radio",
                   "check_answer_label": "Has anyone in the household been seriously injured or ill as a result of their service in the armed forces?",
@@ -153,7 +147,7 @@
             },
             "medical_conditions": {
               "questions": {
-                "medical_conditions": {
+                "illness": {
                   "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "type": "radio",
                   "check_answer_label": "Physical, mental health or illness in the household",
@@ -174,11 +168,11 @@
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
-                    "accessibility_requirements_fully_wheelchair_accessible_housing": "Fully wheelchair accessible housing",
-                    "accessibility_requirements_wheelchair_access_to_essential_rooms": "Wheelchair access to essential rooms",
-                    "accessibility_requirements_level_access_housing": "Level access housing",
+                    "housingneeds_a": "Fully wheelchair accessible housing",
+                    "housingneeds_b": "Wheelchair access to essential rooms",
+                    "housingneeds_c": "Level access housing",
                     "divider_a": true,
-                    "accessibility_requirements_do_not_know": "Do not know"
+                    "housingneeds_h": "Do not know"
                   }
                 }
               }
@@ -191,8 +185,8 @@
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
-                    "condition_effects_vision": "Vision - such as blindness or partial sight",
-                    "condition_effects_hearing": "Hearing - such as deafness or partial hearing"
+                    "illness_type_1": "Vision - such as blindness or partial sight",
+                    "illness_type_2": "Hearing - such as deafness or partial hearing"
                   }
                 }
               }
@@ -223,7 +217,7 @@
           "pages": {
             "property_wheelchair_accessible": {
               "questions": {
-                "property_wheelchair_accessible": {
+                "wchair": {
                   "check_answer_label": "Is property built or adapted to wheelchair user standards?",
                   "header": "Is property built or adapted to wheelchair user standards?",
                   "type": "radio",
@@ -241,7 +235,7 @@
           "pages": {
             "conditional_question": {
               "questions": {
-                "pregnancy": {
+                "preg_occ": {
                   "check_answer_label": "Has the condition been met?",
                   "header": "Has the condition been met?",
                   "type": "radio",
@@ -252,15 +246,15 @@
                 }
               },
               "conditional_route_to": {
-                "rent": { "pregnancy": "Yes", "person_1_gender": "Female" },
-                "conditional_question_yes_page": { "pregnancy": "Yes" },
-                "conditional_question_no_page": { "pregnancy": "No" }
+                "rent": { "preg_occ": "Yes", "sex1": "Female" },
+                "conditional_question_yes_page": { "preg_occ": "Yes" },
+                "conditional_question_no_page": { "preg_occ": "No" }
               },
               "default_next_page": "check_answers"
             },
             "conditional_question_yes_page": {
               "questions": {
-                "cbl_letting": {
+                "cbl": {
                   "check_answer_label": "Has the next condition been met?",
                   "header": "Has the next condition been met?",
                   "type": "radio",
@@ -311,14 +305,14 @@
           "pages": {
             "net_income": {
               "questions": {
-                "net_income": {
+                "earnings": {
                   "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
                   "type": "numeric",
                   "min": 0,
                   "step": "1"
                 },
-                "net_income_frequency": {
+                "incfreq": {
                   "check_answer_label": "Income Frequency",
                   "header": "How often do they receive this income?",
                   "type": "radio",
@@ -341,7 +335,7 @@
             },
             "net_income_uc_proportion": {
               "questions": {
-                "net_income_uc_proportion": {
+                "benefits": {
                   "check_answer_label": "Benefits as a proportion of income",
                   "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                   "type": "radio",
@@ -381,7 +375,7 @@
                     "1": "Fortnightly"
                   }
                 },
-                "basic_rent": {
+                "brent": {
                   "check_answer_label": "Basic Rent",
                   "header": "What is the basic rent?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
@@ -389,14 +383,14 @@
                   "min": 0,
                   "step": 1,
                   "fields-to-add": [
-                    "basic_rent",
-                    "service_charge",
-                    "personal_service_charge",
-                    "support_charge"
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharge"
                   ],
-                  "result-field": "total_charge"
+                  "result-field": "tcharge"
                 },
-                "service_charge": {
+                "scharge": {
                   "check_answer_label": "Service Charge",
                   "header": "What is the service charge?",
                   "hint_text": "Eligible for housing benefit or Universal Credit",
@@ -404,14 +398,14 @@
                   "min": 0,
                   "step": 1,
                   "fields-to-add": [
-                    "basic_rent",
-                    "service_charge",
-                    "personal_service_charge",
-                    "support_charge"
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharge"
                   ],
-                  "result-field": "total_charge"
+                  "result-field": "tcharge"
                 },
-                "personal_service_charge": {
+                "pscharge": {
                   "check_answer_label": "Personal Service Charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
@@ -419,14 +413,14 @@
                   "min": 0,
                   "step": 1,
                   "fields-to-add": [
-                    "basic_rent",
-                    "service_charge",
-                    "personal_service_charge",
-                    "support_charge"
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharge"
                   ],
-                  "result-field": "total_charge"
+                  "result-field": "tcharge"
                 },
-                "support_charge": {
+                "supcharge": {
                   "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
@@ -434,14 +428,14 @@
                   "min": 0,
                   "step": 1,
                   "fields-to-add": [
-                    "basic_rent",
-                    "service_charge",
-                    "personal_service_charge",
-                    "support_charge"
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharge"
                   ],
-                  "result-field": "total_charge"
+                  "result-field": "tcharge"
                 },
-                "total_charge": {
+                "tcharge": {
                   "check_answer_label": "Total Charge",
                   "header": "Total charge?",
                   "hint_text": "This is the total of rent and all charges",
@@ -464,7 +458,7 @@
           "pages": {
             "time_lived_in_la": {
               "questions": {
-                "time_lived_in_la": {
+                "layear": {
                   "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                   "type": "radio",
@@ -483,7 +477,7 @@
             },
             "time_on_la_waiting_list": {
               "questions": {
-                "time_on_la_waiting_list": {
+                "lawaitlist": {
                   "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                   "type": "radio",

@@ -13,25 +13,25 @@ module FinancialValidations
   EMPLOYED_STATUSES = ["Full-time - 30 hours or more", "Part-time - Less than 30 hours"].freeze
   def validate_net_income_uc_proportion(record)
     (1..8).any? do |n|
-      economic_status = record["person_#{n}_economic_status"]
+      economic_status = record["ecstat#{n}"]
       is_employed = EMPLOYED_STATUSES.include?(economic_status)
-      relationship = record["person_#{n}_relationship"]
+      relationship = record["relat#{n}"]
       is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
-      if is_employed && is_partner_or_main && record.net_income_uc_proportion == "All"
-        record.errors.add :net_income_uc_proportion, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      if is_employed && is_partner_or_main && record.benefits == "All"
+        record.errors.add :benefits, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       end
     end
   end
 
   def validate_net_income(record)
-    return unless record.person_1_economic_status && record.weekly_net_income
+    return unless record.ecstat1 && record.weekly_net_income
 
     if record.weekly_net_income > record.applicable_income_range.hard_max
-      record.errors.add :net_income, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
+      record.errors.add :earnings, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
     end
 
     if record.weekly_net_income < record.applicable_income_range.hard_min
-      record.errors.add :net_income, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
+      record.errors.add :earnings, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
     end
   end
 end

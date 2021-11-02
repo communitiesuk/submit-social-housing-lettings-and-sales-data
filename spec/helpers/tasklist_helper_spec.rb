@@ -30,7 +30,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns completed if all the questions in the subsection have been answered" do
-      %w[net_income net_income_frequency net_income_uc_proportion housing_benefit].each { |x| case_log[x] = "value" }
+      %w[earnings incfreq benefits housing_benefit].each { |x| case_log[x] = "value" }
       status = get_subsection_status("income_and_benefits", case_log, income_and_benefits_questions)
       expect(status).to eq(:completed)
     end

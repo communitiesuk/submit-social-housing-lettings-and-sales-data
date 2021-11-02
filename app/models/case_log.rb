@@ -66,20 +66,20 @@ class CaseLog < ApplicationRecord
   end
 
   def weekly_net_income
-    case net_income_frequency
+    case incfreq
     when "Weekly"
-      net_income
+      earnings
     when "Monthly"
-      ((net_income * 12) / 52.0).round(0)
+      ((earnings * 12) / 52.0).round(0)
     when "Yearly"
-      (net_income / 12.0).round(0)
+      (earnings / 12.0).round(0)
     end
   end
 
   def applicable_income_range
-    return unless person_1_economic_status
+    return unless ecstat1
 
-    IncomeRange::ALLOWED[person_1_economic_status.to_sym]
+    IncomeRange::ALLOWED[ecstat1.to_sym]
   end
 
 private
@@ -111,25 +111,25 @@ private
       dynamically_not_required << "other_reason_for_leaving_last_settled_home"
     end
 
-    if net_income.to_i.zero?
-      dynamically_not_required << "net_income_frequency"
+    if earnings.to_i.zero?
+      dynamically_not_required << "incfreq"
     end
 
-    if tenancy_type == "Fixed term – Secure"
-      dynamically_not_required << "fixed_term_tenancy"
+    if tenancy == "Fixed term – Secure"
+      dynamically_not_required << "tenancylength"
     end
 
     unless net_income_in_soft_max_range? || net_income_in_soft_min_range?
       dynamically_not_required << "override_net_income_validation"
     end
 
-    unless tenancy_type == "Other"
-      dynamically_not_required << "other_tenancy_type"
+    unless tenancy == "Other"
+      dynamically_not_required << "tenancyother"
     end
 
     unless net_income_known == "Yes"
-      dynamically_not_required << "net_income"
-      dynamically_not_required << "net_income_frequency"
+      dynamically_not_required << "earnings"
+      dynamically_not_required << "incfreq"
     end
 
     start_range = (household_number_of_other_members || 0) + 2
