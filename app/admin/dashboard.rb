@@ -2,31 +2,28 @@ ActiveAdmin.register_page "Dashboard" do
   menu priority: 1, label: proc { I18n.t("active_admin.dashboard") }
 
   content title: proc { I18n.t("active_admin.dashboard") } do
-    div class: "blank_slate_container", id: "dashboard_default_message" do
-      span class: "blank_slate" do
-        span I18n.t("active_admin.dashboard_welcome.welcome")
-        small I18n.t("active_admin.dashboard_welcome.call_to_action")
+    columns do
+      column do
+        panel "Recent Case Logs" do
+          table_for CaseLog.order(updated_at: :desc).limit(10) do
+            column :id
+            column :created_at
+            column :updated_at
+            column :status
+            column :tenant_code
+            column :property_postcode
+          end
+        end
+      end
+
+      column do
+        panel "Total case logs in progress" do
+          para CaseLog.in_progress.size
+        end
+        panel "Total case logs completed" do
+          para CaseLog.completed.size
+        end
       end
     end
-
-    # Here is an example of a simple dashboard with columns and panels.
-    #
-    # columns do
-    #   column do
-    #     panel "Recent Posts" do
-    #       ul do
-    #         Post.recent(5).map do |post|
-    #           li link_to(post.title, admin_post_path(post))
-    #         end
-    #       end
-    #     end
-    #   end
-
-    #   column do
-    #     panel "Info" do
-    #       para "Welcome to ActiveAdmin."
-    #     end
-    #   end
-    # end
-  end # content
+  end
 end
