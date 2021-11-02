@@ -97,6 +97,45 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "Shared accomodation bedrooms validation" do
+      it "you must have more than zero bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared house",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 8,
+                          household_number_of_other_members: 1)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 4,
+                          household_number_of_other_members: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 2)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "outstanding rent or charges validation" do
       it "must be anwered if answered yes to outstanding rent or charges" do
         expect {
