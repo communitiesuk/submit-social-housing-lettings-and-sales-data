@@ -136,7 +136,7 @@
                   "header": "What is intermediate rent product name?",
                   "type": "text",
                   "conditional_for": {
-                    "rent_type": "Other Intermediate Rent Product"
+                    "rent_type": ["Other Intermediate Rent Product"]
                   }
                 },
                 "needs_type": {
