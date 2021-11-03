@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090530) do
     t.integer "age8"
     t.string "sex8"
     t.integer "ecstat8"
-    t.string "homeless"
+    t.integer "homeless"
     t.string "reason_for_leaving_last_settled_home"
     t.string "underoccupation_benefitcap"
     t.string "leftreg"
