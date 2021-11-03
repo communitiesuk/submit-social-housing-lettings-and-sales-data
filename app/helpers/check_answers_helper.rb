@@ -28,12 +28,25 @@ module CheckAnswersHelper
   def filter_conditional_questions(questions, case_log)
     applicable_questions = questions
 
+    # puts applicable_questions.count
     questions.each do |k, question|
+
+      # if k == "default_next_page" 
+      #   applicable_questions = applicable_questions.reject { |z| z == "default_next_page" }
+      # else
+      #   question.fetch("conditional_for", []).each do |conditional_question_key, condition|
+      #     if condition_not_met(case_log, k, question, condition)
+      #       applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
+      #     end
+      #   end
+      # end
+
       question.fetch("conditional_for", []).each do |conditional_question_key, condition|
         if condition_not_met(case_log, k, question, condition)
           applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
         end
       end
+      
     end
     applicable_questions
   end
@@ -56,13 +69,14 @@ module CheckAnswersHelper
       operator = condition[/[<>=]+/].to_sym
       operand = condition[/\d+/].to_i
       case_log[question_key].blank? || !case_log[question_key].send(operator, operand)
+    when "text"
+      case_log[question_key].blank? || !condition.include?(case_log[question_key])
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     when "select"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
-      raise "Not implemented yet"
-    end
+      raise "Not implemented yet"    end
   end
 
   def create_update_answer_link(case_log_answer, case_log_id, page)

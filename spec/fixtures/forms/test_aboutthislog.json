@@ -75,13 +75,12 @@
                     "0": "Sale",
                     "1": "Letting"
                   }
-                },
-                "conditional_route_to": {
-                  "sale_completion_date": { "sale_or_letting": "Sale" },
-                  "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
-                },
-                "default_next_page" : ["check_answers"]
-              }
+                }
+              },
+              "conditional_route_to": {
+                "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
+              },
+              "default_next_page" : "check_answers"
             },
             "tenant_same_property_renewal": {
               "header": "About this log",
@@ -127,15 +126,15 @@
                     "3": "Rent To Buy",
                     "4": "London Living Rent",
                     "5": "Other Intermediate Rent Product"
+                  },
+                  "conditional_for": {
+                    "intermediate_rent_product_name": ["Other Intermediate Rent Product"]
                   }
                 },
                 "intermediate_rent_product_name": {
                   "check_answer_label": "Enter the product name",
                   "header": "What is intermediate rent product name?",
-                  "type": "text",
-                  "conditional_for": {
-                    "rent_type": ["Other Intermediate Rent Product"]
-                  }
+                  "type": "text"
                 },
                 "needs_type": {
                   "check_answer_label": "What is the needs type?",
