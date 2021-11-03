@@ -1,7 +1,7 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
-  # TODO determine if it's worth splitting out an API controller
+  # TODO: determine if it's worth splitting out an API controller
   before_action :authenticate_user!, unless: :json_api_request?
 
   def index
