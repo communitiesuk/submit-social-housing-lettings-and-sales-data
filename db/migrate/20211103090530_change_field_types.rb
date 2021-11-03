@@ -11,6 +11,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :ecstat6, "integer USING ecstat6::integer"
       t.change :ecstat7, "integer USING ecstat7::integer"
       t.change :ecstat8, "integer USING ecstat8::integer"
+      t.change :prevten, "integer USING prevten::integer"
     end
   end
 
@@ -26,6 +27,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :ecstat6, :string
       t.change :ecstat7, :string
       t.change :ecstat8, :string
+      t.change :prevten, :string
     end
   end
 end

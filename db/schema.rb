@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090530) do
     t.string "sex1"
     t.integer "ethnic"
     t.integer "national"
-    t.string "prevten"
+    t.integer "prevten"
     t.string "armed_forces"
     t.integer "ecstat1"
     t.integer "hhmemb"
