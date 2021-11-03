@@ -121,7 +121,7 @@ private
   end
 
   def authenticate
-    http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
+    http_basic_authenticate_or_request_with ethnic: ENV["API_USER"], password: ENV["API_KEY"]
   end
 
   def api_case_log_params

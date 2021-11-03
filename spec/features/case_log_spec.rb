@@ -223,7 +223,7 @@ RSpec.describe "Test Features" do
   describe "Form flow is correct" do
     context "given an ordered list of pages" do
       it "leads to the next one in the correct order" do
-        pages = question_answers.map {|_key, val| val[:path]}
+        pages = question_answers.map { |_key, val| val[:path] }
         pages[0..-2].each_with_index do |val, index|
           visit("/case_logs/#{id}/#{val}")
           click_button("Save and continue")

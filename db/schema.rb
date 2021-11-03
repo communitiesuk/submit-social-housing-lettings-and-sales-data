@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_01_192151) do
+ActiveRecord::Schema.define(version: 2021_11_03_090530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2021_11_01_192151) do
     t.string "tenant_code"
     t.integer "age1"
     t.string "sex1"
-    t.string "ethnic"
+    t.integer "ethnic"
     t.string "national"
     t.string "prevten"
     t.string "armed_forces"
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2021_11_01_192151) do
     t.boolean "override_net_income_validation"
     t.string "tenancyother"
     t.string "net_income_known"
-    t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
+    t.index ["discarded_at"], ethnic: "index_case_logs_on_discarded_at"
   end
 
 end

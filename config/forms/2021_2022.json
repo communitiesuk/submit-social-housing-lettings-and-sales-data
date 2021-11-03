@@ -64,9 +64,9 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "White: English/Scottish/Welsh/Northern Irish/British",
-                    "1": "White: Irish",
-                    "2": "White: Gypsy/Irish Traveller",
+                    "1": "White: English/Scottish/Welsh/Northern Irish/British",
+                    "2": "White: Irish",
+                    "18": "White: Gypsy/Irish Traveller",
                     "3": "White: Other",
                     "4": "Mixed: White & Black Caribbean",
                     "5": "Mixed: White & Black African",
@@ -75,14 +75,14 @@
                     "8": "Asian or Asian British: Indian",
                     "9": "Asian or Asian British: Pakistani",
                     "10": "Asian or Asian British: Bangladeshi",
-                    "11": "Asian or Asian British: Chinese",
-                    "12": "Asian or Asian British: Other",
-                    "13": "Black: Caribbean",
-                    "14": "Black: African",
-                    "15": "Black: Other",
+                    "15": "Asian or Asian British: Chinese",
+                    "11": "Asian or Asian British: Other",
+                    "12": "Black: Caribbean",
+                    "13": "Black: African",
+                    "14": "Black: Other",
                     "16": "Other Ethnic Group: Arab",
-                    "17": "Other Ethnic Group: Other",
-                    "18": "Prefer not to say"
+                    "19": "Other Ethnic Group: Other",
+                    "17": "Prefer not to say"
                   }
                 }
               }
@@ -97,8 +97,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "UK national resident in UK",
-                    "1": "A current or former reserve in the UK Armed Forces (exc. National Service)",
+                    "1": "UK national resident in UK",
+                    "100": "A current or former reserve in the UK Armed Forces (exc. National Service)",
                     "2": "UK national returning from residence overseas",
                     "3": "Czech Republic",
                     "4": "Estonia",
@@ -107,12 +107,12 @@
                     "7": "Lithuania",
                     "8": "Poland",
                     "9": "Slovakia",
-                    "10": "Bulgaria",
-                    "11": "Romania",
-                    "12": "Ireland",
-                    "13": "Other EU Economic Area (EEA country)",
-                    "14": "Any other country",
-                    "15": "Prefer not to say"
+                    "14": "Bulgaria",
+                    "15": "Romania",
+                    "17": "Ireland",
+                    "11": "Other EU Economic Area (EEA country)",
+                    "12": "Any other country",
+                    "13": "Prefer not to say"
                   }
                 }
               }

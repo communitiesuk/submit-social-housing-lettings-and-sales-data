@@ -102,6 +102,5 @@ class RenameFields < ActiveRecord::Migration[6.1]
     rename_column :case_logs, :cbl_letting, :cbl
     rename_column :case_logs, :chr_letting, :chr
     rename_column :case_logs, :cap_letting, :cap
-
   end
 end
