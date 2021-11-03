@@ -23,6 +23,9 @@ ActiveAdmin.register_page "Dashboard" do
         panel "Total case logs completed" do
           para CaseLog.completed.size
         end
+        panel "Total case logs completed" do
+          pie_chart CaseLog.group(:status).size
+        end
       end
     end
   end

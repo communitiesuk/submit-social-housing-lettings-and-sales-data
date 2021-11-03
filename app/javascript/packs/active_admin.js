@@ -3,3 +3,5 @@
 import "../stylesheets/active_admin";
 
 import "@activeadmin/activeadmin";
+
+import "chartkick/chart.js"
