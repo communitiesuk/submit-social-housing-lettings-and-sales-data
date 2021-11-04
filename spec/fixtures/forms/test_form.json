@@ -497,7 +497,7 @@
                   "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
-                  "type": "date",
+                  "type": "text",
                   "conditional_for": { "faake_key": "fake_condition" }
                 }
               }
