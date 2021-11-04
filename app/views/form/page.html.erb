@@ -1,7 +1,5 @@
-<meta http-equiv="Pragma" content="no-cache">
-
 <% content_for :before_content do %>
-  <%= link_to 'Back', :back, class: "govuk-back-link" %>
+  <%= link_to 'Back', 'javascript:history.back()', class: "govuk-back-link" %>
 <% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
@@ -19,8 +17,8 @@
       </div>
     <% end %>
 
-    <% if @case_log.soft_errors.present? && @case_log.soft_errors.keys.first == page_info["soft_validations"]&.keys&.first %>
-      <%= render partial: "form/validation_override_question", locals: { f: f } %>
+    <% if page_info["soft_validations"]&.keys&.first %>
+      <%= render partial: "form/validation_override_question", locals: { f: f, page_key: page_key, page_info: page_info } %>
     <% end %>
 
     <%= f.hidden_field :page, value: page_key %>

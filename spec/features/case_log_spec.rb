@@ -216,6 +216,17 @@ RSpec.describe "Test Features" do
         click_link(text: "Back")
         expect(page).to have_field("case-log-tenant-code-field")
       end
+
+      it "doesn't get stuck in infinite loops", js: true do
+        visit("/case_logs")
+        visit("/case_logs/#{id}/net_income")
+        fill_in("case-log-net-income-field", with: 740)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        click_link(text: "Back")
+        click_link(text: "Back")
+        expect(page).to have_current_path("/case_logs")
+      end
     end
   end
 
@@ -230,7 +241,7 @@ RSpec.describe "Test Features" do
         end
       end
 
-      context "when changing an answer from the check answers page" do
+      context "when changing an answer from the check answers page", js: true do
         it "the back button routes correctly" do
           visit("/case_logs/#{id}/household_characteristics/check_answers")
           first("a", text: /Answer/).click
@@ -388,12 +399,13 @@ RSpec.describe "Test Features" do
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 
-      it "prompts the user to confirm the value is correct" do
+      it "prompts the user to confirm the value is correct", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
         fill_in("case-log-net-income-field", with: income_over_soft_limit)
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_content("Are you sure this is correct?")
+        binding.pry
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
