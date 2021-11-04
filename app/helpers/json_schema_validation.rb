@@ -23,44 +23,45 @@ require "json"
             #     }
             #   }
             # },
+begin
 
-schema = {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/product.schema.json",
-  "title": "Form",
-  "description": "A form",
-  "type": "object",
-  "properties": {
-    "form_type": {
-      "description": "",
-      "type": "string"
-    },
-    "start_year": {
-      "description": "",
-      "type": "int"
-    },
-    "end_year": {
-      "description": "",
-      "type": "int"
-    },
-    "sections": {
-      "description": "",
-      "type": "object",
-      "properties": {
-        "page_name": {
-          "description": "",
-          "type": "string"
-        },
+  schema = {
+    "$schema": "https://json-schema.org/draft-04/schema#",
+    "$id": "https://example.com/product.schema.json",
+    "title": "Form",
+    "description": "A form",
+    "type": "object",
+    "properties": {
+      "form_type": {
+        "description": "",
+        "type": "string"
+      },
+      "start_year": {
+        "description": "",
+        "type": "int"
+      },
+      "end_year": {
+        "description": "",
+        "type": "int"
+      },
+      "sections": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "page_name": {
+            "description": "",
+            "type": "string"
+          },
+        }
       }
     }
   }
-}
-
-begin
 
   # file = File.open("config/forms/2021_2022.json")
   file = File.open("spec/fixtures/forms/test_validator.json")
-  data = JSON.parse(file.read)
+  puts data = JSON.parse(file.read)
+
+  puts JSON::Validator.validate(schema, data)
 
   if JSON::Validator.validate!(schema, data)
     puts "Success"
