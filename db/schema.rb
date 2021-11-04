@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090530) do
     t.string "property_relet"
     t.integer "rsnvac"
     t.string "property_reference"
-    t.string "unittype_gn"
+    t.integer "unittype_gn"
     t.string "property_building_type"
     t.string "beds"
     t.string "property_void_date"

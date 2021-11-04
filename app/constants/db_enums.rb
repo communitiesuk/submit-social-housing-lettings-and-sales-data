@@ -191,4 +191,17 @@ module DbEnums
       "Relet – tenant involved in a succession downsize" => 19,
     }
   end
+
+  def self.unittype_gn
+    {
+      "Flat / maisonette" => 1,
+      "Bed-sit" => 2,
+      "House" => 7,
+      "Bungalow" => 8,
+      "Shared flat / maisonette" => 4,
+      "Shared house" => 9,
+      "Shared bungalow" => 10,
+      "Other" => 6,
+    }
+  end
 end

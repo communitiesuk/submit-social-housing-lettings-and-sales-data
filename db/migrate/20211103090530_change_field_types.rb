@@ -47,6 +47,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :tenancy, "integer USING tenancy::integer"
       t.change :landlord, "integer USING landlord::integer"
       t.change :rsnvac, "integer USING rsnvac::integer"
+      t.change :unittype_gn, "integer USING unittype_gn::integer"
     end
   end
 
@@ -98,6 +99,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :tenancy, :string
       t.change :landlord, :string
       t.change :rsnvac, :string
+      t.change :unittype_gn, :string
     end
   end
 end
