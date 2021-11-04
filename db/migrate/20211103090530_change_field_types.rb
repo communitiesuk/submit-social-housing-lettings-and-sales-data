@@ -18,6 +18,12 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :leftreg, "integer USING leftreg::integer"
       t.change :illness, "integer USING illness::integer"
       t.change :preg_occ, "integer USING preg_occ::integer"
+      t.change :housingneeds_a, "integer USING housingneeds_a::integer"
+      t.change :housingneeds_b, "integer USING housingneeds_b::integer"
+      t.change :housingneeds_c, "integer USING housingneeds_c::integer"
+      t.change :housingneeds_f, "integer USING housingneeds_f::integer"
+      t.change :housingneeds_g, "integer USING housingneeds_g::integer"
+      t.change :housingneeds_h, "integer USING housingneeds_h::integer"
     end
   end
 
@@ -40,6 +46,13 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :leftreg, :string
       t.change :illness, :string
       t.change :preg_occ, :string
+      t.change :housingneeds_a, :boolean
+      t.change :housingneeds_b, :boolean
+      t.change :housingneeds_c, :boolean
+      t.change :housingneeds_f, :boolean
+      t.change :housingneeds_g, :boolean
+      t.change :housingneeds_h, :boolean
+
     end
   end
 end

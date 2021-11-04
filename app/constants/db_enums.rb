@@ -140,4 +140,11 @@ module DbEnums
       "Prefer not to say" => 3,
     }
   end
+
+  def self.housingneeds
+    {
+      "No" => 0,
+      "Yes" => 1,
+    }
+  end
 end
