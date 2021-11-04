@@ -66,18 +66,18 @@ RSpec.describe CaseLogsController, type: :controller do
       post :submit_form, params: { id: id, case_log: case_log_form_params }
       case_log.reload
 
-      expect(case_log.housingneeds_a).to eq(true)
-      expect(case_log.housingneeds_b).to eq(true)
-      expect(case_log.housingneeds_c).to eq(true)
+      expect(case_log.housingneeds_a).to eq("Yes")
+      expect(case_log.housingneeds_b).to eq("Yes")
+      expect(case_log.housingneeds_c).to eq("Yes")
     end
 
     it "sets previously submitted items to false when resubmitted with new values" do
       post :submit_form, params: { id: id, case_log: new_case_log_form_params }
       case_log.reload
 
-      expect(case_log.housingneeds_a).to eq(false)
-      expect(case_log.housingneeds_b).to eq(false)
-      expect(case_log.housingneeds_c).to eq(true)
+      expect(case_log.housingneeds_a).to eq("No")
+      expect(case_log.housingneeds_b).to eq("No")
+      expect(case_log.housingneeds_c).to eq("Yes")
     end
 
     context "given a page with checkbox and non-checkbox questions" do
@@ -116,9 +116,9 @@ RSpec.describe CaseLogsController, type: :controller do
         post :submit_form, params: { id: id, case_log: case_log_form_params }
         case_log.reload
 
-        expect(case_log.housingneeds_a).to eq(true)
-        expect(case_log.housingneeds_b).to eq(true)
-        expect(case_log.housingneeds_c).to eq(true)
+        expect(case_log.housingneeds_a).to eq("Yes")
+        expect(case_log.housingneeds_b).to eq("Yes")
+        expect(case_log.housingneeds_c).to eq("Yes")
         expect(case_log.tenant_code).to eq(tenant_code)
       end
     end

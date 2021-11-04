@@ -84,8 +84,8 @@ RSpec.describe "Test Features" do
       let(:case_log_with_checkbox_questions_answered) do
         FactoryBot.create(
           :case_log, :in_progress,
-          housingneeds_a: true,
-          housingneeds_c: true
+          housingneeds_a: "Yes",
+          housingneeds_c: "Yes"
         )
       end
 

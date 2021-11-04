@@ -24,6 +24,16 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :housingneeds_f, "integer USING housingneeds_f::integer"
       t.change :housingneeds_g, "integer USING housingneeds_g::integer"
       t.change :housingneeds_h, "integer USING housingneeds_h::integer"
+      t.change :illness_type_1, "integer USING illness_type_1::integer"
+      t.change :illness_type_2, "integer USING illness_type_2::integer"
+      t.change :illness_type_3, "integer USING illness_type_3::integer"
+      t.change :illness_type_4, "integer USING illness_type_4::integer"
+      t.change :illness_type_5, "integer USING illness_type_5::integer"
+      t.change :illness_type_6, "integer USING illness_type_6::integer"
+      t.change :illness_type_7, "integer USING illness_type_7::integer"
+      t.change :illness_type_8, "integer USING illness_type_8::integer"
+      t.change :illness_type_9, "integer USING illness_type_9::integer"
+      t.change :illness_type_10, "integer USING illness_type_10::integer"
     end
   end
 
@@ -46,13 +56,22 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :leftreg, :string
       t.change :illness, :string
       t.change :preg_occ, :string
-      t.change :housingneeds_a, :boolean
-      t.change :housingneeds_b, :boolean
-      t.change :housingneeds_c, :boolean
-      t.change :housingneeds_f, :boolean
-      t.change :housingneeds_g, :boolean
-      t.change :housingneeds_h, :boolean
-
+      t.change :housingneeds_a, "boolean USING housingneeds_a::boolean"
+      t.change :housingneeds_b, "boolean USING housingneeds_b::boolean"
+      t.change :housingneeds_c, "boolean USING housingneeds_c::boolean"
+      t.change :housingneeds_f, "boolean USING housingneeds_f::boolean"
+      t.change :housingneeds_g, "boolean USING housingneeds_g::boolean"
+      t.change :housingneeds_h, "boolean USING housingneeds_h::boolean"
+      t.change :illness_type_1, "boolean USING illness_type_1::boolean"
+      t.change :illness_type_2, "boolean USING illness_type_2::boolean"
+      t.change :illness_type_3, "boolean USING illness_type_3::boolean"
+      t.change :illness_type_4, "boolean USING illness_type_4::boolean"
+      t.change :illness_type_5, "boolean USING illness_type_5::boolean"
+      t.change :illness_type_6, "boolean USING illness_type_6::boolean"
+      t.change :illness_type_7, "boolean USING illness_type_7::boolean"
+      t.change :illness_type_8, "boolean USING illness_type_8::boolean"
+      t.change :illness_type_9, "boolean USING illness_type_9::boolean"
+      t.change :illness_type_10, "boolean USING illness_type_10::boolean"
     end
   end
 end

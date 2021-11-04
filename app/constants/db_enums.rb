@@ -141,7 +141,7 @@ module DbEnums
     }
   end
 
-  def self.housingneeds
+  def self.polar
     {
       "No" => 0,
       "Yes" => 1,
