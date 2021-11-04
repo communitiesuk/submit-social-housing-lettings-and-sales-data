@@ -28,7 +28,7 @@ RSpec.describe QuestionAttributeHelper do
           "type" => "numeric",
           "min" => 0,
           "step" => 1,
-          "fields-to-add" => %w[brent scharge pscharge supcharge],
+          "fields-to-add" => %w[brent scharge pscharge supcharg],
           "result-field" => "tcharge",
           "conditional_for" => {
             "next_question": ">1",

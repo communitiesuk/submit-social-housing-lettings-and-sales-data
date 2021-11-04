@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090530) do
     t.integer "brent"
     t.integer "scharge"
     t.integer "pscharge"
-    t.string "supcharge"
+    t.string "supcharg"
     t.string "tcharge"
     t.string "outstanding_amount"
     t.string "layear"

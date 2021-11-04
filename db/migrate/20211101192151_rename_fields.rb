@@ -87,7 +87,7 @@ class RenameFields < ActiveRecord::Migration[6.1]
     rename_column :case_logs, :basic_rent, :brent
     rename_column :case_logs, :service_charge, :scharge
     rename_column :case_logs, :personal_service_charge, :pscharge
-    rename_column :case_logs, :support_charge, :supcharge
+    rename_column :case_logs, :support_charge, :supcharg
     rename_column :case_logs, :total_charge, :tcharge
     rename_column :case_logs, :time_lived_in_la, :layear
     rename_column :case_logs, :time_on_la_waiting_list, :lawaitlist

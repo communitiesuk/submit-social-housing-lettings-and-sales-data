@@ -170,7 +170,7 @@ RSpec.describe "Test Features" do
         fill_in("case-log-pscharge-field", with: 1)
         expect(page).to have_field("case-log-tcharge-field", with: "6")
 
-        fill_in("case-log-supcharge-field", with: 4)
+        fill_in("case-log-supcharg-field", with: 4)
         expect(page).to have_field("case-log-tcharge-field", with: "10")
       end
 

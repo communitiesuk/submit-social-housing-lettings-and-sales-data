@@ -1580,7 +1580,7 @@
                     "brent",
                     "scharge",
                     "pscharge",
-                    "supcharge"
+                    "supcharg"
                   ],
                   "result-field": "tcharge"
                 },
@@ -1595,7 +1595,7 @@
                     "brent",
                     "scharge",
                     "pscharge",
-                    "supcharge"
+                    "supcharg"
                   ],
                   "result-field": "tcharge"
                 },
@@ -1610,11 +1610,11 @@
                     "brent",
                     "scharge",
                     "pscharge",
-                    "supcharge"
+                    "supcharg"
                   ],
                   "result-field": "tcharge"
                 },
-                "supcharge": {
+                "supcharg": {
                   "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
                   "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
@@ -1625,7 +1625,7 @@
                     "brent",
                     "scharge",
                     "pscharge",
-                    "supcharge"
+                    "supcharg"
                   ],
                   "result-field": "tcharge"
                 },
