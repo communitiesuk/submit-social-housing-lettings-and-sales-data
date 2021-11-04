@@ -1,0 +1,24 @@
+{
+  "form_type": "lettings",
+  "sections": {
+    "household": {
+      "label": "About the household",
+      "subsections": {
+        "household_characteristics": {
+          "label": "Household characteristics",
+          "pages": {
+            "tenant_code": {
+              "questions": {
+                "tenant_code": {
+                  "check_answer_label": "Tenant code",
+                  "header": "What is the tenant code?",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
