@@ -742,7 +742,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "ILLNESS": {
+                "illness": {
                   "header": "Does anyone in the household have any of the following that they expect to last for 12 months or more:<ul><li>Physical Condition</li><li>Mental Health Condition</li><li>Other Illness</li></ul>",
                   "hint_text": "",
                   "type": "radio",

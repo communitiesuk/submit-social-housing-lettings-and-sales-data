@@ -14,6 +14,10 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :prevten, "integer USING prevten::integer"
       t.change :homeless, "integer USING homeless::integer"
       t.change :underoccupation_benefitcap, "integer USING underoccupation_benefitcap::integer"
+      t.change :reservist, "integer USING reservist::integer"
+      t.change :leftreg, "integer USING leftreg::integer"
+      t.change :illness, "integer USING illness::integer"
+      t.change :preg_occ, "integer USING preg_occ::integer"
     end
   end
 
@@ -32,6 +36,10 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :prevten, :string
       t.change :homeless, :string
       t.change :underoccupation_benefitcap, :string
+      t.change :reservist, :string
+      t.change :leftreg, :string
+      t.change :illness, :string
+      t.change :preg_occ, :string
     end
   end
 end
