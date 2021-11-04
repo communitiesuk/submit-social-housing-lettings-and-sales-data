@@ -15,6 +15,7 @@ module CheckAnswersHelper
     page_name = subsection_keys.first
 
     while page_name.to_s != "check_answers" && subsection_keys.include?(page_name)
+      binding.pry
       questions = form.questions_for_page(page_name)
       applicable_questions = filter_conditional_questions(questions, case_log)
       total_questions = total_questions.merge(applicable_questions)
@@ -30,23 +31,11 @@ module CheckAnswersHelper
 
     # puts applicable_questions.count
     questions.each do |k, question|
-
-      # if k == "default_next_page" 
-      #   applicable_questions = applicable_questions.reject { |z| z == "default_next_page" }
-      # else
-      #   question.fetch("conditional_for", []).each do |conditional_question_key, condition|
-      #     if condition_not_met(case_log, k, question, condition)
-      #       applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
-      #     end
-      #   end
-      # end
-
       question.fetch("conditional_for", []).each do |conditional_question_key, condition|
         if condition_not_met(case_log, k, question, condition)
           applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
         end
       end
-      
     end
     applicable_questions
   end
@@ -64,6 +53,7 @@ module CheckAnswersHelper
   end
 
   def condition_not_met(case_log, question_key, question, condition)
+    binding.pry
     case question["type"]
     when "numeric"
       operator = condition[/[<>=]+/].to_sym
@@ -72,8 +62,6 @@ module CheckAnswersHelper
     when "text"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     when "radio"
-      case_log[question_key].blank? || !condition.include?(case_log[question_key])
-    when "select"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
       raise "Not implemented yet"    end
