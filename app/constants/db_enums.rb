@@ -236,4 +236,17 @@ module DbEnums
       "Weekly for 53 weeks" => 10,
     }
   end
+
+  def self.latime
+    {
+      "Just moved to local authority area" => 1,
+      "Less than 1 year" => 2,
+      "1 to 2 years" => 7,
+      "2 to 3 years" => 8,
+      "3 to 4 years" => 9,
+      "4 to 5 years" => 10,
+      "5 years or more" => 5,
+      "Do not know" => 6,
+    }
+  end
 end

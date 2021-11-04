@@ -56,6 +56,11 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :brent, "integer USING brent::integer"
       t.change :scharge, "integer USING scharge::integer"
       t.change :pscharge, "integer USING pscharge::integer"
+      t.change :supcharg, "integer USING supcharg::integer"
+      t.change :tcharge, "integer USING tcharge::integer"
+      t.change :layear, "integer USING layear::integer"
+      t.change :lawaitlist, "integer USING lawaitlist::integer"
+      t.change :reasonpref, "integer USING reasonpref::integer"
     end
   end
 
@@ -116,6 +121,11 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :brent, :string
       t.change :scharge, :string
       t.change :pscharge, :string
+      t.change :supcharg, :string
+      t.change :tcharge, :string
+      t.change :layear, :string
+      t.change :lawaitlist, :string
+      t.change :reasonpref, :string
     end
   end
 end
