@@ -9,7 +9,7 @@ require "capybara/rspec"
 require "database_cleaner/active_record"
 
 # Comment to run `js: true specs` with visible browser interaction
-# Capybara.javascript_driver = :selenium_headless
+Capybara.javascript_driver = :selenium_headless
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

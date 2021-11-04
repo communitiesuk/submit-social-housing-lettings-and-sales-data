@@ -12,7 +12,6 @@ export default class extends Controller {
       case "radio":
         this.displayConditionalRadio()
       default:
-        console.log("Not yet implemented for " + this.element.type)
         break;
     }
   }
