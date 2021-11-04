@@ -42,6 +42,9 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :cbl, "integer USING cbl::integer"
       t.change :chr, "integer USING chr::integer"
       t.change :cap, "integer USING cap::integer"
+      t.change :startertenancy, "integer USING startertenancy::integer"
+      t.change :tenancylength, "integer USING tenancylength::integer"
+      t.change :tenancy, "integer USING tenancy::integer"
     end
   end
 
@@ -88,6 +91,9 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.column :cbl_letting, :string
       t.column :chr_letting, :string
       t.column :cap_letting, :string
+      t.change :startertenancy, :string
+      t.change :tenancylength, :string
+      t.change :tenancy, :string
     end
   end
 end

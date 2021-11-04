@@ -294,12 +294,12 @@ RSpec.describe Form, type: :model do
 
       it "must not be provided if tenancy type is not other" do
         expect {
-          CaseLog.create!(tenancy: "Fixed",
+          CaseLog.create!(tenancy: "Fixed term – Secure",
                           tenancyother: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed",
+          CaseLog.create!(tenancy: "Fixed term – Secure",
                           tenancyother: nil)
         }.not_to raise_error
       end
