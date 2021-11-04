@@ -50,7 +50,7 @@ RSpec.describe Form, type: :model do
       it "if not given reasonable preference a reason should not be selected" do
         expect {
           CaseLog.create!(
-            homeless: "Yes",
+            homeless: "Yes - other homelessness",
             reasonpref: "No",
             rp_homeless: true,
           )

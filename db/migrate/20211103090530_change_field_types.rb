@@ -13,6 +13,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :ecstat8, "integer USING ecstat8::integer"
       t.change :prevten, "integer USING prevten::integer"
       t.change :homeless, "integer USING homeless::integer"
+      t.change :underoccupation_benefitcap, "integer USING underoccupation_benefitcap::integer"
     end
   end
 
@@ -30,6 +31,7 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :ecstat8, :string
       t.change :prevten, :string
       t.change :homeless, :string
+      t.change :underoccupation_benefitcap, :string
     end
   end
 end
