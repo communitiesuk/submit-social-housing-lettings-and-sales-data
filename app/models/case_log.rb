@@ -83,6 +83,8 @@ class CaseLog < ApplicationRecord
   enum illness_type_10: DbEnums.polar, _suffix: true
   enum startertenancy: DbEnums.polar2, _suffix: true
   enum tenancy: DbEnums.tenancy, _suffix: true
+  enum landlord: DbEnums.landlord, _suffix: true
+  enum rsnvac: DbEnums.rsnvac, _suffix: true
 
   enum rp_homeless: DbEnums.polar, _suffix: true
   enum rp_insan_unsat: DbEnums.polar, _suffix: true

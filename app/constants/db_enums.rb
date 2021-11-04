@@ -165,4 +165,30 @@ module DbEnums
       "Other" => 3,
     }
   end
+
+  def self.landlord
+    {
+      "This landlord" => 1,
+      "Another registered provider - includes housing association or local authority" => 2,
+    }
+  end
+
+  def self.rsnvac
+    {
+      "First let of newbuild property" => 15,
+      "First let of conversion/rehabilitation/acquired property" => 16,
+      "First let of leased property" => 17,
+      "Relet - tenant evicted due to arrears" => 10,
+      "Relet - tenant evicted due to ASB or other reason" => 11,
+      "Relet - tenant died (no succession)" => 5,
+      "Relet - tenant moved to other social housing provider" => 12,
+      "Relet - tenant abandoned property" => 6,
+      "Relet - tenant moved to private sector or other accommodation" => 8,
+      "Relet - to tenant who occupied same property as temporary accommodation" => 9,
+      "Relet – internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
+      "Relet – renewal of fixed-term tenancy" => 14,
+      "Relet – tenant moved to care home" => 18,
+      "Relet – tenant involved in a succession downsize" => 19,
+    }
+  end
 end
