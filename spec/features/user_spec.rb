@@ -11,15 +11,15 @@ RSpec.describe "User Features" do
       visit("/case_logs")
       fill_in("user_email", with: "test@example.com")
       fill_in("user_password", with: "pAssword1")
-      click_button("Log in")
+      click_button("Sign in")
       expect(page).to have_current_path("/case_logs")
     end
   end
 
   context "A user who has forgotten their password" do
-    it " is redirected to the forgotten password page when they click the forgot password link" do
+    it " is redirected to the reset password page when they click the reset password link" do
       visit("/case_logs")
-      click_link("Forgot your password?")
+      click_link("reset your password")
       expect(page).to have_current_path("/users/password/new")
     end
   end
