@@ -2,7 +2,7 @@
   <%= f.govuk_check_boxes_fieldset page_info["soft_validations"]&.keys&.first,
       legend: { text: "soft-validations-placeholder-message", size: "l" },
       hint: { text: "soft-validations-placeholder-hint-text" },
-      form_group: { "data-controller": "soft-validations", "data-run": "0" } do %>
+      form_group: { "data-controller": "soft-validations" } do %>
 
       <%= f.govuk_check_box page_info["soft_validations"]&.keys&.first, page_info["soft_validations"]&.keys&.first,
         label: { text: "Yes" }
