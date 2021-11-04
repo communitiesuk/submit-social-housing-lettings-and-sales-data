@@ -104,7 +104,7 @@ RSpec.describe CheckAnswersHelper do
       end
 
       it "raises an error" do
-        allow_any_instance_of(Form).to receive(:pages_for_subsection).and_return(unimplemented_conditional)
+        allow_any_instance_of(Form).to receive(:questions_for_page).and_return(unimplemented_conditional)
         expect { total_number_of_questions(subsection, case_log, form) }.to raise_error(RuntimeError, "Not implemented yet")
       end
     end

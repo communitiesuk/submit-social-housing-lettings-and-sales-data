@@ -14,8 +14,10 @@ module CheckAnswersHelper
     subsection_keys = form.pages_for_subsection(subsection).keys
     page_name = subsection_keys.first
 
+    # binding.pry
+
     while page_name.to_s != "check_answers" && subsection_keys.include?(page_name)
-      binding.pry
+      # binding.pry
       questions = form.questions_for_page(page_name)
       applicable_questions = filter_conditional_questions(questions, case_log)
       total_questions = total_questions.merge(applicable_questions)
@@ -53,7 +55,7 @@ module CheckAnswersHelper
   end
 
   def condition_not_met(case_log, question_key, question, condition)
-    binding.pry
+    # binding.pry
     case question["type"]
     when "numeric"
       operator = condition[/[<>=]+/].to_sym
