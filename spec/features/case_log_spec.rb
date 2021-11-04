@@ -405,7 +405,6 @@ RSpec.describe "Test Features" do
         choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_content("Are you sure this is correct?")
-        binding.pry
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
