@@ -90,4 +90,21 @@ class Form
 
     pages_for_subsection(subsection).keys[current_page_idx - 1]
   end
+
+  def all_questions
+    @all_questions ||= all_pages.map { |_page_key, page_value|
+      page_value["questions"]
+    }.reduce(:merge)
+  end
+
+  def get_answer_label(case_log, question_title)
+    question = all_questions[question_title]
+    if question["type"] == "checkbox"
+      answer = []
+      question["answer_options"].each { |key, value| case_log[key] == "Yes" ? answer << value : nil }
+      return answer.join(", ")
+    end
+
+    case_log[question_title]
+  end
 end
