@@ -86,7 +86,6 @@ class CaseLog < ApplicationRecord
   enum landlord: DbEnums.landlord, _suffix: true
   enum rsnvac: DbEnums.rsnvac, _suffix: true
   enum unittype_gn: DbEnums.unittype_gn, _suffix: true
-
   enum rp_homeless: DbEnums.polar, _suffix: true
   enum rp_insan_unsat: DbEnums.polar, _suffix: true
   enum rp_medwel: DbEnums.polar, _suffix: true

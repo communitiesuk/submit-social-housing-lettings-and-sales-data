@@ -86,14 +86,14 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :illness_type_8, "boolean USING illness_type_8::boolean"
       t.change :illness_type_9, "boolean USING illness_type_9::boolean"
       t.change :illness_type_10, "boolean USING illness_type_10::boolean"
-      t.column :reasonable_preference_reason_homeless, :boolean
-      t.column :reasonable_preference_reason_unsatisfactory_housing, :boolean
-      t.column :reasonable_preference_reason_medical_grounds, :boolean
-      t.column :reasonable_preference_reason_avoid_hardship, :boolean
-      t.column :reasonable_preference_reason_do_not_know, :boolean
-      t.column :cbl_letting, :string
-      t.column :chr_letting, :string
-      t.column :cap_letting, :string
+      t.change :rp_homeless, :boolean
+      t.change :rp_insan_unsat, :boolean
+      t.change :rp_medwel, :boolean
+      t.change :rp_hardship, :boolean
+      t.change :rp_dontknow, :boolean
+      t.change :cbl_letting, :string
+      t.change :chr_letting, :string
+      t.change :cap_letting, :string
       t.change :startertenancy, :string
       t.change :tenancylength, :string
       t.change :tenancy, :string
