@@ -147,4 +147,11 @@ module DbEnums
       "Yes" => 1,
     }
   end
+
+  def self.polar2
+    {
+      "No" => 2,
+      "Yes" => 1,
+    }
+  end
 end

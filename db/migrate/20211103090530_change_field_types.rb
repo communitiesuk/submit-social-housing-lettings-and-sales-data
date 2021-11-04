@@ -34,6 +34,14 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :illness_type_8, "integer USING illness_type_8::integer"
       t.change :illness_type_9, "integer USING illness_type_9::integer"
       t.change :illness_type_10, "integer USING illness_type_10::integer"
+      t.change :rp_homeless, "integer USING rp_homeless::integer"
+      t.change :rp_insan_unsat, "integer USING rp_insan_unsat::integer"
+      t.change :rp_medwel, "integer USING rp_medwel::integer"
+      t.change :rp_hardship, "integer USING rp_hardship::integer"
+      t.change :rp_dontknow, "integer USING rp_dontknow::integer"
+      t.change :cbl, "integer USING cbl::integer"
+      t.change :chr, "integer USING chr::integer"
+      t.change :cap, "integer USING cap::integer"
     end
   end
 
@@ -72,6 +80,14 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :illness_type_8, "boolean USING illness_type_8::boolean"
       t.change :illness_type_9, "boolean USING illness_type_9::boolean"
       t.change :illness_type_10, "boolean USING illness_type_10::boolean"
+      t.column :reasonable_preference_reason_homeless, :boolean
+      t.column :reasonable_preference_reason_unsatisfactory_housing, :boolean
+      t.column :reasonable_preference_reason_medical_grounds, :boolean
+      t.column :reasonable_preference_reason_avoid_hardship, :boolean
+      t.column :reasonable_preference_reason_do_not_know, :boolean
+      t.column :cbl_letting, :string
+      t.column :chr_letting, :string
+      t.column :cap_letting, :string
     end
   end
 end
