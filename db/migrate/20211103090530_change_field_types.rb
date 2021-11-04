@@ -48,6 +48,14 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :landlord, "integer USING landlord::integer"
       t.change :rsnvac, "integer USING rsnvac::integer"
       t.change :unittype_gn, "integer USING unittype_gn::integer"
+      t.change :beds, "integer USING beds::integer"
+      t.change :wchair, "integer USING wchair::integer"
+      t.change :incfreq, "integer USING incfreq::integer"
+      t.change :benefits, "integer USING benefits::integer"
+      t.change :period, "integer USING period::integer"
+      t.change :brent, "integer USING brent::integer"
+      t.change :scharge, "integer USING scharge::integer"
+      t.change :pscharge, "integer USING pscharge::integer"
     end
   end
 
@@ -100,6 +108,14 @@ class ChangeFieldTypes < ActiveRecord::Migration[6.1]
       t.change :landlord, :string
       t.change :rsnvac, :string
       t.change :unittype_gn, :string
+      t.change :beds, :string
+      t.change :wchair, :string
+      t.change :incfreq, :string
+      t.change :benefits, :string
+      t.change :period, :string
+      t.change :brent, :string
+      t.change :scharge, :string
+      t.change :pscharge, :string
     end
   end
 end

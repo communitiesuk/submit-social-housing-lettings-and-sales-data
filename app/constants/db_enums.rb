@@ -204,4 +204,36 @@ module DbEnums
       "Other" => 6,
     }
   end
+
+  def self.incfreq
+    {
+      "Weekly" => 1,
+      "Monthly" => 2,
+      "Yearly" => 3,
+    }
+  end
+
+  def self.benefits
+    {
+      "All" => 1,
+      "Some" => 2,
+      "None" => 3,
+      "Do not know" => 4,
+    }
+  end
+
+  def self.period
+    {
+      "Weekly for 52 weeks" => 1,
+      "Fortnightly" => 2,
+      "Four-weekly" => 3,
+      "Calendar monthly" => 4,
+      "Weekly for 50 weeks" => 5,
+      "Weekly for 49 weeks" => 6,
+      "Weekly for 48 weeks" => 7,
+      "Weekly for 47 weeks" => 8,
+      "Weekly for 46 weeks" => 9,
+      "Weekly for 53 weeks" => 10,
+    }
+  end
 end
