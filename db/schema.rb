@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_03_090530) do
+ActiveRecord::Schema.define(version: 2021_11_05_164644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_090530) do
     t.integer "rp_dontknow"
     t.datetime "discarded_at"
     t.string "tenancyother"
-    t.boolean "override_net_income_validation"
+    t.integer "override_net_income_validation"
     t.string "net_income_known"
     t.string "gdpr_acceptance"
     t.string "gdpr_declined"
