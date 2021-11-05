@@ -56,6 +56,8 @@ module CheckAnswersHelper
       operator = condition[/[<>=]+/].to_sym
       operand = condition[/\d+/].to_i
       case_log[question_key].blank? || !case_log[question_key].send(operator, operand)
+    when "text"
+      case_log[question_key].blank? || !condition.include?(case_log[question_key])
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
