@@ -55,11 +55,23 @@ begin
           "label": {
             "description": "",
             "type": "string"  
+          },
+          "subsections": {
+            "type": "object"
           }
         }
       }
     }
   }
+
+  metaschema = JSON::Validator.validator_for_name("draft4").metaschema
+  # => true
+  if JSON::Validator.validate(metaschema, schema)
+    puts "schema valid"
+  else
+    puts "schema not valid"
+    return
+  end
 
   path = "spec/fixtures/forms/test_validator.json"
   # path = "config/forms/2021_2022.json"
