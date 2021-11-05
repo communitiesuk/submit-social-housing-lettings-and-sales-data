@@ -15,9 +15,9 @@ FactoryBot.define do
     end
     trait :soft_validations_triggered do
       status { 1 }
-      person_1_economic_status { "Full-time - 30 hours or more" }
-      net_income { 750 }
-      net_income_frequency { "Weekly" }
+      ecstat1 { "Full-time - 30 hours or more" }
+      earnings { 750 }
+      incfreq { "Weekly" }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
