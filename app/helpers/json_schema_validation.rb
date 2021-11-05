@@ -26,7 +26,7 @@ require "json"
 begin
 
   schema = {
-    "$schema": "https://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-04/schema",
     "$id": "https://example.com/product.schema.json",
     "title": "Form",
     "description": "A form",
@@ -47,27 +47,29 @@ begin
       "sections": {
         "description": "",
         "type": "object",
-        "properties": {
-          "page_name": {
+        "patternProperties": {
+          "^[0-9]+$": {
             "description": "",
             "type": "string"
           },
+          "label": {
+            "description": "",
+            "type": "string"  
+          }
         }
       }
     }
   }
 
-  # file = File.open("config/forms/2021_2022.json")
-  file = File.open("spec/fixtures/forms/test_validator.json")
-  puts data = JSON.parse(file.read)
+  path = "spec/fixtures/forms/test_validator.json"
+  # path = "config/forms/2021_2022.json"
+
+  file = File.open(path)
+  data = JSON.parse(file.read)
 
   puts JSON::Validator.validate(schema, data)
 
-  if JSON::Validator.validate!(schema, data)
-    puts "Success"
-  else
-    puts "Validation failed"
-  end
+  puts JSON::Validator.fully_validate(schema, data, :strict => true)
 
   begin
     JSON::Validator.validate!(schema, data)
