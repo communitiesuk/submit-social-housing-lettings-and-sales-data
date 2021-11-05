@@ -61,7 +61,7 @@ module CheckAnswersHelper
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
-      raise "Not implemented yet" end
+      raise "Not implemented yet"
   end
 
   def create_update_answer_link(case_log_answer, case_log_id, page)
