@@ -107,7 +107,7 @@ private
 
       if %w[checkbox validation_override].include?(question_info["type"])
         question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
-          result[option] = question_params.include?(option)
+          result[option] = question_params.include?(option) ? "Yes" : "No"
         end
       else
         result[question_key] = question_params

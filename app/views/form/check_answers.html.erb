@@ -6,7 +6,7 @@
       <% form.pages_for_subsection(subsection).each do |page, page_info| %>
         <% page_info["questions"].each do |question_title, question_info| %>
           <% if total_questions(subsection, @case_log, form).include?(question_title) %>
-            <%= render partial: 'form/check_answers_table', locals: { question_title: question_title, question_info: question_info, case_log: @case_log, page: page } %>
+            <%= render partial: 'form/check_answers_table', locals: { question_title: question_title, question_info: question_info, case_log: @case_log, page: page, form: form } %>
           <%end %>
         <%end %>
       <% end %>

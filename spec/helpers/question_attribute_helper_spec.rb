@@ -7,15 +7,15 @@ RSpec.describe QuestionAttributeHelper do
 
   describe "html attributes" do
     it "returns empty hash if fields-to-add or result-field are empty " do
-      expect(stimulus_html_attributes(questions["total_charge"])).to eq({})
+      expect(stimulus_html_attributes(questions["tcharge"])).to eq({})
     end
 
     it "returns html attributes if fields-to-add or result-field are not empty " do
-      expect(stimulus_html_attributes(questions["basic_rent"])).to eq({
+      expect(stimulus_html_attributes(questions["brent"])).to eq({
         "data-controller": "numeric-question",
         "data-action": "numeric-question#calculateFields",
-        "data-target": "case-log-#{questions['basic_rent']['result-field'].to_s.dasherize}-field",
-        "data-calculated": questions["basic_rent"]["fields-to-add"].to_json,
+        "data-target": "case-log-#{questions['brent']['result-field'].to_s.dasherize}-field",
+        "data-calculated": questions["brent"]["fields-to-add"].to_json,
       })
     end
 
@@ -28,8 +28,8 @@ RSpec.describe QuestionAttributeHelper do
           "type" => "numeric",
           "min" => 0,
           "step" => 1,
-          "fields-to-add" => %w[basic_rent service_charge personal_service_charge support_charge],
-          "result-field" => "total_charge",
+          "fields-to-add" => %w[brent scharge pscharge supcharg],
+          "result-field" => "tcharge",
           "conditional_for" => {
             "next_question": ">1",
           },
