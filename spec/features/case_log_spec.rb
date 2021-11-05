@@ -221,8 +221,8 @@ RSpec.describe "Test Features" do
       it "doesn't get stuck in infinite loops", js: true do
         visit("/case_logs")
         visit("/case_logs/#{id}/net_income")
-        fill_in("case-log-net-income-field", with: 740)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: 740)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         click_link(text: "Back")
         click_link(text: "Back")
