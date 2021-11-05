@@ -32,10 +32,6 @@ RSpec.describe "Test Features" do
   describe "Create new log" do
     it "redirects to the task list for the new log" do
       visit("/case_logs")
-      # Ensure that we've finished creating both case logs before running the
-      # Capybara click part to ensure we don't get creation race conditions
-      expect(page).to have_link(nil, href: "/case_logs/#{case_log.id}")
-      expect(page).to have_link(nil, href: "/case_logs/#{empty_case_log.id}")
       click_link("Create new log")
       id = CaseLog.order(created_at: :desc).first.id
       expect(page).to have_content("Tasklist for log #{id}")
@@ -184,7 +180,7 @@ RSpec.describe "Test Features" do
 
       it "displays text answers in inputs if they are already saved" do
         visit("/case_logs/#{id}/person_1_age")
-        expect(page).to have_field("case-log-person-1-age-field", with: "12")
+        expect(page).to have_field("case-log-person-1-age-field", with: "18")
       end
 
       it "displays checkbox answers in inputs if they are already saved" do
@@ -231,6 +227,15 @@ RSpec.describe "Test Features" do
           visit("/case_logs/#{id}/#{val}")
           click_button("Save and continue")
           expect(page).to have_current_path("/case_logs/#{id}/#{pages[index + 1]}")
+        end
+      end
+
+      context "when changing an answer from the check answers page" do
+        it "the back button routes correctly" do
+          visit("/case_logs/#{id}/household_characteristics/check_answers")
+          first("a", text: /Answer/).click
+          click_link("Back")
+          expect(page).to have_current_path("/case_logs/#{id}/household_characteristics/check_answers")
         end
       end
     end
@@ -377,11 +382,66 @@ RSpec.describe "Test Features" do
     end
   end
 
+  describe "Soft Validation" do
+    context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
+      let!(:case_log) { FactoryBot.create(:case_log, :in_progress, person_1_economic_status: "Full-time - 30 hours or more") }
+      let(:income_over_soft_limit) { 750 }
+      let(:income_under_soft_limit) { 700 }
+
+      it "prompts the user to confirm the value is correct" do
+        visit("/case_logs/#{case_log.id}/net_income")
+        fill_in("case-log-net-income-field", with: income_over_soft_limit)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        expect(page).to have_content("Are you sure this is correct?")
+        check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
+        click_button("Save and continue")
+        expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
+      end
+
+      it "does not require confirming the value if the value is amended" do
+        visit("/case_logs/#{case_log.id}/net_income")
+        fill_in("case-log-net-income-field", with: income_over_soft_limit)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        click_button("Save and continue")
+        expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
+        case_log.reload
+        expect(case_log.override_net_income_validation).to be_nil
+      end
+
+      it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
+        visit("/case_logs/#{case_log.id}/net_income")
+        fill_in("case-log-net-income-field", with: income_over_soft_limit)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        click_button("Save and continue")
+        click_link(text: "Back")
+        expect(page).not_to have_content("Are you sure this is correct?")
+      end
+
+      it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
+        visit("/case_logs/#{case_log.id}/net_income")
+        fill_in("case-log-net-income-field", with: income_over_soft_limit)
+        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
+        click_button("Save and continue")
+        click_link(text: "Back")
+        expect(page).to have_content("Are you sure this is correct?")
+      end
+    end
+  end
+
   describe "conditional page routing", js: true do
+    before do
+      allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+    end
+
     it "can route the user to a different page based on their answer on the current page" do
       visit("case_logs/#{id}/conditional_question")
-      # using a question name that is already in the db to avoid
-      # having to add a new column to the db for this test
       choose("case-log-pregnancy-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")

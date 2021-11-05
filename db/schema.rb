@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2021_11_02_100820) do
     t.string "property_major_repairs_date"
     t.integer "property_number_of_times_relet"
     t.string "property_wheelchair_accessible"
-    t.string "net_income"
+    t.integer "net_income"
     t.string "net_income_frequency"
     t.string "net_income_uc_proportion"
     t.string "housing_benefit"
@@ -144,6 +144,8 @@ ActiveRecord::Schema.define(version: 2021_11_02_100820) do
     t.string "needs_type"
     t.string "sale_completion_date"
     t.string "purchaser_code"
+    t.boolean "override_net_income_validation"
+    t.string "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

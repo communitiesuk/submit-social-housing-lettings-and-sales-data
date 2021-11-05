@@ -97,6 +97,45 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "Shared accomodation bedrooms validation" do
+      it "you must have more than zero bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared house",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 8,
+                          household_number_of_other_members: 1)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "you must answer less than 8 bedrooms" do
+        expect {
+          CaseLog.create!(property_unit_type: "Shared bungalow",
+                          property_number_of_bedrooms: 4,
+                          household_number_of_other_members: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 2)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "A bedsit must only have one room" do
+        expect {
+          CaseLog.create!(property_unit_type: "Bed-sit",
+                          property_number_of_bedrooms: 0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "outstanding rent or charges validation" do
       it "must be anwered if answered yes to outstanding rent or charges" do
         expect {
@@ -206,6 +245,40 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "household_member_validations" do
+      it "validate that persons aged under 16 must have relationship Child" do
+        expect { CaseLog.create!(person_2_age: 14, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged over 70 must be retired" do
+        expect { CaseLog.create!(person_2_age: 71, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that a male, retired persons must be over 65" do
+        expect { CaseLog.create!(person_2_age: 64, person_2_gender: "Male", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that a female, retired persons must be over 60" do
+        expect { CaseLog.create!(person_2_age: 59, person_2_gender: "Female", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged under 16 must be a child (economically speaking)" do
+        expect { CaseLog.create!(person_2_age: 15, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged between 16 and 19 that are a child must be a full time student or economic status refused" do
+        expect { CaseLog.create!(person_2_age: 17, person_2_relationship: "Child - includes young adult and grown-up", person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that persons aged under 16 must be a child relationship" do
+        expect { CaseLog.create!(person_2_age: 15, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validate that no more than 1 partner relationship exists" do
+        expect { CaseLog.create!(person_2_relationship: "Partner", person_3_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "other tenancy type validation" do
       it "must be provided if tenancy type was given as other" do
         expect {
@@ -231,6 +304,28 @@ RSpec.describe Form, type: :model do
         }.not_to raise_error
       end
     end
+
+    context "income ranges" do
+      it "validates net income maximum" do
+        expect {
+          CaseLog.create!(
+            person_1_economic_status: "Full-time - 30 hours or more",
+            net_income: 5000,
+            net_income_frequency: "Weekly",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validates net income minimum" do
+        expect {
+          CaseLog.create!(
+            person_1_economic_status: "Full-time - 30 hours or more",
+            net_income: 1,
+            net_income_frequency: "Weekly",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe "status" do
@@ -247,6 +342,26 @@ RSpec.describe Form, type: :model do
       expect(in_progress_case_log.in_progress?).to be(true)
       expect(in_progress_case_log.not_started?).to be(false)
       expect(in_progress_case_log.completed?).to be(false)
+    end
+  end
+
+  describe "weekly_net_income" do
+    let(:net_income) { 5000 }
+    let(:case_log) { FactoryBot.build(:case_log, net_income: net_income) }
+
+    it "returns input income if frequency is already weekly" do
+      case_log.net_income_frequency = "Weekly"
+      expect(case_log.weekly_net_income).to eq(net_income)
+    end
+
+    it "calculates the correct weekly income from monthly income" do
+      case_log.net_income_frequency = "Monthly"
+      expect(case_log.weekly_net_income).to eq(1154)
+    end
+
+    it "calculates the correct weekly income from yearly income" do
+      case_log.net_income_frequency = "Yearly"
+      expect(case_log.weekly_net_income).to eq(417)
     end
   end
 end

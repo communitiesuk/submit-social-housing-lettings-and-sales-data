@@ -1633,6 +1633,21 @@
               "header": "",
               "description": "",
               "questions": {
+                "net_income_known": {
+                  "check_answer_label": "Income known",
+                  "header": "Do you know the tenant and their partner's net income?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Tenant prefers not to say"
+                  },
+                  "conditional_for": {
+                    "net_income": ["Yes"],
+                    "net_income_frequency": ["Yes"]
+                  }
+                },
                 "net_income": {
                   "check_answer_label": "Income",
                   "header": "What is the tenant’s /and partner’s combined income after tax?",
@@ -1650,6 +1665,15 @@
                     "0": "Weekly",
                     "1": "Monthly",
                     "2": "Yearly"
+                  }
+                }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
                   }
                 }
               }

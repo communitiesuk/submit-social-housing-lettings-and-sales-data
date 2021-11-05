@@ -52,13 +52,13 @@ RSpec.describe CaseLogsController, type: :controller do
                              %w[ accessibility_requirements_fully_wheelchair_accessible_housing
                                  accessibility_requirements_wheelchair_access_to_essential_rooms
                                  accessibility_requirements_level_access_housing],
-        previous_page: "accessibility_requirements" }
+        page: "accessibility_requirements" }
     end
 
     let(:new_case_log_form_params) do
       {
         accessibility_requirements: %w[accessibility_requirements_level_access_housing],
-        previous_page: "accessibility_requirements",
+        page: "accessibility_requirements",
       }
     end
 
@@ -88,7 +88,7 @@ RSpec.describe CaseLogsController, type: :controller do
                                    accessibility_requirements_wheelchair_access_to_essential_rooms
                                    accessibility_requirements_level_access_housing],
           tenant_code: tenant_code,
-          previous_page: "accessibility_requirements" }
+          page: "accessibility_requirements" }
       end
       let(:questions_for_page) do
         { "accessibility_requirements" =>
@@ -124,17 +124,21 @@ RSpec.describe CaseLogsController, type: :controller do
     end
 
     context "conditional routing" do
+      before do
+        allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+      end
+
       let(:case_log_form_conditional_question_yes_params) do
         {
           pregnancy: "Yes",
-          previous_page: "conditional_question",
+          page: "conditional_question",
         }
       end
 
       let(:case_log_form_conditional_question_no_params) do
         {
           pregnancy: "No",
-          previous_page: "conditional_question",
+          page: "conditional_question",
         }
       end
 

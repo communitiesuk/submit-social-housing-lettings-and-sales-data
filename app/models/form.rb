@@ -41,6 +41,15 @@ class Form
     pages_for_subsection(subsection).map { |title, _value| questions_for_page(title) }.reduce(:merge)
   end
 
+  # Returns a hash with soft validation questions as keys
+  def soft_validations_for_page(page)
+    all_pages[page]["soft_validations"]
+  end
+
+  def expected_responses_for_page(page)
+    questions_for_page(page).merge(soft_validations_for_page(page) || {})
+  end
+
   def first_page_for_subsection(subsection)
     pages_for_subsection(subsection).keys.first
   end

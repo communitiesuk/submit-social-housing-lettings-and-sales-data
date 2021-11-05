@@ -66,7 +66,7 @@ RSpec.describe CaseLogsController, type: :request do
       it "validates case log parameters" do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to match_array([["property_number_of_times_relet", ["Must be between 0 and 20"]], ["person_1_age", ["Tenant age must be between 0 and 120"]]])
+        expect(json_response["errors"]).to match_array([["property_number_of_times_relet", ["Property number of times relet must be between 0 and 20"]], ["person_1_age", ["Tenant age must be an integer between 16 and 120"]]])
       end
     end
 
@@ -115,6 +115,14 @@ RSpec.describe CaseLogsController, type: :request do
       json_response = JSON.parse(response.body)
       expect(json_response["status"]).to eq(case_log.status)
     end
+
+    context "invalid case log id" do
+      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+      it "returns 404" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "PATCH" do
@@ -157,7 +165,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "returns an error message" do
         json_response = JSON.parse(response.body)
-        expect(json_response["errors"]).to eq({ "person_1_age" => ["Tenant age must be between 0 and 120"] })
+        expect(json_response["errors"]).to eq({ "person_1_age" => ["Tenant age must be an integer between 16 and 120"] })
       end
     end
 

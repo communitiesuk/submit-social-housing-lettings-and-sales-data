@@ -2,6 +2,7 @@
   "name": "data-collector",
   "private": true,
   "dependencies": {
+    "@activeadmin/activeadmin": "^2.9.0",
     "@hotwired/stimulus": "^3.0.0",
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",
     "@hotwired/turbo": "^7.0.0-rc.3",
@@ -10,6 +11,8 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.0",
+    "chart.js": "^3.6.0",
+    "chartkick": "^4.1.0",
     "govuk-frontend": "^3.13.0",
     "stimulus": "^3.0.0",
     "webpack": "^4.46.0",

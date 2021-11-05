@@ -25,6 +25,10 @@ gem "govuk_design_system_formbuilder"
 gem "hotwire-rails"
 # Soft delete ActiveRecords objects
 gem "discard"
+# Administration framework
+gem "activeadmin"
+# Admin charts
+gem "chartkick"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
