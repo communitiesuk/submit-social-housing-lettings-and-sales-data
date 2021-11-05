@@ -181,7 +181,7 @@ RSpec.describe "Test Features" do
 
       it "displays text answers in inputs if they are already saved" do
         visit("/case_logs/#{id}/person_1_age")
-        expect(page).to have_field("case-log-age1-field", with: "12")
+        expect(page).to have_field("case-log-age1-field", with: "17")
       end
 
       it "displays checkbox answers in inputs if they are already saved" do
@@ -385,14 +385,14 @@ RSpec.describe "Test Features" do
 
   describe "Soft Validation" do
     context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
-      let!(:case_log) { FactoryBot.create(:case_log, :in_progress, person_1_economic_status: "Full-time - 30 hours or more") }
+      let!(:case_log) { FactoryBot.create(:case_log, :in_progress, ecstat1: "Full-time - 30 hours or more") }
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 
       it "prompts the user to confirm the value is correct" do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_content("Are you sure this is correct?")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
@@ -402,10 +402,10 @@ RSpec.describe "Test Features" do
 
       it "does not require confirming the value if the value is amended" do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
-        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
         case_log.reload
@@ -414,10 +414,10 @@ RSpec.describe "Test Features" do
 
       it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
-        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         click_link(text: "Back")
         expect(page).not_to have_content("Are you sure this is correct?")
@@ -425,8 +425,8 @@ RSpec.describe "Test Features" do
 
       it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
         click_button("Save and continue")

@@ -36,7 +36,7 @@ end
 
 class CaseLog < ApplicationRecord
   include Discard::Model
-  include SoftValidations  
+  include SoftValidations
   include DbEnums
   default_scope -> { kept }
   scope :not_completed, -> { where.not(status: "completed") }
@@ -187,12 +187,12 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    start_range = (household_number_of_other_members || 0) + 2
+    start_range = (hhmemb || 0) + 2
     (start_range..8).each do |n|
-      dynamically_not_required << "person_#{n}_age"
-      dynamically_not_required << "person_#{n}_gender"
-      dynamically_not_required << "person_#{n}_relationship"
-      dynamically_not_required << "person_#{n}_economic_status"
+      dynamically_not_required << "age#{n}"
+      dynamically_not_required << "sex#{n}"
+      dynamically_not_required << "relat#{n}"
+      dynamically_not_required << "ecstat#{n}"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }

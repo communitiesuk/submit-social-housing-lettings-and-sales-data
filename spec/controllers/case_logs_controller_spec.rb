@@ -52,13 +52,13 @@ RSpec.describe CaseLogsController, type: :controller do
                              %w[ housingneeds_a
                                  housingneeds_b
                                  housingneeds_c],
-        previous_page: "accessibility_requirements" }
+        page: "accessibility_requirements" }
     end
 
     let(:new_case_log_form_params) do
       {
         accessibility_requirements: %w[housingneeds_c],
-        previous_page: "accessibility_requirements",
+        page: "accessibility_requirements",
       }
     end
 
@@ -131,14 +131,14 @@ RSpec.describe CaseLogsController, type: :controller do
       let(:case_log_form_conditional_question_yes_params) do
         {
           preg_occ: "Yes",
-          previous_page: "conditional_question",
+          page: "conditional_question",
         }
       end
 
       let(:case_log_form_conditional_question_no_params) do
         {
           preg_occ: "No",
-          previous_page: "conditional_question",
+          page: "conditional_question",
         }
       end
 

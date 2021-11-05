@@ -247,35 +247,35 @@ RSpec.describe Form, type: :model do
 
     context "household_member_validations" do
       it "validate that persons aged under 16 must have relationship Child" do
-        expect { CaseLog.create!(person_2_age: 14, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 14, relat2: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged over 70 must be retired" do
-        expect { CaseLog.create!(person_2_age: 71, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 71, ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that a male, retired persons must be over 65" do
-        expect { CaseLog.create!(person_2_age: 64, person_2_gender: "Male", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 64, sex2: "Male", ecstat2: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that a female, retired persons must be over 60" do
-        expect { CaseLog.create!(person_2_age: 59, person_2_gender: "Female", person_2_economic_status: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 59, sex2: "Female", ecstat2: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged under 16 must be a child (economically speaking)" do
-        expect { CaseLog.create!(person_2_age: 15, person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 15, ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged between 16 and 19 that are a child must be a full time student or economic status refused" do
-        expect { CaseLog.create!(person_2_age: 17, person_2_relationship: "Child - includes young adult and grown-up", person_2_economic_status: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 17, relat2: "Child - includes young adult and grown-up", ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged under 16 must be a child relationship" do
-        expect { CaseLog.create!(person_2_age: 15, person_2_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(age2: 15, relat2: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that no more than 1 partner relationship exists" do
-        expect { CaseLog.create!(person_2_relationship: "Partner", person_3_relationship: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { CaseLog.create!(relat2: "Partner", relat3: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 

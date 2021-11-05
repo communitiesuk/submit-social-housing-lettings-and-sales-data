@@ -63,10 +63,10 @@ module HouseholdValidations
   end
 
   def validate_person_1_age(record)
-    return unless record.person_1_age
+    return unless record.age1
 
-    if !record.person_1_age.is_a?(Integer) || record.person_1_age < 16 || record.person_1_age > 120
-      record.errors.add "person_1_age", "Tenant age must be an integer between 16 and 120"
+    if !record.age1.is_a?(Integer) || record.age1 < 16 || record.age1 > 120
+      record.errors.add "age1", "Tenant age must be an integer between 16 and 120"
     end
   end
 
@@ -101,65 +101,65 @@ private
   end
 
   def validate_person_age(record, person_num)
-    age = record.public_send("person_#{person_num}_age")
+    age = record.public_send("age#{person_num}")
     return unless age
 
     if !age.is_a?(Integer) || age < 1 || age > 120
-      record.errors.add "person_#{person_num}_age".to_sym, "Tenant age must be an integer between 0 and 120"
+      record.errors.add "age#{person_num}".to_sym, "Tenant age must be an integer between 0 and 120"
     end
   end
 
   def validate_person_age_matches_economic_status(record, person_num)
-    age = record.public_send("person_#{person_num}_age")
-    economic_status = record.public_send("person_#{person_num}_economic_status")
+    age = record.public_send("age#{person_num}")
+    economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
     if age > 70 && economic_status != "Retired"
-      record.errors.add "person_#{person_num}_economic_status", "Tenant #{person_num} must be retired if over 70"
+      record.errors.add "ecstat#{person_num}", "Tenant #{person_num} must be retired if over 70"
     end
     if age < 16 && economic_status != "Child under 16"
-      record.errors.add "person_#{person_num}_economic_status", "Tenant #{person_num} economic status must be Child under 16 if their age is under 16"
+      record.errors.add "ecstat#{person_num}", "Tenant #{person_num} economic status must be Child under 16 if their age is under 16"
     end
   end
 
   def validate_person_age_matches_relationship(record, person_num)
-    age = record.public_send("person_#{person_num}_age")
-    relationship = record.public_send("person_#{person_num}_relationship")
+    age = record.public_send("age#{person_num}")
+    relationship = record.public_send("relat#{person_num}")
     return unless age && relationship
 
     if age < 16 && relationship != "Child - includes young adult and grown-up"
-      record.errors.add "person_#{person_num}_relationship", "Tenant #{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
+      record.errors.add "relat#{person_num}", "Tenant #{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
     end
   end
 
   def validate_person_age_and_relationship_matches_economic_status(record, person_num)
-    age = record.public_send("person_#{person_num}_age")
-    economic_status = record.public_send("person_#{person_num}_economic_status")
-    relationship = record.public_send("person_#{person_num}_relationship")
+    age = record.public_send("age#{person_num}")
+    economic_status = record.public_send("ecstat#{person_num}")
+    relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
     if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
-      record.errors.add "person_#{person_num}_economic_status", "If age is between 16 and 19 - tenant #{person_num} must be a full time student or prefer not to say."
+      record.errors.add "ecstat#{person_num}", "If age is between 16 and 19 - tenant #{person_num} must be a full time student or prefer not to say."
     end
   end
 
   def validate_person_age_and_gender_match_economic_status(record, person_num)
-    age = record.public_send("person_#{person_num}_age")
-    gender = record.public_send("person_#{person_num}_gender")
-    economic_status = record.public_send("person_#{person_num}_economic_status")
+    age = record.public_send("age#{person_num}")
+    gender = record.public_send("sex#{person_num}")
+    economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status && gender
 
     if gender == "Male" && economic_status == "Retired" && age < 65
-      record.errors.add "person_#{person_num}_age", "Male tenant who is retired must be 65 or over"
+      record.errors.add "age#{person_num}", "Male tenant who is retired must be 65 or over"
     end
     if gender == "Female" && economic_status == "Retired" && age < 60
-      record.errors.add "person_#{person_num}_age", "Female tenant who is retired must be 60 or over"
+      record.errors.add "age#{person_num}", "Female tenant who is retired must be 60 or over"
     end
   end
 
   def validate_partner_count(record)
     # TODO: probably need to keep track of which specific field is wrong so we can highlight it in the UI
-    partner_count = (2..8).count { |n| record.public_send("person_#{n}_relationship") == "Partner" }
+    partner_count = (2..8).count { |n| record.public_send("relat#{n}") == "Partner" }
     if partner_count > 1
       record.errors.add :base, "Number of partners cannot be greater than 1"
     end
