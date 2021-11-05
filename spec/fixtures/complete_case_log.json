@@ -85,9 +85,9 @@
     "property_postcode": "SE2 6RT",
     "reasonpref": "Yes",
     "reasonable_preference_reason": "dummy",
-    "cbl": true,
-    "chr": false,
-    "cap": false,
+    "cbl": "Yes",
+    "chr": "Yes",
+    "cap": "No",
     "outstanding_rent_or_charges": 25,
     "other_reason_for_leaving_last_settled_home": null,
     "housingneeds_a": "Yes",
@@ -108,10 +108,10 @@
     "illness_type_9": "No",
     "illness_type_10": "No",
     "condition_effects_prefer_not_to_say": "Yes",
-    "rp_homeless": false,
-    "rp_insan_unsat": false,
-    "rp_medwel": false,
-    "rp_hardship": false,
-    "rp_dontknow": true
+    "rp_homeless": "Yes",
+    "rp_insan_unsat": "No",
+    "rp_medwel": "No",
+    "rp_hardship": "No",
+    "rp_dontknow": "No"
   }
 }

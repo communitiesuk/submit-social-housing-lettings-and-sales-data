@@ -52,7 +52,7 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             homeless: "Yes - other homelessness",
             reasonpref: "No",
-            rp_homeless: true,
+            rp_homeless: "Yes",
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
