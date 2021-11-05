@@ -18,12 +18,12 @@ private
     if net_income_in_soft_min_range?
       net_income_errors["override_net_income_validation"] = OpenStruct.new(
         message: "Net income is lower than expected based on the main tenant's working situation. Are you sure this is correct?",
-        hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}",
+        hint_text: "This is based on the tenant's work situation: #{ecstat1}",
       )
     elsif net_income_in_soft_max_range?
       net_income_errors["override_net_income_validation"] = OpenStruct.new(
         message: "Net income is higher than expected based on the main tenant's working situation. Are you sure this is correct?",
-        hint_text: "This is based on the tenant's work situation: #{person_1_economic_status}",
+        hint_text: "This is based on the tenant's work situation: #{ecstat1}",
       )
     else
       update_column(:override_net_income_validation, nil)
@@ -32,13 +32,13 @@ private
   end
 
   def net_income_in_soft_max_range?
-    return unless weekly_net_income && person_1_economic_status
+    return unless weekly_net_income && ecstat1
 
     weekly_net_income.between?(applicable_income_range.soft_max, applicable_income_range.hard_max)
   end
 
   def net_income_in_soft_min_range?
-    return unless weekly_net_income && person_1_economic_status
+    return unless weekly_net_income && ecstat1
 
     weekly_net_income.between?(applicable_income_range.soft_min, applicable_income_range.hard_min)
   end

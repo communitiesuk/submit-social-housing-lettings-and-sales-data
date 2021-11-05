@@ -6,7 +6,7 @@ FactoryBot.define do
       tenant_code { "TH356" }
       property_postcode { "SW2 6HI" }
       previous_postcode { "P0 5ST" }
-      person_1_age { "18" }
+      age1 { "17" }
     end
     trait :completed do
       status { 2 }

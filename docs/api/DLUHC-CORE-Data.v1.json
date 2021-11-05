@@ -54,9 +54,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -109,9 +107,7 @@
                   "Invalid Age": {
                     "value": {
                       "errors": {
-                        "person_1_age": [
-                          "Tenant age must be an integer between 16 and 120"
-                        ]
+                        "age1": ["Tenant age must be between 16 and 120"]
                       }
                     }
                   }
@@ -136,9 +132,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -177,9 +171,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -219,9 +211,7 @@
                         "reasonable_preference_reason": [
                           "If reasonable preference is Yes, a reason must be given"
                         ],
-                        "person_1_age": [
-                          "Tenant age must be an integer between 16 and 120"
-                        ]
+                        "age1": ["Tenant age must be between 16 and 120"]
                       }
                     }
                   }
@@ -247,9 +237,7 @@
             "schema": {
               "type": "string",
               "pattern": "application/json",
-              "enum": [
-                "application/json"
-              ]
+              "enum": ["application/json"]
             },
             "in": "header",
             "name": "Accept",
@@ -268,117 +256,117 @@
         "x-examples": {
           "example-1": {
             "tenant_code": "T657",
-            "person_1_age": 35,
-            "person_1_gender": "Female",
-            "tenant_ethnic_group": "White: English/Scottish/Welsh/Northern Irish/British",
-            "tenant_nationality": "UK national resident in UK",
-            "previous_housing_situation": "Private sector tenancy",
+            "age1": 35,
+            "sex1": "Female",
+            "ethnic": "White: English/Scottish/Welsh/Northern Irish/British",
+            "national": "UK national resident in UK",
+            "prevten": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
-            "person_1_economic_status": "Full-time - 30 hours or more",
-            "household_number_of_other_members": 7,
-            "person_2_relationship": "Partner",
-            "person_2_age": 32,
-            "person_2_gender": "Male",
-            "person_2_economic_status": "Not seeking work",
-            "person_3_relationship": "Child - includes young adult and grown-up",
-            "person_3_age": 12,
-            "person_3_gender": "Male",
-            "person_3_economic_status": "Child under 16",
-            "person_4_relationship": "Child - includes young adult and grown-up",
-            "person_4_age": 12,
-            "person_4_gender": "Female",
-            "person_4_economic_status": "Child under 16",
-            "person_5_relationship": "Child - includes young adult and grown-up",
-            "person_5_age": 10,
-            "person_5_gender": "Non-binary",
-            "person_5_economic_status": "Child under 16",
-            "person_6_relationship": "Child - includes young adult and grown-up",
-            "person_6_age": 5,
-            "person_6_gender": "Prefer not to say",
-            "person_6_economic_status": "Child under 16",
-            "person_7_relationship": "Child - includes young adult and grown-up",
-            "person_7_age": 5,
-            "person_7_gender": "Prefer not to say",
-            "person_7_economic_status": "Child under 16",
-            "person_8_relationship": "Child - includes young adult and grown-up",
-            "person_8_age": 2,
-            "person_8_gender": "Prefer not to say",
-            "person_8_economic_status": "Child under 16",
-            "homelessness": "No",
+            "ecstat1": "Full-time - 30 hours or more",
+            "hhmemb": 7,
+            "relat2": "Partner",
+            "age2": 32,
+            "sex2": "Male",
+            "ecstat2": "Not seeking work",
+            "relat3": "Child - includes young adult and grown-up",
+            "age3": 12,
+            "sex3": "Male",
+            "ecstat3": "Child under 16",
+            "relat4": "Child - includes young adult and grown-up",
+            "age4": 12,
+            "sex4": "Female",
+            "ecstat4": "Child under 16",
+            "relat5": "Child - includes young adult and grown-up",
+            "age5": 10,
+            "sex5": "Non-binary",
+            "ecstat5": "Child under 16",
+            "relat6": "Child - includes young adult and grown-up",
+            "age6": 5,
+            "sex6": "Prefer not to say",
+            "ecstat6": "Child under 16",
+            "relat7": "Child - includes young adult and grown-up",
+            "age7": 5,
+            "sex7": "Prefer not to say",
+            "ecstat7": "Child under 16",
+            "relat8": "Child - includes young adult and grown-up",
+            "age8": 2,
+            "sex8": "Prefer not to say",
+            "ecstat8": "Child under 16",
+            "homeless": "No",
             "reason_for_leaving_last_settled_home": "Other problems with neighbours",
-            "benefit_cap_spare_room_subsidy": "No",
-            "armed_forces_active": "No",
-            "armed_forces_injured": "No",
+            "underoccupation_benefitcap": "No",
+            "leftreg": "No",
+            "reservist": "No",
             "armed_forces_partner": "No",
-            "medical_conditions": "Yes",
-            "pregnancy": "No",
+            "illness": "Yes",
+            "preg_occ": "No",
             "accessibility_requirements": "No",
             "condition_effects": "dummy",
             "tenancy_code": "BZ757",
-            "tenancy_start_date": "12/03/2019",
-            "starter_tenancy": "No",
-            "fixed_term_tenancy": "No",
-            "tenancy_type": "Fixed term – Secure",
-            "letting_type": "Affordable Rent - General Needs",
-            "letting_provider": "This landlord",
+            "startdate": "12/03/2019",
+            "startertenancy": "No",
+            "tenancylength": "No",
+            "tenancy": "Fixed term – Secure",
+            "lettype": "Affordable Rent - General Needs",
+            "landlord": "This landlord",
             "property_location": "Barnet",
             "previous_postcode": "NW1 5TY",
             "property_relet": "No",
-            "property_vacancy_reason": "Relet - tenant abandoned property",
+            "rsnvac": "Relet - tenant abandoned property",
             "property_reference": "P9876",
-            "property_unit_type": "House",
+            "unittype_gn": "House",
             "property_building_type": "dummy",
-            "property_number_of_bedrooms": 3,
+            "beds": 3,
             "property_void_date": "03/11/2019",
             "property_major_repairs": "Yes",
             "property_major_repairs_date": "05/05/2020",
-            "property_number_of_times_relet": 2,
-            "property_wheelchair_accessible": true,
-            "net_income": 1000,
-            "net_income_frequency": "Monthly",
-            "net_income_uc_proportion": "Some",
+            "offered": 2,
+            "wchair": true,
+            "earnings": 1000,
+            "incfreq": "Monthly",
+            "benefits": "Some",
             "housing_benefit": "Universal Credit with housing element, but not Housing Benefit",
-            "rent_frequency": "Weekly",
-            "basic_rent": 200,
-            "service_charge": 50,
-            "personal_service_charge": 40,
-            "support_charge": 35,
-            "total_charge": 325,
+            "period": "Weekly",
+            "brent": 200,
+            "scharge": 50,
+            "pscharge": 40,
+            "supcharg": 35,
+            "tcharge": 325,
             "outstanding_amount": "Yes",
-            "time_lived_in_la": "1 to 2 years",
-            "time_on_la_waiting_list": "Less than 1 year",
+            "layear": "1 to 2 years",
+            "lawaitlist": "Less than 1 year",
             "previous_la": "Ashford",
             "property_postcode": "SE2 6RT",
-            "reasonable_preference": "Yes",
+            "reasonpref": "Yes",
             "reasonable_preference_reason": "dummy",
-            "cbl_letting": true,
-            "chr_letting": false,
-            "cap_letting": false,
+            "cbl": true,
+            "chr": false,
+            "cap": false,
             "outstanding_rent_or_charges": 25,
             "other_reason_for_leaving_last_settled_home": "Other reason",
-            "accessibility_requirements_fully_wheelchair_accessible_housing": true,
-            "accessibility_requirements_wheelchair_access_to_essential_rooms": false,
-            "accessibility_requirements_level_access_housing": false,
-            "accessibility_requirements_other_disability_requirements": false,
-            "accessibility_requirements_no_disability_requirements": false,
-            "accessibility_requirements_do_not_know": false,
+            "housingneeds_a": true,
+            "housingneeds_b": false,
+            "housingneeds_c": false,
+            "housingneeds_f": false,
+            "housingneeds_g": false,
+            "housingneeds_h": false,
             "accessibility_requirements_prefer_not_to_say": false,
-            "condition_effects_vision": false,
-            "condition_effects_hearing": true,
-            "condition_effects_mobility": false,
-            "condition_effects_dexterity": false,
-            "condition_effects_stamina": false,
-            "condition_effects_learning": false,
-            "condition_effects_memory": false,
-            "condition_effects_mental_health": false,
-            "condition_effects_social_or_behavioral": false,
-            "condition_effects_other": false,
+            "illness_type_1": false,
+            "illness_type_2": true,
+            "illness_type_3": false,
+            "illness_type_4": false,
+            "illness_type_8": false,
+            "illness_type_5": false,
+            "illness_type_6": false,
+            "illness_type_7": false,
+            "illness_type_9": false,
+            "illness_type_10": false,
             "condition_effects_prefer_not_to_say": false,
-            "reasonable_preference_reason_homeless": false,
-            "reasonable_preference_reason_unsatisfactory_housing": false,
-            "reasonable_preference_reason_medical_grounds": false,
-            "reasonable_preference_reason_avoid_hardship": false,
-            "reasonable_preference_reason_do_not_know": true
+            "rp_homeless": false,
+            "rp_insan_unsat": false,
+            "rp_medwel": false,
+            "rp_hardship": false,
+            "rp_dontknow": true
           }
         },
         "title": "Case Log",
@@ -388,23 +376,18 @@
             "type": "string",
             "minLength": 1
           },
-          "person_1_age": {
+          "age1": {
             "type": "number",
             "description": "The age of the lead tenant",
             "maximum": 120,
             "minimum": 0
           },
-          "person_1_gender": {
+          "sex1": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "tenant_ethnic_group": {
+          "ethnic": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -429,7 +412,7 @@
               "Prefer not to say"
             ]
           },
-          "tenant_nationality": {
+          "national": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -451,7 +434,7 @@
               "Prefer not to say"
             ]
           },
-          "previous_housing_situation": {
+          "prevten": {
             "type": "string",
             "minLength": 1
           },
@@ -459,7 +442,7 @@
             "type": "string",
             "minLength": 1
           },
-          "person_1_economic_status": {
+          "ecstat1": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -476,12 +459,12 @@
               "Prefer not to say"
             ]
           },
-          "household_number_of_other_members": {
+          "hhmemb": {
             "type": "number",
             "minimum": 0,
             "maximum": 7
           },
-          "person_2_relationship": {
+          "relat2": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -491,22 +474,17 @@
               "Prefer not to say"
             ]
           },
-          "person_2_age": {
+          "age2": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_2_gender": {
+          "sex2": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_2_economic_status": {
+          "ecstat2": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -523,7 +501,7 @@
               "Prefer not to say"
             ]
           },
-          "person_3_relationship": {
+          "relat3": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -533,22 +511,17 @@
               "Prefer not to say"
             ]
           },
-          "person_3_age": {
+          "age3": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_3_gender": {
+          "sex3": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_3_economic_status": {
+          "ecstat3": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -565,7 +538,7 @@
               "Prefer not to say"
             ]
           },
-          "person_4_relationship": {
+          "relat4": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -575,22 +548,17 @@
               "Prefer not to say"
             ]
           },
-          "person_4_age": {
+          "age4": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_4_gender": {
+          "sex4": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_4_economic_status": {
+          "ecstat4": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -607,7 +575,7 @@
               "Prefer not to say"
             ]
           },
-          "person_5_relationship": {
+          "relat5": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -617,22 +585,17 @@
               "Prefer not to say"
             ]
           },
-          "person_5_age": {
+          "age5": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_5_gender": {
+          "sex5": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_5_economic_status": {
+          "ecstat5": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -649,7 +612,7 @@
               "Prefer not to say"
             ]
           },
-          "person_6_relationship": {
+          "relat6": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -659,22 +622,17 @@
               "Prefer not to say"
             ]
           },
-          "person_6_age": {
+          "age6": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_6_gender": {
+          "sex6": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_6_economic_status": {
+          "ecstat6": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -691,7 +649,7 @@
               "Prefer not to say"
             ]
           },
-          "person_7_relationship": {
+          "relat7": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -701,22 +659,17 @@
               "Prefer not to say"
             ]
           },
-          "person_7_age": {
+          "age7": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_7_gender": {
+          "sex7": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_7_economic_status": {
+          "ecstat7": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -733,7 +686,7 @@
               "Prefer not to say"
             ]
           },
-          "person_8_relationship": {
+          "relat8": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -743,22 +696,17 @@
               "Prefer not to say"
             ]
           },
-          "person_8_age": {
+          "age8": {
             "type": "number",
             "maximum": 120,
             "minimum": 0
           },
-          "person_8_gender": {
+          "sex8": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Female",
-              "Male",
-              "Non-binary",
-              "Prefer not to say"
-            ]
+            "enum": ["Female", "Male", "Non-binary", "Prefer not to say"]
           },
-          "person_8_economic_status": {
+          "ecstat8": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -775,7 +723,7 @@
               "Prefer not to say"
             ]
           },
-          "homelessness": {
+          "homeless": {
             "type": "string",
             "minLength": 1
           },
@@ -819,7 +767,7 @@
               "Prefer not to say"
             ]
           },
-          "benefit_cap_spare_room_subsidy": {
+          "underoccupation_benefitcap": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -831,11 +779,11 @@
               "Prefer not to say"
             ]
           },
-          "armed_forces_active": {
+          "leftreg": {
             "type": "string",
             "minLength": 1
           },
-          "armed_forces_injured": {
+          "reservist": {
             "type": "string",
             "minLength": 1
           },
@@ -843,11 +791,11 @@
             "type": "string",
             "minLength": 1
           },
-          "medical_conditions": {
+          "illness": {
             "type": "string",
             "minLength": 1
           },
-          "pregnancy": {
+          "preg_occ": {
             "type": "string",
             "minLength": 1
           },
@@ -863,28 +811,28 @@
             "type": "string",
             "minLength": 1
           },
-          "tenancy_start_date": {
+          "startdate": {
             "type": "string",
             "minLength": 1
           },
-          "starter_tenancy": {
+          "startertenancy": {
             "type": "string",
             "minLength": 1
           },
-          "fixed_term_tenancy": {
+          "tenancylength": {
             "type": "string",
             "minLength": 1,
             "pattern": "((?!1|0)([0-9][0-9]))+"
           },
-          "tenancy_type": {
+          "tenancy": {
             "type": "string",
             "minLength": 1
           },
-          "letting_type": {
+          "lettype": {
             "type": "string",
             "minLength": 1
           },
-          "letting_provider": {
+          "landlord": {
             "type": "string",
             "minLength": 1
           },
@@ -900,7 +848,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_vacancy_reason": {
+          "rsnvac": {
             "type": "string",
             "minLength": 1
           },
@@ -908,7 +856,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_unit_type": {
+          "unittype_gn": {
             "type": "string",
             "minLength": 1
           },
@@ -916,7 +864,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_number_of_bedrooms": {
+          "beds": {
             "type": "number"
           },
           "property_void_date": {
@@ -931,70 +879,61 @@
             "type": "string",
             "minLength": 1
           },
-          "property_number_of_times_relet": {
+          "offered": {
             "type": "number"
           },
-          "property_wheelchair_accessible": {
+          "wchair": {
             "type": "boolean"
           },
-          "net_income_known": {
+          "earnings_known": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "Yes",
-              "No",
-              "Tenant prefers not to say"
-            ]
+            "enum": ["Yes", "No", "Tenant prefers not to say"]
           },
-          "net_income": {
+          "earnings": {
             "type": "number"
           },
-          "net_income_frequency": {
+          "incfreq": {
             "type": "string",
             "minLength": 1
           },
-          "net_income_uc_proportion": {
+          "benefits": {
             "type": "string",
             "minLength": 1,
-            "enum": [
-              "All",
-              "Some",
-              "None",
-              "Do not know"
-            ]
+            "enum": ["All", "Some", "None", "Do not know"]
           },
           "housing_benefit": {
             "type": "string",
             "minLength": 1
           },
-          "rent_frequency": {
+          "period": {
             "type": "string",
             "minLength": 1
           },
-          "basic_rent": {
+          "brent": {
             "type": "number"
           },
-          "service_charge": {
+          "scharge": {
             "type": "number"
           },
-          "personal_service_charge": {
+          "pscharge": {
             "type": "number"
           },
-          "support_charge": {
+          "supcharg": {
             "type": "number"
           },
-          "total_charge": {
+          "tcharge": {
             "type": "number"
           },
           "outstanding_amount": {
             "type": "string",
             "minLength": 1
           },
-          "time_lived_in_la": {
+          "layear": {
             "type": "string",
             "minLength": 1
           },
-          "time_on_la_waiting_list": {
+          "lawaitlist": {
             "type": "string",
             "minLength": 1
           },
@@ -1006,7 +945,7 @@
             "type": "string",
             "minLength": 1
           },
-          "reasonable_preference": {
+          "reasonpref": {
             "type": "string",
             "minLength": 1
           },
@@ -1014,13 +953,13 @@
             "type": "string",
             "minLength": 1
           },
-          "cbl_letting": {
+          "cbl": {
             "type": "boolean"
           },
-          "chr_letting": {
+          "chr": {
             "type": "boolean"
           },
-          "cap_letting": {
+          "cap": {
             "type": "boolean"
           },
           "outstanding_rent_or_charges": {
@@ -1030,73 +969,73 @@
             "type": "string",
             "minLength": 1
           },
-          "accessibility_requirements_fully_wheelchair_accessible_housing": {
+          "housingneeds_a": {
             "type": "boolean"
           },
-          "accessibility_requirements_wheelchair_access_to_essential_rooms": {
+          "housingneeds_b": {
             "type": "boolean"
           },
-          "accessibility_requirements_level_access_housing": {
+          "housingneeds_c": {
             "type": "boolean"
           },
-          "accessibility_requirements_other_disability_requirements": {
+          "housingneeds_f": {
             "type": "boolean"
           },
-          "accessibility_requirements_no_disability_requirements": {
+          "housingneeds_g": {
             "type": "boolean"
           },
-          "accessibility_requirements_do_not_know": {
+          "housingneeds_h": {
             "type": "boolean"
           },
           "accessibility_requirements_prefer_not_to_say": {
             "type": "boolean"
           },
-          "condition_effects_vision": {
+          "illness_type_1": {
             "type": "boolean"
           },
-          "condition_effects_hearing": {
+          "illness_type_2": {
             "type": "boolean"
           },
-          "condition_effects_mobility": {
+          "illness_type_3": {
             "type": "boolean"
           },
-          "condition_effects_dexterity": {
+          "illness_type_4": {
             "type": "boolean"
           },
-          "condition_effects_stamina": {
+          "illness_type_8": {
             "type": "boolean"
           },
-          "condition_effects_learning": {
+          "illness_type_5": {
             "type": "boolean"
           },
-          "condition_effects_memory": {
+          "illness_type_6": {
             "type": "boolean"
           },
-          "condition_effects_mental_health": {
+          "illness_type_7": {
             "type": "boolean"
           },
-          "condition_effects_social_or_behavioral": {
+          "illness_type_9": {
             "type": "boolean"
           },
-          "condition_effects_other": {
+          "illness_type_10": {
             "type": "boolean"
           },
           "condition_effects_prefer_not_to_say": {
             "type": "boolean"
           },
-          "reasonable_preference_reason_homeless": {
+          "rp_homeless": {
             "type": "boolean"
           },
-          "reasonable_preference_reason_unsatisfactory_housing": {
+          "rp_insan_unsat": {
             "type": "boolean"
           },
-          "reasonable_preference_reason_medical_grounds": {
+          "rp_medwel": {
             "type": "boolean"
           },
-          "reasonable_preference_reason_avoid_hardship": {
+          "rp_hardship": {
             "type": "boolean"
           },
-          "reasonable_preference_reason_do_not_know": {
+          "rp_dontknow": {
             "type": "boolean"
           },
           "other_tenancy-type": {
@@ -1106,119 +1045,119 @@
         },
         "required": [
           "tenant_code",
-          "person_1_age",
-          "person_1_gender",
-          "tenant_ethnic_group",
-          "tenant_nationality",
-          "previous_housing_situation",
+          "age1",
+          "sex1",
+          "ethnic",
+          "national",
+          "prevten",
           "armed_forces",
-          "person_1_economic_status",
-          "household_number_of_other_members",
-          "person_2_relationship",
-          "person_2_age",
-          "person_2_gender",
-          "person_2_economic_status",
-          "person_3_relationship",
-          "person_3_age",
-          "person_3_gender",
-          "person_3_economic_status",
-          "person_4_relationship",
-          "person_4_age",
-          "person_4_gender",
-          "person_4_economic_status",
-          "person_5_relationship",
-          "person_5_age",
-          "person_5_gender",
-          "person_5_economic_status",
-          "person_6_relationship",
-          "person_6_age",
-          "person_6_gender",
-          "person_6_economic_status",
-          "person_7_relationship",
-          "person_7_age",
-          "person_7_gender",
-          "person_7_economic_status",
-          "person_8_relationship",
-          "person_8_age",
-          "person_8_gender",
-          "person_8_economic_status",
-          "homelessness",
+          "ecstat1",
+          "hhmemb",
+          "relat2",
+          "age2",
+          "sex2",
+          "ecstat2",
+          "relat3",
+          "age3",
+          "sex3",
+          "ecstat3",
+          "relat4",
+          "age4",
+          "sex4",
+          "ecstat4",
+          "relat5",
+          "age5",
+          "sex5",
+          "ecstat5",
+          "relat6",
+          "age6",
+          "sex6",
+          "ecstat6",
+          "relat7",
+          "age7",
+          "sex7",
+          "ecstat7",
+          "relat8",
+          "age8",
+          "sex8",
+          "ecstat8",
+          "homeless",
           "reason_for_leaving_last_settled_home",
-          "benefit_cap_spare_room_subsidy",
-          "armed_forces_active",
-          "armed_forces_injured",
+          "underoccupation_benefitcap",
+          "leftreg",
+          "reservist",
           "armed_forces_partner",
-          "medical_conditions",
-          "pregnancy",
+          "illness",
+          "preg_occ",
           "accessibility_requirements",
           "condition_effects",
           "tenancy_code",
-          "tenancy_start_date",
-          "starter_tenancy",
-          "fixed_term_tenancy",
-          "tenancy_type",
-          "letting_type",
-          "letting_provider",
+          "startdate",
+          "startertenancy",
+          "tenancylength",
+          "tenancy",
+          "lettype",
+          "landlord",
           "property_location",
           "previous_postcode",
           "property_relet",
-          "property_vacancy_reason",
+          "rsnvac",
           "property_reference",
-          "property_unit_type",
+          "unittype_gn",
           "property_building_type",
-          "property_number_of_bedrooms",
+          "beds",
           "property_void_date",
           "property_major_repairs",
           "property_major_repairs_date",
-          "property_number_of_times_relet",
-          "property_wheelchair_accessible",
-          "net_income",
-          "net_income_frequency",
-          "net_income_uc_proportion",
+          "offered",
+          "wchair",
+          "earnings",
+          "incfreq",
+          "benefits",
           "housing_benefit",
-          "rent_frequency",
-          "basic_rent",
-          "service_charge",
-          "personal_service_charge",
-          "support_charge",
-          "total_charge",
+          "period",
+          "brent",
+          "scharge",
+          "pscharge",
+          "supcharg",
+          "tcharge",
           "outstanding_amount",
-          "time_lived_in_la",
-          "time_on_la_waiting_list",
+          "layear",
+          "lawaitlist",
           "previous_la",
           "property_postcode",
-          "reasonable_preference",
+          "reasonpref",
           "reasonable_preference_reason",
-          "cbl_letting",
-          "chr_letting",
-          "cap_letting",
+          "cbl",
+          "chr",
+          "cap",
           "outstanding_rent_or_charges",
           "other_reason_for_leaving_last_settled_home",
-          "accessibility_requirements_fully_wheelchair_accessible_housing",
-          "accessibility_requirements_wheelchair_access_to_essential_rooms",
-          "accessibility_requirements_level_access_housing",
-          "accessibility_requirements_other_disability_requirements",
-          "accessibility_requirements_no_disability_requirements",
-          "accessibility_requirements_do_not_know",
+          "housingneeds_a",
+          "housingneeds_b",
+          "housingneeds_c",
+          "housingneeds_f",
+          "housingneeds_g",
+          "housingneeds_h",
           "accessibility_requirements_prefer_not_to_say",
-          "condition_effects_vision",
-          "condition_effects_hearing",
-          "condition_effects_mobility",
-          "condition_effects_dexterity",
-          "condition_effects_stamina",
-          "condition_effects_learning",
-          "condition_effects_memory",
-          "condition_effects_mental_health",
-          "condition_effects_social_or_behavioral",
-          "condition_effects_other",
+          "illness_type_1",
+          "illness_type_2",
+          "illness_type_3",
+          "illness_type_4",
+          "illness_type_8",
+          "illness_type_5",
+          "illness_type_6",
+          "illness_type_7",
+          "illness_type_9",
+          "illness_type_10",
           "condition_effects_prefer_not_to_say",
-          "reasonable_preference_reason_homeless",
-          "reasonable_preference_reason_unsatisfactory_housing",
-          "reasonable_preference_reason_medical_grounds",
-          "reasonable_preference_reason_avoid_hardship",
-          "reasonable_preference_reason_do_not_know",
+          "rp_homeless",
+          "rp_insan_unsat",
+          "rp_medwel",
+          "rp_hardship",
+          "rp_dontknow",
           "other_tenancy-type",
-          "net_income_known"
+          "earnings_known"
         ]
       }
     },
