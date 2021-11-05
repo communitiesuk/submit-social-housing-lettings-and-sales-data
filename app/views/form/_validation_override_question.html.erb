@@ -1,8 +1,11 @@
-<div id="soft-validations" class="govuk-form-group govuk-form-group--error" style='display:none;'>
+<div class="govuk-form-group govuk-form-group--error"
+     data-controller="soft-validations"
+     data-soft-validations-target="override"
+     style='display:none;'>
+
   <%= f.govuk_check_boxes_fieldset page_info["soft_validations"]&.keys&.first,
       legend: { text: "soft-validations-placeholder-message", size: "l" },
-      hint: { text: "soft-validations-placeholder-hint-text" },
-      form_group: { "data-controller": "soft-validations" } do %>
+      hint: { text: "soft-validations-placeholder-hint-text" } do %>
 
       <%= f.govuk_check_box page_info["soft_validations"]&.keys&.first, page_info["soft_validations"]&.keys&.first,
         label: { text: "Yes" }

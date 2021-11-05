@@ -1,10 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static targets = [ "override" ]
+
   initialize() {
     let url = window.location.href + "/soft_validations"
     let xhr = new XMLHttpRequest()
-    let div = document.getElementById("soft-validations")
+    let div = this.overrideTarget
     xhr.open("GET", url, true)
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhr.onreadystatechange = function () {
