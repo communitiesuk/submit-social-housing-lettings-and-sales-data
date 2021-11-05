@@ -113,6 +113,18 @@
       "reasonable_preference_reason_unsatisfactory_housing": false,
       "reasonable_preference_reason_medical_grounds": false,
       "reasonable_preference_reason_avoid_hardship": false,
-      "reasonable_preference_reason_do_not_know": true
+      "reasonable_preference_reason_do_not_know": true,
+      "other_tenancy_type": "",
+      "gdpr_acceptance": "",
+      "gdpr_declined": "",
+      "property_owner_organisation": "",
+      "property_manager_organisation": "",
+      "sale_or_letting": "",
+      "tenant_same_property_renewal": "",
+      "rent_type": "",
+      "intermediate_rent_product_name": "",
+      "needs_type": "",
+      "sale_completion_date" : "",
+      "purchaser_code": ""
     }
   }

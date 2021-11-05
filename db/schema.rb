@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_28_095000) do
+ActiveRecord::Schema.define(version: 2021_11_02_100820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,17 @@ ActiveRecord::Schema.define(version: 2021_10_28_095000) do
     t.boolean "reasonable_preference_reason_do_not_know"
     t.datetime "discarded_at"
     t.string "other_tenancy_type"
+    t.string "gdpr_acceptance"
+    t.string "gdpr_declined"
+    t.string "property_owner_organisation"
+    t.string "property_manager_organisation"
+    t.string "sale_or_letting"
+    t.string "tenant_same_property_renewal"
+    t.string "rent_type"
+    t.string "intermediate_rent_product_name"
+    t.string "needs_type"
+    t.string "sale_completion_date"
+    t.string "purchaser_code"
     t.boolean "override_net_income_validation"
     t.string "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"

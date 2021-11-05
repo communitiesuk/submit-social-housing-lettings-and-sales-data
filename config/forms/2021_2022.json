@@ -3,6 +3,181 @@
   "start_year": 2021,
   "end_year": 2022,
   "sections": {
+    "about_this_log": {
+      "label": "About this log",
+      "subsections": {
+        "about_this_log": {
+          "label": "About this log",
+          "pages": {
+            "gdpr_acceptance": {
+              "header": "DLUHC Privacy Notice Acceptance",
+              "description": "",
+              "questions": {
+                "gdpr_acceptance": {
+                  "check_answer_label": "GDPR acceptance",
+                  "header": "Has the tenant or buyer seen the DLUHC privacy notice?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "conditional_route_to": {
+                "organisation_details": { "gdpr_acceptance": "Yes" }
+              },
+              "default_next_page": "gdpr_declined"
+            },
+            "gdpr_declined": {
+              "header": "You cannot use this service",
+              "hint_text": "",
+              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
+              "questions": {
+
+              },
+              "default_next_page" : "check_answers"
+            },
+            "organisation_details": {
+              "header": "About this log",
+              "description": "Organisation Details",
+              "questions": {
+                "property_owner_organisation": {
+                  "check_answer_label": "",
+                  "header": "Which organisation owns this property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "A",
+                    "1": "B"
+                  }
+                },
+                "property_manager_organisation": {
+                  "check_answer_label": "",
+                  "header": "Which organisation manages this property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "A",
+                    "1": "B"
+                  }
+                }
+              }
+            },
+            "sale_or_letting": {
+              "header": "About this log",
+              "description": "Is this a sale or a letting?",
+              "questions": {
+                "sale_or_letting": {
+                  "check_answer_label": "",
+                  "header": "Is this a sale or a letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Sale",
+                    "1": "Letting"
+                  }
+                }
+              },
+              "conditional_route_to": {
+                "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
+              },
+              "default_next_page" : "check_answers"
+            },
+            "tenant_same_property_renewal": {
+              "header": "About this log",
+              "description": "Is this a renewal to the same tenant in the same property?",
+              "questions": {
+                "tenant_same_property_renewal": {
+                  "check_answer_label": "",
+                  "header": "Is this a renewal to the same tenant in the same property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            },
+            "tenancy_start_date": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "tenancy_start_date": {
+                  "check_answer_label": "When is the tenancy start date?",
+                  "header": "What is the tenancy start date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
+                }
+              }
+            },
+            "letting_type": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "rent_type": {
+                  "check_answer_label": "What is the rent type?",
+                  "header": "What is the rent type?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Social Rent",
+                    "1": "Affordable Rent",
+                    "2": "London Affordable Rent",
+                    "3": "Rent To Buy",
+                    "4": "London Living Rent",
+                    "5": "Other Intermediate Rent Product"
+                  },
+                  "conditional_for": {
+                    "intermediate_rent_product_name": ["Other Intermediate Rent Product"]
+                  }
+                },
+                "intermediate_rent_product_name": {
+                  "check_answer_label": "Enter the product name",
+                  "header": "What is intermediate rent product name?",
+                  "type": "text"
+                },
+                "needs_type": {
+                  "check_answer_label": "What is the needs type?",
+                  "header": "What is the needs type?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "0": "Supported Housing",
+                    "1": "General Needs"
+                  }
+                }
+              }
+            },
+            "sale_completion_date": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "sale_completion_date": {
+                  "check_answer_label": "What is the sale completion date?",
+                  "header": "What is the sale completion date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
+                }
+              }
+            },
+            "purchaser_code": {
+              "header": "About this log",
+              "description": "",
+              "questions": {
+                "purchaser_code": {
+                  "check_answer_label": "What is the purchaser code?",
+                  "header": "What is the purchaser code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "household": {
       "label": "About the household",
       "subsections": {
