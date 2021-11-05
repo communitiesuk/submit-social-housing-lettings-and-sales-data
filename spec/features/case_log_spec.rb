@@ -396,7 +396,7 @@ RSpec.describe "Test Features" do
 
   describe "Soft Validation" do
     context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
-      let!(:case_log) { FactoryBot.create(:case_log, :in_progress, ecstat1: "Full-time - 30 hours or more") }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, ecstat1: "Full-time - 30 hours or more") }
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 
