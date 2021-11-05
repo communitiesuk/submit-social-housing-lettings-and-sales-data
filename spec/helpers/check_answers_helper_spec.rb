@@ -98,9 +98,7 @@ RSpec.describe CheckAnswersHelper do
             "hint_text" => "",
             "type" => "date",
             "check_answer_label" => "Question Label",
-            "conditional_for" => { "question_2" => %w[12-12-2021] }
-          }
-        }
+            "conditional_for" => { "question_2" => %w[12-12-2021] } } }
       end
 
       it "raises an error" do

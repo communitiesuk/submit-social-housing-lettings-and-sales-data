@@ -28,7 +28,6 @@ module CheckAnswersHelper
   def filter_conditional_questions(questions, case_log)
     applicable_questions = questions
 
-    # puts applicable_questions.count
     questions.each do |k, question|
       question.fetch("conditional_for", []).each do |conditional_question_key, condition|
         if condition_not_met(case_log, k, question, condition)
@@ -62,7 +61,7 @@ module CheckAnswersHelper
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
-      raise "Not implemented yet"    end
+      raise "Not implemented yet" end
   end
 
   def create_update_answer_link(case_log_answer, case_log_id, page)
