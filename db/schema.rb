@@ -133,6 +133,8 @@ ActiveRecord::Schema.define(version: 2021_11_02_100820) do
     t.boolean "reasonable_preference_reason_do_not_know"
     t.datetime "discarded_at"
     t.string "other_tenancy_type"
+    t.boolean "override_net_income_validation"
+    t.string "net_income_known"
     t.string "gdpr_acceptance"
     t.string "gdpr_declined"
     t.string "property_owner_organisation"
@@ -144,8 +146,6 @@ ActiveRecord::Schema.define(version: 2021_11_02_100820) do
     t.string "needs_type"
     t.string "sale_completion_date"
     t.string "purchaser_code"
-    t.boolean "override_net_income_validation"
-    t.string "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
