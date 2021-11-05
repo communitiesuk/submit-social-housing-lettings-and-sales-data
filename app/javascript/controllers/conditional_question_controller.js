@@ -21,7 +21,7 @@ export default class extends Controller {
       let selectedValue = this.element.value
       let conditional_for = JSON.parse(this.element.dataset.info)
 
-      Object.entries(conditional_for).forEach(([targetQuestion, conditions]) => {
+      Object.entries(conditional_for).map(([targetQuestion, conditions]) => {
         let div = document.getElementById(targetQuestion + "_div")
         if(conditions.includes(selectedValue)) {
           div.style.display = "block"
@@ -31,7 +31,7 @@ export default class extends Controller {
           if (buttons.length == 0){
             buttons = document.getElementsByName(`case_log[${targetQuestion}][]`);
           }
-          Object.entries(buttons).forEach(([idx, button]) => {
+          Object.entries(buttons).map(([idx, button]) => {
             button.checked = false;
           })
         }
@@ -43,7 +43,7 @@ export default class extends Controller {
     let enteredValue = this.element.value
     let conditional_for = JSON.parse(this.element.dataset.info)
 
-    Object.entries(conditional_for).forEach(([targetQuestion, condition]) => {
+    Object.entries(conditional_for).map(([targetQuestion, condition]) => {
       let div = document.getElementById(targetQuestion + "_div")
       if(eval((enteredValue + condition))) {
         div.style.display = "block"

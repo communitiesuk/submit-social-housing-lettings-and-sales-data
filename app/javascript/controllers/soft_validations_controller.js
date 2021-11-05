@@ -18,7 +18,7 @@ export default class extends Controller {
         } else {
           div.style.display = "none"
           let buttons = document.getElementsByName(`case_log[override_net_income_validation][]`)
-          Object.entries(buttons).forEach(([idx, button]) => {
+          Object.entries(buttons).map(([idx, button]) => {
             button.checked = false
           })
         }
