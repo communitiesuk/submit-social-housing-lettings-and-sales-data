@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "https://example.com/product.schema.json",
+  "title": "Form",
+  "description": "A form",
+  "type": "object",
+  "properties": {
+    "form_type": {
+      "description": "",
+      "type": "string"
+    },
+    "start_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "end_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "sections": {
+      "description": "",
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "description": "",
+          "type": "string"
+        },
+        "label": {
+          "description": "",
+          "type": "string"  
+        },
+        "subsections": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
