@@ -8,6 +8,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
+          "baddata": "Shouldn't be here but what you gonna do?",
           "pages": {
             "tenant_code": {
               "questions": {
