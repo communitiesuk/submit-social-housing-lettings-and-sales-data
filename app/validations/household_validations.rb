@@ -16,11 +16,11 @@ module HouseholdValidations
   end
 
   def validate_other_reason_for_leaving_last_settled_home(record)
-    validate_other_field(record, "reason_for_leaving_last_settled_home", "other_reason_for_leaving_last_settled_home")
+    validate_other_field(record, "reason", "other_reason_for_leaving_last_settled_home")
   end
 
   def validate_reason_for_leaving_last_settled_home(record)
-    if record.reason_for_leaving_last_settled_home == "Do not know" && record.underoccupation_benefitcap != "Do not know"
+    if record.reason == "Do not know" && record.underoccupation_benefitcap != "Do not know"
       record.errors.add :underoccupation_benefitcap, "must be do not know if tenant’s main reason for leaving is do not know"
     end
   end

@@ -293,7 +293,7 @@
             "sex8": "Prefer not to say",
             "ecstat8": "Child under 16",
             "homeless": "No",
-            "reason_for_leaving_last_settled_home": "Other problems with neighbours",
+            "reason": "Other problems with neighbours",
             "underoccupation_benefitcap": "No",
             "leftreg": "No",
             "reservist": "No",
@@ -343,7 +343,7 @@
             "chr": false,
             "cap": false,
             "outstanding_rent_or_charges": 25,
-            "other_reason_for_leaving_last_settled_home": "Other reason",
+            "other_reason": "Other reason",
             "housingneeds_a": true,
             "housingneeds_b": false,
             "housingneeds_c": false,
@@ -727,7 +727,7 @@
             "type": "string",
             "minLength": 1
           },
-          "reason_for_leaving_last_settled_home": {
+          "reason": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -1082,7 +1082,7 @@
           "sex8",
           "ecstat8",
           "homeless",
-          "reason_for_leaving_last_settled_home",
+          "reason",
           "underoccupation_benefitcap",
           "leftreg",
           "reservist",

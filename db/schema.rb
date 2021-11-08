@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_08_134601) do
+ActiveRecord::Schema.define(version: 2021_11_08_143649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2021_11_08_134601) do
     t.string "sex8"
     t.integer "ecstat8"
     t.integer "homeless"
-    t.string "reason_for_leaving_last_settled_home"
+    t.integer "reason"
     t.integer "underoccupation_benefitcap"
     t.integer "leftreg"
     t.integer "reservist"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2021_11_08_134601) do
     t.string "needs_type"
     t.string "sale_completion_date"
     t.string "purchaser_code"
+    t.integer "condition_effects_prefer_not_to_say"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

@@ -249,4 +249,43 @@ module DbEnums
       "Do not know" => 6,
     }
   end
+
+  def self.reason
+    {
+      "Permanently decanted from another property owned by this landlord" => 1,
+      "Left home country as a refugee" => 2,
+      "Loss of tied accommodation" => 4,
+      "Domestic abuse" => 7,
+      "(Non violent) relationship breakdown with partner" => 8,
+      "Asked to leave by family or friends" => 9,
+      "Racial harassment" => 10,
+      "Other problems with neighbours" => 11,
+      "Property unsuitable because of overcrowding" => 12,
+      "End of assured shorthold tenancy - no fault" => 40,
+      "End of assured shorthold tenancy - tenant's fault" => 41,
+      "End of fixed term tenancy - no fault" => 42,
+      "End of fixed term tenancy - tenant's fault" => 43,
+      "Repossession" => 34,
+      "Under occupation - offered incentive to downsize" => 29,
+      "Under occupation - no incentive" => 30,
+      "Property unsuitable because of ill health / disability" => 13,
+      "Property unsuitable because of poor condition" => 14,
+      "Couldn't afford fees attached to renewing the tenancy" => 35,
+      "Couldn't afford increase in rent" => 36,
+      "Couldn't afford rent or mortgage - welfare reforms" => 37,
+      "Couldn't afford rent or mortgage - employment" => 38,
+      "Couldn't afford rent or mortgage - other" => 39,
+      "To move nearer to family / friends / school" => 16,
+      "To move nearer to work" => 17,
+      "To move to accomodation with support" => 18,
+      "To move to independent accomodation" => 19,
+      "Hate crime" => 31,
+      "Death of household member in last settled accomodation" => 46,
+      "Discharged from prison" => 44,
+      "Discharged from long stay hospital or similar institution" => 45,
+      "Other" => 20,
+      "Do not know" => 28,
+      "Prefer not to say" => 100,
+    }
+  end
 end
