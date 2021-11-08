@@ -990,9 +990,7 @@
                     "illness_type_6": "Memory",
                     "illness_type_7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
                     "illness_type_9": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
-                    "illness_type_10": "Other",
-                    "divider": true,
-                    "condition_effects_prefer_not_to_say": "Prefer not to say"
+                    "illness_type_10": "Other"
                   }
                 }
               }
