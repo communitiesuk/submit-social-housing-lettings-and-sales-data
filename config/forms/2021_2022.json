@@ -925,8 +925,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
-                    "2": "Do not know",
-                    "3": "Prefer not to say"
+                    "2": "Prefer not to say"
                   }
                 }
               }
