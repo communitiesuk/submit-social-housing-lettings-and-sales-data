@@ -22,5 +22,12 @@ RSpec.describe "User Features" do
       click_link("reset your password")
       expect(page).to have_current_path("/users/password/new")
     end
+
+    it " is redirected to check your email page after submitting an email on the reset password page" do
+      visit("/users/password/new")
+      fill_in("user_email", with: "test@example.com")
+      click_button("Send email")
+      expect(page).to have_content("Check your email")
+    end
   end
 end
