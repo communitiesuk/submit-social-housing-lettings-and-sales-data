@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_164644) do
+ActiveRecord::Schema.define(version: 2021_11_08_091320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_164644) do
     t.integer "housingneeds_f"
     t.integer "housingneeds_g"
     t.integer "housingneeds_h"
-    t.boolean "accessibility_requirements_prefer_not_to_say"
+    t.integer "accessibility_requirements_prefer_not_to_say"
     t.integer "illness_type_1"
     t.integer "illness_type_2"
     t.integer "illness_type_3"
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_164644) do
     t.integer "illness_type_7"
     t.integer "illness_type_9"
     t.integer "illness_type_10"
-    t.boolean "condition_effects_prefer_not_to_say"
+    t.integer "condition_effects_prefer_not_to_say"
     t.integer "rp_homeless"
     t.integer "rp_insan_unsat"
     t.integer "rp_medwel"
