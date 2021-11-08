@@ -11,11 +11,13 @@
     },
     "start_year": {
       "description": "",
-      "type": "integer"
+      "type": "integer",
+      "optional": "true"
     },
     "end_year": {
       "description": "",
-      "type": "integer"
+      "type": "integer",
+      "required": "false"
     },
     "sections": {
       "description": "",

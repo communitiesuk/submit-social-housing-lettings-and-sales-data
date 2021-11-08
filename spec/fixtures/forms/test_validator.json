@@ -19,6 +19,21 @@
                 }
               }
             }
+          },
+          "person_1_age": {
+            "header": "",
+            "description": "",
+            "questions": {
+              "person_1_age": {
+                "check_answer_label": "Tenant's age",
+                "header": "What is the tenant's age?",
+                "hint_text": "",
+                "type": "numeric",
+                "min": 0,
+                "max": 120,
+                "step": 1
+              }
+            }
           }
         }
       }
