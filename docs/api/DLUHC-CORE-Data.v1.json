@@ -325,14 +325,14 @@
             "earnings": 1000,
             "incfreq": "Monthly",
             "benefits": "Some",
-            "housing_benefit": "Universal Credit with housing element, but not Housing Benefit",
+            "hb": "Universal Credit with housing element, but not Housing Benefit",
             "period": "Weekly",
             "brent": 200,
             "scharge": 50,
             "pscharge": 40,
             "supcharg": 35,
             "tcharge": 325,
-            "outstanding_amount": "Yes",
+            "tshortfall": "Yes",
             "layear": "1 to 2 years",
             "lawaitlist": "Less than 1 year",
             "prevloc": "Ashford",
@@ -342,7 +342,7 @@
             "cbl": true,
             "chr": false,
             "cap": false,
-            "outstanding_rent_or_charges": 25,
+            "hbrentshortfall": "Yes",
             "other_reason_for_leaving_last_settled_home": "Other reason",
             "housingneeds_a": true,
             "housingneeds_b": false,
@@ -902,7 +902,7 @@
             "minLength": 1,
             "enum": ["All", "Some", "None", "Do not know"]
           },
-          "housing_benefit": {
+          "hb": {
             "type": "string",
             "minLength": 1
           },
@@ -925,7 +925,7 @@
           "tcharge": {
             "type": "number"
           },
-          "outstanding_amount": {
+          "tshortfall": {
             "type": "string",
             "minLength": 1
           },
@@ -962,7 +962,7 @@
           "cap": {
             "type": "boolean"
           },
-          "outstanding_rent_or_charges": {
+          "hbrentshortfall": {
             "type": "number"
           },
           "other_reason_for_leaving_last_settled_home": {
@@ -1114,14 +1114,14 @@
           "earnings",
           "incfreq",
           "benefits",
-          "housing_benefit",
+          "hb",
           "period",
           "brent",
           "scharge",
           "pscharge",
           "supcharg",
           "tcharge",
-          "outstanding_amount",
+          "tshortfall",
           "layear",
           "lawaitlist",
           "prevloc",
@@ -1131,7 +1131,7 @@
           "cbl",
           "chr",
           "cap",
-          "outstanding_rent_or_charges",
+          "hbrentshortfall",
           "other_reason_for_leaving_last_settled_home",
           "housingneeds_a",
           "housingneeds_b",

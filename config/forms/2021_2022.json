@@ -1700,7 +1700,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "housing_benefit": {
+                "hb": {
                   "check_answer_label": "Universal Credit & Housing Benefit",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "hint_text": "",
@@ -1813,20 +1813,21 @@
                   "step": 1,
                   "readonly": true
                 },
-                "outstanding_rent_or_charges": {
+                "hbrentshortfall": {
                   "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
-                    "1": "No"
+                    "1": "No",
+                    "2": "Do not know"
                   },
                   "conditional_for": {
-                    "outstanding_amount": ["Yes"]
+                    "tshortfall": ["Yes"]
                   }
                 },
-                "outstanding_amount": {
+                "tshortfall": {
                   "check_answer_label": "Outstanding amount",
                   "header": "What do you expect the amount to be?",
                   "hint_text": "If the amount is unknown you can estimate",

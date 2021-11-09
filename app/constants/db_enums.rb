@@ -260,6 +260,18 @@ module DbEnums
     }
   end
 
+  def self.housing_benefit
+    {
+      "Housing Benefit, but not Universal Credit" => 1,
+      "Universal Credit with housing element, but not Housing Benefit" => 6,
+      "Universal Credit without housing element and no Housing Benefit" => 7,
+      "Universal Credit and Housing Benefit" => 8,
+      "Not Housing Benefit or Universal Credit" => 9,
+      "Do not know" => 3,
+      "Prefer not to say" => 100,
+    }
+  end
+
   def self.reason
     {
       "Permanently decanted from another property owned by this landlord" => 1,

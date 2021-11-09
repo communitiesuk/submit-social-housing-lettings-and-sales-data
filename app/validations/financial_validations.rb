@@ -2,11 +2,11 @@ module FinancialValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
-    if record.outstanding_rent_or_charges == "Yes" && record.outstanding_amount.blank?
-      record.errors.add :outstanding_amount, "You must answer the oustanding amout question if you have outstanding rent or charges."
+    if record.hbrentshortfall == "Yes" && record.tshortfall.blank?
+      record.errors.add :tshortfall, "You must answer the oustanding amout question if you have outstanding rent or charges."
     end
-    if record.outstanding_rent_or_charges == "No" && record.outstanding_amount.present?
-      record.errors.add :outstanding_amount, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
+    if record.hbrentshortfall == "No" && record.tshortfall.present?
+      record.errors.add :tshortfall, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
     end
   end
 
