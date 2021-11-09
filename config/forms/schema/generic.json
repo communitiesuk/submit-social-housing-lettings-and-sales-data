@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "$id": "https://example.com/product.schema.json",
   "title": "Form",
   "description": "A form",
@@ -16,8 +16,7 @@
     },
     "end_year": {
       "description": "",
-      "type": "integer",
-      "required": "false"
+      "type": "integer"
     },
     "sections": {
       "description": "",
@@ -32,7 +31,63 @@
           "type": "string"  
         },
         "subsections": {
-          "type": "object"
+          "description": "",
+          "type": "object",
+          "patternProperties": {
+            "^[0-9]+$": {
+              "description": "",
+              "type": "string"
+            },
+            "label": {
+              "description": "",
+              "type": "string"  
+            },
+            "subsections": {
+              "description": "",
+              "type": "object",
+              "patternProperties": {
+                "^[0-9]+$": {
+                  "description": "",
+                  "type": "string"
+                },
+                "label": {
+                  "description": "",
+                  "type": "string"  
+                },
+                "pages": {
+                  "description": "",
+                  "type": "object",
+                  "patternProperties": {
+                    "^[0-9]+$": {
+                      "description": "",
+                      "type": "string"
+                    }
+                  },
+                  "questions": {
+                    "description": "",
+                    "type": "object",
+                    "patternProperties": {
+                      "^[0-9]+$": {
+                        "description": "",
+                        "type": "string"
+                      },
+                      "conditional_for": {
+                        "type": "object",
+                        "properties": ""
+                      }
+                    }
+                  },
+                  "conditional_route_to": {
+                    "type": "object",
+                    "properties": ""
+                  },
+                  "default_next_page": {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
