@@ -150,6 +150,23 @@ RSpec.describe CaseLogsController, type: :controller do
         expect(response).to redirect_to("/case_logs/#{id}/conditional_question_no_page")
       end
     end
+
+    context "partition postcode" do
+      let(:case_log_with_postcode) do
+        {
+          property_postcode: "M1 1AE",
+          page: "property_postcode",
+        }
+      end
+      it "saves full and partial postcodes" do
+        post :submit_form, params: { id: id, case_log: case_log_with_postcode }
+        case_log.reload
+
+        expect(case_log.property_postcode).to eq("M1 1AE")
+        expect(case_log.postcode).to eq("M1")
+        expect(case_log.postcod2).to eq("1AE")
+      end
+    end
   end
 
   describe "get_next_page_path" do

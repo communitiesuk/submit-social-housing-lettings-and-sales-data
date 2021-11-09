@@ -58,7 +58,8 @@ class CaseLogsController < ApplicationController
     @case_log = CaseLog.find(params[:id])
     @case_log.page = params[:case_log][:page]
     responses_for_page = responses_for_page(@case_log.page)
-    if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+    inferred_answers = get_inferred_answers(responses_for_page)
+    if @case_log.update(responses_for_page.merge(inferred_answers)) && @case_log.has_no_unresolved_soft_errors?
       redirect_path = get_next_page_path(form, @case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
@@ -114,6 +115,20 @@ private
       end
       result
     end
+  end
+
+  def get_inferred_answers(responses_for_page)
+    result = {}
+    if responses_for_page["property_postcode"].present?
+      result["postcode"], result["postcod2"] = get_inferred_postcode(params["case_log"]["property_postcode"])
+    end
+    result
+  end
+
+  def get_inferred_postcode(postcode)
+    require "uk_postcode"
+    property_postcode = UKPostcode.parse(postcode)
+    [property_postcode.outcode, property_postcode.incode]
   end
 
   def json_api_request?

@@ -1515,7 +1515,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_reference": {
+                "propcode": {
                   "check_answer_label": "What’s the property reference?",
                   "header": "What's the property reference?",
                   "hint_text": "",
@@ -1564,7 +1564,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_major_repairs": {
+                "majorrepairs": {
                   "check_answer_label": "Were major repairs carried out during the void period?",
                   "header": "Were any major repairs completed during the void period?",
                   "hint_text": "",

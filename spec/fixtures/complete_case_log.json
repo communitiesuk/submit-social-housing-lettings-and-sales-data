@@ -38,7 +38,7 @@
     "sex8": "Prefer not to say",
     "ecstat8": "Child under 16",
     "homeless": "Yes - other homelessness",
-    "reason": "Other problems with neighbours",
+    "reason": 1,
     "underoccupation_benefitcap": "No",
     "leftreg": "No - they left up to 5 years ago",
     "reservist": "No",
@@ -55,7 +55,7 @@
     "lettype": "Affordable Rent - General Needs",
     "landlord": "This landlord",
     "property_location": "Barnet",
-    "previous_postcode": "NW1 5TY",
+    "property_postcode": "NW1 5TY",
     "property_relet": "No",
     "rsnvac": "Relet - tenant abandoned property",
     "property_reference": "P9876",
@@ -82,7 +82,7 @@
     "layear": "1 to 2 years",
     "lawaitlist": "Less than 1 year",
     "previous_la": "Ashford",
-    "property_postcode": "SE2 6RT",
+    "previous_postcode": "SE2 6RT",
     "reasonpref": "Yes",
     "reasonable_preference_reason": "dummy",
     "cbl": "Yes",
@@ -125,6 +125,10 @@
     "intermediate_rent_product_name": "",
     "needs_type":  "",
     "sale_completion_date": "",
-    "purchaser_code":  ""
+    "purchaser_code":  "",
+    "propcode": "123",
+    "majorrepairs": "yes",
+    "postcode": "a1",
+    "postcod2": "w3"
   }
 }
