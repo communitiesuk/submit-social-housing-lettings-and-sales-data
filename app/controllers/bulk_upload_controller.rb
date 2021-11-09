@@ -159,13 +159,12 @@ class BulkUploadController < ApplicationController
             rent_type: row[130],
             intermediate_rent_product_name: row[131],
             # data_protection: row[132],
+            sale_or_letting: "letting",
             gdpr_acceptance: 1,
             gdpr_declined: 0
             # armed_forces_partner: "",
-            # sale_or_letting: "",
             # tenant_same_property_renewal: "",
             # needs_type: "",
-            # sale_completion_date: "",
             # purchaser_code: "",
           )
         end
