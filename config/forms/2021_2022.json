@@ -285,9 +285,12 @@
                     "10": "Bulgaria",
                     "11": "Romania",
                     "12": "Ireland",
-                    "13": "Other EU Economic Area (EEA country)",
-                    "14": "Any other country",
-                    "15": "Prefer not to say"
+                    "13": "Slovakia",
+                    "14":"Slovenia",
+                    "15": "Croatia",
+                    "16": "Other EU Economic Area (EEA country)",
+                    "17": "Any other country",
+                    "18": "Prefer not to say"
                   }
                 }
               }
@@ -2237,7 +2240,8 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
-                    "1": "No"
+                    "1": "No",
+                    "2":  "Do not know"
                   },
                   "conditional_for": {
                     "reasonable_preference_reason": ["Yes"]

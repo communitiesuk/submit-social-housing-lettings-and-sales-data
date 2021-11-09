@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 2021_11_08_143649) do
     t.string "property_building_type"
     t.integer "beds"
     t.string "property_void_date"
-    t.string "majorrepairs"
+    t.integer "majorrepairs"
     t.string "property_major_repairs_date"
     t.integer "offered"
     t.integer "wchair"

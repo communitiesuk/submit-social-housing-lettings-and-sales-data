@@ -90,6 +90,9 @@ module DbEnums
       "Bulgaria" => 14,
       "Romania" => 15,
       "Ireland" => 17,
+      "Slovakia" => 9,
+      "Slovenia" => 10,
+      "Croatia" => 16,
       "Other EU Economic Area (EEA country)" => 11,
       "Any other country" => 12,
       "Prefer not to say" => 13,
@@ -151,6 +154,14 @@ module DbEnums
     {
       "No" => 2,
       "Yes" => 1,
+    }
+  end
+
+  def self.polar_with_unknown
+    {
+      "No" => 2,
+      "Yes" => 1,
+      "Do not know" => 3,
     }
   end
 
