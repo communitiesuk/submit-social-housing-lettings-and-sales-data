@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://example.com/product.schema.json",
+  "title": "Form",
+  "description": "A form",
+  "type": "object",
+  "required": ["form_type", "start_year", "end_year", "sections"],
+  "properties": {
+    "form_type": {
+      "description": "",
+      "type": "string"
+    },
+    "start_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "end_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "sections": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "description": "",
+          "type": "string"
+        },
+        "properties": {
+          "label": {
+            "description": "",
+            "type": "string"  
+          },
+          "subsections": {
+            "description": "",
+            "type": "object",
+            "patternProperties": {
+              "^[0-9]+$": {
+                "description": "",
+                "type": "object",
+                "required": ["label"],
+                "properties": {
+                  "label": {
+                    "description": "",
+                    "type": "string"  
+                  },
+                  "pages": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[0-9]+$": {
+                        "properties": {
+                          "header": {
+                            "description": "",
+                            "type": "string"  
+                          },
+                          "description": {
+                            "description": "",
+                            "type": "string"  
+                          },
+                          "questions": {
+                            "type": "object",
+                            "properties": {
+                              
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },      
+              "additionalProperties": false,
+              "maxProperties": 1,
+              "minProperties": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

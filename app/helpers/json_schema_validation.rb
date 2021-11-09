@@ -13,7 +13,8 @@ end
 
 begin
 
-  path = "config/forms/schema/generic.json"
+  # path = "config/forms/schema/generic.json"
+  path = "config/forms/schema/test.json"
   # path = "config/forms/schema/2021_2022.json"
 
   file = File.open(path)

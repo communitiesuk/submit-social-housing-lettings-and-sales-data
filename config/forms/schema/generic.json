@@ -4,6 +4,7 @@
   "title": "Form",
   "description": "A form",
   "type": "object",
+  "required": ["form_type", "start_year", "end_year", "sections"],
   "properties": {
     "form_type": {
       "description": "",
@@ -11,8 +12,7 @@
     },
     "start_year": {
       "description": "",
-      "type": "integer",
-      "optional": "true"
+      "type": "integer"
     },
     "end_year": {
       "description": "",
