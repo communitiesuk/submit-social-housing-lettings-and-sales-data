@@ -20,7 +20,7 @@ RSpec.describe BulkUploadController, type: :request do
 
   describe "POST #bulk upload" do
     before do
-      @file = fixture_file_upload('2021_22_lettings_bulk_upload.xlsx', 'application/vnd.ms-excel')
+      @file = fixture_file_upload("2021_22_lettings_bulk_upload.xlsx", "application/vnd.ms-excel")
     end
 
     subject { post url, params: { case_log_bulk_upload: @file } }
