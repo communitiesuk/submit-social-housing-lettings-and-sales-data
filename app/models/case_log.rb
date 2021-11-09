@@ -65,6 +65,7 @@ class CaseLog < ApplicationRecord
   enum leftreg: DbEnums.leftreg, _suffix: true
   enum illness: DbEnums.illness, _suffix: true
   enum preg_occ: DbEnums.pregnancy, _suffix: true
+  enum override_net_income_validation: DbEnums.override_soft_validation, _suffix: true
   enum housingneeds_a: DbEnums.polar, _suffix: true
   enum housingneeds_b: DbEnums.polar, _suffix: true
   enum housingneeds_c: DbEnums.polar, _suffix: true

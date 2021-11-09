@@ -213,6 +213,13 @@ module DbEnums
     }
   end
 
+  def self.override_soft_validation
+    {
+      "No" => 0,
+      "Yes" => 1,
+    }
+  end
+
   def self.benefits
     {
       "All" => 1,

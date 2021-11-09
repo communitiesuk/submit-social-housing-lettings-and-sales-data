@@ -9,7 +9,7 @@
 
       <%= f.govuk_check_box page_info["soft_validations"]&.keys&.first, page_info["soft_validations"]&.keys&.first,
         label: { text: "Yes" },
-        checked: @case_log[page_info["soft_validations"]&.keys&.first] == 1
+        checked: @case_log[page_info["soft_validations"]&.keys&.first] == "Yes"
       %>
   <% end %>
 </div>
