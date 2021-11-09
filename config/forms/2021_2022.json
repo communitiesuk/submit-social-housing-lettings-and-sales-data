@@ -315,6 +315,15 @@
                     "10": "Prefer not to say"
                   }
                 }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
+                  }
+                }
               }
             },
             "household_number_of_other_members": {
