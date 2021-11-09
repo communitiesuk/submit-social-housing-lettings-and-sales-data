@@ -5,8 +5,13 @@ export default class extends Controller {
 
   initialize() {
     let url = window.location.href + "/soft_validations"
+    this.fetch_retry(url, { headers: { accept: "application/json" } }, 2)
+  }
+
+  fetch_retry(url, options, n) {
+    let self = this
     let div = this.overrideTarget
-    fetch(url, { headers: { accept: "application/json" } })
+    fetch(url, options)
       .then(response => response.json())
       .then((response) => {
         if(response["show"]){
@@ -22,7 +27,10 @@ export default class extends Controller {
             button.checked = false
           })
         }
-      }
-    )
+      })
+      .catch(function(error) {
+        if (n === 1) throw error
+        return self.fetch_retry(url, options, n - 1)
+      })
   }
 }

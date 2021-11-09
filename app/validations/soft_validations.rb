@@ -8,7 +8,7 @@ module SoftValidations
   end
 
   def soft_errors_overridden?
-    !public_send(soft_errors.keys.first).zero? if soft_errors.present?
+    public_send(soft_errors.keys.first) == "Yes" if soft_errors.present?
   end
 
 private

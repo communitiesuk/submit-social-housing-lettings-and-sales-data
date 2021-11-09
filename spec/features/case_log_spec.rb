@@ -431,7 +431,7 @@ RSpec.describe "Test Features" do
         fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         click_link(text: "Back")
-        expect(page).not_to have_content("Are you sure this is correct?")
+        expect(page).to have_no_content("Are you sure this is correct?")
       end
 
       it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
