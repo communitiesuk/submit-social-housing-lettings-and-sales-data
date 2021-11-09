@@ -309,7 +309,7 @@
             "tenancy": "Fixed term – Secure",
             "lettype": "Affordable Rent - General Needs",
             "landlord": "This landlord",
-            "property_location": "Barnet",
+            "la": "Barnet",
             "previous_postcode": "NW1 5TY",
             "property_relet": "No",
             "rsnvac": "Relet - tenant abandoned property",
@@ -335,7 +335,7 @@
             "outstanding_amount": "Yes",
             "layear": "1 to 2 years",
             "lawaitlist": "Less than 1 year",
-            "previous_la": "Ashford",
+            "prevloc": "Ashford",
             "property_postcode": "SE2 6RT",
             "reasonpref": "Yes",
             "reasonable_preference_reason": "dummy",
@@ -343,7 +343,7 @@
             "chr": false,
             "cap": false,
             "outstanding_rent_or_charges": 25,
-            "other_reason": "Other reason",
+            "other_reason_for_leaving_last_settled_home": "Other reason",
             "housingneeds_a": true,
             "housingneeds_b": false,
             "housingneeds_c": false,
@@ -836,7 +836,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_location": {
+          "la": {
             "type": "string",
             "minLength": 1
           },
@@ -937,7 +937,7 @@
             "type": "string",
             "minLength": 1
           },
-          "previous_la": {
+          "prevloc": {
             "type": "string",
             "minLength": 1
           },
@@ -1098,7 +1098,7 @@
           "tenancy",
           "lettype",
           "landlord",
-          "property_location",
+          "la",
           "previous_postcode",
           "property_relet",
           "rsnvac",
@@ -1124,7 +1124,7 @@
           "outstanding_amount",
           "layear",
           "lawaitlist",
-          "previous_la",
+          "prevloc",
           "property_postcode",
           "reasonpref",
           "reasonable_preference_reason",

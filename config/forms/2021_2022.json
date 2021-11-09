@@ -1132,7 +1132,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_location": {
+                "la": {
                   "check_answer_label": "Property Location",
                   "header": "Property location",
                   "hint_text": "",
@@ -1891,7 +1891,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "previous_la": {
+                "prevloc": {
                   "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
