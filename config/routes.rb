@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
 
   post "/case_logs/:id", to: "case_logs#submit_form"
+  get "/case_logs/bulk_upload", to: "bulk_upload#show"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
