@@ -8,7 +8,7 @@
       <% else %>
         <%= f.govuk_check_box question_key, key,
           label: { text: val },
-          checked: @case_log[key] == 1,
+          checked: @case_log[key] == "Yes",
           **stimulus_html_attributes(question)
         %>
       <% end %>
