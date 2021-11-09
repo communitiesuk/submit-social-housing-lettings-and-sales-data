@@ -225,7 +225,6 @@ RSpec.describe "Test Features" do
         choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         click_link(text: "Back")
-        expect(page).to have_link(text: "Back")
         click_link(text: "Back")
         expect(page).to have_current_path("/case_logs")
       end
