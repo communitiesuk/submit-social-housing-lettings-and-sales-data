@@ -130,6 +130,8 @@
     "propcode": "123",
     "majorrepairs": "Yes",
     "postcode": "a1",
-    "postcod2": "w3"
+    "postcod2": "w3",
+    "ppostc1": "w3",
+    "ppostc2": "w3"
   }
 }

@@ -11,6 +11,8 @@ class FurtherCoreMigrations < ActiveRecord::Migration[6.1]
     rename_column :case_logs, :outstanding_amount, :tshortfall
     add_column :case_logs, :postcode, :string
     add_column :case_logs, :postcod2, :string
+    add_column :case_logs, :ppostc1, :string
+    add_column :case_logs, :ppostc2, :string
   end
 
   def down
@@ -25,5 +27,7 @@ class FurtherCoreMigrations < ActiveRecord::Migration[6.1]
     rename_column :case_logs, :tshortfall, :outstanding_amount
     remove_column :case_logs, :postcode
     remove_column :case_logs, :postcod2
+    remove_column :case_logs, :ppostc1
+    remove_column :case_logs, :ppostc2
   end
 end

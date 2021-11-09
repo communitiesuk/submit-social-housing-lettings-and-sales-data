@@ -147,6 +147,8 @@ ActiveRecord::Schema.define(version: 2021_11_08_143649) do
     t.string "purchaser_code"
     t.string "postcode"
     t.string "postcod2"
+    t.string "ppostc1"
+    t.string "ppostc2"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

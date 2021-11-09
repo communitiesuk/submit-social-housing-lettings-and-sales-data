@@ -122,6 +122,9 @@ private
     if responses_for_page["property_postcode"].present?
       result["postcode"], result["postcod2"] = get_inferred_postcode(params["case_log"]["property_postcode"])
     end
+    if responses_for_page["previous_postcode"].present?
+      result["ppostc1"], result["ppostc2"] = get_inferred_postcode(params["case_log"]["previous_postcode"])
+    end
     result
   end
 
