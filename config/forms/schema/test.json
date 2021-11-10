@@ -21,61 +21,36 @@
     "sections": {
       "type": "object",
       "patternProperties": {
-        "^[0-9]+$": {
+        "[a-z_\/#]+": {
           "description": "",
-          "type": "string"
-        },
-        "properties": {
-          "label": {
-            "description": "",
-            "type": "string"  
-          },
-          "subsections": {
-            "description": "",
-            "type": "object",
-            "patternProperties": {
-              "^[0-9]+$": {
-                "description": "",
-                "type": "object",
-                "required": ["label"],
-                "properties": {
-                  "label": {
-                    "description": "",
-                    "type": "string"  
-                  },
-                  "pages": {
-                    "type": "object",
-                    "required": ["header"],
-                    "patternProperties": {
-                      "^[0-9]+$": {
-                        "properties": {
-                          "header": {
-                            "description": "",
-                            "type": "string"  
-                          },
-                          "description": {
-                            "description": "",
-                            "type": "string"  
-                          },
-                          "questions": {
-                            "type": "object",
-                            "properties": {
-                              
-                            }
-                          }
-                        }
-                      }
+          "type": "object",
+          "properties": {
+            "label": {
+              "description": "",
+              "type": "string"  
+            },
+            "subsections": {  
+              "type": "object",
+              "patternProperties": {
+                "[a-z_\/#]+": {
+                  "description": "",
+                  "type": "object",
+                  "required": ["label"],
+                  "properties": {
+                    "label": {
+                      "description": "",
+                      "type": "string"
                     }
-                  }
+                  },
+                  "minProperties": 1
                 }
-              },      
-              "additionalProperties": false,
-              "maxProperties": 1,
-              "minProperties": 1
+              }          
             }
-          }
+          },      
+          "minProperties": 2
         }
-      }
+      },
+      "minProperties": 1
     }
   }
 }

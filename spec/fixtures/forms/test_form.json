@@ -9,15 +9,6 @@
         "household_characteristics": {
           "label": "Household characteristics",
           "pages": {
-            "tenant_code": {
-              "questions": {
-                "tenant_code": {
-                  "check_answer_label": "Tenant code",
-                  "header": "What is the tenant code?",
-                  "type": "text"
-                }
-              }
-            }
           }
         }
       }
