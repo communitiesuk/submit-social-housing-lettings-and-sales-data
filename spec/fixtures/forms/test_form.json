@@ -348,7 +348,7 @@
             },
             "housing_benefit": {
               "questions": {
-                "housing_benefit": {
+                "hb": {
                   "check_answer_label": "Universal Credit & Housing Benefit",
                   "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                   "type": "radio",
@@ -494,14 +494,20 @@
                 }
               }
             },
-            "previous_postcode": {
+            "property_postcode": {
               "questions": {
-                "previous_postcode": {
+                "property_postcode": {
                   "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                   "type": "text",
                   "conditional_for": { "faake_key": "fake_condition" }
+                },
+                "previous_postcode": {
+                  "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "type": "text"
                 }
               }
             }

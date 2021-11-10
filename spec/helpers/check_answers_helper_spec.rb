@@ -127,7 +127,7 @@ RSpec.describe CheckAnswersHelper do
       it "returns total questions" do
         result = total_questions(subsection, case_log, form)
         expect(result.class).to eq(Hash)
-        expected_keys = %w[earnings incfreq benefits housing_benefit]
+        expected_keys = %w[earnings incfreq benefits hb]
         expect(result.keys).to eq(expected_keys)
       end
 
