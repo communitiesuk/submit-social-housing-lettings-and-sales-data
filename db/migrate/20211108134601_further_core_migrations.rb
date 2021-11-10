@@ -30,7 +30,6 @@ class FurtherCoreMigrations < ActiveRecord::Migration[6.1]
   def down
     change_table :case_logs, bulk: true do |t|
       t.column :condition_effects_prefer_not_to_say, :integer
-      t.column :condition_effects_prefer_not_to_say, :integer
       t.column :reason_for_leaving_last_settled_home, :string
       t.remove :reason
       t.column :property_reference, :string
