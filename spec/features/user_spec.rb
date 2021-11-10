@@ -36,5 +36,12 @@ RSpec.describe "User Features" do
       click_button("Send email")
       expect(page).to have_content("test@example.com")
     end
+
+    it " is shown the reset password confirmation page even if their email doesn't exist in the system" do
+      visit("/users/password/new")
+      fill_in("user_email", with: "idontexist@example.com")
+      click_button("Send email")
+      expect(page).to have_current_path("/confirmations/reset?email=idontexist%40example.com")
+    end
   end
 end
