@@ -29,5 +29,12 @@ RSpec.describe "User Features" do
       click_button("Send email")
       expect(page).to have_content("Check your email")
     end
+
+    it " is shown their email on the password reset confirmation page" do
+      visit("/users/password/new")
+      fill_in("user_email", with: "test@example.com")
+      click_button("Send email")
+      expect(page).to have_content("test@example.com")
+    end
   end
 end
