@@ -45,6 +45,7 @@
                   },
                   "pages": {
                     "type": "object",
+                    "required": ["header"],
                     "patternProperties": {
                       "^[0-9]+$": {
                         "properties": {
