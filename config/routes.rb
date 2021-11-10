@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { passwords: "users/passwords" }
+  devise_scope :user do
+    get "confirmations/reset", to: "users/passwords#reset_confirmation"
+  end
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
   root to: "test#index"
