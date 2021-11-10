@@ -182,10 +182,6 @@ class BulkUpload
       sale_or_letting: "letting",
       gdpr_acceptance: 1,
       gdpr_declined: 0,
-      # armed_forces_partner: "",
-      # tenant_same_property_renewal: "",
-      # needs_type: "",
-      # purchaser_code: "",
     }
   end
 end
