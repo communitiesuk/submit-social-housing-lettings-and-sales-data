@@ -40,6 +40,41 @@
                     "label": {
                       "description": "",
                       "type": "string"
+                    },
+                    "pages": {  
+                      "type": "object",
+                      "patternProperties": {
+                        "[a-z_\/#]+": {
+                          "description": "",
+                          "type": "object",
+                          "properties": {
+                            "questions": {
+                              "type": "object",
+                              "patternProperties": {
+                                "[a-z_\/#]+": {
+                                  "description": "",
+                                  "type": "object",
+                                  "properties": {
+                                    "check_answer_label": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "header": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "description": "",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "minProperties": 1
+                        }
+                      }          
                     }
                   },
                   "minProperties": 1
