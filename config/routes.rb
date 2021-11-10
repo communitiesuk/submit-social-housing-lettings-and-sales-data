@@ -5,8 +5,11 @@ Rails.application.routes.draw do
   get "about", to: "about#index"
 
   post "/case_logs/:id", to: "case_logs#submit_form", constraints: { id: /\d.+/ }
-  post "/case_logs/bulk_upload", to: "bulk_upload#process_bulk_upload"
-  get "/case_logs/bulk_upload", to: "bulk_upload#show"
+
+  scope :case_logs do
+    post "/bulk_uploads", to: "bulk_upload#bulk_upload"
+    get "/bulk_uploads", to: "bulk_upload#show"
+  end
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
