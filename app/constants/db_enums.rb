@@ -20,7 +20,7 @@ module DbEnums
       "Not seeking work" => 6,
       "Full-time student" => 7,
       "Unable to work because of long term sick or disability" => 8,
-      "Child under 16" => 100,
+      "Child under 16" => 9,
       "Other" => 0,
       "Prefer not to say" => 10,
     }
