@@ -38,6 +38,7 @@ class CaseLog < ApplicationRecord
   include Discard::Model
   include SoftValidations
   include DbEnums
+  require "uk_postcode"
   default_scope -> { kept }
   scope :not_completed, -> { where.not(status: "completed") }
 
@@ -139,25 +140,25 @@ class CaseLog < ApplicationRecord
 
   def postcode
     if property_postcode.present?
-      get_inferred_postcode(property_postcode).outcode
+      UKPostcode.parse(property_postcode).outcode
     end
   end
 
   def postcod2
     if property_postcode.present?
-      get_inferred_postcode(property_postcode).incode
+      UKPostcode.parse(property_postcode).incode
     end
   end
 
   def ppostc1
     if previous_postcode.present?
-      get_inferred_postcode(previous_postcode).outcode
+      UKPostcode.parse(previous_postcode).outcode
     end
   end
 
   def ppostc2
     if previous_postcode.present?
-      get_inferred_postcode(previous_postcode).incode
+      UKPostcode.parse(previous_postcode).incode
     end
   end
 
@@ -168,11 +169,6 @@ class CaseLog < ApplicationRecord
   end
 
 private
-
-  def get_inferred_postcode(postcode)
-    require "uk_postcode"
-    UKPostcode.parse(postcode)
-  end
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
