@@ -137,6 +137,30 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def postcode
+    if property_postcode.present?
+      get_inferred_postcode(property_postcode).outcode
+    end
+  end
+
+  def postcod2
+    if property_postcode.present?
+      get_inferred_postcode(property_postcode).incode
+    end
+  end
+
+  def ppostc1
+    if previous_postcode.present?
+      get_inferred_postcode(previous_postcode).outcode
+    end
+  end
+
+  def ppostc2
+    if previous_postcode.present?
+      get_inferred_postcode(previous_postcode).incode
+    end
+  end
+
   def applicable_income_range
     return unless ecstat1
 
@@ -144,6 +168,11 @@ class CaseLog < ApplicationRecord
   end
 
 private
+
+  def get_inferred_postcode(postcode)
+    require "uk_postcode"
+    UKPostcode.parse(postcode)
+  end
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
