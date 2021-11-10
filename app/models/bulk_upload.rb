@@ -26,7 +26,13 @@ class BulkUpload
     else
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
-        CaseLog.create(map_row(sheet.row(row_num)))
+        case_log = CaseLog.create
+        map_row(sheet.row(row_num)).each do |attr_key, attr_val|
+          begin
+            case_log.update_attribute(attr_key, attr_val)
+          rescue ArgumentError
+          end
+        end
       end
     end
   end
