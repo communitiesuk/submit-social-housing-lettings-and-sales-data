@@ -21,7 +21,7 @@
     "sections": {
       "type": "object",
       "patternProperties": {
-        "[a-z_\/#]+": {
+        "[a-z_]+": {
           "description": "",
           "type": "object",
           "properties": {
@@ -32,7 +32,7 @@
             "subsections": {  
               "type": "object",
               "patternProperties": {
-                "[a-z_\/#]+": {
+                "[a-z_]+": {
                   "description": "",
                   "type": "object",
                   "required": ["label"],
@@ -44,16 +44,25 @@
                     "pages": {  
                       "type": "object",
                       "patternProperties": {
-                        "[a-z_\/#]+": {
+                        "[a-z_]+": {
                           "description": "",
                           "type": "object",
                           "properties": {
+                            "header": {
+                              "description": "",
+                              "type": "string"
+                            },
+                            "description": {
+                              "description": "",
+                              "type": "string"
+                            },
                             "questions": {
                               "type": "object",
                               "patternProperties": {
-                                "[a-z_\/#]+": {
+                                "[a-z_]+": {
                                   "description": "",
                                   "type": "object",
+                                  "required": ["header"],
                                   "properties": {
                                     "check_answer_label": {
                                       "description": "",
@@ -64,6 +73,14 @@
                                       "type": "string"
                                     },
                                     "type": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "hint_text": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "answer_options": {
                                       "description": "",
                                       "type": "string"
                                     }
