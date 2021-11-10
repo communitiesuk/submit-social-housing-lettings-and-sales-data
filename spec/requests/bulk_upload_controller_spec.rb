@@ -45,5 +45,16 @@ RSpec.describe BulkUploadController, type: :request do
         expect(response.body).to match(/Invalid file type/)
       end
     end
+
+    context "given an empty file" do
+      before do
+        @file = fixture_file_upload("2021_22_lettings_bulk_upload_empty.xlsx", "application/vnd.ms-excel")
+        subject
+      end
+
+      it "displays an error message" do
+        expect(response.body).to match(/No data found/)
+      end
+    end
   end
 end
