@@ -23,6 +23,5 @@ Rails.application.routes.draw do
     form.all_subsections.keys.map do |subsection|
       get "#{subsection}/check_answers", to: "case_logs#check_answers"
     end
-
   end
 end

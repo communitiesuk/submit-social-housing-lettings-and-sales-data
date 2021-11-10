@@ -33,10 +33,10 @@ class BulkUpload
 
   def valid_content_type?
     if SPREADSHEET_CONTENT_TYPES.include?(@content_type)
-      return true
+      true
     else
       errors.add(:case_log_bulk_upload, "Invalid file type")
-      return false
+      false
     end
   end
 
@@ -181,7 +181,7 @@ class BulkUpload
       # data_protection: row[132],
       sale_or_letting: "letting",
       gdpr_acceptance: 1,
-      gdpr_declined: 0
+      gdpr_declined: 0,
       # armed_forces_partner: "",
       # tenant_same_property_renewal: "",
       # needs_type: "",
