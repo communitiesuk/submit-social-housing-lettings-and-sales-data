@@ -25,7 +25,7 @@ RSpec.describe "Test Features" do
     click_button("Save and continue")
     choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-housing-benefit-housing-benefit-but-not-universal-credit-field")
+    choose("case-log-hb-housing-benefit-but-not-universal-credit-field")
     click_button("Save and continue")
   end
 
@@ -175,8 +175,8 @@ RSpec.describe "Test Features" do
       end
 
       it "displays number answers in inputs if they are already saved" do
-        visit("/case_logs/#{id}/previous_postcode")
-        expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
+        visit("/case_logs/#{id}/property_postcode")
+        expect(page).to have_field("case-log-property-postcode-field", with: "P0 5ST")
       end
 
       it "displays text answers in inputs if they are already saved" do
