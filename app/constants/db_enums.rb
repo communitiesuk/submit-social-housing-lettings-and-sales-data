@@ -90,7 +90,6 @@ module DbEnums
       "Bulgaria" => 14,
       "Romania" => 15,
       "Ireland" => 17,
-      "Slovakia" => 9,
       "Slovenia" => 10,
       "Croatia" => 16,
       "Other EU Economic Area (EEA country)" => 11,

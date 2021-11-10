@@ -38,7 +38,6 @@ class CaseLog < ApplicationRecord
   include Discard::Model
   include SoftValidations
   include DbEnums
-  require "uk_postcode"
   default_scope -> { kept }
   scope :not_completed, -> { where.not(status: "completed") }
 
