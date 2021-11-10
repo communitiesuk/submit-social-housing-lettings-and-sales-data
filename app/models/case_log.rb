@@ -129,6 +129,8 @@ class CaseLog < ApplicationRecord
   end
 
   def weekly_net_income
+    return unless earnings && incfreq
+
     case incfreq
     when "Weekly"
       earnings
