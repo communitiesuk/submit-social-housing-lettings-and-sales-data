@@ -26,7 +26,7 @@ class BulkUpload
     else
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
-        CaseLog.create!(map_row(sheet.row(row_num)))
+        CaseLog.create(map_row(sheet.row(row_num)))
       end
     end
   end
