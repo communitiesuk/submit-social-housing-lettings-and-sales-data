@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   root to: "test#index"
   get "about", to: "about#index"
 
-  post "/case_logs/:id", to: "case_logs#submit_form", constraints: { id: /\d.+/ }
-
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
@@ -13,6 +11,10 @@ Rails.application.routes.draw do
     collection do
       post "/bulk_uploads", to: "bulk_upload#bulk_upload"
       get "/bulk_uploads", to: "bulk_upload#show"
+    end
+
+    member do
+      post "/form", to: "case_logs#submit_form"
     end
 
     form.all_pages.keys.map do |page|
