@@ -112,7 +112,7 @@
                 }
               }
             },
-            "letting_type": {
+            "rent_type": {
               "header": "About this log",
               "description": "",
               "questions": {
