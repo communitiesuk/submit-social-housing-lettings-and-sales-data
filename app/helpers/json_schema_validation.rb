@@ -28,8 +28,8 @@ begin
     return
   end
 
-  # directories = ["config/forms", "spec/fixtures/forms"]
-  directories = ["config/forms"]
+  directories = ["config/forms", "spec/fixtures/forms"]
+  # directories = ["config/forms"]
 
   get_all_form_paths(directories).each do |path|
     puts path
