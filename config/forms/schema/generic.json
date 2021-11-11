@@ -72,7 +72,12 @@
                                     "type": {
                                       "description": "",
                                       "type": "string"
-                                    }                            
+                                    },
+                                    "check_answer_label": {
+                                      "description": "",
+                                      "type": "string",
+                                      "optional": "true"
+                                    }                           
                                   },
                                   "additionalProperties": {
                                     "hint_text": {
