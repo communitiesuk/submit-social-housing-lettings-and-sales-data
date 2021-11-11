@@ -9,7 +9,7 @@ RSpec.describe "Test Features" do
     tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
     age1: { type: "numeric", answer: 25, path: "person_1_age" },
     sex1: { type: "radio", answer: "Female", path: "person_1_gender" },
-    hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
+    other_hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
   }
 
   def fill_in_number_question(case_log_id, question, value, path)
@@ -265,7 +265,7 @@ RSpec.describe "Test Features" do
 
       let(:last_question_for_subsection) { "household_number_of_other_members" }
       it "redirects to the check answers page when answering the last question and clicking save and continue" do
-        fill_in_number_question(id, "hhmemb", 0, last_question_for_subsection)
+        fill_in_number_question(id, "other_hhmemb", 0, last_question_for_subsection)
         expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
       end
 
