@@ -104,7 +104,7 @@
               "header": "About this log",
               "description": "",
               "questions": {
-                "startdate": {
+                "tenancy_start_date": {
                   "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
@@ -332,7 +332,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "other_hhmemb": {
+                "hhmemb": {
                   "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 7",
@@ -1024,6 +1024,18 @@
                   "header": "What is the tenancy code?",
                   "hint_text": "",
                   "type": "text"
+                }
+              }
+            },
+            "tenancy_start_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "startdate": {
+                  "check_answer_label": "When is the tenancy start date?",
+                  "header": "What is the tenancy start date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
                 }
               }
             },

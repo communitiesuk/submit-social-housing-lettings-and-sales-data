@@ -263,7 +263,7 @@
             "prevten": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
             "ecstat1": "Full-time - 30 hours or more",
-            "other_hhmemb": 7,
+            "hhmemb": 7,
             "relat2": "Partner",
             "age2": 32,
             "sex2": "Male",
@@ -459,7 +459,7 @@
               "Prefer not to say"
             ]
           },
-          "other_hhmemb": {
+          "hhmemb": {
             "type": "number",
             "minimum": 0,
             "maximum": 7
@@ -1052,7 +1052,7 @@
           "prevten",
           "armed_forces",
           "ecstat1",
-          "other_hhmemb",
+          "hhmemb",
           "relat2",
           "age2",
           "sex2",

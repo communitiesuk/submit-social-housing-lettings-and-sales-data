@@ -6,7 +6,7 @@ RSpec.describe CheckAnswersHelper do
     FactoryBot.create(
       :case_log,
       :in_progress,
-      other_hhmemb: 1,
+      hhmemb: 1,
       relat2: "Partner",
     )
   end

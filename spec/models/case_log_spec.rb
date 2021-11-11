@@ -109,7 +109,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(unittype_gn: "Shared bungalow",
                           beds: 8,
-                          other_hhmemb: 1)
+                          hhmemb: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -117,7 +117,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(unittype_gn: "Shared bungalow",
                           beds: 4,
-                          other_hhmemb: 0)
+                          hhmemb: 0)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
