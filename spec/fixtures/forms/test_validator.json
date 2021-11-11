@@ -11,6 +11,7 @@
           "ShouldThrowError": "Shouldn't be here but what you gonna do?",
           "pages": {
             "tenant_code": {
+              "ShouldThrowError": "Shouldn't be here but what you gonna do?",
               "questions": {
                 "tenant_code": {
                   "check_answer_label": "Tenant code",
@@ -19,7 +20,8 @@
                 }
               },
               "conditional_route_to": {"test": "Yes"}
-            }
+            },
+            "conditional_route_to": {"test": "Yes"}
           },
           "person_1_age": {
             "header": "",

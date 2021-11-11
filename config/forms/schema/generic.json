@@ -44,7 +44,7 @@
                     "pages": {  
                       "type": "object",
                       "patternProperties": {
-                        "[a-z_]+": {
+                        "^(?!(conditional_route_to))[a-z_]+$": {
                           "description": "Page Name",
                           "type": "object",
                           "required": ["header", "questions"],
@@ -88,6 +88,10 @@
                                     "check_answer_label": {
                                       "description": "",
                                       "type": "string"
+                                    },
+                                    "conditional_for": {
+                                      "description": "",
+                                      "type": "object"
                                     }
                                   },
                                   "minProperties": 1
