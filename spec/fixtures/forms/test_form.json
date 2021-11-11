@@ -45,7 +45,7 @@
             },
             "household_number_of_other_members": {
               "questions": {
-                "hhmemb": {
+                "other_hhmemb": {
                   "check_answer_label": "Number of Other Household Members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 1",
