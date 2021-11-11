@@ -17,7 +17,8 @@
                   "header": "What is the tenant code?",
                   "type": "text"
                 }
-              }
+              },
+              "conditional_route_to": {"test": "Yes"}
             }
           },
           "person_1_age": {

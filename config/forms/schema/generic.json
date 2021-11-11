@@ -21,69 +21,97 @@
     "sections": {
       "type": "object",
       "patternProperties": {
-        "[a-z_\/#]+": {
-          "description": "",
-          "type": "object"
-        },
-        "properties": {
-          "label": {
-            "description": "",
-            "type": "string"  
-          },
-          "subsections": {
-            "description": "",
-            "type": "object",
-            "patternProperties": {
-              "[a-z_\/#]+": {
-                "description": "",
-                "type": "object",
-                "required": ["label"],
-                "properties": {
-                  "label": {
-                    "description": "",
-                    "type": "string",
-                    "required": "true"  
-                  },
-                  "pages": {
-                    "type": "object",
-                    "required": ["header"],
-                    "patternProperties": {
+        "[a-z_]+": {
+          "description": "Section Name",
+          "type": "object",
+          "properties": {
+            "label": {
+              "description": "",
+              "type": "string"  
+            },
+            "subsections": {  
+              "type": "object",
+              "patternProperties": {
+                "[a-z_]+": {
+                  "description": "SubSection Name",
+                  "type": "object",
+                  "required": ["label"],
+                  "properties": {
+                    "label": {
+                      "description": "",
+                      "type": "string"
+                    },
+                    "pages": {  
                       "type": "object",
-                      "[a-z_]+": {
-                        "properties": {
-                          "header": {
-                            "description": "",
-                            "type": "string"  
-                          },
-                          "description": {
-                            "description": "",
-                            "type": "string"  
-                          },
-                          "questions": {
-                            "type": "object",
-                            "patternProperties": {
+                      "patternProperties": {
+                        "[a-z_]+": {
+                          "description": "Page Name",
+                          "type": "object",
+                          "required": ["header", "questions"],
+                          "properties": {
+                            "header": {
+                              "description": "",
+                              "type": "string"
+                            },
+                            "description": {
+                              "description": "",
+                              "type": "string"
+                            },
+                            "questions": {
                               "type": "object",
-                              "[a-z_]+": {
-                                "properties": {
-                                  "check_answer_label": {
-                                    "type": "string"
-                                  }
+                              "patternProperties": {
+                                "[a-z_]+": {
+                                  "description": "Question Name",
+                                  "type": "object",
+                                  "required": ["header", "type"],
+                                  "properties": {                               
+                                    "header": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "description": "",
+                                      "type": "string"
+                                    }                            
+                                  },
+                                  "additionalProperties": {
+                                    "hint_text": {
+                                      "optional": "true",
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "answer_options": {
+                                      "optional": "true",
+                                      "description": "",
+                                      "type": "object"
+                                    },
+                                    "check_answer_label": {
+                                      "description": "",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "minProperties": 1
                                 }
                               }
-                            },
-                            "minProperties": 8
+                            }
                           },
-                          "minProperties": 8
+                          "additionalProperties": {
+                            "conditional_route_to": {
+                              "description": "",
+                              "type": "object"
+                            }
+                          },               
+                          "minProperties": 1
                         }
-                      }
-                    },
-                    "minProperties": 8
-                  }
+                      }          
+                    }
+                  },
+                  "minProperties": 1
                 }
-              }
-            },      
-            "minProperties": 8
-          }
+              }          
+            }
+          },      
+          "minProperties": 2
         }
       },
       "minProperties": 1
