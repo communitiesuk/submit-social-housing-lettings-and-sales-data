@@ -63,7 +63,7 @@
     "property_building_type": "dummy",
     "beds": 3,
     "property_void_date": "03/11/2019",
-    "property_major_repairs": "Yes",
+    "majorrepairs": "Yes",
     "property_major_repairs_date": "05/05/2020",
     "offered": 2,
     "wchair": "Yes",

@@ -318,7 +318,7 @@
             "property_building_type": "dummy",
             "beds": 3,
             "property_void_date": "03/11/2019",
-            "property_major_repairs": "Yes",
+            "majorrepairs": "Yes",
             "property_major_repairs_date": "05/05/2020",
             "offered": 2,
             "wchair": true,
@@ -871,7 +871,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_major_repairs": {
+          "majorrepairs": {
             "type": "string",
             "minLength": 1
           },
@@ -1107,7 +1107,7 @@
           "property_building_type",
           "beds",
           "property_void_date",
-          "property_major_repairs",
+          "majorrepairs",
           "property_major_repairs_date",
           "offered",
           "wchair",
