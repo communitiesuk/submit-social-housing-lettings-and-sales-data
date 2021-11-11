@@ -181,10 +181,10 @@ RSpec.describe CaseLogsController, type: :controller do
     context "partition date" do
       let(:case_log_with_date) do
         {
-          :"mrcdate(1i)" => "2021",
-          :"mrcdate(2i)" => "05",
-          :"mrcdate(3i)" => "04",
-          :page => "major_repairs_date",
+          "mrcdate(1i)": "2021",
+          "mrcdate(2i)": "05",
+          "mrcdate(3i)": "04",
+          page: "major_repairs_date",
         }
       end
       it "saves full and partial dates" do

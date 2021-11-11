@@ -193,7 +193,11 @@ class CaseLog < ApplicationRecord
     end
   end
 
-
+  def incref
+    if net_income_known == "Prefer not to say"
+      1
+    end
+  end
 
 private
 
@@ -251,6 +255,10 @@ private
       dynamically_not_required << "sex#{n}"
       dynamically_not_required << "relat#{n}"
       dynamically_not_required << "ecstat#{n}"
+    end
+
+    if net_income_known != "Prefer not to say"
+      dynamically_not_required << "incref"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
