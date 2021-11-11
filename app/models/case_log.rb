@@ -169,6 +169,26 @@ class CaseLog < ApplicationRecord
     IncomeRange::ALLOWED[ecstat1.to_sym]
   end
 
+  def mrcday
+    if mrcdate.present?
+      mrcdate.day
+    end
+  end
+
+  def mrcmonth
+    if mrcdate.present?
+      mrcdate.month
+    end
+  end
+
+  def mrcyear
+    if mrcdate.present?
+      mrcdate.year
+    end
+  end
+
+
+
 private
 
   def update_status!

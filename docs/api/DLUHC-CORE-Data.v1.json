@@ -319,7 +319,7 @@
             "beds": 3,
             "property_void_date": "03/11/2019",
             "majorrepairs": "Yes",
-            "property_major_repairs_date": "05/05/2020",
+            "mrcdate": "05/05/2020",
             "offered": 2,
             "wchair": true,
             "earnings": 1000,
@@ -875,7 +875,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_major_repairs_date": {
+          "mrcdate": {
             "type": "string",
             "minLength": 1
           },
@@ -1108,7 +1108,7 @@
           "beds",
           "property_void_date",
           "majorrepairs",
-          "property_major_repairs_date",
+          "mrcdate",
           "offered",
           "wchair",
           "earnings",
