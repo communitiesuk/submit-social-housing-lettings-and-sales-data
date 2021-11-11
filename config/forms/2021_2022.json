@@ -104,7 +104,7 @@
               "header": "About this log",
               "description": "",
               "questions": {
-                "tenancy_start_date": {
+                "startdate": {
                   "check_answer_label": "When is the tenancy start date?",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
@@ -1024,18 +1024,6 @@
                   "header": "What is the tenancy code?",
                   "hint_text": "",
                   "type": "text"
-                }
-              }
-            },
-            "tenancy_start_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "startdate": {
-                  "check_answer_label": "When is the tenancy start date?",
-                  "header": "What is the tenancy start date?",
-                  "hint_text": "For example, 27 3 2007",
-                  "type": "date"
                 }
               }
             },
