@@ -165,6 +165,10 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def hhmemb
+    other_hhmemb.presence
+  end
+
   def applicable_income_range
     return unless ecstat1
 
@@ -189,7 +193,11 @@ class CaseLog < ApplicationRecord
     end
   end
 
-
+  def incref
+    if net_income_known == "Prefer not to say"
+      1
+    end
+  end
 
 private
 
@@ -241,12 +249,16 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    start_range = (hhmemb || 0) + 2
+    start_range = (other_hhmemb || 0) + 2
     (start_range..8).each do |n|
       dynamically_not_required << "age#{n}"
       dynamically_not_required << "sex#{n}"
       dynamically_not_required << "relat#{n}"
       dynamically_not_required << "ecstat#{n}"
+    end
+
+    if net_income_known != "Prefer not to say"
+      dynamically_not_required << "incref"
     end
 
     required.delete_if { |key, _value| dynamically_not_required.include?(key) }
