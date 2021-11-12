@@ -47,7 +47,7 @@ RSpec.describe "User Features" do
     it " is sent a reset password email" do
       visit("/users/password/new")
       fill_in("user_email", with: "test@example.com")
-      expect{click_button("Send email")}.to change{ActionMailer::Base.deliveries.count}.by(1)
+      expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 end

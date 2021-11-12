@@ -44,14 +44,14 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                  465,
-    domain:               'gmail.com',
-    user_name:            ENV["CORE_EMAIL_USERNAME"],
-    password:             ENV["CORE_EMAIL_PASSWORD"],
-    authentication:       'plain',
+    address: "smtp.gmail.com",
+    port: 465,
+    domain: "gmail.com",
+    user_name: ENV["CORE_EMAIL_USERNAME"],
+    password: ENV["CORE_EMAIL_PASSWORD"],
+    authentication: "plain",
     enable_starttls_auto: true,
-    ssl: true
+    ssl: true,
   }
 
   # Print deprecation notices to the Rails logger.
