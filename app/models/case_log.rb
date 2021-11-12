@@ -163,6 +163,12 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def hhmemb
+    if other_hhmemb.present?
+      other_hhmemb
+    end
+  end
+
   def applicable_income_range
     return unless ecstat1
 
@@ -239,7 +245,7 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    start_range = (hhmemb || 0) + 2
+    start_range = (other_hhmemb || 0) + 2
     (start_range..8).each do |n|
       dynamically_not_required << "age#{n}"
       dynamically_not_required << "sex#{n}"
