@@ -163,12 +163,13 @@ Assumptions made by the format:
 ## JSON Form Validation against Schema
 
 To validate the form JSON against the schema you can run:
-`rake form_definition:validate`
+`rake form_definition:validate["config/forms/2021_22.json"]`
 
-This will validate all forms in:
-directories = ["config/forms", "spec/fixtures/forms"]
+This will validate the given form definition against the schema in `config/forms/schema/generic.json`.
 
-against the schema in (config/forms/schema/generic.json)
+You can also run:
+`rake form_definition:validate_all`
+This will validate all forms in directories = ["config/forms", "spec/fixtures/forms"]
 
 ## Useful documentation (external dependencies)
 
