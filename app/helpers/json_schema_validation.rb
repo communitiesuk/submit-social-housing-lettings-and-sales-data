@@ -1,5 +1,5 @@
-require "json-schema"
 require "json"
+require "json-schema"
 
 def get_all_form_paths(directories)
   form_paths = []
@@ -12,7 +12,6 @@ def get_all_form_paths(directories)
 end
 
 begin
-
   path = "config/forms/schema/generic.json"
 
   file = File.open(path)
@@ -35,8 +34,6 @@ begin
     puts path
     file = File.open(path)
     data = JSON.parse(file.read)
-
-    puts JSON::Validator.validate(schema, data, :strict => true)
 
     puts JSON::Validator.fully_validate(schema, data, :strict => true)
 
