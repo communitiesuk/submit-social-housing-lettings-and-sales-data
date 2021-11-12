@@ -29,6 +29,8 @@ gem "discard"
 gem "activeadmin"
 # Admin charts
 gem "chartkick"
+#Json Schema
+gem "json-schema"
 gem "uk_postcode"
 
 group :development, :test do
