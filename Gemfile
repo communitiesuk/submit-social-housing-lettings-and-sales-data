@@ -29,7 +29,7 @@ gem "discard"
 gem "activeadmin"
 # Admin charts
 gem "chartkick"
-#Json Schema
+# Json Schema
 gem "json-schema"
 gem "uk_postcode"
 
