@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: d57c371ee92b16211b80ac7b0b025968438f5297
+  revision: 42a9fe3a2dc9d5e68811ee646f4b9b4349c18b24
   branch: main
   specs:
     rspec-core (3.11.0.pre)
@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-support.git
-  revision: 2a17194b9fc868a4b4a41d7168103dca825c3004
+  revision: 9499cb622f9feef43a53f357809f9e656e7cb6de
   branch: main
   specs:
     rspec-support (3.11.0.pre)
@@ -182,7 +182,7 @@ GEM
       rails (>= 6.0.0)
       stimulus-rails
       turbo-rails
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     inherited_resources (1.13.0)
       actionpack (>= 5.2, < 6.2)
@@ -311,7 +311,7 @@ GEM
       rubocop-rails (= 2.12.2)
       rubocop-rake (= 0.6.0)
       rubocop-rspec (= 2.4.0)
-    rubocop-performance (1.11.5)
+    rubocop-performance (1.12.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.12.2)
@@ -360,6 +360,7 @@ GEM
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    uk_postcode (2.1.6)
     unicode-display_width (2.1.0)
     view_component (2.39.0)
       activesupport (>= 5.0.0, < 8.0)
@@ -420,6 +421,7 @@ DEPENDENCIES
   selenium-webdriver
   simplecov
   tzinfo-data
+  uk_postcode
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
 

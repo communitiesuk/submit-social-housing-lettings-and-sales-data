@@ -6,26 +6,26 @@ RSpec.describe "Test Features" do
   let(:status) { case_log.status }
 
   question_answers = {
-    tenant_code: { type: "text", answer: "BZ737" },
-    person_1_age: { type: "numeric", answer: 25 },
-    person_1_gender: { type: "radio", answer: "Female" },
-    household_number_of_other_members: { type: "numeric", answer: 2 },
+    tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
+    age1: { type: "numeric", answer: 25, path: "person_1_age" },
+    sex1: { type: "radio", answer: "Female", path: "person_1_gender" },
+    other_hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
   }
 
-  def fill_in_number_question(case_log_id, question, value)
-    visit("/case_logs/#{case_log_id}/#{question}")
+  def fill_in_number_question(case_log_id, question, value, path)
+    visit("/case_logs/#{case_log_id}/#{path}")
     fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
     click_button("Save and continue")
   end
 
   def answer_all_questions_in_income_subsection
     visit("/case_logs/#{empty_case_log.id}/net_income")
-    fill_in("case-log-net-income-field", with: 18_000)
-    choose("case-log-net-income-frequency-yearly-field")
+    fill_in("case-log-earnings-field", with: 18_000)
+    choose("case-log-incfreq-yearly-field")
     click_button("Save and continue")
-    choose("case-log-net-income-uc-proportion-all-field")
+    choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-housing-benefit-housing-benefit-but-not-universal-credit-field")
+    choose("case-log-hb-housing-benefit-but-not-universal-credit-field")
     click_button("Save and continue")
   end
 
@@ -84,65 +84,66 @@ RSpec.describe "Test Features" do
       let(:case_log_with_checkbox_questions_answered) do
         FactoryBot.create(
           :case_log, :in_progress,
-          accessibility_requirements_fully_wheelchair_accessible_housing: true,
-          accessibility_requirements_level_access_housing: true
+          housingneeds_a: "Yes",
+          housingneeds_c: "Yes"
         )
       end
 
       context "Validate pregnancy questions" do
         it "Cannot answer yes if no female tenants" do
           expect {
-            CaseLog.create!(pregnancy: "Yes",
-                            person_1_gender: "Male",
-                            person_1_age: 20)
+            CaseLog.create!(preg_occ: "Yes",
+                            sex1: "Male",
+                            age1: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer yes if no female tenants within age range" do
           expect {
-            CaseLog.create!(pregnancy: "Yes",
-                            person_1_gender: "Female",
-                            person_1_age: 51)
+            CaseLog.create!(preg_occ: "Yes",
+                            sex1: "Female",
+                            age1: 51)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Cannot answer prefer not to say if no valid tenants" do
           expect {
-            CaseLog.create!(pregnancy: "Prefer not to say",
-                            person_1_gender: "Male",
-                            person_1_age: 20)
+            CaseLog.create!(preg_occ: "Prefer not to say",
+                            sex1: "Male",
+                            age1: 20)
           }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
         it "Can answer yes if valid tenants" do
           expect {
-            CaseLog.create!(pregnancy: "Yes",
-                            person_1_gender: "Female",
-                            person_1_age: 20)
+            CaseLog.create!(preg_occ: "Yes",
+                            sex1: "Female",
+                            age1: 20)
           }.not_to raise_error
         end
 
         it "Can answer yes if valid second tenant" do
           expect {
-            CaseLog.create!(pregnancy: "Yes",
-                            person_1_gender: "Male", person_1_age: 99,
-                            person_2_gender: "Female",
-                            person_2_age: 20)
+            CaseLog.create!(preg_occ: "Yes",
+                            sex1: "Male", age1: 99,
+                            sex2: "Female",
+                            age2: 20)
           }.not_to raise_error
         end
       end
 
       it "can be accessed by url" do
         visit("/case_logs/#{id}/person_1_age")
-        expect(page).to have_field("case-log-person-1-age-field")
+        expect(page).to have_field("case-log-age1-field")
       end
 
       it "updates model attributes correctly for each question" do
         question_answers.each do |question, hsh|
           type = hsh[:type]
           answer = hsh[:answer]
+          path = hsh[:path]
           original_value = case_log.send(question)
-          visit("/case_logs/#{id}/#{question}")
+          visit("/case_logs/#{id}/#{path}")
           case type
           when "text"
             fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
@@ -160,42 +161,42 @@ RSpec.describe "Test Features" do
       it "updates total value of the rent", js: true do
         visit("/case_logs/#{id}/rent")
 
-        fill_in("case-log-basic-rent-field", with: 3)
-        expect(page).to have_field("case-log-total-charge-field", with: "3")
+        fill_in("case-log-brent-field", with: 3)
+        expect(page).to have_field("case-log-tcharge-field", with: "3")
 
-        fill_in("case-log-service-charge-field", with: 2)
-        expect(page).to have_field("case-log-total-charge-field", with: "5")
+        fill_in("case-log-scharge-field", with: 2)
+        expect(page).to have_field("case-log-tcharge-field", with: "5")
 
-        fill_in("case-log-personal-service-charge-field", with: 1)
-        expect(page).to have_field("case-log-total-charge-field", with: "6")
+        fill_in("case-log-pscharge-field", with: 1)
+        expect(page).to have_field("case-log-tcharge-field", with: "6")
 
-        fill_in("case-log-support-charge-field", with: 4)
-        expect(page).to have_field("case-log-total-charge-field", with: "10")
+        fill_in("case-log-supcharg-field", with: 4)
+        expect(page).to have_field("case-log-tcharge-field", with: "10")
       end
 
       it "displays number answers in inputs if they are already saved" do
-        visit("/case_logs/#{id}/previous_postcode")
-        expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
+        visit("/case_logs/#{id}/property_postcode")
+        expect(page).to have_field("case-log-property-postcode-field", with: "P0 5ST")
       end
 
       it "displays text answers in inputs if they are already saved" do
         visit("/case_logs/#{id}/person_1_age")
-        expect(page).to have_field("case-log-person-1-age-field", with: "18")
+        expect(page).to have_field("case-log-age1-field", with: "17")
       end
 
       it "displays checkbox answers in inputs if they are already saved" do
         visit("/case_logs/#{case_log_with_checkbox_questions_answered.id}/accessibility_requirements")
         # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
         expect(page).to have_checked_field(
-          "case-log-accessibility-requirements-accessibility-requirements-fully-wheelchair-accessible-housing-field",
+          "case-log-accessibility-requirements-housingneeds-a-field",
           visible: false,
         )
         expect(page).to have_unchecked_field(
-          "case-log-accessibility-requirements-accessibility-requirements-wheelchair-access-to-essential-rooms-field",
+          "case-log-accessibility-requirements-housingneeds-b-field",
           visible: false,
         )
         expect(page).to have_checked_field(
-          "case-log-accessibility-requirements-accessibility-requirements-level-access-housing-field",
+          "case-log-accessibility-requirements-housingneeds-c-field",
           visible: false,
         )
       end
@@ -216,13 +217,24 @@ RSpec.describe "Test Features" do
         click_link(text: "Back")
         expect(page).to have_field("case-log-tenant-code-field")
       end
+
+      it "doesn't get stuck in infinite loops", js: true do
+        visit("/case_logs")
+        visit("/case_logs/#{id}/net_income")
+        fill_in("case-log-earnings-field", with: 740)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        click_button("Save and continue")
+        click_link(text: "Back")
+        click_link(text: "Back")
+        expect(page).to have_current_path("/case_logs")
+      end
     end
   end
 
   describe "Form flow is correct" do
     context "given an ordered list of pages" do
       it "leads to the next one in the correct order" do
-        pages = question_answers.keys
+        pages = question_answers.map { |_key, val| val[:path] }
         pages[0..-2].each_with_index do |val, index|
           visit("/case_logs/#{id}/#{val}")
           click_button("Save and continue")
@@ -230,7 +242,7 @@ RSpec.describe "Test Features" do
         end
       end
 
-      context "when changing an answer from the check answers page" do
+      context "when changing an answer from the check answers page", js: true do
         it "the back button routes correctly" do
           visit("/case_logs/#{id}/household_characteristics/check_answers")
           first("a", text: /Answer/).click
@@ -253,7 +265,7 @@ RSpec.describe "Test Features" do
 
       let(:last_question_for_subsection) { "household_number_of_other_members" }
       it "redirects to the check answers page when answering the last question and clicking save and continue" do
-        fill_in_number_question(id, last_question_for_subsection, 0)
+        fill_in_number_question(id, "other_hhmemb", 0, last_question_for_subsection)
         expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
       end
 
@@ -266,8 +278,8 @@ RSpec.describe "Test Features" do
       end
 
       it "should display answers given by the user for the question in the subsection" do
-        fill_in_number_question(empty_case_log.id, "person_1_age", 28)
-        choose("case-log-person-1-gender-non-binary-field")
+        fill_in_number_question(empty_case_log.id, "age1", 28, "person_1_age")
+        choose("case-log-sex1-non-binary-field")
         click_button("Save and continue")
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("28")
@@ -282,7 +294,7 @@ RSpec.describe "Test Features" do
       end
 
       it "should have a change link for answered questions" do
-        fill_in_number_question(empty_case_log.id, "person_1_age", 28)
+        fill_in_number_question(empty_case_log.id, "age1", 28, "person_1_age")
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         assert_selector "a", text: /Answer\z/, count: 3
         assert_selector "a", text: "Change", count: 1
@@ -296,7 +308,7 @@ RSpec.describe "Test Features" do
       end
 
       it "should have a link pointing to the next empty question if some questions are answered" do
-        fill_in_number_question(empty_case_log.id, "net_income", 18_000)
+        fill_in_number_question(empty_case_log.id, "earnings", 18_000, "net_income")
 
         visit("/case_logs/#{empty_case_log.id}/income_and_benefits/check_answers")
         expect(page).to have_content("You answered 1 of 4 questions")
@@ -324,7 +336,7 @@ RSpec.describe "Test Features" do
 
       it "displays conditional question that were visited" do
         visit("/case_logs/#{id}/conditional_question")
-        choose("case-log-pregnancy-no-field")
+        choose("case-log-preg-occ-no-field")
         click_button("Save and continue")
         visit("/case_logs/#{id}/#{conditional_subsection}/check_answers")
         question_labels = ["Has the condition been met?", "Has the condition not been met?"]
@@ -351,13 +363,13 @@ RSpec.describe "Test Features" do
         visit("/case_logs/#{id}/armed_forces")
         # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
         choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
-        expect(page).to have_selector("#armed_forces_injured_div")
-        choose("case-log-armed-forces-injured-no-field", allow_label_click: true)
-        expect(page).to have_checked_field("case-log-armed-forces-injured-no-field", visible: false)
+        expect(page).to have_selector("#reservist_div")
+        choose("case-log-reservist-no-field", allow_label_click: true)
+        expect(page).to have_checked_field("case-log-reservist-no-field", visible: false)
         choose("case-log-armed-forces-no-field", allow_label_click: true)
-        expect(page).not_to have_selector("#armed_forces_injured_div")
+        expect(page).not_to have_selector("#reservist_div")
         choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
-        expect(page).to have_unchecked_field("case-log-armed-forces-injured-no-field", visible: false)
+        expect(page).to have_unchecked_field("case-log-reservist-no-field", visible: false)
       end
     end
   end
@@ -366,32 +378,32 @@ RSpec.describe "Test Features" do
     context "given an invalid tenant age" do
       it " of less than 0 it shows validation" do
         visit("/case_logs/#{id}/person_1_age")
-        fill_in_number_question(empty_case_log.id, "person_1_age", -5)
+        fill_in_number_question(empty_case_log.id, "age1", -5, "person_1_age")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-person-1-age-error")
-        expect(page).to have_selector("#case-log-person-1-age-field-error")
+        expect(page).to have_selector("#case-log-age1-error")
+        expect(page).to have_selector("#case-log-age1-field-error")
       end
 
       it " of greater than 120 it shows validation" do
         visit("/case_logs/#{id}/person_1_age")
-        fill_in_number_question(empty_case_log.id, "person_1_age", 121)
+        fill_in_number_question(empty_case_log.id, "age1", 121, "person_1_age")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-person-1-age-error")
-        expect(page).to have_selector("#case-log-person-1-age-field-error")
+        expect(page).to have_selector("#case-log-age1-error")
+        expect(page).to have_selector("#case-log-age1-field-error")
       end
     end
   end
 
   describe "Soft Validation" do
     context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
-      let!(:case_log) { FactoryBot.create(:case_log, :in_progress, person_1_economic_status: "Full-time - 30 hours or more") }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, ecstat1: "Full-time - 30 hours or more") }
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 
-      it "prompts the user to confirm the value is correct" do
+      it "prompts the user to confirm the value is correct", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_content("Are you sure this is correct?")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
@@ -401,10 +413,10 @@ RSpec.describe "Test Features" do
 
       it "does not require confirming the value if the value is amended" do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
-        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         expect(page).to have_current_path("/case_logs/#{case_log.id}/net_income_uc_proportion")
         case_log.reload
@@ -413,19 +425,19 @@ RSpec.describe "Test Features" do
 
       it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
-        fill_in("case-log-net-income-field", with: income_under_soft_limit)
+        fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         click_link(text: "Back")
-        expect(page).not_to have_content("Are you sure this is correct?")
+        expect(page).to have_no_content("Are you sure this is correct?")
       end
 
       it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
         visit("/case_logs/#{case_log.id}/net_income")
-        fill_in("case-log-net-income-field", with: income_over_soft_limit)
-        choose("case-log-net-income-frequency-weekly-field", allow_label_click: true)
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-weekly-field", allow_label_click: true)
         click_button("Save and continue")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
         click_button("Save and continue")
@@ -442,19 +454,21 @@ RSpec.describe "Test Features" do
 
     it "can route the user to a different page based on their answer on the current page" do
       visit("case_logs/#{id}/conditional_question")
-      choose("case-log-pregnancy-yes-field", allow_label_click: true)
+      # using a question name that is already in the db to avoid
+      # having to add a new column to the db for this test
+      choose("case-log-preg-occ-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_yes_page")
       click_link(text: "Back")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question")
-      choose("case-log-pregnancy-no-field", allow_label_click: true)
+      choose("case-log-preg-occ-no-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
     end
 
     it "can route based on page inclusion rules" do
       visit("/case_logs/#{id}/conditional_question_yes_page")
-      choose("case-log-cbl-letting-yes-field", allow_label_click: true)
+      choose("case-log-cbl-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
@@ -467,10 +481,10 @@ RSpec.describe "Test Features" do
 
     it "can route based on multiple conditions" do
       visit("/case_logs/#{id}/person_1_gender")
-      choose("case-log-person-1-gender-female-field", allow_label_click: true)
+      choose("case-log-sex1-female-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/case_logs/#{id}/conditional_question")
-      choose("case-log-pregnancy-yes-field", allow_label_click: true)
+      choose("case-log-preg-occ-yes-field", allow_label_click: true)
       click_button("Save and continue")
       expect(page).to have_current_path("/case_logs/#{id}/rent")
     end

@@ -103,11 +103,17 @@ private
     form = FormHandler.instance.get_form("2021_2022")
     form.expected_responses_for_page(page).each_with_object({}) do |(question_key, question_info), result|
       question_params = params["case_log"][question_key]
+      if question_info["type"] == "date"
+        day = params["case_log"]["#{question_key}(3i)"]
+        month = params["case_log"]["#{question_key}(2i)"]
+        year = params["case_log"]["#{question_key}(1i)"]
+        result[question_key] = Date.new(year.to_i, month.to_i, day.to_i)
+      end
       next unless question_params
 
-      if question_info["type"] == "checkbox"
+      if %w[checkbox validation_override].include?(question_info["type"])
         question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
-          result[option] = question_params.include?(option)
+          result[option] = question_params.include?(option) ? 1 : 0
         end
       else
         result[question_key] = question_params

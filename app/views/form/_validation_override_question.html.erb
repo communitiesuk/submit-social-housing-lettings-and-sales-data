@@ -1,11 +1,15 @@
-<div class="govuk-form-group govuk-form-group--error">
-  <%= f.govuk_check_boxes_fieldset @case_log.soft_errors.keys.first,
-      legend: { text: @case_log.soft_errors.values.first.message, size: "l" },
-      hint: { text: @case_log.soft_errors.values.first.hint_text } do %>
+<div class="govuk-form-group govuk-form-group--error"
+     data-controller="soft-validations"
+     data-soft-validations-target="override"
+     style='display:none;'>
 
-      <%= f.govuk_check_box @case_log.soft_errors.keys.first, @case_log.soft_errors.keys.first,
+  <%= f.govuk_check_boxes_fieldset page_info["soft_validations"]&.keys&.first,
+      legend: { text: "soft-validations-placeholder-message", size: "l" },
+      hint: { text: "soft-validations-placeholder-hint-text" } do %>
+
+      <%= f.govuk_check_box page_info["soft_validations"]&.keys&.first, page_info["soft_validations"]&.keys&.first,
         label: { text: "Yes" },
-        checked: f.object.send(@case_log.soft_errors.keys.first)
+        checked: @case_log[page_info["soft_validations"]&.keys&.first] == "Yes"
       %>
   <% end %>
 </div>

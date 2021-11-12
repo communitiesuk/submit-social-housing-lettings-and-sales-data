@@ -39,7 +39,7 @@ RSpec.describe Form, type: :model do
     it "returns all questions for subsection" do
       result = form.questions_for_subsection(subsection)
       expect(result.length).to eq(4)
-      expect(result.keys).to eq(%w[net_income net_income_frequency net_income_uc_proportion housing_benefit])
+      expect(result.keys).to eq(%w[earnings incfreq benefits hb])
     end
   end
 end

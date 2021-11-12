@@ -49,15 +49,15 @@ RSpec.describe CaseLogsController, type: :controller do
     let(:id) { case_log.id }
     let(:case_log_form_params) do
       { accessibility_requirements:
-                             %w[ accessibility_requirements_fully_wheelchair_accessible_housing
-                                 accessibility_requirements_wheelchair_access_to_essential_rooms
-                                 accessibility_requirements_level_access_housing],
+                             %w[ housingneeds_a
+                                 housingneeds_b
+                                 housingneeds_c],
         page: "accessibility_requirements" }
     end
 
     let(:new_case_log_form_params) do
       {
-        accessibility_requirements: %w[accessibility_requirements_level_access_housing],
+        accessibility_requirements: %w[housingneeds_c],
         page: "accessibility_requirements",
       }
     end
@@ -66,27 +66,27 @@ RSpec.describe CaseLogsController, type: :controller do
       post :submit_form, params: { id: id, case_log: case_log_form_params }
       case_log.reload
 
-      expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(true)
-      expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(true)
-      expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+      expect(case_log.housingneeds_a).to eq("Yes")
+      expect(case_log.housingneeds_b).to eq("Yes")
+      expect(case_log.housingneeds_c).to eq("Yes")
     end
 
     it "sets previously submitted items to false when resubmitted with new values" do
       post :submit_form, params: { id: id, case_log: new_case_log_form_params }
       case_log.reload
 
-      expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(false)
-      expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(false)
-      expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+      expect(case_log.housingneeds_a).to eq("No")
+      expect(case_log.housingneeds_b).to eq("No")
+      expect(case_log.housingneeds_c).to eq("Yes")
     end
 
     context "given a page with checkbox and non-checkbox questions" do
       let(:tenant_code) { "BZ355" }
       let(:case_log_form_params) do
         { accessibility_requirements:
-                               %w[ accessibility_requirements_fully_wheelchair_accessible_housing
-                                   accessibility_requirements_wheelchair_access_to_essential_rooms
-                                   accessibility_requirements_level_access_housing],
+                               %w[ housingneeds_a
+                                   housingneeds_b
+                                   housingneeds_c],
           tenant_code: tenant_code,
           page: "accessibility_requirements" }
       end
@@ -95,13 +95,13 @@ RSpec.describe CaseLogsController, type: :controller do
           {
             "type" => "checkbox",
             "answer_options" =>
-            { "accessibility_requirements_fully_wheelchair_accessible_housing" => "Fully wheelchair accessible housing",
-              "accessibility_requirements_wheelchair_access_to_essential_rooms" => "Wheelchair access to essential rooms",
-              "accessibility_requirements_level_access_housing" => "Level access housing",
-              "accessibility_requirements_other_disability_requirements" => "Other disability requirements",
-              "accessibility_requirements_no_disability_requirements" => "No disability requirements",
+            { "housingneeds_a" => "Fully wheelchair accessible housing",
+              "housingneeds_b" => "Wheelchair access to essential rooms",
+              "housingneeds_c" => "Level access housing",
+              "housingneeds_f" => "Other disability requirements",
+              "housingneeds_g" => "No disability requirements",
               "divider_a" => true,
-              "accessibility_requirements_do_not_know" => "Do not know",
+              "housingneeds_h" => "Do not know",
               "divider_b" => true,
               "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
           },
@@ -116,9 +116,9 @@ RSpec.describe CaseLogsController, type: :controller do
         post :submit_form, params: { id: id, case_log: case_log_form_params }
         case_log.reload
 
-        expect(case_log.accessibility_requirements_fully_wheelchair_accessible_housing).to eq(true)
-        expect(case_log.accessibility_requirements_wheelchair_access_to_essential_rooms).to eq(true)
-        expect(case_log.accessibility_requirements_level_access_housing).to eq(true)
+        expect(case_log.housingneeds_a).to eq("Yes")
+        expect(case_log.housingneeds_b).to eq("Yes")
+        expect(case_log.housingneeds_c).to eq("Yes")
         expect(case_log.tenant_code).to eq(tenant_code)
       end
     end
@@ -130,14 +130,14 @@ RSpec.describe CaseLogsController, type: :controller do
 
       let(:case_log_form_conditional_question_yes_params) do
         {
-          pregnancy: "Yes",
+          preg_occ: "Yes",
           page: "conditional_question",
         }
       end
 
       let(:case_log_form_conditional_question_no_params) do
         {
-          pregnancy: "No",
+          preg_occ: "No",
           page: "conditional_question",
         }
       end
@@ -148,6 +148,55 @@ RSpec.describe CaseLogsController, type: :controller do
 
         post :submit_form, params: { id: id, case_log: case_log_form_conditional_question_no_params }
         expect(response).to redirect_to("/case_logs/#{id}/conditional_question_no_page")
+      end
+    end
+
+    context "partition postcode" do
+      let(:case_log_with_postcode) do
+        {
+          property_postcode: "M1 1AE",
+          previous_postcode: "M2 2AE",
+          page: "property_postcode",
+        }
+      end
+      it "saves full and partial postcodes" do
+        post :submit_form, params: { id: id, case_log: case_log_with_postcode }
+        case_log.reload
+
+        expect(case_log.property_postcode).to eq("M1 1AE")
+        expect(case_log.postcode).to eq("M1")
+        expect(case_log.postcod2).to eq("1AE")
+      end
+
+      it "saves full and partial previous postcodes" do
+        post :submit_form, params: { id: id, case_log: case_log_with_postcode }
+        case_log.reload
+
+        expect(case_log.previous_postcode).to eq("M2 2AE")
+        expect(case_log.ppostc1).to eq("M2")
+        expect(case_log.ppostc2).to eq("2AE")
+      end
+    end
+
+    context "partition date" do
+      let(:case_log_with_date) do
+        {
+          "mrcdate(1i)": "2021",
+          "mrcdate(2i)": "05",
+          "mrcdate(3i)": "04",
+          page: "major_repairs_date",
+        }
+      end
+      it "saves full and partial dates" do
+        post :submit_form, params: { id: id, case_log: case_log_with_date }
+        case_log.reload
+
+        expect(case_log.mrcdate.day).to eq(4)
+        expect(case_log.mrcdate.month).to eq(5)
+        expect(case_log.mrcdate.year).to eq(2021)
+        expect(case_log.mrcday).to eq(4)
+        expect(case_log.mrcmonth).to eq(5)
+        expect(case_log.mrcyear).to eq(2021)
       end
     end
   end
@@ -170,7 +219,7 @@ RSpec.describe CaseLogsController, type: :controller do
 
     it "returns a correct page path if there is conditional routing" do
       responses_for_page = {}
-      responses_for_page["pregnancy"] = "No"
+      responses_for_page["preg_occ"] = "No"
       expect(case_log_controller.send(:get_next_page_path, form, previous_conditional_page, responses_for_page)).to eq("case_log_conditional_question_no_page_path")
     end
   end
