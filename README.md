@@ -166,7 +166,7 @@ To validate the form JSON against the schema you can run:
 `rake form_definition:validate`
 
 This will run:
-`ruby app/helpers/json_schema_validation.rb`
+`ruby lib/tasks/json_schema_validation.rb`
 
 This will validate all forms in:
 directories = ["config/forms", "spec/fixtures/forms"]
