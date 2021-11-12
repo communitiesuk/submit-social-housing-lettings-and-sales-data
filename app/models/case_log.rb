@@ -164,9 +164,7 @@ class CaseLog < ApplicationRecord
   end
 
   def hhmemb
-    if other_hhmemb.present?
-      other_hhmemb
-    end
+    other_hhmemb.presence
   end
 
   def applicable_income_range
