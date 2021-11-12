@@ -177,6 +177,28 @@ RSpec.describe CaseLogsController, type: :controller do
         expect(case_log.ppostc2).to eq("2AE")
       end
     end
+
+    context "partition date" do
+      let(:case_log_with_date) do
+        {
+          :"mrcdate(1i)" => "2021",
+          :"mrcdate(2i)" => "05",
+          :"mrcdate(3i)" => "04",
+          :page => "major_repairs_date",
+        }
+      end
+      it "saves full and partial dates" do
+        post :submit_form, params: { id: id, case_log: case_log_with_date }
+        case_log.reload
+
+        expect(case_log.mrcdate.day).to eq(4)
+        expect(case_log.mrcdate.month).to eq(5)
+        expect(case_log.mrcdate.year).to eq(2021)
+        expect(case_log.mrcday).to eq(4)
+        expect(case_log.mrcmonth).to eq(5)
+        expect(case_log.mrcyear).to eq(2021)
+      end
+    end
   end
 
   describe "get_next_page_path" do

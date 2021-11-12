@@ -112,7 +112,7 @@
                 }
               }
             },
-            "letting_type": {
+            "rent_type": {
               "header": "About this log",
               "description": "",
               "questions": {
@@ -1585,10 +1585,10 @@
                     "1": "No"
                   },
                   "conditional_for": {
-                    "property_major_repairs_date": ["Yes"]
+                    "mrcdate": ["Yes"]
                   }
                 },
-                "property_major_repairs_date": {
+                "mrcdate": {
                   "check_answer_label": "What was the major repairs completion date?",
                   "header": "What was the major repairs completion date?",
                   "hint_text": "For example, 27 3 2007",
