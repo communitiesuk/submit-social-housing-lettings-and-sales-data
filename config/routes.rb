@@ -9,8 +9,8 @@ Rails.application.routes.draw do
 
   resources :case_logs do
     collection do
-      post "/bulk_uploads", to: "bulk_upload#bulk_upload"
-      get "/bulk_uploads", to: "bulk_upload#show"
+      post "/bulk_upload", to: "bulk_upload#bulk_upload"
+      get "/bulk_upload", to: "bulk_upload#show"
     end
 
     member do

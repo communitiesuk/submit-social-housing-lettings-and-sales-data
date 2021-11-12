@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BulkUploadController, type: :request do
-  let(:url) { "/case_logs/bulk_uploads" }
+  let(:url) { "/case_logs/bulk_upload" }
 
   describe "GET #show" do
     before do
