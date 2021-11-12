@@ -120,6 +120,7 @@ The JSON should follow the structure:
                 "[snake_case_question_name_string]": {
                   "header": String,
                   "hint_text": String,
+                  "check_answer_label": String,
                   "type": "text" / "numeric" / "radio" / "checkbox" / "date",
                   "min": Integer, // numeric only
                   "max": Integer, // numeric only
@@ -133,6 +134,10 @@ The JSON should follow the structure:
                     "[snake_case_question_to_enable_2_name_string]": ["condition-that-enables"]
                   }
                 }
+              },
+              "conditional_route_to": {
+                "[page_name_to_route_to]": {"question_name": "expected_answer"},
+                "[page_name_to_route_to]": {"question_name": "expected_answer"}
               }
             }
           }
@@ -154,6 +159,16 @@ Assumptions made by the format:
 - For conditionally shown questions conditions that have been implemented and can be used are:
   - Radio question answer option selected matches one of conditional e.g. ["answer-options-1-string", "answer-option-3-string"]
   - Numeric question value matches condition e.g. [">2"], ["<7"] or ["== 6"]
+
+## JSON Form Validation against Schema
+
+To validate the form JSON against the schema you can run:
+`ruby app/helpers/json_schema_validation.rb`
+
+This will validate all forms in:
+directories = ["config/forms", "spec/fixtures/forms"]
+
+against the schema in (config/forms/schema/generic.json)
 
 ## Useful documentation (external dependencies)
 
