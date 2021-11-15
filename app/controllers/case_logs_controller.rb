@@ -107,6 +107,8 @@ private
         day = params["case_log"]["#{question_key}(3i)"]
         month = params["case_log"]["#{question_key}(2i)"]
         year = params["case_log"]["#{question_key}(1i)"]
+        next unless day.present? && month.present? && year.present?
+
         result[question_key] = Date.new(year.to_i, month.to_i, day.to_i)
       end
       next unless question_params
