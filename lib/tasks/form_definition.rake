@@ -15,7 +15,6 @@ namespace :form_definition do
   desc "Validate JSON against Generic Form Schema"
 
   task validate_all: :environment do
-
     directories = ["config/forms", "spec/fixtures/forms"]
     paths = get_all_form_paths(directories)
 
@@ -26,7 +25,6 @@ namespace :form_definition do
   end
 
   task :validate, %i[path] => :environment do |_task, args|
-
     puts args
 
     path = Rails.root.join("config/forms/schema/generic.json")
@@ -36,11 +34,13 @@ namespace :form_definition do
 
     puts path
 
+    binding.pry
+
     if JSON::Validator.validate(meta_schema, schema)
-        puts "Schema Definition is Valid"
-      else
-        puts "Schema Definition in #{path} is not valid against draft4 json schema."
-        return
+      puts "Schema Definition is Valid"
+    else
+      puts "Schema Definition in #{path} is not valid against draft4 json schema."
+      next
     end
 
     path = Rails.root.join(args.path)

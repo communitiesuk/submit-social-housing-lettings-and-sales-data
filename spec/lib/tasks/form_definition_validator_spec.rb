@@ -22,11 +22,12 @@ describe "rake form_definition:validate", type: :task do
   before do
     Rake.application.rake_require("tasks/form_definition")
     Rake::Task.define_task(:environment)
+    allow(JSON::Validator).to receive(:validate).and_return(true)
     task.reenable
   end
 
   it "runs the validate task for the given form definition" do
-    expect(JSON::Validator).to receive(:validate!).at_least(1).time
+    expect(JSON::Validator).to receive(:validate!).at_least(2).times
     task.invoke("config/forms/2021_2022.json")
   end
 end
