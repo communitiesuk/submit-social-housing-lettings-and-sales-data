@@ -31,6 +31,8 @@ gem "activeadmin"
 gem "chartkick"
 # Spreadsheet parsing
 gem "roo"
+# Json Schema
+gem "json-schema"
 gem "uk_postcode"
 
 group :development, :test do
