@@ -27,7 +27,7 @@ describe "rake form_definition:validate", type: :task do
   end
 
   it "runs the validate task for the given form definition" do
-    expect(JSON::Validator).to receive(:validate!).at_least(2).times
+    expect(JSON::Validator).to receive(:validate!).at_least(1).time
     task.invoke("config/forms/2021_2022.json")
   end
 end
