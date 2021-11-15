@@ -182,39 +182,39 @@ RSpec.describe Form, type: :model do
 
       it "Must be completed and between 2 and 99 if type of tenancy is Assured shorthold" do
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+          CaseLog.create!(tenancy: "Assured Shorthold",
                           tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+          CaseLog.create!(tenancy: "Assured Shorthold",
                           tenancylength: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Assured Shorthold Tenancy (AST)",
+          CaseLog.create!(tenancy: "Assured Shorthold",
                           tenancylength: 2)
         }.not_to raise_error
       end
 
       it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancylength: 100)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancylength: nil)
         }.not_to raise_error
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancylength: 2)
         }.not_to raise_error
       end
@@ -294,12 +294,12 @@ RSpec.describe Form, type: :model do
 
       it "must not be provided if tenancy type is not other" do
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancyother: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(tenancy: "Fixed term – Secure",
+          CaseLog.create!(tenancy: "Secure (including flexible)",
                           tenancyother: nil)
         }.not_to raise_error
       end
