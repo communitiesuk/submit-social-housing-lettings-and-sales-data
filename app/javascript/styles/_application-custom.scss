@@ -1,21 +1,18 @@
-.a:link,
-.govuk-link:link {
+.a,
+.govuk-link {
   color: #1d70b8;
-}
-
-.a:visited
-.govuk-link:visited {
-  color: #4c2c92;;
-}
-
-.a:focus
-.govuk-link:focus {
-  color: #0b0c0c;
-}
-
-.a:hover
-.govuk-link:hover {
-  color: #0b0c0c;
+  &__link:link {
+    color: #003078;
+  }
+  &__visited {
+    color: #4c2c92;
+  }
+  &__link:focus {
+    color: #0b0c0c;
+  }
+  &__link:hover {
+    color: #003078;
+  }
 }
 
 // turbo-frame {
