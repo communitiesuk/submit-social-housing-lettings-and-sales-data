@@ -163,7 +163,10 @@ Assumptions made by the format:
 ## JSON Form Validation against Schema
 
 To validate the form JSON against the schema you can run:
-`rake form_definition:validate["config/forms/2021_22.json"]`
+`rake form_definition:validate["config/forms/2021_2022.json"]`
+
+n.b. You may have to escape square brackets in zsh 
+`rake form_definition:validate\["config/forms/2021_2022.json"\]`
 
 This will validate the given form definition against the schema in `config/forms/schema/generic.json`.
 
