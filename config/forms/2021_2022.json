@@ -1068,12 +1068,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Fixed term – Secure",
-                    "1": "Fixed term – Assured Shorthold Tenancy (AST)",
-                    "2": "Lifetime – Secure",
-                    "3": "Lifetime – Assured",
-                    "4": "License agreement",
-                    "5": "Other"
+                    "0": "Secure (including flexible)",
+                    "1": "Assured",
+                    "2": "Assured Shorthold",
+                    "3": "Licence agreement (almshouses only)",
+                    "4": "Other"
                   },
                   "conditional_for": {
                     "other_tenancy_type": ["Other"]
