@@ -5,7 +5,7 @@
         <%= @case_log.id %></h1>
 
       <h2 class="govuk-heading-s govuk-!-margin-bottom-2">This submission is
-        <%= @case_log.status %></h2>
+        <%= @case_log.status.to_s.humanize %></h2>
       <p class="govuk-body govuk-!-margin-bottom-7">You've completed <%= get_subsections_count(@form, @case_log, :completed) %> of <%= get_subsections_count(@form, @case_log, :all) %> sections.</p>
       <p class="govuk-body govuk-!-margin-bottom-7">
         <% next_incomplete_section=get_next_incomplete_section(@form, @case_log) %>

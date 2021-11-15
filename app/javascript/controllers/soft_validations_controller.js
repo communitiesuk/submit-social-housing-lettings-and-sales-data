@@ -5,7 +5,7 @@ export default class extends Controller {
 
   initialize() {
     let url = window.location.href + "/soft_validations"
-    this.fetch_retry(url, { headers: { accept: "application/json" } }, 2)
+    this.fetch_retry(url, { headers: { accept: "application/json" } }, 5)
   }
 
   fetch_retry(url, options, n) {
