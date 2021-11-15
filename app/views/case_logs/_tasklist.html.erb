@@ -12,7 +12,7 @@
             <% questions_for_subsection = @form.questions_for_subsection(subsection_key).keys %>
             <% next_page_path = get_first_page_or_check_answers(subsection_key, @case_log, @form, questions_for_subsection) %>
             <%= link_to subsection_value["label"], next_page_path, class: "task-name govuk-link" %>
-            <% subsection_status = get_subsection_status(subsection_key, @case_log, questions_for_subsection).humanize %>
+            <% subsection_status = get_subsection_status(subsection_key, @case_log, questions_for_subsection) %>
             <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
