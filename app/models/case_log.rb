@@ -230,7 +230,7 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    if tenancy == "Fixed term – Secure"
+    if tenancy == "Secure (including flexible)"
       dynamically_not_required << "tenancylength"
     end
 
