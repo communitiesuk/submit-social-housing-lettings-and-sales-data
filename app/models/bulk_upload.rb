@@ -59,6 +59,8 @@ class BulkUpload
       tenancy: row[9],
       tenancyother: row[10],
       # tenancyduration: row[11],
+      other_hhmemb: other_hhmemb(row),
+      hhmemb: other_hhmemb(row) + 1,
       age1: row[12],
       age2: row[13],
       age3: row[14],
@@ -189,5 +191,9 @@ class BulkUpload
       gdpr_acceptance: 1,
       gdpr_declined: 0,
     }
+  end
+
+  def other_hhmemb(row)
+    [13, 14, 15, 16, 17, 18, 19].count { |idx| row[idx].present? }
   end
 end

@@ -39,7 +39,6 @@ class CaseLog < ApplicationRecord
   include SoftValidations
   include DbEnums
   default_scope -> { kept }
-  scope :not_completed, -> { where.not(status: "completed") }
 
   validates_with CaseLogValidator
   before_save :update_status!
