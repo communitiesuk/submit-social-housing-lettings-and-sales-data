@@ -20,6 +20,8 @@ FactoryBot.define do
       incfreq { "Weekly" }
     end
     trait :conditional_section_complete do
+      tenant_code { "TH356" }
+      age1 { 34 }
       sex1 { "M" }
       ethnic { 2 }
       national { 4 }
