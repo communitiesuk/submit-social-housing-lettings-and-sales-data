@@ -27,7 +27,7 @@ RSpec.describe BulkUploadController, type: :request do
       end
 
       it "creates case logs for each row in the template" do
-        expect { subject }.to change(CaseLog, :count).by(2)
+        expect { subject }.to change(CaseLog, :count).by(9)
       end
 
       it "redirects to the case log index page" do
