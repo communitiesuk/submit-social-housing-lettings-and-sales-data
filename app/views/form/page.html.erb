@@ -10,7 +10,7 @@
           <%= page_info["header"] %>
         </h1>
       <% end %>
-      <%= form_with model: @case_log, method: "submit_form", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
         <%= f.govuk_error_summary %>
         <% page_info["questions"].map do |question_key, question| %>
           <div id=<%= question_key + "_div " %><%= display_question_key_div(page_info, question_key) %> >
