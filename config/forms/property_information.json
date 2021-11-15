@@ -1,0 +1,17 @@
+{
+  "form_type": "lettings",
+  "start_year": 2021,
+  "end_year": 2022,
+  "sections": {
+    "property_information": {
+      "label": "Property Information",
+      "subsections": {
+        "about_this_log": {
+          "label": "About this log",
+          "pages": {
+          }
+        }
+      }
+    }
+  }
+} 

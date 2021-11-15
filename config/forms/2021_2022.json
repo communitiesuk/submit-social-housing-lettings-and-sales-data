@@ -1127,13 +1127,69 @@
         "property_information": {
           "label": "Property information",
           "pages": {
-            "property_location": {
+            "property_reference": {
               "header": "",
               "description": "",
               "questions": {
-                "la": {
-                  "check_answer_label": "Property Location",
-                  "header": "Property location",
+                "propcode": {
+                  "check_answer_label": "What’s the property reference?",
+                  "header": "What's the property reference?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            },
+            "property_postcode": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "do_you_know_the_postcode": {
+                  "check_answer_label": "Do you know the property postcode?",
+                  "header": "do_you_know_the_postcode?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  },
+                  "conditional_for": {
+                    "property_postcode": ["Yes"]
+                  }
+                },
+                "property_postcode": {
+                  "check_answer_label": "",
+                  "header": "",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            },
+            "do_you_know_the_local_authority": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "do_you_know_the_local_authority": {
+                  "check_answer_label": "Do you know what local authority the property is located in?",
+                  "header": "Do you know what local authority the property is located in?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "conditional_route_to": {
+                "why_dont_you_know_la": { "do_you_know_the_local_authority": "No" }
+              }
+            },
+            "select_local_authority": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "select_local_authority": {
+                  "check_answer_label": "Local Authority",
+                  "header": "Select a local authority",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1454,15 +1510,34 @@
                 }
               }
             },
-            "property_postcode": {
+            "why_dont_you_know_la": {
               "header": "",
               "description": "",
               "questions": {
-                "property_postcode": {
-                  "check_answer_label": "What was the previous postcode?",
-                  "header": "What is the property's postcode?",
+                "why_dont_you_know_la": {
+                  "check_answer_label": "Reason for not knowing local authority",
+                  "header": "Give a reason why you don't know the postcode or local authority",
                   "hint_text": "",
                   "type": "text"
+                }
+              },
+              "conditional_route_to": {
+                "organisation_details": { "do_you_know_the_local_authority": "No" }
+              }
+            },
+            "first_time_property_let_as_social_housing": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "first_time_property_let_as_social_housing": {
+                  "check_answer_label": "Which type was the property most recently let as?",
+                  "header": "Is this property a relet?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
                 }
               }
             },
@@ -1507,18 +1582,6 @@
                     "12": "Relet – tenant moved to care home",
                     "13": "Relet – tenant involved in a succession downsize"
                   }
-                }
-              }
-            },
-            "property_reference": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "propcode": {
-                  "check_answer_label": "What’s the property reference?",
-                  "header": "What's the property reference?",
-                  "hint_text": "",
-                  "type": "text"
                 }
               }
             },
