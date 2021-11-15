@@ -9,6 +9,7 @@ RSpec.describe TasklistHelper do
 
   describe "get subsection status" do
     let(:section) { "income_and_benefits" }
+    let(:household_characteristics_questions) { form.questions_for_subsection("household_characteristics").keys }
     let(:income_and_benefits_questions) { form.questions_for_subsection("income_and_benefits").keys }
     let(:declaration_questions) { form.questions_for_subsection("declaration").keys }
     let(:local_authority_questions) { form.questions_for_subsection("local_authority").keys }
@@ -42,6 +43,14 @@ RSpec.describe TasklistHelper do
     it "returns not started if the subsection is declaration and all the questions are completed" do
       status = get_subsection_status("declaration", completed_case_log, declaration_questions)
       expect(status).to eq(:not_started)
+    end
+
+    let(:conditional_section_complete_case_log) { FactoryBot.build(:case_log, :conditional_section_complete) }
+    it "sets the correct status for sections with conditional questions" do
+      status = get_subsection_status(
+        "household_characteristics", conditional_section_complete_case_log, household_characteristics_questions
+      )
+      expect(status).to eq(:completed)
     end
   end
 

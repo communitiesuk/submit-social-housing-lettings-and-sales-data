@@ -19,6 +19,13 @@ FactoryBot.define do
       earnings { 750 }
       incfreq { "Weekly" }
     end
+    trait :conditional_section_complete do
+      sex1 { "M" }
+      ethnic { 2 }
+      national { 4 }
+      ecstat1 { 2 }
+      other_hhmemb { 0 }
+    end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
