@@ -263,7 +263,7 @@
             "prevten": "Private sector tenancy",
             "armed_forces": "Yes - a regular",
             "ecstat1": "Full-time - 30 hours or more",
-            "hhmemb": 7,
+            "other_hhmemb": 7,
             "relat2": "Partner",
             "age2": 32,
             "sex2": "Male",
@@ -293,7 +293,7 @@
             "sex8": "Prefer not to say",
             "ecstat8": "Child under 16",
             "homeless": "No",
-            "reason_for_leaving_last_settled_home": "Other problems with neighbours",
+            "reason": "Other problems with neighbours",
             "underoccupation_benefitcap": "No",
             "leftreg": "No",
             "reservist": "No",
@@ -309,7 +309,7 @@
             "tenancy": "Fixed term – Secure",
             "lettype": "Affordable Rent - General Needs",
             "landlord": "This landlord",
-            "property_location": "Barnet",
+            "la": "Barnet",
             "previous_postcode": "NW1 5TY",
             "property_relet": "No",
             "rsnvac": "Relet - tenant abandoned property",
@@ -318,31 +318,31 @@
             "property_building_type": "dummy",
             "beds": 3,
             "property_void_date": "03/11/2019",
-            "property_major_repairs": "Yes",
-            "property_major_repairs_date": "05/05/2020",
+            "majorrepairs": "Yes",
+            "mrcdate": "05/05/2020",
             "offered": 2,
             "wchair": true,
             "earnings": 1000,
             "incfreq": "Monthly",
             "benefits": "Some",
-            "housing_benefit": "Universal Credit with housing element, but not Housing Benefit",
+            "hb": "Universal Credit with housing element, but not Housing Benefit",
             "period": "Weekly",
             "brent": 200,
             "scharge": 50,
             "pscharge": 40,
             "supcharg": 35,
             "tcharge": 325,
-            "outstanding_amount": "Yes",
+            "tshortfall": "Yes",
             "layear": "1 to 2 years",
             "lawaitlist": "Less than 1 year",
-            "previous_la": "Ashford",
+            "prevloc": "Ashford",
             "property_postcode": "SE2 6RT",
             "reasonpref": "Yes",
             "reasonable_preference_reason": "dummy",
             "cbl": true,
             "chr": false,
             "cap": false,
-            "outstanding_rent_or_charges": 25,
+            "hbrentshortfall": "Yes",
             "other_reason_for_leaving_last_settled_home": "Other reason",
             "housingneeds_a": true,
             "housingneeds_b": false,
@@ -459,7 +459,7 @@
               "Prefer not to say"
             ]
           },
-          "hhmemb": {
+          "other_hhmemb": {
             "type": "number",
             "minimum": 0,
             "maximum": 7
@@ -727,7 +727,7 @@
             "type": "string",
             "minLength": 1
           },
-          "reason_for_leaving_last_settled_home": {
+          "reason": {
             "type": "string",
             "minLength": 1,
             "enum": [
@@ -836,7 +836,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_location": {
+          "la": {
             "type": "string",
             "minLength": 1
           },
@@ -871,11 +871,11 @@
             "type": "string",
             "minLength": 1
           },
-          "property_major_repairs": {
+          "majorrepairs": {
             "type": "string",
             "minLength": 1
           },
-          "property_major_repairs_date": {
+          "mrcdate": {
             "type": "string",
             "minLength": 1
           },
@@ -902,7 +902,7 @@
             "minLength": 1,
             "enum": ["All", "Some", "None", "Do not know"]
           },
-          "housing_benefit": {
+          "hb": {
             "type": "string",
             "minLength": 1
           },
@@ -925,7 +925,7 @@
           "tcharge": {
             "type": "number"
           },
-          "outstanding_amount": {
+          "tshortfall": {
             "type": "string",
             "minLength": 1
           },
@@ -937,7 +937,7 @@
             "type": "string",
             "minLength": 1
           },
-          "previous_la": {
+          "prevloc": {
             "type": "string",
             "minLength": 1
           },
@@ -962,7 +962,7 @@
           "cap": {
             "type": "boolean"
           },
-          "outstanding_rent_or_charges": {
+          "hbrentshortfall": {
             "type": "number"
           },
           "other_reason_for_leaving_last_settled_home": {
@@ -1052,7 +1052,7 @@
           "prevten",
           "armed_forces",
           "ecstat1",
-          "hhmemb",
+          "other_hhmemb",
           "relat2",
           "age2",
           "sex2",
@@ -1082,7 +1082,7 @@
           "sex8",
           "ecstat8",
           "homeless",
-          "reason_for_leaving_last_settled_home",
+          "reason",
           "underoccupation_benefitcap",
           "leftreg",
           "reservist",
@@ -1098,7 +1098,7 @@
           "tenancy",
           "lettype",
           "landlord",
-          "property_location",
+          "la",
           "previous_postcode",
           "property_relet",
           "rsnvac",
@@ -1107,31 +1107,31 @@
           "property_building_type",
           "beds",
           "property_void_date",
-          "property_major_repairs",
-          "property_major_repairs_date",
+          "majorrepairs",
+          "mrcdate",
           "offered",
           "wchair",
           "earnings",
           "incfreq",
           "benefits",
-          "housing_benefit",
+          "hb",
           "period",
           "brent",
           "scharge",
           "pscharge",
           "supcharg",
           "tcharge",
-          "outstanding_amount",
+          "tshortfall",
           "layear",
           "lawaitlist",
-          "previous_la",
+          "prevloc",
           "property_postcode",
           "reasonpref",
           "reasonable_preference_reason",
           "cbl",
           "chr",
           "cap",
-          "outstanding_rent_or_charges",
+          "hbrentshortfall",
           "other_reason_for_leaving_last_settled_home",
           "housingneeds_a",
           "housingneeds_b",

@@ -33,7 +33,7 @@ RSpec.describe TasklistHelper do
       case_log["earnings"] = "value"
       case_log["incfreq"] = "Weekly"
       case_log["benefits"] = "All"
-      case_log["housing_benefit"] = "Do not know"
+      case_log["hb"] = "Do not know"
 
       status = get_subsection_status("income_and_benefits", case_log, income_and_benefits_questions)
       expect(status).to eq(:completed)

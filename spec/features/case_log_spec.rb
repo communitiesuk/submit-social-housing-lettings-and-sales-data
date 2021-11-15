@@ -13,7 +13,7 @@ RSpec.describe "Form Features" do
     tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
     age1: { type: "numeric", answer: 25, path: "person_1_age" },
     sex1: { type: "radio", answer: "Female", path: "person_1_gender" },
-    hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
+    other_hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
   }
 
   def fill_in_number_question(case_log_id, question, value, path)
@@ -29,7 +29,7 @@ RSpec.describe "Form Features" do
     click_button("Save and continue")
     choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-housing-benefit-housing-benefit-but-not-universal-credit-field")
+    choose("case-log-hb-housing-benefit-but-not-universal-credit-field")
     click_button("Save and continue")
   end
 
@@ -179,8 +179,8 @@ RSpec.describe "Form Features" do
       end
 
       it "displays number answers in inputs if they are already saved" do
-        visit("/case_logs/#{id}/previous_postcode")
-        expect(page).to have_field("case-log-previous-postcode-field", with: "P0 5ST")
+        visit("/case_logs/#{id}/property_postcode")
+        expect(page).to have_field("case-log-property-postcode-field", with: "P0 5ST")
       end
 
       it "displays text answers in inputs if they are already saved" do
@@ -269,7 +269,7 @@ RSpec.describe "Form Features" do
 
       let(:last_question_for_subsection) { "household_number_of_other_members" }
       it "redirects to the check answers page when answering the last question and clicking save and continue" do
-        fill_in_number_question(id, "hhmemb", 0, last_question_for_subsection)
+        fill_in_number_question(id, "other_hhmemb", 0, last_question_for_subsection)
         expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
       end
 
@@ -435,7 +435,7 @@ RSpec.describe "Form Features" do
         fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
         click_link(text: "Back")
-        expect(page).not_to have_content("Are you sure this is correct?")
+        expect(page).to have_no_content("Are you sure this is correct?")
       end
 
       it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do

@@ -29,6 +29,9 @@ gem "discard"
 gem "activeadmin"
 # Admin charts
 gem "chartkick"
+# Json Schema
+gem "json-schema"
+gem "uk_postcode"
 # Authentication
 gem "devise"
 

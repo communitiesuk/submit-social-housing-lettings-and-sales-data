@@ -43,5 +43,11 @@ RSpec.describe "User Features" do
       click_button("Send email")
       expect(page).to have_current_path("/confirmations/reset?email=idontexist%40example.com")
     end
+
+    it " is sent a reset password email" do
+      visit("/users/password/new")
+      fill_in("user_email", with: "test@example.com")
+      expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
   end
 end

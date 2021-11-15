@@ -1,9 +1,8 @@
 class Users::PasswordsController < Devise::PasswordsController
-
   def reset_confirmation
     @email = params["email"]
     render "devise/confirmations/reset"
-  end 
+  end
 
   def create
     self.resource = resource_class.send_reset_password_instructions(resource_params)
@@ -12,9 +11,9 @@ class Users::PasswordsController < Devise::PasswordsController
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
   end
 
-  protected
+protected
 
-    def after_sending_reset_password_instructions_path_for(resource)
-      confirmations_reset_path(email: params.dig("user", "email")) if is_navigational_format?
-    end
+  def after_sending_reset_password_instructions_path_for(_resource)
+    confirmations_reset_path(email: params.dig("user", "email")) if is_navigational_format?
+  end
 end

@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "https://example.com/product.schema.json",
+  "title": "Form",
+  "description": "A form",
+  "type": "object",
+  "required": ["form_type", "start_year", "end_year", "sections"],
+  "properties": {
+    "form_type": {
+      "description": "",
+      "type": "string"
+    },
+    "start_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "end_year": {
+      "description": "",
+      "type": "integer"
+    },
+    "sections": {
+      "type": "object",
+      "patternProperties": {
+        "[a-z_]+": {
+          "description": "",
+          "type": "object",
+          "properties": {
+            "label": {
+              "description": "",
+              "type": "string"  
+            },
+            "subsections": {  
+              "type": "object",
+              "patternProperties": {
+                "[a-z_]+": {
+                  "description": "",
+                  "type": "object",
+                  "required": ["label"],
+                  "properties": {
+                    "label": {
+                      "description": "",
+                      "type": "string"
+                    },
+                    "pages": {  
+                      "type": "object",
+                      "patternProperties": {
+                        "[a-z_]+": {
+                          "description": "",
+                          "type": "object",
+                          "properties": {
+                            "header": {
+                              "description": "",
+                              "type": "string"
+                            },
+                            "description": {
+                              "description": "",
+                              "type": "string"
+                            },
+                            "questions": {
+                              "type": "object",
+                              "patternProperties": {
+                                "[a-z_]+": {
+                                  "description": "",
+                                  "type": "object",
+                                  "required": ["header", "check_answer_label"],
+                                  "properties": {
+                                    "check_answer_label": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "header": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "type": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "hint_text": {
+                                      "description": "",
+                                      "type": "string"
+                                    },
+                                    "answer_options": {
+                                      "description": "",
+                                      "type": "object"
+                                    },
+                                    "conditional_for": {
+                                      "description": "",
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "minProperties": 1
+                        }
+                      }          
+                    }
+                  },
+                  "minProperties": 1
+                }
+              }          
+            }
+          },      
+          "minProperties": 2
+        }
+      },
+      "minProperties": 1
+    }
+  }
+}
