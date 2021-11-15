@@ -29,7 +29,7 @@ namespace :form_definition do
 
     puts args
 
-    path = "config/forms/schema/generic.json"
+    path = Rails.root.join("config/forms/schema/generic.json")
     file = File.open(path)
     schema = JSON.parse(file.read)
     meta_schema = JSON::Validator.validator_for_name("draft4").metaschema
@@ -37,9 +37,9 @@ namespace :form_definition do
     puts path
 
     if JSON::Validator.validate(meta_schema, schema)
-        puts "schema valid"
+        puts "Schema Definition is Valid"
       else
-        puts "schema not valid"
+        puts "Schema Definition in #{path} is not valid against draft4 json schema."
         return
     end
 
