@@ -13,4 +13,9 @@ $govuk-image-url-function: frontend-image-url;
 
 @import '_task-list';
 
-@import '_application-custom';
+$govuk-global-styles: true;
+
+// turbo-frame {
+//   display: block;
+//   border: 1px solid blue
+// }
