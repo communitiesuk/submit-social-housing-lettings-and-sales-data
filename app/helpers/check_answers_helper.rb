@@ -60,6 +60,8 @@ module CheckAnswersHelper
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
     when "radio"
       case_log[question_key].blank? || !condition.include?(case_log[question_key])
+    when "select"
+      case_log[question_key].blank? || !condition.include?(case_log[question_key])
     else
       raise "Not implemented yet"
     end
