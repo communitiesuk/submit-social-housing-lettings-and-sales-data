@@ -1,0 +1,24 @@
+.a:link,
+.govuk-link:link {
+  color: #1d70b8;
+}
+
+.a:visited
+.govuk-link:visited {
+  color: #4c2c92;;
+}
+
+.a:focus
+.govuk-link:focus {
+  color: #0b0c0c;
+}
+
+.a:hover
+.govuk-link:hover {
+  color: #0b0c0c;
+}
+
+// turbo-frame {
+//   display: block;
+//   border: 1px solid blue
+// }
