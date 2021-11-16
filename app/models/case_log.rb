@@ -39,7 +39,6 @@ class CaseLog < ApplicationRecord
   include SoftValidations
   include DbEnums
   default_scope -> { kept }
-  scope :not_completed, -> { where.not(status: "completed") }
 
   validates_with CaseLogValidator
   before_save :update_status!
@@ -129,6 +128,8 @@ class CaseLog < ApplicationRecord
   end
 
   def weekly_net_income
+    return unless earnings && incfreq
+
     case incfreq
     when "Weekly"
       earnings
@@ -230,7 +231,7 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    if tenancy == "Fixed term – Secure"
+    if tenancy == "Secure (including flexible)"
       dynamically_not_required << "tenancylength"
     end
 

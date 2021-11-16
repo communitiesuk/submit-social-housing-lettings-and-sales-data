@@ -166,11 +166,10 @@ module DbEnums
 
   def self.tenancy
     {
-      "Fixed term – Secure" => 1,
-      "Fixed term – Assured Shorthold Tenancy (AST)" => 4,
-      "Lifetime – Secure" => 100,
-      "Lifetime – Assured" => 2,
-      "License agreement" => 5,
+      "Secure (including flexible)" => 1,
+      "Assured" => 2,
+      "Assured Shorthold" => 4,
+      "Licence agreement (almshouses only)" => 5,
       "Other" => 3,
     }
   end
