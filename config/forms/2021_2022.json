@@ -209,7 +209,7 @@
                 }
               }
             },
-            "age1": {
+            "person_1_age": {
               "header": "",
               "description": "",
               "questions": {
@@ -307,7 +307,7 @@
                 }
               }
             },
-            "tenant_economic_status": {
+            "person_1_economic": {
               "header": "",
               "description": "",
               "questions": {
