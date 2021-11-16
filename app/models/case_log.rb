@@ -10,7 +10,7 @@ class CaseLogValidator < ActiveModel::Validator
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
     # we want to validate all data fields.
-    page_to_validate = options[:page]
+    page_to_validate = record.page
     if page_to_validate
       public_send("validate_#{page_to_validate}", record) if respond_to?("validate_#{page_to_validate}")
     else
@@ -39,9 +39,8 @@ class CaseLog < ApplicationRecord
   include SoftValidations
   include DbEnums
   default_scope -> { kept }
-  scope :not_completed, -> { where.not(status: "completed") }
 
-  validates_with CaseLogValidator, ({ page: @page } || {})
+  validates_with CaseLogValidator
   before_save :update_status!
 
   attr_accessor :page
@@ -129,6 +128,8 @@ class CaseLog < ApplicationRecord
   end
 
   def weekly_net_income
+    return unless earnings && incfreq
+
     case incfreq
     when "Weekly"
       earnings
@@ -230,7 +231,7 @@ private
       dynamically_not_required << "incfreq"
     end
 
-    if tenancy == "Fixed term – Secure"
+    if tenancy == "Secure (including flexible)"
       dynamically_not_required << "tenancylength"
     end
 

@@ -47,7 +47,7 @@ RSpec.describe "Form Features" do
       it "displays a tasklist header" do
         visit("/case_logs/#{id}")
         expect(page).to have_content("Tasklist for log #{id}")
-        expect(page).to have_content("This submission is #{status}")
+        expect(page).to have_content("This submission is #{status.humanize.downcase}")
       end
 
       it "displays a section status" do
@@ -453,7 +453,7 @@ RSpec.describe "Form Features" do
 
   describe "conditional page routing", js: true do
     before do
-      allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+      allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
     end
 
     it "can route the user to a different page based on their answer on the current page" do

@@ -29,6 +29,8 @@ gem "discard"
 gem "activeadmin"
 # Admin charts
 gem "chartkick"
+# Spreadsheet parsing
+gem "roo"
 # Json Schema
 gem "json-schema"
 gem "uk_postcode"

@@ -80,9 +80,8 @@
                 }
               },
               "conditional_route_to": {
-                "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
-              },
-              "default_next_page" : "check_answers"
+                "sale_completion_date": { "sale_or_letting": "Sale" }
+              }
             },
             "tenant_same_property_renewal": {
               "header": "About this log",
@@ -100,7 +99,7 @@
                 }
               }
             },
-            "tenancy_start_date": {
+            "startdate": {
               "header": "About this log",
               "description": "",
               "questions": {
@@ -112,8 +111,8 @@
                 }
               }
             },
-            "rent_type": {
-              "header": "About this log",
+            "about_this_letting": {
+              "header": "Tell us about this letting",
               "description": "",
               "questions": {
                 "rent_type": {
@@ -150,12 +149,25 @@
                 }
               }
             },
+            "tenant_code": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenant_code": {
+                  "check_answer_label": "Tenant code",
+                  "header": "What is the tenant code?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "default_next_page": "check_answers"
+            },
             "sale_completion_date": {
-              "header": "About this log",
+              "header": "Sale Completion Date",
               "description": "",
               "questions": {
                 "sale_completion_date": {
-                  "check_answer_label": "What is the sale completion date?",
+                  "check_answer_label": "Sale completion date",
                   "header": "What is the sale completion date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -172,7 +184,8 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "default_next_page": "check_answers"
             }
           }
         }
@@ -196,7 +209,7 @@
                 }
               }
             },
-            "age1": {
+            "person_1_age": {
               "header": "",
               "description": "",
               "questions": {
@@ -294,7 +307,7 @@
                 }
               }
             },
-            "tenant_economic_status": {
+            "person_1_economic": {
               "header": "",
               "description": "",
               "questions": {
@@ -1068,12 +1081,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Fixed term – Secure",
-                    "1": "Fixed term – Assured Shorthold Tenancy (AST)",
-                    "2": "Lifetime – Secure",
-                    "3": "Lifetime – Assured",
-                    "4": "License agreement",
-                    "5": "Other"
+                    "0": "Secure (including flexible)",
+                    "1": "Assured",
+                    "2": "Assured Shorthold",
+                    "3": "Licence agreement (almshouses only)",
+                    "4": "Other"
                   },
                   "conditional_for": {
                     "other_tenancy_type": ["Other"]

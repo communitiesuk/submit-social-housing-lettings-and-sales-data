@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_12_105348) do
+ActiveRecord::Schema.define(version: 2021_11_16_102527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,6 @@ ActiveRecord::Schema.define(version: 2021_11_12_105348) do
     t.string "accessibility_requirements"
     t.string "condition_effects"
     t.string "tenancy_code"
-    t.string "startdate"
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"
@@ -131,7 +130,6 @@ ActiveRecord::Schema.define(version: 2021_11_12_105348) do
     t.string "rent_type"
     t.string "intermediate_rent_product_name"
     t.string "needs_type"
-    t.string "sale_completion_date"
     t.string "purchaser_code"
     t.integer "override_net_income_validation"
     t.string "net_income_known"
@@ -154,6 +152,8 @@ ActiveRecord::Schema.define(version: 2021_11_12_105348) do
     t.integer "mrcyear"
     t.integer "other_hhmemb"
     t.integer "incref"
+    t.datetime "sale_completion_date"
+    t.datetime "startdate"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

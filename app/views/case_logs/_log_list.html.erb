@@ -12,7 +12,7 @@
     <% case_logs.map do |log| %>
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header">
-        <%= link_to log.id, case_log_path(log) %>
+        <%= link_to log.id, case_log_path(log), class: "govuk-link" %>
       </th>
       <td class="govuk-table__cell govuk-table__cell">
         <%= log.property_postcode %>

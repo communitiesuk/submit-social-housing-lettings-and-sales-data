@@ -127,7 +127,7 @@ RSpec.describe CaseLogsController, type: :controller do
 
     context "conditional routing" do
       before do
-        allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+        allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
       end
 
       let(:case_log_form_conditional_question_yes_params) do
