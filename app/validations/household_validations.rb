@@ -45,7 +45,7 @@ module HouseholdValidations
     end
   end
 
-  def validate_household_pregnancy(record)
+  def validate_pregnancy(record)
     if (record.preg_occ == "Yes" || record.preg_occ == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
       record.errors.add :preg_occ, "You must answer no as there are no female tenants aged 16-50 in the property"
     end
