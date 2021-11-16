@@ -1520,7 +1520,8 @@
                     "312": "York"
                   }
                 }
-              }
+              },
+              "default_next_page": "first_time_property_let_as_social_housing"
             },
             "why_dont_you_know_la": {
               "header": "",
@@ -1532,9 +1533,6 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              },
-              "conditional_route_to": {
-                "organisation_details": { "do_you_know_the_local_authority": "No" }
               }
             },
             "first_time_property_let_as_social_housing": {
@@ -1578,22 +1576,37 @@
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
-                  "answer_options": {
-                    "0": "First let of newbuild property",
-                    "1": "First let of conversion/rehabilitation/acquired property",
-                    "2": "First let of leased property",
-                    "3": "Relet - tenant evicted due to arrears",
-                    "4": "Relet - tenant evicted due to ASB or other reason",
-                    "5": "Relet - tenant died (no succession)",
-                    "6": "Relet - tenant moved to other social housing provider",
-                    "7": "Relet - tenant abandoned property",
-                    "8": "Relet - tenant moved to private sector or other accommodation",
-                    "9": "Relet - to tenant who occupied same property as temporary accommodation",
-                    "10": "Relet – internal transfer (excluding renewals of a fixed-term tenancy)",
-                    "11": "Relet – renewal of fixed-term tenancy",
-                    "12": "Relet – tenant moved to care home",
-                    "13": "Relet – tenant involved in a succession downsize"
+                  "answer_options": {                    
+                    "0": "Renewal of fixed-term tenancy",              
+                    "1": "Internal transfer (excluding renewals of a fixed-term tenancy)",
+                    "2": "Relet to tenant who occupied same property as temporary accommodation",
+                    "3": "Tenant involved in a succession downsize",
+                    "4": "Tenant moved to private sector or other accommodation",
+                    "5": "Tenant moved to other social housing provider",
+                    "6": "Tenant moved to care home",
+                    "7": "Tenant abandoned property",
+                    "8": "Tenant evicted due to arrears",
+                    "9": "Tenant evicted due to ASB or other reason",
+                    "10": "Previous tenant passed away (no succession)",
+                    "11": "First let of newbuild property",
+                    "12": "First let of conversion/rehabilitation/acquired property",
+                    "13": "First let of leased property"                                                      
                   }
+                }
+              }
+            },
+            "property_number_of_times_relet": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "offered": {
+                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
+                  "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
+                  "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
                 }
               }
             },
@@ -1619,6 +1632,38 @@
                 }
               }
             },
+            "property_building_type": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "": {
+                  "check_answer_label": "Building type",
+                  "header": "Which type of building is the property?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Purpose built",
+                    "1": "Converted from previous residential or non-residential property"
+                  }
+                }
+              }
+            },
+            "property_wheelchair_accessible": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "wchair": {
+                  "check_answer_label": "Is property built or adapted to wheelchair user standards?",
+                  "header": "Is property built or adapted to wheelchair user standards?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              }
+            },
             "property_number_of_bedrooms": {
               "header": "",
               "description": "",
@@ -1631,6 +1676,18 @@
                   "min": 0,
                   "max": 150,
                   "step": 1
+                }
+              }
+            },
+            "void_or_renewal_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "beds": {
+                  "check_answer_label": "void/renewal date",
+                  "header": "What is the void or renewal date?",
+                  "hint_text": "",
+                  "type": "date"
                 }
               }
             },
@@ -1656,37 +1713,6 @@
                   "header": "What was the major repairs completion date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
-                }
-              }
-            },
-            "property_number_of_times_relet": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "offered": {
-                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
-                  "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
-                  "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1
-                }
-              }
-            },
-            "property_wheelchair_accessible": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "wchair": {
-                  "check_answer_label": "Is property built or adapted to wheelchair user standards?",
-                  "header": "Is property built or adapted to wheelchair user standards?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
-                  }
                 }
               }
             }
