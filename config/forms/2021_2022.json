@@ -1088,7 +1088,7 @@
                     "4": "Other"
                   },
                   "conditional_for": {
-                    "other_tenancy_type": ["Other"]
+                    "tenancyother": ["Other"]
                   }
                 },
                 "tenancyother": {
