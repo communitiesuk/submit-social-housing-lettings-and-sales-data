@@ -29,7 +29,7 @@ class BulkUpload
         case_log = CaseLog.create!
         map_row(sheet.row(row_num)).each do |attr_key, attr_val|
           update = case_log.update(attr_key => attr_val)
-          unless update.persisted?
+          unless update
             # TODO: determine what to do when a bulk upload contains field values that don't pass validations
           end
         rescue ArgumentError
