@@ -466,27 +466,17 @@ RSpec.describe "Test Features" do
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
     end
 
-    it "can route based on page inclusion rules" do
-      visit("/case_logs/#{id}/conditional_question_yes_page")
-      choose("case-log-cbl-yes-field", allow_label_click: true)
-      click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
-    end
-
-    it "can route to the default next page" do
-      visit("/case_logs/#{id}/conditional_question")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
-    end
-
     it "can route based on multiple conditions" do
       visit("/case_logs/#{id}/person_1_gender")
       choose("case-log-sex1-female-field", allow_label_click: true)
       click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/household_number_of_other_members")
       visit("/case_logs/#{id}/conditional_question")
-      choose("case-log-preg-occ-yes-field", allow_label_click: true)
+      choose("case-log-preg-occ-no-field", allow_label_click: true)
       click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/rent")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
     end
   end
 end

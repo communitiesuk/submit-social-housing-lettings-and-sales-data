@@ -26,8 +26,7 @@
               },
               "conditional_route_to": {
                 "organisation_details": { "gdpr_acceptance": "Yes" }
-              },
-              "default_next_page": "gdpr_declined"
+              }
             },
             "gdpr_declined": {
               "header": "You cannot use this service",
@@ -35,8 +34,7 @@
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
               "questions": {
 
-              },
-              "default_next_page" : "check_answers"
+              }
             },
             "organisation_details": {
               "header": "About this log",
@@ -159,8 +157,7 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              },
-              "default_next_page": "check_answers"
+              }
             },
             "sale_completion_date": {
               "header": "Sale Completion Date",
@@ -184,8 +181,7 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              },
-              "default_next_page": "check_answers"
+              }
             }
           }
         }
