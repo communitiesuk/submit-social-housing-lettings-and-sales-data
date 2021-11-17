@@ -108,22 +108,15 @@ class Form
   end
 
   def page_routed_to?(page, case_log)
-    return true unless pages_with_routing_conditions.include?(page)
+    return true unless conditions = page_dependencies(page)
 
-    applicable_conditions = all_routing_conditions.flat_map { |conditions|
-      conditions.select { |k, _condition| k == page }
-    }.flat_map(&:values)
-    applicable_conditions.all? do |condition|
-      condition.all? { |k, v| case_log[k].present? && case_log[k] == v }
+    conditions.all? do |question, value|
+      case_log[question].present? && case_log[question] == value
     end
   end
 
-  def pages_with_routing_conditions
-    @pages_with_routing_conditions ||= all_routing_conditions.flat_map(&:keys)
-  end
-
-  def all_routing_conditions
-    @all_routing_conditions ||= all_pages.map { |_page_key, page| page["conditional_route_to"] }.compact
+  def page_dependencies(page)
+    all_pages[page]["depends_on"]
   end
 
   def condition_not_met(case_log, question_key, question, condition)

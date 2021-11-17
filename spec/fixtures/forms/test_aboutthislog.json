@@ -74,9 +74,6 @@
                     "1": "Letting"
                   }
                 }
-              },
-              "conditional_route_to": {
-                "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
               }
             },
             "tenant_same_property_renewal": {
@@ -93,7 +90,8 @@
                     "1": "No"
                   }
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "tenancy_start_date": {
               "header": "About this log",
@@ -105,7 +103,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "letting_type": {
               "header": "About this log",
@@ -143,7 +142,8 @@
                     "1": "General Needs"
                   }
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "sale_completion_date": {
               "header": "About this log",
@@ -155,7 +155,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Sale" }
             },
             "purchaser_code": {
               "header": "About this log",
@@ -167,7 +168,8 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Sale" }
             }
           }
         }

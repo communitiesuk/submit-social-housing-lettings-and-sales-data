@@ -244,11 +244,6 @@
                       "1": "No"
                     }
                   }
-                },
-                "conditional_route_to": {
-                  "conditional_question_yes_page": { "preg_occ": "Yes" },
-                  "conditional_question_no_page": { "preg_occ": "No" },
-                  "conditional_question_no_second_page": { "preg_occ": "No", "sex1": "Male" }
                 }
               },
               "conditional_question_yes_page": {
@@ -262,7 +257,8 @@
                       "1": "No"
                     }
                   }
-                }
+                },
+                "depends_on": { "preg_occ": "Yes" }
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -275,7 +271,8 @@
                       "1": "No"
                     }
                   }
-                }
+                },
+                "depends_on": { "preg_occ": "No" }
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -288,7 +285,8 @@
                       "1": "No"
                     }
                   }
-                }
+                },
+                "depends_on": { "preg_occ": "No", "sex1": "Male" }
               }
             }
           }

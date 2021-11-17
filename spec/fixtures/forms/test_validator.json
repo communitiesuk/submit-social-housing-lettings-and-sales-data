@@ -22,9 +22,8 @@
                   "type": "text"
                 }
               },
-              "conditional_route_to": {"test": "Yes"}
+              "depends_on": {"test": "Yes"}
             },
-            "conditional_route_to": {"test": "Yes"},
             "person_1_age": {
               "header": "",
               "description": "",
