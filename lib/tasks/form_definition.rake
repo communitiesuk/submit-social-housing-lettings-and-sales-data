@@ -1,5 +1,6 @@
 require "json"
 require "json-schema"
+
 def get_all_form_paths(directories)
   form_paths = []
   directories.each do |directory|
