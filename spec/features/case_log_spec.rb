@@ -493,4 +493,56 @@ RSpec.describe "Form Features" do
       expect(page).to have_current_path("/case_logs/#{id}/rent")
     end
   end
+
+  describe "date validation", js: true do
+    def fill_in_date(case_log_id, question, day, month, year, path)
+      visit("/case_logs/#{case_log_id}/#{path}")
+      fill_in("#{question}_1i", with: year)
+      fill_in("#{question}_2i", with: month)
+      fill_in("#{question}_3i", with: day)
+    end
+    it "does not allow out of range dates to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 3100, 12, 2000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 12, 1, 20_000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 13, 100, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/local_authority/check_answers")
+    end
+
+    it "does not allow non numeric inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", "abc", "de", "ff", "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+    end
+
+    it "does not allow partial inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 21, 12, nil, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 12, nil, 2000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", nil, 10, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+    end
+
+    it "allows valid inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/local_authority/check_answers")
+    end
+  end
 end

@@ -186,7 +186,7 @@ RSpec.describe CaseLogsController, type: :controller do
           "mrcdate(1i)": "2021",
           "mrcdate(2i)": "05",
           "mrcdate(3i)": "04",
-          page: "major_repairs_date",
+          page: "property_major_repairs",
         }
       end
       it "saves full and partial dates" do
