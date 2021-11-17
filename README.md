@@ -192,6 +192,10 @@ This will validate all forms in directories = ["config/forms", "spec/fixtures/fo
 - [Technical docs](https://www.rubydoc.info/gems/govuk_design_system_formbuilder/)
 - [GitHub repository](https://github.com/DFE-Digital/govuk-formbuilder)
 
+### GOV.UK Frontend for Rails
+
+- [Github repository](https://github.com/DFE-Digital/govuk-components)
+
 ### GOV.UK Frontend
 
 - [GitHub repository](https://github.com/alphagov/govuk-frontend)
