@@ -26,9 +26,13 @@ module CheckAnswersHelper
     form.next_page(page_name)
   end
 
-  def create_update_answer_link(question_title, case_log, form)
+  def create_update_answer_link(question_title, question_info, case_log, form)
     page = form.page_for_question(question_title)
-    link_name = case_log[question_title].blank? ? "Answer" : "Change"
+    link_name = if question_info["type"] == "checkbox"
+                  question_info["answer_options"].keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
+                else
+                  case_log[question_title].blank? ? "Answer" : "Change"
+                end
     link_to(link_name, "/case_logs/#{case_log.id}/#{page}", class: "govuk-link").html_safe
   end
 
