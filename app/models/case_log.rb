@@ -5,6 +5,7 @@ class CaseLogValidator < ActiveModel::Validator
   include PropertyValidations
   include FinancialValidations
   include TenancyValidations
+  include DateValidations
 
   def validate(record)
     # If we've come from the form UI we only want to validate the specific fields
@@ -184,7 +185,7 @@ class CaseLog < ApplicationRecord
       mrcdate.month
     end
   end
-
+  
   def mrcyear
     if mrcdate.present?
       mrcdate.year
