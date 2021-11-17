@@ -107,9 +107,13 @@ private
         day = params["case_log"]["#{question_key}(3i)"]
         month = params["case_log"]["#{question_key}(2i)"]
         year = params["case_log"]["#{question_key}(1i)"]
-        next unless day.present? && month.present? && year.present?
+        next unless [day, month, year].any?(&:present?)
 
-        result[question_key] = Date.new(year.to_i, month.to_i, day.to_i)
+        result[question_key] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
+                                 Date.new(year.to_i, month.to_i, day.to_i)
+                               else
+                                 Date.new(0, 1, 1)
+                               end
       end
       next unless question_params
 

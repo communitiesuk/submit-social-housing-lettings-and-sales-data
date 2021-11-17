@@ -508,7 +508,7 @@
                   }
                 }
               },
-              "major_repairs_date": {
+              "property_major_repairs": {
                 "questions": {
                   "mrcdate": {
                     "check_answer_label": "What was the major repairs completion date?",
