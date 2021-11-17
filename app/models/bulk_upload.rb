@@ -26,12 +26,14 @@ class BulkUpload
     else
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
-        case_log = CaseLog.create
+        case_log = CaseLog.create!
         map_row(sheet.row(row_num)).each do |attr_key, attr_val|
-          begin
-            case_log.update_attribute(attr_key, attr_val)
-          rescue ArgumentError
+          update = case_log.update(attr_key => attr_val)
+          unless update
+            # TODO: determine what to do when a bulk upload contains field values that don't pass validations
           end
+        rescue ArgumentError
+          # TODO: determine what we want to do when bulk upload contains totally invalid data for a field.
         end
       end
     end

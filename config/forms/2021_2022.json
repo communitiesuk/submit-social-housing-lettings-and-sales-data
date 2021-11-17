@@ -1028,18 +1028,6 @@
         "tenancy_information": {
           "label": "Tenancy information",
           "pages": {
-            "tenancy_code": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancy_code": {
-                  "check_answer_label": "What is the tenancy code?",
-                  "header": "What is the tenancy code?",
-                  "hint_text": "",
-                  "type": "text"
-                }
-              }
-            },
             "starter_tenancy": {
               "header": "",
               "description": "",
