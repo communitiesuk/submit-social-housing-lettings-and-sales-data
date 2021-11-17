@@ -14,6 +14,6 @@ class Users::PasswordsController < Devise::PasswordsController
 protected
 
   def after_sending_reset_password_instructions_path_for(_resource)
-    confirmations_reset_path(email: params.dig("user", "email")) if is_navigational_format?
+    confirmations_reset_path(email: params.dig("user", "email"))
   end
 end
