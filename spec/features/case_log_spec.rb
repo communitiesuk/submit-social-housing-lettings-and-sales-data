@@ -301,6 +301,19 @@ RSpec.describe "Test Features" do
         expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/person_1_age")
       end
 
+      it "should have a change link for answered questions" do
+        visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+        assert_selector "a", text: /Answer\z/, count: 4
+        assert_selector "a", text: "Change", count: 0
+        visit("/case_logs/#{empty_case_log.id}/accessibility_requirements")
+        check("case-log-accessibility-requirements-housingneeds-c-field")
+        click_button("Save and continue")
+        visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+        assert_selector "a", text: /Answer\z/, count: 3
+        assert_selector "a", text: "Change", count: 1
+        expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/accessibility_requirements")
+      end
+
       it "should have a link pointing to the first question if no questions are answered" do
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("You answered 0 of 4 questions")
