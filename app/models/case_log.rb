@@ -185,7 +185,7 @@ class CaseLog < ApplicationRecord
       mrcdate.month
     end
   end
-  
+
   def mrcyear
     if mrcdate.present?
       mrcdate.year
