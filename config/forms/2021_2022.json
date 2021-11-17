@@ -193,18 +193,6 @@
         "household_characteristics": {
           "label": "Household characteristics",
           "pages": {
-            "tenant_code": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenant_code": {
-                  "check_answer_label": "Tenant code",
-                  "header": "What is the tenant code?",
-                  "hint_text": "",
-                  "type": "text"
-                }
-              }
-            },
             "person_1_age": {
               "header": "",
               "description": "",
