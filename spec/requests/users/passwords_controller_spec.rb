@@ -29,5 +29,11 @@ RSpec.describe Users::PasswordsController, type: :request do
       follow_redirect!
       expect(response.body).to match(/Check your email/)
     end
+
+    it "shows a flash banner" do
+      post "/users/password", params: params
+      follow_redirect!
+      expect(flash[:notice]).to be_present
+    end
   end
 end

@@ -1,6 +1,7 @@
 class Users::PasswordsController < Devise::PasswordsController
   def reset_confirmation
     @email = params["email"]
+    flash[:notice] = "Reset password instructions have been sent to #{@email}"
     render "devise/confirmations/reset"
   end
 
