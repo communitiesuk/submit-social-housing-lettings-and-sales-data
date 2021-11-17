@@ -1,6 +1,5 @@
 require "json"
 require "json-schema"
-# rubocop:disable Lint/ShadowingOuterLocalVariable
 def get_all_form_paths(directories)
   form_paths = []
   directories.each do |directory|
