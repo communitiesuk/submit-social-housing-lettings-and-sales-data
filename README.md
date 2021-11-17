@@ -135,10 +135,7 @@ The JSON should follow the structure:
                   }
                 }
               },
-              "conditional_route_to": {
-                "[page_name_to_route_to]": {"question_name": "expected_answer"},
-                "[page_name_to_route_to]": {"question_name": "expected_answer"}
-              }
+              "depends_on": { "question_key": "answer_value_required_for_this_page_to_be_shown" }
             }
           }
         }
@@ -160,12 +157,25 @@ Assumptions made by the format:
   - Radio question answer option selected matches one of conditional e.g. ["answer-options-1-string", "answer-option-3-string"]
   - Numeric question value matches condition e.g. [">2"], ["<7"] or ["== 6"]
 
+  Page routing:
+
+  - Form navigation works by stepping sequentially through every page defined in the JSON form definition for the given subsection. For every page it checks if it has "depends_on" conditions. If it does, it evaluates them to determine whether that page should be show or not.
+
+  - In this way we can build up whole branches by having:
+
+  ```jsonc
+  "page_1": { "questions": { "question_1: "answer_options": ["A", "B"] } },
+  "page_2": { "questions": { "question_2: "answer_options": ["C", "D"] }, "depends_on": { "question_1": "A" } },
+  "page_3": { "questions": { "question_3: "answer_options": ["E", "F"] }, "depends_on": { "question_1": "A" } },
+  "page_4": { "questions": { "question_4: "answer_options": ["G", "H"] }, "depends_on": { "question_1": "B" } },
+  ```
+
 ## JSON Form Validation against Schema
 
 To validate the form JSON against the schema you can run:
 `rake form_definition:validate["config/forms/2021_2022.json"]`
 
-n.b. You may have to escape square brackets in zsh 
+n.b. You may have to escape square brackets in zsh
 `rake form_definition:validate\["config/forms/2021_2022.json"\]`
 
 This will validate the given form definition against the schema in `config/forms/schema/generic.json`.
