@@ -1534,7 +1534,7 @@
               },
               "depends_on": { "first_time_property_let_as_social_housing": "No" }
             },
-            "property_vacancy_reason": {
+            "property_vacancy_reason_not_first_let": {
               "header": "",
               "description": "",
               "questions": {
@@ -1557,9 +1557,10 @@
                     "10": "Previous tenant passed away (no succession)"                                                 
                   }
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No" }
             },
-            "property_vacancy_reason": {
+            "property_vacancy_reason_first_let": {
               "header": "",
               "description": "",
               "questions": {
@@ -1574,9 +1575,10 @@
                     "13": "First let of leased property"                                                  
                   }
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes" }
             },
-            "property_number_of_times_relet": {
+            "property_number_of_times_relet_not_social_let": {
               "header": "",
               "description": "",
               "questions": {
@@ -1592,7 +1594,7 @@
               },
               "depends_on": { "first_time_property_let_as_social_housing": "No" }
             },
-            "property_number_of_times_relet": {
+            "property_number_of_times_relet_social_let": {
               "header": "",
               "description": "",
               "questions": {
