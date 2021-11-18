@@ -30,7 +30,7 @@ RSpec.describe Users::PasswordsController, type: :request do
       expect(response.body).to match(/Check your email/)
     end
 
-    
+
   end
 
   context "when a password reset is requested the email" do
@@ -40,8 +40,9 @@ RSpec.describe Users::PasswordsController, type: :request do
     it "should contain the correct email" do
       post "/users/password", params: params
       follow_redirect!
-      binding.pry
-      expect ( ActionMailer::Base.deliveries.last.body.raw_source ).to contain( email )
+      email_ascii_content = ActionMailer::Base.deliveries.last.body.raw_source
+      email_content = email_ascii_content.encode("ASCII", "UTF-8", undef: :replace)
+      expect(email_content).to match(email)
     end
   end
 end
