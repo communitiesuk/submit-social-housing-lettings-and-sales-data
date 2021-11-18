@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_16_102527) do
+ActiveRecord::Schema.define(version: 2021_11_18_090831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "ethnic"
     t.integer "national"
     t.integer "prevten"
-    t.string "armed_forces"
     t.integer "ecstat1"
     t.integer "hhmemb"
     t.string "relat2"
@@ -60,7 +59,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "underoccupation_benefitcap"
     t.integer "leftreg"
     t.integer "reservist"
-    t.string "armed_forces_partner"
     t.integer "illness"
     t.integer "preg_occ"
     t.string "accessibility_requirements"
@@ -154,6 +152,7 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "incref"
     t.datetime "sale_completion_date"
     t.datetime "startdate"
+    t.integer "armedforces"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

@@ -84,14 +84,14 @@ RSpec.describe Form, type: :model do
     context "armed forces injured validation" do
       it "must be answered if tenant was a regular or reserve in armed forces" do
         expect {
-          CaseLog.create!(armed_forces: "Yes - a regular",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
                           reservist: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must be answered if tenant was not a regular or reserve in armed forces" do
         expect {
-          CaseLog.create!(armed_forces: "No",
+          CaseLog.create!(armedforces: "No",
                           reservist: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -223,14 +223,14 @@ RSpec.describe Form, type: :model do
     context "armed forces active validation" do
       it "must be answered if ever served in the forces as a regular" do
         expect {
-          CaseLog.create!(armed_forces: "Yes - a regular",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
                           leftreg: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must not be answered if not ever served as a regular" do
         expect {
-          CaseLog.create!(armed_forces: "No",
+          CaseLog.create!(armedforces: "No",
                           leftreg: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -238,7 +238,7 @@ RSpec.describe Form, type: :model do
       # Crossover over tests here as injured must be answered as well for no error
       it "must be answered if ever served in the forces as a regular" do
         expect do
-          CaseLog.create!(armed_forces: "Yes - a regular",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
                           leftreg: "Yes",
                           reservist: "Yes")
         end

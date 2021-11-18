@@ -26,21 +26,21 @@ module HouseholdValidations
   end
 
   def validate_armed_forces_injured(record)
-    if (record.armed_forces == "Yes - a regular" || record.armed_forces == "Yes - a reserve") && record.reservist.blank?
+    if (record.armedforces == "A current or former regular in the UK Armed Forces (exc. National Service)" || record.armedforces == "A current or former reserve in the UK Armed Forces (exc. National Service)") && record.reservist.blank?
       record.errors.add :reservist, "You must answer the armed forces injury question if the tenant has served in the armed forces"
     end
 
-    if (record.armed_forces == "No" || record.armed_forces == "Prefer not to say") && record.reservist.present?
+    if (record.armedforces == "No" || record.armedforces == "Prefer not to say") && record.reservist.present?
       record.errors.add :reservist, "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
     end
   end
 
   def validate_armed_forces_active_response(record)
-    if record.armed_forces == "Yes - a regular" && record.leftreg.blank?
+    if record.armedforces == "A current or former regular in the UK Armed Forces (exc. National Service)" && record.leftreg.blank?
       record.errors.add :leftreg, "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
     end
 
-    if record.armed_forces != "Yes - a regular" && record.leftreg.present?
+    if record.armedforces != "A current or former regular in the UK Armed Forces (exc. National Service)" && record.leftreg.present?
       record.errors.add :leftreg, "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
     end
   end
