@@ -30,10 +30,18 @@ RSpec.describe Users::PasswordsController, type: :request do
       expect(response.body).to match(/Check your email/)
     end
 
-    it "shows a flash banner" do
+    
+  end
+
+  context "when a password reset is requested the email" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:email) { user.email }
+
+    it "should contain the correct email" do
       post "/users/password", params: params
       follow_redirect!
-      expect(flash[:notice]).to be_present
+      binding.pry
+      expect ( ActionMailer::Base.deliveries.last.body.raw_source ).to contain( email )
     end
   end
 end
