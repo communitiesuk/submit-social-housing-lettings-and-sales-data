@@ -23,20 +23,15 @@
                     "1": "No"
                   }
                 }
-              },
-              "conditional_route_to": {
-                "organisation_details": { "gdpr_acceptance": "Yes" }
-              },
-              "default_next_page": "gdpr_declined"
+              }
             },
             "gdpr_declined": {
               "header": "You cannot use this service",
               "hint_text": "",
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
               "questions": {
-
               },
-              "default_next_page" : "check_answers"
+              "depends_on": { "gdpr_acceptance": "No" }
             },
             "organisation_details": {
               "header": "About this log",
@@ -62,7 +57,8 @@
                     "1": "B"
                   }
                 }
-              }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes" }
             },
             "sale_or_letting": {
               "header": "About this log",
@@ -79,9 +75,7 @@
                   }
                 }
               },
-              "conditional_route_to": {
-                "sale_completion_date": { "sale_or_letting": "Sale" }
-              }
+              "depends_on": { "gdpr_acceptance": "Yes" }
             },
             "tenant_same_property_renewal": {
               "header": "About this log",
@@ -97,7 +91,8 @@
                     "1": "No"
                   }
                 }
-              }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "startdate": {
               "header": "About this log",
@@ -109,7 +104,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "about_this_letting": {
               "header": "Tell us about this letting",
@@ -147,7 +143,8 @@
                     "1": "General Needs"
                   }
                 }
-              }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "tenant_code": {
               "header": "",
@@ -160,7 +157,7 @@
                   "type": "text"
                 }
               },
-              "default_next_page": "check_answers"
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "sale_completion_date": {
               "header": "Sale Completion Date",
@@ -172,7 +169,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
             },
             "purchaser_code": {
               "header": "About this log",
@@ -185,7 +183,7 @@
                   "type": "text"
                 }
               },
-              "default_next_page": "check_answers"
+              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
             }
           }
         }
@@ -197,18 +195,6 @@
         "household_characteristics": {
           "label": "Household characteristics",
           "pages": {
-            "tenant_code": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenant_code": {
-                  "check_answer_label": "Tenant code",
-                  "header": "What is the tenant code?",
-                  "hint_text": "",
-                  "type": "text"
-                }
-              }
-            },
             "person_1_age": {
               "header": "",
               "description": "",

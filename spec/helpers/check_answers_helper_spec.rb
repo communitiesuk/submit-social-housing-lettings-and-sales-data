@@ -119,6 +119,7 @@ RSpec.describe CheckAnswersHelper do
 
       it "counts correct questions when the conditional question is answered" do
         case_log["preg_occ"] = "No"
+        case_log["sex1"] = "Male"
         expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(3)
       end
     end
@@ -126,7 +127,6 @@ RSpec.describe CheckAnswersHelper do
     context "total questions" do
       it "returns total questions" do
         result = total_questions(subsection, case_log, form)
-        expect(result.class).to eq(Hash)
         expected_keys = %w[earnings incfreq benefits hb]
         expect(result.keys).to eq(expected_keys)
       end
@@ -157,14 +157,14 @@ RSpec.describe CheckAnswersHelper do
           case_log["preg_occ"] = "Yes"
           case_log["sex1"] = "Female"
           result = total_questions(conditional_routing_subsection, case_log, form)
-          expected_keys = %w[preg_occ]
+          expected_keys = %w[preg_occ cbl]
           expect(result.keys).to match_array(expected_keys)
         end
 
         it "it includes conditional pages and questions that were displayed" do
           case_log["preg_occ"] = "No"
           result = total_questions(conditional_routing_subsection, case_log, form)
-          expected_keys = %w[preg_occ conditional_question_no_question conditional_question_no_second_question]
+          expected_keys = %w[preg_occ conditional_question_no_question]
           expect(result.keys).to match_array(expected_keys)
         end
       end
