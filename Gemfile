@@ -34,6 +34,8 @@ gem "roo"
 # Json Schema
 gem "json-schema"
 gem "uk_postcode"
+# Authentication
+gem "devise"
 gem "turbo-rails", "~> 0.8"
 
 group :development, :test do

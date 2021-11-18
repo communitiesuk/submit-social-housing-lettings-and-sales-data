@@ -1,6 +1,7 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
+  before_action :authenticate_user!, unless: :json_api_request?
 
   def index
     @completed_case_logs = CaseLog.completed

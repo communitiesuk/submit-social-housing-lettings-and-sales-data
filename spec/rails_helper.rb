@@ -113,4 +113,7 @@ RSpec.configure do |config|
   # Silence capybara logging puma start up messages to stdout on first js: true
   # spec
   Capybara.server = :puma, { Silent: true }
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
