@@ -119,6 +119,28 @@ class Form
     all_pages[page]["depends_on"]
   end
 
+  def subsection_dependencies_met?(subsection_name, case_log)
+    conditions = all_subsections[subsection_name]["depends_on"]
+    return true unless conditions
+
+    conditions.all? do |subsection, status|
+      subsection_status(subsection, case_log) == status
+    end
+  end
+
+  def subsection_status(subsection_name, case_log)
+    unless subsection_dependencies_met?(subsection_name, case_log)
+      return :cannot_start_yet
+    end
+
+    questions = questions_for_subsection(subsection_name)
+    applicable_questions = filter_conditional_questions(questions, case_log).keys
+    return :not_started if applicable_questions.all? { |question| case_log[question].blank? }
+    return :completed if applicable_questions.all? { |question| case_log[question].present? }
+
+    :in_progress
+  end
+
   def condition_not_met(case_log, question_key, question, condition)
     case question["type"]
     when "numeric"
