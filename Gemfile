@@ -33,6 +33,8 @@ gem "chartkick"
 gem "roo"
 # Json Schema
 gem "json-schema"
+# Authentication
+gem "devise"
 gem "turbo-rails", "~> 0.8"
 gem "uk_postcode"
 
