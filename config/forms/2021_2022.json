@@ -1131,7 +1131,7 @@
                     "property_postcode": ["Yes"]
                   }
                 },
-                "property_postcode": {
+                "postcode": {
                   "check_answer_label": "",
                   "header": "",
                   "hint_text": "",
@@ -1484,7 +1484,7 @@
                   }
                 }
               },
-              "default_next_page": "first_time_property_let_as_social_housing"
+              "depends_on": { "do_you_know_the_local_authority": "Yes" }
             },
             "why_dont_you_know_la": {
               "header": "",
@@ -1496,7 +1496,8 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": { "do_you_know_the_local_authority": "No" }
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
@@ -1514,21 +1515,24 @@
                 }
               }
             },
-            "property_relet": {
+            "type_property_most_recently_let_as": {
               "header": "",
               "description": "",
               "questions": {
-                "property_relet": {
-                  "check_answer_label": "Which type was the property most recently let as?",
-                  "header": "Is this property a relet?",
+                "type_property_most_recently_let_as": {
+                  "check_answer_label": "Type property most recently let as",
+                  "header": "Which type was the property most recently let as?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "Social rent basis",
+                    "1": "Affordable rent basis",
+                    "2": "Intermediate rent basis",
+                    "3": "Do not know"
                   }
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No" }
             },
             "property_vacancy_reason": {
               "header": "",
@@ -1550,10 +1554,24 @@
                     "7": "Tenant abandoned property",
                     "8": "Tenant evicted due to arrears",
                     "9": "Tenant evicted due to ASB or other reason",
-                    "10": "Previous tenant passed away (no succession)",
+                    "10": "Previous tenant passed away (no succession)"                                                 
+                  }
+                }
+              }
+            },
+            "property_vacancy_reason": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "rsnvac": {
+                  "check_answer_label": "What is the reason for the property vacancy?",
+                  "header": "What is the reason for the property vacancy?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {                    
                     "11": "First let of newbuild property",
                     "12": "First let of conversion/rehabilitation/acquired property",
-                    "13": "First let of leased property"                                                      
+                    "13": "First let of leased property"                                                  
                   }
                 }
               }
@@ -1563,15 +1581,32 @@
               "description": "",
               "questions": {
                 "offered": {
-                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
-                  "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
-                  "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
+                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since becoming available for relet (after the last tenancy ended)?",
+                  "header": "How many times has this unit been previously offered since becoming available for relet since becoming available for relet (after the last tenancy ended)?",
+                  "hint_text": "If the property is being let for the first time, enter 0",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
                   "step": 1
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No" }
+            },
+            "property_number_of_times_relet": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "offered": {
+                  "check_answer_label": "How many times has the property been previously offered since becoming available?",
+                  "header": "How many times has the property been previously offered since becoming available?",
+                  "hint_text": "If the property is being let for the first time, enter 0",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes" }
             },
             "property_unit_type": {
               "header": "",
@@ -1652,7 +1687,8 @@
                   "hint_text": "",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "rsnvac": "First let of newbuild property" }
             },
             "property_major_repairs": {
               "header": "",
@@ -1677,7 +1713,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "rsnvac": "First let of newbuild property" }
             }
           }
         }
