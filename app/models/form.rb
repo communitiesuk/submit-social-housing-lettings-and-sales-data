@@ -124,7 +124,7 @@ class Form
     return true unless conditions
 
     conditions.all? do |subsection, status|
-      subsection_status(subsection, case_log) == status
+      subsection_status(subsection, case_log) == status.to_sym
     end
   end
 

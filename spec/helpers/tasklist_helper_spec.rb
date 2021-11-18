@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe TasklistHelper do
   let(:empty_case_log) { FactoryBot.build(:case_log) }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
-  let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
   let(:household_characteristics_questions) { form.questions_for_subsection("household_characteristics") }
