@@ -884,20 +884,21 @@
               "header": "Experience of the UK Armed Forces",
               "description": "",
               "questions": {
-                "armed_forces": {
-                  "header": "Has the tenant ever served in the UK armed forces?",
-                  "hint_text": "",
+                "armedforces": {
+                  "header": "Is anyone in the household...",
+                  "hint_text": "This excludes national service",
                   "type": "radio",
                   "check_answer_label": "Armed Forces",
                   "answer_options": {
-                    "0": "Yes - a regular",
-                    "1": "Yes - a reserve",
-                    "2": "No",
-                    "3": "Prefer not to say"
+                    "0":"A current or former regular in the UK Armed Forces (exc. National Service)",
+                    "1":"A current or former reserve in the UK Armed Forces (exc. National Service)",
+                    "2": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years",
+                    "3": "No",
+                    "4": "Tenant prefers not to say"
                   },
                   "conditional_for": {
-                    "leftreg": ["Yes - a regular", "Yes - a reserve"],
-                    "reservist": ["Yes - a regular", "Yes - a reserve"]
+                    "leftreg": ["A current or former regular in the UK Armed Forces (exc. National Service)"],
+                    "reservist": ["A current or former regular in the UK Armed Forces (exc. National Service)"]
                   }
                 },
                 "leftreg": {
@@ -921,18 +922,6 @@
                     "0": "Yes",
                     "1": "No",
                     "2": "Prefer not to say"
-                  }
-                },
-                "armed_forces_partner": {
-                  "header": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "check_answer_label": "Was the tenant the spouse or civil partner of someone who served in the UK armed forces?",
-                  "answer_options": {
-                    "0": "Yes - was the spouse or civil partner of a UK Armed Forces member and have separated within the last 2 years",
-                    "1": "Yes - was the spouse or civil partner of a UK Armed Forces member who died within the last 2 years",
-                    "2": "No",
-                    "3": "Prefer not to say"
                   }
                 }
               }

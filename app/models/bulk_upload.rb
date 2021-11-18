@@ -96,7 +96,7 @@ class BulkUpload
       ecstat8: row[42],
       ethnic: row[43],
       national: row[44],
-      armed_forces: row[45],
+      armedforces: row[45],
       reservist: row[46],
       preg_occ: row[47],
       hb: row[48],

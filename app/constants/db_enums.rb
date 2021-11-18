@@ -699,4 +699,14 @@ module DbEnums
       "East Renfrewshire" => "S12000011",
     }
   end
+
+  def self.armed_forces
+    {
+      "A current or former regular in the UK Armed Forces (exc. National Service)" => 1,
+      "No" => 2,
+      "Tenant prefers not to say" => 3,
+      "A current or former reserve in the UK Armed Forces (exc. National Service)" => 4,
+      "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years" => 5,
+    }
+  end
 end
