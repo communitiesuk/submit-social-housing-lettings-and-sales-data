@@ -1,6 +1,6 @@
 <%= f.govuk_number_field question.id.to_sym,
     hint: { text: question.hint_text },
-    label: { text: question.header.html_safe, size: "l"},
+    label: { text: question.header.html_safe, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1"},
     min: question.min, max: question.max, step: question.step,
     width: 20, :readonly => question.read_only?,
    **stimulus_html_attributes(question)
