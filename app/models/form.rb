@@ -108,7 +108,7 @@ class Form
   end
 
   def page_routed_to?(page, case_log)
-    return true unless (conditions = page_dependencies(page))
+    return true unless conditions = page_dependencies(page)
 
     conditions.all? do |question, value|
       case_log[question].present? && case_log[question] == value

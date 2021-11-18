@@ -14,15 +14,23 @@ module TasklistHelper
   }.freeze
 
   def get_subsection_status(subsection_name, case_log, form, questions)
-    applicable_questions = form.filter_conditional_questions(questions, case_log).keys
     if subsection_name == "declaration"
       return case_log.completed? ? :not_started : :cannot_start_yet
+    elsif subsection_name != "about_this_log"
+      return :cannot_start_yet unless about_this_log_completed?(form, case_log)
     end
 
+    applicable_questions = form.filter_conditional_questions(questions, case_log).keys
     return :not_started if applicable_questions.all? { |question| case_log[question].blank? }
     return :completed if applicable_questions.all? { |question| case_log[question].present? }
 
     :in_progress
+  end
+
+  def about_this_log_completed?(form, case_log)
+    questions = form.questions_for_subsection("about_this_log")
+    applicable_questions = form.filter_conditional_questions(questions, case_log).keys
+    applicable_questions.all? { |question| case_log[question].present? }
   end
 
   def get_next_incomplete_section(form, case_log)
@@ -44,6 +52,16 @@ module TasklistHelper
              "case_log_#{form.first_page_for_subsection(subsection)}_path"
            end
     send(path, case_log)
+  end
+
+  def subsection_link(subsection_key, subsection_value, status)
+    next_page_path = if status != :cannot_start_yet
+      questions = @form.questions_for_subsection(subsection_key)
+      get_first_page_or_check_answers(subsection_key, @case_log, @form, questions)
+    else
+      "#"
+    end
+    link_to(subsection_value["label"], next_page_path, class: "task-name govuk-link")
   end
 
 private
