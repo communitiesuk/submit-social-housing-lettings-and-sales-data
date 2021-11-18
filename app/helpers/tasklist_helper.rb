@@ -15,7 +15,7 @@ module TasklistHelper
 
   def get_next_incomplete_section(form, case_log)
     subsections = form.all_subsections.keys
-    subsections.find { |subsection| is_incomplete?(subsection, case_log, form, form.questions_for_subsection(subsection)) }
+    subsections.find { |subsection| is_incomplete?(subsection, case_log, form) }
   end
 
   def get_subsections_count(form, case_log, status = :all)
@@ -25,8 +25,8 @@ module TasklistHelper
     subsections.count { |subsection| form.subsection_status(subsection, case_log) == status }
   end
 
-  def get_first_page_or_check_answers(subsection, case_log, form, questions)
-    path = if is_started?(subsection, case_log, form, questions)
+  def get_first_page_or_check_answers(subsection, case_log, form)
+    path = if is_started?(subsection, case_log, form)
              "case_log_#{subsection}_check_answers_path"
            else
              "case_log_#{form.first_page_for_subsection(subsection)}_path"
@@ -34,24 +34,19 @@ module TasklistHelper
     send(path, case_log)
   end
 
-  def subsection_link(subsection_key, subsection_value, status)
-    next_page_path = if status != :cannot_start_yet
-      questions = @form.questions_for_subsection(subsection_key)
-      get_first_page_or_check_answers(subsection_key, @case_log, @form, questions)
-    else
-      "#"
-    end
+  def subsection_link(subsection_key, subsection_value, status, form, case_log)
+    next_page_path = status != :cannot_start_yet ? get_first_page_or_check_answers(subsection_key, case_log, form) : "#"
     link_to(subsection_value["label"], next_page_path, class: "task-name govuk-link")
   end
 
 private
 
-  def is_incomplete?(subsection, case_log, form, questions)
+  def is_incomplete?(subsection, case_log, form)
     status = form.subsection_status(subsection, case_log)
     %i[not_started in_progress].include?(status)
   end
 
-  def is_started?(subsection, case_log, form, questions)
+  def is_started?(subsection, case_log, form)
     status = form.subsection_status(subsection, case_log)
     %i[in_progress completed].include?(status)
   end

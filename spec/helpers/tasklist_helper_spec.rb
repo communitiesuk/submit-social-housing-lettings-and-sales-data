@@ -5,7 +5,6 @@ RSpec.describe TasklistHelper do
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
-  let(:household_characteristics_questions) { form.questions_for_subsection("household_characteristics") }
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
@@ -42,11 +41,11 @@ RSpec.describe TasklistHelper do
 
   describe "get_first_page_or_check_answers" do
     it "returns the check answers page path if the section has been started already" do
-      expect(get_first_page_or_check_answers("household_characteristics", case_log, form, household_characteristics_questions)).to match(/check_answers/)
+      expect(get_first_page_or_check_answers("household_characteristics", case_log, form)).to match(/check_answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(get_first_page_or_check_answers("household_characteristics", empty_case_log, form, household_characteristics_questions)).to match(/tenant_code/)
+      expect(get_first_page_or_check_answers("household_characteristics", empty_case_log, form)).to match(/tenant_code/)
     end
   end
 end

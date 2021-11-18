@@ -4,7 +4,7 @@ FactoryBot.define do
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }
-      postcode { "P0 5ST" }
+      property_postcode { "P0 5ST" }
       previous_postcode { "SW2 6HI" }
       age1 { "17" }
     end
@@ -114,7 +114,7 @@ FactoryBot.define do
       rent_type { 1 }
       intermediate_rent_product_name { 2 }
       needs_type { 1 }
-      purchaser_code { 798794 }
+      purchaser_code { 798_794 }
       reason { "Permanently decanted from another property owned by this landlord" }
       propcode { "123" }
       majorrepairs { "Yes" }
@@ -131,7 +131,7 @@ FactoryBot.define do
       mrcday { 5 }
       mrcmonth { 5 }
       mrcyear { 2020 }
-      incref { 554355 }
+      incref { 554_355 }
       sale_completion_date { nil }
       startdate { nil }
       armedforces { 1 }

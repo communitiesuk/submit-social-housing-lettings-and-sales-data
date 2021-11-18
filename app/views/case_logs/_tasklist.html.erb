@@ -11,7 +11,7 @@
           <li class="app-task-list__item" id=<%= subsection_key %>>
             <% questions_for_subsection = @form.questions_for_subsection(subsection_key) %>
             <% subsection_status = @form.subsection_status(subsection_key, @case_log) %>
-            <%= subsection_link(subsection_key, subsection_value, subsection_status) %>
+            <%= subsection_link(subsection_key, subsection_value, subsection_status, @form, @case_log) %>
             <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
