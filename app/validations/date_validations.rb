@@ -3,7 +3,7 @@ module DateValidations
     date_valid?("mrcdate", record)
   end
 
-  def validate_tenancy_start_date(record)
+  def validate_startdate(record)
     date_valid?("startdate", record)
   end
 

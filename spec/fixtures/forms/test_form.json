@@ -244,13 +244,7 @@
                       "1": "No"
                     }
                   }
-                },
-                "conditional_route_to": {
-                  "rent": { "preg_occ": "Yes", "sex1": "Female" },
-                  "conditional_question_yes_page": { "preg_occ": "Yes" },
-                  "conditional_question_no_page": { "preg_occ": "No" }
-                },
-                "default_next_page": "check_answers"
+                }
               },
               "conditional_question_yes_page": {
                 "questions": {
@@ -264,7 +258,7 @@
                     }
                   }
                 },
-                "default_next_page": "check_answers"
+                "depends_on": { "preg_occ": "Yes" }
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -278,7 +272,7 @@
                     }
                   }
                 },
-                "default_next_page": "conditional_question_no_second_page"
+                "depends_on": { "preg_occ": "No" }
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -291,7 +285,8 @@
                       "1": "No"
                     }
                   }
-                }
+                },
+                "depends_on": { "preg_occ": "No", "sex1": "Male" }
               }
             }
           }
