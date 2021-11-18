@@ -10,19 +10,8 @@ module CheckAnswersHelper
   end
 
   def total_questions(subsection, case_log, form)
-    total_questions = {}
-    subsection_keys = form.pages_for_subsection(subsection).keys
-    page_name = subsection_keys.first
-
-    while page_name.to_s != "check_answers" && subsection_keys.include?(page_name)
-      questions = form.questions_for_page(page_name)
-      applicable_questions = form.filter_conditional_questions(questions, case_log)
-      total_questions = total_questions.merge(applicable_questions)
-
-      page_name = get_next_page_name(form, page_name, case_log)
-    end
-
-    total_questions
+    questions = form.questions_for_subsection(subsection)
+    form.filter_conditional_questions(questions, case_log)
   end
 
   def get_next_page_name(form, page_name, case_log)
@@ -37,9 +26,14 @@ module CheckAnswersHelper
     form.next_page(page_name)
   end
 
-  def create_update_answer_link(case_log_answer, case_log_id, page)
-    link_name = case_log_answer.blank? ? "Answer" : "Change"
-    link_to(link_name, "/case_logs/#{case_log_id}/#{page}", class: "govuk-link").html_safe
+  def create_update_answer_link(question_title, question_info, case_log, form)
+    page = form.page_for_question(question_title)
+    link_name = if question_info["type"] == "checkbox"
+                  question_info["answer_options"].keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
+                else
+                  case_log[question_title].blank? ? "Answer" : "Change"
+                end
+    link_to(link_name, "/case_logs/#{case_log.id}/#{page}", class: "govuk-link").html_safe
   end
 
   def create_next_missing_question_link(case_log_id, subsection, case_log, form)

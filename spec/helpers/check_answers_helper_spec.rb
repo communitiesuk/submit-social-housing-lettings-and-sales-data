@@ -11,7 +11,7 @@ RSpec.describe CheckAnswersHelper do
     )
   end
   let(:case_log_with_met_radio_condition) do
-    FactoryBot.create(:case_log, armed_forces: "Yes - a regular",
+    FactoryBot.create(:case_log, armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
                                  reservist: "No",
                                  leftreg: "Yes")
   end
@@ -47,7 +47,7 @@ RSpec.describe CheckAnswersHelper do
     end
 
     it "ignores questions with unmet radio conditions" do
-      case_log["armed_forces"] = "No"
+      case_log["armedforces"] = "No"
       expect(total_answered_questions(subsection_with_radio_conditionals, case_log, form)).to equal(1)
     end
 
@@ -119,6 +119,7 @@ RSpec.describe CheckAnswersHelper do
 
       it "counts correct questions when the conditional question is answered" do
         case_log["preg_occ"] = "No"
+        case_log["sex1"] = "Male"
         expect(total_number_of_questions(conditional_routing_subsection, case_log, form)).to eq(3)
       end
     end
@@ -126,7 +127,6 @@ RSpec.describe CheckAnswersHelper do
     context "total questions" do
       it "returns total questions" do
         result = total_questions(subsection, case_log, form)
-        expect(result.class).to eq(Hash)
         expected_keys = %w[earnings incfreq benefits hb]
         expect(result.keys).to eq(expected_keys)
       end
@@ -134,14 +134,14 @@ RSpec.describe CheckAnswersHelper do
       context "conditional questions on the same page" do
         it "it filters out conditional questions that were not displayed" do
           result = total_questions(conditional_page_subsection, case_log, form)
-          expected_keys = %w[armed_forces illness accessibility_requirements condition_effects]
+          expected_keys = %w[armedforces illness accessibility_requirements condition_effects]
           expect(result.keys).to eq(expected_keys)
         end
 
         it "it includes conditional questions that were displayed" do
-          case_log["armed_forces"] = "Yes - a regular"
+          case_log["armedforces"] = "A current or former regular in the UK Armed Forces (exc. National Service)"
           result = total_questions(conditional_page_subsection, case_log, form)
-          expected_keys = %w[armed_forces leftreg reservist illness accessibility_requirements condition_effects]
+          expected_keys = %w[armedforces leftreg reservist illness accessibility_requirements condition_effects]
           expect(result.keys).to eq(expected_keys)
         end
       end
@@ -157,14 +157,14 @@ RSpec.describe CheckAnswersHelper do
           case_log["preg_occ"] = "Yes"
           case_log["sex1"] = "Female"
           result = total_questions(conditional_routing_subsection, case_log, form)
-          expected_keys = %w[preg_occ]
+          expected_keys = %w[preg_occ cbl]
           expect(result.keys).to match_array(expected_keys)
         end
 
         it "it includes conditional pages and questions that were displayed" do
           case_log["preg_occ"] = "No"
           result = total_questions(conditional_routing_subsection, case_log, form)
-          expected_keys = %w[preg_occ conditional_question_no_question conditional_question_no_second_question]
+          expected_keys = %w[preg_occ conditional_question_no_question]
           expect(result.keys).to match_array(expected_keys)
         end
       end

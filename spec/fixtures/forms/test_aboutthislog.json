@@ -24,8 +24,7 @@
               },
               "conditional_route_to": {
                 "organisation_details": { "gdpr_acceptance": "Yes" }
-              },
-              "default_next_page": "gdpr_declined"
+              }
             },
             "gdpr_declined": {
               "header": "You cannot use this service",
@@ -33,8 +32,7 @@
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
               "questions": {
 
-              },
-              "default_next_page" : "check_answers"
+              }
             },
             "organisation_details": {
               "header": "About this log",
@@ -76,11 +74,7 @@
                     "1": "Letting"
                   }
                 }
-              },
-              "conditional_route_to": {
-                "tenant_same_property_renewal": { "sale_or_letting": "Letting" }
-              },
-              "default_next_page" : "check_answers"
+              }
             },
             "tenant_same_property_renewal": {
               "header": "About this log",
@@ -96,7 +90,8 @@
                     "1": "No"
                   }
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "tenancy_start_date": {
               "header": "About this log",
@@ -108,7 +103,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "letting_type": {
               "header": "About this log",
@@ -146,7 +142,8 @@
                     "1": "General Needs"
                   }
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Letting" }
             },
             "sale_completion_date": {
               "header": "About this log",
@@ -158,7 +155,8 @@
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Sale" }
             },
             "purchaser_code": {
               "header": "About this log",
@@ -170,7 +168,8 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": { "sale_or_letting": "Sale" }
             }
           }
         }

@@ -60,35 +60,28 @@ class Form
     }.first
   end
 
-  def next_page(previous_page)
-    if all_pages[previous_page].key?("default_next_page")
-      next_page = all_pages[previous_page]["default_next_page"]
-      return :check_answers if next_page == "check_answers"
-
-      return next_page
-    end
-
-    subsection = subsection_for_page(previous_page)
-    previous_page_idx = pages_for_subsection(subsection).keys.index(previous_page)
-    pages_for_subsection(subsection).keys[previous_page_idx + 1] || :check_answers
+  def page_for_question(question)
+    all_pages.find { |_page_key, page_value| page_value["questions"].key?(question) }.first
   end
 
-  def next_page_redirect_path(previous_page)
-    next_page = next_page(previous_page)
-    if next_page == :check_answers
-      subsection = subsection_for_page(previous_page)
+  def next_page(page, case_log)
+    subsection = subsection_for_page(page)
+    page_idx = pages_for_subsection(subsection).keys.index(page)
+    nxt_page = pages_for_subsection(subsection).keys[page_idx + 1]
+    return :check_answers if nxt_page.nil?
+    return nxt_page if page_routed_to?(nxt_page, case_log)
+
+    next_page(nxt_page, case_log)
+  end
+
+  def next_page_redirect_path(page, case_log)
+    nxt_page = next_page(page, case_log)
+    if nxt_page == :check_answers
+      subsection = subsection_for_page(page)
       "case_log_#{subsection}_check_answers_path"
     else
-      "case_log_#{next_page}_path"
+      "case_log_#{nxt_page}_path"
     end
-  end
-
-  def previous_page(current_page)
-    subsection = subsection_for_page(current_page)
-    current_page_idx = pages_for_subsection(subsection).keys.index(current_page)
-    return unless current_page_idx.positive?
-
-    pages_for_subsection(subsection).keys[current_page_idx - 1]
   end
 
   def all_questions
@@ -101,6 +94,10 @@ class Form
     applicable_questions = questions
 
     questions.each do |k, question|
+      unless page_routed_to?(page_for_question(k), case_log)
+        applicable_questions = applicable_questions.reject { |z| z == k }
+      end
+
       question.fetch("conditional_for", []).each do |conditional_question_key, condition|
         if condition_not_met(case_log, k, question, condition)
           applicable_questions = applicable_questions.reject { |z| z == conditional_question_key }
@@ -108,6 +105,18 @@ class Form
       end
     end
     applicable_questions
+  end
+
+  def page_routed_to?(page, case_log)
+    return true unless (conditions = page_dependencies(page))
+
+    conditions.all? do |question, value|
+      case_log[question].present? && case_log[question] == value
+    end
+  end
+
+  def page_dependencies(page)
+    all_pages[page]["depends_on"]
   end
 
   def condition_not_met(case_log, question_key, question, condition)

@@ -125,7 +125,7 @@ RSpec.describe CaseLogsController, type: :controller do
 
     context "conditional routing" do
       before do
-        allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+        allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
       end
 
       let(:case_log_form_conditional_question_yes_params) do
@@ -184,7 +184,7 @@ RSpec.describe CaseLogsController, type: :controller do
           "mrcdate(1i)": "2021",
           "mrcdate(2i)": "05",
           "mrcdate(3i)": "04",
-          page: "major_repairs_date",
+          page: "property_major_repairs",
         }
       end
       it "saves full and partial dates" do
@@ -198,29 +198,6 @@ RSpec.describe CaseLogsController, type: :controller do
         expect(case_log.mrcmonth).to eq(5)
         expect(case_log.mrcyear).to eq(2021)
       end
-    end
-  end
-
-  describe "get_next_page_path" do
-    let(:previous_page) { "net_income" }
-    let(:last_previous_page) { "housing_benefit" }
-    let(:previous_conditional_page) { "conditional_question" }
-    let(:form_handler) { FormHandler.instance }
-    let(:form) { form_handler.get_form("test_form") }
-    let(:case_log_controller) { CaseLogsController.new }
-
-    it "returns a correct page path if there is no conditional routing" do
-      expect(case_log_controller.send(:get_next_page_path, form, previous_page)).to eq("case_log_net_income_uc_proportion_path")
-    end
-
-    it "returns a check answers page if previous page is the last page" do
-      expect(case_log_controller.send(:get_next_page_path, form, last_previous_page)).to eq("case_log_income_and_benefits_check_answers_path")
-    end
-
-    it "returns a correct page path if there is conditional routing" do
-      responses_for_page = {}
-      responses_for_page["preg_occ"] = "No"
-      expect(case_log_controller.send(:get_next_page_path, form, previous_conditional_page, responses_for_page)).to eq("case_log_conditional_question_no_page_path")
     end
   end
 end

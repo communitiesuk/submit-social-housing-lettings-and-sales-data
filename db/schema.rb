@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_16_102527) do
+ActiveRecord::Schema.define(version: 2021_11_18_090831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "ethnic"
     t.integer "national"
     t.integer "prevten"
-    t.string "armed_forces"
     t.integer "ecstat1"
     t.integer "hhmemb"
     t.string "relat2"
@@ -60,7 +59,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "underoccupation_benefitcap"
     t.integer "leftreg"
     t.integer "reservist"
-    t.string "armed_forces_partner"
     t.integer "illness"
     t.integer "preg_occ"
     t.string "accessibility_requirements"
@@ -121,6 +119,8 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "rp_dontknow"
     t.datetime "discarded_at"
     t.string "tenancyother"
+    t.integer "override_net_income_validation"
+    t.string "net_income_known"
     t.string "gdpr_acceptance"
     t.string "gdpr_declined"
     t.string "property_owner_organisation"
@@ -131,8 +131,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.string "intermediate_rent_product_name"
     t.string "needs_type"
     t.string "purchaser_code"
-    t.integer "override_net_income_validation"
-    t.string "net_income_known"
     t.integer "reason"
     t.string "propcode"
     t.integer "majorrepairs"
@@ -154,6 +152,7 @@ ActiveRecord::Schema.define(version: 2021_11_16_102527) do
     t.integer "incref"
     t.datetime "sale_completion_date"
     t.datetime "startdate"
+    t.integer "armedforces"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

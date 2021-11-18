@@ -59,7 +59,7 @@ class CaseLogsController < ApplicationController
     @case_log.page = params[:case_log][:page]
     responses_for_page = responses_for_page(@case_log.page)
     if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-      redirect_path = get_next_page_path(form, @case_log.page, @case_log)
+      redirect_path = form.next_page_redirect_path(@case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
       page_info = form.all_pages[@case_log.page]
@@ -107,9 +107,13 @@ private
         day = params["case_log"]["#{question_key}(3i)"]
         month = params["case_log"]["#{question_key}(2i)"]
         year = params["case_log"]["#{question_key}(1i)"]
-        next unless day.present? && month.present? && year.present?
+        next unless [day, month, year].any?(&:present?)
 
-        result[question_key] = Date.new(year.to_i, month.to_i, day.to_i)
+        result[question_key] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
+                                 Date.new(year.to_i, month.to_i, day.to_i)
+                               else
+                                 Date.new(0, 1, 1)
+                               end
       end
       next unless question_params
 
@@ -136,18 +140,5 @@ private
     return {} unless params[:case_log]
 
     params.require(:case_log).permit(CaseLog.editable_fields)
-  end
-
-  def get_next_page_path(form, page, case_log = {})
-    content = form.all_pages[page]
-
-    if content.key?("conditional_route_to")
-      content["conditional_route_to"].each do |route, conditions|
-        if conditions.keys.all? { |x| case_log[x].present? } && conditions.all? { |k, v| v.include?(case_log[k]) }
-          return "case_log_#{route}_path"
-        end
-      end
-    end
-    form.next_page_redirect_path(page)
   end
 end

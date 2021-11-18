@@ -301,6 +301,19 @@ RSpec.describe "Test Features" do
         expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/person_1_age")
       end
 
+      it "should have a change link for answered questions" do
+        visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+        assert_selector "a", text: /Answer\z/, count: 4
+        assert_selector "a", text: "Change", count: 0
+        visit("/case_logs/#{empty_case_log.id}/accessibility_requirements")
+        check("case-log-accessibility-requirements-housingneeds-c-field")
+        click_button("Save and continue")
+        visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+        assert_selector "a", text: /Answer\z/, count: 3
+        assert_selector "a", text: "Change", count: 1
+        expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/accessibility_requirements")
+      end
+
       it "should have a link pointing to the first question if no questions are answered" do
         visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
         expect(page).to have_content("You answered 0 of 4 questions")
@@ -362,13 +375,13 @@ RSpec.describe "Test Features" do
       it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
         visit("/case_logs/#{id}/armed_forces")
         # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
-        choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
+        choose("case-log-armedforces-a-current-or-former-regular-in-the-uk-armed-forces-exc-national-service-field", allow_label_click: true)
         expect(page).to have_selector("#reservist_div")
         choose("case-log-reservist-no-field", allow_label_click: true)
         expect(page).to have_checked_field("case-log-reservist-no-field", visible: false)
-        choose("case-log-armed-forces-no-field", allow_label_click: true)
+        choose("case-log-armedforces-no-field", allow_label_click: true)
         expect(page).not_to have_selector("#reservist_div")
-        choose("case-log-armed-forces-yes-a-regular-field", allow_label_click: true)
+        choose("case-log-armedforces-a-current-or-former-regular-in-the-uk-armed-forces-exc-national-service-field", allow_label_click: true)
         expect(page).to have_unchecked_field("case-log-reservist-no-field", visible: false)
       end
     end
@@ -449,7 +462,7 @@ RSpec.describe "Test Features" do
 
   describe "conditional page routing", js: true do
     before do
-      allow_any_instance_of(CaseLogValidator).to receive(:validate_household_pregnancy).and_return(true)
+      allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
     end
 
     it "can route the user to a different page based on their answer on the current page" do
@@ -466,27 +479,69 @@ RSpec.describe "Test Features" do
       expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
     end
 
-    it "can route based on page inclusion rules" do
-      visit("/case_logs/#{id}/conditional_question_yes_page")
-      choose("case-log-cbl-yes-field", allow_label_click: true)
-      click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
-    end
-
-    it "can route to the default next page" do
-      visit("/case_logs/#{id}/conditional_question")
-      click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
-    end
-
     it "can route based on multiple conditions" do
       visit("/case_logs/#{id}/person_1_gender")
       choose("case-log-sex1-female-field", allow_label_click: true)
       click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/household_number_of_other_members")
       visit("/case_logs/#{id}/conditional_question")
-      choose("case-log-preg-occ-yes-field", allow_label_click: true)
+      choose("case-log-preg-occ-no-field", allow_label_click: true)
       click_button("Save and continue")
-      expect(page).to have_current_path("/case_logs/#{id}/rent")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question_no_page")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/conditional_question/check_answers")
+    end
+  end
+
+  describe "date validation", js: true do
+    def fill_in_date(case_log_id, question, day, month, year, path)
+      visit("/case_logs/#{case_log_id}/#{path}")
+      fill_in("#{question}_1i", with: year)
+      fill_in("#{question}_2i", with: month)
+      fill_in("#{question}_3i", with: day)
+    end
+    it "does not allow out of range dates to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 3100, 12, 2000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 12, 1, 20_000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 13, 100, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/local_authority/check_answers")
+    end
+
+    it "does not allow non numeric inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", "abc", "de", "ff", "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+    end
+
+    it "does not allow partial inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 21, 12, nil, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", 12, nil, 2000, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+
+      fill_in_date(id, "case_log_mrcdate", nil, 10, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/property_major_repairs")
+    end
+
+    it "allows valid inputs to be submitted" do
+      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property_major_repairs")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case_logs/#{id}/local_authority/check_answers")
     end
   end
 end
