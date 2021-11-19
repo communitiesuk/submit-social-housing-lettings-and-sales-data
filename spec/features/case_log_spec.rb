@@ -29,7 +29,7 @@ RSpec.describe "Form Features" do
     click_button("Save and continue")
     choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-hb-housing-benefit-but-not-universal-credit-field")
+    choose("case-log-hb-prefer-not-to-say-field")
     click_button("Save and continue")
   end
 

@@ -1,6 +1,6 @@
-<%= f.govuk_text_field question_key,
-    hint: { text: question["hint_text"] },
-    label: { text: question["header"].html_safe, size: "l"},
+<%= f.govuk_text_field question.id.to_sym,
+    hint: { text: question.hint_text },
+    label: { text: question.header.html_safe, size: "l"},
     width: 20,
     **stimulus_html_attributes(question)
 %>

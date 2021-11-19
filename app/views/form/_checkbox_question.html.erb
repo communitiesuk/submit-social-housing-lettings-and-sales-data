@@ -1,12 +1,12 @@
-<%= f.govuk_check_boxes_fieldset question_key,
-    legend: { text: question["header"].html_safe, size: "l" },
-    hint: { text: question["hint_text"] } do %>
+<%= f.govuk_check_boxes_fieldset question.id.to_sym,
+    legend: { text: question.header.html_safe, size: "l" },
+    hint: { text: question.hint_text } do %>
 
-    <% question["answer_options"].map do |key, val| %>
+    <% question.answer_options.map do |key, val| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_check_box_divider %>
       <% else %>
-        <%= f.govuk_check_box question_key, key,
+        <%= f.govuk_check_box question.id, key,
           label: { text: val },
           checked: @case_log[key] == "Yes",
           **stimulus_html_attributes(question)
