@@ -192,7 +192,7 @@ module DbEnums
       "Tenant moved to other social housing provider" => 12,
       "Tenant abandoned property" => 6,
       "Tenant moved to private sector or other accommodation" => 8,
-      "Relet wdto tenant who occupied same property as temporary accommodation" => 9,
+      "Relet to tenant who occupied same property as temporary accommodation" => 9,
       "Internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
       "Renewal of fixed-term tenancy" => 14,
       "Tenant moved to care home" => 18,

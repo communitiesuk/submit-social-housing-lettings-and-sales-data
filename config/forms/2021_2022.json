@@ -1736,8 +1736,7 @@
                   },
                   "depends_on": {
                     "renewal": "No",
-                    "rsnvac": "First let of conversion, rehabilitation or acquired property?",
-                    "rsnvac": "First let of leased property"
+                    "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
                   }
                 }
               }
