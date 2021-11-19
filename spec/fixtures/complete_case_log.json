@@ -57,7 +57,7 @@
     "la": "Barnet",
     "property_postcode": "NW1 5TY",
     "property_relet": "No",
-    "rsnvac": "Relet - tenant abandoned property",
+    "rsnvac": "Renewal of fixed-term tenancy",
     "property_reference": "P9876",
     "unittype_gn": "House",
     "property_building_type": "dummy",
@@ -134,6 +134,17 @@
     "postcode": "a1",
     "postcod2": "w3",
     "ppostc1": "w3",
-    "ppostc2": "w3"
+    "ppostc2": "w3",
+    "do_you_know_the_postcode": "No",
+    "do_you_know_the_local_authority": "No",
+    "why_dont_you_know_la": "Forgot",
+    "first_time_property_let_as_social_housing": "Yes",
+    "type_property_most_recently_let_as": "",
+    "property_number_of_times_relet_social_let": "1",
+    "builtype": "",
+    "property_wheelchair_accessible": "Yes",
+    "property_number_of_bedrooms": 2,
+    "void_or_renewal_date": "05/05/2020",
+    "new_build_handover_date": "01/01/2019"
   }
 }
