@@ -1123,6 +1123,7 @@
                   "header": "do_you_know_the_postcode?",
                   "hint_text": "",
                   "type": "radio",
+                  "store": "false",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
@@ -1153,9 +1154,6 @@
                     "1": "No"
                   }
                 }
-              },
-              "conditional_route_to": {
-                "why_dont_you_know_la": { "do_you_know_the_local_authority": "No" }
               }
             },
             "select_local_authority": {
