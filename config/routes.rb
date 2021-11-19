@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users, controllers: { passwords: "users/passwords" }
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
