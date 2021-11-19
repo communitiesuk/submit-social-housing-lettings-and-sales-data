@@ -3,56 +3,8 @@ require "rails_helper"
 RSpec.describe TasklistHelper do
   let(:empty_case_log) { FactoryBot.build(:case_log) }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
-  let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
-  let(:household_characteristics_questions) { form.questions_for_subsection("household_characteristics") }
-
-  describe "get subsection status" do
-    let(:section) { "income_and_benefits" }
-    let(:income_and_benefits_questions) { form.questions_for_subsection("income_and_benefits") }
-    let(:declaration_questions) { form.questions_for_subsection("declaration") }
-    let(:local_authority_questions) { form.questions_for_subsection("local_authority") }
-
-    it "returns not started if none of the questions in the subsection are answered" do
-      status = get_subsection_status("income_and_benefits", case_log, form, income_and_benefits_questions)
-      expect(status).to eq(:not_started)
-    end
-
-    it "returns cannot start yet if the subsection is declaration" do
-      status = get_subsection_status("declaration", case_log, form, declaration_questions)
-      expect(status).to eq(:cannot_start_yet)
-    end
-
-    it "returns in progress if some of the questions have been answered" do
-      case_log["previous_postcode"] = "P0 5TT"
-      status = get_subsection_status("local_authority", case_log, form, local_authority_questions)
-      expect(status).to eq(:in_progress)
-    end
-
-    it "returns completed if all the questions in the subsection have been answered" do
-      case_log["earnings"] = "value"
-      case_log["incfreq"] = "Weekly"
-      case_log["benefits"] = "All"
-      case_log["hb"] = "Do not know"
-
-      status = get_subsection_status("income_and_benefits", case_log, form, income_and_benefits_questions)
-      expect(status).to eq(:completed)
-    end
-
-    it "returns not started if the subsection is declaration and all the questions are completed" do
-      status = get_subsection_status("declaration", completed_case_log, form, declaration_questions)
-      expect(status).to eq(:not_started)
-    end
-
-    let(:conditional_section_complete_case_log) { FactoryBot.build(:case_log, :conditional_section_complete) }
-    it "sets the correct status for sections with conditional questions" do
-      status = get_subsection_status(
-        "household_characteristics", conditional_section_complete_case_log, form, household_characteristics_questions
-      )
-      expect(status).to eq(:completed)
-    end
-  end
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
@@ -89,11 +41,11 @@ RSpec.describe TasklistHelper do
 
   describe "get_first_page_or_check_answers" do
     it "returns the check answers page path if the section has been started already" do
-      expect(get_first_page_or_check_answers("household_characteristics", case_log, form, household_characteristics_questions)).to match(/check_answers/)
+      expect(get_first_page_or_check_answers("household_characteristics", case_log, form)).to match(/check_answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(get_first_page_or_check_answers("household_characteristics", empty_case_log, form, household_characteristics_questions)).to match(/tenant_code/)
+      expect(get_first_page_or_check_answers("household_characteristics", empty_case_log, form)).to match(/tenant_code/)
     end
   end
 end

@@ -365,7 +365,7 @@
             "pages": {
               "rent": {
                 "questions": {
-                  "rent_frequency": {
+                  "period": {
                     "check_answer_label": "Rent Period",
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
@@ -529,6 +529,15 @@
         "subsections": {
           "declaration": {
             "label": "Declaration",
+            "depends_on": {
+              "household_characteristics": "completed",
+              "household_needs": "completed",
+              "tenancy_information": "completed",
+              "property_information": "completed",
+              "income_and_benefits": "completed",
+              "rent": "completed",
+              "local_authority": "completed"
+            },
             "pages": {
               "declaration": {
                 "questions": {

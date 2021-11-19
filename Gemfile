@@ -33,10 +33,10 @@ gem "chartkick"
 gem "roo"
 # Json Schema
 gem "json-schema"
-gem "uk_postcode"
 # Authentication
 gem "devise"
 gem "turbo-rails", "~> 0.8"
+gem "uk_postcode"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
