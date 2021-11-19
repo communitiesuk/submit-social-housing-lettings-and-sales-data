@@ -1123,7 +1123,6 @@
                   "header": "do_you_know_the_postcode?",
                   "hint_text": "",
                   "type": "radio",
-                  "store": "false",
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
@@ -1160,7 +1159,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "select_local_authority": {
+                "la": {
                   "check_answer_label": "Local Authority",
                   "header": "Select a local authority",
                   "hint_text": "",
@@ -1510,7 +1509,8 @@
                     "0": "Yes",
                     "1": "No"
                   }
-                }
+                },
+                "depends_on": { "renewal": "Not Renewal"}
               }
             },
             "type_property_most_recently_let_as": {
@@ -1530,7 +1530,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "Not Renewal" }
             },
             "property_vacancy_reason_not_first_let": {
               "header": "",
@@ -1556,7 +1556,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "Not Renewal" }
             },
             "property_vacancy_reason_first_let": {
               "header": "",
@@ -1574,7 +1574,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes" }
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "renewal": "Not Renewal" }
             },
             "property_number_of_times_relet_not_social_let": {
               "header": "",
@@ -1590,7 +1590,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "Not Renewal" }
             },
             "property_number_of_times_relet_social_let": {
               "header": "",
@@ -1606,7 +1606,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes" }
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "renewal": "Not Renewal" }
             },
             "property_unit_type": {
               "header": "",
@@ -1634,7 +1634,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "": {
+                "builtype": {
                   "check_answer_label": "Building type",
                   "header": "Which type of building is the property?",
                   "hint_text": "",
@@ -1675,7 +1675,8 @@
                   "max": 150,
                   "step": 1
                 }
-              }
+              },
+              "depends_on": { "needstype": "General Needs" }
             },
             "void_or_renewal_date": {
               "header": "",
@@ -1688,7 +1689,7 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "rsnvac": "First let of newbuild property" }
+              "depends_on": { "rsnvac": "First let of newbuild property", "renewal": "Not Renewal" }
             },
             "property_major_repairs": {
               "header": "",
@@ -1705,7 +1706,8 @@
                   },
                   "conditional_for": {
                     "mrcdate": ["Yes"]
-                  }
+                  },
+                  "depends_on": { "renewal": "Not Renewal" }
                 },
                 "mrcdate": {
                   "check_answer_label": "What was the major repairs completion date?",
@@ -1715,6 +1717,30 @@
                 }
               },
               "depends_on": { "rsnvac": "First let of newbuild property" }
+            },
+            "new_build_handover_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "majorrepairs": {
+                  "check_answer_label": "Were major repairs carried out during the void period?",
+                  "header": "Were any major repairs completed during the void period?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  },
+                  "conditional_for": {
+                    "mrcdate": ["Yes"]
+                  },
+                  "depends_on": {
+                    "renewal": "Not Renewal",
+                    "rsnvac": "First let of conversion, rehabilitation or acquired property?",
+                    "rsnvac": "First let of leased property"
+                  }
+                }
+              }
             }
           }
         }
