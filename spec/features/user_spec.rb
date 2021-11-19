@@ -50,4 +50,25 @@ RSpec.describe "User Features" do
       expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
+
+  context "Your Account " do
+    it "main page is present and accessible" do
+      visit("/users/account")
+      expect(page).to have_content("Your account")
+    end
+
+    it "personal details page is present and accessible" do
+      visit("/users/account/personal_details")
+      expect(page).to have_content("Personal details")
+    end
+
+    it "can navigate to personal details from main account page" do
+      visit("/users/account")
+      click_link("change-name")
+      expect(page).to have_content("Personal details")
+      visit("/users/account")
+      click_link("change-email")
+      expect(page).to have_content("Personal details")
+    end
+  end
 end
