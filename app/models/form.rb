@@ -108,6 +108,7 @@ class Form
   end
 
   def page_routed_to?(page, case_log)
+    # binding.pry
     return true unless (conditions = page_dependencies(page))
 
     conditions.all? do |question, value|

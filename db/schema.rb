@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_104835) do
+ActiveRecord::Schema.define(version: 2021_11_19_154133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_104835) do
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"
-    t.string "tenant_same_property_renewal"
+    t.string "renewal"
     t.string "rent_type"
     t.string "intermediate_rent_product_name"
     t.string "needs_type"
@@ -154,12 +154,12 @@ ActiveRecord::Schema.define(version: 2021_11_19_104835) do
     t.integer "incref"
     t.datetime "sale_completion_date"
     t.datetime "startdate"
-    t.integer "do_you_know_the_postcode"
-    t.integer "do_you_know_the_local_authority"
+    t.string "do_you_know_the_postcode"
+    t.string "do_you_know_the_local_authority"
     t.string "why_dont_you_know_la"
-    t.integer "first_time_property_let_as_social_housing"
-    t.integer "type_property_most_recently_let_as"
-    t.integer "builtype"
+    t.string "first_time_property_let_as_social_housing"
+    t.string "type_property_most_recently_let_as"
+    t.string "builtype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 
