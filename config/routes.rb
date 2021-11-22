@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { passwords: "users/passwords" }
+  devise_for :users, :controllers => { passwords: "users/passwords" }, :skip => [:registrations]  
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
-  end                                
-  as :user do
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'    
-    patch 'users' => 'users/registrations#update', :as => 'user_registration'            
-  end
+    patch 'users' => 'users/registrations#update', :as => 'user_registration'
+  end                                
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
