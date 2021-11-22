@@ -2,7 +2,7 @@
   <%= link_to 'Back', :back, class: "govuk-back-link" %>
 <% end %>
 
-<%= form_for(resource, as: resource_name, url: user_registration_path(), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: user_registration_path(), html: { method: :patch }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Change your password</h1>
