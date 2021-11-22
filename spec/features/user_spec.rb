@@ -70,5 +70,10 @@ RSpec.describe "User Features" do
       click_link("change-email")
       expect(page).to have_content("Personal details")
     end
+
+    it "edit password page present and accessible" do
+      visit("users/edit")
+      expect(page).to have_content("Change your password")
+    end
   end
 end
