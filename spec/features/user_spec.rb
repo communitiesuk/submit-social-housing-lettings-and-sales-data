@@ -52,6 +52,14 @@ RSpec.describe "User Features" do
   end
 
   context "Your Account " do
+
+    before(:each) do
+      visit("/case_logs")
+      fill_in("user_email", with: "test@example.com")
+      fill_in("user_password", with: "pAssword1")
+      click_button("Sign in")
+    end
+    
     it "main page is present and accessible" do
       visit("/users/account")
       expect(page).to have_content("Your account")
@@ -74,6 +82,16 @@ RSpec.describe "User Features" do
     it "edit password page present and accessible" do
       visit("users/edit")
       expect(page).to have_content("Change your password")
+    end
+
+    it "can navigate to change your password page from main account page" do
+      visit("/users/account")
+      click_link("change-password")
+      expect(page).to have_content("Change your password")
+      fill_in("user_current_password", with: "pAssword1")
+      fill_in("user_password", with: "Password123!")
+      click_button("Update")
+      expect(page).to have_current_path("/users/account")
     end
   end
 end
