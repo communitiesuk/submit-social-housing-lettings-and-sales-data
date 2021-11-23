@@ -1,11 +1,1 @@
-<div class="cell govuk-body">
-  <strong class="cell question_cell">
-    <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
-  </strong>
-</div>
-<div class="govuk-body">
-  <% question["answer_options"].each do |index, answer_option| %>
-    <input type="checkbox"/>
-    <label><%=answer_option %></label>
-  <%end %>
-</div>
+<%= render partial: "form/print/radio_question", locals: { question_key: question_key, question: question, index: index, f: f, outer_grid: outer_grid } %>

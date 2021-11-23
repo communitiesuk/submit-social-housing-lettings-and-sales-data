@@ -6,9 +6,23 @@
   border: 1px solid gray;
 }
 
+.one-grid {
+  display: grid;
+  grid-template-columns: auto;
+  font-size: 10px;
+  grid-auto-columns: 1fr 200px;
+}
+
 .two-grid {
   display: grid;
   grid-template-columns: auto auto;
+  font-size: 10px;
+  grid-auto-columns: 1fr 200px;
+}
+
+.four-grid {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
   font-size: 10px;
   grid-auto-columns: 1fr 200px;
 }
@@ -24,6 +38,8 @@
   font-size: small;
   margin-bottom: 0;
   margin-top: 5px;
+  background-color: #1d70b8;
+  color: white;
 }
 
 .govuk-body{

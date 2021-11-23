@@ -3,21 +3,59 @@
     <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
   </strong>
 </div>
-<div class="two-grid govuk-body">
-  <div>
-    <% question["answer_options"].each do |index, answer_option| %>
-      <% if index.to_i.even? %>
-        <input type="checkbox"/>
-        <label><%=answer_option %></label><br/>
-      <% end %>
-    <%end %>
+<%if outer_grid == 'three-grid' %>
+  <div class="two-grid govuk-body">
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if index.to_i.even? %>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if !index.to_i.even?%>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
   </div>
-  <div>
-    <% question["answer_options"].each do |index, answer_option| %>
-      <% if !index.to_i.even? %>
-        <input type="checkbox"/>
-        <label><%=answer_option %></label><br/>
-      <% end %>
-    <%end %>
+
+<% else %>
+  <div class="four-grid govuk-body">
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if index.to_i.even? && index.to_i%4 != 0 %>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if !index.to_i.even? && index.to_i%3 != 0%>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if index.to_i.even? && index.to_i%4 == 0%>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
+    <div>
+      <% question["answer_options"].each_with_index do |answer_option, index| %>
+        <% if !index.to_i.even? && index.to_i%3 == 0%>
+          <input type="checkbox"/>
+          <label><%=answer_option[1] %></label><br/>
+        <% end %>
+      <%end %>
+    </div>
   </div>
-</div>
+<% end %>
