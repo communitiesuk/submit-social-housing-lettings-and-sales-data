@@ -1,9 +1,9 @@
-<div class="cell">
+<div class="cell govuk-body">
   <strong class="cell question_cell">
     <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
   </strong>
 </div>
-<div class="grid">
+<div class="two-grid govuk-body">
   <div>
     <% question["answer_options"].each do |index, answer_option| %>
       <% if index.to_i.even? %>

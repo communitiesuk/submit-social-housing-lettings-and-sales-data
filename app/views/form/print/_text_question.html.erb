@@ -1,7 +1,11 @@
-<strong class="cell">
-  <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%><br/>
-</strong>
+<div class="cell govuk-body">
+  <strong class="cell">
+    <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%><br/>
+  </strong>
+</div>
 <div>
-  <div class="cell_answer_too"></div>
+  <div class="cell_answer">
+    <br/>
+  </div>
 </div>
 

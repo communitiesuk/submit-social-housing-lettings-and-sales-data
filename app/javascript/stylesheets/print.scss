@@ -1,13 +1,9 @@
 .cell {
-  background-color: lightgrey;
-}
-
-.question_cell {
-  grid-column: 1;
+  background-color: gainsboro;
 }
 
 .grid-row {
-  border: 0.5px solid rgba(0, 0, 0, 0.8);
+  border: 1px solid gray;
 }
 
 .two-grid {
@@ -15,22 +11,23 @@
   grid-template-columns: auto auto;
   font-size: 10px;
   grid-auto-columns: 1fr 200px;
-
 }
-
 
 .three-grid {
   display: grid;
   grid-template-columns: auto auto auto;
   font-size: 10px;
   grid-auto-columns: 1fr 200px;
-
 }
 
 .print-header {
   size: 12px;
 }
 
+.govuk-body{
+  font-size: 10px;
+  margin-bottom: 0;
+}
 @media print {
   body {
     -webkit-print-color-adjust: exact;
@@ -38,5 +35,4 @@
   .cell {
     background-color: lightgrey;
   }
-
 }

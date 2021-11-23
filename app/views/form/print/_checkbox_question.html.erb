@@ -1,9 +1,9 @@
-<div class="cell">
+<div class="cell govuk-body">
   <strong class="cell question_cell">
     <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
   </strong>
 </div>
-<div>
+<div class="govuk-body">
   <% question["answer_options"].each do |index, answer_option| %>
     <input type="checkbox"/>
     <label><%=answer_option %></label>
