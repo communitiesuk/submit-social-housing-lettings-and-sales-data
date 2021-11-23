@@ -66,7 +66,7 @@ module HouseholdValidations
     return unless record.age1
 
     if !record.age1.is_a?(Integer) || record.age1 < 16 || record.age1 > 120
-      record.errors.add "age1", "Tenant age must be an integer between 16 and 120"
+      record.errors.add :age1, "Tenant age must be an integer between 16 and 120"
     end
   end
 

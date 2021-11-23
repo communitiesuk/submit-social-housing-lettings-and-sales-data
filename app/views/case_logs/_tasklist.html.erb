@@ -1,17 +1,16 @@
 <ol class="app-task-list app-task-list--no-numbers">
-  <% @form.all_sections.map do |section_key, section_value| %>
+  <% @form.sections.map do |section| %>
     <li>
       <h2 class="app-task-list__section">
         <span class="app-task-list__section-number">
-          <%= section_value["label"] %>
+          <%= section.label %>
         </span>
       </h2>
       <ul class="app-task-list__items">
-        <% section_value["subsections"].map do |subsection_key, subsection_value| %>
-          <li class="app-task-list__item" id=<%= subsection_key %>>
-            <% questions_for_subsection = @form.questions_for_subsection(subsection_key) %>
-            <% subsection_status = @form.subsection_status(subsection_key, @case_log) %>
-            <%= subsection_link(subsection_key, subsection_value, subsection_status, @form, @case_log) %>
+        <% section.subsections.map do |subsection| %>
+          <li class="app-task-list__item" id=<%= subsection.id %>>
+            <% subsection_status = subsection.status(@case_log) %>
+            <%= subsection_link(subsection, @case_log) %>
             <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
