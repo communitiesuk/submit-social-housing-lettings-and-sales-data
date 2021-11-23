@@ -3,9 +3,21 @@
     <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
   </strong>
 </div>
-<div class="govuk-body">
-  <% question["answer_options"].each do |index, answer_option| %>
-    <input type="checkbox"/>
-    <label><%=answer_option %></label>
-  <%end %>
+<div class="two-grid govuk-body">
+  <div>
+    <% question["answer_options"].each do |index, answer_option| %>
+      <% if index.to_i.even? %>
+        <input type="checkbox"/>
+        <label><%=answer_option %></label><br/>
+      <% end %>
+    <%end %>
+  </div>
+  <div>
+    <% question["answer_options"].each do |index, answer_option| %>
+      <% if !index.to_i.even? %>
+        <input type="checkbox"/>
+        <label><%=answer_option %></label><br/>
+      <% end %>
+    <%end %>
+  </div>
 </div>

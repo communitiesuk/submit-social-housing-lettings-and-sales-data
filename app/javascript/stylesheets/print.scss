@@ -20,8 +20,10 @@
   grid-auto-columns: 1fr 200px;
 }
 
-.print-header {
-  size: 12px;
+.govuk-heading-s {
+  font-size: small;
+  margin-bottom: 0;
+  margin-top: 5px;
 }
 
 .govuk-body{
@@ -35,4 +37,5 @@
   .cell {
     background-color: lightgrey;
   }
+  .noprint {display:none;}
 }

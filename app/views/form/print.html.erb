@@ -1,8 +1,8 @@
-<h1>Print the form</h1>
+<h1>2021/2022 form</h1>
 
 <%= form_with do |f| %>
   <% @form.all_subsections.each do |subsection_name, subsection_content| %>
-    <p class="print-header"><%= subsection_content["label"] %></p>
+    <p class="govuk-heading-s"><%= subsection_content["label"] %></p>
     <% large_answers = @form.questions_for_subsection(subsection_name).any? {|key, info| info["type"]== 'checkbox' || info["type"]== 'radio' && info["answer_options"].keys.length > 4} ? "two-grid" : "three-grid" %>
     <div class="<%= large_answers %>">
         <% @form.questions_for_subsection(subsection_name).each_with_index do |question, index| %>
