@@ -34,7 +34,7 @@
   grid-auto-columns: 1fr 200px;
 }
 
-.govuk-heading-s {
+.print-form-heading {
   font-size: small;
   margin-bottom: 0;
   margin-top: 5px;
@@ -54,4 +54,12 @@
     background-color: lightgrey;
   }
   .noprint {display:none;}
+
+  .one-grid {
+    page-break-inside: avoid;
+  }
+
+  .three-grid {
+    page-break-inside: avoid;
+  }
 }

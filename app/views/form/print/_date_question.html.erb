@@ -1,8 +1,1 @@
-<div class="cell govuk-body">
-  <strong class="cell question_cell">
-    <%= question["header"].html_safe.present? ?  question["header"].html_safe : "missing question header"%>
-  </strong>
-</div>
-<div class="cell_answer">
-  <br/>
-</div>
+<%= render partial: "form/print/text_question", locals: { question_key: question_key, question: question, index: index, f: f, outer_grid: outer_grid } %>
