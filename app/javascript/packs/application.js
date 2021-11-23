@@ -10,6 +10,8 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import { initAll } from 'govuk-frontend'
 import "@hotwired/turbo-rails"
+import ('stylesheets/print.scss');
+
 
 
 Rails.start()

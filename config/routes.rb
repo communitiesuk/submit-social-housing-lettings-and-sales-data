@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root to: "test#index"
   get "about", to: "about#index"
+  get "form/print", to: "case_logs#print"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")

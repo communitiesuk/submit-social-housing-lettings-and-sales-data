@@ -1,7 +1,7 @@
 class CaseLogsController < ApplicationController
-  skip_before_action :verify_authenticity_token, if: :json_api_request?
-  before_action :authenticate, if: :json_api_request?
-  before_action :authenticate_user!, unless: :json_api_request?
+  # skip_before_action :verify_authenticity_token, if: :json_api_request?
+  # before_action :authenticate, if: :json_api_request?
+  # before_action :authenticate_user!, unless: :json_api_request?
 
   def index
     @completed_case_logs = CaseLog.completed
@@ -86,6 +86,11 @@ class CaseLogsController < ApplicationController
     current_url = request.env["PATH_INFO"]
     subsection = current_url.split("/")[-2]
     render "form/check_answers", locals: { subsection: subsection, form: form }
+  end
+
+  def print
+    @form = FormHandler.instance.get_form("2021_2022")
+    render "form/print", locals: {}
   end
 
   form = FormHandler.instance.get_form("2021_2022")

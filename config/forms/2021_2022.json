@@ -1111,6 +1111,7 @@
                   "header": "Property location",
                   "hint_text": "",
                   "type": "radio",
+                  "print_type": "text",
                   "answer_options": {
                     "0": "Adur",
                     "1": "Allerdale",
@@ -1871,6 +1872,7 @@
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
                   "type": "radio",
+                  "print_type": "text",
                   "answer_options": {
                     "0": "Adur",
                     "1": "Allerdale",

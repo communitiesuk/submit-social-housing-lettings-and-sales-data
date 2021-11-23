@@ -29,8 +29,6 @@ RSpec.describe Users::PasswordsController, type: :request do
       follow_redirect!
       expect(response.body).to match(/Check your email/)
     end
-
-
   end
 
   context "when a password reset is requested the email" do
