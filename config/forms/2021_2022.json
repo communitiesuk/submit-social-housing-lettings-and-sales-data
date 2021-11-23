@@ -1156,7 +1156,7 @@
                   "check_answer_label": "Local Authority",
                   "header": "Select a local authority",
                   "hint_text": "",
-                  "type": "radio",
+                  "type": "select",
                   "answer_options": {
                     "0": "Adur",
                     "1": "Allerdale",
@@ -2009,7 +2009,7 @@
                   "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation",
-                  "type": "radio",
+                  "type": "select",
                   "answer_options": {
                     "0": "Adur",
                     "1": "Allerdale",
