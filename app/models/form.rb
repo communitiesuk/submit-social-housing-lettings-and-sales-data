@@ -25,8 +25,8 @@ class Form
 
   def next_page(page, case_log)
     page_ids = subsection_for_page(page).pages.map(&:id)
-    page_idx = page_ids.index(page.id)
-    nxt_page = get_page(page_ids[page_idx + 1])
+    page_index = page_ids.index(page.id)
+    nxt_page = get_page(page_ids[page_index + 1])
     return :check_answers if nxt_page.nil?
     return nxt_page.id if nxt_page.routed_to?(case_log)
 

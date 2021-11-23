@@ -57,8 +57,8 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    @case_log.page = params[:case_log][:page]
-    page = form.get_page(@case_log.page)
+    @case_log.page_id = params[:case_log][:page]
+    page = form.get_page(@case_log.page_id)
     responses_for_page = responses_for_page(page)
     if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
       redirect_path = form.next_page_redirect_path(page, @case_log)
@@ -101,7 +101,7 @@ private
   API_ACTIONS = %w[create show update destroy].freeze
 
   def responses_for_page(page)
-    page.expected_responses.each_with_object({}) do |(question), result|
+    page.expected_responses.each_with_object({}) do |question, result|
       question_params = params["case_log"][question.id]
       if question.type == "date"
         day = params["case_log"]["#{question.id}(3i)"]
