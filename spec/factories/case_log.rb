@@ -56,7 +56,6 @@ FactoryBot.define do
       previous_postcode { "SE2 6RT" }
       rsnvac { "Tenant abandoned property" }
       unittype_gn { "House" }
-      property_building_type { "dummy" }
       beds { 3 }
       property_void_date { "03/11/2019" }
       offered { 2 }
@@ -133,8 +132,10 @@ FactoryBot.define do
       mrcyear { 2020 }
       incref { 554_355 }
       sale_completion_date { nil }
-      startdate { nil }
+      startdate { Time.zone.now }
       armedforces { 1 }
+      builtype { 1 }
+      unitletas { 2 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

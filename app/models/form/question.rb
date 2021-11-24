@@ -33,12 +33,6 @@ class Form::Question
     !!readonly
   end
 
-  def conditional_on
-    @conditional_on ||= form.conditional_question_conditions.select do |condition|
-      condition[:to] == id
-    end
-  end
-
   def enabled?(case_log)
     return true if conditional_on.blank?
 
@@ -59,6 +53,12 @@ private
     answer = []
     answer_options.each { |key, value| case_log[key] == "Yes" ? answer << value : nil }
     answer.join(", ")
+  end
+
+  def conditional_on
+    @conditional_on ||= form.conditional_question_conditions.select do |condition|
+      condition[:to] == id
+    end
   end
 
   def evaluate_condition(condition, case_log)

@@ -159,7 +159,7 @@ class BulkUpload
       # property_reference: row[100],
       beds: row[101],
       unittype_gn: row[102],
-      property_building_type: row[103],
+      builtype: row[103],
       wchair: row[104],
       property_relet: row[105],
       rsnvac: row[106],

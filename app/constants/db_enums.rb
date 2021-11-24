@@ -22,7 +22,7 @@ module DbEnums
   def self.builtype
     {
       "Purpose built" => 1,
-      "Conversion" => 2
+      "Conversion" => 2,
     }
   end
 

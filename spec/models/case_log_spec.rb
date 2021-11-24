@@ -330,6 +330,7 @@ RSpec.describe Form, type: :model do
   describe "status" do
     let!(:empty_case_log) { FactoryBot.create(:case_log) }
     let!(:in_progress_case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let!(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
 
     it "is set to not started for an empty case log" do
       expect(empty_case_log.not_started?).to be(true)
@@ -337,10 +338,16 @@ RSpec.describe Form, type: :model do
       expect(empty_case_log.completed?).to be(false)
     end
 
-    it "is set to not started for an empty case log" do
+    it "is set to in progress for a started case log" do
       expect(in_progress_case_log.in_progress?).to be(true)
       expect(in_progress_case_log.not_started?).to be(false)
       expect(in_progress_case_log.completed?).to be(false)
+    end
+
+    it "is set to completed for a completed case log" do
+      expect(completed_case_log.in_progress?).to be(false)
+      expect(completed_case_log.not_started?).to be(false)
+      expect(completed_case_log.completed?).to be(true)
     end
   end
 

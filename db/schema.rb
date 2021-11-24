@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_24_152204) do
+ActiveRecord::Schema.define(version: 2021_11_24_174732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,6 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.integer "ethnic"
     t.integer "national"
     t.integer "prevten"
-    t.string "armed_forces"
     t.integer "ecstat1"
     t.integer "hhmemb"
     t.string "relat2"
@@ -70,7 +69,6 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.integer "underoccupation_benefitcap"
     t.integer "leftreg"
     t.integer "reservist"
-    t.string "armed_forces_partner"
     t.integer "illness"
     t.integer "preg_occ"
     t.string "accessibility_requirements"
@@ -84,7 +82,6 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.string "previous_postcode"
     t.integer "rsnvac"
     t.integer "unittype_gn"
-    t.string "property_building_type"
     t.integer "beds"
     t.string "property_void_date"
     t.integer "offered"
@@ -100,6 +97,7 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.integer "tcharge"
     t.integer "layear"
     t.integer "lawaitlist"
+    t.string "property_postcode"
     t.integer "reasonpref"
     t.string "reasonable_preference_reason"
     t.integer "cbl"
@@ -164,7 +162,6 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.datetime "sale_completion_date"
     t.datetime "startdate"
     t.integer "armedforces"
-    t.string "property_postcode"
     t.integer "first_time_property_let_as_social_housing"
     t.string "why_dont_you_know_la"
     t.integer "unitletas"

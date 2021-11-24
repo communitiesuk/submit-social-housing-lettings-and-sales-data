@@ -1,6 +1,6 @@
 FactoryBot.define do
-  factory :user do
-    email { "test@example.com" }
+  factory :admin_user do
+    email { "admin@example.com" }
     password { "pAssword1" }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
