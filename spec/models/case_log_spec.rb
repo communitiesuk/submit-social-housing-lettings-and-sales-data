@@ -324,6 +324,36 @@ RSpec.describe Form, type: :model do
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
+
+      context "given an income in upper soft validation range" do
+        let(:case_log) do
+          FactoryBot.create(:case_log,
+                            ecstat1: "Full-time - 30 hours or more",
+                            earnings: 750,
+                            incfreq: "Weekly")
+        end
+
+        it "updates soft errors" do
+          expect(case_log.has_no_unresolved_soft_errors?).to be false
+          expect(case_log.soft_errors["override_net_income_validation"].message)
+            .to match(/Net income is higher than expected/)
+        end
+      end
+
+      context "given an income in lower soft validation range" do
+        let(:case_log) do
+          FactoryBot.create(:case_log,
+                            ecstat1: "Full-time - 30 hours or more",
+                            earnings: 120,
+                            incfreq: "Weekly")
+        end
+
+        it "updates soft errors" do
+          expect(case_log.has_no_unresolved_soft_errors?).to be false
+          expect(case_log.soft_errors["override_net_income_validation"].message)
+            .to match(/Net income is lower than expected/)
+        end
+      end
     end
   end
 

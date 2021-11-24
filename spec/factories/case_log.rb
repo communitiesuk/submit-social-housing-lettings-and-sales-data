@@ -60,7 +60,7 @@ FactoryBot.define do
       property_void_date { "03/11/2019" }
       offered { 2 }
       wchair { "Yes" }
-      earnings { 60 }
+      earnings { 68 }
       incfreq { "Weekly" }
       benefits { "Some" }
       period { "Fortnightly" }
