@@ -1,6 +1,6 @@
-<%= f.govuk_date_field question_key,
-    hint: { text: question["hint_text"] },
-    legend: { text: question["header"].html_safe, size: "l"},
+<%= f.govuk_date_field question.id.to_sym,
+    hint: { text: question.hint_text },
+    legend: { text: question.header.html_safe, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1" },
     width: 20,
     **stimulus_html_attributes(question)
 %>

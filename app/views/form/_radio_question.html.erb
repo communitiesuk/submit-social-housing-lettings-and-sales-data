@@ -1,13 +1,13 @@
-<%= f.govuk_radio_buttons_fieldset question_key,
-    legend: { text: question["header"].html_safe, size: "l" },
-    hint: { text: question["hint_text"] },
-    small: (question["answer_options"].size > 5) do %>
+<%= f.govuk_radio_buttons_fieldset question.id.to_sym,
+    legend: { text: question.header.html_safe, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1" },
+    hint: { text: question.hint_text },
+    small: (question.answer_options.size > 5) do %>
 
-    <% question["answer_options"].map do |key, val| %>
+    <% question.answer_options.map do |key, val| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
       <% else %>
-        <%= f.govuk_radio_button question_key, val, label: { text: val }, **stimulus_html_attributes(question) %>
+        <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>
 <% end %>

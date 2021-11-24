@@ -10,23 +10,23 @@ module QuestionAttributeHelper
 private
 
   def numeric_question_html_attributes(question)
-    return {} if question["fields-to-add"].blank? || question["result-field"].blank?
+    return {} if question.fields_to_add.blank? || question.result_field.blank?
 
     {
       "data-controller": "numeric-question",
       "data-action": "numeric-question#calculateFields",
-      "data-target": "case-log-#{question['result-field'].to_s.dasherize}-field",
-      "data-calculated": question["fields-to-add"].to_json,
+      "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
+      "data-calculated": question.fields_to_add.to_json,
     }
   end
 
   def conditional_html_attributes(question)
-    return {} if question["conditional_for"].blank?
+    return {} if question.conditional_for.blank?
 
     {
       "data-controller": "conditional-question",
       "data-action": "conditional-question#displayConditional",
-      "data-info": question["conditional_for"].to_json,
+      "data-info": question.conditional_for.to_json,
     }
   end
 end

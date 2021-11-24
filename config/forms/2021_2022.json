@@ -194,6 +194,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "person_1_age": {
               "header": "",
@@ -740,6 +741,7 @@
         },
         "household_situation": {
           "label": "Household situation",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "previous_housing_situation": {
               "header": "",
@@ -865,6 +867,7 @@
         },
         "household_needs": {
           "label": "Household needs",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -1002,6 +1005,7 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1101,6 +1105,7 @@
         },
         "property_information": {
           "label": "Property information",
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "property_reference": {
               "header": "",
@@ -1750,6 +1755,7 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income and benefits",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "net_income": {
               "header": "",
@@ -1843,6 +1849,7 @@
         },
         "rent": {
           "label": "Rent",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "rent": {
               "header": "",
@@ -1968,6 +1975,7 @@
       "subsections": {
         "local_authority": {
           "label": "Local authority",
+          "depends_on": {"about_this_log": "completed"},
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -2431,6 +2439,17 @@
       "subsections": {
         "declaration": {
           "label": "Declaration",
+          "depends_on": {
+            "about_this_log": "completed",
+            "household_characteristics": "completed",
+            "household_situation": "completed",
+            "household_needs": "completed",
+            "tenancy_information": "completed",
+            "property_information": "completed",
+            "income_and_benefits": "completed",
+            "rent": "completed",
+            "local_authority": "completed"
+          },
           "pages": {
             "declaration": {
               "header": "",

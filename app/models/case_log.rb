@@ -11,7 +11,7 @@ class CaseLogValidator < ActiveModel::Validator
     # If we've come from the form UI we only want to validate the specific fields
     # that have just been submitted. If we're submitting a log via API or Bulk Upload
     # we want to validate all data fields.
-    page_to_validate = record.page
+    page_to_validate = record.page_id
     if page_to_validate
       public_send("validate_#{page_to_validate}", record) if respond_to?("validate_#{page_to_validate}")
     else
@@ -44,7 +44,7 @@ class CaseLog < ApplicationRecord
   validates_with CaseLogValidator
   before_save :update_status!
 
-  attr_accessor :page
+  attr_accessor :page_id
 
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }
 

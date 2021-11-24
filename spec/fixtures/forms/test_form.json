@@ -303,13 +303,15 @@
             "label": "Income and benefits",
             "pages": {
               "net_income": {
+                "header": "Test header",
+                "description": "Some extra text for the page",
                 "questions": {
                   "earnings": {
                     "check_answer_label": "Income",
                     "header": "What is the tenant’s /and partner’s combined income after tax?",
                     "type": "numeric",
                     "min": 0,
-                    "step": "1"
+                    "step": 1
                   },
                   "incfreq": {
                     "check_answer_label": "Income Frequency",
@@ -354,6 +356,32 @@
                     "answer_options": {
                       "0": "Housing Benefit, but not Universal Credit",
                       "1": "Prefer not to say"
+                    },
+                    "conditional_for": {
+                      "conditional_question": ["Housing Benefit, but not Universal Credit"]
+                    }
+                  },
+                  "conditional_question": {
+                    "check_answer_label": "Conditional Question",
+                    "header": "Question to test page conditions",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Option A",
+                      "1": "Option B"
+                    }
+                  }
+                }
+              },
+              "dependent_page": {
+                "depends_on": { "incfreq": "Weekly" },
+                "questions": {
+                  "dependent_question": {
+                    "check_answer_label": "Dependent Question",
+                    "header": "Question to test page routing",
+                    "type": "checkbox",
+                    "answer_options": {
+                      "0": "Option A",
+                      "1": "Option B"
                     }
                   }
                 }
@@ -365,7 +393,7 @@
             "pages": {
               "rent": {
                 "questions": {
-                  "rent_frequency": {
+                  "period": {
                     "check_answer_label": "Rent Period",
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
@@ -529,6 +557,15 @@
         "subsections": {
           "declaration": {
             "label": "Declaration",
+            "depends_on": {
+              "household_characteristics": "completed",
+              "household_needs": "completed",
+              "tenancy_information": "completed",
+              "property_information": "completed",
+              "income_and_benefits": "completed",
+              "rent": "completed",
+              "local_authority": "completed"
+            },
             "pages": {
               "declaration": {
                 "questions": {
