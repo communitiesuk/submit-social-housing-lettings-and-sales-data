@@ -1,9 +1,11 @@
 module ConditionalQuestionsHelper
   def conditional_questions_for_page(page)
-    page.questions.map(&:conditional_for).compact.map(&:keys).flatten
+    page["questions"].values.map { |question|
+      question["conditional_for"]
+    }.compact.map(&:keys).flatten
   end
 
-  def display_question_key_div(page, question)
-    "style='display:none;'".html_safe if conditional_questions_for_page(page).include?(question.id)
+  def display_question_key_div(page_info, question_key)
+    "style='display:none;'".html_safe if conditional_questions_for_page(page_info).include?(question_key)
   end
 end

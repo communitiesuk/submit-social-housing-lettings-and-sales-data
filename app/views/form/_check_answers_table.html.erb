@@ -1,11 +1,11 @@
 <div class="govuk-summary-list__row">
   <dt class="govuk-summary-list__key">
-    <%= question.check_answer_label.to_s.present? ?  question.check_answer_label.to_s : question.header.to_s %>
+    <%= question_info["check_answer_label"].to_s.present? ?  question_info["check_answer_label"].to_s : question_info["header"].to_s%>
   <dt>
   <dd class="govuk-summary-list__value">
-    <%= question.answer_label(@case_log) %>
+    <%= form.get_answer_label(@case_log, question_title) %>
   </dd>
   <dd class="govuk-summary-list__actions">
-    <%= link_to(question.update_answer_link_name(@case_log), "/case_logs/#{@case_log.id}/#{question.page.id}", class: "govuk-link").html_safe %>
+    <%= create_update_answer_link(question_title, question_info, @case_log, form) %>
   </dd>
 </div>

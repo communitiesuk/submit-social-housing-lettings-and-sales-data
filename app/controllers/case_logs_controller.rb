@@ -1,7 +1,6 @@
 class CaseLogsController < ApplicationController
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
-  before_action :authenticate_user!, unless: :json_api_request?
 
   def index
     @completed_case_logs = CaseLog.completed
@@ -57,15 +56,15 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    @case_log.page_id = params[:case_log][:page]
-    page = form.get_page(@case_log.page_id)
-    responses_for_page = responses_for_page(page)
+    @case_log.page = params[:case_log][:page]
+    responses_for_page = responses_for_page(@case_log.page)
     if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-      redirect_path = form.next_page_redirect_path(page, @case_log)
+      redirect_path = form.next_page_redirect_path(@case_log.page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+      page_info = form.all_pages[@case_log.page]
+      subsection = form.subsection_for_page(@case_log.page)
+      render "form/page", locals: { form: form, page_key: @case_log.page, page_info: page_info, subsection: subsection.humanize }, status: :unprocessable_entity
     end
   end
 
@@ -85,16 +84,16 @@ class CaseLogsController < ApplicationController
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:case_log_id])
     current_url = request.env["PATH_INFO"]
-    subsection = form.get_subsection(current_url.split("/")[-2])
+    subsection = current_url.split("/")[-2]
     render "form/check_answers", locals: { subsection: subsection, form: form }
   end
 
   form = FormHandler.instance.get_form("2021_2022")
-  form.pages.map do |page|
-    define_method(page.id) do |_errors = {}|
+  form.all_pages.map do |page_key, page_info|
+    define_method(page_key) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }
+      subsection = form.subsection_for_page(page_key)
+      render "form/page", locals: { form: form, page_key: page_key, page_info: page_info, subsection: subsection.humanize }
     end
   end
 
@@ -103,28 +102,29 @@ private
   API_ACTIONS = %w[create show update destroy].freeze
 
   def responses_for_page(page)
-    page.expected_responses.each_with_object({}) do |question, result|
-      question_params = params["case_log"][question.id]
-      if question.type == "date"
-        day = params["case_log"]["#{question.id}(3i)"]
-        month = params["case_log"]["#{question.id}(2i)"]
-        year = params["case_log"]["#{question.id}(1i)"]
+    form = FormHandler.instance.get_form("2021_2022")
+    form.expected_responses_for_page(page).each_with_object({}) do |(question_key, question_info), result|
+      question_params = params["case_log"][question_key]
+      if question_info["type"] == "date"
+        day = params["case_log"]["#{question_key}(3i)"]
+        month = params["case_log"]["#{question_key}(2i)"]
+        year = params["case_log"]["#{question_key}(1i)"]
         next unless [day, month, year].any?(&:present?)
 
-        result[question.id] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
-                                Date.new(year.to_i, month.to_i, day.to_i)
-                              else
-                                Date.new(0, 1, 1)
-                              end
+        result[question_key] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
+                                 Date.new(year.to_i, month.to_i, day.to_i)
+                               else
+                                 Date.new(0, 1, 1)
+                               end
       end
       next unless question_params
 
-      if %w[checkbox validation_override].include?(question.type)
-        question.answer_options.keys.reject { |x| x.match(/divider/) }.each do |option|
+      if %w[checkbox validation_override].include?(question_info["type"])
+        question_info["answer_options"].keys.reject { |x| x.match(/divider/) }.each do |option|
           result[option] = question_params.include?(option) ? 1 : 0
         end
       else
-        result[question.id] = question_params
+        result[question_key] = question_params
       end
       result
     end

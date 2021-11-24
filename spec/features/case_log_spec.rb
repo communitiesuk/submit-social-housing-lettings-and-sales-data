@@ -1,13 +1,9 @@
 require "rails_helper"
-RSpec.describe "Form Features" do
+RSpec.describe "Test Features" do
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
-
-  before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
-  end
 
   question_answers = {
     tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
@@ -29,7 +25,7 @@ RSpec.describe "Form Features" do
     click_button("Save and continue")
     choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-hb-prefer-not-to-say-field")
+    choose("case-log-hb-housing-benefit-but-not-universal-credit-field")
     click_button("Save and continue")
   end
 

@@ -3,13 +3,13 @@
      data-soft-validations-target="override"
      style='display:none;'>
 
-  <%= f.govuk_check_boxes_fieldset page.soft_validations&.first&.id.to_sym,
+  <%= f.govuk_check_boxes_fieldset page_info["soft_validations"]&.keys&.first,
       legend: { text: "soft-validations-placeholder-message", size: "l" },
       hint: { text: "soft-validations-placeholder-hint-text" } do %>
 
-      <%= f.govuk_check_box page.soft_validations&.first&.id, page.soft_validations&.first&.id,
+      <%= f.govuk_check_box page_info["soft_validations"]&.keys&.first, page_info["soft_validations"]&.keys&.first,
         label: { text: "Yes" },
-        checked: @case_log[page.soft_validations&.first&.id] == "Yes"
+        checked: @case_log[page_info["soft_validations"]&.keys&.first] == "Yes"
       %>
   <% end %>
 </div>

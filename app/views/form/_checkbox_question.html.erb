@@ -5,7 +5,7 @@
       <% if key.starts_with?("divider") %>
         <%= f.govuk_check_box_divider %>
       <% else %>
-        <%= f.govuk_check_box question.id, key,
+        <%= f.govuk_check_box question_key, key,
           label: { text: val },
           checked: @case_log[key] == "Yes",
           **stimulus_html_attributes(question)

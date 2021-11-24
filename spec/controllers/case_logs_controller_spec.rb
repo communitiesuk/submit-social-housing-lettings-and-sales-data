@@ -1,9 +1,7 @@
 require "rails_helper"
-require_relative "../support/devise"
 
 RSpec.describe CaseLogsController, type: :controller do
   let(:valid_session) { {} }
-  login_user
 
   context "Collection routes" do
     describe "GET #index" do
@@ -93,29 +91,28 @@ RSpec.describe CaseLogsController, type: :controller do
           page: "accessibility_requirements" }
       end
       let(:questions_for_page) do
-        [
-          Form::Question.new(
-            "accessibility_requirements",
-            {
-              "type" => "checkbox",
-              "answer_options" =>
-              { "housingneeds_a" => "Fully wheelchair accessible housing",
-                "housingneeds_b" => "Wheelchair access to essential rooms",
-                "housingneeds_c" => "Level access housing",
-                "housingneeds_f" => "Other disability requirements",
-                "housingneeds_g" => "No disability requirements",
-                "divider_a" => true,
-                "housingneeds_h" => "Do not know",
-                "divider_b" => true,
-                "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
-            }, nil
-          ),
-          Form::Question.new("tenant_code", { "type" => "text" }, nil),
-        ]
+        { "accessibility_requirements" =>
+          {
+            "type" => "checkbox",
+            "answer_options" =>
+            { "housingneeds_a" => "Fully wheelchair accessible housing",
+              "housingneeds_b" => "Wheelchair access to essential rooms",
+              "housingneeds_c" => "Level access housing",
+              "housingneeds_f" => "Other disability requirements",
+              "housingneeds_g" => "No disability requirements",
+              "divider_a" => true,
+              "housingneeds_h" => "Do not know",
+              "divider_b" => true,
+              "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
+          },
+          "tenant_code" =>
+          {
+            "type" => "text",
+          } }
       end
 
       it "updates both question fields" do
-        allow_any_instance_of(Form::Page).to receive(:expected_responses).and_return(questions_for_page)
+        allow_any_instance_of(Form).to receive(:questions_for_page).and_return(questions_for_page)
         post :submit_form, params: { id: id, case_log: case_log_form_params }
         case_log.reload
 

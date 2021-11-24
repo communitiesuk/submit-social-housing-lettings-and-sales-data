@@ -100,14 +100,10 @@ jobs:
         API_USER: ${{ secrets.API_USER }}
         API_KEY: ${{ secrets.API_KEY }}
         APP_NAME: dluhc-core
-        CORE_EMAIL_USERNAME: ${{ secrets.CORE_EMAIL_USERNAME }}
-        CORE_EMAIL_PASSWORD: ${{ secrets.CORE_EMAIL_PASSWORD }}
       run: |
         cf7 api $CF_API_ENDPOINT
         cf7 auth
         cf7 target -o $CF_ORG -s $CF_SPACE
         cf7 set-env $APP_NAME API_USER $API_USER
         cf7 set-env $APP_NAME API_KEY $API_KEY
-        cf7 set-env $APP_NAME CORE_EMAIL_USERNAME $CORE_EMAIL_USERNAME
-        cf7 set-env $APP_NAME CORE_EMAIL_PASSWORD $CORE_EMAIL_PASSWORD
         cf7 push --strategy rolling

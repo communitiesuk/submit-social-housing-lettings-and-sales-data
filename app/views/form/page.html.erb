@@ -5,27 +5,27 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <span class="govuk-caption-l">
-        <%= subsection %>
-      </span>
-      <% if page.header.present? %>
+      <% if page_info["header"].present? %>
+        <span class="govuk-caption-l">
+          <%= subsection %>
+        </span>
         <h1 class="govuk-heading-l">
-          <%= page.header %>
+          <%= page_info["header"] %>
         </h1>
       <% end %>
       <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
         <%= f.govuk_error_summary %>
-        <% page.questions.map do |question| %>
-          <div id=<%= question.id + "_div " %><%= display_question_key_div(page, question) %> >
-            <%= render partial: "form/#{question.type}_question", locals: { question: question, page_header: page.header, f: f } %>
+        <% page_info["questions"].map do |question_key, question| %>
+          <div id=<%= question_key + "_div " %><%= display_question_key_div(page_info, question_key) %> >
+            <%= render partial: "form/#{question["type"]}_question", locals: { question_key: question_key.to_sym, question: question, page_header: page_info["header"], f: f } %>
           </div>
         <% end %>
 
-        <% if page.has_soft_validations? %>
-          <%= render partial: "form/validation_override_question", locals: { f: f, page: page } %>
+        <% if page_info["soft_validations"]&.keys&.first %>
+          <%= render partial: "form/validation_override_question", locals: { f: f, page_key: page_key, page_info: page_info } %>
         <% end %>
 
-        <%= f.hidden_field :page, value: page.id %>
+        <%= f.hidden_field :page, value: page_key %>
         <%= f.govuk_submit "Save and continue"  %>
       <% end %>
     </div>
