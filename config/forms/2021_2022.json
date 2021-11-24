@@ -1124,8 +1124,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   },
                   "conditional_for": {
                     "postcode": ["Yes"]
@@ -1149,8 +1149,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   }
                 }
               }
@@ -1506,8 +1506,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   }
                 }
               },
