@@ -233,6 +233,10 @@ private
       dynamically_not_required << "incfreq"
     end
 
+    if sale_or_letting == "Letting"
+      dynamically_not_required << "sale_completion_date"
+    end
+
     if tenancy == "Secure (including flexible)"
       dynamically_not_required << "tenancylength"
     end
