@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_120910) do
     t.integer "tcharge"
     t.integer "layear"
     t.integer "lawaitlist"
+    t.string "property_postcode"
     t.integer "reasonpref"
     t.string "reasonable_preference_reason"
     t.integer "cbl"
@@ -162,7 +163,6 @@ ActiveRecord::Schema.define(version: 2021_11_19_120910) do
     t.datetime "sale_completion_date"
     t.datetime "startdate"
     t.integer "armedforces"
-    t.string "property_postcode"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

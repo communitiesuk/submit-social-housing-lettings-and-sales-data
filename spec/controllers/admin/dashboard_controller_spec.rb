@@ -26,14 +26,14 @@ describe Admin::DashboardController, type: :controller do
 
     it "returns a panel of in progress case logs" do
       panel_xpath = "//div[@class='panel' and .//h3[contains(., 'Total case logs in progress')]]"
-      panel_content_xpath = panel_xpath + "//div[@class='panel_contents' and .//p[contains(., 2)]]"
+      panel_content_xpath = "#{panel_xpath}//div[@class='panel_contents' and .//p[contains(., 2)]]"
       expect(page).to have_xpath(panel_xpath)
       expect(page).to have_xpath(panel_content_xpath)
     end
 
     it "returns a panel of completed case logs" do
       panel_xpath = "//div[@class='panel' and .//h3[contains(., 'Total case logs completed')]]"
-      panel_content_xpath = panel_xpath + "//div[@class='panel_contents' and .//p[contains(., 1)]]"
+      panel_content_xpath = "#{panel_xpath}//div[@class='panel_contents' and .//p[contains(., 1)]]"
       expect(page).to have_xpath(panel_xpath)
       expect(page).to have_xpath(panel_content_xpath)
     end

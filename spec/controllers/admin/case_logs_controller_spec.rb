@@ -20,4 +20,10 @@ describe Admin::CaseLogsController, type: :controller do
       expect(page).to have_link(case_log.id.to_s)
     end
   end
+
+  describe "Create case logs" do
+    it "creates a new case log" do
+      expect { post :create, session: valid_session }.to change(CaseLog, :count).by(1)
+    end
+  end
 end

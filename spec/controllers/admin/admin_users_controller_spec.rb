@@ -8,7 +8,7 @@ describe Admin::AdminUsersController, type: :controller do
   let(:valid_session) { {} }
   login_admin_user
 
-  describe "Get case logs" do
+  describe "Get admin users" do
     before do
       get :index, session: valid_session
     end
@@ -17,6 +17,14 @@ describe Admin::AdminUsersController, type: :controller do
       expect(page).to have_content(resource_title)
       expect(page).to have_table("index_table_admin_users")
       expect(page).to have_link(AdminUser.first.id.to_s)
+    end
+  end
+
+  describe "Create admin users" do
+    let(:params) { { admin_user: { email: "test2@example.com", password: "pAssword1" } } }
+
+    it "creates a new admin users" do
+      expect { post :create, session: valid_session, params: params }.to change(AdminUser, :count).by(1)
     end
   end
 end
