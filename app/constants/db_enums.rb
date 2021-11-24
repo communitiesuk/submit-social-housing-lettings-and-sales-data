@@ -10,6 +10,15 @@ module DbEnums
     }
   end
 
+  def self.unitletas
+    {
+      "Social rent basis" => 1,
+      "Affordable rent basis" => 2,
+      "Intermediate rent basis" => 4,
+      "Do not know" => 3,
+    }
+  end
+
   def self.ecstat
     {
       "Part-time - Less than 30 hours" => 2,
