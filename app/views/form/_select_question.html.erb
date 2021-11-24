@@ -3,6 +3,6 @@
     answers,
     :name,
     :name,
-    label: { text: question.header},
+    label: { text: question.header, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1" },
     hint: { text: question.hint_text }
  %>

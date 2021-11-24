@@ -64,7 +64,8 @@ class CaseLogsController < ApplicationController
       redirect_path = form.next_page_redirect_path(page, @case_log)
       redirect_to(send(redirect_path, @case_log))
     else
-      render "form/page", locals: { form: form, page: page }, status: :unprocessable_entity
+      subsection = form.subsection_for_page(page)
+      render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
     end
   end
 
@@ -92,7 +93,8 @@ class CaseLogsController < ApplicationController
   form.pages.map do |page|
     define_method(page.id) do |_errors = {}|
       @case_log = CaseLog.find(params[:case_log_id])
-      render "form/page", locals: { form: form, page: page }
+      subsection = form.subsection_for_page(page)
+      render "form/page", locals: { form: form, page: page, subsection: subsection.label }
     end
   end
 
