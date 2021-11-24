@@ -5,7 +5,6 @@ class AddPropertyInfoFields < ActiveRecord::Migration[6.1]
       t.column :why_dont_you_know_la, :string
       t.column :type_property_most_recently_let_as, :string
       t.column :builtype, :string
-      t.rename :tenant_same_property_renewal, :renewal
     end
   end
 end

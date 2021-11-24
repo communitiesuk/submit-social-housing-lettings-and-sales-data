@@ -81,14 +81,14 @@
               "header": "About this log",
               "description": "Is this a renewal to the same tenant in the same property?",
               "questions": {
-                "renewal": {
+                "tenant_same_property_renewal": {
                   "check_answer_label": "",
                   "header": "Is this a renewal to the same tenant in the same property?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   }
                 }
               },
@@ -1516,7 +1516,7 @@
                   }
                 }
               },
-              "depends_on": { "renewal": "No"}
+              "depends_on": { "tenant_same_property_renewal": "No"}
             },
             "type_property_most_recently_let_as": {
               "header": "",
@@ -1535,7 +1535,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
             },
             "property_vacancy_reason_not_first_let": {
               "header": "",
@@ -1561,7 +1561,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
             },
             "property_vacancy_reason_first_let": {
               "header": "",
@@ -1579,7 +1579,7 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "renewal": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
             },
             "property_number_of_times_relet_not_social_let": {
               "header": "",
@@ -1595,7 +1595,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "renewal": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
             },
             "property_number_of_times_relet_social_let": {
               "header": "",
@@ -1611,7 +1611,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "renewal": "No" }
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
             },
             "property_unit_type": {
               "header": "",
@@ -1694,7 +1694,7 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "rsnvac": "First let of newbuild property", "renewal": "No" }
+              "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No" }
             },
             "property_major_repairs": {
               "header": "",
@@ -1712,7 +1712,7 @@
                   "conditional_for": {
                     "mrcdate": ["Yes"]
                   },
-                  "depends_on": { "renewal": "No" }
+                  "depends_on": { "tenant_same_property_renewal": "No" }
                 },
                 "mrcdate": {
                   "check_answer_label": "What was the major repairs completion date?",
@@ -1740,7 +1740,7 @@
                     "mrcdate": ["Yes"]
                   },
                   "depends_on": {
-                    "renewal": "No",
+                    "tenant_same_property_renewal": "No",
                     "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
                   }
                 }

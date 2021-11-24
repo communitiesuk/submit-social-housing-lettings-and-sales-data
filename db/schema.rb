@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_120910) do
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"
-    t.string "renewal"
+    t.string "tenant_same_property_renewal"
     t.string "rent_type"
     t.string "intermediate_rent_product_name"
     t.string "needs_type"
@@ -163,12 +163,12 @@ ActiveRecord::Schema.define(version: 2021_11_19_120910) do
     t.integer "incref"
     t.datetime "sale_completion_date"
     t.datetime "startdate"
+    t.integer "armedforces"
+    t.string "property_postcode"
     t.integer "first_time_property_let_as_social_housing"
     t.string "why_dont_you_know_la"
     t.string "type_property_most_recently_let_as"
     t.string "builtype"
-    t.integer "armedforces"
-    t.string "property_postcode"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

@@ -127,7 +127,6 @@
     "property_owner_organisation":  "",
     "property_manager_organisation": "",
     "sale_or_letting":  "",
-    "tenant_same_property_renewal": "",
     "rent_type":  "",
     "intermediate_rent_product_name": "",
     "needs_type":  "",
@@ -145,7 +144,7 @@
     "builtype": "Purpose built",
     "property_wheelchair_accessible": "Yes",
     "void_or_renewal_date": "05/05/2020",
-    "renewal": "Yes",
+    "tenant_same_property_renewal": "Yes",
     "new_build_handover_date": "01/01/2019"
   }
 }
