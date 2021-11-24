@@ -167,8 +167,8 @@ ActiveRecord::Schema.define(version: 2021_11_24_152204) do
     t.string "property_postcode"
     t.integer "first_time_property_let_as_social_housing"
     t.string "why_dont_you_know_la"
-    t.string "builtype"
     t.integer "unitletas"
+    t.integer "builtype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

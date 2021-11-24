@@ -1522,7 +1522,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "type_property_most_recently_let_as": {
+                "unitletas": {
                   "check_answer_label": "Type property most recently let as",
                   "header": "Which type was the property most recently let as?",
                   "hint_text": "",

@@ -19,6 +19,13 @@ module DbEnums
     }
   end
 
+  def self.builtype
+    {
+      "Purpose built" => 1,
+      "Conversion" => 2
+    }
+  end
+
   def self.ecstat
     {
       "Part-time - Less than 30 hours" => 2,
