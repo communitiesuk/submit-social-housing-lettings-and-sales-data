@@ -154,8 +154,6 @@ ActiveRecord::Schema.define(version: 2021_11_19_104835) do
     t.integer "incref"
     t.datetime "sale_completion_date"
     t.datetime "startdate"
-    t.integer "do_you_know_the_postcode"
-    t.integer "do_you_know_the_local_authority"
     t.integer "first_time_property_let_as_social_housing"
     t.string "why_dont_you_know_la"
     t.string "type_property_most_recently_let_as"
