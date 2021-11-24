@@ -54,7 +54,7 @@ FactoryBot.define do
       lettype { "Affordable Rent - General Needs" }
       landlord { "This landlord" }
       previous_postcode { "SE2 6RT" }
-      rsnvac { "Relet - tenant abandoned property" }
+      rsnvac { "Tenant abandoned property" }
       unittype_gn { "House" }
       property_building_type { "dummy" }
       beds { 3 }

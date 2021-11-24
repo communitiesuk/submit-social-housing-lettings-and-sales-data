@@ -10,6 +10,22 @@ module DbEnums
     }
   end
 
+  def self.unitletas
+    {
+      "Social rent basis" => 1,
+      "Affordable rent basis" => 2,
+      "Intermediate rent basis" => 4,
+      "Do not know" => 3,
+    }
+  end
+
+  def self.builtype
+    {
+      "Purpose built" => 1,
+      "Conversion" => 2
+    }
+  end
+
   def self.ecstat
     {
       "Part-time - Less than 30 hours" => 2,
@@ -186,17 +202,17 @@ module DbEnums
       "First let of newbuild property" => 15,
       "First let of conversion/rehabilitation/acquired property" => 16,
       "First let of leased property" => 17,
-      "Relet - tenant evicted due to arrears" => 10,
-      "Relet - tenant evicted due to ASB or other reason" => 11,
-      "Relet - tenant died (no succession)" => 5,
-      "Relet - tenant moved to other social housing provider" => 12,
-      "Relet - tenant abandoned property" => 6,
-      "Relet - tenant moved to private sector or other accommodation" => 8,
-      "Relet - to tenant who occupied same property as temporary accommodation" => 9,
-      "Relet – internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
-      "Relet – renewal of fixed-term tenancy" => 14,
-      "Relet – tenant moved to care home" => 18,
-      "Relet – tenant involved in a succession downsize" => 19,
+      "Tenant evicted due to arrears" => 10,
+      "Tenant evicted due to ASB or other reason" => 11,
+      "Tenant died (no succession)" => 5,
+      "Tenant moved to other social housing provider" => 12,
+      "Tenant abandoned property" => 6,
+      "Tenant moved to private sector or other accommodation" => 8,
+      "Relet to tenant who occupied same property as temporary accommodation" => 9,
+      "Internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
+      "Renewal of fixed-term tenancy" => 14,
+      "Tenant moved to care home" => 18,
+      "Tenant involved in a succession downsize" => 19,
     }
   end
 
