@@ -1,12 +1,15 @@
 {
   "case_log": {
     "tenant_code": "T657",
+    "tenanceother": "",
     "age1": 35,
     "sex1": "Female",
     "ethnic": "White: English/Scottish/Welsh/Northern Irish/British",
     "national": "UK national resident in UK",
     "prevten": "Private sector tenancy",
     "armedforces": "A current or former regular in the UK Armed Forces (exc. National Service)",
+    "armed_forces": "A current or former regular in the UK Armed Forces (exc. National Service)",
+    "armed_forces_partner": "",
     "ecstat1": "Full-time - 30 hours or more",
     "other_hhmemb": 7,
     "hhmemb": 8,
@@ -135,8 +138,8 @@
     "postcod2": "w3",
     "ppostc1": "w3",
     "ppostc2": "w3",
-    "do_you_know_the_postcode": "No",
-    "do_you_know_the_local_authority": "No",
+    "do_you_know_the_postcode": "Yes",
+    "do_you_know_the_local_authority": "Yes",
     "why_dont_you_know_la": "Forgot",
     "first_time_property_let_as_social_housing": "Yes",
     "type_property_most_recently_let_as": "Affordable rent basis",
@@ -144,6 +147,7 @@
     "builtype": "Purpose built",
     "property_wheelchair_accessible": "Yes",
     "void_or_renewal_date": "05/05/2020",
+    "renewal": "Yes",
     "new_build_handover_date": "01/01/2019"
   }
 }
