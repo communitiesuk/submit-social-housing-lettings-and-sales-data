@@ -56,7 +56,6 @@ FactoryBot.define do
       previous_postcode { "SE2 6RT" }
       rsnvac { "Tenant abandoned property" }
       unittype_gn { "House" }
-      property_building_type { "dummy" }
       beds { 3 }
       property_void_date { "03/11/2019" }
       offered { 2 }
