@@ -59,14 +59,13 @@ RSpec.describe "User Features" do
   end
 
   context "Your Account " do
-
     before(:each) do
       visit("/case_logs")
       fill_in("user_email", with: "test@example.com")
       fill_in("user_password", with: "pAssword1")
       click_button("Sign in")
     end
-    
+
     it "main page is present and accessible" do
       visit("/users/account")
       expect(page).to have_content("Your account")

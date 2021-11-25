@@ -1,19 +1,19 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords" }, :skip => [:registrations] 
+  devise_for :users, controllers: { passwords: "users/passwords" }, skip: [:registrations]
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
-    get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'    
-    patch 'users' => 'users/registrations#update', :as => 'user_registration'
-    patch 'details' => 'users/account#update', :as => 'account_update'
-  end                                
+    get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
+    patch "users" => "users/registrations#update", :as => "user_registration"
+    patch "details" => "users/account#update", :as => "account_update"
+  end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
   root to: "test#index"
   get "about", to: "about#index"
-  get '/users/account', to: 'users/account#index'
-  get '/users/account/personal_details', to: 'users/account#personal_details'
+  get "/users/account", to: "users/account#index"
+  get "/users/account/personal_details", to: "users/account#personal_details"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
