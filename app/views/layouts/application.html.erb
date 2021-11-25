@@ -17,9 +17,6 @@
     <%= javascript_pack_tag 'application', defer: true %>
     <%= capybara_lockstep if defined?(Capybara::Lockstep) %>
 
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-
     <% if Rails.env.development? %>
       <script>
         console.log(<%= session.to_json.html_safe %>)
@@ -28,6 +25,7 @@
   </head>
 
   <body class="govuk-template__body ">
+
 
     <script>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
@@ -43,7 +41,6 @@
           )
       %>
     </header>
-
     <aside class="govuk-width-container">
       <%= render GovukComponent::PhaseBannerComponent.new(
         tag: { text: 'Beta' },
@@ -57,6 +54,15 @@
       </div>
 
       <main class="govuk-main-wrapper " id="main-content" role="main">
+        <% flash.each do |type, msg| %>
+          <%= render GovukComponent::NotificationBannerComponent.new(
+            title_text: 'Success',
+            success: true, title_heading_level: 3,
+            title_id: "swanky-notifications") do |notification_banner|
+              notification_banner.heading(text: msg)
+            end
+          %>
+        <% end %>
         <%= yield %>
       </main>
     </div>
