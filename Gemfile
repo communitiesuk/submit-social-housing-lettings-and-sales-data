@@ -13,8 +13,6 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.0"
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.7"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 # Gov.UK frontend components
@@ -61,6 +59,7 @@ end
 
 group :test do
   gem "capybara", require: false
+  gem "capybara-lockstep"
   gem "factory_bot_rails"
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
