@@ -6,9 +6,21 @@ require File.expand_path("../config/environment", __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
 require "capybara/rspec"
+require "selenium-webdriver"
 
-# Comment to run `js: true specs` with visible browser interaction
-Capybara.javascript_driver = :selenium_headless
+Capybara.register_driver :headless do |app|
+  options = Selenium::WebDriver::Firefox::Options.new
+  options.add_argument("--no-sandbox")
+  options.add_argument("--headless")
+  options.add_argument("--disable-gpu")
+
+  Capybara::Selenium::Driver.new(app,
+    browser: :firefox,
+    capabilities: options
+  )
+end
+
+Capybara.javascript_driver = :headless
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
