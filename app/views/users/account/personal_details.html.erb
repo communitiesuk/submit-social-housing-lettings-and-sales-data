@@ -1,0 +1,23 @@
+<% content_for :before_content do %>
+  <%= link_to 'Back', :back, class: "govuk-back-link" %>
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: account_update_path(), html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Change your personal details</h1>
+
+      <div class="govuk-form-group">
+        <%= f.label :name, class: "govuk-label" %>
+        <%= f.text_field :name, autocomplete: "name", class: "govuk-input" %>
+      </div>
+
+      <div class="govuk-form-group">
+        <%= f.label :email, class: "govuk-label" %>
+        <%= f.email_field :email, autocomplete: "email", class: "govuk-input" %>
+      </div>
+
+      <%= f.submit "Save changes", class: "govuk-button" %>
+    </div>
+  </div>
+<% end %>

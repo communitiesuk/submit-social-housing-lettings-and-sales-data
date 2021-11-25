@@ -57,4 +57,55 @@ RSpec.describe "User Features" do
       expect(page).to have_css '.govuk-notification-banner.govuk-notification-banner--success'
     end    
   end
+
+  context "If a not logged in user tries to access pages that need permissions" do
+    it "redirects to log in page" do
+      visit("/users/account")
+      expect(page).to have_content("Sign in to your account to submit CORE data")
+    end
+  end
+
+  context "Your Account " do
+    before(:each) do
+      visit("/case_logs")
+      fill_in("user_email", with: user.email)
+      fill_in("user_password", with: "pAssword1")
+      click_button("Sign in")
+    end
+
+    it "main page is present and accessible" do
+      visit("/users/account")
+      expect(page).to have_content("Your account")
+    end
+
+    it "personal details page is present and accessible" do
+      visit("/users/account/personal_details")
+      expect(page).to have_content("Change your personal details")
+    end
+
+    it "edit password page present and accessible" do
+      visit("users/edit")
+      expect(page).to have_content("Change your password")
+    end
+
+    it "can navigate to change your password page from main account page" do
+      visit("/users/account")
+      click_link("change-password")
+      expect(page).to have_content("Change your password")
+      fill_in("user_current_password", with: "pAssword1")
+      fill_in("user_password", with: "Password123!")
+      click_button("Update")
+      expect(page).to have_current_path("/users/account")
+    end
+
+    it "allow user to change name" do
+      visit("/users/account")
+      click_link("change-name")
+      expect(page).to have_content("Change your personal details")
+      fill_in("user_name", with: "Test New")
+      click_button("Save changes")
+      expect(page).to have_current_path("/users/account")
+      expect(page).to have_content("Test New")
+    end
+  end
 end
