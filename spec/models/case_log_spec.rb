@@ -4,14 +4,17 @@ RSpec.describe Form, type: :model do
   describe "#new" do
     it "validates age is a number" do
       expect { CaseLog.create!(age1: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age3: "random") }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is under 120" do
       expect { CaseLog.create!(age1: 121) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age3: 121) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is over 0" do
       expect { CaseLog.create!(age1: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { CaseLog.create!(age3: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is a number" do
@@ -53,6 +56,15 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(reasonpref: "No", rp_homeless: "No")
         }.not_to raise_error
+      end
+
+      it "validates that no reason has been provided" do
+        expect {
+          CaseLog.create!(
+            reasonpref: "No",
+            rp_medwel: "Yes"
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
@@ -421,6 +433,14 @@ RSpec.describe Form, type: :model do
       expect(completed_case_log.in_progress?).to be(false)
       expect(completed_case_log.not_started?).to be(false)
       expect(completed_case_log.completed?).to be(true)
+    end
+  end
+
+  describe "incref" do
+    let(:case_log) { FactoryBot.build(:case_log, net_income_known: "Prefer not to say") }
+
+    it "sets income refused to Yes" do
+      expect(case_log.incref).to eq(1)
     end
   end
 

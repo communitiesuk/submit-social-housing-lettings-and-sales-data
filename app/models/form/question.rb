@@ -67,11 +67,7 @@ private
       operator = condition[:cond][/[<>=]+/].to_sym
       operand = condition[:cond][/\d+/].to_i
       case_log[condition[:from]].present? && case_log[condition[:from]].send(operator, operand)
-    when "text"
-      case_log[condition[:from]].present? && condition[:cond].include?(case_log[condition[:from]])
-    when "radio"
-      case_log[condition[:from]].present? && condition[:cond].include?(case_log[condition[:from]])
-    when "select"
+    when "text", "radio", "select"
       case_log[condition[:from]].present? && condition[:cond].include?(case_log[condition[:from]])
     else
       raise "Not implemented yet"

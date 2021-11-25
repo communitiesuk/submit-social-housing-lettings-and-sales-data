@@ -27,4 +27,16 @@ describe Admin::AdminUsersController, type: :controller do
       expect { post :create, session: valid_session, params: params }.to change(AdminUser, :count).by(1)
     end
   end
+
+  describe "Update admin users" do
+    before do
+      get :edit, session: valid_session, params: { id: AdminUser.first.id }
+    end
+
+    it "creates a new admin users" do
+      expect(page).to have_field("admin_user_email")
+      expect(page).to have_field("admin_user_password")
+      expect(page).to have_field("admin_user_password_confirmation")
+    end
+  end
 end

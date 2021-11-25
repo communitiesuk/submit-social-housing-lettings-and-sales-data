@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let(:empty_case_log) { FactoryBot.build(:case_log) }
-  let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:empty_case_log) { FactoryBot.create(:case_log) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
 

@@ -231,34 +231,47 @@ RSpec.describe CaseLogsController, type: :request do
     end
     let(:id) { case_log.id }
 
-    before do
-      delete "/case_logs/#{id}", headers: headers
-    end
+    context "expected deletion" do
+      before do
+        delete "/case_logs/#{id}", headers: headers
+      end
 
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
 
-    it "soft deletes the case log" do
-      expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
-    end
+      it "soft deletes the case log" do
+        expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
+      end
 
-    context "invalid case log id" do
-      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+      context "invalid case log id" do
+        let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
 
-      it "returns 404" do
-        expect(response).to have_http_status(:not_found)
+        it "returns 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "request with invalid credentials" do
+        let(:basic_credentials) do
+          ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+        end
+
+        it "returns 401" do
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
-    context "request with invalid credentials" do
-      let(:basic_credentials) do
-        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+    context "deletion fails" do
+      before do
+        allow_any_instance_of(CaseLog).to receive(:discard).and_return(false)
+        delete "/case_logs/#{id}", headers: headers
       end
 
-      it "returns 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "returns an unprocessable entity 422" do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

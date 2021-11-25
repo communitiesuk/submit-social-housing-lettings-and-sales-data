@@ -9,7 +9,7 @@ RSpec.describe "User Features" do
 
     it " is redirected to case logs after signing in" do
       visit("/case_logs")
-      fill_in("user_email", with: "test@example.com")
+      fill_in("user_email", with: user.email)
       fill_in("user_password", with: "pAssword1")
       click_button("Sign in")
       expect(page).to have_current_path("/case_logs")
@@ -25,16 +25,16 @@ RSpec.describe "User Features" do
 
     it " is redirected to check your email page after submitting an email on the reset password page" do
       visit("/users/password/new")
-      fill_in("user_email", with: "test@example.com")
+      fill_in("user_email", with: user.email)
       click_button("Send email")
       expect(page).to have_content("Check your email")
     end
 
     it " is shown their email on the password reset confirmation page" do
       visit("/users/password/new")
-      fill_in("user_email", with: "test@example.com")
+      fill_in("user_email", with: user.email)
       click_button("Send email")
-      expect(page).to have_content("test@example.com")
+      expect(page).to have_content(user.email)
     end
 
     it " is shown the reset password confirmation page even if their email doesn't exist in the system" do
@@ -46,7 +46,7 @@ RSpec.describe "User Features" do
 
     it " is sent a reset password email" do
       visit("/users/password/new")
-      fill_in("user_email", with: "test@example.com")
+      fill_in("user_email", with: user.email)
       expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
