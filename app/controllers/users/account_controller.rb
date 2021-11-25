@@ -14,8 +14,12 @@ class Users::AccountController < ApplicationController
   end
 
   def update
-    if current_user.update('name': params[:user][:name], 'email': params[:user][:email])
+    if current_user.update(user_params)
       redirect_to(users_account_path)
     end
+  end
+
+  def user_params
+    params.require(:user).permit(:email, :name, :password)
   end
 end
