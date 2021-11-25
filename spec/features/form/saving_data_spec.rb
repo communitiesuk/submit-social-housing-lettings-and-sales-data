@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Form Saving Data" do
-  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:id) { case_log.id }
   let(:case_log_with_checkbox_questions_answered) do
     FactoryBot.create(

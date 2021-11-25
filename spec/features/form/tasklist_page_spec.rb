@@ -3,8 +3,8 @@ require_relative "helpers"
 
 RSpec.describe "Task List" do
   include Helpers
-  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let!(:empty_case_log) { FactoryBot.create(:case_log) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 

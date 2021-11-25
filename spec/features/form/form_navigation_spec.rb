@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Form Navigation" do
-  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:id) { case_log.id }
   let(:question_answers) do
     {
