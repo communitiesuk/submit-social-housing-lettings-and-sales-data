@@ -38,6 +38,7 @@ RSpec.describe "validations" do
       fill_in("#{question}_2i", with: month)
       fill_in("#{question}_3i", with: day)
     end
+
     it "does not allow out of range dates to be submitted" do
       fill_in_date(id, "case_log_mrcdate", 3100, 12, 2000, "property_major_repairs")
       click_button("Save and continue")
