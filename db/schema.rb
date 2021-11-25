@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_25_114400) do
+ActiveRecord::Schema.define(version: 2021_11_25_154916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,7 +83,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_114400) do
     t.integer "rsnvac"
     t.integer "unittype_gn"
     t.integer "beds"
-    t.string "property_void_date"
     t.integer "offered"
     t.integer "wchair"
     t.integer "earnings"
@@ -166,6 +165,8 @@ ActiveRecord::Schema.define(version: 2021_11_25_114400) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
+    t.string "property_postcode"
+    t.datetime "property_void_date"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

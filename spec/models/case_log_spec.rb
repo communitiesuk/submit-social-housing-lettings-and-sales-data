@@ -450,6 +450,33 @@ RSpec.describe Form, type: :model do
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
+
+      it "must have less than two years between the tenancy start date and major cprepairs date" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            mrcdate: Date.new(2017, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "void date" do
+      it "must have less than two years between the tenancy start date and void" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2017, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2019, 10, 10),
+          )
+        }.not_to raise_error
+      end
     end
   end
 
