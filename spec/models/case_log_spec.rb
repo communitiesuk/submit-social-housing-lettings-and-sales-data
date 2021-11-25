@@ -57,6 +57,15 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(reasonpref: "No", rp_homeless: "No")
         }.not_to raise_error
       end
+
+      it "validates that no reason has been provided" do
+        expect {
+          CaseLog.create!(
+            reasonpref: "No",
+            rp_medwel: "Yes"
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
 
     context "reason for leaving last settled home validation" do
