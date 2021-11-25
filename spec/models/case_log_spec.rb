@@ -424,6 +424,14 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "incref" do
+    let(:case_log) { FactoryBot.build(:case_log, net_income_known: "Prefer not to say") }
+
+    it "sets income refused to Yes" do
+      expect(case_log.incref).to eq(1)
+    end
+  end
+
   describe "weekly_net_income" do
     let(:net_income) { 5000 }
     let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
