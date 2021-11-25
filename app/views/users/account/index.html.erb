@@ -1,73 +1,73 @@
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">      
-        <h1 class="govuk-heading-l">
-            Your account
-        </h1>
-        <h2 class="govuk-heading-m">
-            Personal details
-        </h2>
-        <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Name
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <%= current_user.name %>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="/users/account/personal_details" id="change-name">
-                        Change<span class="govuk-visually-hidden"> name</span>
-                        </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Email address
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <%= current_user.email %>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="/users/account/personal_details" id="change-email">
-                        Change<span class="govuk-visually-hidden"> email address</span>
-                        </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Password
-                </dt>
-                <dd class="govuk-summary-list__value">
-                ••••••••
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <%= link_to "Change", edit_user_registration_path, id: "change-password" %>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Organisation
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <%= current_user.organisation %>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="">
-                        </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                Role
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <%= current_user.role %>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="">
-                        </a>
-                </dd>
-            </div>
-        </dl>
-    </div>
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      Your account
+    </h1>
+    <h2 class="govuk-heading-m">
+      Personal details
+    </h2>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= current_user.name %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/users/account/personal_details" id="change-name">
+            Change<span class="govuk-visually-hidden">
+              name</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Email address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= current_user.email %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="/users/account/personal_details" id="change-email">
+            Change<span class="govuk-visually-hidden">
+              email address</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Password
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ••••••••
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <%= link_to "Change", edit_user_registration_path, id: "change-password" %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Organisation
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= current_user.organisation %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href=""></a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Role
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <%= current_user.role %>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href=""></a>
+        </dd>
+      </div>
+    </dl>
+  </div>
 </div>
