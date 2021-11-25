@@ -61,7 +61,7 @@ RSpec.describe "User Features" do
   context "Your Account " do
     before(:each) do
       visit("/case_logs")
-      fill_in("user_email", with: "test@example.com")
+      fill_in("user_email", with: user.email)
       fill_in("user_password", with: "pAssword1")
       click_button("Sign in")
     end
