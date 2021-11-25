@@ -49,5 +49,12 @@ RSpec.describe "User Features" do
       fill_in("user_email", with: user.email)
       expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
+
+    it " is shown the password reset confirmation page and successful flash message shows" do
+      visit("/users/password/new")
+      fill_in("user_email", with: user.email)
+      click_button("Send email")
+      expect(page).to have_css '.govuk-notification-banner.govuk-notification-banner--success'
+    end    
   end
 end
