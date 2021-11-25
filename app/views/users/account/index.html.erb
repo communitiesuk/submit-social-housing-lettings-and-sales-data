@@ -12,6 +12,7 @@
                 Name
                 </dt>
                 <dd class="govuk-summary-list__value">
+                    <%= current_user.name %>
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="/users/account/personal_details" id="change-name">
@@ -24,6 +25,7 @@
                 Email address
                 </dt>
                 <dd class="govuk-summary-list__value">
+                    <%= current_user.email %>
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="/users/account/personal_details" id="change-email">
@@ -47,6 +49,7 @@
                 Organisation
                 </dt>
                 <dd class="govuk-summary-list__value">
+                    <%= current_user.organisation %>
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">
@@ -58,6 +61,7 @@
                 Role
                 </dt>
                 <dd class="govuk-summary-list__value">
+                    <%= current_user.role %>
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" href="">

@@ -67,16 +67,7 @@ RSpec.describe "User Features" do
 
     it "personal details page is present and accessible" do
       visit("/users/account/personal_details")
-      expect(page).to have_content("Personal details")
-    end
-
-    it "can navigate to personal details from main account page" do
-      visit("/users/account")
-      click_link("change-name")
-      expect(page).to have_content("Personal details")
-      visit("/users/account")
-      click_link("change-email")
-      expect(page).to have_content("Personal details")
+      expect(page).to have_content("Change your personal details")
     end
 
     it "edit password page present and accessible" do
@@ -92,6 +83,16 @@ RSpec.describe "User Features" do
       fill_in("user_password", with: "Password123!")
       click_button("Update")
       expect(page).to have_current_path("/users/account")
+    end
+
+    it "allow user to change name" do
+      visit("/users/account")
+      click_link("change-name")
+      expect(page).to have_content("Change your personal details")
+      fill_in("user_name", with: "Test New")
+      click_button("Save changes")
+      expect(page).to have_current_path("/users/account")
+      expect(page).to have_content("Test New")
     end
   end
 end

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'    
     patch 'users' => 'users/registrations#update', :as => 'user_registration'
+    patch 'details' => 'users/account#update', :as => 'account_update'
   end                                
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
