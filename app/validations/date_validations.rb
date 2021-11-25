@@ -1,6 +1,15 @@
 module DateValidations
   def validate_property_major_repairs(record)
     date_valid?("mrcdate", record)
+    if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
+      record.errors.add :mrcdate, "Major repairs date must be before the tenancy start date"
+    end
+    if (record["rsnvac"] == "First let of newbuild property" ||
+        record["rsnvac"] == "First let of conversion/rehabilitation/acquired property" ||
+        record["rsnvac"] == "First let of leased property") &&
+        record["mrcdate"].present?
+      record.errors.add :mrcdate, "Major repairs date must be before the tenancy start date"
+    end
   end
 
   def validate_startdate(record)

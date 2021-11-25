@@ -410,6 +410,47 @@ RSpec.describe Form, type: :model do
         end
       end
     end
+
+    context "major repairs date" do
+      it "cannot be later than the tenancy start date" do
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2020, 10, 9),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 9),
+            startdate: Date.new(2020, 10, 10),
+          )
+        }.not_to raise_error
+      end
+
+      it "must not be completed if reason for vacancy is first let" do
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of newbuild property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of conversion/rehabilitation/acquired property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of leased property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe "status" do
