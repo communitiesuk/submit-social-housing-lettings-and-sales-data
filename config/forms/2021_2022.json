@@ -87,8 +87,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   }
                 }
               },
@@ -1107,13 +1107,66 @@
           "label": "Property information",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
-            "property_location": {
+            "property_reference": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "propcode": {
+                  "check_answer_label": "What’s the property reference?",
+                  "header": "What's the property reference?",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            },
+            "property_postcode": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "do_you_know_the_postcode": {
+                  "check_answer_label": "Do you know the property postcode?",
+                  "header": "Do you know the postcode?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "No",
+                    "1": "Yes"
+                  },
+                  "conditional_for": {
+                    "postcode": ["Yes"]
+                  }
+                },
+                "postcode": {
+                  "check_answer_label": "",
+                  "header": "",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              }
+            },
+            "do_you_know_the_local_authority": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "do_you_know_the_local_authority": {
+                  "check_answer_label": "Do you know what local authority the property is located in?",
+                  "header": "Do you know what local authority the property is located in?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "No",
+                    "1": "Yes"
+                  }
+                }
+              }
+            },
+            "select_local_authority": {
               "header": "",
               "description": "",
               "questions": {
                 "la": {
-                  "check_answer_label": "Property Location",
-                  "header": "Property location",
+                  "check_answer_label": "Local Authority",
+                  "header": "Select a local authority",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1432,37 +1485,59 @@
                     "312": "York"
                   }
                 }
-              }
+              },
+              "depends_on": { "do_you_know_the_local_authority": "Yes" }
             },
-            "property_postcode": {
+            "why_dont_you_know_la": {
               "header": "",
               "description": "",
               "questions": {
-                "property_postcode": {
-                  "check_answer_label": "What was the previous postcode?",
-                  "header": "What is the property's postcode?",
+                "why_dont_you_know_la": {
+                  "check_answer_label": "Reason for not knowing local authority",
+                  "header": "Give a reason why you don't know the postcode or local authority",
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": { "do_you_know_the_local_authority": "No" }
             },
-            "property_relet": {
+            "first_time_property_let_as_social_housing": {
               "header": "",
               "description": "",
               "questions": {
-                "property_relet": {
+                "first_time_property_let_as_social_housing": {
                   "check_answer_label": "Which type was the property most recently let as?",
                   "header": "Is this property a relet?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": "No",
+                    "1": "Yes"
                   }
                 }
-              }
+              },
+              "depends_on": { "tenant_same_property_renewal": "No"}
             },
-            "property_vacancy_reason": {
+            "unitletas": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "unitletas": {
+                  "check_answer_label": "Type property most recently let as",
+                  "header": "Which type was the property most recently let as?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Social rent basis",
+                    "1": "Affordable rent basis",
+                    "2": "Intermediate rent basis",
+                    "3": "Do not know"
+                  }
+                }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
+            },
+            "property_vacancy_reason_not_first_let": {
               "header": "",
               "description": "",
               "questions": {
@@ -1471,36 +1546,72 @@
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
-                  "answer_options": {
-                    "0": "First let of newbuild property",
-                    "1": "First let of conversion/rehabilitation/acquired property",
-                    "2": "First let of leased property",
-                    "3": "Relet - tenant evicted due to arrears",
-                    "4": "Relet - tenant evicted due to ASB or other reason",
-                    "5": "Relet - tenant died (no succession)",
-                    "6": "Relet - tenant moved to other social housing provider",
-                    "7": "Relet - tenant abandoned property",
-                    "8": "Relet - tenant moved to private sector or other accommodation",
-                    "9": "Relet - to tenant who occupied same property as temporary accommodation",
-                    "10": "Relet – internal transfer (excluding renewals of a fixed-term tenancy)",
-                    "11": "Relet – renewal of fixed-term tenancy",
-                    "12": "Relet – tenant moved to care home",
-                    "13": "Relet – tenant involved in a succession downsize"
+                  "answer_options": {                    
+                    "0": "Renewal of fixed-term tenancy",              
+                    "1": "Internal transfer (excluding renewals of a fixed-term tenancy)",
+                    "2": "Relet to tenant who occupied same property as temporary accommodation",
+                    "3": "Tenant involved in a succession downsize",
+                    "4": "Tenant moved to private sector or other accommodation",
+                    "5": "Tenant moved to other social housing provider",
+                    "6": "Tenant moved to care home",
+                    "7": "Tenant abandoned property",
+                    "8": "Tenant evicted due to arrears",
+                    "9": "Tenant evicted due to ASB or other reason",
+                    "10": "Previous tenant passed away (no succession)"                                                 
                   }
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
             },
-            "property_reference": {
+            "property_vacancy_reason_first_let": {
               "header": "",
               "description": "",
               "questions": {
-                "propcode": {
-                  "check_answer_label": "What’s the property reference?",
-                  "header": "What's the property reference?",
+                "rsnvac": {
+                  "check_answer_label": "What is the reason for the property vacancy?",
+                  "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "radio",
+                  "answer_options": {                    
+                    "11": "First let of newbuild property",
+                    "12": "First let of conversion/rehabilitation/acquired property",
+                    "13": "First let of leased property"                                                  
+                  }
                 }
-              }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
+            },
+            "property_number_of_times_relet_not_social_let": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "offered": {
+                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since becoming available for relet (after the last tenancy ended)?",
+                  "header": "How many times has this unit been previously offered since becoming available for relet since becoming available for relet (after the last tenancy ended)?",
+                  "hint_text": "If the property is being let for the first time, enter 0",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
+            },
+            "property_number_of_times_relet_social_let": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "offered": {
+                  "check_answer_label": "How many times has the property been previously offered since becoming available?",
+                  "header": "How many times has the property been previously offered since becoming available?",
+                  "hint_text": "If the property is being let for the first time, enter 0",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
             },
             "property_unit_type": {
               "header": "",
@@ -1524,58 +1635,19 @@
                 }
               }
             },
-            "property_number_of_bedrooms": {
+            "property_building_type": {
               "header": "",
               "description": "",
               "questions": {
-                "beds": {
-                  "check_answer_label": "How many bedrooms are there in the property?",
-                  "header": "How many bedrooms are there in the property?",
-                  "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1
-                }
-              }
-            },
-            "property_major_repairs": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "majorrepairs": {
-                  "check_answer_label": "Were major repairs carried out during the void period?",
-                  "header": "Were any major repairs completed during the void period?",
+                "builtype": {
+                  "check_answer_label": "Building type",
+                  "header": "Which type of building is the property?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
-                  },
-                  "conditional_for": {
-                    "mrcdate": ["Yes"]
+                    "0": "Purpose built",
+                    "1": "Converted from previous residential or non-residential property"
                   }
-                },
-                "mrcdate": {
-                  "check_answer_label": "What was the major repairs completion date?",
-                  "header": "What was the major repairs completion date?",
-                  "hint_text": "For example, 27 3 2007",
-                  "type": "date"
-                }
-              }
-            },
-            "property_number_of_times_relet": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "offered": {
-                  "check_answer_label": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let?",
-                  "header": "How many times has this unit been previously offered since becoming available for relet since the last tenancy ended or as a first let? ",
-                  "hint_text": "For an Affordable Rent or Intermediate Rent Letting, only include number of offers as that type. For a property let at the first attempt enter '0' ",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1
                 }
               }
             },
@@ -1591,6 +1663,85 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No"
+                  }
+                }
+              }
+            },
+            "property_number_of_bedrooms": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "beds": {
+                  "check_answer_label": "How many bedrooms are there in the property?",
+                  "header": "How many bedrooms are there in the property?",
+                  "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": { "needstype": "General Needs" }
+            },
+            "void_or_renewal_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "beds": {
+                  "check_answer_label": "void/renewal date",
+                  "header": "What is the void or renewal date?",
+                  "hint_text": "",
+                  "type": "date"
+                }
+              },
+              "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No" }
+            },
+            "property_major_repairs": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "majorrepairs": {
+                  "check_answer_label": "Were major repairs carried out during the void period?",
+                  "header": "Were any major repairs completed during the void period?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "No",
+                    "1": "Yes"
+                  },
+                  "conditional_for": {
+                    "mrcdate": ["Yes"]
+                  },
+                  "depends_on": { "tenant_same_property_renewal": "No" }
+                },
+                "mrcdate": {
+                  "check_answer_label": "What was the major repairs completion date?",
+                  "header": "What was the major repairs completion date?",
+                  "hint_text": "For example, 27 3 2007",
+                  "type": "date"
+                }
+              },
+              "depends_on": { "rsnvac": "First let of newbuild property" }
+            },
+            "new_build_handover_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "majorrepairs": {
+                  "check_answer_label": "Were major repairs carried out during the void period?",
+                  "header": "Were any major repairs completed during the void period?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "No",
+                    "1": "Yesx"
+                  },
+                  "conditional_for": {
+                    "mrcdate": ["Yes"]
+                  },
+                  "depends_on": {
+                    "tenant_same_property_renewal": "No",
+                    "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
                   }
                 }
               }

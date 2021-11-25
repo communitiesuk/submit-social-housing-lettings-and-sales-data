@@ -40,6 +40,6 @@ private
   def net_income_in_soft_min_range?
     return unless weekly_net_income && ecstat1
 
-    weekly_net_income.between?(applicable_income_range.soft_min, applicable_income_range.hard_min)
+    weekly_net_income.between?(applicable_income_range.hard_min, applicable_income_range.soft_min)
   end
 end

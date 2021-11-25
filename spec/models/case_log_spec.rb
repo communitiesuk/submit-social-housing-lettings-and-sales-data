@@ -26,8 +26,8 @@ RSpec.describe Form, type: :model do
       expect { CaseLog.create!(offered: 0) }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    context "reasonable preference validation" do
-      it "if given reasonable preference is yes a reason must be selected" do
+    context "reasonable preference is yes" do
+      it "validates a reason must be selected" do
         expect {
           CaseLog.create!(reasonpref: "Yes",
                           rp_homeless: nil,
@@ -38,7 +38,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "if not previously homeless reasonable preference should not be selected" do
+      it "validates that previously homeless should be selected" do
         expect {
           CaseLog.create!(
             homeless: "No",
@@ -46,17 +46,16 @@ RSpec.describe Form, type: :model do
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
+    end
 
-      it "if not given reasonable preference a reason should not be selected" do
+    context "reasonable preference is no" do
+      it "validates no reason is needed" do
         expect {
-          CaseLog.create!(
-            homeless: "Yes - other homelessness",
-            reasonpref: "No",
-            rp_homeless: "Yes",
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
+          CaseLog.create!(reasonpref: "No", rp_homeless: "No")
+        }.not_to raise_error
       end
     end
+
     context "reason for leaving last settled home validation" do
       it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
         expect {
@@ -94,6 +93,49 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(armedforces: "No",
                           reservist: "Yes")
         }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "Validate pregnancy questions" do
+      it "Cannot answer yes if no female tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer yes if no female tenants within age range" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 51)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer prefer not to say if no valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Prefer not to say",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Can answer yes if valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 20)
+        }.not_to raise_error
+      end
+
+      it "Can answer yes if valid second tenant" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male", age1: 99,
+                          sex2: "Female",
+                          age2: 20)
+        }.not_to raise_error
       end
     end
 
@@ -325,12 +367,43 @@ RSpec.describe Form, type: :model do
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
+
+      context "given an income in upper soft validation range" do
+        let(:case_log) do
+          FactoryBot.create(:case_log,
+                            ecstat1: "Full-time - 30 hours or more",
+                            earnings: 750,
+                            incfreq: "Weekly")
+        end
+
+        it "updates soft errors" do
+          expect(case_log.has_no_unresolved_soft_errors?).to be false
+          expect(case_log.soft_errors["override_net_income_validation"].message)
+            .to match(/Net income is higher than expected/)
+        end
+      end
+
+      context "given an income in lower soft validation range" do
+        let(:case_log) do
+          FactoryBot.create(:case_log,
+                            ecstat1: "Full-time - 30 hours or more",
+                            earnings: 120,
+                            incfreq: "Weekly")
+        end
+
+        it "updates soft errors" do
+          expect(case_log.has_no_unresolved_soft_errors?).to be false
+          expect(case_log.soft_errors["override_net_income_validation"].message)
+            .to match(/Net income is lower than expected/)
+        end
+      end
     end
   end
 
   describe "status" do
     let!(:empty_case_log) { FactoryBot.create(:case_log) }
     let!(:in_progress_case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let!(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
 
     it "is set to not started for an empty case log" do
       expect(empty_case_log.not_started?).to be(true)
@@ -338,10 +411,16 @@ RSpec.describe Form, type: :model do
       expect(empty_case_log.completed?).to be(false)
     end
 
-    it "is set to not started for an empty case log" do
+    it "is set to in progress for a started case log" do
       expect(in_progress_case_log.in_progress?).to be(true)
       expect(in_progress_case_log.not_started?).to be(false)
       expect(in_progress_case_log.completed?).to be(false)
+    end
+
+    it "is set to completed for a completed case log" do
+      expect(completed_case_log.in_progress?).to be(false)
+      expect(completed_case_log.not_started?).to be(false)
+      expect(completed_case_log.completed?).to be(true)
     end
   end
 

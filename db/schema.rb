@@ -15,6 +15,16 @@ ActiveRecord::Schema.define(version: 2021_11_25_114400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "admin_users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "case_logs", force: :cascade do |t|
     t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
@@ -72,7 +82,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_114400) do
     t.string "previous_postcode"
     t.integer "rsnvac"
     t.integer "unittype_gn"
-    t.string "property_building_type"
     t.integer "beds"
     t.string "property_void_date"
     t.integer "offered"
@@ -153,6 +162,10 @@ ActiveRecord::Schema.define(version: 2021_11_25_114400) do
     t.datetime "sale_completion_date"
     t.datetime "startdate"
     t.integer "armedforces"
+    t.integer "first_time_property_let_as_social_housing"
+    t.string "why_dont_you_know_la"
+    t.integer "unitletas"
+    t.integer "builtype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
 

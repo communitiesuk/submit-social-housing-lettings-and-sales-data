@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => { passwords: "users/passwords" }, :skip => [:registrations]  
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :users, controllers: { passwords: "users/passwords" }, :skip => [:registrations] 
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'    
@@ -27,13 +28,13 @@ Rails.application.routes.draw do
       post "/form", to: "case_logs#submit_form"
     end
 
-    form.all_pages.keys.map do |page|
-      get page.to_s, to: "case_logs##{page}"
-      get "#{page}/soft_validations", to: "soft_validations#show" if form.soft_validations_for_page(page)
+    form.pages.map do |page|
+      get page.id.to_s, to: "case_logs##{page.id}"
+      get "#{page.id}/soft_validations", to: "soft_validations#show" if page.has_soft_validations?
     end
 
-    form.all_subsections.keys.map do |subsection|
-      get "#{subsection}/check_answers", to: "case_logs#check_answers"
+    form.subsections.map do |subsection|
+      get "#{subsection.id}/check_answers", to: "case_logs#check_answers"
     end
   end
 end

@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe ConditionalQuestionsHelper do
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
-  let(:page_key) { "armed_forces" }
-  let(:page) { form.all_pages[page_key] }
+  let(:page) { form.get_page("armed_forces") }
 
   describe "conditional questions for page" do
     let(:conditional_pages) { %w[leftreg reservist] }
@@ -15,15 +14,14 @@ RSpec.describe ConditionalQuestionsHelper do
   end
 
   describe "display question key div" do
-    let(:question_key) { "armed_forces" }
-    let(:conditional_question_key) { "reservist" }
+    let(:conditional_question) { page.questions.find { |q| q.id == "reservist" } }
 
     it "returns a non visible div for conditional questions" do
-      expect(display_question_key_div(page, conditional_question_key)).to match("style='display:none;'")
+      expect(display_question_key_div(page, conditional_question)).to match("style='display:none;'")
     end
 
-    it "returns a visible div for conditional questions" do
-      expect(display_question_key_div(page, question_key)).not_to match("style='display:none;'")
+    it "returns a visible div for questions" do
+      expect(display_question_key_div(page, page.questions.first)).not_to match("style='display:none;'")
     end
   end
 end

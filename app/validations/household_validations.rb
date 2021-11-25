@@ -5,12 +5,12 @@ module HouseholdValidations
     if record.homeless == "No" && record.reasonpref == "Yes"
       record.errors.add :reasonpref, "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
     elsif record.reasonpref == "Yes"
-      if !record.rp_homeless && !record.rp_insan_unsat && !record.rp_medwel && !record.rp_hardship && !record.rp_dontknow
-        record.errors.add :reasonable_preference_reason, "If reasonable preference is Yes, a reason must be given"
+      if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].none? { |a| a == "Yes" }
+        record.errors.add :reasonable_preference_reason, 'If reasonable preference is "Yes", a reason must be given'
       end
     elsif record.reasonpref == "No"
-      if record.rp_homeless || record.rp_insan_unsat || record.rp_medwel || record.rp_hardship || record.rp_dontknow
-        record.errors.add :reasonable_preference_reason, "If reasonable preference is No, no reasons should be given"
+      if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].any? { |a| a == "Yes" }
+        record.errors.add :reasonable_preference_reason, 'If reasonable preference is "No", no reasons should be given'
       end
     end
   end
@@ -66,7 +66,7 @@ module HouseholdValidations
     return unless record.age1
 
     if !record.age1.is_a?(Integer) || record.age1 < 16 || record.age1 > 120
-      record.errors.add "age1", "Tenant age must be an integer between 16 and 120"
+      record.errors.add :age1, "Tenant age must be an integer between 16 and 120"
     end
   end
 
