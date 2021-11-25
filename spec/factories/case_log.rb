@@ -129,7 +129,7 @@ FactoryBot.define do
       mrcday { 5 }
       mrcmonth { 5 }
       mrcyear { 2020 }
-      incref { 554_355 }
+      incref { 0 }
       sale_completion_date { nil }
       startdate { Time.zone.now }
       armedforces { 1 }
