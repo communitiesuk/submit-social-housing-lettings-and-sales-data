@@ -1,18 +1,14 @@
 require "rails_helper"
+require_relative "helpers"
 
 RSpec.describe "validations" do
+  include Helpers
   let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let!(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:id) { case_log.id }
 
   before do
     allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
-  end
-
-  def fill_in_number_question(case_log_id, question, value, path)
-    visit("/case_logs/#{case_log_id}/#{path}")
-    fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
-    click_button("Save and continue")
   end
 
   describe "Question validation" do
