@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :case_log do
-    sequence(:id) { |i| i }
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }

@@ -61,7 +61,6 @@ end
 
 group :test do
   gem "capybara", require: false
-  gem "database_cleaner-active_record", require: false
   gem "factory_bot_rails"
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
