@@ -51,6 +51,13 @@ RSpec.describe "User Features" do
     end
   end
 
+  context "If a not logged in user tries to access pages that need permissions" do
+    it "redirects to log in page" do
+      visit("/users/account")
+      expect(page).to have_content("Sign in to your account to submit CORE data")
+    end
+  end
+
   context "Your Account " do
 
     before(:each) do
