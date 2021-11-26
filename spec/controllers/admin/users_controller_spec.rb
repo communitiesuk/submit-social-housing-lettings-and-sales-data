@@ -26,7 +26,7 @@ describe Admin::UsersController, type: :controller do
     let(:params) do
       {
         user: {
-          email: "test5@example.com",
+          email: "somethin5@example.com",
           name: "Jane",
           password: "pAssword1",
           organisation_id: organisation.id,
