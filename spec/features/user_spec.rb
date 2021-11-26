@@ -58,8 +58,13 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "If a not logged in user tries to access pages that need permissions" do
-    it "redirects to log in page" do
+  context "If user not logged in" do
+    it "'Your account' link does not display" do
+      visit("/case_logs")
+      expect(page).to have_no_link("Your account")
+    end
+
+    it "tries to access account page, redirects to log in page" do
       visit("/users/account")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
@@ -71,6 +76,13 @@ RSpec.describe "User Features" do
       fill_in("user_email", with: user.email)
       fill_in("user_password", with: "pAssword1")
       click_button("Sign in")
+    end
+
+    it "shows 'Your account' link in navigation if logged in and redirect to correct page" do
+      visit("/case_logs")
+      expect(page).to have_link("Your account")
+      click_link("Your account")
+      expect(page).to have_current_path("/users/account")
     end
 
     it "main page is present and accessible" do
