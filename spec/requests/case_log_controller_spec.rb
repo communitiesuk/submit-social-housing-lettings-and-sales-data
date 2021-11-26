@@ -275,4 +275,29 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
   end
+
+  describe "Submit Form" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let(:page_id) { "person_1_age" }
+    let(:answer) { 2000 }
+    let(:params) do
+      {
+        id: case_log.id,
+        case_log: {
+          page: page_id,
+          age1: answer
+        }
+      }
+    end
+
+    before do
+      sign_in user
+      post "/case_logs/#{case_log.id}/form", params: params
+    end
+
+    it "re-renders the same page with errors if validation fails" do
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
 end
