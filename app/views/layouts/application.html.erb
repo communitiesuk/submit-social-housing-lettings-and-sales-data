@@ -39,10 +39,11 @@
             service_name: 'Share Lettings and Sales for Social Housing in England Data with DLUHC',
             service_url: '/'
           ) do |component|
-            unless current_user.nil?
+            if current_user.nil?
+               component.navigation_item(text: 'Case logs', href: '/case_logs')
+            elsif 
               component.navigation_item(text: 'Your account', href: '/users/account')
-              component.navigation_item(text: 'Sign out', href: destroy_user_session_path)
-              component.navigation_item(text: 'Page C', href: '/#page-c')
+              component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
             end
           end
       %>

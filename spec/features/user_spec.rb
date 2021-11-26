@@ -64,6 +64,16 @@ RSpec.describe "User Features" do
       expect(page).to have_no_link("Your account")
     end
 
+    it "Can navigate and sign in page with sign in button" do
+      visit("/")
+      expect(page).to have_link("Case logs")
+      click_link("Case logs")
+      fill_in("user_email", with: user.email)
+      fill_in("user_password", with: "pAssword1")
+      click_button("Sign in")
+      expect(page).to have_current_path("/case_logs")
+    end
+
     it "tries to access account page, redirects to log in page" do
       visit("/users/account")
       expect(page).to have_content("Sign in to your account to submit CORE data")
