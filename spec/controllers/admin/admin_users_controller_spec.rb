@@ -33,7 +33,7 @@ describe Admin::AdminUsersController, type: :controller do
       get :edit, session: valid_session, params: { id: AdminUser.first.id }
     end
 
-    it "creates a new admin users" do
+    it "shows an edit form" do
       expect(page).to have_field("admin_user_email")
       expect(page).to have_field("admin_user_password")
       expect(page).to have_field("admin_user_password_confirmation")
