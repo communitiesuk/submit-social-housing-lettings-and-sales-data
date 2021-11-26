@@ -286,8 +286,8 @@ RSpec.describe CaseLogsController, type: :request do
         id: case_log.id,
         case_log: {
           page: page_id,
-          age1: answer
-        }
+          age1: answer,
+        },
       }
     end
 

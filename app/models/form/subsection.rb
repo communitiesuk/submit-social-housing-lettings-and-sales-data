@@ -5,7 +5,7 @@ class Form::Subsection
     @id = id
     @label = hsh["label"]
     @depends_on = hsh["depends_on"]
-    @pages = hsh["pages"].map { |id, p| Form::Page.new(id, p, self) }
+    @pages = hsh["pages"].map { |s_id, p| Form::Page.new(s_id, p, self) }
     @section = section
   end
 

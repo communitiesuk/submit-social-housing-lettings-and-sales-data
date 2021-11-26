@@ -62,7 +62,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             reasonpref: "No",
-            rp_medwel: "Yes"
+            rp_medwel: "Yes",
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end

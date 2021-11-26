@@ -54,8 +54,8 @@ RSpec.describe "User Features" do
       visit("/users/password/new")
       fill_in("user_email", with: user.email)
       click_button("Send email")
-      expect(page).to have_css '.govuk-notification-banner.govuk-notification-banner--success'
-    end    
+      expect(page).to have_css ".govuk-notification-banner.govuk-notification-banner--success"
+    end
   end
 
   context "If a not logged in user tries to access pages that need permissions" do

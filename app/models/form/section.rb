@@ -5,6 +5,6 @@ class Form::Section
     @id = id
     @label = hsh["label"]
     @form = form
-    @subsections = hsh["subsections"].map { |id, s| Form::Subsection.new(id, s, self) }
+    @subsections = hsh["subsections"].map { |s_id, s| Form::Subsection.new(s_id, s, self) }
   end
 end
