@@ -278,9 +278,9 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "Submit Form" do
     let(:user) { FactoryBot.create(:user) }
+    let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
     let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
     let(:page_id) { "person_1_age" }
-    let(:answer) { 2000 }
     let(:params) do
       {
         id: case_log.id,
@@ -292,12 +292,25 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
+      allow(FormHandler.instance).to receive(:get_form).and_return(form)
       sign_in user
       post "/case_logs/#{case_log.id}/form", params: params
     end
 
-    it "re-renders the same page with errors if validation fails" do
-      expect(response).to have_http_status(:unprocessable_entity)
+    context "invalid answers" do
+      let(:answer) { 2000 }
+
+      it "re-renders the same page with errors if validation fails" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "valid answers" do
+      let(:answer) { 20 }
+
+      it "re-renders the same page with errors if validation fails" do
+        expect(response).to have_http_status(:redirect)
+      end
     end
   end
 end

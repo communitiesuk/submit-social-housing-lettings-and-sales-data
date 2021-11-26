@@ -6,9 +6,9 @@ class Form::Page
     @id = id
     @header = hsh["header"]
     @description = hsh["description"]
-    @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
+    @questions = hsh["questions"].map { |id, q| Form::Question.new(id, q, self) }
     @depends_on = hsh["depends_on"]
-    @soft_validations = hsh["soft_validations"]&.map { |v_id, s| Form::Question.new(v_id, s, self) }
+    @soft_validations = hsh["soft_validations"]&.map { |id, s| Form::Question.new(id, s, self) }
     @subsection = subsection
   end
 
