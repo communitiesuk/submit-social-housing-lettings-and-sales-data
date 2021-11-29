@@ -33,21 +33,20 @@
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-    <header class="govuk-header" role="banner" data-module="govuk-header">
-      <%= render GovukComponent::HeaderComponent.new(
-            logotype: 'GOV.UK',
-            service_name: 'Share Lettings and Sales for Social Housing in England Data with DLUHC',
-            service_url: '/'
-          ) do |component|
-            if current_user.nil?
-               component.navigation_item(text: 'Case logs', href: '/case_logs')
-            elsif 
-              component.navigation_item(text: 'Your account', href: '/users/account')
-              component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
-            end
-          end
-      %>
-    </header>
+    <%= render GovukComponent::HeaderComponent.new(
+        logotype: 'GOV.UK',
+        service_name: 'Share Lettings and Sales for Social Housing in England Data with DLUHC',
+        service_url: '/'
+      ) do |component|
+        if current_user.nil?
+            component.navigation_item(text: 'Case logs', href: '/case_logs')
+        elsif
+          component.navigation_item(text: 'Your account', href: '/users/account')
+          component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
+        end
+      end
+    %>
+
     <aside class="govuk-width-container">
       <%= render GovukComponent::PhaseBannerComponent.new(
         tag: { text: 'Beta' },
