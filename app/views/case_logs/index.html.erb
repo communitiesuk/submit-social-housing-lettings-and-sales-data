@@ -11,7 +11,7 @@
     <% end %>
 
     <% if @completed_case_logs.present? %>
-      <%= render partial: "log_list", locals: { case_logs: @completed_case_logs, title: "Logs you've submitted", date_title: "Date Submitted" } %>
+      <%= render partial: "log_list", locals: { case_logs: @completed_case_logs, title: "Logs you’ve submitted", date_title: "Date Submitted" } %>
     <% end %>
 
     <p><a href="#" class="govuk-link">See all completed logs (<%= @completed_case_logs.count %>)</a></p>

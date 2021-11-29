@@ -10,7 +10,7 @@ RSpec.describe "case_logs/index" do
       render
       expect(rendered).to match(/<table class="govuk-table">/)
       expect(rendered).to match(/Logs you need to complete/)
-      expect(rendered).not_to match(/Logs you&#39;ve submitted/)
+      expect(rendered).not_to match(/Logs you’ve submitted/)
       expect(rendered).to match(in_progress_log.tenant_code)
       expect(rendered).to match(in_progress_log.property_postcode)
     end
@@ -22,7 +22,7 @@ RSpec.describe "case_logs/index" do
       assign(:completed_case_logs, [completed_log])
       render
       expect(rendered).to match(/<table class="govuk-table">/)
-      expect(rendered).to match(/Logs you&#39;ve submitted/)
+      expect(rendered).to match(/Logs you’ve submitted/)
       expect(rendered).not_to match(/Logs you need to complete/)
       expect(rendered).to match(completed_log.tenant_code)
       expect(rendered).to match(completed_log.property_postcode)
@@ -35,7 +35,7 @@ RSpec.describe "case_logs/index" do
       assign(:completed_case_logs, [completed_log])
       render
       expect(rendered).to match(/<table class="govuk-table">/)
-      expect(rendered).to match(/Logs you&#39;ve submitted/)
+      expect(rendered).to match(/Logs you’ve submitted/)
       expect(rendered).to match(/Logs you need to complete/)
     end
   end
