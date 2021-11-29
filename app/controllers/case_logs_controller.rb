@@ -95,9 +95,13 @@ class CaseLogsController < ApplicationController
   form = FormHandler.instance.get_form("2021_2022")
   form.pages.map do |page|
     define_method(page.id) do |_errors = {}|
-      @case_log = CaseLog.find(params[:case_log_id])
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }
+      @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+      if @case_log
+        subsection = form.subsection_for_page(page)
+        render "form/page", locals: { form: form, page: page, subsection: subsection.label }
+      else
+        render file: "#{Rails.root}/public/404.html", status: 404
+      end
     end
   end
 

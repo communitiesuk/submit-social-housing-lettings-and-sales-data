@@ -172,7 +172,7 @@ RSpec.describe CaseLogsController, type: :request do
         end
       end
 
-      context "edit page" do
+      context "edit log" do
         let(:headers) { { "Accept" => "text/html" } }
         let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
         before do
@@ -198,6 +198,19 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not show the tasklist for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "form pages" do
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}/person_1_age", headers: headers, params: {}
+          end
+
+          it "does not show form pages for case logs you don't have access to" do
             expect(response).to have_http_status(:not_found)
           end
         end
