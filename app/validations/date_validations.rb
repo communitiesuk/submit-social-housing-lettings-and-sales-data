@@ -8,7 +8,7 @@ module DateValidations
         record["rsnvac"] == "First let of conversion/rehabilitation/acquired property" ||
         record["rsnvac"] == "First let of leased property") &&
         record["mrcdate"].present?
-      record.errors.add :mrcdate, "Major repairs date must be before the tenancy start date"
+      record.errors.add :mrcdate, "Major repairs date must not be completed if the tenancy is first let"
     end
 
     if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 730
