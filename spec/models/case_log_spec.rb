@@ -504,6 +504,49 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context "Validate pregnancy questions" do
+      it "Cannot answer yes if no female tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer yes if no female tenants within age range" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 51)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer prefer not to say if no valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Prefer not to say",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Can answer yes if valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 20)
+        }.not_to raise_error
+      end
+
+      it "Can answer yes if valid second tenant" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male", age1: 99,
+                          sex2: "Female",
+                          age2: 20)
+        }.not_to raise_error
+      end
+    end
   end
 
   describe "status" do
