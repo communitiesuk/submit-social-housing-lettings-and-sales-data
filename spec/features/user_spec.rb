@@ -13,6 +13,7 @@ RSpec.describe "User Features" do
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
       expect(page).to have_current_path("/case_logs")
+      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
     end
   end
 
@@ -77,6 +78,17 @@ RSpec.describe "User Features" do
     it "tries to access account page, redirects to log in page" do
       visit("/users/account")
       expect(page).to have_content("Sign in to your account to submit CORE data")
+    end
+  end
+
+  context "Trying to log in with incorrect credentials" do
+    it "shows a gov uk error summary and no flash message" do
+      visit("/case_logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: "nonsense")
+      click_button("Sign in")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
     end
   end
 

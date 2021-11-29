@@ -56,12 +56,12 @@
       </div>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
-        <% flash.each do |type, msg| %>
+        <% if flash.notice %>
           <%= govuk_notification_banner(
             title_text: 'Success',
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications") do |notification_banner|
-              notification_banner.heading(text: msg)
+              notification_banner.heading(text: flash.notice)
             end
           %>
         <% end %>

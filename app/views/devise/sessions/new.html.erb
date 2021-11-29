@@ -3,6 +3,9 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Sign in to your account to submit CORE data</h1>
 
+      <% flash_to_model_errors(resource) %>
+      <%= f.govuk_error_summary %>
+
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
         autocomplete: "email"
