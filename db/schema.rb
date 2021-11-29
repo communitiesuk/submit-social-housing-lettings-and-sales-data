@@ -165,7 +165,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_154916) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
-    t.string "property_postcode"
     t.datetime "property_void_date"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end
