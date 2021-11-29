@@ -410,6 +410,143 @@ RSpec.describe Form, type: :model do
         end
       end
     end
+
+    context "major repairs date" do
+      it "cannot be later than the tenancy start date" do
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2020, 10, 9),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 9),
+            startdate: Date.new(2020, 10, 10),
+          )
+        }.not_to raise_error
+      end
+
+      it "must not be completed if reason for vacancy is first let" do
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of newbuild property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of conversion/rehabilitation/acquired property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            mrcdate: Date.new(2020, 10, 10),
+            rsnvac: "First let of leased property",
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must have less than two years between the tenancy start date and major repairs date" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            mrcdate: Date.new(2017, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "void date" do
+      it "must have less than 10 years between the tenancy start date and void" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2009, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2015, 10, 10),
+          )
+        }.not_to raise_error
+      end
+
+      it "must be before the tenancy start date" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2021, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2019, 10, 10),
+          )
+        }.not_to raise_error
+      end
+
+      it "must be before major repairs date if major repairs date provided" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            mrcdate: Date.new(2019, 10, 10),
+            property_void_date: Date.new(2019, 11, 11),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    context "Validate pregnancy questions" do
+      it "Cannot answer yes if no female tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer yes if no female tenants within age range" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 51)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Cannot answer prefer not to say if no valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Prefer not to say",
+                          sex1: "Male",
+                          age1: 20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "Can answer yes if valid tenants" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Female",
+                          age1: 20)
+        }.not_to raise_error
+      end
+
+      it "Can answer yes if valid second tenant" do
+        expect {
+          CaseLog.create!(preg_occ: "Yes",
+                          sex1: "Male", age1: 99,
+                          sex2: "Female",
+                          age2: 20)
+        }.not_to raise_error
+      end
+    end
   end
 
   describe "status" do

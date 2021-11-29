@@ -84,6 +84,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "marks the record as completed" do
         json_response = JSON.parse(response.body)
+        expect(json_response).not_to have_key("errors")
         expect(json_response["status"]).to eq(completed)
       end
     end
@@ -318,7 +319,7 @@ RSpec.describe CaseLogsController, type: :request do
           case_log: {
             page: page_id,
             age1: answer,
-            age2: 2000
+            age2: 2000,
           },
         }
       end
