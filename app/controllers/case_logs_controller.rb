@@ -30,7 +30,7 @@ class CaseLogsController < ApplicationController
         render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+      render_not_found_json("Case log", params[:id])
     end
   end
 
@@ -42,7 +42,7 @@ class CaseLogsController < ApplicationController
         if (case_log = CaseLog.find_by(id: params[:id]))
           render json: case_log, status: :ok
         else
-          render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+          render_not_found_json("Case log", params[:id])
         end
       end
     end
@@ -54,7 +54,7 @@ class CaseLogsController < ApplicationController
     if @case_log
       render :edit
     else
-      render file: "#{Rails.root}/public/404.html", status: 404
+      render_not_found_html
     end
   end
 
@@ -72,7 +72,7 @@ class CaseLogsController < ApplicationController
         render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
       end
     else
-      render file: "#{Rails.root}/public/404.html", status: 404
+      render_not_found_html
     end
   end
 
@@ -84,7 +84,7 @@ class CaseLogsController < ApplicationController
         render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+      render_not_found_json("Case log", params[:id])
     end
   end
 
@@ -96,7 +96,7 @@ class CaseLogsController < ApplicationController
       subsection = form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection: subsection, form: form }
     else
-      render file: "#{Rails.root}/public/404.html", status: 404
+      render_not_found_html
     end
   end
 
@@ -108,7 +108,7 @@ class CaseLogsController < ApplicationController
         subsection = form.subsection_for_page(page)
         render "form/page", locals: { form: form, page: page, subsection: subsection.label }
       else
-        render file: "#{Rails.root}/public/404.html", status: 404
+        render_not_found_html
       end
     end
   end
