@@ -204,6 +204,8 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       context "form pages" do
+        let(:headers) { { "Accept" => "text/html" } }
+
         context "case logs that are not owned or managed by your organisation" do
           before do
             sign_in user
@@ -211,6 +213,21 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not show form pages for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "check answers pages" do
+        let(:headers) { { "Accept" => "text/html" } }
+
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}/household_characteristics/check_answers", headers: headers, params: {}
+          end
+
+          it "does not show a check answers for case logs you don't have access to" do
             expect(response).to have_http_status(:not_found)
           end
         end

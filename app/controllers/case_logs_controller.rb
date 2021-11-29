@@ -86,10 +86,14 @@ class CaseLogsController < ApplicationController
 
   def check_answers
     form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:case_log_id])
-    current_url = request.env["PATH_INFO"]
-    subsection = form.get_subsection(current_url.split("/")[-2])
-    render "form/check_answers", locals: { subsection: subsection, form: form }
+    @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+    if @case_log
+      current_url = request.env["PATH_INFO"]
+      subsection = form.get_subsection(current_url.split("/")[-2])
+      render "form/check_answers", locals: { subsection: subsection, form: form }
+    else
+      render file: "#{Rails.root}/public/404.html", status: 404
+    end
   end
 
   form = FormHandler.instance.get_form("2021_2022")
