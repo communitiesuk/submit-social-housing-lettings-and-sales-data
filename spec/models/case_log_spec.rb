@@ -628,6 +628,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             startdate: Date.new(2020, 10, 9),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -635,6 +637,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 9),
             startdate: Date.new(2020, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -644,6 +648,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of newbuild property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -651,6 +657,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of conversion/rehabilitation/acquired property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -658,6 +666,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of leased property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -667,6 +677,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             mrcdate: Date.new(2017, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -678,6 +690,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2009, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -685,6 +699,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2015, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -694,6 +710,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2021, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -701,6 +719,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2019, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -711,6 +731,8 @@ RSpec.describe Form, type: :model do
             startdate: Date.new(2020, 10, 10),
             mrcdate: Date.new(2019, 10, 10),
             property_void_date: Date.new(2019, 11, 11),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -721,7 +743,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -729,7 +753,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 51)
+                          age1: 51,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -737,7 +763,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Prefer not to say",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -745,7 +773,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
 
@@ -754,7 +784,9 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male", age1: 99,
                           sex2: "Female",
-                          age2: 20)
+                          age2: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
     end
