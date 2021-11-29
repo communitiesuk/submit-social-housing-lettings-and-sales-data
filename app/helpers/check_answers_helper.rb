@@ -1,3 +1,5 @@
+include GovukLinkHelper
+
 module CheckAnswersHelper
   def display_answered_questions_summary(subsection, case_log)
     total = subsection.applicable_questions_count(case_log)
@@ -15,6 +17,6 @@ private
   def create_next_missing_question_link(subsection, case_log)
     pages_to_fill_in = subsection.unanswered_questions(case_log).map(&:page)
     url = "/case_logs/#{case_log.id}/#{pages_to_fill_in.first.id}"
-    link_to("Answer the missing questions", url, class: "govuk-link").html_safe
+    govuk_link_to("Answer the missing questions", url).html_safe
   end
 end

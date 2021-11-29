@@ -1,6 +1,9 @@
 {
   "name": "data-collector",
   "private": true,
+  "engines": {
+    "node": "^14.0.0"
+  },
   "dependencies": {
     "@activeadmin/activeadmin": "^2.9.0",
     "@hotwired/stimulus": "^3.0.0",

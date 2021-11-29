@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template ">
+<html lang="en" class="govuk-template">
   <head>
     <title>DLUHC CORE Data Collection</title>
     <%= csrf_meta_tags %>
@@ -25,44 +25,39 @@
   </head>
 
   <body class="govuk-template__body ">
-
-
     <script>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
 
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <%= govuk_skip_link %>
 
-    <header class="govuk-header" role="banner" data-module="govuk-header">
-      <%= render GovukComponent::HeaderComponent.new(
-            logotype: 'GOV.UK',
-            service_name: 'Share Lettings and Sales for Social Housing in England Data with DLUHC',
-            service_url: '/'
-          ) do |component|
-            if current_user.nil?
-               component.navigation_item(text: 'Case logs', href: '/case_logs')
-            elsif 
-              component.navigation_item(text: 'Your account', href: '/users/account')
-              component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
-            end
-          end
-      %>
-    </header>
-    <aside class="govuk-width-container">
-      <%= render GovukComponent::PhaseBannerComponent.new(
+    <%= govuk_header(
+        logotype: 'GOV.UK',
+        service_name: 'Share Lettings and Sales for Social Housing in England Data with DLUHC',
+        service_url: '/'
+      ) do |component|
+        if current_user.nil?
+          component.navigation_item(text: 'Case logs', href: '/case_logs')
+        elsif
+          component.navigation_item(text: 'Your account', href: '/users/account')
+          component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
+        end
+      end
+    %>
+
+    <div class="govuk-width-container">
+      <%= govuk_phase_banner(
         tag: { text: 'Beta' },
         text: "This is a new service – #{govuk_mail_to("test@mhclg.gov.uk", "give feedback or report a problem", subject: "Feedback about Lettings and Sales of Social Housing in England Data Collection")}".html_safe
       ) %>
-    </aside>
 
-    <div class="govuk-width-container">
       <div role="navigation">
         <%= content_for(:before_content) %>
       </div>
 
-      <main class="govuk-main-wrapper " id="main-content" role="main">
+      <main class="govuk-main-wrapper" id="main-content" role="main">
         <% flash.each do |type, msg| %>
-          <%= render GovukComponent::NotificationBannerComponent.new(
+          <%= govuk_notification_banner(
             title_text: 'Success',
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications") do |notification_banner|
@@ -74,8 +69,6 @@
       </main>
     </div>
 
-    <footer class="govuk-footer">
-      <%= render partial: "layouts/footer" %>
-    </footer>
+    <%= render partial: "layouts/footer" %>
   </body>
 </html>
