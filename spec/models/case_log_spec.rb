@@ -247,14 +247,14 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(tenancy: "Assured Shorthold",
-                          tenancylength: 2)
+          tenancylength: 2)
         }.not_to raise_error
       end
 
       it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: 1)
+          tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -264,12 +264,12 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: nil)
+          tenancylength: nil)
         }.not_to raise_error
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: 2)
+          tenancylength: 2)
         }.not_to raise_error
       end
     end
@@ -337,7 +337,7 @@ RSpec.describe Form, type: :model do
       it "must be provided if tenancy type was given as other" do
         expect {
           CaseLog.create!(tenancy: "Other",
-                          tenancyother: nil)
+          tenancyother: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -349,7 +349,7 @@ RSpec.describe Form, type: :model do
       it "must not be provided if tenancy type is not other" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancyother: "the other reason provided")
+          tenancyother: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -451,7 +451,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "must have less than two years between the tenancy start date and major cprepairs date" do
+      it "must have less than two years between the tenancy start date and major repairs date" do
         expect {
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
@@ -462,11 +462,27 @@ RSpec.describe Form, type: :model do
     end
 
     context "void date" do
-      it "must have less than two years between the tenancy start date and void" do
+      it "must have less than 10 years between the tenancy start date and void" do
         expect {
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
-            property_void_date: Date.new(2017, 10, 10),
+            property_void_date: Date.new(2009, 10, 10),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2015, 10, 10),
+          )
+        }.not_to raise_error
+      end
+
+      it "must be before the tenancy start date" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            property_void_date: Date.new(2021, 10, 10),
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -476,6 +492,16 @@ RSpec.describe Form, type: :model do
             property_void_date: Date.new(2019, 10, 10),
           )
         }.not_to raise_error
+      end
+
+      it "must be before major repairs date if major repairs date provided" do
+        expect {
+          CaseLog.create!(
+            startdate: Date.new(2020, 10, 10),
+            mrcdate: Date.new(2019, 10, 10),
+            property_void_date: Date.new(2019, 11, 11),
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
