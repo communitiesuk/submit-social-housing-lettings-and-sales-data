@@ -1,5 +1,5 @@
 class Organisation < ApplicationRecord
   has_many :users
-  has_many :case_logs, as: :owning_organisation
-  has_many :case_logs, as: :managing_organisation
+  has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
+  has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
 end
