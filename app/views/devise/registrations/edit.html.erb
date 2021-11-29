@@ -1,5 +1,8 @@
 <% content_for :before_content do %>
-  <%= link_to 'Back', :back, class: "govuk-back-link" %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
 <% end %>
 
 <%= form_for(resource, as: resource_name, url: user_registration_path(), html: { method: :patch }) do |f| %>

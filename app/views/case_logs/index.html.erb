@@ -4,14 +4,14 @@
   </div>
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= link_to "Create new log", case_logs_path, method: :post, class: "govuk-button" %>
+    <%= govuk_button_link_to "Create new log", case_logs_path, method: :post %>
 
     <% if @in_progress_case_logs.present? %>
       <%= render partial: "log_list", locals: { case_logs: @in_progress_case_logs, title: "Logs you need to complete", date_title: "Last Changed" } %>
     <% end %>
 
     <% if @completed_case_logs.present? %>
-      <%= render partial: "log_list", locals: { case_logs: @completed_case_logs, title: "Logs you've submitted", date_title: "Date Submitted" } %>
+      <%= render partial: "log_list", locals: { case_logs: @completed_case_logs, title: "Logs you’ve submitted", date_title: "Date Submitted" } %>
     <% end %>
 
     <p><a href="#" class="govuk-link">See all completed logs (<%= @completed_case_logs.count %>)</a></p>

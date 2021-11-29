@@ -8,12 +8,12 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "ShouldThrowError": "Shouldn't be here but what you gonna do?",
+          "ShouldThrowError": "Shouldn’t be here but what you gonna do?",
           "pages": {
             "tenant_code": {
               "header": "",
               "description": "",
-              "ShouldThrowError": "Shouldn't be here but what you gonna do?",
+              "ShouldThrowError": "Shouldn’t be here but what you gonna do?",
               "questions": {
                 "tenant_code": {
                   "check_answer_label": "Tenant code",
