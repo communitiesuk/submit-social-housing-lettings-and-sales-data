@@ -9,14 +9,14 @@ RSpec.describe User, type: :model do
         :case_log,
         :completed,
         owning_organisation: user.organisation,
-        managing_organisation: other_organisation
+        managing_organisation: other_organisation,
       )
     end
     let!(:managed_case_log) do
       FactoryBot.create(
         :case_log,
         owning_organisation: other_organisation,
-        managing_organisation: user.organisation
+        managing_organisation: user.organisation,
       )
     end
 

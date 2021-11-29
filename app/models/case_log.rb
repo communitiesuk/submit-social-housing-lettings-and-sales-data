@@ -47,6 +47,8 @@ class CaseLog < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, class_name: "Organisation"
 
+  scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
+
   attr_accessor :page_id
 
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }
