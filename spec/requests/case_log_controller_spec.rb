@@ -113,27 +113,62 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "GET" do
-    let(:case_log) { FactoryBot.create(:case_log, :completed) }
-    let(:id) { case_log.id }
+    context "collection" do
+      let(:user) { FactoryBot.create(:user) }
+      let(:organisation) { user.organisation }
+      let(:other_organisation) { FactoryBot.create(:organisation) }
+      let!(:case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: organisation,
+          managing_organisation: organisation,
+        )
+      end
+      let!(:unauthorized_case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: other_organisation,
+          managing_organisation: other_organisation,
+        )
+      end
+      let(:headers) { { "Accept" => "text/html" } }
 
-    before do
-      get "/case_logs/#{id}", headers: headers
+      before do
+        sign_in user
+        get "/case_logs", headers: headers, params: {}
+      end
+
+      it "only shows case logs for your organisation" do
+        expected_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{case_log.id}\">#{case_log.id}</a>"
+        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+        expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
+        expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+      end
     end
 
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
+    context "member" do
+      let(:case_log) { FactoryBot.create(:case_log, :completed) }
+      let(:id) { case_log.id }
 
-    it "returns a serialized Case Log" do
-      json_response = JSON.parse(response.body)
-      expect(json_response["status"]).to eq(case_log.status)
-    end
+      before do
+        get "/case_logs/#{id}", headers: headers
+      end
 
-    context "invalid case log id" do
-      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
 
-      it "returns 404" do
-        expect(response).to have_http_status(:not_found)
+      it "returns a serialized Case Log" do
+        json_response = JSON.parse(response.body)
+        expect(json_response["status"]).to eq(case_log.status)
+      end
+
+      context "invalid case log id" do
+        let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+        it "returns 404" do
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
   end

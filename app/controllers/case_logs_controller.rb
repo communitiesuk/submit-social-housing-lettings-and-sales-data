@@ -4,8 +4,8 @@ class CaseLogsController < ApplicationController
   before_action :authenticate_user!, unless: :json_api_request?
 
   def index
-    @completed_case_logs = CaseLog.completed
-    @in_progress_case_logs = CaseLog.not_completed
+    @completed_case_logs = current_user.completed_case_logs
+    @in_progress_case_logs = current_user.not_completed_case_logs
   end
 
   def create
