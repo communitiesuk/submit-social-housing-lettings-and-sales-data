@@ -60,15 +60,19 @@ class CaseLogsController < ApplicationController
 
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:id])
-    page = form.get_page(params[:case_log][:page])
-    responses_for_page = responses_for_page(page)
-    if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-      redirect_path = form.next_page_redirect_path(page, @case_log)
-      redirect_to(send(redirect_path, @case_log))
+    @case_log = current_user.case_logs.find_by(id: params[:id])
+    if @case_log
+      page = form.get_page(params[:case_log][:page])
+      responses_for_page = responses_for_page(page)
+      if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+        redirect_path = form.next_page_redirect_path(page, @case_log)
+        redirect_to(send(redirect_path, @case_log))
+      else
+        subsection = form.subsection_for_page(page)
+        render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+      end
     else
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+      render file: "#{Rails.root}/public/404.html", status: 404
     end
   end
 

@@ -389,7 +389,14 @@ RSpec.describe CaseLogsController, type: :request do
   describe "Submit Form" do
     let(:user) { FactoryBot.create(:user) }
     let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
-    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let(:organisation) { user.organisation }
+    let(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
     let(:page_id) { "person_1_age" }
     let(:params) do
       {
@@ -437,6 +444,27 @@ RSpec.describe CaseLogsController, type: :request do
         case_log.reload
         expect(case_log.age1).to eq(answer)
         expect(case_log.age2).to be nil
+      end
+    end
+
+    context "case logs that are not owned or managed by your organisation" do
+      let(:answer) { 25 }
+      let(:other_organisation) { FactoryBot.create(:organisation) }
+      let(:unauthorized_case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: other_organisation,
+          managing_organisation: other_organisation,
+        )
+      end
+
+      before do
+        sign_in user
+        post "/case_logs/#{unauthorized_case_log.id}/form", params: params
+      end
+
+      it "does not let you post form answers to case logs you don't have access to" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
