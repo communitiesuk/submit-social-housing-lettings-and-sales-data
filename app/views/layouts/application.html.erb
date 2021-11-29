@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="govuk-template ">
+<html lang="en" class="govuk-template">
   <head>
     <title>DLUHC CORE Data Collection</title>
     <%= csrf_meta_tags %>
@@ -25,8 +25,6 @@
   </head>
 
   <body class="govuk-template__body ">
-
-
     <script>
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
@@ -57,7 +55,7 @@
         <%= content_for(:before_content) %>
       </div>
 
-      <main class="govuk-main-wrapper " id="main-content" role="main">
+      <main class="govuk-main-wrapper" id="main-content" role="main">
         <% flash.each do |type, msg| %>
           <%= govuk_notification_banner(
             title_text: 'Success',
