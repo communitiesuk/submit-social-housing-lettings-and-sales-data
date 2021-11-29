@@ -1,3 +1,5 @@
+include GovukLinkHelper
+
 module TasklistHelper
   STATUSES = {
     not_started: "Not started",
@@ -38,6 +40,6 @@ module TasklistHelper
                      else
                        "#"
                      end
-    link_to(subsection.label, next_page_path, class: "task-name govuk-link")
+    govuk_link_to(subsection.label, next_page_path, class: "task-name")
   end
 end

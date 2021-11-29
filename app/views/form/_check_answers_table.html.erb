@@ -6,6 +6,6 @@
     <%= question.answer_label(@case_log) %>
   </dd>
   <dd class="govuk-summary-list__actions">
-    <%= link_to(question.update_answer_link_name(@case_log), "/case_logs/#{@case_log.id}/#{question.page.id}", class: "govuk-link").html_safe %>
+    <%= govuk_link_to(question.update_answer_link_name(@case_log), "/case_logs/#{@case_log.id}/#{question.page.id}").html_safe %>
   </dd>
 </div>
