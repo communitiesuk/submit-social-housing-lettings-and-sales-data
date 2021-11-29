@@ -1,5 +1,8 @@
 <% content_for :before_content do %>
-  <%= link_to 'Back', :back, class: "govuk-back-link" %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
 <% end %>
 
 <%= form_for(current_user, as: :user, url: account_update_path(), html: { method: :patch }) do |f| %>

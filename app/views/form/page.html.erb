@@ -1,5 +1,8 @@
 <% content_for :before_content do %>
-  <%= link_to 'Back', 'javascript:history.back()', class: "govuk-back-link" %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: 'javascript:history.back()',
+  ) %>
 <% end %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
