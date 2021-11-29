@@ -319,7 +319,7 @@ RSpec.describe CaseLogsController, type: :request do
           case_log: {
             page: page_id,
             age1: answer,
-            age2: 2000
+            age2: 2000,
           },
         }
       end

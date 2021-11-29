@@ -247,14 +247,14 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(tenancy: "Assured Shorthold",
-          tenancylength: 2)
+                          tenancylength: 2)
         }.not_to raise_error
       end
 
       it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-          tenancylength: 1)
+                          tenancylength: 1)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -264,12 +264,12 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-          tenancylength: nil)
+                          tenancylength: nil)
         }.not_to raise_error
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-          tenancylength: 2)
+                          tenancylength: 2)
         }.not_to raise_error
       end
     end
@@ -337,7 +337,7 @@ RSpec.describe Form, type: :model do
       it "must be provided if tenancy type was given as other" do
         expect {
           CaseLog.create!(tenancy: "Other",
-          tenancyother: nil)
+                          tenancyother: nil)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -349,7 +349,7 @@ RSpec.describe Form, type: :model do
       it "must not be provided if tenancy type is not other" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-          tenancyother: "the other reason provided")
+                          tenancyother: "the other reason provided")
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
