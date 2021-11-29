@@ -4,10 +4,8 @@ module DateValidations
     if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
       record.errors.add :mrcdate, "Major repairs date must be before the tenancy start date"
     end
-    if (record["rsnvac"] == "First let of newbuild property" ||
-        record["rsnvac"] == "First let of conversion/rehabilitation/acquired property" ||
-        record["rsnvac"] == "First let of leased property") &&
-        record["mrcdate"].present?
+
+    if is_rsnvac_first_let?(record) && record["mrcdate"].present?
       record.errors.add :mrcdate, "Major repairs date must not be completed if the tenancy is first let"
     end
 
@@ -44,5 +42,11 @@ private
     if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
       record.errors.add question, "Please enter a valid date"
     end
+  end
+
+  def is_rsnvac_first_let?(record)
+    record["rsnvac"] == "First let of newbuild property" ||
+      record["rsnvac"] == "First let of conversion/rehabilitation/acquired property" ||
+      record["rsnvac"] == "First let of leased property"
   end
 end
