@@ -50,8 +50,12 @@ class CaseLogsController < ApplicationController
 
   def edit
     @form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:id])
-    render :edit
+    @case_log = current_user.case_logs.find_by(id: params[:id])
+    if @case_log
+      render :edit
+    else
+      render file: "#{Rails.root}/public/404.html", status: 404
+    end
   end
 
   def submit_form

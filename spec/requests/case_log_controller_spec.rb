@@ -113,24 +113,25 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "GET" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:organisation) { user.organisation }
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let!(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
+    let!(:unauthorized_case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: other_organisation,
+        managing_organisation: other_organisation,
+      )
+    end
+
     context "collection" do
-      let(:user) { FactoryBot.create(:user) }
-      let(:organisation) { user.organisation }
-      let(:other_organisation) { FactoryBot.create(:organisation) }
-      let!(:case_log) do
-        FactoryBot.create(
-          :case_log,
-          owning_organisation: organisation,
-          managing_organisation: organisation,
-        )
-      end
-      let!(:unauthorized_case_log) do
-        FactoryBot.create(
-          :case_log,
-          owning_organisation: other_organisation,
-          managing_organisation: other_organisation,
-        )
-      end
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
@@ -147,8 +148,8 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "member" do
-      let(:case_log) { FactoryBot.create(:case_log, :completed) }
-      let(:id) { case_log.id }
+      let(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
+      let(:id) { completed_case_log.id }
 
       before do
         get "/case_logs/#{id}", headers: headers
@@ -160,7 +161,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "returns a serialized Case Log" do
         json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(case_log.status)
+        expect(json_response["status"]).to eq(completed_case_log.status)
       end
 
       context "invalid case log id" do
@@ -168,6 +169,37 @@ RSpec.describe CaseLogsController, type: :request do
 
         it "returns 404" do
           expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "edit page" do
+        let(:headers) { { "Accept" => "text/html" } }
+        let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
+        before do
+          allow(FormHandler.instance).to receive(:get_form).and_return(form)
+        end
+
+        context "case logs that are owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{case_log.id}", headers: headers, params: {}
+          end
+
+          it "shows the tasklist for case logs you have access to" do
+            expect(response.body).to match("Tasklist for log")
+            expect(response.body).to match("#{case_log.id}")
+          end
+        end
+
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+          end
+
+          it "does not show the tasklist for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
         end
       end
     end
