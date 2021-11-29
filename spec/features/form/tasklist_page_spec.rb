@@ -9,14 +9,14 @@ RSpec.describe "Task List" do
       :case_log,
       :in_progress,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:id) { case_log.id }

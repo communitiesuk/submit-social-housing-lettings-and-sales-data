@@ -7,7 +7,7 @@ RSpec.describe CaseLogsController, type: :controller do
     FactoryBot.create(
       :case_log,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:id) { case_log.id }

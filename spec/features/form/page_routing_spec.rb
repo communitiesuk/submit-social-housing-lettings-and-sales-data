@@ -9,7 +9,7 @@ RSpec.describe "Form Page Routing" do
       :case_log,
       :in_progress,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:id) { case_log.id }

@@ -9,7 +9,7 @@ RSpec.describe "Form Saving Data" do
       :case_log,
       :in_progress,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:id) { case_log.id }

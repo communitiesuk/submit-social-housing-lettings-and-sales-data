@@ -1,6 +1,6 @@
-include GovukLinkHelper
-
 module TasklistHelper
+  include GovukLinkHelper
+
   STATUSES = {
     not_started: "Not started",
     cannot_start_yet: "Cannot start yet",

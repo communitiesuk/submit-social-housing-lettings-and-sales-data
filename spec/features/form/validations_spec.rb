@@ -9,14 +9,14 @@ RSpec.describe "validations" do
       :case_log,
       :in_progress,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
       owning_organisation: user.organisation,
-      managing_organisation: user.organisation
+      managing_organisation: user.organisation,
     )
   end
   let(:id) { case_log.id }
@@ -106,7 +106,7 @@ RSpec.describe "validations" do
           :in_progress,
           ecstat1: "Full-time - 30 hours or more",
           owning_organisation: user.organisation,
-          managing_organisation: user.organisation
+          managing_organisation: user.organisation,
         )
       end
       let(:income_over_soft_limit) { 750 }

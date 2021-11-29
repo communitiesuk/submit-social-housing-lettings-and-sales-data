@@ -188,7 +188,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows the tasklist for case logs you have access to" do
             expect(response.body).to match("Tasklist for log")
-            expect(response.body).to match("#{case_log.id}")
+            expect(response.body).to match(case_log.id.to_s)
           end
         end
 
