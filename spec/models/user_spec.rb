@@ -7,6 +7,7 @@ RSpec.describe User, type: :model do
     let!(:owned_case_log) do
       FactoryBot.create(
         :case_log,
+        :completed,
         owning_organisation: user.organisation,
         managing_organisation: other_organisation
       )
@@ -29,6 +30,15 @@ RSpec.describe User, type: :model do
 
     it "has managed case logs through their organisation" do
       expect(user.managed_case_logs.first).to eq(managed_case_log)
+    end
+
+    it "has case logs through their organisation" do
+      expect(user.case_logs.to_a).to eq([owned_case_log, managed_case_log])
+    end
+
+    it "has case log status helper methods" do
+      expect(user.completed_case_logs.to_a).to eq([owned_case_log])
+      expect(user.not_completed_case_logs.to_a).to eq([managed_case_log])
     end
   end
 end
