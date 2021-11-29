@@ -1,8 +1,17 @@
 require "rails_helper"
+require_relative "helpers"
 
 RSpec.describe "Form Navigation" do
+  include Helpers
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation
+    )
+  end
   let(:id) { case_log.id }
   let(:question_answers) do
     {
@@ -14,10 +23,7 @@ RSpec.describe "Form Navigation" do
   end
 
   before do
-    visit("/case_logs")
-    fill_in("user_email", with: user.email)
-    fill_in("user_password", with: user.password)
-    click_button("Sign in")
+    sign_in user
   end
 
   describe "Create new log" do

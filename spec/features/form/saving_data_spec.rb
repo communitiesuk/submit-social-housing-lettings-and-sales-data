@@ -1,13 +1,25 @@
 require "rails_helper"
+require_relative "helpers"
 
 RSpec.describe "Form Saving Data" do
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  include Helpers
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation
+    )
+  end
   let(:id) { case_log.id }
   let(:case_log_with_checkbox_questions_answered) do
     FactoryBot.create(
       :case_log, :in_progress,
       housingneeds_a: "Yes",
-      housingneeds_c: "Yes"
+      housingneeds_c: "Yes",
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation
     )
   end
   let(:question_answers) do
@@ -20,7 +32,7 @@ RSpec.describe "Form Saving Data" do
   end
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+    sign_in user
   end
 
   it "updates model attributes correctly for each question" do

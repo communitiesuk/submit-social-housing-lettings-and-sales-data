@@ -1,12 +1,22 @@
 require "rails_helper"
+require_relative "helpers"
 
 RSpec.describe "Form Page Routing" do
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  include Helpers
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation
+    )
+  end
   let(:id) { case_log.id }
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
     allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
+    sign_in user
   end
 
   it "can route the user to a different page based on their answer on the current page", js: true do

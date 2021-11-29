@@ -1,11 +1,21 @@
 require "rails_helper"
+require_relative "helpers"
 
 RSpec.describe "Form Conditional Questions" do
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  include Helpers
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation
+    )
+  end
   let(:id) { case_log.id }
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+    sign_in user
   end
 
   context "given a page where some questions are only conditionally shown, depending on how you answer the first question" do
