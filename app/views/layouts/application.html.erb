@@ -59,7 +59,7 @@
 
       <main class="govuk-main-wrapper " id="main-content" role="main">
         <% flash.each do |type, msg| %>
-          <%= render GovukComponent::NotificationBannerComponent.new(
+          <%= govuk_notification_banner(
             title_text: 'Success',
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications") do |notification_banner|
