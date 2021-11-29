@@ -10,17 +10,16 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Change your personal details</h1>
 
-      <div class="govuk-form-group">
-        <%= f.label :name, class: "govuk-label" %>
-        <%= f.text_field :name, autocomplete: "name", class: "govuk-input" %>
-      </div>
+      <%= f.govuk_text_field :name,
+        autocomplete: "name"
+      %>
 
-      <div class="govuk-form-group">
-        <%= f.label :email, class: "govuk-label" %>
-        <%= f.email_field :email, autocomplete: "email", class: "govuk-input" %>
-      </div>
+      <%= f.govuk_email_field :email,
+        label: { text: "Email address" },
+        autocomplete: "email"
+      %>
 
-      <%= f.submit "Save changes", class: "govuk-button" %>
+      <%= f.govuk_submit "Save changes" %>
     </div>
   </div>
 <% end %>
