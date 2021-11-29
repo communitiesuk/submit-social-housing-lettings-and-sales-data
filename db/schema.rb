@@ -166,7 +166,11 @@ ActiveRecord::Schema.define(version: 2021_11_26_142105) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
+    t.bigint "owning_organisation_id"
+    t.bigint "managing_organisation_id"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
+    t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
+    t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
 
   create_table "organisations", force: :cascade do |t|

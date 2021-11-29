@@ -14,14 +14,23 @@ RSpec.describe CaseLogsController, type: :controller do
     end
 
     describe "Post #create" do
+      let(:owning_organisation) { FactoryBot.create(:organisation) }
+      let(:managing_organisation) { owning_organisation }
+      let(:params) do
+        {
+          "owning_organisation_id": owning_organisation.id,
+          "managing_organisation_id": managing_organisation.id,
+        }
+      end
+
       it "creates a new case log record" do
         expect {
-          post :create, params: {}, session: valid_session
+          post :create, params: params, session: valid_session
         }.to change(CaseLog, :count).by(1)
       end
 
       it "redirects to that case log" do
-        post :create, params: {}, session: valid_session
+        post :create, params: params, session: valid_session
         expect(response.status).to eq(302)
       end
     end

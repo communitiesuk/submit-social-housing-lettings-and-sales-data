@@ -3,7 +3,6 @@
     <h1 class="govuk-heading-l">Your logs</h1>
   </div>
   <div class="govuk-grid-column-two-thirds-from-desktop">
-
     <%= link_to "Create new log", case_logs_path, method: :post, class: "govuk-button" %>
 
     <% if @in_progress_case_logs.present? %>

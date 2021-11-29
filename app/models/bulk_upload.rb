@@ -26,8 +26,14 @@ class BulkUpload
     else
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
-        case_log = CaseLog.create!
-        map_row(sheet.row(row_num)).each do |attr_key, attr_val|
+        row = sheet.row(row_num)
+        owning_organisation = Organisation.find(row[111])
+        managing_organisation = Organisation.find(row[113])
+        case_log = CaseLog.create!(
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+        map_row(row).each do |attr_key, attr_val|
           update = case_log.update(attr_key => attr_val)
           unless update
             # TODO: determine what to do when a bulk upload contains field values that don't pass validations
@@ -167,9 +173,9 @@ class BulkUpload
       # postcode: row[108],
       # postcod2: row[109],
       # row[110] removed
-      property_owner_organisation: row[111],
+      # row[111] is owning organisation used above
       # username: row[112],
-      property_manager_organisation: row[113],
+      # row[113] is managing organisation used above
       leftreg: row[114],
       # uprn: row[115],
       incfreq: row[116],

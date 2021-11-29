@@ -9,7 +9,7 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    case_log = CaseLog.create(api_case_log_params)
+    case_log = CaseLog.create(case_log_params)
     respond_to do |format|
       format.html { redirect_to case_log }
       format.json do
@@ -136,6 +136,21 @@ private
 
   def authenticate
     http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
+  end
+
+  def case_log_params
+    if current_user
+      org_params.merge(api_case_log_params)
+    else
+      api_case_log_params
+    end
+  end
+
+  def org_params
+    {
+      "owning_organisation_id" => current_user.organisation.id,
+      "managing_organisation_id" => current_user.organisation.id,
+    }
   end
 
   def api_case_log_params

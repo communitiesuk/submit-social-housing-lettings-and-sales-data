@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Form Navigation" do
+  let(:user) { FactoryBot.create(:user) }
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:id) { case_log.id }
   let(:question_answers) do
@@ -13,7 +14,10 @@ RSpec.describe "Form Navigation" do
   end
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+    visit("/case_logs")
+    fill_in("user_email", with: user.email)
+    fill_in("user_password", with: user.password)
+    click_button("Sign in")
   end
 
   describe "Create new log" do

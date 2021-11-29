@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
+  let(:owning_organisation) { FactoryBot.create(:organisation) }
+  let(:managing_organisation) { owning_organisation }
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -32,6 +34,8 @@ RSpec.describe CaseLogsController, type: :request do
 
     let(:params) do
       {
+        "owning_organisation_id": owning_organisation.id,
+        "managing_organisation_id": managing_organisation.id,
         "tenant_code": tenant_code,
         "age1": age1,
         "property_postcode": property_postcode,
@@ -78,8 +82,17 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "complete case log submission" do
+      let(:org_params) do
+        {
+          "case_log" => {
+            "owning_organisation_id" => owning_organisation.id,
+            "managing_organisation_id" => managing_organisation.id,
+          },
+        }
+      end
+      let(:case_log_params) { JSON.parse(File.open("spec/fixtures/complete_case_log.json").read) }
       let(:params) do
-        JSON.parse(File.open("spec/fixtures/complete_case_log.json").read)
+        case_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
       end
 
       it "marks the record as completed" do
