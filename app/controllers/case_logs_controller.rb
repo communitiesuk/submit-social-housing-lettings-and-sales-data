@@ -57,8 +57,7 @@ class CaseLogsController < ApplicationController
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
     @case_log = CaseLog.find(params[:id])
-    @case_log.page_id = params[:case_log][:page]
-    page = form.get_page(@case_log.page_id)
+    page = form.get_page(params[:case_log][:page])
     responses_for_page = responses_for_page(page)
     if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
       redirect_path = form.next_page_redirect_path(page, @case_log)

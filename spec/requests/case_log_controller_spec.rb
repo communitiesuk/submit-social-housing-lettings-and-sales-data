@@ -359,6 +359,23 @@ RSpec.describe CaseLogsController, type: :request do
       it "re-renders the same page with errors if validation fails" do
         expect(response).to have_http_status(:redirect)
       end
+
+      let(:params) do
+        {
+          id: case_log.id,
+          case_log: {
+            page: page_id,
+            age1: answer,
+            age2: 2000
+          },
+        }
+      end
+
+      it "only updates answers that apply to the page being submitted" do
+        case_log.reload
+        expect(case_log.age1).to eq(answer)
+        expect(case_log.age2).to be nil
+      end
     end
   end
 end
