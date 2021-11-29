@@ -1,5 +1,5 @@
 <div class="govuk-form-group">
-  <%= form_for @bulk_upload, url: bulk_upload_case_logs_path, method: "post", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+  <%= form_for @bulk_upload, url: bulk_upload_case_logs_path, method: "post" do |f| %>
     <%= f.govuk_error_summary %>
     <%= f.govuk_file_field :case_log_bulk_upload,
         label: { text: "Bulk Upload", size: "l" },

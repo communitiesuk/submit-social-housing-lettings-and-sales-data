@@ -16,7 +16,7 @@
           <%= page.header %>
         </h1>
       <% end %>
-      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
         <%= f.govuk_error_summary %>
         <% page.questions.map do |question| %>
           <div id=<%= question.id + "_div " %><%= display_question_key_div(page, question) %> >
