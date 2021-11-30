@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_26_142105) do
+ActiveRecord::Schema.define(version: 2021_11_30_090246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2021_11_26_142105) do
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.datetime "property_void_date"
+    t.integer "renttype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
