@@ -1546,8 +1546,8 @@
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
-                  "answer_options": {                    
-                    "0": "Renewal of fixed-term tenancy",              
+                  "answer_options": {
+                    "0": "Renewal of fixed-term tenancy",
                     "1": "Internal transfer (excluding renewals of a fixed-term tenancy)",
                     "2": "Relet to tenant who occupied same property as temporary accommodation",
                     "3": "Tenant involved in a succession downsize",
@@ -1557,7 +1557,7 @@
                     "7": "Tenant abandoned property",
                     "8": "Tenant evicted due to arrears",
                     "9": "Tenant evicted due to ASB or other reason",
-                    "10": "Previous tenant passed away (no succession)"                                                 
+                    "10": "Previous tenant passed away (no succession)"
                   }
                 }
               },
@@ -1572,10 +1572,10 @@
                   "header": "What is the reason for the property vacancy?",
                   "hint_text": "",
                   "type": "radio",
-                  "answer_options": {                    
+                  "answer_options": {
                     "11": "First let of newbuild property",
                     "12": "First let of conversion/rehabilitation/acquired property",
-                    "13": "First let of leased property"                                                  
+                    "13": "First let of leased property"
                   }
                 }
               },
@@ -1734,7 +1734,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "No",
-                    "1": "Yesx"
+                    "1": "Yes"
                   },
                   "conditional_for": {
                     "mrcdate": ["Yes"]
