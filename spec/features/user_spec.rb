@@ -112,7 +112,7 @@ RSpec.describe "User Features" do
 
     it "can navigate to change your password page from main account page" do
       visit("/users/account")
-      click_link("change-password")
+      find('[data-qa="change-password"]').click
       expect(page).to have_content("Change your password")
       fill_in("user[current_password]", with: "pAssword1")
       fill_in("user[password]", with: "Password123!")
@@ -122,7 +122,7 @@ RSpec.describe "User Features" do
 
     it "allow user to change name" do
       visit("/users/account")
-      click_link("change-name")
+      find('[data-qa="change-name"]').click
       expect(page).to have_content("Change your personal details")
       fill_in("user[name]", with: "Test New")
       click_button("Save changes")
