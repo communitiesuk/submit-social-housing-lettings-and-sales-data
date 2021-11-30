@@ -9,11 +9,18 @@
   Your Organisation
 </h1>
 
-<%= govuk_summary_list do |summary_list| %>
-  <% @organisation.display_attributes.each do |attr, val| %>
-    <%= summary_list.row do |row|
-      row.key { attr.to_s.humanize }
-      row.value { simple_format(val, {}, wrapper_tag: "div") }
-    end %>
+<%= govuk_tabs(title: "Your Organisation") do |component| %>
+  <%= component.tab(label: "Details") do |tab| %>
+    <%= govuk_summary_list do |summary_list| %>
+      <% @organisation.display_attributes.each do |attr, val| %>
+        <%= summary_list.row do |row|
+          row.key { attr.to_s.humanize }
+          row.value { simple_format(val, {}, wrapper_tag: "div") }
+        end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= component.tab(label: "Users") do |tab| %>
+
   <% end %>
 <% end %>
