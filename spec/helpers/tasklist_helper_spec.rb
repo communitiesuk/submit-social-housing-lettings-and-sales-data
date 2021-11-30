@@ -43,7 +43,7 @@ RSpec.describe TasklistHelper do
     let(:subsection) { form.get_subsection("household_characteristics") }
 
     it "returns the check answers page path if the section has been started already" do
-      expect(first_page_or_check_answers(subsection, case_log)).to match(/check_answers/)
+      expect(first_page_or_check_answers(subsection, case_log)).to match(/check-answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do

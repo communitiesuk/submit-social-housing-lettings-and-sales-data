@@ -44,7 +44,7 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
-      post "/case_logs", headers: headers, params: params.to_json
+      post "/case-logs", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -137,12 +137,12 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         sign_in user
-        get "/case_logs", headers: headers, params: {}
+        get "/case-logs", headers: headers, params: {}
       end
 
       it "only shows case logs for your organisation" do
-        expected_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{case_log.id}\">#{case_log.id}</a>"
-        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+        expected_case_row_log = "<a class=\"govuk-link\" href=\"/case-logs/#{case_log.id}\">#{case_log.id}</a>"
+        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/case-logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
         expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
         expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
       end
@@ -153,7 +153,7 @@ RSpec.describe CaseLogsController, type: :request do
       let(:id) { completed_case_log.id }
 
       before do
-        get "/case_logs/#{id}", headers: headers
+        get "/case-logs/#{id}", headers: headers
       end
 
       it "returns http success" do
@@ -183,7 +183,7 @@ RSpec.describe CaseLogsController, type: :request do
         context "case logs that are owned or managed by your organisation" do
           before do
             sign_in user
-            get "/case_logs/#{case_log.id}", headers: headers, params: {}
+            get "/case-logs/#{case_log.id}", headers: headers, params: {}
           end
 
           it "shows the tasklist for case logs you have access to" do
@@ -201,7 +201,7 @@ RSpec.describe CaseLogsController, type: :request do
         context "case logs that are not owned or managed by your organisation" do
           before do
             sign_in user
-            get "/case_logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+            get "/case-logs/#{unauthorized_case_log.id}", headers: headers, params: {}
           end
 
           it "does not show the tasklist for case logs you don't have access to" do
@@ -216,7 +216,7 @@ RSpec.describe CaseLogsController, type: :request do
         context "case logs that are not owned or managed by your organisation" do
           before do
             sign_in user
-            get "/case_logs/#{unauthorized_case_log.id}/person_1_age", headers: headers, params: {}
+            get "/case-logs/#{unauthorized_case_log.id}/person_1_age", headers: headers, params: {}
           end
 
           it "does not show form pages for case logs you don't have access to" do
@@ -231,7 +231,7 @@ RSpec.describe CaseLogsController, type: :request do
         context "case logs that are not owned or managed by your organisation" do
           before do
             sign_in user
-            get "/case_logs/#{unauthorized_case_log.id}/household_characteristics/check_answers", headers: headers, params: {}
+            get "/case-logs/#{unauthorized_case_log.id}/household_characteristics/check-answers", headers: headers, params: {}
           end
 
           it "does not show a check answers for case logs you don't have access to" do
@@ -252,7 +252,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      patch "/case_logs/#{id}", headers: headers, params: params.to_json
+      patch "/case-logs/#{id}", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -310,7 +310,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      put "/case_logs/#{id}", headers: headers, params: params.to_json
+      put "/case-logs/#{id}", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -350,7 +350,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "expected deletion" do
       before do
-        delete "/case_logs/#{id}", headers: headers
+        delete "/case-logs/#{id}", headers: headers
       end
 
       it "returns http success" do
@@ -384,7 +384,7 @@ RSpec.describe CaseLogsController, type: :request do
     context "deletion fails" do
       before do
         allow_any_instance_of(CaseLog).to receive(:discard).and_return(false)
-        delete "/case_logs/#{id}", headers: headers
+        delete "/case-logs/#{id}", headers: headers
       end
 
       it "returns an unprocessable entity 422" do
@@ -418,7 +418,7 @@ RSpec.describe CaseLogsController, type: :request do
     before do
       allow(FormHandler.instance).to receive(:get_form).and_return(form)
       sign_in user
-      post "/case_logs/#{case_log.id}/form", params: params
+      post "/case-logs/#{case_log.id}/form", params: params
     end
 
     context "invalid answers" do
@@ -467,7 +467,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         sign_in user
-        post "/case_logs/#{unauthorized_case_log.id}/form", params: params
+        post "/case-logs/#{unauthorized_case_log.id}/form", params: params
       end
 
       it "does not let you post form answers to case logs you don't have access to" do

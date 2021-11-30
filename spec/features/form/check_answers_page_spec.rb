@@ -30,18 +30,18 @@ RSpec.describe "Form Check Answers Page" do
 
   context "when the user needs to check their answers for a subsection" do
     it "can be visited by URL" do
-      visit("case_logs/#{id}/#{subsection}/check_answers")
+      visit("case-logs/#{id}/#{subsection}/check-answers")
       expect(page).to have_content("Check the answers you gave for #{subsection.tr('_', ' ')}")
     end
 
     let(:last_question_for_subsection) { "household_number_of_other_members" }
     it "redirects to the check answers page when answering the last question and clicking save and continue" do
       fill_in_number_question(id, "other_hhmemb", 0, last_question_for_subsection)
-      expect(page).to have_current_path("/case_logs/#{id}/#{subsection}/check_answers")
+      expect(page).to have_current_path("/case-logs/#{id}/#{subsection}/check-answers")
     end
 
     it "has question headings based on the subsection" do
-      visit("case_logs/#{id}/#{subsection}/check_answers")
+      visit("case-logs/#{id}/#{subsection}/check-answers")
       question_labels = ["Tenant code", "Tenant's age", "Tenant's gender", "Number of Other Household Members"]
       question_labels.each do |label|
         expect(page).to have_content(label)
@@ -52,51 +52,51 @@ RSpec.describe "Form Check Answers Page" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person_1_age")
       choose("case-log-sex1-non-binary-field")
       click_button("Save and continue")
-      visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/#{subsection}/check-answers")
       expect(page).to have_content("28")
       expect(page).to have_content("Non-binary")
     end
 
     it "should have an answer link for questions missing an answer" do
-      visit("case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+      visit("case-logs/#{empty_case_log.id}/#{subsection}/check-answers")
       assert_selector "a", text: /Answer\z/, count: 4
       assert_selector "a", text: "Change", count: 0
-      expect(page).to have_link("Answer", href: "/case_logs/#{empty_case_log.id}/person_1_age")
+      expect(page).to have_link("Answer", href: "/case-logs/#{empty_case_log.id}/person_1_age")
     end
 
     it "should have a change link for answered questions" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person_1_age")
-      visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/#{subsection}/check-answers")
       assert_selector "a", text: /Answer\z/, count: 3
       assert_selector "a", text: "Change", count: 1
-      expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/person_1_age")
+      expect(page).to have_link("Change", href: "/case-logs/#{empty_case_log.id}/person_1_age")
     end
 
     it "should have a change link for answered questions" do
-      visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/household_needs/check-answers")
       assert_selector "a", text: /Answer\z/, count: 4
       assert_selector "a", text: "Change", count: 0
-      visit("/case_logs/#{empty_case_log.id}/accessibility_requirements")
+      visit("/case-logs/#{empty_case_log.id}/accessibility_requirements")
       check("case-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
-      visit("/case_logs/#{empty_case_log.id}/household_needs/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/household_needs/check-answers")
       assert_selector "a", text: /Answer\z/, count: 3
       assert_selector "a", text: "Change", count: 1
-      expect(page).to have_link("Change", href: "/case_logs/#{empty_case_log.id}/accessibility_requirements")
+      expect(page).to have_link("Change", href: "/case-logs/#{empty_case_log.id}/accessibility_requirements")
     end
 
     it "should have a link pointing to the first question if no questions are answered" do
-      visit("/case_logs/#{empty_case_log.id}/#{subsection}/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/#{subsection}/check-answers")
       expect(page).to have_content("You answered 0 of 4 questions")
-      expect(page).to have_link("Answer the missing questions", href: "/case_logs/#{empty_case_log.id}/tenant_code")
+      expect(page).to have_link("Answer the missing questions", href: "/case-logs/#{empty_case_log.id}/tenant_code")
     end
 
     it "should have a link pointing to the next empty question if some questions are answered" do
       fill_in_number_question(empty_case_log.id, "earnings", 18_000, "net_income")
 
-      visit("/case_logs/#{empty_case_log.id}/income_and_benefits/check_answers")
+      visit("/case-logs/#{empty_case_log.id}/income_and_benefits/check-answers")
       expect(page).to have_content("You answered 1 of 4 questions")
-      expect(page).to have_link("Answer the missing questions", href: "/case_logs/#{empty_case_log.id}/net_income")
+      expect(page).to have_link("Answer the missing questions", href: "/case-logs/#{empty_case_log.id}/net_income")
     end
 
     it "should not display the missing answer questions link if all questions are answered" do
@@ -106,7 +106,7 @@ RSpec.describe "Form Check Answers Page" do
     end
 
     it "does not display conditional questions that were not visited" do
-      visit("case_logs/#{id}/#{conditional_subsection}/check_answers")
+      visit("case-logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?"]
       question_labels.each do |label|
         expect(page).to have_content(label)
@@ -119,10 +119,10 @@ RSpec.describe "Form Check Answers Page" do
     end
 
     it "displays conditional question that were visited" do
-      visit("/case_logs/#{id}/conditional_question")
+      visit("/case-logs/#{id}/conditional_question")
       choose("case-log-preg-occ-no-field")
       click_button("Save and continue")
-      visit("/case_logs/#{id}/#{conditional_subsection}/check_answers")
+      visit("/case-logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?", "Has the condition not been met?"]
       question_labels.each do |label|
         expect(page).to have_content(label)

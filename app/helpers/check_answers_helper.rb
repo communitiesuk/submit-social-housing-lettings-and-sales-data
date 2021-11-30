@@ -16,7 +16,7 @@ private
 
   def create_next_missing_question_link(subsection, case_log)
     pages_to_fill_in = subsection.unanswered_questions(case_log).map(&:page)
-    url = "/case_logs/#{case_log.id}/#{pages_to_fill_in.first.id}"
+    url = "/case-logs/#{case_log.id}/#{pages_to_fill_in.first.id}"
     govuk_link_to("Answer the missing questions", url).html_safe
   end
 end

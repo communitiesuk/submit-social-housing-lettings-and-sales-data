@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords" }, skip: [:registrations]
+  devise_for :users, controllers: { passwords: "users/passwords" }, path_names: { sign_in: 'sign-in', sign_out: 'sign-out' }, skip: [:registrations]
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
@@ -13,15 +13,15 @@ Rails.application.routes.draw do
   root to: "test#index"
   get "about", to: "about#index"
   get "/users/account", to: "users/account#index"
-  get "/users/account/personal_details", to: "users/account#personal_details"
+  get "/users/account/personal-details", to: "users/account#personal_details"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
-  resources :case_logs do
+  resources :case_logs, :path => '/case-logs' do
     collection do
-      post "/bulk_upload", to: "bulk_upload#bulk_upload"
-      get "/bulk_upload", to: "bulk_upload#show"
+      post "/bulk-upload", to: "bulk_upload#bulk_upload"
+      get "/bulk-upload", to: "bulk_upload#show"
     end
 
     member do
@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
 
     form.subsections.map do |subsection|
-      get "#{subsection.id}/check_answers", to: "case_logs#check_answers"
+      get "#{subsection.id}/check-answers", to: "case_logs#check_answers"
     end
   end
 end

@@ -41,7 +41,7 @@ RSpec.describe "Form Saving Data" do
       answer = hsh[:answer]
       path = hsh[:path]
       original_value = case_log.send(question)
-      visit("/case_logs/#{id}/#{path}")
+      visit("/case-logs/#{id}/#{path}")
       case type
       when "text"
         fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
@@ -57,7 +57,7 @@ RSpec.describe "Form Saving Data" do
   end
 
   it "updates total value of the rent", js: true do
-    visit("/case_logs/#{id}/rent")
+    visit("/case-logs/#{id}/rent")
 
     fill_in("case-log-brent-field", with: 3)
     expect(page).to have_field("case-log-tcharge-field", with: "3")
@@ -73,17 +73,17 @@ RSpec.describe "Form Saving Data" do
   end
 
   it "displays number answers in inputs if they are already saved" do
-    visit("/case_logs/#{id}/property_postcode")
+    visit("/case-logs/#{id}/property_postcode")
     expect(page).to have_field("case-log-property-postcode-field", with: "P0 5ST")
   end
 
   it "displays text answers in inputs if they are already saved" do
-    visit("/case_logs/#{id}/person_1_age")
+    visit("/case-logs/#{id}/person_1_age")
     expect(page).to have_field("case-log-age1-field", with: "17")
   end
 
   it "displays checkbox answers in inputs if they are already saved" do
-    visit("/case_logs/#{case_log_with_checkbox_questions_answered.id}/accessibility_requirements")
+    visit("/case-logs/#{case_log_with_checkbox_questions_answered.id}/accessibility_requirements")
     # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
     expect(page).to have_checked_field(
       "case-log-accessibility-requirements-housingneeds-a-field",
