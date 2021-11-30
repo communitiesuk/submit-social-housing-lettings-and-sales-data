@@ -1,0 +1,25 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
+<% end %>
+
+<% content_for :content do %>
+  <h1 class="govuk-heading-l">
+    Your Organisation
+  </h1>
+
+  <%= render TabNavigationComponent.new(items: [
+    { name: t('Details'), url: details_organisation_path(@organisation) },
+    { name: t('Users'), url: users_organisation_path(@organisation) },
+  ]) %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= content_for?(:organisations_content) ? yield(:organisations_content) : yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render template: "layouts/application" %>
