@@ -9,15 +9,11 @@
   Your Organisation
 </h1>
 
-<dl class="govuk-summary-list govuk-!-margin-bottom-9">
+<%= govuk_summary_list do |summary_list| %>
   <% @organisation.display_attributes.each do |attr, val| %>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        <%= attr.to_s.humanize %>
-      <dt>
-      <dd class="govuk-summary-list__value">
-        <%= simple_format(val, {}, wrapper_tag: "div") %>
-      </dd>
-    </div>
+    <%= summary_list.row do |row|
+      row.key { attr.to_s.humanize }
+      row.value { simple_format(val, {}, wrapper_tag: "div") }
+    end %>
   <% end %>
-</dl>
+<% end %>
