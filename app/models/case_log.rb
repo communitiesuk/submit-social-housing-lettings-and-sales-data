@@ -145,74 +145,10 @@ class CaseLog < ApplicationRecord
     end
   end
 
-  def postcode
-    if property_postcode.present?
-      UKPostcode.parse(property_postcode).outcode
-    end
-  end
-
-  def postcod2
-    if property_postcode.present?
-      UKPostcode.parse(property_postcode).incode
-    end
-  end
-
-  def ppostc1
-    if previous_postcode.present?
-      UKPostcode.parse(previous_postcode).outcode
-    end
-  end
-
-  def ppostc2
-    if previous_postcode.present?
-      UKPostcode.parse(previous_postcode).incode
-    end
-  end
-
-  def hhmemb
-    other_hhmemb.presence
-  end
-
   def applicable_income_range
     return unless ecstat1
 
     IncomeRange::ALLOWED[ecstat1.to_sym]
-  end
-
-  def mrcday
-    if mrcdate.present?
-      mrcdate.day
-    end
-  end
-
-  def mrcmonth
-    if mrcdate.present?
-      mrcdate.month
-    end
-  end
-
-  def mrcyear
-    if mrcdate.present?
-      mrcdate.year
-    end
-  end
-
-  def incref
-    if net_income_known == "Prefer not to say"
-      1
-    end
-  end
-
-  def renttype
-    rent_type_mapping = {
-      "Social Rent" => "Social Rent",
-      "Affordable Rent" => "Affordable Rent",
-      "London Affordable Rent" => "Affordable Rent",
-      "Rent To Buy" => "Intermediate Rent",
-      "London Living Rent" => "Intermediate Rent",
-      "Other Intermediate Rent Product" => "Intermediate Rent",
-    }
-    rent_type_mapping[rent_type]
   end
 
 private
@@ -225,6 +161,31 @@ private
                   else
                     "in_progress"
                   end
+    set_derived_fields
+  end
+
+  def set_derived_fields
+    self.postcode = UKPostcode.parse(property_postcode).outcode if property_postcode.present?
+    self.postcod2 = UKPostcode.parse(property_postcode).incode if property_postcode.present?
+    self.ppostc1 = UKPostcode.parse(previous_postcode).outcode if previous_postcode.present?
+    self.ppostc2 = UKPostcode.parse(previous_postcode).incode if previous_postcode.present?
+    if mrcdate.present?
+      self.mrcday = mrcdate.day
+      self.mrcmonth = mrcdate.month
+      self.mrcyear = mrcdate.year
+    end
+    self.incref = 1 if net_income_known == "Prefer not to say"
+    self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
+
+    rent_type_mapping = {
+      "Social Rent" => "Social Rent",
+      "Affordable Rent" => "Affordable Rent",
+      "London Affordable Rent" => "Affordable Rent",
+      "Rent To Buy" => "Intermediate Rent",
+      "London Living Rent" => "Intermediate Rent",
+      "Other Intermediate Rent Product" => "Intermediate Rent",
+    }
+    self.renttype = rent_type_mapping[rent_type]
   end
 
   def all_fields_completed?

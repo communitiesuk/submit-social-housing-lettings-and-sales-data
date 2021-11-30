@@ -168,54 +168,5 @@ RSpec.describe CaseLogsController, type: :controller do
         expect(response).to redirect_to("/case_logs/#{id}/conditional_question_no_page")
       end
     end
-
-    context "partition postcode" do
-      let(:case_log_with_postcode) do
-        {
-          property_postcode: "M1 1AE",
-          previous_postcode: "M2 2AE",
-          page: "property_postcode",
-        }
-      end
-      it "saves full and partial postcodes" do
-        post :submit_form, params: { id: id, case_log: case_log_with_postcode }
-        case_log.reload
-
-        expect(case_log.property_postcode).to eq("M1 1AE")
-        expect(case_log.postcode).to eq("M1")
-        expect(case_log.postcod2).to eq("1AE")
-      end
-
-      it "saves full and partial previous postcodes" do
-        post :submit_form, params: { id: id, case_log: case_log_with_postcode }
-        case_log.reload
-
-        expect(case_log.previous_postcode).to eq("M2 2AE")
-        expect(case_log.ppostc1).to eq("M2")
-        expect(case_log.ppostc2).to eq("2AE")
-      end
-    end
-
-    context "partition date" do
-      let(:case_log_with_date) do
-        {
-          "mrcdate(1i)": "2021",
-          "mrcdate(2i)": "05",
-          "mrcdate(3i)": "04",
-          page: "property_major_repairs",
-        }
-      end
-      it "saves full and partial dates" do
-        post :submit_form, params: { id: id, case_log: case_log_with_date }
-        case_log.reload
-
-        expect(case_log.mrcdate.day).to eq(4)
-        expect(case_log.mrcdate.month).to eq(5)
-        expect(case_log.mrcdate.year).to eq(2021)
-        expect(case_log.mrcday).to eq(4)
-        expect(case_log.mrcmonth).to eq(5)
-        expect(case_log.mrcyear).to eq(2021)
-      end
-    end
   end
 end
