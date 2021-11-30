@@ -30,7 +30,13 @@
         end %>
       <% end %>
       <% @organisation.users.each do |user| %>
-
+        <%= table.body do |body| %>
+          <%= body.row do |row|
+            row.cell(text: user.email)
+            row.cell(text: "Data provider")
+            row.cell(text: "date")
+          end %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
