@@ -98,6 +98,15 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_selector("#user-password-field-error")
     end
+
+    it "show specific field error messages if an invalid email address is entered" do
+      visit("/case_logs")
+      fill_in("user[email]", with: "thisisn'tanemail")
+      click_button("Sign in")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+      expect(page).to have_content(/Email addess is not valid/)
+    end
   end
 
   context "Your Account " do
