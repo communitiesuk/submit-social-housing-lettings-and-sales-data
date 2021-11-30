@@ -198,6 +198,28 @@ RSpec.describe CaseLogsController, type: :request do
           end
         end
 
+        context "case log with a single section complete" do
+          let(:section_completed_case_log) do
+            FactoryBot.create(
+              :case_log,
+              :conditional_section_complete,
+              owning_organisation: organisation,
+              managing_organisation: organisation,
+            )
+          end
+
+          before do
+            sign_in user
+            get "/case_logs/#{section_completed_case_log.id}", headers: headers, params: {}
+          end
+
+          it "displays a section status for a case log" do
+            assert_select ".govuk-tag", text: /Not started/, count: 7
+            assert_select ".govuk-tag", text: /Completed/, count: 1
+            assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+          end
+        end
+
         context "case logs that are not owned or managed by your organisation" do
           before do
             sign_in user

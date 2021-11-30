@@ -26,15 +26,6 @@ RSpec.describe "Task List" do
     sign_in user
   end
 
-  it "shows the correct status if one section is completed" do
-    answer_all_questions_in_income_subsection(empty_case_log)
-    visit("/case_logs/#{empty_case_log.id}")
-
-    assert_selector ".govuk-tag", text: /Not started/, count: 7
-    assert_selector ".govuk-tag", text: /Completed/, count: 1
-    assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
-  end
-
   it "skips to the first section if no answers are completed" do
     visit("/case_logs/#{empty_case_log.id}")
     expect(page).to have_link("Skip to next incomplete section", href: /#household_characteristics/)
