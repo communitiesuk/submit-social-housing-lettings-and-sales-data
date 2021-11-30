@@ -21,6 +21,12 @@
     <% end %>
   <% end %>
   <%= component.tab(label: "Users") do |tab| %>
-
+    <%= govuk_summary_list do |summary_list| %>
+      <% @organisation.users.each do |user| %>
+      <%= summary_list.row do |row|
+        row.value { simple_format([user.name, user.email].join("\n"), {}, wrapper_tag: "div") }
+      end %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
