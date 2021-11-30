@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_090246) do
     t.integer "unitletas"
     t.integer "builtype"
     t.datetime "property_void_date"
+
     t.integer "renttype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
   end

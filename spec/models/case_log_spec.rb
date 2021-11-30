@@ -600,4 +600,12 @@ RSpec.describe Form, type: :model do
       expect(case_log.weekly_net_income).to eq(417)
     end
   end
+
+  describe "inferred fields" do
+    let!(:case_log) { FactoryBot.create(:case_log, rent_type: "London Affordable Rent") }
+
+    it "sets renttype correctly" do
+      expect(case_log.renttype).to eq("Affordable Rent")
+    end
+  end
 end
