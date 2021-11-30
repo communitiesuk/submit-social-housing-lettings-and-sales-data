@@ -190,6 +190,12 @@ RSpec.describe CaseLogsController, type: :request do
             expect(response.body).to match("Tasklist for log")
             expect(response.body).to match(case_log.id.to_s)
           end
+
+          it "displays a section status for a case log" do
+            assert_select ".govuk-tag", text: /Not started/, count: 8
+            assert_select ".govuk-tag", text: /Completed/, count: 0
+            assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+          end
         end
 
         context "case logs that are not owned or managed by your organisation" do

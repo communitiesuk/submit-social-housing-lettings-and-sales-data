@@ -26,14 +26,6 @@ RSpec.describe "Task List" do
     sign_in user
   end
 
-  it "displays a section status" do
-    visit("/case_logs/#{empty_case_log.id}")
-
-    assert_selector ".govuk-tag", text: /Not started/, count: 8
-    assert_selector ".govuk-tag", text: /Completed/, count: 0
-    assert_selector ".govuk-tag", text: /Cannot start yet/, count: 1
-  end
-
   it "shows the correct status if one section is completed" do
     answer_all_questions_in_income_subsection(empty_case_log)
     visit("/case_logs/#{empty_case_log.id}")
