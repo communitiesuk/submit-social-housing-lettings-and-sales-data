@@ -3,11 +3,11 @@ class OrganisationsController < ApplicationController
   before_action :find_organisation
 
   def details
-    render "details"
+    render "_details"
   end
 
   def users
-    render "users"
+    render "_users"
   end
 
 private
