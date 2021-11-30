@@ -10,6 +10,6 @@
 </h1>
 
 <%= render TabNavigationComponent.new(items: [
-  { name: t('Details'), partial: '_details' },
-  { name: t('Users'), url: '#' },
+  { name: t('Details'), url: details_organisation_path(@organisation) },
+  { name: t('Users'), url: users_organisation_path(@organisation) },
 ]) %>

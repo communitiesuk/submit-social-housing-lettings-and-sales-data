@@ -18,7 +18,12 @@ Rails.application.routes.draw do
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
-  resources :organisations
+  resources :organisations do
+    member do
+      get "details", to: "organisations#details"
+      get "users", to: "organisations#users"
+    end
+  end
 
   resources :case_logs do
     collection do
