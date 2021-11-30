@@ -34,7 +34,7 @@
           <%= body.row do |row|
             row.cell(text: simple_format(user.name_email_display, {}, wrapper_tag: "div"))
             row.cell(text: simple_format(user.org_role_display, {}, wrapper_tag: "div"))
-            row.cell(text: user.last_sign_in_at )
+            row.cell(text: user.last_sign_in_at_display )
           end %>
         <% end %>
       <% end %>

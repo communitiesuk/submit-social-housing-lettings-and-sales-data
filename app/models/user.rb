@@ -27,4 +27,10 @@ class User < ApplicationRecord
   def org_role_display
     [organisation.name, role].join("\n")
   end
+
+  def last_sign_in_at_display
+    return unless last_sign_in_at
+
+    last_sign_in_at.strftime("%d %b %Y")
+  end
 end
