@@ -4,7 +4,7 @@
       <% @organisation.display_attributes.each do |attr, val| %>
         <%= summary_list.row do |row|
           row.key { attr.to_s.humanize }
-          row.value { simple_format(val, {}, wrapper_tag: "div") }
+          row.value { simple_format(val.to_s, {}, wrapper_tag: "div") }
         end %>
       <% end %>
     <% end %>
