@@ -32,9 +32,9 @@
       <% @organisation.users.each do |user| %>
         <%= table.body do |body| %>
           <%= body.row do |row|
-            row.cell(text: user.email)
-            row.cell(text: "Data provider")
-            row.cell(text: "date")
+            row.cell(text: simple_format(user.name_email_display, {}, wrapper_tag: "div"))
+            row.cell(text: simple_format(user.org_role_display, {}, wrapper_tag: "div"))
+            row.cell(text: user.last_sign_in_at )
           end %>
         <% end %>
       <% end %>

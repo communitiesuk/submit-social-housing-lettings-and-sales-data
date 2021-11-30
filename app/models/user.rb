@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :recoverable, :rememberable, :validatable,
+         :trackable
 
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation
@@ -17,5 +18,13 @@ class User < ApplicationRecord
 
   def not_completed_case_logs
     case_logs.not_completed
+  end
+
+  def name_email_display
+    %i[name email].map { |field| public_send(field) }.join("\n")
+  end
+
+  def org_role_display
+    [organisation.name, role].join("\n")
   end
 end
