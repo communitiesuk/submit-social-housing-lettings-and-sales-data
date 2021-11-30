@@ -438,6 +438,7 @@ DEPENDENCIES
   turbo-rails (~> 0.8)
   tzinfo-data
   uk_postcode
+  view_component
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
 
