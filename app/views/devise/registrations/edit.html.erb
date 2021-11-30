@@ -10,20 +10,16 @@
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Change your password</h1>
 
-      <div class="govuk-form-group">
-        <%= f.label :current_password, class: "govuk-label" %>
-        <%= f.password_field :current_password, autocomplete: "current-password", class: "govuk-input" %>
-      </div>
+      <%= f.govuk_password_field :current_password,
+        autocomplete: "current-password"
+      %>
 
-      <div class="govuk-form-group">
-        <%= f.label :password, class: "govuk-label" %>
-        <div id="undefined-hint" class="govuk-hint">
-          Your password must be at least 8 characters and hard to guess.
-        </div>
-        <%= f.password_field :password, autocomplete: "new-password", class: "govuk-input" %>
-      </div>
+      <%= f.govuk_password_field :password,
+        hint: @minimum_password_length ? { text: "Your password must be at least #{@minimum_password_length} characters and hard to guess." } : nil,
+        autocomplete: "new-password"
+      %>
 
-      <%= f.submit "Update", class: "govuk-button" %>
+      <%= f.govuk_submit "Update" %>
     </div>
   </div>
 <% end %>

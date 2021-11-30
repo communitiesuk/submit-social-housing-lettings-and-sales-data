@@ -8,7 +8,7 @@
           <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
         <% end %>
       </dl>
-      <%= form_with model: @case_log, method: "get", builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+      <%= form_with model: @case_log, method: "get" do |f| %>
         <%= f.govuk_submit "Save and continue"  %>
       <% end %>
     </div>

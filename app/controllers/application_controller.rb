@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
+
   def render_not_found_html
     render file: Rails.root.join("public/404.html"), status: :not_found
   end
