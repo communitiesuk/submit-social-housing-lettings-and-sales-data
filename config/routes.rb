@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   resources :organisations do
     member do
-      get "details", to: "organisations#details"
+      get "details", to: "organisations#show"
       get "users", to: "organisations#users"
     end
   end

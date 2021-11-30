@@ -2,12 +2,8 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_organisation
 
-  def details
-    render "_details"
-  end
-
   def users
-    render "_users"
+    render "users"
   end
 
 private

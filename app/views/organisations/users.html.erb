@@ -1,3 +1,19 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l">
+  Your Organisation
+</h1>
+
+<%= render TabNavigationComponent.new(items: [
+  { name: t('Details'), url: details_organisation_path(@organisation) },
+  { name: t('Users'), url: users_organisation_path(@organisation) },
+]) %>
+
 <%= govuk_table do |table| %>
   <%= table.head do |head| %>
     <%= head.row do |row|
