@@ -12,13 +12,15 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root to: "test#index"
   get "about", to: "about#index"
+  get "/users/account", to: "users/account#index"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
   resources :users do
-    get "account", to: "users/account#index"
-    get "account/personal_details", to: "users/account#personal_details"
+    collection do
+      get "account/personal_details", to: "users/account#personal_details"
+    end
   end
 
   resources :organisations do
