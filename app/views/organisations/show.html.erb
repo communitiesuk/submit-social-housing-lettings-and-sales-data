@@ -1,0 +1,19 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
+<% end %>
+
+<dl class="govuk-summary-list govuk-!-margin-bottom-9">
+  <% @organisation.display_attributes.each do |attr, val| %>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        <%= attr.to_s.humanize %>
+      <dt>
+      <dd class="govuk-summary-list__value">
+        <%= simple_format(val, {}, wrapper_tag: "div") %>
+      </dd>
+    </div>
+  <% end %>
+</dl>

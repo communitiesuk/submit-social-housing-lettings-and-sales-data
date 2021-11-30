@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
+  resources :organisations
+
   resources :case_logs do
     collection do
       post "/bulk_upload", to: "bulk_upload#bulk_upload"
