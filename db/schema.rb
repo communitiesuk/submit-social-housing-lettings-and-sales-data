@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_090246) do
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.datetime "property_void_date"
+
     t.integer "renttype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
