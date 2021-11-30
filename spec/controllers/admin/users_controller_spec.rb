@@ -34,7 +34,7 @@ describe Admin::UsersController, type: :controller do
       }
     end
 
-    it "creates a new users" do
+    it "creates a new user" do
       expect { post :create, session: valid_session, params: params }.to change(User, :count).by(1)
     end
   end

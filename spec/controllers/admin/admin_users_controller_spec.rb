@@ -23,7 +23,7 @@ describe Admin::AdminUsersController, type: :controller do
   describe "Create admin users" do
     let(:params) { { admin_user: { email: "test2@example.com", password: "pAssword1" } } }
 
-    it "creates a new admin users" do
+    it "creates a new admin user" do
       expect { post :create, session: valid_session, params: params }.to change(AdminUser, :count).by(1)
     end
   end
