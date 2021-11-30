@@ -26,12 +26,6 @@ RSpec.describe "Task List" do
     sign_in user
   end
 
-  it "displays a tasklist header" do
-    visit("/case_logs/#{id}")
-    expect(page).to have_content("Tasklist for log #{id}")
-    expect(page).to have_content("This submission is #{status.humanize.downcase}")
-  end
-
   it "displays a section status" do
     visit("/case_logs/#{empty_case_log.id}")
 
