@@ -90,6 +90,14 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
     end
+
+    it "show specific field error messages if a field was omitted" do
+      visit("/case_logs")
+      click_button("Sign in")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+      expect(page).to have_selector("#user-password-field-error")
+    end
   end
 
   context "Your Account " do
