@@ -36,6 +36,11 @@ class CaseLog < ApplicationRecord
   validates_with CaseLogValidator
   before_save :update_status!
 
+  belongs_to :owning_organisation, class_name: "Organisation"
+  belongs_to :managing_organisation, class_name: "Organisation"
+
+  scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
+
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }
 
   enum ethnic: DbEnums.ethnic
@@ -214,7 +219,9 @@ private
   end
 
   def all_fields_nil?
-    mandatory_fields.all? { |_key, val| val.nil? }
+    init_fields = %w[owning_organisation_id managing_organisation_id]
+    fields = mandatory_fields.except(*init_fields)
+    fields.all? { |_key, val| val.nil? }
   end
 
   def mandatory_fields

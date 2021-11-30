@@ -1,6 +1,6 @@
-include GovukLinkHelper
-
 module CheckAnswersHelper
+  include GovukLinkHelper
+
   def display_answered_questions_summary(subsection, case_log)
     total = subsection.applicable_questions_count(case_log)
     answered = subsection.answered_questions_count(case_log)

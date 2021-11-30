@@ -2,6 +2,10 @@ require "rails_helper"
 
 RSpec.describe BulkUploadController, type: :request do
   let(:url) { "/case_logs/bulk_upload" }
+  let(:organisation) { FactoryBot.create(:organisation) }
+  before do
+    allow(Organisation).to receive(:find).with(107_242).and_return(organisation)
+  end
 
   describe "GET #show" do
     before do

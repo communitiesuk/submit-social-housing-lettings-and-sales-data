@@ -15,4 +15,11 @@ module Helpers
     choose("case-log-hb-prefer-not-to-say-field")
     click_button("Save and continue")
   end
+
+  def sign_in(user)
+    visit("/case_logs")
+    fill_in("user_email", with: user.email)
+    fill_in("user_password", with: user.password)
+    click_button("Sign in")
+  end
 end

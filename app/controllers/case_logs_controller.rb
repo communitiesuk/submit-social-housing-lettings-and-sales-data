@@ -4,12 +4,12 @@ class CaseLogsController < ApplicationController
   before_action :authenticate_user!, unless: :json_api_request?
 
   def index
-    @completed_case_logs = CaseLog.completed
-    @in_progress_case_logs = CaseLog.not_completed
+    @completed_case_logs = current_user.completed_case_logs
+    @in_progress_case_logs = current_user.not_completed_case_logs
   end
 
   def create
-    case_log = CaseLog.create(api_case_log_params)
+    case_log = CaseLog.create(case_log_params)
     respond_to do |format|
       format.html { redirect_to case_log }
       format.json do
@@ -30,7 +30,7 @@ class CaseLogsController < ApplicationController
         render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+      render_not_found_json("Case log", params[:id])
     end
   end
 
@@ -42,7 +42,7 @@ class CaseLogsController < ApplicationController
         if (case_log = CaseLog.find_by(id: params[:id]))
           render json: case_log, status: :ok
         else
-          render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+          render_not_found_json("Case log", params[:id])
         end
       end
     end
@@ -50,21 +50,29 @@ class CaseLogsController < ApplicationController
 
   def edit
     @form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:id])
-    render :edit
+    @case_log = current_user.case_logs.find_by(id: params[:id])
+    if @case_log
+      render :edit
+    else
+      render_not_found_html
+    end
   end
 
   def submit_form
     form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:id])
-    page = form.get_page(params[:case_log][:page])
-    responses_for_page = responses_for_page(page)
-    if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-      redirect_path = form.next_page_redirect_path(page, @case_log)
-      redirect_to(send(redirect_path, @case_log))
+    @case_log = current_user.case_logs.find_by(id: params[:id])
+    if @case_log
+      page = form.get_page(params[:case_log][:page])
+      responses_for_page = responses_for_page(page)
+      if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+        redirect_path = form.next_page_redirect_path(page, @case_log)
+        redirect_to(send(redirect_path, @case_log))
+      else
+        subsection = form.subsection_for_page(page)
+        render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+      end
     else
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+      render_not_found_html
     end
   end
 
@@ -76,24 +84,32 @@ class CaseLogsController < ApplicationController
         render json: { errors: case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render json: { error: "Case Log #{params[:id]} not found" }, status: :not_found
+      render_not_found_json("Case log", params[:id])
     end
   end
 
   def check_answers
     form = FormHandler.instance.get_form("2021_2022")
-    @case_log = CaseLog.find(params[:case_log_id])
-    current_url = request.env["PATH_INFO"]
-    subsection = form.get_subsection(current_url.split("/")[-2])
-    render "form/check_answers", locals: { subsection: subsection, form: form }
+    @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+    if @case_log
+      current_url = request.env["PATH_INFO"]
+      subsection = form.get_subsection(current_url.split("/")[-2])
+      render "form/check_answers", locals: { subsection: subsection, form: form }
+    else
+      render_not_found_html
+    end
   end
 
   form = FormHandler.instance.get_form("2021_2022")
   form.pages.map do |page|
     define_method(page.id) do |_errors = {}|
-      @case_log = CaseLog.find(params[:case_log_id])
-      subsection = form.subsection_for_page(page)
-      render "form/page", locals: { form: form, page: page, subsection: subsection.label }
+      @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+      if @case_log
+        subsection = form.subsection_for_page(page)
+        render "form/page", locals: { form: form, page: page, subsection: subsection.label }
+      else
+        render_not_found_html
+      end
     end
   end
 
@@ -135,6 +151,21 @@ private
 
   def authenticate
     http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
+  end
+
+  def case_log_params
+    if current_user
+      org_params.merge(api_case_log_params)
+    else
+      api_case_log_params
+    end
+  end
+
+  def org_params
+    {
+      "owning_organisation_id" => current_user.organisation.id,
+      "managing_organisation_id" => current_user.organisation.id,
+    }
   end
 
   def api_case_log_params

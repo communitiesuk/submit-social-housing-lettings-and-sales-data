@@ -1,32 +1,89 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
+  let(:owning_organisation) { FactoryBot.create(:organisation) }
+  let(:managing_organisation) { owning_organisation }
+
   describe "#new" do
     it "validates age is a number" do
-      expect { CaseLog.create!(age1: "random") }.to raise_error(ActiveRecord::RecordInvalid)
-      expect { CaseLog.create!(age3: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age1: "random",
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age3: "random",
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is under 120" do
-      expect { CaseLog.create!(age1: 121) }.to raise_error(ActiveRecord::RecordInvalid)
-      expect { CaseLog.create!(age3: 121) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age1: 121,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age3: 121,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates age is over 0" do
-      expect { CaseLog.create!(age1: 0) }.to raise_error(ActiveRecord::RecordInvalid)
-      expect { CaseLog.create!(age3: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age1: 0,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          age3: 0,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is a number" do
-      expect { CaseLog.create!(offered: "random") }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          offered: "random",
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is under 20" do
-      expect { CaseLog.create!(offered: 21) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          offered: 21,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "validates number of relets is over 0" do
-      expect { CaseLog.create!(offered: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect {
+        CaseLog.create!(
+          offered: 0,
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     context "reasonable preference is yes" do
@@ -37,7 +94,9 @@ RSpec.describe Form, type: :model do
                           rp_insan_unsat: nil,
                           rp_medwel: nil,
                           rp_hardship: nil,
-                          rp_dontknow: nil)
+                          rp_dontknow: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -46,6 +105,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             homeless: "No",
             reasonpref: "Yes",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -54,7 +115,12 @@ RSpec.describe Form, type: :model do
     context "reasonable preference is no" do
       it "validates no reason is needed" do
         expect {
-          CaseLog.create!(reasonpref: "No", rp_homeless: "No")
+          CaseLog.create!(
+            reasonpref: "No",
+            rp_homeless: "No",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
         }.not_to raise_error
       end
 
@@ -63,6 +129,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             reasonpref: "No",
             rp_medwel: "Yes",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -72,7 +140,9 @@ RSpec.describe Form, type: :model do
       it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
         expect {
           CaseLog.create!(reason: "Do not know",
-                          underoccupation_benefitcap: "Yes - benefit cap")
+                          underoccupation_benefitcap: "Yes - benefit cap",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -80,14 +150,18 @@ RSpec.describe Form, type: :model do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
           CaseLog.create!(reason: "Other",
-                          other_reason_for_leaving_last_settled_home: nil)
+                          other_reason_for_leaving_last_settled_home: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must not be provided if the main reason for leaving settled home is not other" do
         expect {
           CaseLog.create!(reason: "Repossession",
-                          other_reason_for_leaving_last_settled_home: "the other reason provided")
+                          other_reason_for_leaving_last_settled_home: "the other reason provided",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -96,14 +170,18 @@ RSpec.describe Form, type: :model do
       it "must be answered if tenant was a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
-                          reservist: nil)
+                          reservist: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must be answered if tenant was not a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armedforces: "No",
-                          reservist: "Yes")
+                          reservist: "Yes",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -113,7 +191,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -121,7 +201,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 51)
+                          age1: 51,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -129,7 +211,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Prefer not to say",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -137,7 +221,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
 
@@ -146,7 +232,9 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male", age1: 99,
                           sex2: "Female",
-                          age2: 20)
+                          age2: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
     end
@@ -155,7 +243,9 @@ RSpec.describe Form, type: :model do
       it "you must have more than zero bedrooms" do
         expect {
           CaseLog.create!(unittype_gn: "Shared house",
-                          beds: 0)
+                          beds: 0,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -163,7 +253,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(unittype_gn: "Shared bungalow",
                           beds: 8,
-                          other_hhmemb: 1)
+                          other_hhmemb: 1,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -171,21 +263,27 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(unittype_gn: "Shared bungalow",
                           beds: 4,
-                          other_hhmemb: 0)
+                          other_hhmemb: 0,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "A bedsit must only have one room" do
         expect {
           CaseLog.create!(unittype_gn: "Bed-sit",
-                          beds: 2)
+                          beds: 2,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "A bedsit must only have one room" do
         expect {
           CaseLog.create!(unittype_gn: "Bed-sit",
-                          beds: 0)
+                          beds: 0,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -194,14 +292,18 @@ RSpec.describe Form, type: :model do
       it "must be anwered if answered yes to outstanding rent or charges" do
         expect {
           CaseLog.create!(hbrentshortfall: "Yes",
-                          tshortfall: nil)
+                          tshortfall: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must be not be anwered if answered no to outstanding rent or charges" do
         expect {
           CaseLog.create!(hbrentshortfall: "No",
-                          tshortfall: 99)
+                          tshortfall: 99,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -209,19 +311,35 @@ RSpec.describe Form, type: :model do
     context "tenant’s income is from Universal Credit, state pensions or benefits" do
       it "Cannot be All if person 1 works full time" do
         expect {
-          CaseLog.create!(benefits: "All", ecstat1: "Full-time - 30 hours or more")
+          CaseLog.create!(
+            benefits: "All",
+            ecstat1: "Full-time - 30 hours or more",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Cannot be All if person 1 works part time" do
         expect {
-          CaseLog.create!(benefits: "All", ecstat1: "Part-time - Less than 30 hours")
+          CaseLog.create!(
+            benefits: "All",
+            ecstat1: "Part-time - Less than 30 hours",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
         expect {
-          CaseLog.create!(benefits: "All", relat2: "Partner", ecstat2: "Part-time - Less than 30 hours")
+          CaseLog.create!(
+            benefits: "All",
+            relat2: "Partner",
+            ecstat2: "Part-time - Less than 30 hours",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -230,46 +348,62 @@ RSpec.describe Form, type: :model do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
           CaseLog.create!(tenancy: "Other",
-                          tenancylength: 10)
+                          tenancylength: 10,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "Must be completed and between 2 and 99 if type of tenancy is Assured shorthold" do
         expect {
           CaseLog.create!(tenancy: "Assured Shorthold",
-                          tenancylength: 1)
+                          tenancylength: 1,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Assured Shorthold",
-                          tenancylength: nil)
+                          tenancylength: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Assured Shorthold",
-                          tenancylength: 2)
+                          tenancylength: 2,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
 
       it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: 1)
+                          tenancylength: 1,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: 100)
+                          tenancylength: 100,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: nil)
+                          tenancylength: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancylength: 2)
+                          tenancylength: 2,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
     end
@@ -278,14 +412,18 @@ RSpec.describe Form, type: :model do
       it "must be answered if ever served in the forces as a regular" do
         expect {
           CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
-                          leftreg: nil)
+                          leftreg: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "must not be answered if not ever served as a regular" do
         expect {
           CaseLog.create!(armedforces: "No",
-                          leftreg: "Yes")
+                          leftreg: "Yes",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -294,42 +432,103 @@ RSpec.describe Form, type: :model do
         expect do
           CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
                           leftreg: "Yes",
-                          reservist: "Yes")
+                          reservist: "Yes",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         end
       end
     end
 
     context "household_member_validations" do
       it "validate that persons aged under 16 must have relationship Child" do
-        expect { CaseLog.create!(age2: 14, relat2: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 14,
+            relat2: "Partner",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged over 70 must be retired" do
-        expect { CaseLog.create!(age2: 71, ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 71,
+            ecstat2: "Full-time - 30 hours or more",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that a male, retired persons must be over 65" do
-        expect { CaseLog.create!(age2: 64, sex2: "Male", ecstat2: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 64,
+            sex2: "Male",
+            ecstat2: "Retired",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that a female, retired persons must be over 60" do
-        expect { CaseLog.create!(age2: 59, sex2: "Female", ecstat2: "Retired") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 59,
+            sex2: "Female",
+            ecstat2: "Retired",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged under 16 must be a child (economically speaking)" do
-        expect { CaseLog.create!(age2: 15, ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 15,
+            ecstat2: "Full-time - 30 hours or more",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged between 16 and 19 that are a child must be a full time student or economic status refused" do
-        expect { CaseLog.create!(age2: 17, relat2: "Child - includes young adult and grown-up", ecstat2: "Full-time - 30 hours or more") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 17,
+            relat2: "Child - includes young adult and grown-up",
+            ecstat2: "Full-time - 30 hours or more",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that persons aged under 16 must be a child relationship" do
-        expect { CaseLog.create!(age2: 15, relat2: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            age2: 15,
+            relat2: "Partner",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it "validate that no more than 1 partner relationship exists" do
-        expect { CaseLog.create!(relat2: "Partner", relat3: "Partner") }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            relat2: "Partner",
+            relat3: "Partner",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
@@ -337,24 +536,32 @@ RSpec.describe Form, type: :model do
       it "must be provided if tenancy type was given as other" do
         expect {
           CaseLog.create!(tenancy: "Other",
-                          tenancyother: nil)
+                          tenancyother: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Other",
-                          tenancyother: "type")
+                          tenancyother: "type",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
 
       it "must not be provided if tenancy type is not other" do
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancyother: "the other reason provided")
+                          tenancyother: "the other reason provided",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           CaseLog.create!(tenancy: "Secure (including flexible)",
-                          tenancyother: nil)
+                          tenancyother: nil,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
     end
@@ -366,6 +573,8 @@ RSpec.describe Form, type: :model do
             ecstat1: "Full-time - 30 hours or more",
             earnings: 5000,
             incfreq: "Weekly",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -376,6 +585,8 @@ RSpec.describe Form, type: :model do
             ecstat1: "Full-time - 30 hours or more",
             earnings: 1,
             incfreq: "Weekly",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -417,6 +628,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             startdate: Date.new(2020, 10, 9),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -424,6 +637,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 9),
             startdate: Date.new(2020, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -433,6 +648,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of newbuild property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -440,6 +657,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of conversion/rehabilitation/acquired property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -447,6 +666,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of leased property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -456,6 +677,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             mrcdate: Date.new(2017, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -467,6 +690,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2009, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -474,6 +699,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2015, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -483,6 +710,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2021, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -490,6 +719,8 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(
             startdate: Date.new(2020, 10, 10),
             property_void_date: Date.new(2019, 10, 10),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.not_to raise_error
       end
@@ -500,6 +731,8 @@ RSpec.describe Form, type: :model do
             startdate: Date.new(2020, 10, 10),
             mrcdate: Date.new(2019, 10, 10),
             property_void_date: Date.new(2019, 11, 11),
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -510,7 +743,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -518,7 +753,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 51)
+                          age1: 51,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -526,7 +763,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Prefer not to say",
                           sex1: "Male",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -534,7 +773,9 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Female",
-                          age1: 20)
+                          age1: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
 
@@ -543,7 +784,9 @@ RSpec.describe Form, type: :model do
           CaseLog.create!(preg_occ: "Yes",
                           sex1: "Male", age1: 99,
                           sex2: "Female",
-                          age2: 20)
+                          age2: 20,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
         }.not_to raise_error
       end
     end

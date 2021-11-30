@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :case_log do
+    owning_organisation { FactoryBot.create(:organisation) }
+    managing_organisation { FactoryBot.create(:organisation) }
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }

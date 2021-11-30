@@ -3,13 +3,27 @@ require_relative "helpers"
 
 RSpec.describe "Task List" do
   include Helpers
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:empty_case_log) { FactoryBot.create(:case_log) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
+  let(:empty_case_log) do
+    FactoryBot.create(
+      :case_log,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+    sign_in user
   end
 
   it "displays a tasklist header" do

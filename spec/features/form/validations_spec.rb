@@ -3,12 +3,26 @@ require_relative "helpers"
 
 RSpec.describe "validations" do
   include Helpers
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:empty_case_log) { FactoryBot.create(:case_log) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
+  let(:empty_case_log) do
+    FactoryBot.create(
+      :case_log,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
   let(:id) { case_log.id }
 
   before do
-    allow_any_instance_of(CaseLogsController).to receive(:authenticate_user!).and_return(true)
+    sign_in user
   end
 
   describe "Question validation" do
@@ -86,7 +100,15 @@ RSpec.describe "validations" do
 
   describe "Soft Validation" do
     context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, ecstat1: "Full-time - 30 hours or more") }
+      let(:case_log) do
+        FactoryBot.create(
+          :case_log,
+          :in_progress,
+          ecstat1: "Full-time - 30 hours or more",
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+        )
+      end
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 

@@ -1,9 +1,20 @@
 require "rails_helper"
-require_relative "../support/devise"
 
 RSpec.describe CaseLogsController, type: :controller do
   let(:valid_session) { {} }
-  login_user
+  let(:user) { FactoryBot.create(:user) }
+  let(:case_log) do
+    FactoryBot.create(
+      :case_log,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
+  let(:id) { case_log.id }
+
+  before do
+    sign_in user
+  end
 
   context "Collection routes" do
     describe "GET #index" do
@@ -14,23 +25,29 @@ RSpec.describe CaseLogsController, type: :controller do
     end
 
     describe "Post #create" do
+      let(:owning_organisation) { FactoryBot.create(:organisation) }
+      let(:managing_organisation) { owning_organisation }
+      let(:params) do
+        {
+          "owning_organisation_id": owning_organisation.id,
+          "managing_organisation_id": managing_organisation.id,
+        }
+      end
+
       it "creates a new case log record" do
         expect {
-          post :create, params: {}, session: valid_session
+          post :create, params: params, session: valid_session
         }.to change(CaseLog, :count).by(1)
       end
 
       it "redirects to that case log" do
-        post :create, params: {}, session: valid_session
+        post :create, params: params, session: valid_session
         expect(response.status).to eq(302)
       end
     end
   end
 
   context "Instance routes" do
-    let!(:case_log) { FactoryBot.create(:case_log) }
-    let(:id) { case_log.id }
-
     describe "GET #show" do
       it "returns a success response" do
         get :show, params: { id: id }
@@ -47,8 +64,6 @@ RSpec.describe CaseLogsController, type: :controller do
   end
 
   describe "submit_form" do
-    let!(:case_log) { FactoryBot.create(:case_log) }
-    let(:id) { case_log.id }
     let(:case_log_form_params) do
       { accessibility_requirements:
                              %w[ housingneeds_a

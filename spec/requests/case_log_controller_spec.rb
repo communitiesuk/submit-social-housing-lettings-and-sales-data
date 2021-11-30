@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
+  let(:owning_organisation) { FactoryBot.create(:organisation) }
+  let(:managing_organisation) { owning_organisation }
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -32,6 +34,8 @@ RSpec.describe CaseLogsController, type: :request do
 
     let(:params) do
       {
+        "owning_organisation_id": owning_organisation.id,
+        "managing_organisation_id": managing_organisation.id,
         "tenant_code": tenant_code,
         "age1": age1,
         "property_postcode": property_postcode,
@@ -78,8 +82,17 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "complete case log submission" do
+      let(:org_params) do
+        {
+          "case_log" => {
+            "owning_organisation_id" => owning_organisation.id,
+            "managing_organisation_id" => managing_organisation.id,
+          },
+        }
+      end
+      let(:case_log_params) { JSON.parse(File.open("spec/fixtures/complete_case_log.json").read) }
       let(:params) do
-        JSON.parse(File.open("spec/fixtures/complete_case_log.json").read)
+        case_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
       end
 
       it "marks the record as completed" do
@@ -101,27 +114,124 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "GET" do
-    let(:case_log) { FactoryBot.create(:case_log, :completed) }
-    let(:id) { case_log.id }
-
-    before do
-      get "/case_logs/#{id}", headers: headers
+    let(:user) { FactoryBot.create(:user) }
+    let(:organisation) { user.organisation }
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let!(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
+    let!(:unauthorized_case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: other_organisation,
+        managing_organisation: other_organisation,
+      )
     end
 
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
+    context "collection" do
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        sign_in user
+        get "/case_logs", headers: headers, params: {}
+      end
+
+      it "only shows case logs for your organisation" do
+        expected_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{case_log.id}\">#{case_log.id}</a>"
+        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/case_logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+        expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
+        expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+      end
     end
 
-    it "returns a serialized Case Log" do
-      json_response = JSON.parse(response.body)
-      expect(json_response["status"]).to eq(case_log.status)
-    end
+    context "member" do
+      let(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
+      let(:id) { completed_case_log.id }
 
-    context "invalid case log id" do
-      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+      before do
+        get "/case_logs/#{id}", headers: headers
+      end
 
-      it "returns 404" do
-        expect(response).to have_http_status(:not_found)
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "returns a serialized Case Log" do
+        json_response = JSON.parse(response.body)
+        expect(json_response["status"]).to eq(completed_case_log.status)
+      end
+
+      context "invalid case log id" do
+        let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+
+        it "returns 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "edit log" do
+        let(:headers) { { "Accept" => "text/html" } }
+        let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
+        before do
+          allow(FormHandler.instance).to receive(:get_form).and_return(form)
+        end
+
+        context "case logs that are owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{case_log.id}", headers: headers, params: {}
+          end
+
+          it "shows the tasklist for case logs you have access to" do
+            expect(response.body).to match("Tasklist for log")
+            expect(response.body).to match(case_log.id.to_s)
+          end
+        end
+
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+          end
+
+          it "does not show the tasklist for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "form pages" do
+        let(:headers) { { "Accept" => "text/html" } }
+
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}/person_1_age", headers: headers, params: {}
+          end
+
+          it "does not show form pages for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+      end
+
+      context "check answers pages" do
+        let(:headers) { { "Accept" => "text/html" } }
+
+        context "case logs that are not owned or managed by your organisation" do
+          before do
+            sign_in user
+            get "/case_logs/#{unauthorized_case_log.id}/household_characteristics/check_answers", headers: headers, params: {}
+          end
+
+          it "does not show a check answers for case logs you don't have access to" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
       end
     end
   end
@@ -280,7 +390,14 @@ RSpec.describe CaseLogsController, type: :request do
   describe "Submit Form" do
     let(:user) { FactoryBot.create(:user) }
     let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
-    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let(:organisation) { user.organisation }
+    let(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
     let(:page_id) { "person_1_age" }
     let(:params) do
       {
@@ -328,6 +445,27 @@ RSpec.describe CaseLogsController, type: :request do
         case_log.reload
         expect(case_log.age1).to eq(answer)
         expect(case_log.age2).to be nil
+      end
+    end
+
+    context "case logs that are not owned or managed by your organisation" do
+      let(:answer) { 25 }
+      let(:other_organisation) { FactoryBot.create(:organisation) }
+      let(:unauthorized_case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: other_organisation,
+          managing_organisation: other_organisation,
+        )
+      end
+
+      before do
+        sign_in user
+        post "/case_logs/#{unauthorized_case_log.id}/form", params: params
+      end
+
+      it "does not let you post form answers to case logs you don't have access to" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
