@@ -3,7 +3,7 @@
   <%= "Users" %>
 <% end %>
 
-<%= govuk_button_link_to "Invite user", new_user_registration_path, html: { "data-turbo" => "false", method: :get } %>
+<%= govuk_button_link_to "Invite user", users_invite_organisation_path(@organisation), html: { method: :get } %>
 <%= govuk_table do |table| %>
   <%= table.head do |head| %>
     <%= head.row do |row|

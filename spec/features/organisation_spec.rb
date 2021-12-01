@@ -32,7 +32,7 @@ RSpec.describe "User Features" do
       visit("/organisations/#{org_id}")
       click_link("Users")
       click_link("Invite user")
-      expect(page).to have_current_path("/users/invite")
+      expect(page).to have_current_path("/organisations/#{org_id}/users/invite")
       expect(page).to have_content("Invite user to submit CORE data")
     end
   end

@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "../../support/devise"
 
-RSpec.describe Users::PasswordsController, type: :request do
+RSpec.describe Auth::PasswordsController, type: :request do
   let(:params) { { user: { email: email } } }
 
   context "when a password reset is requested for a valid email" do
@@ -18,7 +18,7 @@ RSpec.describe Users::PasswordsController, type: :request do
 
   context "when a password reset is requested with an email that doesn't exist in the system" do
     before do
-      allow_any_instance_of(Users::PasswordsController).to receive(:is_navigational_format?).and_return(false)
+      allow_any_instance_of(Auth::PasswordsController).to receive(:is_navigational_format?).and_return(false)
     end
 
     let(:email) { "madeup_email@test.com" }

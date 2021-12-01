@@ -1,18 +1,12 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users, controllers: {
-    passwords: "users/passwords",
-    sessions: "users/sessions",
-    registrations: "users/registrations",
-  }, path_names: { sign_in: "sign-in", sign_out: "sign-out", sign_up: "invite" }
+    passwords: "auth/passwords",
+    sessions: "auth/sessions",
+  }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }
 
   devise_scope :user do
-    get "user", to: "users/account#index"
-    get "users", to: "users/account#index"
-    get "users/account", to: "users/account#index"
-    get "confirmations/reset", to: "users/passwords#reset_confirmation"
-    get "users/account/personal-details", to: "users/account#edit"
-    patch "details", to: "users/account#update", as: "account_update"
+    get "confirmations/reset", to: "auth/passwords#reset_confirmation"
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
@@ -20,15 +14,18 @@ Rails.application.routes.draw do
   root to: "test#index"
   get "about", to: "about#index"
 
-  form_handler = FormHandler.instance
-  form = form_handler.get_form("2021_2022")
+  resources :users
 
   resources :organisations do
     member do
       get "details", to: "organisations#show"
       get "users", to: "organisations#users"
+      get "users/invite", to: "users/account#new"
     end
   end
+
+  form_handler = FormHandler.instance
+  form = form_handler.get_form("2021_2022")
 
   resources :case_logs, path: "/case-logs" do
     collection do
