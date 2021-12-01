@@ -7,6 +7,11 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/users/sign_in")
     end
 
+    it "does not see the default devise error message" do
+      visit("/case_logs")
+      expect(page).to have_no_content("You need to sign in or sign up before continuing.")
+    end
+
     it " is redirected to case logs after signing in" do
       visit("/case_logs")
       fill_in("user[email]", with: user.email)
