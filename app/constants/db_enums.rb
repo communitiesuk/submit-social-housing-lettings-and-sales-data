@@ -733,4 +733,11 @@ module DbEnums
       "Intermediate Rent" => 3,
     }
   end
+
+  def self.needstype
+    {
+      "General Needs" => 1,
+      "Supported Housing" => 2,
+    }
+  end
 end

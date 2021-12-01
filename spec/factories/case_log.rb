@@ -113,7 +113,7 @@ FactoryBot.define do
       tenant_same_property_renewal { 1 }
       rent_type { 1 }
       intermediate_rent_product_name { 2 }
-      needs_type { 1 }
+      needstype { 1 }
       purchaser_code { 798_794 }
       reason { "Permanently decanted from another property owned by this landlord" }
       propcode { "123" }

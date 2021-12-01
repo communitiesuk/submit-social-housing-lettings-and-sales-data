@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_144840) do
+ActiveRecord::Schema.define(version: 2021_12_01_114814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 2021_11_30_144840) do
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"
-    t.string "lettype"
     t.integer "landlord"
     t.string "previous_postcode"
     t.integer "rsnvac"
@@ -137,7 +136,6 @@ ActiveRecord::Schema.define(version: 2021_11_30_144840) do
     t.string "tenant_same_property_renewal"
     t.string "rent_type"
     t.string "intermediate_rent_product_name"
-    t.string "needs_type"
     t.string "purchaser_code"
     t.integer "reason"
     t.string "propcode"
@@ -165,10 +163,12 @@ ActiveRecord::Schema.define(version: 2021_11_30_144840) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
+    t.datetime "property_void_date"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
-    t.datetime "property_void_date"
     t.integer "renttype"
+    t.integer "needstype"
+    t.integer "lettype"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
