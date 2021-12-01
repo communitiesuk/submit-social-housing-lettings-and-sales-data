@@ -7,15 +7,15 @@
 
 <% content_for :content do %>
   <h1 class="govuk-heading-l">
-    Your Organisation
+    Your organisation
   </h1>
-
-  <h2 class="govuk-visually-hidden"><%= content_for(:tab_title) %></h2>
 
   <%= render TabNavigationComponent.new(items: [
     { name: t('Details'), url: details_organisation_path(@organisation) },
     { name: t('Users'), url: users_organisation_path(@organisation) },
   ]) %>
+
+  <h2 class="govuk-visually-hidden"><%= content_for(:tab_title) %></h2>
 
   <%= content_for?(:organisations_content) ? yield(:organisations_content) : yield %>
 <% end %>
