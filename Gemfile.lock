@@ -1,4 +1,16 @@
 GIT
+  remote: https://github.com/ghiculescu/devise.git
+  revision: 3b2d9ae3d47be5c9228c4446119b04b0e98917c1
+  branch: error-code-422
+  specs:
+    devise (4.8.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+
+GIT
   remote: https://github.com/rspec/rspec-core.git
   revision: e36aa2a9ebe68acee3ce05190fc2124947b45925
   branch: main
@@ -148,12 +160,6 @@ GEM
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     deep_merge (1.2.1)
-    devise (4.8.0)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
     diff-lcs (1.4.4)
     discard (1.2.0)
       activerecord (>= 4.2, < 7)
@@ -408,7 +414,7 @@ DEPENDENCIES
   capybara
   capybara-lockstep
   chartkick
-  devise
+  devise!
   discard
   dotenv-rails
   factory_bot_rails

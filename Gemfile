@@ -32,7 +32,8 @@ gem "roo"
 # Json Schema
 gem "json-schema"
 # Authentication
-gem "devise"
+# Point at branch until devise is compatible with Turbo, see https://github.com/heartcombo/devise/pull/5340
+gem "devise", github: "ghiculescu/devise", branch: "error-code-422"
 gem "turbo-rails", "~> 0.8"
 gem "uk_postcode"
 gem "view_component"

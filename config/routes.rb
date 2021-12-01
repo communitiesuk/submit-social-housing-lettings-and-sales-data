@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords" }, skip: [:registrations]
+  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, skip: [:registrations]
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
