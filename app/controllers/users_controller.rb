@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
+  include Devise::Controllers::SignInOut
   before_action :authenticate_user!
 
   def update
     if current_user.update(user_params)
-      redirect_to(user_path)
+      bypass_sign_in current_user
+      redirect_to user_path(current_user)
     end
   end
 
@@ -12,7 +14,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    User.create!(user_params)
+    @user = User.create!(user_params)
+    redirect_to @user
   end
 
   def edit_password
