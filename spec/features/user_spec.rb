@@ -105,7 +105,7 @@ RSpec.describe "User Features" do
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
-      expect(page).to have_content(/Email addess is not valid/)
+      expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
     end
   end
 
