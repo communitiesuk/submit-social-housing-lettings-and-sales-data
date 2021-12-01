@@ -1734,7 +1734,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "No",
-                    "1": "Yesx"
+                    "1": "Yes"
                   },
                   "conditional_for": {
                     "mrcdate": ["Yes"]

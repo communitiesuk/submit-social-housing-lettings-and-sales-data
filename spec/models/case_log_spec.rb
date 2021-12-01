@@ -816,14 +816,6 @@ RSpec.describe Form, type: :model do
     end
   end
 
-  describe "incref" do
-    let(:case_log) { FactoryBot.build(:case_log, net_income_known: "Prefer not to say") }
-
-    it "sets income refused to Yes" do
-      expect(case_log.incref).to eq(1)
-    end
-  end
-
   describe "weekly_net_income" do
     let(:net_income) { 5000 }
     let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
@@ -841,6 +833,75 @@ RSpec.describe Form, type: :model do
     it "calculates the correct weekly income from yearly income" do
       case_log.incfreq = "Yearly"
       expect(case_log.weekly_net_income).to eq(417)
+    end
+  end
+
+  describe "derived variables" do
+    require "date"
+    let(:organisation) { FactoryBot.create(:organisation) }
+    let!(:case_log) do
+      CaseLog.create({
+        managing_organisation: organisation,
+        owning_organisation: organisation,
+        property_postcode: "M1 1AE",
+        previous_postcode: "M2 2AE",
+        # rubocop:disable Style/DateTime
+        mrcdate: DateTime.new(2021, 5, 4),
+        # rubocop:enable Style/DateTime
+        net_income_known: "Prefer not to say",
+        other_hhmemb: 6,
+        rent_type: "London Living Rent",
+      })
+    end
+
+    it "correctly derives and saves partial and full postcodes" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select postcode, postcod2 from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["postcode"]).to eq("M1")
+      expect(record_from_db["postcod2"]).to eq("1AE")
+    end
+
+    it "correctly derives and saves partial and full previous postcodes" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select ppostc1, ppostc2 from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["ppostc1"]).to eq("M2")
+      expect(record_from_db["ppostc2"]).to eq("2AE")
+    end
+
+    it "correctly derives and saves partial and full major repairs date" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select mrcday, mrcmonth, mrcyear, mrcdate from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["mrcdate"].day).to eq(4)
+      expect(record_from_db["mrcdate"].month).to eq(5)
+      expect(record_from_db["mrcdate"].year).to eq(2021)
+      expect(record_from_db["mrcday"]).to eq(4)
+      expect(record_from_db["mrcmonth"]).to eq(5)
+      expect(record_from_db["mrcyear"]).to eq(2021)
+    end
+
+    it "correctly derives and saves incref" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select incref from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["incref"]).to eq(1)
+    end
+
+    it "correctly derives and saves hhmemb" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["hhmemb"]).to eq(7)
+    end
+
+    it "correctly derives and saves renttype" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select renttype from case_logs where id=#{case_log.id}").to_a[0]
+      expect(case_log.renttype).to eq("Intermediate Rent")
+      expect(record_from_db["renttype"]).to eq(3)
     end
   end
 end

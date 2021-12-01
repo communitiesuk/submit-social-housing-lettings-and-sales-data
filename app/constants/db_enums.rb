@@ -725,4 +725,12 @@ module DbEnums
       "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years" => 5,
     }
   end
+
+  def self.renttype
+    {
+      "Social Rent" => 1,
+      "Affordable Rent" => 2,
+      "Intermediate Rent" => 3,
+    }
+  end
 end
