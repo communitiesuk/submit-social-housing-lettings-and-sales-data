@@ -838,7 +838,7 @@ RSpec.describe Form, type: :model do
 
   describe "derived variables" do
     require "date"
-    let(:organisation) { FactoryBot.create(:organisation) }
+    let(:organisation) { FactoryBot.create(:organisation, org_type: "PRP") }
     let!(:case_log) do
       CaseLog.create({
         managing_organisation: organisation,
@@ -851,6 +851,7 @@ RSpec.describe Form, type: :model do
         net_income_known: "Prefer not to say",
         other_hhmemb: 6,
         rent_type: "London Living Rent",
+        needstype: "General Needs",
       })
     end
 
@@ -902,6 +903,14 @@ RSpec.describe Form, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select renttype from case_logs where id=#{case_log.id}").to_a[0]
       expect(case_log.renttype).to eq("Intermediate Rent")
       expect(record_from_db["renttype"]).to eq(3)
+    end
+
+    it "correctly derives and saves lettype" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+      expect(case_log.lettype).to eq("Intermediate Rent General Needs PRP")
+      expect(record_from_db["lettype"]).to eq(9)
     end
   end
 end
