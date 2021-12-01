@@ -29,6 +29,21 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/users/password/new")
     end
 
+    it " is shown an error message if they submit without entering an email address" do
+      visit("/users/password/new")
+      click_button("Send email")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+    end
+
+    it " is shown an error message if they submit an invalid email address" do
+      visit("/users/password/new")
+      fill_in("user[email]", with: "thisisn'tanemail")
+      click_button("Send email")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+    end
+
     it " is redirected to check your email page after submitting an email on the reset password page" do
       visit("/users/password/new")
       fill_in("user[email]", with: user.email)
