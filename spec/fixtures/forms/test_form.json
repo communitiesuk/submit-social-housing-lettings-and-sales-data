@@ -53,6 +53,7 @@
                     "min": 0,
                     "max": 1,
                     "step": 1,
+                    "width": 2,
                     "conditional_for": {
                       "relat2": ">0",
                       "age2": ">0",
