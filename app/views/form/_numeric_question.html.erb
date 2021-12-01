@@ -1,7 +1,8 @@
 <%= f.govuk_number_field question.id.to_sym,
+    caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
+    label: { text: question.header.html_safe, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
     hint: { text: question.hint_text },
-    label: { text: question.header.html_safe, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1" },
     min: question.min, max: question.max, step: question.step,
-    width: 20, :readonly => question.read_only?,
+    width: question.width, :readonly => question.read_only?,
    **stimulus_html_attributes(question)
 %>

@@ -8,11 +8,9 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <span class="govuk-caption-l">
-        <%= subsection %>
-      </span>
       <% if page.header.present? %>
         <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l"><%= subsection %></span>
           <%= page.header %>
         </h1>
       <% end %>
@@ -20,7 +18,7 @@
         <%= f.govuk_error_summary %>
         <% page.questions.map do |question| %>
           <div id=<%= question.id + "_div " %><%= display_question_key_div(page, question) %> >
-            <%= render partial: "form/#{question.type}_question", locals: { question: question, page_header: page.header, f: f } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question: question, caption: subsection, page_header: page.header, f: f } %>
           </div>
         <% end %>
 

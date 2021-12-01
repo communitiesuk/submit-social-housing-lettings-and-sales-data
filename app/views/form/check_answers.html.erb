@@ -1,7 +1,10 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
-      <h1 class="govuk-heading-l">Check the answers you gave for <%= subsection.id.humanize(capitalize: false) %></h1>
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l"><%= subsection.id.humanize %></span>
+        Check your answers
+      </h1>
       <%= display_answered_questions_summary(subsection, @case_log) %>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         <% subsection.applicable_questions(@case_log).each do |question| %>

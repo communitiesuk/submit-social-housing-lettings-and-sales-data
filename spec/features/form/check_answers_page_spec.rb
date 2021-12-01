@@ -31,7 +31,7 @@ RSpec.describe "Form Check Answers Page" do
   context "when the user needs to check their answers for a subsection" do
     it "can be visited by URL" do
       visit("case-logs/#{id}/#{subsection}/check-answers")
-      expect(page).to have_content("Check the answers you gave for #{subsection.tr('-', ' ')}")
+      expect(page).to have_content("#{subsection.tr('-', ' ').humanize} Check your answers")
     end
 
     let(:last_question_for_subsection) { "household-number-of-other-members" }
