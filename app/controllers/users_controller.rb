@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params)
+    @user = User.create!(user_params.merge(org_params))
     redirect_to @user
   end
 
@@ -23,6 +23,10 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def org_params
+    { organisation: current_user.organisation }
+  end
 
   def user_params
     params.require(:user).permit(:email, :name, :password)
