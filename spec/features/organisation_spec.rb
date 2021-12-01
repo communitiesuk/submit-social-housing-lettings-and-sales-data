@@ -14,7 +14,7 @@ RSpec.describe "User Features" do
   context "Organisation page" do
     it "default to organisation details" do
       visit("/case_logs")
-      click_link("Organisation")
+      click_link("Your organisation")
       expect(page).to have_content(user.organisation.name)
     end
 

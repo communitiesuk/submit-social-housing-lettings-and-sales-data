@@ -39,8 +39,8 @@
         if current_user.nil?
           component.navigation_item(text: 'Case logs', href: '/case_logs')
         elsif
+          component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
           component.navigation_item(text: 'Your account', href: '/users/account')
-          component.navigation_item(text: 'Organisation', href: "/organisations/#{current_user.organisation.id}")
           component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
         end
       end

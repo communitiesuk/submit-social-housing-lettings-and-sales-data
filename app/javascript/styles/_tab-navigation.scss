@@ -5,12 +5,12 @@
 
 .app-tab-navigation__list {
   @include govuk-clearfix;
-  // left: govuk-spacing(-3);
+  left: govuk-spacing(-3);
   list-style: none;
   margin: 0;
   padding: 0;
   position: relative;
-  // right: govuk-spacing(-3);
+  right: govuk-spacing(-3);
   width: calc(100% + #{govuk-spacing(6)});
 
   @include govuk-media-query($from: tablet) {

@@ -21,6 +21,11 @@ RSpec.describe OrganisationsController, type: :request do
       expect(response.body).to include(expected_html)
       expect(response.body).to include(organisation.name)
     end
+
+    it "has a hidden header title" do
+      expected_html = "<h2 class=\"govuk-visually-hidden\">  Details"
+      expect(response.body).to include(expected_html)
+    end
   end
 
   context "users tab" do
@@ -44,6 +49,11 @@ RSpec.describe OrganisationsController, type: :request do
       expected_html = "<table class=\"govuk-table\""
       expect(response.body).to include(expected_html)
       expect(response.body).to include(user.email)
+    end
+
+    it "has a hidden header title" do
+      expected_html = "<h2 class=\"govuk-visually-hidden\">  Users"
+      expect(response.body).to include(expected_html)
     end
   end
 end

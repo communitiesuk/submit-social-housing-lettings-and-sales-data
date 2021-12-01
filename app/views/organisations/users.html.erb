@@ -1,3 +1,7 @@
+<% content_for :tab_title do %>
+  <%= "Users" %>
+<% end %>
+
 <%= govuk_button_link_to "Invite user", new_user_path, method: :post %>
 <%= govuk_table do |table| %>
   <%= table.head do |head| %>
