@@ -1112,22 +1112,6 @@
                   "type": "text"
                 }
               }
-            },
-            "letting_provider": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "landlord": {
-                  "check_answer_label": "Provider",
-                  "header": "Who is the letting provider?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "This landlord",
-                    "1": "Another registered provider - includes housing association or local authority"
-                  }
-                }
-              }
             }
           }
         },
