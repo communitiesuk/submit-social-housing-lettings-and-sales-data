@@ -26,4 +26,14 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/organisations/#{org_id}/details")
     end
   end
+
+  context "Organisation users" do
+    it "users can be added" do
+      visit("/organisations/#{org_id}")
+      click_link("Users")
+      click_link("Invite user")
+      expect(page).to have_current_path("/users/invite")
+      expect(page).to have_content("Invite user to submit CORE data")
+    end
+  end
 end
