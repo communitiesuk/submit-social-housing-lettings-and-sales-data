@@ -37,10 +37,11 @@
         service_url: '/'
       ) do |component|
         if current_user.nil?
-          component.navigation_item(text: 'Case logs', href: case_logs_path)
+          component.navigation_item(text: 'Sign in', href: user_session_path)
         elsif
+          component.navigation_item(text: 'Case logs', href: case_logs_path)
           component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
-          component.navigation_item(text: 'Your account', href: '/users/account')
+          component.navigation_item(text: 'Your account', href: users_account_path)
           component.navigation_item(text: 'Sign out', href: destroy_user_session_path, options: {:method => :delete})
         end
       end
