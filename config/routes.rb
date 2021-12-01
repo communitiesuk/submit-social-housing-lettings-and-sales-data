@@ -3,8 +3,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     passwords: "users/passwords",
     sessions: "users/sessions",
-    registrations: "users/registrations"
-  }, path_names: { sign_in: 'sign-in', sign_out: 'sign-out', sign_up: 'invite' }
+    registrations: "users/registrations",
+  }, path_names: { sign_in: "sign-in", sign_out: "sign-out", sign_up: "invite" }
 
   devise_scope :user do
     get "user", to: "users/account#index"
@@ -32,12 +32,12 @@ Rails.application.routes.draw do
 
   resources :case_logs, path: "/case-logs" do
     collection do
-      post "/bulk-upload", to: "bulk_upload#bulk_upload"
-      get "/bulk-upload", to: "bulk_upload#show"
+      post "bulk-upload", to: "bulk_upload#bulk_upload"
+      get "bulk-upload", to: "bulk_upload#show"
     end
 
     member do
-      post "/form", to: "case_logs#submit_form"
+      post "form", to: "case_logs#submit_form"
     end
 
     form.pages.map do |page|
