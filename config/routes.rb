@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   root to: "test#index"
   get "about", to: "about#index"
 
-  resources :users
+  resources :users do
+    member do
+      get "password/edit", to: "users#edit_password"
+    end
+  end
 
   resources :organisations do
     member do

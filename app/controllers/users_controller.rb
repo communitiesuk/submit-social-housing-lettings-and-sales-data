@@ -15,6 +15,10 @@ class UsersController < ApplicationController
     User.create!(user_params)
   end
 
+  def edit_password
+    render :edit_password
+  end
+
 private
 
   def user_params

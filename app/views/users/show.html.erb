@@ -23,7 +23,7 @@
       <%= summary_list.row do |row|
         row.key { 'Password' }
         row.value { '••••••••' }
-        row.action(visually_hidden_text: 'password', href: edit_user_password_path, html_attributes: { 'data-qa': 'change-password' })
+        row.action(visually_hidden_text: 'password', href: password_edit_user_path, html_attributes: { 'data-qa': 'change-password' })
       end %>
 
       <%= summary_list.row do |row|
