@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :organisation do
     name { "DLUHC" }
-    org_type { "LA" }
+    providertype { "LA" }
     address_line1 { "2 Marsham Street" }
     address_line2 { "London" }
     postcode { "SW1P 4DF" }

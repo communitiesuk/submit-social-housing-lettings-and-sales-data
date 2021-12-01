@@ -838,7 +838,7 @@ RSpec.describe Form, type: :model do
 
   describe "derived variables" do
     require "date"
-    let(:organisation) { FactoryBot.create(:organisation, org_type: "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, providertype: "PRP") }
     let!(:case_log) do
       CaseLog.create({
         managing_organisation: organisation,

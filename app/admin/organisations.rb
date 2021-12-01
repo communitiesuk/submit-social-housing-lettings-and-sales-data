@@ -2,7 +2,7 @@ ActiveAdmin.register Organisation do
   permit_params do
     permitted = %i[name
                    phone
-                   org_type
+                   providertype
                    address_line1
                    address_line2
                    postcode
@@ -17,7 +17,7 @@ ActiveAdmin.register Organisation do
     selectable_column
     id_column
     column :name
-    column :org_type
+    column :providertype
     column "Address Line 1", :address_line1
     column "Address Line 2", :address_line2
     column :postcode

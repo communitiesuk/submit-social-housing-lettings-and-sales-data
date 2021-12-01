@@ -741,7 +741,7 @@ module DbEnums
     }
   end
 
-  def self.org_type
+  def self.providertype
     {
       "LA" => 1,
       "PRP" => 2,
