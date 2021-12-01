@@ -4,7 +4,7 @@ RSpec.describe "User Features" do
   context "A user navigating to case logs" do
     it " is required to log in" do
       visit("/case-logs")
-      expect(page).to have_current_path("/users/sign_in")
+      expect(page).to have_current_path("/users/sign-in")
     end
 
     it "does not see the default devise error message" do
@@ -150,7 +150,7 @@ RSpec.describe "User Features" do
     end
 
     it "personal details page is present and accessible" do
-      visit("/users/account/personal_details")
+      visit("/users/account/personal-details")
       expect(page).to have_content("Change your personal details")
     end
 
