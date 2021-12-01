@@ -37,6 +37,7 @@ RSpec.describe "User Features" do
       fill_in("user[name]", with: "New User")
       fill_in("user[email]", with: "new_user@example.com")
       expect { click_button("Continue") }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect(page).to have_current_path("/organisations/#{org_id}/users")
     end
   end
 end
