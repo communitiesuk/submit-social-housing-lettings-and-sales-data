@@ -2,7 +2,7 @@ class Users::SessionsController < Devise::SessionsController
   def create
     self.resource = resource_class.new
     if params.dig("user", "email").empty?
-      resource.errors.add :email, "Please enter email address"
+      resource.errors.add :email, "Enter an email address"
     elsif !email_valid?(params.dig("user", "email"))
       resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
     end
