@@ -16,7 +16,7 @@ Rails.application.routes.draw do
     get "users", to: "users/account#index"
     get "users/account", to: "users/account#index"
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
-    get "users/account/personal_details", to: "users/account#edit"
+    get "users/account/personal-details", to: "users/account#edit"
     patch "details", to: "users/account#update", as: "account_update"
   end
 
