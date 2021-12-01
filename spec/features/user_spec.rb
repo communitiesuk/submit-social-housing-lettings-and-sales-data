@@ -3,28 +3,28 @@ RSpec.describe "User Features" do
   let!(:user) { FactoryBot.create(:user) }
   context "A user navigating to case logs" do
     it " is required to log in" do
-      visit("/case_logs")
+      visit("/case-logs")
       expect(page).to have_current_path("/users/sign_in")
     end
 
     it "does not see the default devise error message" do
-      visit("/case_logs")
+      visit("/case-logs")
       expect(page).to have_no_content("You need to sign in or sign up before continuing.")
     end
 
     it " is redirected to case logs after signing in" do
-      visit("/case_logs")
+      visit("/case-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/case_logs")
+      expect(page).to have_current_path("/case-logs")
       expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
     end
   end
 
   context "A user who has forgotten their password" do
     it " is redirected to the reset password page when they click the reset password link" do
-      visit("/case_logs")
+      visit("/case-logs")
       click_link("reset your password")
       expect(page).to have_current_path("/users/password/new")
     end
@@ -81,7 +81,7 @@ RSpec.describe "User Features" do
 
   context "If user not logged in" do
     it "'Your account' link does not display" do
-      visit("/case_logs")
+      visit("/case-logs")
       expect(page).to have_no_link("Your account")
     end
 
@@ -92,7 +92,7 @@ RSpec.describe "User Features" do
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/case_logs")
+      expect(page).to have_current_path("/case-logs")
     end
 
     it "tries to access account page, redirects to log in page" do
@@ -103,7 +103,7 @@ RSpec.describe "User Features" do
 
   context "Trying to log in with incorrect credentials" do
     it "shows a gov uk error summary and no flash message" do
-      visit("/case_logs")
+      visit("/case-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "nonsense")
       click_button("Sign in")
@@ -112,7 +112,7 @@ RSpec.describe "User Features" do
     end
 
     it "show specific field error messages if a field was omitted" do
-      visit("/case_logs")
+      visit("/case-logs")
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
@@ -120,7 +120,7 @@ RSpec.describe "User Features" do
     end
 
     it "show specific field error messages if an invalid email address is entered" do
-      visit("/case_logs")
+      visit("/case-logs")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
@@ -131,14 +131,14 @@ RSpec.describe "User Features" do
 
   context "Your Account " do
     before(:each) do
-      visit("/case_logs")
+      visit("/case-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
     end
 
     it "shows 'Your account' link in navigation if logged in and redirect to correct page" do
-      visit("/case_logs")
+      visit("/case-logs")
       expect(page).to have_link("Your account")
       click_link("Your account")
       expect(page).to have_current_path("/users/account")

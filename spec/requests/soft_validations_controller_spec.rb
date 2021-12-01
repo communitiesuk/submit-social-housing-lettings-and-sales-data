@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe SoftValidationsController, type: :request do
   let(:params) { { case_log_id: case_log.id } }
-  let(:url) { "/case_logs/#{case_log.id}/net_income/soft_validations" }
+  let(:url) { "/case-logs/#{case_log.id}/net-income/soft-validations" }
 
   before do
     get url, params: {}
