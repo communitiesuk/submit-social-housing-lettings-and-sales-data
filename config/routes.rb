@@ -1,15 +1,17 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, skip: [:registrations]
+  devise_for :users, controllers: {
+    passwords: "users/passwords",
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
+
   devise_scope :user do
     get "user", to: "users/account#index"
     get "users", to: "users/account#index"
-    get "users/new", to: "devise/registrations#new", as: "new_user_registration"
-    get "users/edit", to: "devise/registrations#edit", as: "edit_user_registration"
     get "users/account", to: "users/account#index"
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get "users/account/personal_details", to: "users/account#edit"
-    patch "users", to: "users/registrations#update", as: "user_registration"
     patch "details", to: "users/account#update", as: "account_update"
   end
 
