@@ -52,9 +52,7 @@
         text: "This is a new service – #{govuk_mail_to("test@mhclg.gov.uk", "give feedback or report a problem", subject: "Feedback about Lettings and Sales of Social Housing in England Data Collection")}".html_safe
       ) %>
 
-      <div role="navigation">
-        <%= content_for(:before_content) %>
-      </div>
+      <%= content_for(:before_content) %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if flash.notice %>
