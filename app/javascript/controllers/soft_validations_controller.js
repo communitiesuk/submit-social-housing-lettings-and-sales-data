@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = [ "override" ]
 
   initialize() {
-    let url = window.location.href + "/soft_validations"
+    let url = window.location.href + "/soft-validations"
     let div = this.overrideTarget
     fetch(url, { headers: { accept: "application/json" } })
       .then(response => response.json())

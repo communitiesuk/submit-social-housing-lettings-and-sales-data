@@ -133,7 +133,7 @@
                   "header": "What is intermediate rent product name?",
                   "type": "text"
                 },
-                "needs_type": {
+                "needstype": {
                   "check_answer_label": "What is the needs type?",
                   "header": "What is the needs type?",
                   "hint_text": "",
@@ -1062,26 +1062,6 @@
                   "header": "Please state the tenancy type",
                   "hint_text": "",
                   "type": "text"
-                }
-              }
-            },
-            "letting_type": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "lettype": {
-                  "check_answer_label": "Type of letting",
-                  "header": "Which type of letting is this?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Social Rent - General Needs",
-                    "1": "Social Rent - Supporting Housing",
-                    "2": "Affordable Rent - General Needs",
-                    "3": "Affordable Rent - Supporting Housing",
-                    "4": "Rent To Buy - General Needs",
-                    "5": "Rent To Buy - Supported Housing"
-                  }
                 }
               }
             },

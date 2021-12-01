@@ -40,6 +40,6 @@ module TasklistHelper
                      else
                        "#"
                      end
-    govuk_link_to(subsection.label, next_page_path, class: "task-name")
+    govuk_link_to(subsection.label, next_page_path.to_s.dasherize, class: "task-name")
   end
 end

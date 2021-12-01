@@ -162,10 +162,10 @@ RSpec.describe CaseLogsController, type: :controller do
 
       it "routes to the appropriate conditional page based on the question answer of the current page" do
         post :submit_form, params: { id: id, case_log: case_log_form_conditional_question_yes_params }
-        expect(response).to redirect_to("/case_logs/#{id}/conditional_question_yes_page")
+        expect(response).to redirect_to("/case-logs/#{id}/conditional-question-yes-page")
 
         post :submit_form, params: { id: id, case_log: case_log_form_conditional_question_no_params }
-        expect(response).to redirect_to("/case_logs/#{id}/conditional_question_no_page")
+        expect(response).to redirect_to("/case-logs/#{id}/conditional-question-no-page")
       end
     end
   end

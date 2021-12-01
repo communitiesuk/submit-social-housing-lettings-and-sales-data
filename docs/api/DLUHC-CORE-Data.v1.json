@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/case_logs/:id": {
+    "/case-logs/:id": {
       "parameters": [],
       "get": {
         "summary": "Get Case Log Info by Case Log ID",
@@ -180,7 +180,7 @@
         ]
       }
     },
-    "/case_logs": {
+    "/case-logs": {
       "post": {
         "summary": "Create New Case Log",
         "operationId": "post-caselog",
@@ -306,7 +306,6 @@
             "startertenancy": "No",
             "tenancylength": "No",
             "tenancy": "Secure (including flexible)",
-            "lettype": "Affordable Rent - General Needs",
             "landlord": "This landlord",
             "la": "Barnet",
             "previous_postcode": "NW1 5TY",
