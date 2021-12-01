@@ -10,10 +10,8 @@
   <% @organisation.users.each do |user| %>
     <%= table.body do |body| %>
       <%= body.row do |row|
-        user_cell = [govuk_link_to(user.name, user), user.email].join("\n")
-        org_cell = [user.organisation.name, user.role].join("\n")
-        row.cell(text: simple_format(user_cell, {}, wrapper_tag: "div"))
-        row.cell(text: simple_format(org_cell, {}, wrapper_tag: "div"))
+        row.cell(text: simple_format(user_cell(user), {}, wrapper_tag: "div"))
+        row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div"))
         row.cell(text: user.last_sign_in_at&.strftime("%d %b %Y") )
       end %>
     <% end %>

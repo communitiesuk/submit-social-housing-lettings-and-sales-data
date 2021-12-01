@@ -20,3 +20,8 @@ $govuk-global-styles: true;
 //   display: block;
 //   border: 1px solid blue
 // }
+
+//overrides
+.app-\!-colour-muted {
+  color: $govuk-secondary-text-colour !important;
+}
