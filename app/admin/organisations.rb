@@ -17,7 +17,7 @@ ActiveAdmin.register Organisation do
     selectable_column
     id_column
     column :name
-    column "org_type", :providertype
+    column "Org type", :providertype
     column "Address Line 1", :address_line1
     column "Address Line 2", :address_line2
     column :postcode

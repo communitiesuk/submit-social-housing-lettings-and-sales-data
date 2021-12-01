@@ -192,7 +192,7 @@ private
     self.incref = 1 if net_income_known == "Prefer not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
-    self.lettype = "#{renttype} #{needstype} #{owning_organisation.org_type}" if renttype.present? && needstype.present? && owning_organisation.org_type.present?
+    self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
   end
 
   def all_fields_completed?

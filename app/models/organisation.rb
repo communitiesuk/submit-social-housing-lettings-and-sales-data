@@ -4,7 +4,7 @@ class Organisation < ApplicationRecord
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
 
   include DbEnums
-  enum org_type: DbEnums.org_type, _suffix: true
+  enum "Org type": DbEnums.org_type, _suffix: true
 
   def case_logs
     CaseLog.for_organisation(self)
@@ -27,7 +27,7 @@ class Organisation < ApplicationRecord
       name: name,
       address: address_string,
       telephone_number: phone,
-      type: org_type,
+      type: "Org type",
       local_authorities_operated_in: local_authorities,
       holds_own_stock: holds_own_stock,
       other_stock_owners: other_stock_owners,
