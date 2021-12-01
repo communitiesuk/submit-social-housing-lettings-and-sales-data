@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     passwords: "users/passwords",
     sessions: "users/sessions",
     registrations: "users/registrations"
-  }
+  }, path_names: { sign_in: 'sign-in', sign_out: 'sign-out', sign_up: 'invite' }
 
   devise_scope :user do
     get "user", to: "users/account#index"
