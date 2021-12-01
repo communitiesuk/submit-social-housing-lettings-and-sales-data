@@ -153,6 +153,15 @@ class CaseLog < ApplicationRecord
 
 private
 
+  RENT_TYPE_MAPPING = {
+    "Social Rent" => "Social Rent",
+    "Affordable Rent" => "Affordable Rent",
+    "London Affordable Rent" => "Affordable Rent",
+    "Rent To Buy" => "Intermediate Rent",
+    "London Living Rent" => "Intermediate Rent",
+    "Other Intermediate Rent Product" => "Intermediate Rent",
+  }.freeze
+
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
                     "completed"
@@ -165,10 +174,14 @@ private
   end
 
   def set_derived_fields
-    self.postcode = UKPostcode.parse(property_postcode).outcode if property_postcode.present?
-    self.postcod2 = UKPostcode.parse(property_postcode).incode if property_postcode.present?
-    self.ppostc1 = UKPostcode.parse(previous_postcode).outcode if previous_postcode.present?
-    self.ppostc2 = UKPostcode.parse(previous_postcode).incode if previous_postcode.present?
+    if property_postcode.present?
+      self.postcode = UKPostcode.parse(property_postcode).outcode
+      self.postcod2 = UKPostcode.parse(property_postcode).incode
+    end
+    if previous_postcode.present?
+      self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
+      self.ppostc2 = UKPostcode.parse(previous_postcode).incode
+    end
     if mrcdate.present?
       self.mrcday = mrcdate.day
       self.mrcmonth = mrcdate.month
@@ -176,16 +189,7 @@ private
     end
     self.incref = 1 if net_income_known == "Prefer not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
-
-    rent_type_mapping = {
-      "Social Rent" => "Social Rent",
-      "Affordable Rent" => "Affordable Rent",
-      "London Affordable Rent" => "Affordable Rent",
-      "Rent To Buy" => "Intermediate Rent",
-      "London Living Rent" => "Intermediate Rent",
-      "Other Intermediate Rent Product" => "Intermediate Rent",
-    }
-    self.renttype = rent_type_mapping[rent_type]
+    self.renttype = RENT_TYPE_MAPPING[rent_type]
   end
 
   def all_fields_completed?
