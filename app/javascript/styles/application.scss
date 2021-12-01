@@ -12,6 +12,7 @@ $govuk-image-url-function: frontend-image-url;
 @import "~govuk-frontend/govuk/all";
 
 @import '_task-list';
+@import '_tab-navigation';
 
 $govuk-global-styles: true;
 
@@ -19,3 +20,8 @@ $govuk-global-styles: true;
 //   display: block;
 //   border: 1px solid blue
 // }
+
+//overrides
+.app-\!-colour-muted {
+  color: $govuk-secondary-text-colour !important;
+}

@@ -35,6 +35,7 @@ gem "json-schema"
 gem "devise"
 gem "turbo-rails", "~> 0.8"
 gem "uk_postcode"
+gem "view_component"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

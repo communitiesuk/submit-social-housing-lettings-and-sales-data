@@ -13,10 +13,22 @@ Rails.application.routes.draw do
   root to: "test#index"
   get "about", to: "about#index"
   get "/users/account", to: "users/account#index"
-  get "/users/account/personal_details", to: "users/account#personal_details"
 
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
+
+  resources :users do
+    collection do
+      get "account/personal_details", to: "users/account#personal_details"
+    end
+  end
+
+  resources :organisations do
+    member do
+      get "details", to: "organisations#show"
+      get "users", to: "organisations#users"
+    end
+  end
 
   resources :case_logs do
     collection do
