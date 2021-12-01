@@ -14,8 +14,9 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params.merge(org_params))
-    redirect_to @user
+    @user = User.create!(user_params.merge(org_params).merge(password_params))
+    @user.send_reset_password_instructions
+    redirect_to users_organisation_path(current_user.organisation)
   end
 
   def edit_password
@@ -23,6 +24,10 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def password_params
+    { password: SecureRandom.hex(8) }
+  end
 
   def org_params
     { organisation: current_user.organisation }
