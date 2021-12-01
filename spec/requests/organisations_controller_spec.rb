@@ -4,6 +4,7 @@ RSpec.describe OrganisationsController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   let(:headers) { { "Accept" => "text/html" } }
+  let(:page) { Capybara::Node::Simple.new(response.body) }
 
   context "details tab" do
     before do
@@ -40,9 +41,7 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     it "shows a new user button" do
-      expected_html = "<a class=\"govuk-button\""
-      expect(response.body).to include(expected_html)
-      expect(response.body).to include("Invite user")
+      expect(page).to have_link("Invite user")
     end
 
     it "shows a table of users" do
