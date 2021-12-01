@@ -30,10 +30,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_logs do
+  resources :case_logs, :path => '/case-logs' do
     collection do
-      post "/bulk_upload", to: "bulk_upload#bulk_upload"
-      get "/bulk_upload", to: "bulk_upload#show"
+      post "/bulk-upload", to: "bulk_upload#bulk_upload"
+      get "/bulk-upload", to: "bulk_upload#show"
     end
 
     member do
@@ -41,12 +41,12 @@ Rails.application.routes.draw do
     end
 
     form.pages.map do |page|
-      get page.id.to_s, to: "case_logs##{page.id}"
-      get "#{page.id}/soft_validations", to: "soft_validations#show" if page.has_soft_validations?
+      get page.id.to_s.dasherize, to: "case_logs##{page.id}"
+      get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
     end
 
     form.subsections.map do |subsection|
-      get "#{subsection.id}/check_answers", to: "case_logs#check_answers"
+      get "#{subsection.id.to_s.dasherize}/check-answers", to: "case_logs#check_answers"
     end
   end
 end
