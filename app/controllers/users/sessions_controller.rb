@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
       resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
     end
     if params.dig("user", "password").empty?
-      resource.errors.add :password, "Please enter password"
+      resource.errors.add :password, "Enter a password"
     end
     if resource.errors.present?
       render :new, status: :unprocessable_entity
