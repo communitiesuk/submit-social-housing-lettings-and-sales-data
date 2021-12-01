@@ -123,6 +123,7 @@ The JSON should follow the structure:
                   "min": Integer, // numeric only
                   "max": Integer, // numeric only
                   "step": Integer, // numeric only
+                  "width": Integer, // text and numeric only
                   "answer_options": { // checkbox and radio only
                     "0": String,
                     "1": String
