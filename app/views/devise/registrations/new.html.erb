@@ -1,23 +1,28 @@
-<h2>Sign up</h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <%= f.govuk_email_field :email,
-    label: { text: "Email address" },
-    autocomplete: "email"
-  %>
-
-  <%= f.govuk_password_field :password,
-    hint: @minimum_password_length ? { text: "#{@minimum_password_length} characters minimum" } : nil,
-    autocomplete: "new-password"
-  %>
-
-  <%= f.govuk_password_field :password_confirmation,
-    autocomplete: "new-password"
-  %>
-
-  <%= f.govuk_submit "Sign up" %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<%= form_for(resource, as: resource_name, url: user_registration_path(), html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Invite user to submit CORE data</h1>
+
+      <%= f.govuk_text_field :name,
+        autocomplete: "name"
+      %>
+
+      <%= f.govuk_email_field :email,
+        label: { text: "Email address" },
+        autocomplete: "email",
+        value: resource.email
+      %>
+
+      <%= f.govuk_submit "Continue" %>
+    </div>
+  </div>
+<% end %>
