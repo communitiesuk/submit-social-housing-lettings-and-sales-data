@@ -12,11 +12,11 @@ class Form
   end
 
   def get_subsection(id)
-    subsections.find { |s| s.id == id }
+    subsections.find { |s| s.id == id.to_s.underscore }
   end
 
   def get_page(id)
-    pages.find { |p| p.id == id }
+    pages.find { |p| p.id == id.to_s.underscore }
   end
 
   def subsection_for_page(page)

@@ -37,7 +37,7 @@
         service_url: '/'
       ) do |component|
         if current_user.nil?
-          component.navigation_item(text: 'Case logs', href: '/case_logs')
+          component.navigation_item(text: 'Case logs', href: case_logs_path)
         elsif
           component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
           component.navigation_item(text: 'Your account', href: '/users/account')

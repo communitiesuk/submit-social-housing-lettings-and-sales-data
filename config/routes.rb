@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, skip: [:registrations]
+  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, path_names: { sign_in: 'sign-in', sign_out: 'sign-out' }, skip: [:registrations]
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get "account/personal_details", to: "users/account#personal_details"
+      get "account/personal-details", to: "users/account#personal_details"
     end
   end
 
@@ -30,10 +30,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_logs do
+  resources :case_logs, :path => '/case-logs' do
     collection do
-      post "/bulk_upload", to: "bulk_upload#bulk_upload"
-      get "/bulk_upload", to: "bulk_upload#show"
+      post "/bulk-upload", to: "bulk_upload#bulk_upload"
+      get "/bulk-upload", to: "bulk_upload#show"
     end
 
     member do
@@ -41,12 +41,12 @@ Rails.application.routes.draw do
     end
 
     form.pages.map do |page|
-      get page.id.to_s, to: "case_logs##{page.id}"
-      get "#{page.id}/soft_validations", to: "soft_validations#show" if page.has_soft_validations?
+      get page.id.to_s.dasherize, to: "case_logs##{page.id}"
+      get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
     end
 
     form.subsections.map do |subsection|
-      get "#{subsection.id}/check_answers", to: "case_logs#check_answers"
+      get "#{subsection.id.to_s.dasherize}/check-answers", to: "case_logs#check_answers"
     end
   end
 end

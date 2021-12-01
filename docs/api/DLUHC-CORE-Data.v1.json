@@ -12,7 +12,7 @@
     }
   ],
   "paths": {
-    "/case_logs/:id": {
+    "/case-logs/:id": {
       "parameters": [],
       "get": {
         "summary": "Get Case Log Info by Case Log ID",
@@ -180,7 +180,7 @@
         ]
       }
     },
-    "/case_logs": {
+    "/case-logs": {
       "post": {
         "summary": "Create New Case Log",
         "operationId": "post-caselog",
