@@ -10,6 +10,7 @@ class Organisation < ApplicationRecord
     CaseLog.for_organisation(self)
   end
 
+
   def completed_case_logs
     case_logs.completed
   end
@@ -27,7 +28,7 @@ class Organisation < ApplicationRecord
       name: name,
       address: address_string,
       telephone_number: phone,
-      type: org_type,
+      type: providertype,
       local_authorities_operated_in: local_authorities,
       holds_own_stock: holds_own_stock,
       other_stock_owners: other_stock_owners,
