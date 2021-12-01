@@ -8,8 +8,9 @@
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
       <h1 class="govuk-heading-l">Reset password</h1>
-      <%= render "devise/shared/error_messages", resource: resource %>
 
       <p class="govuk-body">Enter the email address you used to create your account.</p>
       <p class="govuk-body">We’ll email you a link to reset your password. This link will expire in 3 hours.</p>

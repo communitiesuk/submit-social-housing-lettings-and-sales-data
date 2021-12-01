@@ -1,4 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
+  include Helpers::Email
+
   def create
     self.resource = resource_class.new
     if params.dig("user", "email").empty?
@@ -14,11 +16,5 @@ class Users::SessionsController < Devise::SessionsController
     else
       super
     end
-  end
-
-private
-
-  def email_valid?(email)
-    email =~ URI::MailTo::EMAIL_REGEXP
   end
 end

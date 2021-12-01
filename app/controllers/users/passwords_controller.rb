@@ -1,8 +1,19 @@
 class Users::PasswordsController < Devise::PasswordsController
+  include Helpers::Email
+
   def reset_confirmation
+    self.resource = resource_class.new
     @email = params["email"]
-    flash[:notice] = "Reset password instructions have been sent to #{@email}"
-    render "devise/confirmations/reset"
+    if @email.empty?
+      resource.errors.add :email, "Enter an email address"
+      render "devise/passwords/new", status: :unprocessable_entity
+    elsif !email_valid?(@email)
+      resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
+      render "devise/passwords/new", status: :unprocessable_entity
+    else
+      flash[:notice] = "Reset password instructions have been sent to #{@email}"
+      render "devise/confirmations/reset"
+    end
   end
 
   def create
