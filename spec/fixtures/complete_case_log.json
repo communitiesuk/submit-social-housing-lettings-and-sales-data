@@ -54,7 +54,6 @@
     "startertenancy": "No",
     "tenancylength": "5",
     "tenancy": "Secure (including flexible)",
-    "lettype": "Affordable Rent - General Needs",
     "landlord": "This landlord",
     "la": "Barnet",
     "property_postcode": "NW1 5TY",
@@ -126,9 +125,9 @@
     "property_owner_organisation": "",
     "property_manager_organisation": "",
     "sale_or_letting": "",
-    "rent_type": "",
+    "rent_type": "Social Rent",
     "intermediate_rent_product_name": "",
-    "needs_type": "",
+    "needstype": "General Needs",
     "sale_completion_date": "01/01/2020",
     "purchaser_code": "",
     "propcode": "123",
@@ -143,7 +142,6 @@
     "property_wheelchair_accessible": "Yes",
     "void_or_renewal_date": "05/05/2020",
     "tenant_same_property_renewal": "Yes",
-    "new_build_handover_date": "01/01/2019",
-    "renttype": 1
+    "new_build_handover_date": "01/01/2019"
   }
 }
