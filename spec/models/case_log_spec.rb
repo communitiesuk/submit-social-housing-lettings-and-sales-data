@@ -845,7 +845,9 @@ RSpec.describe Form, type: :model do
         owning_organisation: organisation,
         property_postcode: "M1 1AE",
         previous_postcode: "M2 2AE",
-        mrcdate: Time.zone.local(2021, 5, 4),
+        # rubocop:disable Style/DateTime
+        mrcdate: DateTime.new(2021, 5, 4),
+        # rubocop:enable Style/DateTime
         net_income_known: "Prefer not to say",
         other_hhmemb: 6,
         rent_type: "London Living Rent",
