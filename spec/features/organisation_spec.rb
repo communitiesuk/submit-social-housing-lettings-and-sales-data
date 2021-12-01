@@ -34,6 +34,9 @@ RSpec.describe "User Features" do
       click_link("Invite user")
       expect(page).to have_current_path("/users/new")
       expect(page).to have_content("Invite user to submit CORE data")
+      fill_in("user[name]", with: "New User")
+      fill_in("user[email]", with: "new_user@example.com")
+      expect { click_button("Continue") }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 end
