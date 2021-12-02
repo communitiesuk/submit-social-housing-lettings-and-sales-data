@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   def update
     if current_user.update(user_params)
       bypass_sign_in current_user
-      flash[:notice] = "Your password has been changed successfully. You are now signed in."
+      flash[:notice] = I18n.t("devise.passwords.updated")
       redirect_to user_path(current_user)
     end
   end
