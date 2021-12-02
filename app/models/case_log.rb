@@ -156,15 +156,6 @@ class CaseLog < ApplicationRecord
 
 private
 
-  RENT_TYPE_MAPPING = {
-    "Social rent" => "Social Rent",
-    "Affordable rent" => "Affordable Rent",
-    "London Affordable rent" => "Affordable Rent",
-    "Rent to buy" => "Intermediate Rent",
-    "London living rent" => "Intermediate Rent",
-    "Other intermediate rent product" => "Intermediate Rent",
-  }.freeze
-
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
                     "completed"
