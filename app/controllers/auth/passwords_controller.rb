@@ -1,4 +1,4 @@
-class Users::PasswordsController < Devise::PasswordsController
+class Auth::PasswordsController < Devise::PasswordsController
   include Helpers::Email
 
   def reset_confirmation

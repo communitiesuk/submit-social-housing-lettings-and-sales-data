@@ -11,19 +11,19 @@
       <%= summary_list.row do |row|
         row.key { 'Name' }
         row.value { current_user.name }
-        row.action(visually_hidden_text: 'name', href: '/users/account/personal-details', html_attributes: { 'data-qa': 'change-name' })
+        row.action(visually_hidden_text: 'name', href: edit_user_path, html_attributes: { 'data-qa': 'change-name' })
       end %>
 
       <%= summary_list.row() do |row|
         row.key { 'Email address' }
         row.value { current_user.email }
-        row.action(visually_hidden_text: 'email address', href: '/users/account/personal-details', html_attributes: { 'data-qa': 'change-email' })
+        row.action(visually_hidden_text: 'email address', href: edit_user_path, html_attributes: { 'data-qa': 'change-email' })
       end %>
 
       <%= summary_list.row do |row|
         row.key { 'Password' }
         row.value { '••••••••' }
-        row.action(visually_hidden_text: 'password', href: edit_user_registration_path, html_attributes: { 'data-qa': 'change-password' })
+        row.action(visually_hidden_text: 'password', href: password_edit_user_path, html_attributes: { 'data-qa': 'change-password' })
       end %>
 
       <%= summary_list.row do |row|

@@ -1,0 +1,28 @@
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
+<% end %>
+
+<%= form_for(@resource, as: :user, html: { method: :post }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">Invite user to submit CORE data</h1>
+
+      <%= f.govuk_text_field :name,
+        autocomplete: "name"
+      %>
+
+      <%= f.govuk_email_field :email,
+        label: { text: "Email address" },
+        autocomplete: "email",
+        value: @resource.email
+      %>
+
+      <%= f.govuk_submit "Continue" %>
+    </div>
+  </div>
+<% end %>

@@ -1,4 +1,4 @@
-class Users::SessionsController < Devise::SessionsController
+class Auth::SessionsController < Devise::SessionsController
   include Helpers::Email
 
   def create

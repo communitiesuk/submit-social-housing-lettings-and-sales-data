@@ -96,7 +96,7 @@ RSpec.describe "User Features" do
     end
 
     it "tries to access account page, redirects to log in page" do
-      visit("/users/account")
+      visit("/users/#{user.id}")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
   end
@@ -141,42 +141,46 @@ RSpec.describe "User Features" do
       visit("/case-logs")
       expect(page).to have_link("Your account")
       click_link("Your account")
-      expect(page).to have_current_path("/users/account")
-    end
-
-    it "main page is present and accessible" do
-      visit("/users/account")
-      expect(page).to have_content("Your account")
-    end
-
-    it "personal details page is present and accessible" do
-      visit("/users/account/personal-details")
-      expect(page).to have_content("Change your personal details")
-    end
-
-    it "edit password page present and accessible" do
-      visit("users/edit")
-      expect(page).to have_content("Change your password")
+      expect(page).to have_current_path("/users/#{user.id}")
     end
 
     it "can navigate to change your password page from main account page" do
-      visit("/users/account")
+      visit("/users/#{user.id}")
       find('[data-qa="change-password"]').click
       expect(page).to have_content("Change your password")
       fill_in("user[current_password]", with: "pAssword1")
       fill_in("user[password]", with: "Password123!")
       click_button("Update")
-      expect(page).to have_current_path("/users/account")
+      expect(page).to have_current_path("/users/#{user.id}")
     end
 
     it "allow user to change name" do
-      visit("/users/account")
+      visit("/users/#{user.id}")
       find('[data-qa="change-name"]').click
       expect(page).to have_content("Change your personal details")
       fill_in("user[name]", with: "Test New")
       click_button("Save changes")
-      expect(page).to have_current_path("/users/account")
+      expect(page).to have_current_path("/users/#{user.id}")
       expect(page).to have_content("Test New")
+    end
+  end
+
+  context "Adding a new user" do
+    before(:each) do
+      visit("/case-logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: "pAssword1")
+      click_button("Sign in")
+    end
+
+    it "validates email" do
+      visit("users/new")
+      fill_in("user[name]", with: "New User")
+      fill_in("user[email]", with: "thisis'tanemail")
+      click_button("Continue")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+      expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
     end
   end
 end

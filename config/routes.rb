@@ -1,25 +1,22 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }, skip: [:registrations]
+  devise_for :users, controllers: {
+    passwords: "auth/passwords",
+    sessions: "auth/sessions",
+  }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }
+
   devise_scope :user do
-    get "confirmations/reset", to: "users/passwords#reset_confirmation"
-    get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
-    patch "users" => "users/registrations#update", :as => "user_registration"
-    patch "details" => "users/account#update", :as => "account_update"
+    get "confirmations/reset", to: "auth/passwords#reset_confirmation"
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
   root to: "test#index"
   get "about", to: "about#index"
-  get "/users/account", to: "users/account#index"
-
-  form_handler = FormHandler.instance
-  form = form_handler.get_form("2021_2022")
 
   resources :users do
-    collection do
-      get "account/personal-details", to: "users/account#personal_details"
+    member do
+      get "password/edit", to: "users#edit_password"
     end
   end
 
@@ -27,17 +24,21 @@ Rails.application.routes.draw do
     member do
       get "details", to: "organisations#show"
       get "users", to: "organisations#users"
+      get "users/invite", to: "users/account#new"
     end
   end
 
+  form_handler = FormHandler.instance
+  form = form_handler.get_form("2021_2022")
+
   resources :case_logs, path: "/case-logs" do
     collection do
-      post "/bulk-upload", to: "bulk_upload#bulk_upload"
-      get "/bulk-upload", to: "bulk_upload#show"
+      post "bulk-upload", to: "bulk_upload#bulk_upload"
+      get "bulk-upload", to: "bulk_upload#show"
     end
 
     member do
-      post "/form", to: "case_logs#submit_form"
+      post "form", to: "case_logs#submit_form"
     end
 
     form.pages.map do |page|
