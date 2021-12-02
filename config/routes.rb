@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, path_names: { sign_in: 'sign-in', sign_out: 'sign-out' }, skip: [:registrations]
+  devise_for :users, controllers: { passwords: "users/passwords", sessions: "users/sessions" }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }, skip: [:registrations]
   devise_scope :user do
     get "confirmations/reset", to: "users/passwords#reset_confirmation"
     get "users/edit" => "devise/registrations#edit", :as => "edit_user_registration"
@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_logs, :path => '/case-logs' do
+  resources :case_logs, path: "/case-logs" do
     collection do
       post "/bulk-upload", to: "bulk_upload#bulk_upload"
       get "/bulk-upload", to: "bulk_upload#show"
