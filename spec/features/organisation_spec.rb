@@ -38,8 +38,10 @@ RSpec.describe "User Features" do
         expect(page).to have_content("Invite user to submit CORE data")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "new_user@example.com")
+        choose("user-role-data-provider-field")
         expect { click_button("Continue") }.to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(page).to have_current_path("/organisations/#{org_id}/users")
+        expect(User.last.role).to eq("data_provider")
       end
     end
   end
