@@ -20,6 +20,10 @@
         autocomplete: "name"
       %>
 
+      <%= roles = User::ROLES.map { |key, value| OpenStruct.new(id:key, name: key.humanize) }
+        f.govuk_collection_select :role, roles, :id, :name, label: { text: "Role" }
+      %>
+
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
