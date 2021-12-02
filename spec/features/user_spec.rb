@@ -173,6 +173,15 @@ RSpec.describe "User Features" do
       click_button("Sign in")
     end
 
+    it "validates an email has been provided" do
+      visit("users/new")
+      fill_in("user[name]", with: "New User")
+      click_button("Continue")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+      expect(page).to have_content(/Enter an email address/)
+    end
+
     it "validates email" do
       visit("users/new")
       fill_in("user[name]", with: "New User")
