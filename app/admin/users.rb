@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :name, :email, :password, :password_confirmation, :organisation_id
+  permit_params :name, :email, :password, :password_confirmation, :organisation_id, :role
 
   controller do
     def update_resource(object, attributes)
@@ -14,6 +14,7 @@ ActiveAdmin.register User do
     column :name
     column :email
     column :organisation
+    column(:role) { |u| u.role.to_s.humanize }
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
@@ -34,6 +35,7 @@ ActiveAdmin.register User do
       f.input :password
       f.input :password_confirmation
       f.input :organisation
+      f.input :role
     end
     f.actions
   end

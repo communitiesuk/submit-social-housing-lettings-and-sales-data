@@ -40,5 +40,11 @@ RSpec.describe User, type: :model do
       expect(user.completed_case_logs.to_a).to eq([owned_case_log])
       expect(user.not_completed_case_logs.to_a).to eq([managed_case_log])
     end
+
+    it "has a role" do
+      expect(user.role).to eq("data_provider")
+      expect(user.data_provider?).to be true
+      expect(user.data_coordinator?).to be false
+    end
   end
 end

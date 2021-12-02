@@ -30,6 +30,7 @@ describe Admin::UsersController, type: :controller do
           name: "Jane",
           password: "pAssword1",
           organisation_id: organisation.id,
+          role: "data_coordinator",
         },
       }
     end
@@ -49,6 +50,7 @@ describe Admin::UsersController, type: :controller do
         expect(page).to have_field("user_email")
         expect(page).to have_field("user_name")
         expect(page).to have_field("user_organisation_id")
+        expect(page).to have_field("user_role")
         expect(page).to have_field("user_password")
         expect(page).to have_field("user_password_confirmation")
       end

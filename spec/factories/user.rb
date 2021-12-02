@@ -4,7 +4,10 @@ FactoryBot.define do
     name { "Danny Rojas" }
     password { "pAssword1" }
     organisation
-    role { "Data Provider" }
+    role { "data_provider" }
+    trait :data_coordinator do
+      role { "data_coordinator" }
+    end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
