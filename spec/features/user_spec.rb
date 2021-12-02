@@ -164,4 +164,23 @@ RSpec.describe "User Features" do
       expect(page).to have_content("Test New")
     end
   end
+
+  context "Adding a new user" do
+    before(:each) do
+      visit("/case-logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: "pAssword1")
+      click_button("Sign in")
+    end
+
+    it "validates email" do
+      visit("users/new")
+      fill_in("user[name]", with: "New User")
+      fill_in("user[email]", with: "thisis'tanemail")
+      click_button("Continue")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_selector("#user-email-field-error")
+      expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
+    end
+  end
 end

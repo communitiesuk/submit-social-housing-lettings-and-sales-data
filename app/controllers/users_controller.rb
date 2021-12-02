@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   include Devise::Controllers::SignInOut
+  include Helpers::Email
   before_action :authenticate_user!
 
   def update
@@ -14,9 +15,19 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create!(user_params.merge(org_params).merge(password_params))
-    @user.send_reset_password_instructions
-    redirect_to users_organisation_path(current_user.organisation)
+    @resource = User.new
+    if user_params["email"].empty?
+      @resource.errors.add :email, "Enter an email address"
+    elsif !email_valid?(user_params["email"])
+      @resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
+    end
+    if @resource.errors.present?
+      render :new, status: :unprocessable_entity
+    else
+      @user = User.create!(user_params.merge(org_params).merge(password_params))
+      @user.send_reset_password_instructions
+      redirect_to users_organisation_path(current_user.organisation)
+    end
   end
 
   def edit_password
