@@ -1,4 +1,4 @@
-<% content_for :title, subsection %>
+<% content_for :title, page.header.present? ? page.header : page.questions.first().header.html_safe %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
@@ -16,6 +16,7 @@
           <%= page.header %>
         </h1>
       <% end %>
+
       <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
         <%= f.govuk_error_summary %>
         <% page.questions.map do |question| %>
