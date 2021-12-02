@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
   <head>
-    <title>DLUHC CORE Data Collection</title>
+    <title><%= yield(:title).present? ? yield(:title) : t('service_name') %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
