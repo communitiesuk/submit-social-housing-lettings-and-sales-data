@@ -1,3 +1,5 @@
+<% content_for :title, "Change your personal details" %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: 'Back',
@@ -8,7 +10,9 @@
 <%= form_for(current_user, as: :user, html: { method: :patch }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Change your personal details</h1>
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
 
       <%= f.govuk_text_field :name,
         autocomplete: "name"

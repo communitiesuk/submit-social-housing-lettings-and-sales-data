@@ -1,3 +1,5 @@
+<% content_for :title, "Invite user to submit CORE data" %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: 'Back',
@@ -10,7 +12,9 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <h1 class="govuk-heading-l">Invite user to submit CORE data</h1>
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
 
       <%= f.govuk_text_field :name,
         autocomplete: "name"
