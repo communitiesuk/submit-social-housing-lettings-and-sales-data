@@ -3,10 +3,9 @@
     Your organisation
   </h1>
 
-  <%= render TabNavigationComponent.new(items: [
-    { name: t('Details'), url: details_organisation_path(@organisation) },
-    { name: t('Users'), url: users_organisation_path(@organisation) },
-  ]) %>
+  <% items = tab_items(current_user) %>
+
+  <%= render TabNavigationComponent.new(items: items) %>
 
   <h2 class="govuk-visually-hidden"><%= content_for(:tab_title) %></h2>
 
