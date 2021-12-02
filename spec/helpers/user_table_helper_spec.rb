@@ -12,7 +12,7 @@ RSpec.describe UserTableHelper do
 
   describe "#org_cell" do
     it "returns the users org name and role separated by a newline character" do
-      expected_html = "DLUHC\n<span class='app-!-colour-muted'>Data Provider</span>"
+      expected_html = "DLUHC\n<span class='app-!-colour-muted'>Data provider</span>"
       expect(org_cell(user)).to match(expected_html)
     end
   end

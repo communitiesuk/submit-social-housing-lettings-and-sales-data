@@ -6,7 +6,7 @@ module UserTableHelper
   end
 
   def org_cell(user)
-    role = "<span class='app-!-colour-muted'>#{user.role}</span>"
+    role = "<span class='app-!-colour-muted'>#{user.role.to_s.humanize}</span>"
     [user.organisation.name, role].join("\n")
   end
 end
