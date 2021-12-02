@@ -1,6 +1,7 @@
 class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_organisation
+  before_action :authenticate_scope!
 
   def show
     redirect_to details_organisation_path(@organisation)
@@ -19,6 +20,10 @@ class OrganisationsController < ApplicationController
   end
 
 private
+
+  def authenticate_scope!
+    head :unauthorized if current_user.organisation != @organisation
+  end
 
   def find_organisation
     @organisation = Organisation.find(params[:id])
