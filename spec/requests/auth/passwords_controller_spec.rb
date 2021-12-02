@@ -32,7 +32,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
   end
 
   context "when a password reset is requested the email" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
     let(:email) { user.email }
 
     it "should contain the correct email" do
