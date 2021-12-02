@@ -157,12 +157,12 @@ class CaseLog < ApplicationRecord
 private
 
   RENT_TYPE_MAPPING = {
-    "Social Rent" => "Social Rent",
-    "Affordable Rent" => "Affordable Rent",
-    "London Affordable Rent" => "Affordable Rent",
-    "Rent To Buy" => "Intermediate Rent",
-    "London Living Rent" => "Intermediate Rent",
-    "Other Intermediate Rent Product" => "Intermediate Rent",
+    "Social rent" => "Social Rent",
+    "Affordable rent" => "Affordable Rent",
+    "London Affordable rent" => "Affordable Rent",
+    "Rent to buy" => "Intermediate Rent",
+    "London living rent" => "Intermediate Rent",
+    "Other intermediate rent product" => "Intermediate Rent",
   }.freeze
 
   def update_status!
