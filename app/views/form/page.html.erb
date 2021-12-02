@@ -1,4 +1,4 @@
-<% content_for :title, "#{subsection} – #{t('service_name')} - GOV.UK" %>
+<% content_for :title, browser_title(subsection) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(

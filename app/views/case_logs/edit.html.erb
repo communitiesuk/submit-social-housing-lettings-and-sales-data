@@ -1,4 +1,4 @@
-<% content_for :title, "Case log #{@case_log.id} – #{t('service_name')} - GOV.UK" %>
+<% content_for :title, browser_title("Case log #{@case_log.id}") %>
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
