@@ -5,13 +5,26 @@ RSpec.describe OrganisationsController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
 
+  describe "#show" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+    before do
+      sign_in user
+      get "/organisations/#{organisation.id}", headers: headers, params: {}
+    end
+
+    it "redirects to details" do
+      expect(response).to have_http_status(:redirect)
+    end
+  end
+
   context "As a data coordinator user" do
     let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
     context "details tab" do
       before do
         sign_in user
-        get "/organisations/#{organisation.id}", headers: headers, params: {}
+        get "/organisations/#{organisation.id}/details", headers: headers, params: {}
       end
 
       it "shows the tab navigation" do
@@ -65,7 +78,7 @@ RSpec.describe OrganisationsController, type: :request do
     context "details tab" do
       before do
         sign_in user
-        get "/organisations/#{organisation.id}", headers: headers, params: {}
+        get "/organisations/#{organisation.id}/details", headers: headers, params: {}
       end
 
       it "shows the tab navigation" do

@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   resources :organisations do
     member do
-      get "details", to: "organisations#show"
+      get "details", to: "organisations#details"
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
     end
