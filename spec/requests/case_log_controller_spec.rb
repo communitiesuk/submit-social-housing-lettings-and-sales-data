@@ -231,36 +231,6 @@ RSpec.describe CaseLogsController, type: :request do
           end
         end
       end
-
-      context "form pages" do
-        let(:headers) { { "Accept" => "text/html" } }
-
-        context "case logs that are not owned or managed by your organisation" do
-          before do
-            sign_in user
-            get "/case-logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
-          end
-
-          it "does not show form pages for case logs you don't have access to" do
-            expect(response).to have_http_status(:not_found)
-          end
-        end
-      end
-
-      context "check answers pages" do
-        let(:headers) { { "Accept" => "text/html" } }
-
-        context "case logs that are not owned or managed by your organisation" do
-          before do
-            sign_in user
-            get "/case-logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
-          end
-
-          it "does not show a check answers for case logs you don't have access to" do
-            expect(response).to have_http_status(:not_found)
-          end
-        end
-      end
     end
   end
 
@@ -411,89 +381,6 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "returns an unprocessable entity 422" do
         expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
-
-  describe "Submit Form" do
-    let(:user) { FactoryBot.create(:user) }
-    let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
-    let(:organisation) { user.organisation }
-    let(:case_log) do
-      FactoryBot.create(
-        :case_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
-      )
-    end
-    let(:page_id) { "person_1_age" }
-    let(:params) do
-      {
-        id: case_log.id,
-        case_log: {
-          page: page_id,
-          age1: answer,
-        },
-      }
-    end
-
-    before do
-      allow(FormHandler.instance).to receive(:get_form).and_return(form)
-      sign_in user
-      post "/case-logs/#{case_log.id}/form", params: params
-    end
-
-    context "invalid answers" do
-      let(:answer) { 2000 }
-
-      it "re-renders the same page with errors if validation fails" do
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-
-    context "valid answers" do
-      let(:answer) { 20 }
-
-      it "re-renders the same page with errors if validation fails" do
-        expect(response).to have_http_status(:redirect)
-      end
-
-      let(:params) do
-        {
-          id: case_log.id,
-          case_log: {
-            page: page_id,
-            age1: answer,
-            age2: 2000,
-          },
-        }
-      end
-
-      it "only updates answers that apply to the page being submitted" do
-        case_log.reload
-        expect(case_log.age1).to eq(answer)
-        expect(case_log.age2).to be nil
-      end
-    end
-
-    context "case logs that are not owned or managed by your organisation" do
-      let(:answer) { 25 }
-      let(:other_organisation) { FactoryBot.create(:organisation) }
-      let(:unauthorized_case_log) do
-        FactoryBot.create(
-          :case_log,
-          owning_organisation: other_organisation,
-          managing_organisation: other_organisation,
-        )
-      end
-
-      before do
-        sign_in user
-        post "/case-logs/#{unauthorized_case_log.id}/form", params: params
-      end
-
-      it "does not let you post form answers to case logs you don't have access to" do
-        expect(response).to have_http_status(:not_found)
       end
     end
   end

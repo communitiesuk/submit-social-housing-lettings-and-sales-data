@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   include Devise::Controllers::SignInOut
   include Helpers::Email
   before_action :authenticate_user!
-  before_action :find_resource, except: [:new, :create]
-  before_action :authenticate_scope!, except: [:new, :create]
+  before_action :find_resource, except: %i[new create]
+  before_action :authenticate_scope!, except: %i[new create]
 
   def update
     if @user.update(user_params)
