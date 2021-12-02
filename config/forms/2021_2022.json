@@ -10,11 +10,11 @@
           "label": "About this log",
           "pages": {
             "gdpr_acceptance": {
-              "header": "DLUHC Privacy Notice Acceptance",
+              "header": "",
               "description": "",
               "questions": {
                 "gdpr_acceptance": {
-                  "check_answer_label": "GDPR acceptance",
+                  "check_answer_label": "Privacy notice seen",
                   "header": "Has the tenant or buyer seen the DLUHC privacy notice?",
                   "hint_text": "",
                   "type": "radio",
@@ -34,11 +34,11 @@
               "depends_on": { "gdpr_acceptance": "No" }
             },
             "organisation_details": {
-              "header": "About this log",
-              "description": "Organisation Details",
+              "header": "Organisation details",
+              "description": "",
               "questions": {
                 "property_owner_organisation": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Owning organisation",
                   "header": "Which organisation owns this property?",
                   "hint_text": "",
                   "type": "radio",
@@ -48,7 +48,7 @@
                   }
                 },
                 "property_manager_organisation": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Managing organisation",
                   "header": "Which organisation manages this property?",
                   "hint_text": "",
                   "type": "radio",
@@ -61,11 +61,11 @@
               "depends_on": { "gdpr_acceptance": "Yes" }
             },
             "sale_or_letting": {
-              "header": "About this log",
-              "description": "Is this a sale or a letting?",
+              "header": "",
+              "description": "",
               "questions": {
                 "sale_or_letting": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Sale or letting",
                   "header": "Is this a sale or a letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -78,11 +78,11 @@
               "depends_on": { "gdpr_acceptance": "Yes" }
             },
             "tenant_same_property_renewal": {
-              "header": "About this log",
-              "description": "Is this a renewal to the same tenant in the same property?",
+              "header": "",
+              "description": "",
               "questions": {
                 "tenant_same_property_renewal": {
-                  "check_answer_label": "",
+                  "check_answer_label": "Property renewal",
                   "header": "Is this a renewal to the same tenant in the same property?",
                   "hint_text": "",
                   "type": "radio",
@@ -95,11 +95,11 @@
               "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "startdate": {
-              "header": "About this log",
+              "header": "",
               "description": "",
               "questions": {
                 "startdate": {
-                  "check_answer_label": "When is the tenancy start date?",
+                  "check_answer_label": "Tenancy start date",
                   "header": "What is the tenancy start date?",
                   "hint_text": "For example, 27 3 2007",
                   "type": "date"
@@ -112,35 +112,35 @@
               "description": "",
               "questions": {
                 "rent_type": {
-                  "check_answer_label": "What is the rent type?",
+                  "check_answer_label": "Rent type",
                   "header": "What is the rent type?",
                   "hint_text": "",
-                  "type": "select",
+                  "type": "radio",
                   "answer_options": {
-                    "0": "Social Rent",
-                    "1": "Affordable Rent",
-                    "2": "London Affordable Rent",
-                    "3": "Rent To Buy",
-                    "4": "London Living Rent",
-                    "5": "Other Intermediate Rent Product"
+                    "0": "Social rent",
+                    "1": "Affordable rent",
+                    "2": "London Affordable rent",
+                    "3": "Rent to buy",
+                    "4": "London living rent",
+                    "5": "Other intermediate rent product"
                   },
                   "conditional_for": {
-                    "intermediate_rent_product_name": ["Other Intermediate Rent Product"]
+                    "intermediate_rent_product_name": ["Other intermediate rent product"]
                   }
                 },
                 "intermediate_rent_product_name": {
-                  "check_answer_label": "Enter the product name",
+                  "check_answer_label": "Product name",
                   "header": "What is intermediate rent product name?",
                   "type": "text"
                 },
                 "needstype": {
-                  "check_answer_label": "What is the needs type?",
+                  "check_answer_label": "Needs type",
                   "header": "What is the needs type?",
                   "hint_text": "",
-                  "type": "select",
+                  "type": "radio",
                   "answer_options": {
-                    "0": "Supported Housing",
-                    "1": "General Needs"
+                    "0": "Supported housing",
+                    "1": "General needs"
                   }
                 }
               },
@@ -154,13 +154,14 @@
                   "check_answer_label": "Tenant code",
                   "header": "What is the tenant code?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "text",
+                  "width": 10
                 }
               },
               "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
             "sale_completion_date": {
-              "header": "Sale Completion Date",
+              "header": "",
               "description": "",
               "questions": {
                 "sale_completion_date": {
@@ -173,14 +174,15 @@
               "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
             },
             "purchaser_code": {
-              "header": "About this log",
+              "header": "",
               "description": "",
               "questions": {
                 "purchaser_code": {
-                  "check_answer_label": "What is the purchaser code?",
+                  "check_answer_label": "Purchaser code",
                   "header": "What is the purchaser code?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "text",
+                  "width": 10
                 }
               },
               "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
@@ -201,13 +203,14 @@
               "description": "",
               "questions": {
                 "age1": {
-                  "check_answer_label": "Tenant's age",
-                  "header": "What is the tenant's age?",
+                  "check_answer_label": "Tenant’s age",
+                  "header": "What is the tenant’s age?",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               }
             },
@@ -216,8 +219,8 @@
               "description": "",
               "questions": {
                 "sex1": {
-                  "check_answer_label": "Tenant's gender",
-                  "header": "Which of these best describes the tenant's gender identity?",
+                  "check_answer_label": "Tenant’s gender",
+                  "header": "Which of these best describes the tenant’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -235,7 +238,7 @@
               "questions": {
                 "ethnic": {
                   "check_answer_label": "Ethnicity",
-                  "header": "What is the tenant's ethnic group?",
+                  "header": "What is the tenant’s ethnic group?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -268,7 +271,7 @@
               "questions": {
                 "national": {
                   "check_answer_label": "Nationality",
-                  "header": "What is the tenant's nationality?",
+                  "header": "What is the tenant’s nationality?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -300,7 +303,7 @@
               "questions": {
                 "ecstat1": {
                   "check_answer_label": "Work",
-                  "header": "Which of these best describes the tenant's working situation?",
+                  "header": "Which of these best describes the tenant’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -333,13 +336,14 @@
               "description": "",
               "questions": {
                 "other_hhmemb": {
-                  "check_answer_label": "Number of Other Household Members",
+                  "check_answer_label": "Number of other household members",
                   "header": "How many other people are there in the household?",
                   "hint_text": "The maximum number of others is 7",
                   "type": "numeric",
                   "min": 0,
                   "max": 7,
                   "step": 1,
+                  "width": 2,
                   "conditional_for": {
                     "relat2": ">0",
                     "age2": ">0",
@@ -372,8 +376,8 @@
                   }
                 },
                 "relat2": {
-                  "check_answer_label": "Person 2's relationship to lead tenant",
-                  "header": "What's person 2's relationship to lead tenant",
+                  "check_answer_label": "Person 2’s relationship to lead tenant",
+                  "header": "What’s person 2’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -384,8 +388,8 @@
                   }
                 },
                 "age2": {
-                  "check_answer_label": "Person 2's age",
-                  "header": "What's person 2's age",
+                  "check_answer_label": "Person 2’s age",
+                  "header": "What’s person 2’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -393,8 +397,8 @@
                   "step": 1
                 },
                 "sex2": {
-                  "check_answer_label": "Person 2's gender",
-                  "header": "Which of these best describes person 2's gender identity?",
+                  "check_answer_label": "Person 2’s gender",
+                  "header": "Which of these best describes person 2’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -405,8 +409,8 @@
                   }
                 },
                 "ecstat2": {
-                  "check_answer_label": "Person 2's Work",
-                  "header": "Which of these best describes person 2's working situation?",
+                  "check_answer_label": "Person 2’s Work",
+                  "header": "Which of these best describes person 2’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -424,8 +428,8 @@
                   }
                 },
                 "relat3": {
-                  "check_answer_label": "Person 3's relationship to lead tenant",
-                  "header": "What's person 3's relationship to lead tenant",
+                  "check_answer_label": "Person 3’s relationship to lead tenant",
+                  "header": "What’s person 3’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -436,8 +440,8 @@
                   }
                 },
                 "age3": {
-                  "check_answer_label": "Person 3's age",
-                  "header": "What's person 3's age",
+                  "check_answer_label": "Person 3’s age",
+                  "header": "What’s person 3’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -445,8 +449,8 @@
                   "step": 1
                 },
                 "sex3": {
-                  "check_answer_label": "Person 3's gender",
-                  "header": "Which of these best describes person 3's gender identity?",
+                  "check_answer_label": "Person 3’s gender",
+                  "header": "Which of these best describes person 3’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -457,8 +461,8 @@
                   }
                 },
                 "ecstat3": {
-                  "check_answer_label": "Person 3's Work",
-                  "header": "Which of these best describes person 3's working situation?",
+                  "check_answer_label": "Person 3’s Work",
+                  "header": "Which of these best describes person 3’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -476,8 +480,8 @@
                   }
                 },
                 "relat4": {
-                  "check_answer_label": "Person 4's relationship to lead tenant",
-                  "header": "What's person 4's relationship to lead tenant",
+                  "check_answer_label": "Person 4’s relationship to lead tenant",
+                  "header": "What’s person 4’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -488,8 +492,8 @@
                   }
                 },
                 "age4": {
-                  "check_answer_label": "Person 4's age",
-                  "header": "What's person 4's age",
+                  "check_answer_label": "Person 4’s age",
+                  "header": "What’s person 4’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -497,8 +501,8 @@
                   "step": 1
                 },
                 "sex4": {
-                  "check_answer_label": "Person 4's gender",
-                  "header": "Which of these best describes person 4's gender identity?",
+                  "check_answer_label": "Person 4’s gender",
+                  "header": "Which of these best describes person 4’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -509,8 +513,8 @@
                   }
                 },
                 "ecstat4": {
-                  "check_answer_label": "Person 4's Work",
-                  "header": "Which of these best describes person 4's working situation?",
+                  "check_answer_label": "Person 4’s Work",
+                  "header": "Which of these best describes person 4’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -528,8 +532,8 @@
                   }
                 },
                 "relat5": {
-                  "check_answer_label": "Person 5's relationship to lead tenant",
-                  "header": "What's person 5's relationship to lead tenant",
+                  "check_answer_label": "Person 5’s relationship to lead tenant",
+                  "header": "What’s person 5’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -540,8 +544,8 @@
                   }
                 },
                 "age5": {
-                  "check_answer_label": "Person 5's age",
-                  "header": "What's person 5's age",
+                  "check_answer_label": "Person 5’s age",
+                  "header": "What’s person 5’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -549,8 +553,8 @@
                   "step": 1
                 },
                 "sex5": {
-                  "check_answer_label": "Person 5's gender",
-                  "header": "Which of these best describes person 5's gender identity?",
+                  "check_answer_label": "Person 5’s gender",
+                  "header": "Which of these best describes person 5’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -561,8 +565,8 @@
                   }
                 },
                 "ecstat5": {
-                  "check_answer_label": "Person 5's Work",
-                  "header": "Which of these best describes person 5's working situation?",
+                  "check_answer_label": "Person 5’s Work",
+                  "header": "Which of these best describes person 5’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -580,8 +584,8 @@
                   }
                 },
                 "relat6": {
-                  "check_answer_label": "Person 6's relationship to lead tenant",
-                  "header": "What's person 6's relationship to lead tenant",
+                  "check_answer_label": "Person 6’s relationship to lead tenant",
+                  "header": "What’s person 6’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -592,8 +596,8 @@
                   }
                 },
                 "age6": {
-                  "check_answer_label": "Person 6's age",
-                  "header": "What's person 6's age",
+                  "check_answer_label": "Person 6’s age",
+                  "header": "What’s person 6’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -601,8 +605,8 @@
                   "step": 1
                 },
                 "sex6": {
-                  "check_answer_label": "Person 6's gender",
-                  "header": "Which of these best describes person 6's gender identity?",
+                  "check_answer_label": "Person 6’s gender",
+                  "header": "Which of these best describes person 6’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -613,8 +617,8 @@
                   }
                 },
                 "ecstat6": {
-                  "check_answer_label": "Person 6's Work",
-                  "header": "Which of these best describes person 6's working situation?",
+                  "check_answer_label": "Person 6’s Work",
+                  "header": "Which of these best describes person 6’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -632,8 +636,8 @@
                   }
                 },
                 "relat7": {
-                  "check_answer_label": "Person 7's relationship to lead tenant",
-                  "header": "What's person 7's relationship to lead tenant",
+                  "check_answer_label": "Person 7’s relationship to lead tenant",
+                  "header": "What’s person 7’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -644,8 +648,8 @@
                   }
                 },
                 "age7": {
-                  "check_answer_label": "Person 7's age",
-                  "header": "What's person 7's age",
+                  "check_answer_label": "Person 7’s age",
+                  "header": "What’s person 7’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -653,8 +657,8 @@
                   "step": 1
                 },
                 "sex7": {
-                  "check_answer_label": "Person 7's gender",
-                  "header": "Which of these best describes person 7's gender identity?",
+                  "check_answer_label": "Person 7’s gender",
+                  "header": "Which of these best describes person 7’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -665,8 +669,8 @@
                   }
                 },
                 "ecstat7": {
-                  "check_answer_label": "Person 7's Work",
-                  "header": "Which of these best describes person 7's working situation?",
+                  "check_answer_label": "Person 7’s Work",
+                  "header": "Which of these best describes person 7’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -684,8 +688,8 @@
                   }
                 },
                 "relat8": {
-                  "check_answer_label": "Person 8's relationship to lead tenant",
-                  "header": "What's person 8's relationship to lead tenant",
+                  "check_answer_label": "Person 8’s relationship to lead tenant",
+                  "header": "What’s person 8’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -696,8 +700,8 @@
                   }
                 },
                 "age8": {
-                  "check_answer_label": "Person 8's age",
-                  "header": "What's person 8's age",
+                  "check_answer_label": "Person 8’s age",
+                  "header": "What’s person 8’s age",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
@@ -705,8 +709,8 @@
                   "step": 1
                 },
                 "sex8": {
-                  "check_answer_label": "Person 8's gender",
-                  "header": "Which of these best describes person 8's gender identity?",
+                  "check_answer_label": "Person 8’s gender",
+                  "header": "Which of these best describes person 8’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -717,8 +721,8 @@
                   }
                 },
                 "ecstat8": {
-                  "check_answer_label": "Person 8's Work",
-                  "header": "Which of these best describes person 8's working situation?",
+                  "check_answer_label": "Person 8’s Work",
+                  "header": "Which of these best describes person 8’s working situation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -814,9 +818,9 @@
                     "7": "Other problems with neighbours",
                     "8": "Property unsuitable because of overcrowding",
                     "9": "End of assured shorthold tenancy - no fault",
-                    "10": "End of assured shorthold tenancy - tenant's fault",
+                    "10": "End of assured shorthold tenancy - tenant’s fault",
                     "11": "End of fixed term tenancy - no fault",
-                    "12": "End of fixed term tenancy - tenant's fault",
+                    "12": "End of fixed term tenancy - tenant’s fault",
                     "13": "Repossession",
                     "14": "Under occupation - offered incentive to downsize",
                     "15": "Under occupation - no incentive",
@@ -1034,7 +1038,8 @@
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
-                  "step": 1
+                  "step": 1,
+                  "width": 4
                 }
               }
             },
@@ -1093,9 +1098,10 @@
               "questions": {
                 "propcode": {
                   "check_answer_label": "What’s the property reference?",
-                  "header": "What's the property reference?",
+                  "header": "What’s the property reference?",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "text",
+                  "width": 10
                 }
               }
             },
@@ -1120,7 +1126,8 @@
                   "check_answer_label": "",
                   "header": "",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "text",
+                  "width": 5
                 }
               }
             },
@@ -1474,7 +1481,7 @@
               "questions": {
                 "why_dont_you_know_la": {
                   "check_answer_label": "Reason for not knowing local authority",
-                  "header": "Give a reason why you don't know the postcode or local authority",
+                  "header": "Give a reason why you don’t know the postcode or local authority",
                   "hint_text": "",
                   "type": "text"
                 }
@@ -1743,7 +1750,7 @@
               "questions": {
                 "net_income_known": {
                   "check_answer_label": "Income known",
-                  "header": "Do you know the tenant and their partner's net income?",
+                  "header": "Do you know the tenant and their partner’s net income?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {

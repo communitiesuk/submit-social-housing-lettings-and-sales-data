@@ -3,6 +3,7 @@
     answers,
     :name,
     :name,
-    label: { text: question.header, size: page_header.nil? ? "l" : "m", tag: page_header.nil? ? "h2" : "h1" },
+    caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
+    label: { text: question.header, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
     hint: { text: question.hint_text }
  %>

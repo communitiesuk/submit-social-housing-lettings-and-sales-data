@@ -12,7 +12,8 @@
                   "tenant_code": {
                     "check_answer_label": "Tenant code",
                     "header": "What is the tenant code?",
-                    "type": "text"
+                    "type": "text",
+                    "width": 10
                   }
                 }
               },
@@ -24,7 +25,8 @@
                     "type": "numeric",
                     "min": 0,
                     "max": 150,
-                    "step": 1
+                    "step": 1,
+                    "width": 2
                   }
                 }
               },
@@ -53,6 +55,7 @@
                     "min": 0,
                     "max": 1,
                     "step": 1,
+                    "width": 2,
                     "conditional_for": {
                       "relat2": ">0",
                       "age2": ">0",
@@ -75,7 +78,8 @@
                     "type": "numeric",
                     "min": 0,
                     "max": 150,
-                    "step": 1
+                    "step": 1,
+                    "width": 2
                   },
                   "sex2": {
                     "check_answer_label": "Person 2's gender",
@@ -210,7 +214,8 @@
                   "tenancy_code": {
                     "check_answer_label": "What is the tenancy code?",
                     "header": "What is the tenancy code?",
-                    "type": "text"
+                    "type": "text",
+                    "width": 10
                   }
                 }
               }
@@ -311,7 +316,8 @@
                     "header": "What is the tenant’s /and partner’s combined income after tax?",
                     "type": "numeric",
                     "min": 0,
-                    "step": 1
+                    "step": 1,
+                    "width": 5
                   },
                   "incfreq": {
                     "check_answer_label": "Income Frequency",
@@ -409,6 +415,7 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
+                    "width": 4,
                     "fields-to-add": [
                       "brent",
                       "scharge",
@@ -424,6 +431,7 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
+                    "width": 4,
                     "fields-to-add": [
                       "brent",
                       "scharge",
@@ -439,6 +447,7 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
+                    "width": 4,
                     "fields-to-add": [
                       "brent",
                       "scharge",
@@ -454,6 +463,7 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
+                    "width": 4,
                     "fields-to-add": [
                       "brent",
                       "scharge",
@@ -469,6 +479,7 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
+                    "width": 4,
                     "readonly": true
                   }
                 }
@@ -528,13 +539,15 @@
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                     "type": "text",
+                    "width": 5,
                     "conditional_for": { "faake_key": "fake_condition" }
                   },
                   "previous_postcode": {
                     "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
-                    "type": "text"
+                    "type": "text",
+                    "width": 5
                   }
                 }
               },
@@ -572,7 +585,8 @@
                   "declaration": {
                     "check_answer_label": "",
                     "header": "What is the tenant code?",
-                    "type": "text"
+                    "type": "text",
+                    "width": 10
                   }
                 }
               }

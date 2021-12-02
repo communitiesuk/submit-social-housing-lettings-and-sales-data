@@ -1,6 +1,6 @@
 class Form::Question
   attr_accessor :id, :header, :hint_text, :description, :questions,
-                :type, :min, :max, :step, :fields_to_add, :result_field,
+                :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label
 
   def initialize(id, hsh, page)
@@ -12,6 +12,7 @@ class Form::Question
     @min = hsh["min"]
     @max = hsh["max"]
     @step = hsh["step"]
+    @width = hsh["width"]
     @fields_to_add = hsh["fields-to-add"]
     @result_field = hsh["result-field"]
     @readonly = hsh["readonly"]

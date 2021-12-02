@@ -27,9 +27,9 @@
           "properties": {
             "label": {
               "description": "",
-              "type": "string"  
+              "type": "string"
             },
-            "subsections": {  
+            "subsections": {
               "type": "object",
               "patternProperties": {
                 "[a-z_]+": {
@@ -41,7 +41,7 @@
                       "description": "",
                       "type": "string"
                     },
-                    "pages": {  
+                    "pages": {
                       "type": "object",
                       "patternProperties": {
                         "[a-z_]+": {
@@ -80,6 +80,10 @@
                                       "description": "",
                                       "type": "string"
                                     },
+                                    "width": {
+                                      "description": "",
+                                      "type": "integer"
+                                    },
                                     "answer_options": {
                                       "description": "",
                                       "type": "object"
@@ -95,14 +99,14 @@
                           },
                           "minProperties": 1
                         }
-                      }          
+                      }
                     }
                   },
                   "minProperties": 1
                 }
-              }          
+              }
             }
-          },      
+          },
           "minProperties": 2
         }
       },
