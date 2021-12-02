@@ -1,4 +1,4 @@
-module SoftValidations
+module Validations::SoftValidations
   def has_no_unresolved_soft_errors?
     soft_errors.empty? || soft_errors_overridden?
   end
