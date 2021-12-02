@@ -144,21 +144,6 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/users/#{user.id}")
     end
 
-    it "main page is present and accessible" do
-      visit("/users/#{user.id}")
-      expect(page).to have_content("Your account")
-    end
-
-    it "personal details page is present and accessible" do
-      visit("/users/#{user.id}/edit")
-      expect(page).to have_content("Change your personal details")
-    end
-
-    it "edit password page present and accessible" do
-      visit("users/#{user.id}/password/edit")
-      expect(page).to have_content("Change your password")
-    end
-
     it "can navigate to change your password page from main account page" do
       visit("/users/#{user.id}")
       find('[data-qa="change-password"]').click
