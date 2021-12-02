@@ -1,4 +1,4 @@
-module PropertyValidations
+module Validations::PropertyValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_property_number_of_times_relet(record)

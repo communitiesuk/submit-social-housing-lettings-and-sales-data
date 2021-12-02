@@ -1,4 +1,4 @@
-module DateValidations
+module Validations::DateValidations
   def validate_property_major_repairs(record)
     date_valid?("mrcdate", record)
     if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]

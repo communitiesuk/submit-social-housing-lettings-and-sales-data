@@ -1,5 +1,5 @@
-class IncomeRange
-  ALLOWED = {
+module Constants::IncomeRanges
+  ALLOWED_INCOME_RANGES = {
     "Full-time - 30 hours or more": OpenStruct.new(soft_min: 143, soft_max: 730, hard_min: 90, hard_max: 1230),
     "Part-time - Less than 30 hours": OpenStruct.new(soft_min: 67, soft_max: 620, hard_min: 50, hard_max: 950),
     "In government training into work, such as New Deal": OpenStruct.new(soft_min: 80, soft_max: 480, hard_min: 40, hard_max: 990),
