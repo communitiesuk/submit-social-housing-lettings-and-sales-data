@@ -1054,6 +1054,23 @@
           "label": "Tenancy information",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
+            "joint_tenancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "jointtenancy": {
+                  "check_answer_label": "Is this a joint tenancy?",
+                  "header": "Is this a joint tenancy?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "2": "Don't know"
+                  }
+                }
+              }
+            },
             "starter_tenancy": {
               "header": "",
               "description": "",
