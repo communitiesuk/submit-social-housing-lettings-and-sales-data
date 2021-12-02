@@ -16,5 +16,18 @@ org = Organisation.create!(
   other_stock_owners: "None",
   managing_agents: "None",
 )
-User.create!(email: "test@example.com", password: "password", organisation: org)
+User.create!(
+  email: "test@example.com",
+  password: "password",
+  organisation: org,
+  role: "data_provider",
+)
+
+User.create!(
+  email: "coordinator@example.com",
+  password: "password",
+  organisation: org,
+  role: "data_coordinator",
+)
+
 AdminUser.create!(email: "admin@example.com", password: "password")

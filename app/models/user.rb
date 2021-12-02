@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Constants::User
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
@@ -7,6 +9,8 @@ class User < ApplicationRecord
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation
   has_many :managed_case_logs, through: :organisation
+
+  enum role: ROLES
 
   def case_logs
     CaseLog.for_organisation(organisation)

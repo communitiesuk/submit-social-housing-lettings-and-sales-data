@@ -3,7 +3,11 @@ class OrganisationsController < ApplicationController
   before_action :find_organisation
 
   def users
-    render "users"
+    if current_user.data_coordinator?
+      render "users"
+    else
+      head :unauthorized
+    end
   end
 
 private

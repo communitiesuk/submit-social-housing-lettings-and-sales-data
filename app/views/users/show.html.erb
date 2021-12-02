@@ -34,7 +34,7 @@
 
       <%= summary_list.row do |row|
         row.key { 'Role' }
-        row.value { current_user.role }
+        row.value { current_user.role.humanize }
         row.action()
       end %>
     <% end %>
