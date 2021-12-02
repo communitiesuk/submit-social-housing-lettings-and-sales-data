@@ -2,12 +2,14 @@ class UsersController < ApplicationController
   include Devise::Controllers::SignInOut
   include Helpers::Email
   before_action :authenticate_user!
+  before_action :find_resource, except: [:new, :create]
+  before_action :authenticate_scope!, except: [:new, :create]
 
   def update
-    if current_user.update(user_params)
-      bypass_sign_in current_user
+    if @user.update(user_params)
+      bypass_sign_in @user
       flash[:notice] = I18n.t("devise.passwords.updated")
-      redirect_to user_path(current_user)
+      redirect_to user_path(@user)
     end
   end
 
@@ -47,5 +49,13 @@ private
 
   def user_params
     params.require(:user).permit(:email, :name, :password, :role)
+  end
+
+  def find_resource
+    @user = User.find(params[:id])
+  end
+
+  def authenticate_scope!
+    head :unauthorized if current_user != @user
   end
 end

@@ -1,6 +1,6 @@
 class OrganisationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_organisation
+  before_action :find_resource
   before_action :authenticate_scope!
 
   def show
@@ -25,7 +25,7 @@ private
     head :unauthorized if current_user.organisation != @organisation
   end
 
-  def find_organisation
+  def find_resource
     @organisation = Organisation.find(params[:id])
   end
 end
