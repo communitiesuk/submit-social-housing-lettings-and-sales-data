@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
   <head>
-    <title><%= browser_title(yield(:title)) %></title>
+    <% if @case_log.errors.present? %>
+      <title><%= browser_title("Error: #{yield(:title)}") %></title>
+    <% elsif %>
+      <title><%= browser_title(yield(:title)) %></title>
+    <% end %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
