@@ -76,7 +76,7 @@ module Validations::HouseholdValidations
 
   def validate_shared_housing_rooms(record)
     unless record.unittype_gn.nil?
-      if record.unittype_gn == "Bed-sit" && record.beds != 1
+      if record.unittype_gn == "Bed-sit" && record.beds != 1 && record.beds.present?
         record.errors.add :unittype_gn, "A bedsit can only have one bedroom"
       end
 

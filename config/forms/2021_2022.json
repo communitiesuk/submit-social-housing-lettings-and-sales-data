@@ -1668,7 +1668,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "needstype": "General Needs" }
+              "depends_on": { "needstype": "General needs" }
             },
             "void_or_renewal_date": {
               "header": "",
