@@ -180,54 +180,63 @@ RSpec.describe CaseLogsController, type: :request do
           allow(FormHandler.instance).to receive(:get_form).and_return(form)
         end
 
-        context "case logs that are owned or managed by your organisation" do
-          before do
-            sign_in user
+        context "a user that is not signed in" do
+          it "does not let you get case log tasklist pages you don't have access to" do
             get "/case-logs/#{case_log.id}", headers: headers, params: {}
-          end
-
-          it "shows the tasklist for case logs you have access to" do
-            expect(response.body).to match("Case log")
-            expect(response.body).to match(case_log.id.to_s)
-          end
-
-          it "displays a section status for a case log" do
-            assert_select ".govuk-tag", text: /Not started/, count: 8
-            assert_select ".govuk-tag", text: /Completed/, count: 0
-            assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+            expect(response).to redirect_to("/users/sign-in")
           end
         end
 
-        context "case log with a single section complete" do
-          let(:section_completed_case_log) do
-            FactoryBot.create(
-              :case_log,
-              :conditional_section_complete,
-              owning_organisation: organisation,
-              managing_organisation: organisation,
-            )
+        context "a signed in user" do
+          context "case logs that are owned or managed by your organisation" do
+            before do
+              sign_in user
+              get "/case-logs/#{case_log.id}", headers: headers, params: {}
+            end
+
+            it "shows the tasklist for case logs you have access to" do
+              expect(response.body).to match("Case log")
+              expect(response.body).to match(case_log.id.to_s)
+            end
+
+            it "displays a section status for a case log" do
+              assert_select ".govuk-tag", text: /Not started/, count: 8
+              assert_select ".govuk-tag", text: /Completed/, count: 0
+              assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+            end
           end
 
-          before do
-            sign_in user
-            get "/case-logs/#{section_completed_case_log.id}", headers: headers, params: {}
+          context "case log with a single section complete" do
+            let(:section_completed_case_log) do
+              FactoryBot.create(
+                :case_log,
+                :conditional_section_complete,
+                owning_organisation: organisation,
+                managing_organisation: organisation,
+              )
+            end
+
+            before do
+              sign_in user
+              get "/case-logs/#{section_completed_case_log.id}", headers: headers, params: {}
+            end
+
+            it "displays a section status for a case log" do
+              assert_select ".govuk-tag", text: /Not started/, count: 7
+              assert_select ".govuk-tag", text: /Completed/, count: 1
+              assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
+            end
           end
 
-          it "displays a section status for a case log" do
-            assert_select ".govuk-tag", text: /Not started/, count: 7
-            assert_select ".govuk-tag", text: /Completed/, count: 1
-            assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
-          end
-        end
+          context "case logs that are not owned or managed by your organisation" do
+            before do
+              sign_in user
+              get "/case-logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+            end
 
-        context "case logs that are not owned or managed by your organisation" do
-          before do
-            sign_in user
-            get "/case-logs/#{unauthorized_case_log.id}", headers: headers, params: {}
-          end
-
-          it "does not show the tasklist for case logs you don't have access to" do
-            expect(response).to have_http_status(:not_found)
+            it "does not show the tasklist for case logs you don't have access to" do
+              expect(response).to have_http_status(:not_found)
+            end
           end
         end
       end
