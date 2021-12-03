@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2022_01_31_123638) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "second_factor_attempts_count", default: 0
+    t.string "encrypted_otp_secret_key"
+    t.string "encrypted_otp_secret_key_iv"
+    t.string "encrypted_otp_secret_key_salt"
+    t.string "direct_otp"
+    t.datetime "direct_otp_sent_at"
+    t.datetime "totp_timestamp"
+    t.string "phone"
+    t.index ["encrypted_otp_secret_key"], name: "index_admin_users_on_encrypted_otp_secret_key", unique: true
   end
 
   create_table "case_logs", force: :cascade do |t|
