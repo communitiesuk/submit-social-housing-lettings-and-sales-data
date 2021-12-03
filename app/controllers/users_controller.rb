@@ -56,6 +56,6 @@ private
   end
 
   def authenticate_scope!
-    head :unauthorized if current_user != @user
+    head :not_found if current_user != @user
   end
 end

@@ -6,6 +6,30 @@ RSpec.describe UsersController, type: :request do
   let(:unauthorised_user) { FactoryBot.create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
+  let(:new_value) { "new test name" }
+  let(:params) { { id: user.id, user: { name: new_value } } }
+
+  context "a not signed in user" do
+    it "does not let you see user details" do
+      get "/users/#{user.id}", headers: headers, params: {}
+      expect(response).to redirect_to("/users/sign-in")
+    end
+
+    it "does not let you edit user details" do
+      get "/users/#{user.id}/edit", headers: headers, params: {}
+      expect(response).to redirect_to("/users/sign-in")
+    end
+
+    it "does not let you edit user passwords" do
+      get "/users/#{user.id}/password/edit", headers: headers, params: {}
+      expect(response).to redirect_to("/users/sign-in")
+    end
+
+    it "does not let you update user details" do
+      patch "/case-logs/#{user.id}", params: {}
+      expect(response).to redirect_to("/users/sign-in")
+    end
+  end
 
   describe "#show" do
     context "current user is user" do
@@ -25,8 +49,8 @@ RSpec.describe UsersController, type: :request do
         get "/users/#{unauthorised_user.id}", headers: headers, params: {}
       end
 
-      it "returns unauthorised 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "returns not found 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -49,8 +73,8 @@ RSpec.describe UsersController, type: :request do
         get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
       end
 
-      it "returns unauthorised 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "returns not found 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -73,16 +97,13 @@ RSpec.describe UsersController, type: :request do
         get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
       end
 
-      it "returns unauthorised 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "returns not found 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
 
   describe "#update" do
-    let(:new_value) { "new test name" }
-    let(:params) { { id: user.id, user: { name: new_value } } }
-
     context "current user is user" do
       before do
         sign_in user
@@ -103,8 +124,8 @@ RSpec.describe UsersController, type: :request do
         patch "/users/#{unauthorised_user.id}", headers: headers, params: params
       end
 
-      it "returns unauthorised 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "returns not found 404" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

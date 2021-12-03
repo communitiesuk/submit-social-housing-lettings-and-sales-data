@@ -22,7 +22,7 @@ class OrganisationsController < ApplicationController
 private
 
   def authenticate_scope!
-    head :unauthorized if current_user.organisation != @organisation
+    head :not_found if current_user.organisation != @organisation
   end
 
   def find_resource
