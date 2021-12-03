@@ -10,24 +10,32 @@ RSpec.describe UsersController, type: :request do
   let(:params) { { id: user.id, user: { name: new_value } } }
 
   context "a not signed in user" do
-    it "does not let you see user details" do
-      get "/users/#{user.id}", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "#show" do
+      it "does not let you see user details" do
+        get "/users/#{user.id}", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
 
-    it "does not let you edit user details" do
-      get "/users/#{user.id}/edit", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "#edit" do
+      it "does not let you edit user details" do
+        get "/users/#{user.id}/edit", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
 
-    it "does not let you edit user passwords" do
-      get "/users/#{user.id}/password/edit", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "#password" do
+      it "does not let you edit user passwords" do
+        get "/users/#{user.id}/password/edit", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
 
-    it "does not let you update user details" do
-      patch "/case-logs/#{user.id}", params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "#patch" do
+      it "does not let you update user details" do
+        patch "/case-logs/#{user.id}", params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
   end
 

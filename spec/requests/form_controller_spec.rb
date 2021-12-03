@@ -21,19 +21,23 @@ RSpec.describe FormController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
 
   context "a not signed in user" do
-    it "does not let you get case logs pages you don't have access to" do
-      get "/case-logs/#{case_log.id}/person-1-age", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "GET" do
+      it "does not let you get case logs pages you don't have access to" do
+        get "/case-logs/#{case_log.id}/person-1-age", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
+
+      it "does not let you get case log check answer pages you don't have access to" do
+        get "/case-logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
 
-    it "does not let you get case log check answer pages you don't have access to" do
-      get "/case-logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
-    end
-
-    it "does not let you post form answers to case logs you don't have access to" do
-      post "/case-logs/#{case_log.id}/form", params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "POST" do
+      it "does not let you post form answers to case logs you don't have access to" do
+        post "/case-logs/#{case_log.id}/form", params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
   end
 

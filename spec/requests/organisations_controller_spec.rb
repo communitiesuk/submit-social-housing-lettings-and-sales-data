@@ -8,17 +8,21 @@ RSpec.describe OrganisationsController, type: :request do
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
   context "a not signed in user" do
-    it "does not let you see organisation details" do
-      get "/organisations/#{organisation.id}", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+    describe "#show" do
+      it "does not let you see organisation details from org route" do
+        get "/organisations/#{organisation.id}", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
 
-      get "/organisations/#{organisation.id}/details", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
-    end
+      it "does not let you see organisation details from details route" do
+        get "/organisations/#{organisation.id}/details", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
 
-    it "does not let you see organisation users" do
-      get "/organisations/#{organisation.id}/users", headers: headers, params: {}
-      expect(response).to redirect_to("/users/sign-in")
+      it "does not let you see organisation users" do
+        get "/organisations/#{organisation.id}/users", headers: headers, params: {}
+        expect(response).to redirect_to("/users/sign-in")
+      end
     end
   end
 
