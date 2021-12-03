@@ -1,4 +1,6 @@
 class SoftValidationsController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @case_log = CaseLog.find(params[:case_log_id])
     page_id = request.env["PATH_INFO"].split("/")[-2]

@@ -15,7 +15,7 @@ class BulkUpload
     @content_type = content_type
   end
 
-  def process
+  def process(current_user)
     return unless valid_content_type?
 
     xlsx = Roo::Spreadsheet.open(@file, extension: :xlsx)
@@ -30,8 +30,8 @@ class BulkUpload
         owning_organisation = Organisation.find(row[111])
         managing_organisation = Organisation.find(row[113])
         case_log = CaseLog.create!(
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
+          owning_organisation: current_user.organisation,
+          managing_organisation: current_user.organisation,
         )
         map_row(row).each do |attr_key, attr_val|
           update = case_log.update(attr_key => attr_val)
