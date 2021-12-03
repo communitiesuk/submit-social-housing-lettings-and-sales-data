@@ -1,4 +1,6 @@
 class BulkUploadController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @bulk_upload = BulkUpload.new(nil, nil)
     render "case_logs/bulk_upload"
@@ -15,6 +17,8 @@ class BulkUploadController < ApplicationController
       redirect_to(case_logs_path)
     end
   end
+
+private
 
   def upload_params
     params.require("bulk_upload")["case_log_bulk_upload"]
