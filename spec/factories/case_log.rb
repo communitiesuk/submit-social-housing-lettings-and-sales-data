@@ -148,6 +148,7 @@ FactoryBot.define do
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
+      joint_tenancy { 1 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
