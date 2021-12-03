@@ -1,4 +1,4 @@
-module Constants::DbEnums
+module Constants::CaseLog
   BENEFITCAP = {
     "Yes - benefit cap" => 5,
     "Yes - removal of the spare room subsidy" => 4,
@@ -674,11 +674,6 @@ module Constants::DbEnums
   NEEDS_TYPE = {
     "General needs" => 1,
     "Supported housing" => 2,
-  }.freeze
-
-  ORG_TYPE = {
-    "LA" => 1,
-    "PRP" => 2,
   }.freeze
 
   LET_TYPE = {
