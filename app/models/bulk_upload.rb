@@ -15,7 +15,7 @@ class BulkUpload
     @content_type = content_type
   end
 
-  def process
+  def process(current_user)
     return unless valid_content_type?
 
     xlsx = Roo::Spreadsheet.open(@file, extension: :xlsx)
