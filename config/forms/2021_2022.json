@@ -1087,22 +1087,6 @@
                 }
               }
             },
-            "fixed_term_tenancy": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancylength": {
-                  "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
-                  "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
-                  "hint_text": "To the nearest year",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1,
-                  "width": 4
-                }
-              }
-            },
             "tenancy_type": {
               "header": "",
               "description": "",
@@ -1127,6 +1111,21 @@
                   "header": "Please state the tenancy type",
                   "hint_text": "",
                   "type": "text"
+                }
+              }
+            },
+            "fixed_term_tenancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenancylength": {
+                  "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
+                  "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
+                  "hint_text": "To the nearest year",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
                 }
               }
             }
