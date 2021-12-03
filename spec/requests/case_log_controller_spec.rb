@@ -181,7 +181,7 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "a user that is not signed in" do
-          it "does not let you get case log tasklist pages you don't have access to" do
+          it "does not let the user get case log tasklist pages they don't have access to" do
             get "/case-logs/#{case_log.id}", headers: headers, params: {}
             expect(response).to redirect_to("/users/sign-in")
           end
