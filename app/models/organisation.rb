@@ -3,7 +3,7 @@ class Organisation < ApplicationRecord
   has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
 
-  include Constants::DbEnums
+  include Constants::Organisation
   enum "Org type": ORG_TYPE, _suffix: true
 
   def case_logs

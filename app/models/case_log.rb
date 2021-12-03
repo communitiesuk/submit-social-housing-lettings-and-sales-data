@@ -30,7 +30,7 @@ end
 class CaseLog < ApplicationRecord
   include Discard::Model
   include Validations::SoftValidations
-  include Constants::DbEnums
+  include Constants::CaseLog
   include Constants::IncomeRanges
   default_scope -> { kept }
 
