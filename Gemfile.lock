@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-support.git
-  revision: 9499cb622f9feef43a53f357809f9e656e7cb6de
+  revision: 321dc7227df43cd682c293fa31fa427b94b2ea74
   branch: main
   specs:
     rspec-support (3.11.0.pre)
@@ -180,7 +180,7 @@ GEM
     formtastic_i18n (0.7.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    govuk-components (2.1.4)
+    govuk-components (2.1.5)
       activemodel (>= 6.0)
       railties (>= 6.0)
       view_component (~> 2.39.0)
@@ -304,7 +304,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (2.1.1)
+    regexp_parser (2.2.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
