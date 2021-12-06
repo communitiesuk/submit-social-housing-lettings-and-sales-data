@@ -1109,7 +1109,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "do_you_know_the_postcode": {
+                "postcode_known": {
                   "check_answer_label": "Do you know the property postcode?",
                   "header": "Do you know the postcode?",
                   "hint_text": "",
@@ -1135,7 +1135,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "do_you_know_the_local_authority": {
+                "la_known": {
                   "check_answer_label": "Do you know what local authority the property is located in?",
                   "header": "Do you know what local authority the property is located in?",
                   "hint_text": "",
@@ -1473,7 +1473,7 @@
                   }
                 }
               },
-              "depends_on": { "do_you_know_the_local_authority": "Yes" }
+              "depends_on": { "la_known": "Yes" }
             },
             "why_dont_you_know_la": {
               "header": "",
@@ -1486,15 +1486,15 @@
                   "type": "text"
                 }
               },
-              "depends_on": { "do_you_know_the_local_authority": "No" }
+              "depends_on": { "la_known": "No" }
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
               "description": "",
               "questions": {
                 "first_time_property_let_as_social_housing": {
-                  "check_answer_label": "Which type was the property most recently let as?",
-                  "header": "Is this property a relet?",
+                  "check_answer_label": "Is this the first time the property has been let as social housing?",
+                  "header": "Is this the first time the property has been let as social housing?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1674,7 +1674,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "beds": {
+                "property_void_date": {
                   "check_answer_label": "void/renewal date",
                   "header": "What is the void or renewal date?",
                   "hint_text": "",
@@ -1682,6 +1682,22 @@
                 }
               },
               "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No" }
+            },
+            "new_build_handover_date": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "property_void_date": {
+                  "check_answer_label": "What is the new build handover date?",
+                  "header": "What is the new build handover date?",
+                  "hint_text": "",
+                  "type": "date"
+                }
+              },
+              "depends_on": {
+                "tenant_same_property_renewal": "No",
+                "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
+              }
             },
             "property_major_repairs": {
               "header": "",
@@ -1698,8 +1714,7 @@
                   },
                   "conditional_for": {
                     "mrcdate": ["Yes"]
-                  },
-                  "depends_on": { "tenant_same_property_renewal": "No" }
+                  }
                 },
                 "mrcdate": {
                   "check_answer_label": "What was the major repairs completion date?",
@@ -1708,30 +1723,7 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "rsnvac": "First let of newbuild property" }
-            },
-            "new_build_handover_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "majorrepairs": {
-                  "check_answer_label": "Were major repairs carried out during the void period?",
-                  "header": "Were any major repairs completed during the void period?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
-                  },
-                  "conditional_for": {
-                    "mrcdate": ["Yes"]
-                  },
-                  "depends_on": {
-                    "tenant_same_property_renewal": "No",
-                    "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
-                  }
-                }
-              }
+              "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No"}
             }
           }
         }

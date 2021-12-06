@@ -84,7 +84,7 @@ module Validations::HouseholdValidations
         record.errors.add :unittype_gn, "A shared house must have 1 to 7 bedrooms"
       end
 
-      if record.unittype_gn.include?("Shared") && !record.beds.to_i.between?(1, 3)
+      if record.unittype_gn.include?("Shared") && !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, "A shared house with less than two tenants must have 1 to 3 bedrooms"
       end
     end

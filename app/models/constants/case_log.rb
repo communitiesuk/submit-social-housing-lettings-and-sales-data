@@ -17,7 +17,7 @@ module Constants::CaseLog
 
   BUILTYPE = {
     "Purpose built" => 1,
-    "Conversion" => 2,
+    "Converted from previous residential or non-residential property" => 2,
   }.freeze
 
   ECSTAT = {
@@ -169,7 +169,7 @@ module Constants::CaseLog
     "First let of leased property" => 17,
     "Tenant evicted due to arrears" => 10,
     "Tenant evicted due to ASB or other reason" => 11,
-    "Tenant died (no succession)" => 5,
+    "Previous tenant passed away (no succession)" => 5,
     "Tenant moved to other social housing provider" => 12,
     "Tenant abandoned property" => 6,
     "Tenant moved to private sector or other accommodation" => 8,
