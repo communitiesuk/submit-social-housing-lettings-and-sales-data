@@ -1,4 +1,4 @@
-module Constants::DbEnums
+module Constants::CaseLog
   BENEFITCAP = {
     "Yes - benefit cap" => 5,
     "Yes - removal of the spare room subsidy" => 4,
@@ -672,27 +672,31 @@ module Constants::DbEnums
   }.freeze
 
   NEEDS_TYPE = {
-    "General Needs" => 1,
-    "Supported Housing" => 2,
-  }.freeze
-
-  ORG_TYPE = {
-    "LA" => 1,
-    "PRP" => 2,
+    "General needs" => 1,
+    "Supported housing" => 2,
   }.freeze
 
   LET_TYPE = {
-    "Social Rent General Needs PRP" => 1,
-    "Social Rent Supported Housing PRP" => 2,
-    "Social Rent General Needs LA" => 3,
-    "Social Rent Supported Housing LA" => 4,
-    "Affordable Rent General Needs PRP" => 5,
-    "Affordable Rent Supported Housing PRP" => 6,
-    "Affordable Rent General Needs LA" => 7,
-    "Affordable Rent Supported Housing LA" => 8,
-    "Intermediate Rent General Needs PRP" => 9,
-    "Intermediate Rent Supported Housing PRP" => 10,
-    "Intermediate Rent General Needs LA" => 11,
-    "Intermediate Rent Supported Housing LA" => 12,
+    "Social Rent General needs PRP" => 1,
+    "Social Rent Supported housing PRP" => 2,
+    "Social Rent General needs LA" => 3,
+    "Social Rent Supported housing LA" => 4,
+    "Affordable Rent General needs PRP" => 5,
+    "Affordable Rent Supported housing PRP" => 6,
+    "Affordable Rent General needs LA" => 7,
+    "Affordable Rent Supported housing LA" => 8,
+    "Intermediate Rent General needs PRP" => 9,
+    "Intermediate Rent Supported housing PRP" => 10,
+    "Intermediate Rent General needs LA" => 11,
+    "Intermediate Rent Supported housing LA" => 12,
+  }.freeze
+
+  RENT_TYPE_MAPPING = {
+    "Social rent" => "Social Rent",
+    "Affordable rent" => "Affordable Rent",
+    "London Affordable rent" => "Affordable Rent",
+    "Rent to buy" => "Intermediate Rent",
+    "London living rent" => "Intermediate Rent",
+    "Other intermediate rent product" => "Intermediate Rent",
   }.freeze
 end

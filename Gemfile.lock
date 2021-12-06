@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 1fe6c2e8a56f46ae4c2f13ffa0733cce3b717c2d
+  revision: 5f54d780a3d8f21cfe4f424a7d0435be2e279356
   branch: main
   specs:
     rspec-rails (5.1.0.pre)
@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-support.git
-  revision: 9499cb622f9feef43a53f357809f9e656e7cb6de
+  revision: 321dc7227df43cd682c293fa31fa427b94b2ea74
   branch: main
   specs:
     rspec-support (3.11.0.pre)
@@ -178,13 +178,13 @@ GEM
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
     formtastic_i18n (0.7.0)
-    globalid (0.6.0)
+    globalid (1.0.0)
       activesupport (>= 5.0)
-    govuk-components (2.1.4)
+    govuk-components (2.1.5)
       activemodel (>= 6.0)
       railties (>= 6.0)
       view_component (~> 2.39.0)
-    govuk_design_system_formbuilder (2.7.6)
+    govuk_design_system_formbuilder (2.8.0)
       actionview (>= 6.0)
       activemodel (>= 6.0)
       activesupport (>= 6.0)
@@ -249,7 +249,7 @@ GEM
       iniparse (~> 1.4)
       rexml (~> 3.2)
     parallel (1.21.0)
-    parser (3.0.2.0)
+    parser (3.0.3.1)
       ast (~> 2.4.1)
     pg (1.2.3)
     pry (0.13.1)
@@ -304,7 +304,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    regexp_parser (2.1.1)
+    regexp_parser (2.2.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -377,7 +377,7 @@ GEM
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    uk_postcode (2.1.6)
+    uk_postcode (2.1.7)
     unicode-display_width (2.1.0)
     view_component (2.39.0)
       activesupport (>= 5.0.0, < 8.0)
@@ -441,7 +441,6 @@ DEPENDENCIES
   scss_lint-govuk
   selenium-webdriver
   simplecov
-  turbo-rails (~> 0.8)
   tzinfo-data
   uk_postcode
   view_component

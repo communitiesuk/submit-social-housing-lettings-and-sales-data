@@ -52,7 +52,7 @@ FactoryBot.define do
       startertenancy { "No" }
       tenancylength { 5 }
       tenancy { "Secure (including flexible)" }
-      lettype { "Affordable Rent General Needs LA" }
+      lettype { "Affordable Rent General needs LA" }
       landlord { "This landlord" }
       previous_postcode { "SE2 6RT" }
       rsnvac { "Tenant abandoned property" }

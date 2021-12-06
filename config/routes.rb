@@ -38,16 +38,16 @@ Rails.application.routes.draw do
     end
 
     member do
-      post "form", to: "case_logs#submit_form"
+      post "form", to: "form#submit_form"
     end
 
     form.pages.map do |page|
-      get page.id.to_s.dasherize, to: "case_logs##{page.id}"
+      get page.id.to_s.dasherize, to: "form##{page.id}"
       get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
     end
 
     form.subsections.map do |subsection|
-      get "#{subsection.id.to_s.dasherize}/check-answers", to: "case_logs#check_answers"
+      get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
     end
   end
 end

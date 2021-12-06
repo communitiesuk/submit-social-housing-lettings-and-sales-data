@@ -30,7 +30,7 @@ end
 class CaseLog < ApplicationRecord
   include Discard::Model
   include Validations::SoftValidations
-  include Constants::DbEnums
+  include Constants::CaseLog
   include Constants::IncomeRanges
   default_scope -> { kept }
 
@@ -155,15 +155,6 @@ class CaseLog < ApplicationRecord
   end
 
 private
-
-  RENT_TYPE_MAPPING = {
-    "Social Rent" => "Social Rent",
-    "Affordable Rent" => "Affordable Rent",
-    "London Affordable Rent" => "Affordable Rent",
-    "Rent To Buy" => "Intermediate Rent",
-    "London Living Rent" => "Intermediate Rent",
-    "Other Intermediate Rent Product" => "Intermediate Rent",
-  }.freeze
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?

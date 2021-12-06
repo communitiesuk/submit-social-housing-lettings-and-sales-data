@@ -15,9 +15,9 @@ gem "puma", "~> 5.0"
 gem "webpacker", "~> 5.0"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
-# Gov.UK frontend components
+# GOV UK frontend components
 gem "govuk-components"
-# Gov.UK component form builder DSL
+# GOV UK component form builder DSL
 gem "govuk_design_system_formbuilder"
 # Turbo & Stimulus
 gem "hotwire-rails"
@@ -34,8 +34,9 @@ gem "json-schema"
 # Authentication
 # Point at branch until devise is compatible with Turbo, see https://github.com/heartcombo/devise/pull/5340
 gem "devise", github: "ghiculescu/devise", branch: "error-code-422"
-gem "turbo-rails", "~> 0.8"
+# UK postcode parsing and validation
 gem "uk_postcode"
+# Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
 gem "view_component"
 
 group :development, :test do

@@ -790,6 +790,24 @@ RSpec.describe Form, type: :model do
         }.not_to raise_error
       end
     end
+
+    context "Validate type of unit" do
+      it "Cannot be bedsit if no of bedrooms is greater than 1" do
+        expect {
+          CaseLog.create!(unittype_gn: "Bed-sit",
+                          beds: 2,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(unittype_gn: "Bed-sit",
+                          beds: 1,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.not_to raise_error
+      end
+    end
   end
 
   describe "status" do
@@ -850,8 +868,8 @@ RSpec.describe Form, type: :model do
         # rubocop:enable Style/DateTime
         net_income_known: "Prefer not to say",
         other_hhmemb: 6,
-        rent_type: "London Living Rent",
-        needstype: "General Needs",
+        rent_type: "London living rent",
+        needstype: "General needs",
       })
     end
 
@@ -909,7 +927,7 @@ RSpec.describe Form, type: :model do
       case_log.reload
 
       record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
-      expect(case_log.lettype).to eq("Intermediate Rent General Needs PRP")
+      expect(case_log.lettype).to eq("Intermediate Rent General needs PRP")
       expect(record_from_db["lettype"]).to eq(9)
     end
   end
