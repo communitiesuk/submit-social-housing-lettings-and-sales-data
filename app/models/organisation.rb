@@ -23,15 +23,15 @@ class Organisation < ApplicationRecord
   end
 
   def display_attributes
-    {
-      name: name,
-      address: address_string,
-      telephone_number: phone,
-      type: "Org type",
-      local_authorities_operated_in: local_authorities,
-      holds_own_stock: holds_own_stock,
-      other_stock_owners: other_stock_owners,
-      managing_agents: managing_agents,
-    }
+    [
+      { name: "name", value: name, editable: true },
+      { name: "address", value: address_string, editable: true },
+      { name: "telephone_number", value: phone, editable: true },
+      { name: "type", value: "Org type", editable: false },
+      { name: "local_authorities_operated_in", value: local_authorities, editable: false },
+      { name: "holds_own_stock", value: holds_own_stock, editable: false },
+      { name: "other_stock_owners", value: other_stock_owners, editable: false },
+      { name: "managing_agents", value: managing_agents, editable: false }
+    ]
   end
 end

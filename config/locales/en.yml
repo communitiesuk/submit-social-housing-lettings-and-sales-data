@@ -31,3 +31,5 @@
 
 en:
   service_name: "Log social housing lettings and sales (CORE)"
+  organisation:
+    updated: "Organisation details updated"
