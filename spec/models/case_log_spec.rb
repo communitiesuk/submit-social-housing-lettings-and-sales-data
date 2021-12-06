@@ -808,6 +808,24 @@ RSpec.describe Form, type: :model do
         }.not_to raise_error
       end
     end
+
+    context "Validate local authority" do
+      it "Has to be london if rent type london affordable rent" do
+        expect {
+          CaseLog.create!(la: "Ashford",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(la: "Westminster",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.not_to raise_error
+      end
+    end
   end
 
   describe "status" do
