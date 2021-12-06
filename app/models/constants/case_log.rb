@@ -698,29 +698,5 @@ module Constants::CaseLog
     "Rent to buy" => "Intermediate Rent",
     "London living rent" => "Intermediate Rent",
     "Other intermediate rent product" => "Intermediate Rent",
-}.freeze
-
-  LET_TYPE = {
-    "Social Rent General needs PRP" => 1,
-    "Social Rent Supported housing PRP" => 2,
-    "Social Rent General needs LA" => 3,
-    "Social Rent Supported housing LA" => 4,
-    "Affordable Rent General needs PRP" => 5,
-    "Affordable Rent Supported housing PRP" => 6,
-    "Affordable Rent General needs LA" => 7,
-    "Affordable Rent Supported housing LA" => 8,
-    "Intermediate Rent General needs PRP" => 9,
-    "Intermediate Rent Supported housing PRP" => 10,
-    "Intermediate Rent General needs LA" => 11,
-    "Intermediate Rent Supported housing LA" => 12,
-  }.freeze
-
-  RENT_TYPE_MAPPING = {
-    "Social rent" => "Social Rent",
-    "Affordable rent" => "Affordable Rent",
-    "London Affordable rent" => "Affordable Rent",
-    "Rent to buy" => "Intermediate Rent",
-    "London living rent" => "Intermediate Rent",
-    "Other intermediate rent product" => "Intermediate Rent",
   }.freeze
 end
