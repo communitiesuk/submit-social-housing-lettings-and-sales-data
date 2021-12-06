@@ -145,6 +145,7 @@
     "void_or_renewal_date": "05/05/2020",
     "tenant_same_property_renewal": "Yes",
     "new_build_handover_date": "01/01/2019",
-    "joint_tenancy": "Yes"
+    "joint_tenancy": "Yes",
+    "letting_in_sheltered_accomodation": "No"
   }
 }

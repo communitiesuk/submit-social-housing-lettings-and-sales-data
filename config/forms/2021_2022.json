@@ -1128,6 +1128,24 @@
                   "step": 1
                 }
               }
+            },
+            "letting_in_sheltered_accomodation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "lettinginshelteredaccomodation": {
+                  "check_answer_label": "Is this letting in sheltered accommodation?",
+                  "header": "Is this letting in sheltered accommodation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes - sheltered housing",
+                    "1": "Yes - extra care housing",
+                    "2": "No",
+                    "3": "Don't know"
+                  }
+                }
+              }
             }
           }
         },

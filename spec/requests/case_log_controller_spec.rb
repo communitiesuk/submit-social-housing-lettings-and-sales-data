@@ -243,13 +243,16 @@ RSpec.describe CaseLogsController, type: :request do
 
       context "tenancy information pages" do
         let(:headers) { { "Accept" => "text/html" } }
-        
-        before do
-          sign_in user
-          get "/case_logs/#{case_log.id}/joint_tenancy", headers: headers, params: { case_log_id: case_log.id }
-        end 
   
         it "has a joint tenancy page that can be visited" do
+          sign_in user
+          get "/case-logs/#{case_log.id}/joint-tenancy", headers: headers, params: { case_log_id: case_log.id }
+          expect(response).to have_http_status(:success) 
+        end 
+
+        it "has a letting in sheltered accomondation page that can be visited" do
+          sign_in user
+          get "/case-logs/#{case_log.id}/letting-in-sheltered-accomodation", headers: headers, params: { case_log_id: case_log.id }
           expect(response).to have_http_status(:success) 
         end 
       end 

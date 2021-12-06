@@ -149,6 +149,7 @@ FactoryBot.define do
       builtype { 1 }
       unitletas { 2 }
       joint_tenancy { 1 }
+      letting_in_sheltered_accomodation { 2 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

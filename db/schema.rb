@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 2022_01_07_103143) do
     t.integer "totadult"
     t.integer "net_income_known"
     t.integer "joint_tenancy"
+    t.integer "letting_in_sheltered_accomodation"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
