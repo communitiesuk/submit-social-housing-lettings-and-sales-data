@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
   <head>
-    <% if @resource.present? && @resource.errors.present? %>
-      <title><%= browser_title("Error: #{yield(:title)}") %></title>
-    <% elsif @user.present? && @user.errors.present? %>
-      <title><%= browser_title("Error: #{yield(:title)}") %></title>
-    <% elsif @case_log.present? && @case_log.errors.present?%>
-      <title><%= browser_title("Error: #{yield(:title)}") %></title>
-    <% else %>
-      <title><%= browser_title(yield(:title)) %></title>
-    <% end %>
+    <title><%= browser_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
