@@ -1,7 +1,7 @@
 module ApplicationHelper
   def browser_title(title)
     if user_log_errors || case_log_errors || resource_errors
-      ["Error", title, t("service_name"), "GOV.UK"].select(&:present?).join(" - ")
+      "Error: #{[title, t("service_name"), "GOV.UK"].select(&:present?).join(" - ")}"
     else
       [title, t("service_name"), "GOV.UK"].select(&:present?).join(" - ")
     end
