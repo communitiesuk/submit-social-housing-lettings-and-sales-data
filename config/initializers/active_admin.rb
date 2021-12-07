@@ -333,3 +333,10 @@ ActiveAdmin.setup do |config|
   #
   config.use_webpacker = true
 end
+
+# Print stylesheet is no longer a separate stylesheet in upstream so we can
+# delete this when the next version bump is released but for now it prevents
+# webpacker issues.
+Rails.application.config.after_initialize do
+  ActiveAdmin.application.stylesheets.delete('active_admin/print.css')
+end
