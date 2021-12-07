@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def update
     if @user.update(user_params)
       bypass_sign_in @user
-      flash[:notice] = I18n.t("devise.passwords.updated")
+      flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
       redirect_to user_path(@user)
     end
   end
