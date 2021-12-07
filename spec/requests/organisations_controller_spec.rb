@@ -143,7 +143,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows an edit form" do
-            expect(response.body).to include("Change #{organisation.name}&#39;s details")
+            expect(response.body).to include("Change #{organisation.name}’s details")
             expect(page).to have_field("organisation-name-field")
             expect(page).to have_field("organisation-phone-field")
           end

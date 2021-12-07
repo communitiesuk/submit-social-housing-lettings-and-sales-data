@@ -31,7 +31,7 @@ class Organisation < ApplicationRecord
       { name: "local_authorities_operated_in", value: local_authorities, editable: false },
       { name: "holds_own_stock", value: holds_own_stock, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
-      { name: "managing_agents", value: managing_agents, editable: false }
+      { name: "managing_agents", value: managing_agents, editable: false },
     ]
   end
 end
