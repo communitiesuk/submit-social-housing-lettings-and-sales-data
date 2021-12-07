@@ -1,4 +1,4 @@
-<% content_for :title, "Change #{@organisation.name}'s details" %>
+<% content_for :title, "Change #{@organisation.name}’s details" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
@@ -27,11 +27,14 @@
       %>
 
       <%= f.govuk_text_field :postcode,
-        autocomplete: "postal-code"
+        autocomplete: "postal-code",
+        width: 10
       %>
 
       <%= f.govuk_phone_field :phone,
-        autocomplete: "tel"
+        label: { text: "Telephone number" },
+        autocomplete: "tel",
+        width: 20
       %>
 
       <%= f.govuk_submit "Save changes" %>
