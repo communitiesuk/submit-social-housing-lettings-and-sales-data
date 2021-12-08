@@ -3,12 +3,13 @@ require_relative "../../support/devise"
 
 RSpec.describe Auth::PasswordsController, type: :request do
   let(:params) { { user: { email: email } } }
+  let(:page) { Capybara::Node::Simple.new(response.body) }
 
   context "when a password reset is requested for a valid email" do
     let(:user) { FactoryBot.create(:user) }
     let(:email) { user.email }
 
-    it "redirects to the email sent page anyway" do
+    it "redirects to the email sent page" do
       post "/users/password", params: params
       expect(response).to have_http_status(:redirect)
       follow_redirect!
@@ -41,6 +42,34 @@ RSpec.describe Auth::PasswordsController, type: :request do
       email_ascii_content = ActionMailer::Base.deliveries.last.body.raw_source
       email_content = email_ascii_content.encode("ASCII", "UTF-8", undef: :replace)
       expect(email_content).to match(email)
+    end
+  end
+
+  context "#Update - reset password" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:token) { user.send(:set_reset_password_token) }
+    let(:updated_password) { "updated_password_280" }
+    let(:update_password_params) do
+      {
+        user:
+          {
+            reset_password_token: token,
+            password: updated_password,
+            password_confirmation: updated_password
+          }
+      }
+    end
+    let(:message) { "Your password has been changed successfully. You are now signed in" }
+
+    it "changes the password" do
+      expect { put "/users/password", params: update_password_params }
+        .to change { user.reload.encrypted_password }
+    end
+
+    it "signs in" do
+      put "/users/password", params: update_password_params
+      follow_redirect!
+      expect(page).to have_css("div", class: "govuk-notification-banner__heading", text: message)
     end
   end
 end
