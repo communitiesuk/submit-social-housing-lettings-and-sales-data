@@ -55,15 +55,15 @@ RSpec.describe Auth::PasswordsController, type: :request do
           {
             reset_password_token: token,
             password: updated_password,
-            password_confirmation: updated_password
-          }
+            password_confirmation: updated_password,
+          },
       }
     end
     let(:message) { "Your password has been changed successfully. You are now signed in" }
 
     it "changes the password" do
       expect { put "/users/password", params: update_password_params }
-        .to change { user.reload.encrypted_password }
+        .to(change { user.reload.encrypted_password })
     end
 
     it "signs in" do
