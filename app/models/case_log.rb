@@ -1,3 +1,7 @@
+require "uri"
+require "net/http"
+require "json"
+
 class CaseLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
   # or form page submission
@@ -193,6 +197,14 @@ private
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
+    self.la = get_la(property_postcode) if property_postcode.present?
+  end
+
+  def get_la(postcode)
+    uri = URI("https://api.os.uk/search/places/v1/postcode?key=#{ENV['OS_PLACES_API_KEY']}&postcode=#{postcode}&dataset=LPI")
+    res = Net::HTTP.get_response(uri)
+    response_body = JSON.parse(res.body)
+    response_body["results"][0]["LPI"]["ADMINISTRATIVE_AREA"].downcase.capitalize if res.is_a?(Net::HTTPSuccess) && (response_body["header"]["totalresults"]).to_i.positive?
   end
 
   def all_fields_completed?
