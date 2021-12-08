@@ -338,5 +338,5 @@ end
 # delete this when the next version bump is released but for now it prevents
 # webpacker issues.
 Rails.application.config.after_initialize do
-  ActiveAdmin.application.stylesheets.delete('active_admin/print.css')
+  ActiveAdmin.application.stylesheets.delete("active_admin/print.css")
 end

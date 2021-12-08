@@ -27,8 +27,8 @@ class BulkUpload
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
         row = sheet.row(row_num)
-        owning_organisation = Organisation.find(row[111])
-        managing_organisation = Organisation.find(row[113])
+        # owning_organisation = Organisation.find(row[111])
+        # managing_organisation = Organisation.find(row[113])
         case_log = CaseLog.create!(
           owning_organisation: current_user.organisation,
           managing_organisation: current_user.organisation,
