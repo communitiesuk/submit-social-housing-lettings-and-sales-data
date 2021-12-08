@@ -1,0 +1,45 @@
+<% content_for :title, "Change #{@organisation.name}’s details" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: 'Back',
+    href: :back,
+  ) %>
+<% end %>
+
+<%= form_for(@organisation, as: :organisation, html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= f.govuk_text_field :name,
+        autocomplete: "name"
+      %>
+
+      <%= f.govuk_text_field :address_line1,
+        label: { text: "Address line 1" },
+        autocomplete: "address-line1"
+      %>
+
+      <%= f.govuk_text_field :address_line2,
+        label: { text: "Address line 2" },
+        autocomplete: "address-line2"
+      %>
+
+      <%= f.govuk_text_field :postcode,
+        autocomplete: "postal-code",
+        width: 10
+      %>
+
+      <%= f.govuk_phone_field :phone,
+        label: { text: "Telephone number" },
+        autocomplete: "tel",
+        width: 20
+      %>
+
+      <%= f.govuk_submit "Save changes" %>
+    </div>
+  </div>
+<% end %>
