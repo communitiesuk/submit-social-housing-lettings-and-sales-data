@@ -1,5 +1,6 @@
 require "rails_helper"
 require_relative "helpers"
+require_relative "../../request_helper"
 
 RSpec.describe "Form Page Routing" do
   include Helpers
@@ -15,6 +16,7 @@ RSpec.describe "Form Page Routing" do
   let(:id) { case_log.id }
 
   before do
+    RequestHelper.stub_http_requests
     allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
     sign_in user
   end

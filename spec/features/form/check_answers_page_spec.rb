@@ -1,5 +1,6 @@
 require "rails_helper"
 require_relative "helpers"
+require_relative "../../request_helper"
 
 RSpec.describe "Form Check Answers Page" do
   include Helpers
@@ -22,6 +23,7 @@ RSpec.describe "Form Check Answers Page" do
   let(:id) { case_log.id }
 
   before do
+    RequestHelper.stub_http_requests
     sign_in user
   end
 
