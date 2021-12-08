@@ -1483,7 +1483,7 @@
                   "check_answer_label": "Reason for not knowing local authority",
                   "header": "Give a reason why you don’t know the postcode or local authority",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "textarea"
                 }
               },
               "depends_on": { "la_known": "No" }
