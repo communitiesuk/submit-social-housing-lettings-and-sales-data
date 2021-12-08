@@ -222,6 +222,28 @@
           }
         }
       },
+      "about_this_log": {
+        "label": "About this log",
+        "subsections": {
+          "about_this_log": {
+            "label": "About this log",
+            "pages": {
+              "startdate": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "startdate": {
+                    "check_answer_label": "Tenancy start date",
+                    "header": "What is the tenancy start date?",
+                    "hint_text": "For example, 27 3 2007",
+                    "type": "date"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "tenancy_and_property": {
         "label": "Tenancy and property information",
         "subsections": {
