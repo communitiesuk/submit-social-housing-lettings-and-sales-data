@@ -33,7 +33,7 @@ RSpec.describe "validations" do
         expect(page).to have_selector("#error-summary-title")
         expect(page).to have_selector("#case-log-age1-error")
         expect(page).to have_selector("#case-log-age1-field-error")
-        expect(page).to have_title('Error')
+        expect(page).to have_title("Error")
       end
 
       it " of greater than 120 it shows validation" do
@@ -42,7 +42,7 @@ RSpec.describe "validations" do
         expect(page).to have_selector("#error-summary-title")
         expect(page).to have_selector("#case-log-age1-error")
         expect(page).to have_selector("#case-log-age1-field-error")
-        expect(page).to have_title('Error')
+        expect(page).to have_title("Error")
       end
     end
   end

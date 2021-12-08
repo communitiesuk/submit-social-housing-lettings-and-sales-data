@@ -34,7 +34,7 @@ RSpec.describe "User Features" do
       click_button("Send email")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
 
     it " is shown an error message if they submit an invalid email address" do
@@ -43,7 +43,7 @@ RSpec.describe "User Features" do
       click_button("Send email")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
 
     it " is redirected to check your email page after submitting an email on the reset password page" do
@@ -111,7 +111,7 @@ RSpec.describe "User Features" do
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
 
     it "show specific field error messages if a field was omitted" do
@@ -120,7 +120,7 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_selector("#user-password-field-error")
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
 
     it "show specific field error messages if an invalid email address is entered" do
@@ -130,7 +130,7 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
   end
 
@@ -185,7 +185,7 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_content(/Enter an email address/)
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
 
     it "validates email" do
@@ -196,7 +196,7 @@ RSpec.describe "User Features" do
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
       expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
-      expect(page).to have_title('Error')
+      expect(page).to have_title("Error")
     end
   end
 end
