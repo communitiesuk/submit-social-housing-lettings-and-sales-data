@@ -60,6 +60,7 @@ RSpec.describe UsersController, type: :request do
         it "shows an error if passwords don't match" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_selector("#error-summary-title")
+          expect(page).to have_content("Password confirmation doesn't match Password")
         end
       end
     end

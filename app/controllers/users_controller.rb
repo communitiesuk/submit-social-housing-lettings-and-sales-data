@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 private
 
   def format_error_messages
-    errors = @user.errors.to_h
+    errors = @user.errors.to_hash
     @user.errors.clear
     errors.each do |attribute, message|
       @user.errors.add attribute.to_sym, format_error_message(attribute, message)
