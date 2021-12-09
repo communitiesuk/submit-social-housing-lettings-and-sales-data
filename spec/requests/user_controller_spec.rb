@@ -150,6 +150,18 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
+    context "update fails to persist" do
+      before do
+        allow_any_instance_of(User).to receive(:update).and_return(false)
+        sign_in user
+        patch "/users/#{user.id}", headers: headers, params: params
+      end
+
+      it "show an error" do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     context "current user is another user" do
       let(:params) { { id: unauthorised_user.id, user: { name: new_value } } }
 
