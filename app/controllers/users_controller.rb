@@ -11,8 +11,10 @@ class UsersController < ApplicationController
       flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
       redirect_to user_path(@user)
     elsif user_params.key?("password")
+      format_error_messages
       render :edit_password, status: :unprocessable_entity
     else
+      format_error_messages
       render :edit, status: :unprocessable_entity
     end
   end
@@ -42,6 +44,18 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def format_error_messages
+    errors = @user.errors.to_h
+    @user.errors.clear
+    errors.each do |attribute, message|
+      @user.errors.add attribute.to_sym, format_error_message(attribute, message)
+    end
+  end
+
+  def format_error_message(attribute, message)
+    [attribute.to_s.humanize.capitalize, message].join(" ")
+  end
 
   def password_params
     { password: SecureRandom.hex(8) }
