@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BulkUploadController, type: :request do
-  let(:url) { "/case-logs/bulk-upload" }
+  let(:url) { "/logs/bulk-upload" }
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   before do

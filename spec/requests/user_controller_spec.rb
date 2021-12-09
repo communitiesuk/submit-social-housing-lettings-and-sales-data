@@ -33,7 +33,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "#patch" do
       it "does not let you update user details" do
-        patch "/case-logs/#{user.id}", params: {}
+        patch "/logs/#{user.id}", params: {}
         expect(response).to redirect_to("/users/sign-in")
       end
     end
