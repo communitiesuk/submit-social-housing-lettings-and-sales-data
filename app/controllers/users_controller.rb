@@ -10,6 +10,10 @@ class UsersController < ApplicationController
       bypass_sign_in @user
       flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
       redirect_to user_path(@user)
+    elsif user_params.key?("password")
+      render :edit_password, status: :unprocessable_entity
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -48,7 +52,7 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :password, :role)
+    params.require(:user).permit(:email, :name, :password, :password_confirmation, :role)
   end
 
   def find_resource

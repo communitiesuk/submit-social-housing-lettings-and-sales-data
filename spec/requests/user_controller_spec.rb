@@ -44,6 +44,24 @@ RSpec.describe UsersController, type: :request do
         get "/users/password/edit?reset_password_token=#{enc}"
         expect(page).to have_css("h1", class: "govuk-heading-l", text: "Reset your password")
       end
+
+      context "update password" do
+        let(:params) do
+          {
+            id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+          }
+        end
+
+        before do
+          sign_in user
+          put "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "shows an error if passwords don't match" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_selector("#error-summary-title")
+        end
+      end
     end
   end
 
@@ -142,6 +160,24 @@ RSpec.describe UsersController, type: :request do
 
       it "returns not found 404" do
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "update password" do
+      let(:params) do
+        {
+          id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+        }
+      end
+
+      before do
+        sign_in user
+        patch "/users/#{user.id}", headers: headers, params: params
+      end
+
+      it "shows an error if passwords don't match" do
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(page).to have_selector("#error-summary-title")
       end
     end
   end
