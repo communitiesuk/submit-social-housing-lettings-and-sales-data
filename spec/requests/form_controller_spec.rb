@@ -23,19 +23,19 @@ RSpec.describe FormController, type: :request do
   context "a not signed in user" do
     describe "GET" do
       it "does not let you get case logs pages you don't have access to" do
-        get "/case-logs/#{case_log.id}/person-1-age", headers: headers, params: {}
+        get "/logs/#{case_log.id}/person-1-age", headers: headers, params: {}
         expect(response).to redirect_to("/users/sign-in")
       end
 
       it "does not let you get case log check answer pages you don't have access to" do
-        get "/case-logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+        get "/logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
         expect(response).to redirect_to("/users/sign-in")
       end
     end
 
     describe "POST" do
       it "does not let you post form answers to case logs you don't have access to" do
-        post "/case-logs/#{case_log.id}/form", params: {}
+        post "/logs/#{case_log.id}/form", params: {}
         expect(response).to redirect_to("/users/sign-in")
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe FormController, type: :request do
       context "form pages" do
         context "case logs that are not owned or managed by your organisation" do
           it "does not show form pages for case logs you don't have access to" do
-            get "/case-logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
+            get "/logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
           end
         end
@@ -59,7 +59,7 @@ RSpec.describe FormController, type: :request do
       context "check answers pages" do
         context "case logs that are not owned or managed by your organisation" do
           it "does not show a check answers for case logs you don't have access to" do
-            get "/case-logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+            get "/logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
           end
         end
@@ -91,7 +91,7 @@ RSpec.describe FormController, type: :request do
 
         before do
           allow(FormHandler.instance).to receive(:get_form).and_return(form)
-          post "/case-logs/#{case_log.id}/form", params: params
+          post "/logs/#{case_log.id}/form", params: params
         end
 
         context "invalid answers" do
@@ -153,7 +153,7 @@ RSpec.describe FormController, type: :request do
         end
 
         it "sets checked items to true" do
-          post "/case-logs/#{case_log.id}/form", params: case_log_form_params
+          post "/logs/#{case_log.id}/form", params: case_log_form_params
           case_log.reload
 
           expect(case_log.housingneeds_a).to eq("Yes")
@@ -162,7 +162,7 @@ RSpec.describe FormController, type: :request do
         end
 
         it "sets previously submitted items to false when resubmitted with new values" do
-          post "/case-logs/#{case_log.id}/form", params: new_case_log_form_params
+          post "/logs/#{case_log.id}/form", params: new_case_log_form_params
           case_log.reload
 
           expect(case_log.housingneeds_a).to eq("No")
@@ -209,7 +209,7 @@ RSpec.describe FormController, type: :request do
 
           it "updates both question fields" do
             allow_any_instance_of(Form::Page).to receive(:expected_responses).and_return(questions_for_page)
-            post "/case-logs/#{case_log.id}/form", params: case_log_form_params
+            post "/logs/#{case_log.id}/form", params: case_log_form_params
             case_log.reload
 
             expect(case_log.housingneeds_a).to eq("Yes")
@@ -246,11 +246,11 @@ RSpec.describe FormController, type: :request do
         end
 
         it "routes to the appropriate conditional page based on the question answer of the current page" do
-          post "/case-logs/#{case_log.id}/form", params: case_log_form_conditional_question_yes_params
-          expect(response).to redirect_to("/case-logs/#{case_log.id}/conditional-question-yes-page")
+          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_yes_params
+          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-yes-page")
 
-          post "/case-logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
-          expect(response).to redirect_to("/case-logs/#{case_log.id}/conditional-question-no-page")
+          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
+          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-no-page")
         end
       end
 
@@ -266,7 +266,7 @@ RSpec.describe FormController, type: :request do
         end
 
         before do
-          post "/case-logs/#{unauthorized_case_log.id}/form", params: {}
+          post "/logs/#{unauthorized_case_log.id}/form", params: {}
         end
 
         it "does not let you post form answers to case logs you don't have access to" do

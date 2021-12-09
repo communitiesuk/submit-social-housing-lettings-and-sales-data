@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   form_handler = FormHandler.instance
   form = form_handler.get_form("2021_2022")
 
-  resources :case_logs, path: "/case-logs" do
+  resources :case_logs, path: "/logs" do
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"

@@ -4,7 +4,7 @@ require_relative "../../support/devise"
 describe Admin::CaseLogsController, type: :controller do
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:resource_title) { "Case Logs" }
+  let(:resource_title) { "Logs" }
   let(:valid_session) { {} }
   login_admin_user
 

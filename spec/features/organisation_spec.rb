@@ -15,7 +15,7 @@ RSpec.describe "User Features" do
 
     context "Organisation page" do
       it "defaults to organisation details" do
-        visit("/case-logs")
+        visit("/logs")
         click_link("Your organisation")
         expect(page).to have_content(user.organisation.name)
       end
@@ -51,7 +51,7 @@ RSpec.describe "User Features" do
 
     context "Organisation page" do
       it "can only see the details tab" do
-        visit("/case-logs")
+        visit("/logs")
         click_link("Your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
         expect(page).to have_no_link("Users")

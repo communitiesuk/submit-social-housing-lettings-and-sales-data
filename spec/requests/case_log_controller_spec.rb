@@ -44,7 +44,7 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     before do
-      post "/case-logs", headers: headers, params: params.to_json
+      post "/logs", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -137,12 +137,12 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         sign_in user
-        get "/case-logs", headers: headers, params: {}
+        get "/logs", headers: headers, params: {}
       end
 
       it "only shows case logs for your organisation" do
-        expected_case_row_log = "<a class=\"govuk-link\" href=\"/case-logs/#{case_log.id}\">#{case_log.id}</a>"
-        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/case-logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+        expected_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{case_log.id}\">#{case_log.id}</a>"
+        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
         expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
         expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
       end
@@ -153,7 +153,7 @@ RSpec.describe CaseLogsController, type: :request do
       let(:id) { completed_case_log.id }
 
       before do
-        get "/case-logs/#{id}", headers: headers
+        get "/logs/#{id}", headers: headers
       end
 
       it "returns http success" do
@@ -182,7 +182,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "a user that is not signed in" do
           it "does not let the user get case log tasklist pages they don't have access to" do
-            get "/case-logs/#{case_log.id}", headers: headers, params: {}
+            get "/logs/#{case_log.id}", headers: headers, params: {}
             expect(response).to redirect_to("/users/sign-in")
           end
         end
@@ -191,11 +191,11 @@ RSpec.describe CaseLogsController, type: :request do
           context "case logs that are owned or managed by your organisation" do
             before do
               sign_in user
-              get "/case-logs/#{case_log.id}", headers: headers, params: {}
+              get "/logs/#{case_log.id}", headers: headers, params: {}
             end
 
             it "shows the tasklist for case logs you have access to" do
-              expect(response.body).to match("Case log")
+              expect(response.body).to match("Log")
               expect(response.body).to match(case_log.id.to_s)
             end
 
@@ -218,7 +218,7 @@ RSpec.describe CaseLogsController, type: :request do
 
             before do
               sign_in user
-              get "/case-logs/#{section_completed_case_log.id}", headers: headers, params: {}
+              get "/logs/#{section_completed_case_log.id}", headers: headers, params: {}
             end
 
             it "displays a section status for a case log" do
@@ -231,7 +231,7 @@ RSpec.describe CaseLogsController, type: :request do
           context "case logs that are not owned or managed by your organisation" do
             before do
               sign_in user
-              get "/case-logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+              get "/logs/#{unauthorized_case_log.id}", headers: headers, params: {}
             end
 
             it "does not show the tasklist for case logs you don't have access to" do
@@ -253,7 +253,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      patch "/case-logs/#{id}", headers: headers, params: params.to_json
+      patch "/logs/#{id}", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -311,7 +311,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      put "/case-logs/#{id}", headers: headers, params: params.to_json
+      put "/logs/#{id}", headers: headers, params: params.to_json
     end
 
     it "returns http success" do
@@ -351,7 +351,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "expected deletion" do
       before do
-        delete "/case-logs/#{id}", headers: headers
+        delete "/logs/#{id}", headers: headers
       end
 
       it "returns http success" do
@@ -385,7 +385,7 @@ RSpec.describe CaseLogsController, type: :request do
     context "deletion fails" do
       before do
         allow_any_instance_of(CaseLog).to receive(:discard).and_return(false)
-        delete "/case-logs/#{id}", headers: headers
+        delete "/logs/#{id}", headers: headers
       end
 
       it "returns an unprocessable entity 422" do
