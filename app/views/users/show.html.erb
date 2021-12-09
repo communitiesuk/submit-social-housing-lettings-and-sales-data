@@ -31,7 +31,7 @@
 
       <%= summary_list.row do |row|
         row.key { 'Organisation' }
-        row.value { current_user.organisation }
+        row.value { current_user.organisation.name }
         row.action()
       end %>
 

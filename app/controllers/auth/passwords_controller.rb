@@ -11,7 +11,6 @@ class Auth::PasswordsController < Devise::PasswordsController
       resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
       render "devise/passwords/new", status: :unprocessable_entity
     else
-      flash[:notice] = "Reset password instructions have been sent to #{@email}"
       render "devise/confirmations/reset"
     end
   end
@@ -21,6 +20,11 @@ class Auth::PasswordsController < Devise::PasswordsController
     yield resource if block_given?
 
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+  end
+
+  def edit
+    super
+    render "users/reset_password"
   end
 
 protected
