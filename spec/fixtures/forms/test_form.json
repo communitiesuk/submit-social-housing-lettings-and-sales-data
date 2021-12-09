@@ -532,6 +532,18 @@
                   }
                 }
               },
+              "why_dont_you_know_la": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "why_dont_you_know_la": {
+                    "check_answer_label": "Reason for not knowing local authority",
+                    "header": "Give a reason why you don’t know the postcode or local authority",
+                    "hint_text": "",
+                    "type": "textarea"
+                  }
+                }
+              },
               "property_postcode": {
                 "questions": {
                   "property_postcode": {
