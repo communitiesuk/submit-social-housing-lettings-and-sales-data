@@ -224,6 +224,36 @@
           "property_information": {
             "label": "Property information",
             "pages": {
+              "property_postcode": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "property_postcode": {
+                    "check_answer_label": "Postcode",
+                    "header": "",
+                    "hint_text": "",
+                    "type": "text",
+                    "width": 5
+                  }
+                }
+              },
+              "do_you_know_the_local_authority": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "la_known": {
+                    "check_answer_label": "Do you know what local authority the property is located in?",
+                    "header": "Do you know what local authority the property is located in?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "No",
+                      "1": "Yes"
+                    }
+                  }
+                },
+                "depends_on": {"is_la_inferred": false}
+              },
               "property_wheelchair_accessible": {
                 "questions": {
                   "wchair": {

@@ -47,4 +47,29 @@ RSpec.describe "Form Page Routing" do
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question/check-answers")
   end
+
+  context "inferred answers routing", js: true do
+    it "shows question if the answer could not be inferred" do
+      visit("/case-logs/#{id}/property-postcode")
+      fill_in("case-log-property-postcode-field", with: "P0 5ST")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case-logs/#{id}/do-you-know-the-local-authority")
+    end
+
+    it "shows question if the answer could not be inferred" do
+      visit("/case-logs/#{id}/property-postcode")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case-logs/#{id}/do-you-know-the-local-authority")
+    end
+
+    it "does not show question if the answer could be inferred" do
+      stub_request(:get, /api.os.uk/)
+        .to_return(status: 200, body: "{\"header\": {\"totalresults\": \"1\"}, \"results\": [{\"LPI\": {\"ADMINISTRATIVE_AREA\": \"MANCHESTER\"}}]}", headers: {})
+
+      visit("/case-logs/#{id}/property-postcode")
+      fill_in("case-log-property-postcode-field", with: "P0 5ST")
+      click_button("Save and continue")
+      expect(page).to have_current_path("/case-logs/#{id}/property-wheelchair-accessible")
+    end
+  end
 end

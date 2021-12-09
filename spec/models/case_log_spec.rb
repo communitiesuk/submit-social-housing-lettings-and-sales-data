@@ -1035,7 +1035,7 @@ RSpec.describe Form, type: :model do
         })
       end
 
-      it "correctly infers postcode" do
+      it "correctly infers la" do
         address_case_log.reload
 
         record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]

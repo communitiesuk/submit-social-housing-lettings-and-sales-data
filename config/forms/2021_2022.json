@@ -1119,10 +1119,10 @@
                     "1": "Yes"
                   },
                   "conditional_for": {
-                    "postcode": ["Yes"]
+                    "property_postcode": ["Yes"]
                   }
                 },
-                "postcode": {
+                "property_postcode": {
                   "check_answer_label": "Postcode",
                   "header": "",
                   "hint_text": "",
@@ -1145,7 +1145,8 @@
                     "1": "Yes"
                   }
                 }
-              }
+              },
+              "depends_on": {"is_la_inferred": false}
             },
             "select_local_authority": {
               "header": "",
@@ -1473,7 +1474,7 @@
                   }
                 }
               },
-              "depends_on": { "la_known": "Yes" }
+              "depends_on": { "la_known": "Yes", "is_la_inferred": false }
             },
             "why_dont_you_know_la": {
               "header": "",
@@ -1486,7 +1487,7 @@
                   "type": "textarea"
                 }
               },
-              "depends_on": { "la_known": "No" }
+              "depends_on": { "la_known": "No", "is_la_inferred": false }
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
