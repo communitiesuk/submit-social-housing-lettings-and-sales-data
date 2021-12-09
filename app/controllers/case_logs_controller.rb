@@ -31,7 +31,7 @@ class CaseLogsController < ApplicationController
         render json: { errors: @case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render_not_found_json("Case log", params[:id])
+      render_not_found_json("Log", params[:id])
     end
   end
 
@@ -43,7 +43,7 @@ class CaseLogsController < ApplicationController
         if @case_log
           render json: @case_log, status: :ok
         else
-          render_not_found_json("Case log", params[:id])
+          render_not_found_json("Log", params[:id])
         end
       end
     end
@@ -67,7 +67,7 @@ class CaseLogsController < ApplicationController
         render json: { errors: @case_log.errors.messages }, status: :unprocessable_entity
       end
     else
-      render_not_found_json("Case log", params[:id])
+      render_not_found_json("Log", params[:id])
     end
   end
 

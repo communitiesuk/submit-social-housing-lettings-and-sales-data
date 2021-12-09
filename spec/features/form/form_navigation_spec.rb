@@ -31,7 +31,7 @@ RSpec.describe "Form Navigation" do
       visit("/logs")
       click_link("Create new log")
       id = CaseLog.order(created_at: :desc).first.id
-      expect(page).to have_content("Case log #{id}")
+      expect(page).to have_content("Log #{id}")
     end
   end
 
@@ -55,7 +55,7 @@ RSpec.describe "Form Navigation" do
         visit("/logs/#{id}")
         visit("/logs/#{id}/tenant-code")
         click_link(text: "Back")
-        expect(page).to have_content("Case log #{id}")
+        expect(page).to have_content("Log #{id}")
       end
 
       it "go back to tenant code page from tenant age page", js: true do
