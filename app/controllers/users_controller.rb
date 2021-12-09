@@ -10,6 +10,12 @@ class UsersController < ApplicationController
       bypass_sign_in @user
       flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
       redirect_to user_path(@user)
+    elsif user_params.key?("password")
+      format_error_messages
+      render :edit_password, status: :unprocessable_entity
+    else
+      format_error_messages
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -39,6 +45,18 @@ class UsersController < ApplicationController
 
 private
 
+  def format_error_messages
+    errors = @user.errors.to_hash
+    @user.errors.clear
+    errors.each do |attribute, message|
+      @user.errors.add attribute.to_sym, format_error_message(attribute, message)
+    end
+  end
+
+  def format_error_message(attribute, message)
+    [attribute.to_s.humanize.capitalize, message].join(" ")
+  end
+
   def password_params
     { password: SecureRandom.hex(8) }
   end
@@ -48,7 +66,7 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :password, :role)
+    params.require(:user).permit(:email, :name, :password, :password_confirmation, :role)
   end
 
   def find_resource

@@ -146,8 +146,8 @@ RSpec.describe "User Features" do
       visit("/users/#{user.id}")
       find('[data-qa="change-password"]').click
       expect(page).to have_content("Change your password")
-      fill_in("user[current_password]", with: "pAssword1")
       fill_in("user[password]", with: "Password123!")
+      fill_in("user[password_confirmation]", with: "Password123!")
       click_button("Update")
       expect(page).to have_current_path("/users/#{user.id}")
     end
