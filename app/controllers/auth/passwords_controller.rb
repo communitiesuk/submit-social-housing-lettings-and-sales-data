@@ -11,7 +11,6 @@ class Auth::PasswordsController < Devise::PasswordsController
       resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
       render "devise/passwords/new", status: :unprocessable_entity
     else
-      flash[:notice] = "Reset password instructions have been sent to #{@email}"
       render "devise/confirmations/reset"
     end
   end
