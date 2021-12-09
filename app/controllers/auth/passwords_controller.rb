@@ -23,6 +23,11 @@ class Auth::PasswordsController < Devise::PasswordsController
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
   end
 
+  def edit
+    super
+    render "users/reset_password"
+  end
+
 protected
 
   def after_sending_reset_password_instructions_path_for(_resource)

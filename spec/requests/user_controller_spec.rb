@@ -37,6 +37,14 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/users/sign-in")
       end
     end
+
+    describe "reset password" do
+      it "renders the user edit password view" do
+        _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
+        get "/users/password/edit?reset_password_token=#{enc}"
+        expect(page).to have_css("h1", class: "govuk-heading-l", text: "Reset your password")
+      end
+    end
   end
 
   describe "#show" do
