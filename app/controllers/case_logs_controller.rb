@@ -55,7 +55,7 @@ class CaseLogsController < ApplicationController
     if @case_log
       render :edit
     else
-      render_not_found_html
+      render_not_found
     end
   end
 
