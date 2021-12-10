@@ -22,7 +22,7 @@ Bundler.require(*Rails.groups)
 module DataCollector
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -31,8 +31,5 @@ module DataCollector
     #
     config.time_zone = "London"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    # Don't generate system test files.
-    config.generators.system_tests = nil
   end
 end
