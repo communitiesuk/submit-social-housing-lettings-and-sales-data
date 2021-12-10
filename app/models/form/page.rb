@@ -21,11 +21,22 @@ class Form::Page
     soft_validations.present?
   end
 
+  def is_22_23_log?(startdate)
+    return false if startdate.blank?
+
+    startdate.to_date > Date.parse("2022-04-01") && startdate.to_date < Date.parse("2023-04-01")
+  end
+
   def routed_to?(case_log)
     return true unless depends_on
 
     depends_on.all? do |question, value|
       !case_log[question].nil? && case_log[question] == value
+      if question == "conditions"
+        return value.all? { |condition| eval(condition) }
+      end
+
+      case_log[question].present? && case_log[question] == value
     end
   end
 end

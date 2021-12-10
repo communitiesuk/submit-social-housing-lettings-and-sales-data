@@ -29,7 +29,7 @@ module TasklistHelper
     path = if subsection.is_started?(case_log)
              "case_log_#{subsection.id}_check_answers_path"
            else
-             "case_log_#{subsection.pages.first.id}_path"
+             "case_log_#{subsection.applicable_questions(case_log).first.page.id}_path"
            end
     send(path, case_log)
   end

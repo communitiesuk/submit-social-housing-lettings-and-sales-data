@@ -72,4 +72,28 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
     end
   end
+
+  context "routing based on start date period", js: true do
+    it "the first question in tenancy information section is joint tenancy if startdate is in 2022/23 period" do
+      visit("/case-logs/#{id}/startdate")
+      fill_in("case_log_startdate_3i", with: 10)
+      fill_in("case_log_startdate_2i", with: 10)
+      fill_in("case_log_startdate_1i", with: 2022)
+      click_button("Save and continue")
+      visit("/case-logs/#{id}")
+      click_link(text: "Tenancy information")
+      expect(page).to have_current_path("/case-logs/#{id}/joint-tenancy")
+    end
+
+    it "the first question in tenancy information section is not joint tenancy if startdate is in 2021/22 period" do
+      visit("/case-logs/#{id}/startdate")
+      fill_in("case_log_startdate_3i", with: 10)
+      fill_in("case_log_startdate_2i", with: 10)
+      fill_in("case_log_startdate_1i", with: 2021)
+      click_button("Save and continue")
+      visit("/case-logs/#{id}")
+      click_link(text: "Tenancy information")
+      expect(page).to have_current_path("/case-logs/#{id}/tenancy-code")
+    end
+  end
 end

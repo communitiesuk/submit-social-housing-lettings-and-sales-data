@@ -1069,7 +1069,8 @@
                     "2": "Don't know"
                   }
                 }
-              }
+              },
+              "depends_on": { "conditions" : ["is_22_23_log?(case_log[\"startdate\"])"] }
             },
             "starter_tenancy": {
               "header": "",

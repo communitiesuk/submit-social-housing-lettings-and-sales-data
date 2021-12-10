@@ -250,16 +250,6 @@
           "tenancy_information": {
             "label": "Tenancy information",
             "pages": {
-              "tenancy_code": {
-                "questions": {
-                  "tenancy_code": {
-                    "check_answer_label": "What is the tenancy code?",
-                    "header": "What is the tenancy code?",
-                    "type": "text",
-                    "width": 10
-                  }
-                }
-              },
               "joint_tenancy": {
                 "header": "",
                 "description": "",
@@ -274,6 +264,17 @@
                       "1": "No",
                       "2": "Don't know"
                     }
+                  }
+                },
+                "depends_on": { "conditions" : ["is_22_23_log?(case_log[\"startdate\"])"] }
+              },
+              "tenancy_code": {
+                "questions": {
+                  "tenancy_code": {
+                    "check_answer_label": "What is the tenancy code?",
+                    "header": "What is the tenancy code?",
+                    "type": "text",
+                    "width": 10
                   }
                 }
               },
