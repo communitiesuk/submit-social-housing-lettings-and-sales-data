@@ -65,7 +65,7 @@ module Constants::CaseLog
   ILLNESS = {
     "Yes" => 1,
     "No" => 2,
-    "Do not know" => 3,
+    "Prefer not to say" => 3,
   }.freeze
 
   LEFTREG = {
