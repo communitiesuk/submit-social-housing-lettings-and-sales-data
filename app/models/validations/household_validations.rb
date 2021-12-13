@@ -74,6 +74,16 @@ module Validations::HouseholdValidations
     validate_person_age_matches_economic_status(record, 1)
   end
 
+  def validate_accessibility_requirements(record)
+    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h, record.accessibility_requirements_prefer_not_to_say]
+    if all_options.count("Yes") > 1
+      mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
+      unless all_options.count("Yes") == 2 && record.housingneeds_f == "Yes" && mobility_accessibility_options.any? { |x| x == "Yes" }
+        record.errors.add :housingneeds_a, "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
+      end
+    end
+  end
+
   def validate_shared_housing_rooms(record)
     unless record.unittype_gn.nil?
       if record.unittype_gn == "Bed-sit" && record.beds != 1 && record.beds.present?
