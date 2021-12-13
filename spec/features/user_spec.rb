@@ -18,7 +18,6 @@ RSpec.describe "User Features" do
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
       expect(page).to have_current_path("/logs")
-      expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
     end
   end
 
