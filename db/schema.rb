@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_03_144855) do
+ActiveRecord::Schema.define(version: 2021_12_13_122642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,9 @@ ActiveRecord::Schema.define(version: 2021_12_03_144855) do
     t.integer "lettype"
     t.integer "postcode_known"
     t.integer "la_known"
+    t.integer "day"
+    t.integer "month"
+    t.integer "year"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
