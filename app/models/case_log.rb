@@ -68,6 +68,7 @@ class CaseLog < ApplicationRecord
   enum housingneeds_f: POLAR, _suffix: true
   enum housingneeds_g: POLAR, _suffix: true
   enum housingneeds_h: POLAR, _suffix: true
+  enum accessibility_requirements_prefer_not_to_say: POLAR, _suffix: true
   enum illness_type_1: POLAR, _suffix: true
   enum illness_type_2: POLAR, _suffix: true
   enum illness_type_3: POLAR, _suffix: true

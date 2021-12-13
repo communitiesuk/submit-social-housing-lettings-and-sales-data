@@ -826,6 +826,61 @@ RSpec.describe Form, type: :model do
         }.not_to raise_error
       end
     end
+
+    context "For accessibility requirements" do
+      it "validates that only one option can be selected" do
+        expect {
+          CaseLog.create!(housingneeds_a: "Yes",
+                          housingneeds_b: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "validates that only one option a, b, or c can be selected in conjunction with f" do
+        expect {
+          CaseLog.create!(housingneeds_a: "Yes",
+                          housingneeds_f: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to_not raise_error
+
+        expect {
+          CaseLog.create!(housingneeds_b: "Yes",
+                          housingneeds_f: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to_not raise_error
+
+        expect {
+          CaseLog.create!(housingneeds_c: "Yes",
+                          housingneeds_f: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to_not raise_error
+
+        expect {
+          CaseLog.create!(housingneeds_g: "Yes",
+                          housingneeds_f: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+
+        expect {
+          CaseLog.create!(housingneeds_a: "Yes",
+                          housingneeds_b: "Yes",
+                          housingneeds_f: "Yes",
+                          rent_type: "London Affordable rent",
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe "status" do
