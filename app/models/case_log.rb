@@ -209,6 +209,7 @@ private
       self.is_la_inferred = true
       response_body["results"][0]["LPI"]["ADMINISTRATIVE_AREA"].downcase.capitalize
     end
+    self.is_la_inferred = false
   end
 
   def all_fields_completed?
