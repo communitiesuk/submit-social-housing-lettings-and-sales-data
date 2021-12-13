@@ -937,6 +937,7 @@ RSpec.describe Form, type: :model do
         property_postcode: "M1 1AE",
         previous_postcode: "M2 2AE",
         # rubocop:disable Style/DateTime
+        startdate: DateTime.new(2021, 10, 10),
         mrcdate: DateTime.new(2021, 5, 4),
         # rubocop:enable Style/DateTime
         net_income_known: "Prefer not to say",
@@ -1002,6 +1003,18 @@ RSpec.describe Form, type: :model do
       record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
       expect(case_log.lettype).to eq("Intermediate Rent General needs PRP")
       expect(record_from_db["lettype"]).to eq(9)
+    end
+
+    it "correctly derives and saves day, month, year from start date" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select day, month, year, startdate from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["startdate"].day).to eq(10)
+      expect(record_from_db["startdate"].month).to eq(10)
+      expect(record_from_db["startdate"].year).to eq(2021)
+      expect(record_from_db["day"]).to eq(10)
+      expect(record_from_db["month"]).to eq(10)
+      expect(record_from_db["year"]).to eq(2021)
     end
   end
 end
