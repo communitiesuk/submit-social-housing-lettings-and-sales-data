@@ -183,8 +183,10 @@ private
       self.mrcmonth = mrcdate.month
       self.mrcyear = mrcdate.year
     end
-    if day.present? && month.present? && year.present?
-      self.startdate = Time.zone.local(year, month, day)
+    if startdate.present?
+      self.day = startdate.day
+      self.month = startdate.month
+      self.year = startdate.year
     end
     self.incref = 1 if net_income_known == "Prefer not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
