@@ -134,6 +134,9 @@ FactoryBot.define do
       incref { 0 }
       sale_completion_date { nil }
       startdate { Time.zone.now }
+      day { Time.zone.now.day }
+      month { Time.zone.now.month }
+      year { Time.zone.now.year }
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
