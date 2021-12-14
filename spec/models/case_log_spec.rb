@@ -1059,5 +1059,26 @@ RSpec.describe Form, type: :model do
         expect(record_from_db["la"]).to eq(nil)
       end
     end
+
+    context "household members derived vars" do
+      let!(:household_case_log) do
+        CaseLog.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          other_hhmemb: 4,
+          relat2: "Child - includes young adult and grown-up",
+          relat3: "Child - includes young adult and grown-up",
+          relat4: "Other",
+          relat5: "Child - includes young adult and grown-up",
+        })
+      end
+
+      it "correctly derives and saves totchild" do
+        household_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select totchild from case_logs where id=#{household_case_log.id}").to_a[0]
+        expect(record_from_db["totchild"]).to eq(3)
+      end
+    end
   end
 end
