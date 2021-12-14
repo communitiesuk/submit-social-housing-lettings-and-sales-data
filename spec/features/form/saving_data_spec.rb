@@ -17,7 +17,6 @@ RSpec.describe "Form Saving Data" do
     FactoryBot.create(
       :case_log, :in_progress,
       housingneeds_a: "Yes",
-      housingneeds_c: "Yes",
       owning_organisation: user.organisation,
       managing_organisation: user.organisation
     )
@@ -91,10 +90,6 @@ RSpec.describe "Form Saving Data" do
     )
     expect(page).to have_unchecked_field(
       "case-log-accessibility-requirements-housingneeds-b-field",
-      visible: false,
-    )
-    expect(page).to have_checked_field(
-      "case-log-accessibility-requirements-housingneeds-c-field",
       visible: false,
     )
   end

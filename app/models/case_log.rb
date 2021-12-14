@@ -68,6 +68,7 @@ class CaseLog < ApplicationRecord
   enum housingneeds_f: POLAR, _suffix: true
   enum housingneeds_g: POLAR, _suffix: true
   enum housingneeds_h: POLAR, _suffix: true
+  enum accessibility_requirements_prefer_not_to_say: POLAR, _suffix: true
   enum illness_type_1: POLAR, _suffix: true
   enum illness_type_2: POLAR, _suffix: true
   enum illness_type_3: POLAR, _suffix: true
@@ -182,6 +183,11 @@ private
       self.mrcday = mrcdate.day
       self.mrcmonth = mrcdate.month
       self.mrcyear = mrcdate.year
+    end
+    if startdate.present?
+      self.day = startdate.day
+      self.month = startdate.month
+      self.year = startdate.year
     end
     self.incref = 1 if net_income_known == "Prefer not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
