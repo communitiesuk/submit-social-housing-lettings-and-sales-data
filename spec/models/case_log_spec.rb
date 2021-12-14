@@ -1042,6 +1042,22 @@ RSpec.describe Form, type: :model do
         expect(address_case_log.la).to eq("Manchester")
         expect(record_from_db["la"]).to eq("E08000003")
       end
+
+      it "correctly resets all fields" do
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(address_case_log.la).to eq("Manchester")
+        expect(record_from_db["la"]).to eq("E08000003")
+
+        address_case_log.update!({ property_postcode: "" })
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["property_postcode"]).to eq("")
+        expect(address_case_log.la).to eq(nil)
+        expect(record_from_db["la"]).to eq(nil)
+      end
     end
   end
 end

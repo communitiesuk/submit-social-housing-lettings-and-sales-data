@@ -201,14 +201,16 @@ private
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
     self.is_la_inferred = false if is_la_inferred.nil?
-    self.la = get_la(property_postcode) if property_postcode.present?
+    self.la = get_la(property_postcode)
   end
 
   def get_la(postcode)
-    postcode_lookup = PIO.lookup(postcode)
-    unless postcode_lookup.info.nil?
-      self.is_la_inferred = true
-      return postcode_lookup.admin_district
+    if postcode.present?
+      postcode_lookup = PIO.lookup(postcode)
+      if postcode_lookup && postcode_lookup.info.present?
+        self.is_la_inferred = true
+        return postcode_lookup.admin_district
+      end
     end
     self.la = nil
     self.is_la_inferred = false
