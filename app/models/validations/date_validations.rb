@@ -10,13 +10,13 @@ module Validations::DateValidations
     end
 
     if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 730
-      record.errors.add :mrcdate, "Major repairs cannot be more than 730 days before the tenancy start date"
+      record.errors.add :mrcdate, "The major repairs completion date should be no more than 730 days before the tenancy start date"
     end
   end
 
   def validate_property_void_date(record)
     if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date - record["property_void_date"].to_date > 3650
-      record.errors.add :property_void_date, "Void date cannot be more than 10 years before the tenancy start date"
+      record.errors.add :property_void_date, "The void date must be no more than 10 years before the tenancy start date"
     end
 
     if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date < record["property_void_date"].to_date
