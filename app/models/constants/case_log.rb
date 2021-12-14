@@ -733,4 +733,18 @@ module Constants::CaseLog
                      "Waltham Forest",
                      "Wandsworth",
                      "Westminster"].freeze
+
+  RELAT = {
+    "Child - includes young adult and grown-up" => "C",
+    "Partner" => "P",
+    "Other" => "X",
+    "Prefer not to say" => "R",
+  }.freeze
+
+  GENDER = {
+    "Female" => "F",
+    "Male" => "M",
+    "Non-binary" => "X",
+    "Prefer not to say" => "R",
+  }.freeze
 end
