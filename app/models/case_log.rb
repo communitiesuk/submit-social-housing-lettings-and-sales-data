@@ -213,7 +213,12 @@ private
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
     self.is_la_inferred = false if is_la_inferred.nil?
     self.la = get_la(property_postcode)
-    self.totchild = [relat2, relat3, relat4, relat5, relat6, relat7, relat8].count("Child - includes young adult and grown-up")
+    self.totchild = get_totchild
+  end
+
+  def get_totchild
+    relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
+    relationships.count("Child - includes young adult and grown-up")
   end
 
   def get_la(postcode)
