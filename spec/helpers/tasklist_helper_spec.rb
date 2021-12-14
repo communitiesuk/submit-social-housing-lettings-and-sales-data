@@ -1,6 +1,10 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe TasklistHelper do
+  before do
+    RequestHelper.stub_http_requests
+  end
   let(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   form_handler = FormHandler.instance
@@ -31,7 +35,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of sections in progress" do
-      expect(get_subsections_count(form, case_log, :in_progress)).to eq(2)
+      expect(get_subsections_count(form, case_log, :in_progress)).to eq(3)
     end
 
     it "returns 0 for invalid state" do

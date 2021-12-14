@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_122642) do
     t.integer "day"
     t.integer "month"
     t.integer "year"
+    t.boolean "is_la_inferred"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"

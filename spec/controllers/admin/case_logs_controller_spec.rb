@@ -1,7 +1,11 @@
 require "rails_helper"
 require_relative "../../support/devise"
+require_relative "../../request_helper"
 
 describe Admin::CaseLogsController, type: :controller do
+  before do
+    RequestHelper.stub_http_requests
+  end
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Logs" }

@@ -1,8 +1,12 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe Form, type: :model do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:managing_organisation) { owning_organisation }
+  before do
+    RequestHelper.stub_http_requests
+  end
 
   describe "#new" do
     it "validates age is a number" do
@@ -1015,6 +1019,45 @@ RSpec.describe Form, type: :model do
       expect(record_from_db["day"]).to eq(10)
       expect(record_from_db["month"]).to eq(10)
       expect(record_from_db["year"]).to eq(2021)
+    end
+
+    context "addresses" do
+      before do
+        stub_request(:get, /api.postcodes.io/)
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+      end
+
+      let!(:address_case_log) do
+        CaseLog.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          property_postcode: "M1 1AE",
+        })
+      end
+
+      it "correctly infers la" do
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(address_case_log.la).to eq("Manchester")
+        expect(record_from_db["la"]).to eq("E08000003")
+      end
+
+      it "correctly resets all fields" do
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(address_case_log.la).to eq("Manchester")
+        expect(record_from_db["la"]).to eq("E08000003")
+
+        address_case_log.update!({ property_postcode: "" })
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["property_postcode"]).to eq("")
+        expect(address_case_log.la).to eq(nil)
+        expect(record_from_db["la"]).to eq(nil)
+      end
     end
   end
 end

@@ -1,5 +1,11 @@
 require "rails_helper"
+require_relative "../request_helper"
+
 RSpec.describe "case_logs/index" do
+  before do
+    RequestHelper.stub_http_requests
+  end
+
   let(:in_progress_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:completed_log) { FactoryBot.create(:case_log, :completed) }
 

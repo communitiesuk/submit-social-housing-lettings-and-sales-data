@@ -1,9 +1,14 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe SoftValidationsController, type: :request do
   let(:params) { { case_log_id: case_log.id } }
   let(:url) { "/logs/#{case_log.id}/net-income/soft-validations" }
   let(:user) { FactoryBot.create(:user) }
+
+  before do
+    RequestHelper.stub_http_requests
+  end
 
   context "a not signed in user" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress) }

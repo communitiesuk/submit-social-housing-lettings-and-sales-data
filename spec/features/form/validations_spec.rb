@@ -1,7 +1,13 @@
 require "rails_helper"
 require_relative "helpers"
+require_relative "../../request_helper"
 
 RSpec.describe "validations" do
+  before do
+    RequestHelper.stub_http_requests
+    sign_in user
+  end
+
   include Helpers
   let(:user) { FactoryBot.create(:user) }
   let(:case_log) do
@@ -20,10 +26,6 @@ RSpec.describe "validations" do
     )
   end
   let(:id) { case_log.id }
-
-  before do
-    sign_in user
-  end
 
   describe "Question validation" do
     context "given an invalid tenant age" do

@@ -1,5 +1,6 @@
 require "rails_helper"
 require_relative "helpers"
+require_relative "../../request_helper"
 
 RSpec.describe "Form Navigation" do
   include Helpers
@@ -23,6 +24,7 @@ RSpec.describe "Form Navigation" do
   end
 
   before do
+    RequestHelper.stub_http_requests
     sign_in user
   end
 
