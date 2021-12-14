@@ -1,6 +1,7 @@
 require "uri"
 require "net/http"
 require "json"
+require "postcodes_io"
 
 class CaseLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
@@ -163,6 +164,8 @@ class CaseLog < ApplicationRecord
 
 private
 
+  PIO = Postcodes::IO.new
+
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
                     "completed"
@@ -202,13 +205,12 @@ private
   end
 
   def get_la(postcode)
-    uri = URI("https://api.os.uk/search/places/v1/postcode?key=#{ENV['OS_PLACES_API_KEY']}&postcode=#{postcode}&dataset=LPI")
-    res = Net::HTTP.get_response(uri)
-    response_body = JSON.parse(res.body)
-    if res.is_a?(Net::HTTPSuccess) && (response_body["header"]["totalresults"]).to_i.positive?
+    postcode_lookup = PIO.lookup(postcode)
+    unless postcode_lookup.info.nil?
       self.is_la_inferred = true
-      response_body["results"][0]["LPI"]["ADMINISTRATIVE_AREA"].downcase.capitalize
+      return postcode_lookup.admin_district
     end
+    self.la = nil
     self.is_la_inferred = false
   end
 

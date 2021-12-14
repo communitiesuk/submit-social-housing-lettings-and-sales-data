@@ -63,8 +63,8 @@ RSpec.describe "Form Page Routing" do
     end
 
     it "does not show question if the answer could be inferred" do
-      stub_request(:get, /api.os.uk/)
-        .to_return(status: 200, body: "{\"header\": {\"totalresults\": \"1\"}, \"results\": [{\"LPI\": {\"ADMINISTRATIVE_AREA\": \"MANCHESTER\"}}]}", headers: {})
+      stub_request(:get, /api.postcodes.io/)
+        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
 
       visit("/case-logs/#{id}/property-postcode")
       fill_in("case-log-property-postcode-field", with: "P0 5ST")

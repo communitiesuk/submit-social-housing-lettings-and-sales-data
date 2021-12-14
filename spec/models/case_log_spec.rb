@@ -1023,8 +1023,8 @@ RSpec.describe Form, type: :model do
     
     context "addresses" do
       before do
-        stub_request(:get, /api.os.uk/)
-          .to_return(status: 200, body: "{\"header\": {\"totalresults\": \"1\"}, \"results\": [{\"LPI\": {\"ADMINISTRATIVE_AREA\": \"MANCHESTER\"}}]}", headers: {})
+        stub_request(:get, /api.postcodes.io/)
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
       end
 
       let!(:address_case_log) do
