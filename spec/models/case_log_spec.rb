@@ -1070,6 +1070,9 @@ RSpec.describe Form, type: :model do
           relat3: "Child - includes young adult and grown-up",
           relat4: "Other",
           relat5: "Child - includes young adult and grown-up",
+          age4: 60,
+          age2: 14,
+          age6: 88,
         })
       end
 
@@ -1078,6 +1081,13 @@ RSpec.describe Form, type: :model do
 
         record_from_db = ActiveRecord::Base.connection.execute("select totchild from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totchild"]).to eq(3)
+      end
+
+      it "correctly derives and saves totelder" do
+        household_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select totelder from case_logs where id=#{household_case_log.id}").to_a[0]
+        expect(record_from_db["totelder"]).to eq(2)
       end
     end
   end
