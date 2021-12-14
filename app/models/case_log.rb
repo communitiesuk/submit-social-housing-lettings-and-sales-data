@@ -1,6 +1,3 @@
-require "uri"
-require "net/http"
-require "json"
 require "postcodes_io"
 
 class CaseLogValidator < ActiveModel::Validator

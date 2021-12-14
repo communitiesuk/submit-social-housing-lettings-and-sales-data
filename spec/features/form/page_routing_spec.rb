@@ -50,26 +50,26 @@ RSpec.describe "Form Page Routing" do
 
   context "inferred answers routing", js: true do
     it "shows question if the answer could not be inferred" do
-      visit("/case-logs/#{id}/property-postcode")
+      visit("/logs/#{id}/property-postcode")
       fill_in("case-log-property-postcode-field", with: "P0 5ST")
       click_button("Save and continue")
-      expect(page).to have_current_path("/case-logs/#{id}/do-you-know-the-local-authority")
+      expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
     end
 
     it "shows question if the answer could not be inferred" do
-      visit("/case-logs/#{id}/property-postcode")
+      visit("/logs/#{id}/property-postcode")
       click_button("Save and continue")
-      expect(page).to have_current_path("/case-logs/#{id}/do-you-know-the-local-authority")
+      expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
     end
 
     it "does not show question if the answer could be inferred" do
       stub_request(:get, /api.postcodes.io/)
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
 
-      visit("/case-logs/#{id}/property-postcode")
+      visit("/logs/#{id}/property-postcode")
       fill_in("case-log-property-postcode-field", with: "P0 5ST")
       click_button("Save and continue")
-      expect(page).to have_current_path("/case-logs/#{id}/property-wheelchair-accessible")
+      expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
     end
   end
 end

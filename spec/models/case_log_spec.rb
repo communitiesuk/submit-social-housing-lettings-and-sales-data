@@ -1020,7 +1020,7 @@ RSpec.describe Form, type: :model do
       expect(record_from_db["month"]).to eq(10)
       expect(record_from_db["year"]).to eq(2021)
     end
-    
+
     context "addresses" do
       before do
         stub_request(:get, /api.postcodes.io/)
