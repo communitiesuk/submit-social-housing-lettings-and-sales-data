@@ -1,7 +1,7 @@
 class Form::Question
   attr_accessor :id, :header, :hint_text, :description, :questions,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
-                :conditional_for, :readonly, :answer_options, :page, :check_answer_label
+                :conditional_for, :readonly, :answer_options, :page, :check_answer_label, :inferred_answers
 
   def initialize(id, hsh, page)
     @id = id
@@ -18,6 +18,7 @@ class Form::Question
     @readonly = hsh["readonly"]
     @answer_options = hsh["answer_options"]
     @conditional_for = hsh["conditional_for"]
+    @inferred_answers = hsh["inferred_answers"]
     @page = page
   end
 
@@ -29,6 +30,14 @@ class Form::Question
     return case_log[id].strftime("%d %b %Y") if type == "date"
 
     case_log[id].to_s
+  end
+
+  def get_inferred_answers(case_log)
+    if inferred_answers
+      inferred_answers.keys.map { |x| case_log[x].to_s }
+    else
+      []
+    end
   end
 
   def read_only?

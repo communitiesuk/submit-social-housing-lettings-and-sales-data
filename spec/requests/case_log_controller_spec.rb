@@ -240,6 +240,26 @@ RSpec.describe CaseLogsController, type: :request do
         end
       end
     end
+
+    context "Check answers" do
+      before do
+        stub_request(:get, /api.postcodes.io/)
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+        sign_in user
+      end
+
+      it "shows the inferred postcode" do
+        case_log = FactoryBot.create(:case_log,
+                                     owning_organisation: organisation,
+                                     managing_organisation: organisation,
+                                     postcode_known: "Yes",
+                                     property_postcode: "P0 0ST")
+        id = case_log.id
+        get "/logs/#{id}/property-information/check-answers"
+        expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
+        expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
+      end
+    end
   end
 
   describe "PATCH" do
