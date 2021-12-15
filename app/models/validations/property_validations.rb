@@ -13,4 +13,10 @@ module Validations::PropertyValidations
       record.errors.add :la, "Local authority has to be in London"
     end
   end
+
+  def validate_unitletas(record)
+    if record.unitletas.present? && (record.rsnvac == "First let of newbuild property" || record.rsnvac == "First let of conversion/rehabilitation/acquired property" || record.rsnvac == "First let of leased property")
+      record.errors.add :unitletas, "Can not be completed if it is the first let of the property"
+    end
+  end
 end
