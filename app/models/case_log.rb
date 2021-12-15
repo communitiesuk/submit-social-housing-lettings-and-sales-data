@@ -1,4 +1,5 @@
 require "postcodes_io"
+require "timeout"
 
 class CaseLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
@@ -241,7 +242,8 @@ private
 
   def get_la(postcode)
     if postcode.present?
-      postcode_lookup = PIO.lookup(postcode)
+      postcode_lookup = nil
+      Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
       if postcode_lookup && postcode_lookup.info.present?
         self.is_la_inferred = true
         return postcode_lookup.admin_district
