@@ -165,16 +165,15 @@ RSpec.describe "validations" do
 
   describe "Property Validations" do
     context "first let of property and reason for vacancy completed" do
-      let(:rsnvac){ "First let of newbuild property" }
-      let(:rsnvac1){ "First let of conversion/rehabilitation/acquired property" }
-        let(:rsnvac2){ "First let of leased property" }
-      let(:unitletas){ "Social rent basis" }
+      let(:rsnvac) { "First let of newbuild property" }
+      let(:rsnvac1) { "First let of conversion/rehabilitation/acquired property" }
+      let(:rsnvac2) { "First let of leased property" }
+      let(:unitletas) { "Social rent basis" }
 
       it "throws a validation error", js: true do
-        expect{ case_log.update!(rsnvac: rsnvac, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
-        expect{ case_log.update!(rsnvac: rsnvac1, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
-        expect{ case_log.update!(rsnvac: rsnvac2, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
-
+        expect { case_log.update!(rsnvac: rsnvac, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { case_log.update!(rsnvac: rsnvac1, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { case_log.update!(rsnvac: rsnvac2, unitletas: unitletas) }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
