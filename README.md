@@ -1,6 +1,6 @@
 [![CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml/badge.svg?branch=main&event=push)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml)
 
-# Log social housing lettings and sales (CORE)
+# Submit social housing lettings and sales data (CORE)
 
 This is the codebase for the Ruby on Rails app that will handle the submission of lettings and sales of social housing data in England.
 

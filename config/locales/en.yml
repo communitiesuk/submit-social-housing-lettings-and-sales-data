@@ -30,6 +30,6 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  service_name: "Log social housing lettings and sales (CORE)"
+  service_name: "Submit social housing lettings and sales data (CORE)"
   organisation:
     updated: "Organisation details updated"
