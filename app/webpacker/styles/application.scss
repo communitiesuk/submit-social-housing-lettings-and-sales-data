@@ -11,8 +11,9 @@ $govuk-image-url-function: frontend-image-url;
 
 @import "~govuk-frontend/govuk/all";
 
-@import '_task-list';
-@import '_tab-navigation';
+@import 'related-navigation';
+@import 'task-list';
+@import 'tab-navigation';
 
 $govuk-global-styles: true;
 
