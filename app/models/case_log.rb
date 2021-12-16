@@ -1,4 +1,5 @@
 require "postcodes_io"
+require "timeout"
 
 class CaseLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
@@ -189,10 +190,6 @@ private
   end
 
   def set_derived_fields
-    if property_postcode.present?
-      self.postcode = UKPostcode.parse(property_postcode).outcode
-      self.postcod2 = UKPostcode.parse(property_postcode).incode
-    end
     if previous_postcode.present?
       self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
       self.ppostc2 = UKPostcode.parse(previous_postcode).incode
@@ -212,7 +209,17 @@ private
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
     self.is_la_inferred = false if is_la_inferred.nil?
-    self.la = get_la(property_postcode)
+    if property_postcode.blank? || postcode_known == "No"
+      reset_location_fields
+    else
+      self.la = get_la(property_postcode)
+    end
+    if property_postcode.present?
+      self.postcode = UKPostcode.parse(property_postcode).outcode
+      self.postcod2 = UKPostcode.parse(property_postcode).incode
+    else
+      self.postcode = self.postcod2 = nil
+    end
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
@@ -240,15 +247,22 @@ private
   end
 
   def get_la(postcode)
-    if postcode.present?
-      postcode_lookup = PIO.lookup(postcode)
-      if postcode_lookup && postcode_lookup.info.present?
-        self.is_la_inferred = true
-        return postcode_lookup.admin_district
-      end
+    postcode_lookup = nil
+    Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
+    if postcode_lookup && postcode_lookup.info.present?
+      self.is_la_inferred = true
+      return postcode_lookup.admin_district
     end
     self.la = nil
     self.is_la_inferred = false
+  end
+
+  def reset_location_fields
+    if is_la_inferred == true
+      self.la = nil
+    end
+    self.is_la_inferred = false
+    self.property_postcode = nil
   end
 
   def all_fields_completed?
