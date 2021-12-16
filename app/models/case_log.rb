@@ -190,10 +190,6 @@ private
   end
 
   def set_derived_fields
-    if property_postcode.present?
-      self.postcode = UKPostcode.parse(property_postcode).outcode
-      self.postcod2 = UKPostcode.parse(property_postcode).incode
-    end
     if previous_postcode.present?
       self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
       self.ppostc2 = UKPostcode.parse(previous_postcode).incode
@@ -218,7 +214,12 @@ private
     else
       self.la = get_la(property_postcode)
     end
-
+    if property_postcode.present?
+      self.postcode = UKPostcode.parse(property_postcode).outcode
+      self.postcod2 = UKPostcode.parse(property_postcode).incode
+    else
+      self.postcode = self.postcod2 = nil
+    end
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult

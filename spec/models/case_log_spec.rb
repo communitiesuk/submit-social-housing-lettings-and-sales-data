@@ -1044,13 +1044,7 @@ RSpec.describe Form, type: :model do
         expect(record_from_db["la"]).to eq("E08000003")
       end
 
-      it "correctly resets all fields" do
-        address_case_log.reload
-
-        record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(address_case_log.la).to eq("Manchester")
-        expect(record_from_db["la"]).to eq("E08000003")
-
+      it "correctly resets all fields if property postcode is empty" do
         address_case_log.update!({ property_postcode: "" })
         address_case_log.reload
 
@@ -1058,6 +1052,35 @@ RSpec.describe Form, type: :model do
         expect(record_from_db["property_postcode"]).to eq(nil)
         expect(address_case_log.la).to eq(nil)
         expect(record_from_db["la"]).to eq(nil)
+      end
+
+      it "correctly resets all fields if property postcode not known" do
+        address_case_log.update!({ postcode_known: "No" })
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["property_postcode"]).to eq(nil)
+        expect(address_case_log.la).to eq(nil)
+        expect(record_from_db["la"]).to eq(nil)
+      end
+
+      it "keeps the LA if property postcode changes from not known to known and not provided" do
+        address_case_log.update!({ postcode_known: "No" })
+        address_case_log.update!({ la: "Westminster" })
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["property_postcode"]).to eq(nil)
+        expect(address_case_log.la).to eq("Westminster")
+        expect(record_from_db["la"]).to eq("E09000033")
+
+        address_case_log.update!({ postcode_known: "Yes" })
+        address_case_log.reload
+
+        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["property_postcode"]).to eq(nil)
+        expect(address_case_log.la).to eq("Westminster")
+        expect(record_from_db["la"]).to eq("E09000033")
       end
     end
 
