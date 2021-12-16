@@ -489,7 +489,7 @@ module Constants::CaseLog
     "Tewkesbury" => "E07000083",
     "Basingstoke and Deane" => "E07000084",
     "East Hampshire" => "E07000085",
-    "King’s Lynn and West Norfolk" => "E07000146",
+    "King's Lynn and West Norfolk" => "E07000146",
     "Eastleigh" => "E07000086",
     "North Norfolk" => "E07000147",
     "Norwich" => "E07000148",

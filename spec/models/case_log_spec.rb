@@ -1031,6 +1031,7 @@ RSpec.describe Form, type: :model do
         CaseLog.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
+          postcode_known: "Yes",
           property_postcode: "M1 1AE",
         })
       end
@@ -1054,7 +1055,7 @@ RSpec.describe Form, type: :model do
         address_case_log.reload
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["property_postcode"]).to eq("")
+        expect(record_from_db["property_postcode"]).to eq(nil)
         expect(address_case_log.la).to eq(nil)
         expect(record_from_db["la"]).to eq(nil)
       end
