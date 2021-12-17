@@ -1,7 +1,8 @@
 class Form::Question
   attr_accessor :id, :header, :hint_text, :description, :questions,
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
-                :conditional_for, :readonly, :answer_options, :page, :check_answer_label, :inferred_answers
+                :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
+                :inferred_answers
 
   def initialize(id, hsh, page)
     @id = id
@@ -33,9 +34,8 @@ class Form::Question
   end
 
   def get_inferred_answers(case_log)
-    if inferred_answers
-      return filter_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s }
-    end
+    return filter_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s } if inferred_answers
+
     []
   end
 
