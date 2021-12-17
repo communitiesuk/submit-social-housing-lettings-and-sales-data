@@ -34,10 +34,9 @@ class Form::Question
 
   def get_inferred_answers(case_log)
     if inferred_answers
-      inferred_answers.keys.map { |x| case_log[x].to_s }
-    else
-      []
+      return filter_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s }
     end
+    []
   end
 
   def read_only?
@@ -83,5 +82,9 @@ private
     else
       raise "Not implemented yet"
     end
+  end
+
+  def filter_inferred_answers(inferred_answers, case_log)
+    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
   end
 end
