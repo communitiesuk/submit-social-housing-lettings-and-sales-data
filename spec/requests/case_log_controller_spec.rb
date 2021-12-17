@@ -259,6 +259,17 @@ RSpec.describe CaseLogsController, type: :request do
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
         expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
       end
+
+      it "shows is the postcode is not known" do
+        case_log = FactoryBot.create(:case_log,
+                                     owning_organisation: organisation,
+                                     managing_organisation: organisation,
+                                     postcode_known: "No")
+        id = case_log.id
+        get "/logs/#{id}/property-information/check-answers"
+        expect(CGI.unescape_html(response.body)).to include("Not known")
+        expect(CGI.unescape_html(response.body)).not_to include("Do you know the property postcode?")
+      end
     end
   end
 
