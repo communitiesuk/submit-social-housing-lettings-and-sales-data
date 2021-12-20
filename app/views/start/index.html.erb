@@ -16,9 +16,10 @@
     <p class="govuk-body">The data will be used to update the national record for social housing. It will also help to inform policy about the cost of social housing and what type of housing needs to be built.</p>
     <p class="govuk-body">This service is only for social housing in England.</p>
 
+    <% start_path = current_user ? case_logs_path : (user_session_path + "?start=true") %>
     <%= govuk_start_button(
       text: 'Start now',
-      href: user_session_path
+      href: start_path
     ) %>
 
     <h2 class="govuk-heading-m">Before you start</h2>

@@ -1,6 +1,5 @@
 require "rails_helper"
 
-# Test Controller intital test
 RSpec.describe StartController, type: :controller do
   let(:valid_session) { {} }
 
