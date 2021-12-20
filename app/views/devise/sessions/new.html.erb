@@ -19,6 +19,7 @@
         autocomplete: "current-password"
       %>
 
+      <%= f.hidden_field :start, value: request["start"] %>
       <%= f.govuk_submit "Sign in" %>
     </div>
   </div>
