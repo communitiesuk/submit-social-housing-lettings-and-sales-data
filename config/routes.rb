@@ -11,8 +11,8 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
-  root to: "test#index"
-  get "about", to: "about#index"
+
+  root to: "start#index"
 
   resources :users do
     member do

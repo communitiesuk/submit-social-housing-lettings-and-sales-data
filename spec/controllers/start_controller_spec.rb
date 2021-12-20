@@ -1,7 +1,7 @@
 require "rails_helper"
 
 # Test Controller intital test
-RSpec.describe TestController, type: :controller do
+RSpec.describe StartController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do

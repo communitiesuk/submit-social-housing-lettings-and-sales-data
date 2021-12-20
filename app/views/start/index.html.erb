@@ -1,0 +1,47 @@
+<h1 class="govuk-heading-xl govuk-!-width-two-thirds">
+  <%= t("service_name") %>
+</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">Use this service to submit social housing lettings and sales data to the Department for Levelling Up, Housing and Communities (DLUHC).</p>
+    <p class="govuk-body">We’ll ask you questions about a sale or letting, like details about the household or property. Your answers will create a log that you can submit directly to us.</p>
+    <p class="govuk-body">Your organisation can also:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>upload data for multiple sales and lettings</li>
+      <li>transfer data using an API</li>
+      <%# TODO: Add link to lettings log form %>
+      <li><%= govuk_link_to("download a copy of the 2021 to 2022 lettings log as a PDF", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %> (2MB)</li>
+    </ul>
+    <p class="govuk-body">The data will be used to update the national record for social housing. It will also help to inform policy about the cost of social housing and what type of housing needs to be built.</p>
+    <p class="govuk-body">This service is only for social housing in England.</p>
+
+    <%= govuk_start_button(
+      text: 'Start now',
+      href: user_session_path
+    ) %>
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p class="govuk-body">Use your account details to sign in.</p>
+    <p class="govuk-body">If you need to set up a new account, speak to your organisation’s CORE data coordinator. If you don’t know who that is, <%= govuk_link_to("contact the helpdesk", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %>.</p>
+    <p class="govuk-body">You can <%= govuk_link_to("request an account", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %> if your organisation doesn’t have one.</p>
+    <%# TODO: Add link to data sharing agreement %>
+    <p class="govuk-body"><%= govuk_link_to("Read our data sharing agreement", "#") %>.</p>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <div class="app-related-navigation">
+      <nav class="app-related-navigation__nav-section" role="navigation" aria-labelledby="related-content">
+        <h2 class="app-related-navigation__main-heading" id="related-content">
+          Related content
+        </h2>
+        <ul class="app-related-navigation__link-list">
+          <li class="app-related-navigation__link">
+            <%# TODO: Add link to guidance %>
+            <%= govuk_link_to("How to submit social housing lettings and sales data (CORE)", "#", classes: "app-related-navigation__section-link app-related-navigation__section-link--other") %>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
