@@ -1,6 +1,3 @@
-require "postcodes_io"
-require "timeout"
-
 class CaseLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
   # or form page submission
