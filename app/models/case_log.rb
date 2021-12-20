@@ -238,10 +238,8 @@ private
   def get_totadult
     total = !age1.nil? && age1 >= 16 && age1 < 60 ? 1 : 0
     total + (2..8).count do |i|
-      # rubocop:disable Style/EvalWithLocation, Security/Eval::
-      age = eval("age#{i}")
-      relat = eval("relat#{i}")
-      # rubocop:enable Style/EvalWithLocation, Security/Eval::
+      age = public_send("age#{i}")
+      relat = public_send("relat#{i}")
       !age.nil? && ((age >= 16 && age < 18 && %w[Partner Other].include?(relat)) || age >= 18 && age < 60)
     end
   end
