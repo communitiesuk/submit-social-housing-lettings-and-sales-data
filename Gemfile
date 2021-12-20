@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.0.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.0.rc1"
+gem "rails", "~> 7.0.0"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -38,8 +38,9 @@ gem "json-schema"
 gem "devise", github: "ghiculescu/devise", branch: "error-code-422"
 # UK postcode parsing and validation
 gem "uk_postcode"
-# Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
+# Get rich data from postcode lookups. Wraps postcodes.io
 gem "postcodes_io"
+# Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
 gem "view_component"
 
 group :development, :test do
