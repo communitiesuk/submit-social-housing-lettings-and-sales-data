@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/activeadmin.git
-  revision: 1acaa350fc822f078424cfe6f1e22da164ef64f2
+  revision: 8274b3dcf6f2ddd8190eeb5e3ee618706214fa2d
   branch: rails7
   specs:
     activeadmin (2.9.0)
