@@ -31,5 +31,7 @@ module DataCollector
     #
     config.time_zone = "London"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.exceptions_app = routes
   end
 end

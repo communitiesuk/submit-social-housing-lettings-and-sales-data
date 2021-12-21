@@ -16,7 +16,7 @@ class FormController < ApplicationController
         render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
       end
     else
-      render_not_found_html
+      render_not_found
     end
   end
 
@@ -27,7 +27,7 @@ class FormController < ApplicationController
       subsection = form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection: subsection, form: form }
     else
-      render_not_found_html
+      render_not_found
     end
   end
 
@@ -38,7 +38,7 @@ class FormController < ApplicationController
         subsection = form.subsection_for_page(page)
         render "form/page", locals: { form: form, page: page, subsection: subsection.label }
       else
-        render_not_found_html
+        render_not_found
       end
     end
   end
