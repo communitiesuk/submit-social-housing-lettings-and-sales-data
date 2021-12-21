@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Question, type: :model do
-  let(:form) { FormHandler.instance.get_form("test_form") }
+  let(:case_log) { FactoryBot.build(:case_log) }
+  let(:form) { case_log.form }
   let(:section_id) { "rent_and_charges" }
   let(:section_definition) { form.form_definition["sections"][section_id] }
   let(:section) { Form::Section.new(section_id, section_definition, form) }

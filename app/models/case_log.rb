@@ -141,8 +141,6 @@ class CaseLog < ApplicationRecord
   end
 
   def form_name
-    return "test_form" if Rails.env.test?
-
     start_year = year || 2021
     "#{start_year}_#{start_year + 1}"
   end

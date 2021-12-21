@@ -106,9 +106,4 @@ private
   def find_resource
     @case_log = CaseLog.find_by(id: params[:id])
   end
-
-  def find_form
-    year = @case_log.year || 2021
-    @form = FormHandler.instance.get_form("#{year}_#{year + 1}")
-  end
 end
