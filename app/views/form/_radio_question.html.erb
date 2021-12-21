@@ -1,7 +1,7 @@
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     legend: { text: question.header.html_safe, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
-    hint: { text: question.hint_text.html_safe } do %>
+    hint: { text: question.hint_text&.html_safe } do %>
 
     <% question.answer_options.map do |key, val| %>
       <% if key.starts_with?("divider") %>

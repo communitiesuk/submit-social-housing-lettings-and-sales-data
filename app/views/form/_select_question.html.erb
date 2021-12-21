@@ -5,5 +5,5 @@
     :name,
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     label: { text: question.header, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
-    hint: { text: question.hint_text.html_safe }
+    hint: { text: question.hint_text&.html_safe }
  %>
