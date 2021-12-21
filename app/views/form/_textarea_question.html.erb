@@ -1,7 +1,7 @@
 <%= f.govuk_text_area question.id.to_sym,
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     label: { text: question.header.html_safe, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
-    hint: { text: question.hint_text },
+    hint: { text: question.hint_text.html_safe },
     width: question.width ? question.width : nil,
     **stimulus_html_attributes(question)
 %>
