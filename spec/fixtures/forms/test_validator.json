@@ -28,7 +28,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "age1": {
+                "person_1_age": {
                   "check_answer_label": "Tenant's age",
                   "header": "What is the tenant's age?",
                   "hint_text": "",

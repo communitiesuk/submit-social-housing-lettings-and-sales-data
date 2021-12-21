@@ -34,7 +34,8 @@ class FormController < ApplicationController
       define_method(page.id) do |_errors = {}|
         if @case_log
           subsection = @case_log.form.subsection_for_page(page)
-          render "form/page", locals: { page: page, subsection: subsection.label }
+          case_log_form_page = @case_log.form.get_page(page.id)
+          render "form/page", locals: { page: case_log_form_page, subsection: subsection.label }
         else
           render_not_found
         end
