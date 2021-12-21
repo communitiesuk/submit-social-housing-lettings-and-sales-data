@@ -28,9 +28,6 @@ Rails.application.routes.draw do
     end
   end
 
-  form_handler = FormHandler.instance
-  form = form_handler.get_form("2021_2022")
-
   resources :case_logs, path: "/logs" do
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
@@ -41,13 +38,15 @@ Rails.application.routes.draw do
       post "form", to: "form#submit_form"
     end
 
-    form.pages.map do |page|
-      get page.id.to_s.dasherize, to: "form##{page.id}"
-      get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
-    end
+    FormHandler.instance.forms.each do |_key, form|
+      form.pages.map do |page|
+        get page.id.to_s.dasherize, to: "form##{page.id}"
+        get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
+      end
 
-    form.subsections.map do |subsection|
-      get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+      form.subsections.map do |subsection|
+        get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+      end
     end
   end
 

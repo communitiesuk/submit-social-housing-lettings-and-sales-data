@@ -50,7 +50,6 @@ class CaseLogsController < ApplicationController
   end
 
   def edit
-    @form = FormHandler.instance.get_form("2021_2022")
     @case_log = current_user.case_logs.find_by(id: params[:id])
     if @case_log
       render :edit
@@ -106,5 +105,10 @@ private
 
   def find_resource
     @case_log = CaseLog.find_by(id: params[:id])
+  end
+
+  def find_form
+    year = @case_log.year || 2021
+    @form = FormHandler.instance.get_form("#{year}_#{year + 1}")
   end
 end

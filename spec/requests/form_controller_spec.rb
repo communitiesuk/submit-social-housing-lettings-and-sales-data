@@ -69,7 +69,6 @@ RSpec.describe FormController, type: :request do
     describe "Submit Form" do
       context "a form page" do
         let(:user) { FactoryBot.create(:user) }
-        let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
         let(:organisation) { user.organisation }
         let(:case_log) do
           FactoryBot.create(
@@ -90,7 +89,6 @@ RSpec.describe FormController, type: :request do
         end
 
         before do
-          allow(FormHandler.instance).to receive(:get_form).and_return(form)
           post "/logs/#{case_log.id}/form", params: params
         end
 

@@ -21,7 +21,7 @@ RSpec.describe FormHandler do
 
   it "should only load the form once at boot time" do
     form_handler = FormHandler.instance
-    expect(Form).not_to receive(:new).with("test_form")
+    expect(Form).not_to receive(:new).with(:any, "test_form")
     expect(form_handler.get_form("test_form")).to be_a(Form)
   end
 end
