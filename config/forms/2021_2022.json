@@ -15,8 +15,8 @@
               "questions": {
                 "gdpr_acceptance": {
                   "check_answer_label": "Privacy notice seen",
-                  "header": "Has the tenant or buyer seen the DLUHC privacy notice?",
-                  "hint_text": "",
+                  "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
+                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
