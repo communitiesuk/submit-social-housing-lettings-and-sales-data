@@ -1,0 +1,25 @@
+{
+    "form_type": "lettings",
+    "sections": {
+      "household": {
+        "label": "About the household",
+        "subsections": {
+          "household_characteristics": {
+            "label": "Household characteristics",
+            "pages": {
+              "tenant_code": {
+                "questions": {
+                  "tenant_code": {
+                    "check_answer_label": "Tenant code",
+                    "header": "Different question header text for this year - 2023",
+                    "type": "text",
+                    "width": 10
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

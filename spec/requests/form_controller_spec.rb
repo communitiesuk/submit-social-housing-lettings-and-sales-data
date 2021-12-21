@@ -48,6 +48,18 @@ RSpec.describe FormController, type: :request do
 
     describe "GET" do
       context "form pages" do
+        context "forms exist for multiple years" do
+          let(:case_log_year_1) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 1, 1), owning_organisation: organisation) }
+          let(:case_log_year_2) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 1, 1), owning_organisation: organisation) }
+
+          it "displays the correct question details for each case log based on form year" do
+            get "/logs/#{case_log_year_1.id}/tenant-code", headers: headers, params: {}
+            expect(response.body).to include("What is the tenant code?")
+            get "/logs/#{case_log_year_2.id}/tenant-code", headers: headers, params: {}
+            expect(response.body).to match("Different question header text for this year - 2023")
+          end
+        end
+
         context "case logs that are not owned or managed by your organisation" do
           it "does not show form pages for case logs you don't have access to" do
             get "/logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
