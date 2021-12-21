@@ -8,20 +8,8 @@ GIT
       i18n
 
 GIT
-  remote: https://github.com/ghiculescu/devise.git
-  revision: 3b2d9ae3d47be5c9228c4446119b04b0e98917c1
-  branch: error-code-422
-  specs:
-    devise (4.8.0)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
-
-GIT
-  remote: https://github.com/naveed-ahmad/activeadmin.git
-  revision: 669d808151d8a087ccdd8dad7ebac303289873de
+  remote: https://github.com/baarkerlounger/activeadmin.git
+  revision: 1acaa350fc822f078424cfe6f1e22da164ef64f2
   branch: rails7
   specs:
     activeadmin (2.9.0)
@@ -33,6 +21,18 @@ GIT
       kaminari (~> 1.0, >= 1.2.1)
       railties (>= 5.2, <= 7.0.0)
       ransack (~> 2.1, >= 2.1.1)
+
+GIT
+  remote: https://github.com/ghiculescu/devise.git
+  revision: 3b2d9ae3d47be5c9228c4446119b04b0e98917c1
+  branch: error-code-422
+  specs:
+    devise (4.8.0)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
 
 GIT
   remote: https://github.com/naveed-ahmad/inherited_resources.git
