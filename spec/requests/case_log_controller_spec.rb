@@ -178,10 +178,6 @@ RSpec.describe CaseLogsController, type: :request do
 
       context "edit log" do
         let(:headers) { { "Accept" => "text/html" } }
-        let(:form) { Form.new("spec/fixtures/forms/test_form.json") }
-        before do
-          allow(FormHandler.instance).to receive(:get_form).and_return(form)
-        end
 
         context "a user that is not signed in" do
           it "does not let the user get case log tasklist pages they don't have access to" do

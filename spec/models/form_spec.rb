@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
-  form_handler = FormHandler.instance
-  let(:form) { form_handler.get_form("test_form") }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:form) { case_log.form }
   let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
   let(:conditional_section_complete_case_log) { FactoryBot.build(:case_log, :conditional_section_complete) }
 

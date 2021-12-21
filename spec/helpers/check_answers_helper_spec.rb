@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CheckAnswersHelper do
-  form_handler = FormHandler.instance
-  let(:form) { form_handler.get_form("test_form") }
+  let(:case_log) { FactoryBot.build(:case_log) }
+  let(:form) { case_log.form }
   let(:subsection) { form.get_subsection("household_characteristics") }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
 

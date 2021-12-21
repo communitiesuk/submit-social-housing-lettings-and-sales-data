@@ -4,16 +4,15 @@ class FormController < ApplicationController
   before_action :find_resource_by_named_id, except: [:submit_form]
 
   def submit_form
-    form = FormHandler.instance.get_form("2021_2022")
     if @case_log
-      page = form.get_page(params[:case_log][:page])
+      page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(page)
       if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-        redirect_path = form.next_page_redirect_path(page, @case_log)
+        redirect_path = @case_log.form.next_page_redirect_path(page, @case_log)
         redirect_to(send(redirect_path, @case_log))
       else
-        subsection = form.subsection_for_page(page)
-        render "form/page", locals: { form: form, page: page, subsection: subsection.label }, status: :unprocessable_entity
+        subsection = @case_log.form.subsection_for_page(page)
+        render "form/page", locals: { page: page, subsection: subsection.label }, status: :unprocessable_entity
       end
     else
       render_not_found
@@ -21,24 +20,25 @@ class FormController < ApplicationController
   end
 
   def check_answers
-    form = FormHandler.instance.get_form("2021_2022")
     if @case_log
       current_url = request.env["PATH_INFO"]
-      subsection = form.get_subsection(current_url.split("/")[-2])
-      render "form/check_answers", locals: { subsection: subsection, form: form }
+      subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
+      render "form/check_answers", locals: { subsection: subsection }
     else
       render_not_found
     end
   end
 
-  form = FormHandler.instance.get_form("2021_2022")
-  form.pages.map do |page|
-    define_method(page.id) do |_errors = {}|
-      if @case_log
-        subsection = form.subsection_for_page(page)
-        render "form/page", locals: { form: form, page: page, subsection: subsection.label }
-      else
-        render_not_found
+  FormHandler.instance.forms.each do |_key, form|
+    form.pages.map do |page|
+      define_method(page.id) do |_errors = {}|
+        if @case_log
+          subsection = @case_log.form.subsection_for_page(page)
+          case_log_form_page = @case_log.form.get_page(page.id)
+          render "form/page", locals: { page: case_log_form_page, subsection: subsection.label }
+        else
+          render_not_found
+        end
       end
     end
   end

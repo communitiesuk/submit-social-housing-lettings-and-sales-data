@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe QuestionAttributeHelper do
-  form_handler = FormHandler.instance
-  let(:form) { form_handler.get_form("test_form") }
+  let(:case_log) { FactoryBot.build(:case_log) }
+  let(:form) { case_log.form }
   let(:questions) { form.get_page("rent").questions }
 
   describe "html attributes" do

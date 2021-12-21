@@ -50,7 +50,6 @@ class CaseLogsController < ApplicationController
   end
 
   def edit
-    @form = FormHandler.instance.get_form("2021_2022")
     @case_log = current_user.case_logs.find_by(id: params[:id])
     if @case_log
       render :edit

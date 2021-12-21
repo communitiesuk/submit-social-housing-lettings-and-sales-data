@@ -136,7 +136,7 @@ FactoryBot.define do
       startdate { Time.zone.now }
       day { Time.zone.now.day }
       month { Time.zone.now.month }
-      year { Time.zone.now.year }
+      year { 2021 }
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }

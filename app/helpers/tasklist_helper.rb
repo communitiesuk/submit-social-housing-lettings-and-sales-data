@@ -15,14 +15,14 @@ module TasklistHelper
     in_progress: "govuk-tag--blue",
   }.freeze
 
-  def get_next_incomplete_section(form, case_log)
-    form.subsections.find { |subsection| subsection.is_incomplete?(case_log) }
+  def get_next_incomplete_section(case_log)
+    case_log.form.subsections.find { |subsection| subsection.is_incomplete?(case_log) }
   end
 
-  def get_subsections_count(form, case_log, status = :all)
-    return form.subsections.count if status == :all
+  def get_subsections_count(case_log, status = :all)
+    return case_log.form.subsections.count if status == :all
 
-    form.subsections.count { |subsection| subsection.status(case_log) == status }
+    case_log.form.subsections.count { |subsection| subsection.status(case_log) == status }
   end
 
   def first_page_or_check_answers(subsection, case_log)

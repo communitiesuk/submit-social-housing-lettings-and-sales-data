@@ -1,10 +1,15 @@
 class Form
-  attr_reader :form_definition, :sections, :subsections, :pages, :questions
+  attr_reader :form_definition, :sections, :subsections, :pages, :questions,
+              :start_year, :end_year, :type, :name
 
-  def initialize(form_path)
+  def initialize(form_path, name)
     raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
     @form_definition = JSON.parse(File.open(form_path).read)
+    @name = name
+    @start_year = form_definition["start_year"]
+    @end_year = form_definition["end_year"]
+    @type = form_definition["form_type"]
     @sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
     @subsections = sections.flat_map(&:subsections)
     @pages = subsections.flat_map(&:pages)

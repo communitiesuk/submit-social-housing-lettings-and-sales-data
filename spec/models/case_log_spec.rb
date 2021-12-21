@@ -8,6 +8,16 @@ RSpec.describe Form, type: :model do
     RequestHelper.stub_http_requests
   end
 
+  describe "#form" do
+    let(:case_log) { FactoryBot.build(:case_log) }
+    let(:case_log_year_2) { FactoryBot.build(:case_log, year: 2023) }
+    it "has returns the correct form based on the start date" do
+      expect(case_log.form_name).to eq("2021_2022")
+      expect(case_log_year_2.form_name).to eq("2023_2024")
+      expect(case_log.form).to be_a(Form)
+    end
+  end
+
   describe "#new" do
     it "validates age is a number" do
       expect {
