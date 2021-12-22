@@ -1158,6 +1158,7 @@
                   "hint_text": "",
                   "type": "select",
                   "answer_options": {
+                    "select": "Select an option",
                     "0": "Adur",
                     "1": "Allerdale",
                     "2": "Amber Valley",
@@ -2011,6 +2012,7 @@
                   "hint_text": "Includes temporary accommodation",
                   "type": "select",
                   "answer_options": {
+                    "select": "Select an option",
                     "0": "Adur",
                     "1": "Allerdale",
                     "2": "Amber Valley",
