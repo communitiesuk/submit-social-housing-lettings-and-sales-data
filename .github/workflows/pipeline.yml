@@ -122,7 +122,7 @@ jobs:
         CORE_EMAIL_USERNAME: ${{ secrets.CORE_EMAIL_USERNAME }}
         CORE_EMAIL_PASSWORD: ${{ secrets.CORE_EMAIL_PASSWORD }}
         APP_HOST: ${{ secrets.APP_HOST }}
-        RAILS_MASTER_KEY: ${{ secret.RAILS_MASTER_KEY }}
+        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       run: |
         cf7 api $CF_API_ENDPOINT
         cf7 auth
