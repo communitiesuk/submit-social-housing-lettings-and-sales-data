@@ -6,7 +6,7 @@ export default class extends Controller {
   connect() {
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
-      selectElement: this.element.querySelector('input')
+      selectElement: this.element
     })
   }
 }
