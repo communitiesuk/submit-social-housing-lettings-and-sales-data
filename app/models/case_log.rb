@@ -114,8 +114,8 @@ class CaseLog < ApplicationRecord
   enum lawaitlist: LATIME, _suffix: true
   enum reasonpref: POLAR_WITH_UNKNOWN, _suffix: true
   enum reason: REASON, _suffix: true
-  enum la: LA, _suffix: true
-  enum prevloc: LA, _suffix: true
+  enum la: ENGLISH_LA, _suffix: true
+  enum prevloc: UK_LA, _suffix: true
   enum majorrepairs: POLAR, _suffix: true
   enum hb: HOUSING_BENEFIT, _suffix: true
   enum hbrentshortfall: POLAR_WITH_UNKNOWN, _suffix: true
