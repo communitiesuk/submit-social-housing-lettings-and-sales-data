@@ -4,11 +4,9 @@ import 'accessible-autocomplete/dist/accessible-autocomplete.min.css'
 
 export default class extends Controller {
   connect() {
-    if(document.querySelectorAll(".autocomplete__input").length == 0){
-      accessibleAutocomplete.enhanceSelectElement({
-        defaultValue: '',
-        selectElement: this.element
-      })
-    }
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement: this.element.querySelector('input')
+    })
   }
 }
