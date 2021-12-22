@@ -185,6 +185,23 @@
                   }
                 }
               },
+              "accessible_select": {
+                "questions": {
+                  "la": {
+                    "header": "Select options",
+                    "hint_text": "Type ahead to filter the options",
+                    "type": "select",
+                    "check_answer_label": "Accessible Select",
+                    "answer_options": {
+                      "0": "Adur",
+                      "1": "Lewisham",
+                      "2": "Oxford",
+                      "3": "Thanet",
+                      "4": "York"
+                    }
+                  }
+                }
+              },
               "condition_effects": {
                 "questions": {
                   "condition_effects": {
