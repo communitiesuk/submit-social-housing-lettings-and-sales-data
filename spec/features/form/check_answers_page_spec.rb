@@ -76,13 +76,13 @@ RSpec.describe "Form Check Answers Page" do
 
     it "should have a change link for answered questions" do
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 4
+      assert_selector "a", text: /Answer\z/, count: 5
       assert_selector "a", text: "Change", count: 0
       visit("/logs/#{empty_case_log.id}/accessibility-requirements")
       check("case-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 3
+      assert_selector "a", text: /Answer\z/, count: 4
       assert_selector "a", text: "Change", count: 1
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements")
     end

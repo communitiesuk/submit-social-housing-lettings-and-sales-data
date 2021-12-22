@@ -1,9 +1,11 @@
-<%= answers = question.answer_options.map { |key, value| OpenStruct.new(id:key, name: value) }
+<%= answers = question.answer_options.map { |key, value| OpenStruct.new(id: key, name: value) }
  f.govuk_collection_select question.id.to_sym,
     answers,
-    :name,
+    :id,
     :name,
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     label: { text: question.header, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
-    hint: { text: question.hint_text&.html_safe }
+    hint: { text: question.hint_text&.html_safe },
+    options: { disabled: [""] },
+    "data-controller": "accessible-autocomplete"
  %>
