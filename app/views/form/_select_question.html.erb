@@ -6,6 +6,6 @@
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     label: { text: question.header, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
     hint: { text: question.hint_text&.html_safe },
-    options: { disabled: [""], selected: [@case_log.public_send(question.id) || ""] },
+    options: { disabled: [""], selected: @case_log.public_send(question.id) || "" },
     "data-controller": "accessible-autocomplete"
  %>
