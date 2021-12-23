@@ -76,6 +76,20 @@ RSpec.describe FormController, type: :request do
           end
         end
       end
+
+      context "a question that in a section that isn't enabled yet" do
+        it "routes back to the tasklist page" do
+          get "/logs/#{case_log.id}/declaration", headers: headers, params: {}
+          expect(response).to redirect_to("/logs/#{case_log.id}")
+        end
+      end
+
+      context "a question that isn't enabled yet" do
+        it "routes back to the tasklist page" do
+          get "/logs/#{case_log.id}/conditional-question-no-second-page", headers: headers, params: {}
+          expect(response).to redirect_to("/logs/#{case_log.id}")
+        end
+      end
     end
 
     describe "Submit Form" do
