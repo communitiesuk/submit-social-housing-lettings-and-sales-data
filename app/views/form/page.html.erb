@@ -1,3 +1,7 @@
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
+
 <% content_for :title, @page.header.present? ? @page.header : @page.questions.first().header.html_safe %>
 
 <% content_for :before_content do %>
