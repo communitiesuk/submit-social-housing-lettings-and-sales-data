@@ -32,4 +32,9 @@ RSpec.describe "Accessible Automcomplete" do
     click_link(text: "Back")
     expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
   end
+
+  it "has a disabled null option" do
+    visit("/logs/#{case_log.id}/accessible-select")
+    expect(page).to have_select("case-log-la-field", disabled_options: ["Select an option"])
+  end
 end
