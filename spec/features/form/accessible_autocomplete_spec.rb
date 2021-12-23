@@ -24,4 +24,12 @@ RSpec.describe "Accessible Automcomplete" do
     find("#case-log-la-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
     expect(find("#case-log-la-field").value).to eq("Thanet")
   end
+
+  it "maintains enhancement state across back navigation", js: true do
+    visit("/logs/#{case_log.id}/accessible-select")
+    find("#case-log-la-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
+    click_button("Save and continue")
+    click_link(text: "Back")
+    expect(page).to have_selector("input", class: "autocomplete__input", count: 1)
+  end
 end

@@ -193,11 +193,12 @@
                     "type": "select",
                     "check_answer_label": "Accessible Select",
                     "answer_options": {
-                      "0": "Adur",
-                      "1": "Lewisham",
-                      "2": "Oxford",
-                      "3": "Thanet",
-                      "4": "York"
+                      "" : "Select an option",
+                      "E07000223": "Adur",
+                      "E09000023": "Lewisham",
+                      "E07000178": "Oxford",
+                      "E07000114": "Thanet",
+                      "E06000014": "York"
                     }
                   }
                 }
