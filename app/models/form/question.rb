@@ -26,6 +26,7 @@ class Form::Question
 
   def answer_label(case_log)
     return checkbox_answer_label(case_log) if type == "checkbox"
+    return case_log[id].strftime("%d %b %Y") if type == "date"
 
     case_log[id].to_s
   end

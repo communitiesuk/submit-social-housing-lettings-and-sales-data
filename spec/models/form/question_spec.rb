@@ -110,6 +110,18 @@ RSpec.describe Form::Question, type: :model do
       expect(subject.update_answer_link_name(case_log)).to eq("Change")
     end
 
+    context "when type is date" do
+      let(:section_id) { "local_authority" }
+      let(:subsection_id) { "local_authority" }
+      let(:page_id) { "property_major_repairs" }
+      let(:question_id) { "mrcdate" }
+
+      it "displays a formatted answer label" do
+        case_log.mrcdate = Time.zone.local(2021, 10, 11)
+        expect(subject.answer_label(case_log)).to eq("11 Oct 2021")
+      end
+    end
+
     context "when type is checkbox" do
       let(:section_id) { "household" }
       let(:subsection_id) { "household_needs" }
