@@ -5,14 +5,14 @@ class FormController < ApplicationController
 
   def submit_form
     if @case_log
-      page = @case_log.form.get_page(params[:case_log][:page])
-      responses_for_page = responses_for_page(page)
+      @page = @case_log.form.get_page(params[:case_log][:page])
+      responses_for_page = responses_for_page(@page)
       if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-        redirect_path = @case_log.form.next_page_redirect_path(page, @case_log)
+        redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
         redirect_to(send(redirect_path, @case_log))
       else
-        subsection = @case_log.form.subsection_for_page(page)
-        render "form/page", locals: { page: page, subsection: subsection.label }, status: :unprocessable_entity
+        @subsection = @case_log.form.subsection_for_page(@page)
+        render "form/page", status: :unprocessable_entity
       end
     else
       render_not_found
@@ -33,9 +33,9 @@ class FormController < ApplicationController
     form.pages.map do |page|
       define_method(page.id) do |_errors = {}|
         if @case_log
-          subsection = @case_log.form.subsection_for_page(page)
-          case_log_form_page = @case_log.form.get_page(page.id)
-          render "form/page", locals: { page: case_log_form_page, subsection: subsection.label }
+          @subsection = @case_log.form.subsection_for_page(page)
+          @page = @case_log.form.get_page(page.id)
+          render "form/page"
         else
           render_not_found
         end
