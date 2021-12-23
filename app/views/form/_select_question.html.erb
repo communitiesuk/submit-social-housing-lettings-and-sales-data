@@ -1,3 +1,4 @@
+<% selected = CaseLog::UK_LA[@case_log.public_send(question.id)] || "" %>
 <%= answers = question.answer_options.map { |key, value| OpenStruct.new(id: key, name: value) }
  f.govuk_collection_select question.id.to_sym,
     answers,
@@ -6,6 +7,6 @@
     caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
     label: { text: question.header, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
     hint: { text: question.hint_text&.html_safe },
-    options: { disabled: [""], selected: @case_log.public_send(question.id) || "" },
+    options: { disabled: [""], selected: selected },
     "data-controller": "accessible-autocomplete"
  %>
