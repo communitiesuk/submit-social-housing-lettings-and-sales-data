@@ -37,4 +37,10 @@ RSpec.describe "Accessible Automcomplete" do
     visit("/logs/#{case_log.id}/accessible-select")
     expect(page).to have_select("case-log-la-field", disabled_options: ["Select an option"])
   end
+
+  it "has the correct option selected if one has been saved" do
+    case_log.update(property_postcode: nil, la: "Oxford")
+    visit("/logs/#{case_log.id}/accessible-select")
+    expect(page).to have_select("case-log-la-field", selected: ["Oxford"])
+  end
 end
