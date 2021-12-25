@@ -1,13 +1,4 @@
 GIT
-  remote: https://github.com/activerecord-hackery/ransack.git
-  revision: 25c5c9dfec216a5fafcd90b8893abcfe19460e50
-  specs:
-    ransack (2.4.2)
-      activerecord (>= 5.2.4)
-      activesupport (>= 5.2.4)
-      i18n
-
-GIT
   remote: https://github.com/baarkerlounger/activeadmin.git
   revision: 8274b3dcf6f2ddd8190eeb5e3ee618706214fa2d
   branch: rails7
@@ -73,7 +64,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 24631bfc78fc0bd69d66ab8eb7f81731bd789bbc
+  revision: 84d3ba39770e341f6e19d65f5ecce83a8842bff9
   branch: main
   specs:
     rspec-rails (5.1.0.pre)
@@ -187,7 +178,7 @@ GEM
       rexml
     crass (1.0.6)
     deep_merge (1.2.1)
-    diff-lcs (1.4.4)
+    diff-lcs (1.5.0)
     discard (1.2.1)
       activerecord (>= 4.2, < 8)
     docile (1.4.0)
@@ -234,18 +225,18 @@ GEM
       thor (>= 0.14, < 2.0)
     json-schema (2.8.1)
       addressable (>= 2.4)
-    kaminari (1.2.1)
+    kaminari (1.2.2)
       activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.1)
-      kaminari-activerecord (= 1.2.1)
-      kaminari-core (= 1.2.1)
-    kaminari-actionview (1.2.1)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
       actionview
-      kaminari-core (= 1.2.1)
-    kaminari-activerecord (1.2.1)
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
       activerecord
-      kaminari-core (= 1.2.1)
-    kaminari-core (1.2.1)
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -323,6 +314,10 @@ GEM
       zeitwerk (~> 2.5)
     rainbow (3.0.0)
     rake (13.0.6)
+    ransack (2.5.0)
+      activerecord (>= 5.2.4)
+      activesupport (>= 5.2.4)
+      i18n
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -351,7 +346,7 @@ GEM
       rubocop-rails (= 2.12.4)
       rubocop-rake (= 0.6.0)
       rubocop-rspec (= 2.6.0)
-    rubocop-performance (1.12.0)
+    rubocop-performance (1.13.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.12.4)
@@ -451,7 +446,6 @@ DEPENDENCIES
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
   rails (~> 7.0.0)
-  ransack!
   roo
   rspec-core!
   rspec-expectations!
