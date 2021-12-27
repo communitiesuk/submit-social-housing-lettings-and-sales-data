@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/activeadmin/inherited_resources.git
+  revision: a0a350245a2ec76c040f8751707c1d98792534dd
+  specs:
+    inherited_resources (1.13.0)
+      actionpack (>= 5.2, < 7.1)
+      has_scope (~> 0.6)
+      railties (>= 5.2, < 7.1)
+      responders (>= 2, < 4)
+
+GIT
   remote: https://github.com/baarkerlounger/activeadmin.git
   revision: 8274b3dcf6f2ddd8190eeb5e3ee618706214fa2d
   branch: rails7
@@ -24,17 +34,6 @@ GIT
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-
-GIT
-  remote: https://github.com/naveed-ahmad/inherited_resources.git
-  revision: 15aa6273f97cc34369a080b82e7b9e15c4308c00
-  branch: rails7
-  specs:
-    inherited_resources (1.13.0)
-      actionpack (>= 5.2, <= 7.0.0)
-      has_scope (~> 0.6)
-      railties (>= 5.2, <= 7.0.0)
-      responders (>= 2, < 4)
 
 GIT
   remote: https://github.com/rspec/rspec-core.git
@@ -414,7 +413,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.2)
 
 PLATFORMS
   arm64-darwin-21

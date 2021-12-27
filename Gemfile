@@ -25,7 +25,7 @@ gem "hotwire-rails"
 gem "discard"
 # Administration framework
 gem "activeadmin", git: "https://github.com/baarkerlounger/activeadmin.git", branch: "rails7"
-gem "inherited_resources", git: "https://github.com/naveed-ahmad/inherited_resources.git", branch: "rails7"
+gem "inherited_resources", git: "https://github.com/activeadmin/inherited_resources.git"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
