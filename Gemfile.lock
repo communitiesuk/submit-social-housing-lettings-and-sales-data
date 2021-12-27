@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/activeadmin/arbre.git
+  revision: e4970e683c81c99432b73f0ceb5dff7d3fe50413
+  specs:
+    arbre (1.4.0)
+      activesupport (>= 3.0.0, < 7.1)
+      ruby2_keywords (>= 0.0.2, < 1.0)
+
+GIT
   remote: https://github.com/activeadmin/inherited_resources.git
   revision: a0a350245a2ec76c040f8751707c1d98792534dd
   specs:
@@ -7,21 +15,6 @@ GIT
       has_scope (~> 0.6)
       railties (>= 5.2, < 7.1)
       responders (>= 2, < 4)
-
-GIT
-  remote: https://github.com/baarkerlounger/activeadmin.git
-  revision: 8274b3dcf6f2ddd8190eeb5e3ee618706214fa2d
-  branch: rails7
-  specs:
-    activeadmin (2.9.0)
-      arbre (~> 1.2, >= 1.2.1)
-      formtastic (>= 3.1, < 5.0)
-      formtastic_i18n (~> 0.4)
-      inherited_resources (~> 1.7)
-      jquery-rails (~> 4.2)
-      kaminari (~> 1.0, >= 1.2.1)
-      railties (>= 5.2, <= 7.0.0)
-      ransack (~> 2.1, >= 2.1.1)
 
 GIT
   remote: https://github.com/ghiculescu/devise.git
@@ -81,6 +74,21 @@ GIT
   branch: main
   specs:
     rspec-support (3.11.0.pre)
+
+GIT
+  remote: https://github.com/tagliala/activeadmin.git
+  revision: 12ef798e1a02084565fa2ea698e26334dbc56e42
+  branch: feature/railties-7
+  specs:
+    activeadmin (2.9.0)
+      arbre (~> 1.2, >= 1.2.1)
+      formtastic (>= 3.1, < 5.0)
+      formtastic_i18n (~> 0.4)
+      inherited_resources (~> 1.7)
+      jquery-rails (~> 4.2)
+      kaminari (~> 1.0, >= 1.2.1)
+      railties (>= 5.2, < 7.1)
+      ransack (~> 2.1, >= 2.1.1)
 
 GEM
   remote: https://rubygems.org/
@@ -146,8 +154,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    arbre (1.2.1)
-      activesupport (>= 3.0.0)
     ast (2.4.2)
     bcrypt (3.1.16)
     bindex (0.8.1)
@@ -423,6 +429,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
+  arbre!
   bootsnap (>= 1.4.4)
   byebug
   capybara
