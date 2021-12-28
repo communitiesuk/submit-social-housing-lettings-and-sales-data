@@ -29,53 +29,6 @@ GIT
       warden (~> 1.2.3)
 
 GIT
-  remote: https://github.com/rspec/rspec-core.git
-  revision: e3bda9da1e625a428fd005f0d1a633531f5da749
-  branch: main
-  specs:
-    rspec-core (3.11.0.pre)
-      rspec-support (= 3.11.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-expectations.git
-  revision: d9fd9a5589e3914bcd25d66560eccadd75493727
-  branch: main
-  specs:
-    rspec-expectations (3.11.0.pre)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (= 3.11.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-mocks.git
-  revision: 17cf86ab61544b93232c4e9ca9784ab212dccbf6
-  branch: main
-  specs:
-    rspec-mocks (3.11.0.pre)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (= 3.11.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-rails.git
-  revision: 84d3ba39770e341f6e19d65f5ecce83a8842bff9
-  branch: main
-  specs:
-    rspec-rails (5.1.0.pre)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      railties (>= 5.2)
-      rspec-core (= 3.11.0.pre)
-      rspec-expectations (= 3.11.0.pre)
-      rspec-mocks (= 3.11.0.pre)
-      rspec-support (= 3.11.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-support.git
-  revision: 321dc7227df43cd682c293fa31fa427b94b2ea74
-  branch: main
-  specs:
-    rspec-support (3.11.0.pre)
-
-GIT
   remote: https://github.com/tagliala/activeadmin.git
   revision: 12ef798e1a02084565fa2ea698e26334dbc56e42
   branch: feature/railties-7
@@ -334,6 +287,23 @@ GEM
     roo (2.8.3)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
+    rspec-core (3.10.1)
+      rspec-support (~> 3.10.0)
+    rspec-expectations (3.10.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-mocks (3.10.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-rails (5.0.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      railties (>= 5.2)
+      rspec-core (~> 3.10)
+      rspec-expectations (~> 3.10)
+      rspec-mocks (~> 3.10)
+      rspec-support (~> 3.10)
+    rspec-support (3.10.3)
     rubocop (1.23.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -453,11 +423,7 @@ DEPENDENCIES
   rack-mini-profiler (~> 2.0)
   rails (~> 7.0.0)
   roo
-  rspec-core!
-  rspec-expectations!
-  rspec-mocks!
-  rspec-rails!
-  rspec-support!
+  rspec-rails
   rubocop-govuk
   rubocop-performance
   rubocop-rails
