@@ -160,6 +160,20 @@
               },
               "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
             },
+            "property_reference": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "propcode": {
+                  "check_answer_label": "Property reference",
+                  "header": "What’s the property reference?",
+                  "hint_text": "This is how you refer to the property in your own systems.",
+                  "type": "text",
+                  "width": 10
+                }
+              },
+              "depends_on": { "gdpr_acceptance": "Yes" }
+            },
             "sale_completion_date": {
               "header": "",
               "description": "",
@@ -1092,19 +1106,6 @@
           "label": "Property information",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
-            "property_reference": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "propcode": {
-                  "check_answer_label": "Property reference",
-                  "header": "What’s the property reference?",
-                  "hint_text": "This is how you refer to the property in your own systems.",
-                  "type": "text",
-                  "width": 10
-                }
-              }
-            },
             "property_postcode": {
               "header": "",
               "description": "",
