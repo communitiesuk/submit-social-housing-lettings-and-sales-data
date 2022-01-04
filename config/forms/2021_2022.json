@@ -101,7 +101,7 @@
                 "startdate": {
                   "check_answer_label": "Tenancy start date",
                   "header": "What is the tenancy start date?",
-                  "hint_text": "For example, 27 3 2007",
+                  "hint_text": "For example, 27 3 2021",
                   "type": "date"
                 }
               },
@@ -181,7 +181,7 @@
                 "sale_completion_date": {
                   "check_answer_label": "Sale completion date",
                   "header": "What is the sale completion date?",
-                  "hint_text": "For example, 27 3 2007",
+                  "hint_text": "For example, 27 3 2021",
                   "type": "date"
                 }
               },
@@ -1725,7 +1725,7 @@
                 "mrcdate": {
                   "check_answer_label": "Completion date of repairs",
                   "header": "When were the repairs completed?",
-                  "hint_text": "For example, 27 3 2007",
+                  "hint_text": "For example, 27 3 2021",
                   "type": "date"
                 }
               },
