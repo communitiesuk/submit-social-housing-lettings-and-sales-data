@@ -1,5 +1,5 @@
 # Build compilation image
-FROM ruby:3.0.3-alpine as builder
+FROM ruby:3.0.3-alpine3.14 as builder
 
 # The application runs from /app
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN apk add --update --no-cache tzdata && \
 # build-base: complication tools for bundle
 # yarn: node package manager
 # postgresql-dev: postgres driver and libraries
-RUN apk add --no-cache build-base yarn postgresql-dev
+RUN apk add --no-cache build-base yarn postgresql-dev git
 
 # Install bundler to run bundle exec
 # This should be the same version as the Gemfile.lock
