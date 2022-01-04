@@ -974,6 +974,10 @@ module Constants::CaseLog
     "Wyre" => "E07000128",
     "Wyre Forest" => "E07000239",
     "York" => "E06000014",
+    "Northern Ireland" => "N92000002",
+    "Scotland" => "S92000003",
+    "Wales" => "W92000004",
+    "Outside UK" => "9300000XX",
   }.freeze
 
   ARMED_FORCES = {
