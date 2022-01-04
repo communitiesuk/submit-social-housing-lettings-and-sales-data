@@ -1144,7 +1144,8 @@
                   },
                   "conditional_for": {
                     "property_postcode": ["Yes"]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "property_postcode": {
                   "check_answer_label": "Postcode",

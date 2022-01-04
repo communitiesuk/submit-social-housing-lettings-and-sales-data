@@ -242,6 +242,14 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "Check answers" do
+      let(:postcode_case_log) do
+        FactoryBot.create(:case_log,
+                          owning_organisation: organisation,
+                          managing_organisation: organisation,
+                          postcode_known: "No")
+      end
+      let(:id) { postcode_case_log.id }
+
       before do
         stub_request(:get, /api.postcodes.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
@@ -260,15 +268,14 @@ RSpec.describe CaseLogsController, type: :request do
         expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
       end
 
-      it "shows is the postcode is not known" do
-        case_log = FactoryBot.create(:case_log,
-                                     owning_organisation: organisation,
-                                     managing_organisation: organisation,
-                                     postcode_known: "No")
-        id = case_log.id
+      it "does not show do you know the property postcode question" do
+        get "/logs/#{id}/property-information/check-answers"
+        expect(CGI.unescape_html(response.body)).not_to include("Do you know the property postcode?")
+      end
+
+      it "shows if the postcode is not known" do
         get "/logs/#{id}/property-information/check-answers"
         expect(CGI.unescape_html(response.body)).to include("Not known")
-        expect(CGI.unescape_html(response.body)).not_to include("Do you know the property postcode?")
       end
     end
   end
