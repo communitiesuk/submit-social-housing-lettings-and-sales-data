@@ -2394,7 +2394,11 @@
                     "E07000238": "Wychavon",
                     "E07000128": "Wyre",
                     "E07000239": "Wyre Forest",
-                    "E06000014": "York"
+                    "E06000014": "York",
+                    "N92000002": "Northern Ireland",
+                    "S92000003": "Scotland",
+                    "W92000004": "Wales",
+                    "9300000XX": "Outside UK"
                   }
                 }
               }
