@@ -1153,7 +1153,11 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "inferred_answers": { "la": { "is_la_inferred": true } }
+                  "inferred_answers": { "la": { "is_la_inferred": true } },
+                  "inferred_check_answers_value": {
+                    "condition": { "postcode_known": "No" },
+                    "value": "Not known"
+                  }
                 }
               }
             },
