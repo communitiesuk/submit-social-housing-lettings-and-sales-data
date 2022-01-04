@@ -1,6 +1,153 @@
 {
     "form_type": "lettings",
     "sections": {
+      "about_this_log": {
+        "label": "About this log",
+        "subsections": {
+          "about_this_log": {
+            "label": "About this log",
+            "pages": {
+              "gdpr_acceptance": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "gdpr_acceptance": {
+                    "check_answer_label": "Privacy notice seen",
+                    "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
+                    "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                }
+              },
+              "gdpr_declined": {
+                "header": "You cannot use this service",
+                "hint_text": "",
+                "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
+                "questions": {
+                },
+                "depends_on": { "gdpr_acceptance": "No" }
+              },
+              "sale_or_letting": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "sale_or_letting": {
+                    "check_answer_label": "Sale or letting",
+                    "header": "Is this a sale or a letting?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Sale",
+                      "1": "Letting"
+                    }
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes" }
+              },
+              "tenant_same_property_renewal": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "tenant_same_property_renewal": {
+                    "check_answer_label": "Property renewal",
+                    "header": "Is this a renewal to the same tenant in the same property?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "No",
+                      "1": "Yes"
+                    }
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              },
+              "startdate": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "startdate": {
+                    "check_answer_label": "Tenancy start date",
+                    "header": "What is the tenancy start date?",
+                    "hint_text": "For example, 27 3 2007",
+                    "type": "date"
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              },
+              "about_this_letting": {
+                "header": "Tell us about this letting",
+                "description": "",
+                "questions": {
+                  "rent_type": {
+                    "check_answer_label": "Rent type",
+                    "header": "What is the rent type?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Social rent",
+                      "1": "Affordable rent",
+                      "2": "London Affordable rent",
+                      "3": "Rent to buy",
+                      "4": "London living rent",
+                      "5": "Other intermediate rent product"
+                    },
+                    "conditional_for": {
+                      "intermediate_rent_product_name": ["Other intermediate rent product"]
+                    }
+                  },
+                  "intermediate_rent_product_name": {
+                    "check_answer_label": "Product name",
+                    "header": "What is intermediate rent product name?",
+                    "type": "text"
+                  },
+                  "needstype": {
+                    "check_answer_label": "Needs type",
+                    "header": "What is the needs type?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Supported housing",
+                      "1": "General needs"
+                    }
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              },
+              "sale_completion_date": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "sale_completion_date": {
+                    "check_answer_label": "Sale completion date",
+                    "header": "What is the sale completion date?",
+                    "hint_text": "For example, 27 3 2007",
+                    "type": "date"
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+              },
+              "purchaser_code": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "purchaser_code": {
+                    "check_answer_label": "Purchaser code",
+                    "header": "What is the purchaser code?",
+                    "hint_text": "",
+                    "type": "text",
+                    "width": 10
+                  }
+                },
+                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+              }
+            }
+          }
+        }
+      },
       "household": {
         "label": "About the household",
         "subsections": {

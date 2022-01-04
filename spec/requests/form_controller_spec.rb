@@ -50,7 +50,7 @@ RSpec.describe FormController, type: :request do
       context "form pages" do
         context "forms exist for multiple years" do
           let(:case_log_year_1) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 1, 1), owning_organisation: organisation) }
-          let(:case_log_year_2) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 1, 1), owning_organisation: organisation) }
+          let(:case_log_year_2) { FactoryBot.create(:case_log, :about_completed, startdate: Time.zone.local(2022, 1, 1), owning_organisation: organisation) }
 
           it "displays the correct question details for each case log based on form year" do
             get "/logs/#{case_log_year_1.id}/tenant-code", headers: headers, params: {}
