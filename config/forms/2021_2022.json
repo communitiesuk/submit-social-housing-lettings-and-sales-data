@@ -166,7 +166,7 @@
               "questions": {
                 "propcode": {
                   "check_answer_label": "Property reference",
-                  "header": "What’s the property reference?",
+                  "header": "What is the property reference?",
                   "hint_text": "This is how you refer to the property in your own systems.",
                   "type": "text",
                   "width": 10
