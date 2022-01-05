@@ -32,7 +32,9 @@ class Form::Question
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id].strftime("%d %b %Y") if type == "date"
 
-    case_log[id].to_s
+    return case_log[id].to_s if case_log[id].present?
+
+    inferred_check_answers_value.present? ? inferred_check_answers_value["value"] : ""
   end
 
   def get_inferred_answers(case_log)
@@ -56,7 +58,8 @@ class Form::Question
   end
 
   def has_inferred_check_answers_value?(case_log)
-    return inferred_check_answers_value["condition"].values[0] == case_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present? 
+    return inferred_check_answers_value["condition"].values[0] == case_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
+
     false
   end
 

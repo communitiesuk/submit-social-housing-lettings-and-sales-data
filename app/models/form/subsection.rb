@@ -63,7 +63,7 @@ class Form::Subsection
     applicable_questions(case_log) - answered_questions(case_log)
   end
 
-  def displayed_to_user?(case_log, q)
-    q.page.routed_to?(case_log) && q.enabled?(case_log) && !q.hidden_in_check_answers?
+  def displayed_to_user?(case_log, question)
+    question.page.routed_to?(case_log) && question.enabled?(case_log) && !question.hidden_in_check_answers?
   end
 end
