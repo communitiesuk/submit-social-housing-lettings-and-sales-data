@@ -30,14 +30,9 @@ class Form::Subsection
 
     qs = applicable_questions(case_log)
     return :not_started if qs.all? { |question| case_log[question.id].blank? }
-    return :completed if qs.all? { |question| case_log[question.id].present? } && !invalidated?(case_log)
+    return :completed if qs.all? { |question| question.completed?(case_log) }
 
     :in_progress
-  end
-
-  def invalidated?(case_log)
-    applicable_questions(case_log).map(&:id).include?("gdpr_acceptance") &&
-      case_log["gdpr_acceptance"] == "No"
   end
 
   def is_incomplete?(case_log)
