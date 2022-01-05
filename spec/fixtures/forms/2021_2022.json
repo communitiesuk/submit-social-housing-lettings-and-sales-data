@@ -616,7 +616,7 @@
                   "mrcdate": {
                     "check_answer_label": "What was the major repairs completion date?",
                     "header": "What was the major repairs completion date?",
-                    "hint_text": "For example, 27 3 2007",
+                    "hint_text": "For example, 27 3 2021",
                     "type": "date"
                   }
                 }
