@@ -253,6 +253,86 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "Property vacancy and let as validations" do
+      it "cannot have a previously let as type, if it hasn't been let before" do
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "No",
+            unitletas: "Social rent basis",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.not_to raise_error
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            unitletas: "Social rent basis",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            unitletas: "Affordable rent basis",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            unitletas: "Intermediate rent basis",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            unitletas: "Do not know",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "must have a first let reason for vacancy if it's being let as social housing for the first time" do
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            rsnvac: "First let of newbuild property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.not_to raise_error
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            rsnvac: "First let of conversion/rehabilitation/acquired property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.not_to raise_error
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            rsnvac: "First let of leased property",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.not_to raise_error
+        expect {
+          CaseLog.create!(
+            first_time_property_let_as_social_housing: "Yes",
+            rsnvac: "Tenant moved to care home",
+            owning_organisation: owning_organisation,
+            managing_organisation: managing_organisation,
+          )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     context "Shared accomodation bedrooms validation" do
       it "you must have more than zero bedrooms" do
         expect {

@@ -180,6 +180,10 @@ class CaseLog < ApplicationRecord
     ALLOWED_INCOME_RANGES[ecstat1.to_sym]
   end
 
+  def first_time_property_let_as_social_housing?
+    first_time_property_let_as_social_housing == "Yes"
+  end
+
 private
 
   PIO = Postcodes::IO.new
