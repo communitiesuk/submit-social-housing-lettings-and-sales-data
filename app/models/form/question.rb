@@ -49,6 +49,13 @@ class Form::Question
     end
   end
 
+  def completed?(case_log)
+    # Special case as No is a valid answer but doesn't let you progress and use the service
+    return false if id == "gdpr_acceptance" && case_log[id] == "No"
+
+    case_log[id].present?
+  end
+
 private
 
   def checkbox_answer_label(case_log)

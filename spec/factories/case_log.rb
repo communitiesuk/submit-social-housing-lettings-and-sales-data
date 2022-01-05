@@ -2,6 +2,15 @@ FactoryBot.define do
   factory :case_log do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
+    trait :about_completed do
+      gdpr_acceptance { "Yes" }
+      sale_or_letting { "Letting" }
+      tenant_same_property_renewal { "No" }
+      needstype { 1 }
+      rent_type { 1 }
+      startdate { Time.zone.local(2022, 1, 1) }
+      year { 2022 }
+    end
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }
