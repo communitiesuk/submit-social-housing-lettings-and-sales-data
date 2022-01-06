@@ -97,6 +97,24 @@
                                     "conditional_for": {
                                       "description": "",
                                       "type": "object"
+                                    },
+                                    "inferred_answers": {
+                                      "description": "fields that get inferred based on the value of the current field",
+                                      "type": "object"
+                                    },
+                                    "inferred_check_answers_value": {
+                                      "description": "value that gets displayed in the check answers for this field if the given condition is met",
+                                      "type": "object",
+                                      "properties": {
+                                        "condition": {
+                                          "description": "",
+                                          "type": "object"
+                                        },
+                                        "value": {
+                                          "description": "",
+                                          "type": "object"
+                                        }
+                                      }
                                     }
                                   },
                                   "minProperties": 1
