@@ -367,6 +367,7 @@
                   "earnings": {
                     "check_answer_label": "Income",
                     "header": "What is the tenant’s /and partner’s combined income after tax?",
+                    "guidance_partial": "what_counts_as_income",
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
