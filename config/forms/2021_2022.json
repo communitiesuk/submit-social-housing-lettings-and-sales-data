@@ -29,8 +29,7 @@
               "header": "You cannot use this service",
               "hint_text": "",
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
-              "questions": {
-              },
+              "questions": {},
               "depends_on": { "gdpr_acceptance": "No" }
             },
             "organisation_details": {
@@ -92,7 +91,10 @@
                   }
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Letting"
+              }
             },
             "startdate": {
               "header": "",
@@ -105,7 +107,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Letting"
+              }
             },
             "about_this_letting": {
               "header": "Tell us about this letting",
@@ -125,7 +130,9 @@
                     "5": "Other intermediate rent product"
                   },
                   "conditional_for": {
-                    "intermediate_rent_product_name": ["Other intermediate rent product"]
+                    "intermediate_rent_product_name": [
+                      "Other intermediate rent product"
+                    ]
                   }
                 },
                 "intermediate_rent_product_name": {
@@ -144,7 +151,10 @@
                   }
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Letting"
+              }
             },
             "tenant_code": {
               "header": "",
@@ -158,7 +168,10 @@
                   "width": 10
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Letting"
+              }
             },
             "property_reference": {
               "header": "",
@@ -185,7 +198,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Sale"
+              }
             },
             "purchaser_code": {
               "header": "",
@@ -199,7 +215,10 @@
                   "width": 10
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+              "depends_on": {
+                "gdpr_acceptance": "Yes",
+                "sale_or_letting": "Sale"
+              }
             }
           }
         }
@@ -210,7 +229,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "person_1_age": {
               "header": "",
@@ -302,7 +321,7 @@
                     "10": "Romania",
                     "11": "Ireland",
                     "12": "Slovakia",
-                    "13":"Slovenia",
+                    "13": "Slovenia",
                     "14": "Croatia",
                     "15": "Other EU Economic Area (EEA country)",
                     "16": "Any other country",
@@ -759,7 +778,7 @@
         },
         "household_situation": {
           "label": "Household situation",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "previous_housing_situation": {
               "header": "",
@@ -885,7 +904,7 @@
         },
         "household_needs": {
           "label": "Household needs",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -897,15 +916,19 @@
                   "type": "radio",
                   "check_answer_label": "Armed Forces",
                   "answer_options": {
-                    "0":"A current or former regular in the UK Armed Forces (exc. National Service)",
-                    "1":"A current or former reserve in the UK Armed Forces (exc. National Service)",
+                    "0": "A current or former regular in the UK Armed Forces (exc. National Service)",
+                    "1": "A current or former reserve in the UK Armed Forces (exc. National Service)",
                     "2": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years",
                     "3": "No",
                     "4": "Tenant prefers not to say"
                   },
                   "conditional_for": {
-                    "leftreg": ["A current or former regular in the UK Armed Forces (exc. National Service)"],
-                    "reservist": ["A current or former regular in the UK Armed Forces (exc. National Service)"]
+                    "leftreg": [
+                      "A current or former regular in the UK Armed Forces (exc. National Service)"
+                    ],
+                    "reservist": [
+                      "A current or former regular in the UK Armed Forces (exc. National Service)"
+                    ]
                   }
                 },
                 "leftreg": {
@@ -1023,7 +1046,7 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1121,14 +1144,20 @@
                   },
                   "conditional_for": {
                     "property_postcode": ["Yes"]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "property_postcode": {
                   "check_answer_label": "Postcode",
                   "header": "",
                   "hint_text": "",
                   "type": "text",
-                  "width": 5
+                  "width": 5,
+                  "inferred_answers": { "la": { "is_la_inferred": true } },
+                  "inferred_check_answers_value": {
+                    "condition": { "postcode_known": "No" },
+                    "value": "Not known"
+                  }
                 }
               }
             },
@@ -1147,7 +1176,7 @@
                   }
                 }
               },
-              "depends_on": {"is_la_inferred": false}
+              "depends_on": { "is_la_inferred": false }
             },
             "select_local_authority": {
               "header": "",
@@ -1509,7 +1538,7 @@
                   }
                 }
               },
-              "depends_on": { "tenant_same_property_renewal": "No"}
+              "depends_on": { "tenant_same_property_renewal": "No" }
             },
             "unitletas": {
               "header": "",
@@ -1528,7 +1557,10 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "first_time_property_let_as_social_housing": "No",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "property_vacancy_reason_not_first_let": {
               "header": "",
@@ -1554,7 +1586,10 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "first_time_property_let_as_social_housing": "No",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "property_vacancy_reason_first_let": {
               "header": "",
@@ -1572,7 +1607,10 @@
                   }
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "first_time_property_let_as_social_housing": "Yes",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "property_number_of_times_relet_not_social_let": {
               "header": "",
@@ -1588,7 +1626,10 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "No", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "first_time_property_let_as_social_housing": "No",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "property_number_of_times_relet_social_let": {
               "header": "",
@@ -1604,7 +1645,10 @@
                   "step": 1
                 }
               },
-              "depends_on": { "first_time_property_let_as_social_housing": "Yes", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "first_time_property_let_as_social_housing": "Yes",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "property_unit_type": {
               "header": "",
@@ -1687,7 +1731,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No" }
+              "depends_on": {
+                "rsnvac": "First let of newbuild property",
+                "tenant_same_property_renewal": "No"
+              }
             },
             "new_build_handover_date": {
               "header": "",
@@ -1702,7 +1749,10 @@
               },
               "depends_on": {
                 "tenant_same_property_renewal": "No",
-                "rsnvac": ["First let of conversion, rehabilitation or acquired property?", "First let of leased property"]
+                "rsnvac": [
+                  "First let of conversion, rehabilitation or acquired property?",
+                  "First let of leased property"
+                ]
               }
             },
             "property_major_repairs": {
@@ -1729,7 +1779,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": { "rsnvac": "First let of newbuild property", "tenant_same_property_renewal": "No"}
+              "depends_on": {
+                "rsnvac": "First let of newbuild property",
+                "tenant_same_property_renewal": "No"
+              }
             }
           }
         }
@@ -1740,7 +1793,7 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income and benefits",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "net_income": {
               "header": "",
@@ -1834,7 +1887,7 @@
         },
         "rent": {
           "label": "Rent",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "rent": {
               "header": "",
@@ -1865,12 +1918,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "scharge": {
@@ -1880,12 +1928,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "pscharge": {
@@ -1895,12 +1938,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "supcharg": {
@@ -1910,12 +1948,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
                 "tcharge": {
@@ -1960,7 +1993,7 @@
       "subsections": {
         "local_authority": {
           "label": "Local authority",
-          "depends_on": {"about_this_log": "completed"},
+          "depends_on": { "about_this_log": "completed" },
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -2428,7 +2461,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
-                    "2":  "Do not know"
+                    "2": "Do not know"
                   },
                   "conditional_for": {
                     "reasonable_preference_reason": ["Yes"]
