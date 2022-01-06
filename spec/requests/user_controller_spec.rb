@@ -87,6 +87,10 @@ RSpec.describe UsersController, type: :request do
       it "returns not found 404" do
         expect(response).to have_http_status(:not_found)
       end
+
+      it "shows the 404 view" do
+        expect(page).to have_content("Page not found")
+      end
     end
   end
 

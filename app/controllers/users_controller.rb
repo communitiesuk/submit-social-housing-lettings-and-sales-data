@@ -74,6 +74,6 @@ private
   end
 
   def authenticate_scope!
-    head :not_found if current_user != @user
+    render_not_found if current_user != @user
   end
 end

@@ -45,7 +45,7 @@ private
   end
 
   def authenticate_scope!
-    head :not_found if current_user.organisation != @organisation
+    render_not_found if current_user.organisation != @organisation
   end
 
   def find_resource
