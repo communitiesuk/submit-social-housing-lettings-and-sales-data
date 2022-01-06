@@ -31,6 +31,8 @@ RSpec.describe "form/page" do
     end
 
     after do
+      # Revert any changes we've made to avoid affecting other specs as the form,
+      # subsection, page, question objects being acted on are in memory
       assign_attributes(question, initial_attribs)
     end
 
