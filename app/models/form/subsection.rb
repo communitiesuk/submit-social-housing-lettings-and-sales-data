@@ -52,7 +52,7 @@ class Form::Subsection
   end
 
   def applicable_questions(case_log)
-    questions.select { |q| displayed_to_user?(case_log, q) || q.has_inferred_check_answers_value?(case_log) }
+    questions.select { |q| (displayed_to_user?(case_log, q) && !q.hidden_in_check_answers?) || q.has_inferred_check_answers_value?(case_log) }
   end
 
   def answered_questions(case_log)
@@ -64,6 +64,6 @@ class Form::Subsection
   end
 
   def displayed_to_user?(case_log, question)
-    question.page.routed_to?(case_log) && question.enabled?(case_log) && !question.hidden_in_check_answers?
+    question.page.routed_to?(case_log) && question.enabled?(case_log)
   end
 end
