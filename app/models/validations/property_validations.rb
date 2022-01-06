@@ -15,8 +15,8 @@ module Validations::PropertyValidations
     end
   end
 
-  FIRST_LET_VACANCY_REASONS = ["First let of newbuild property",
-                               "First let of conversion/rehabilitation/acquired property",
+  FIRST_LET_VACANCY_REASONS = ["First let of new-build property",
+                               "First let of conversion, rehabilitation or acquired property",
                                "First let of leased property"].freeze
   def validate_rsnvac(record)
     if !record.first_time_property_let_as_social_housing? && FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)

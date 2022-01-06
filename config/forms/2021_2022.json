@@ -16,7 +16,7 @@
                 "gdpr_acceptance": {
                   "check_answer_label": "Privacy notice seen",
                   "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
-                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
+                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service",
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
@@ -86,8 +86,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "1": "Yes",
+                    "0": "No"
                   }
                 }
               },
@@ -122,11 +122,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Social rent",
                     "1": "Affordable rent",
-                    "2": "London Affordable rent",
-                    "3": "Rent to buy",
+                    "2": "London affordable rent",
                     "4": "London living rent",
+                    "3": "Rent to buy",
+                    "0": "Social rent",
                     "5": "Other intermediate rent product"
                   },
                   "conditional_for": {
@@ -146,8 +146,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Supported housing",
-                    "1": "General needs"
+                    "1": "General needs",
+                    "0": "Supported housing"
                   }
                 }
               },
@@ -180,7 +180,7 @@
                 "propcode": {
                   "check_answer_label": "Property reference",
                   "header": "What is the property reference?",
-                  "hint_text": "This is how you refer to the property in your own systems.",
+                  "hint_text": "This is how you refer to the property in your own systems",
                   "type": "text",
                   "width": 10
                 }
@@ -872,8 +872,9 @@
                     "28": "Death of household member in last settled accomodation",
                     "29": "Discharged from prison",
                     "30": "Discharged from long stay hospital or similar institution",
+                    "divider": true,
                     "31": "Other",
-                    "32": "Do not know",
+                    "32": "Don’t know",
                     "33": "Prefer not to say"
                   },
                   "conditional_for": {
@@ -894,7 +895,8 @@
                     "1": "Yes - removal of the spare room subsidy",
                     "2": "Yes - both the benefit cap and the removal of the spare room subsidy",
                     "3": "No",
-                    "4": "Do not know",
+                    "divider": true,
+                    "4": "Don’t know",
                     "5": "Prefer not to say"
                   }
                 }
@@ -940,6 +942,7 @@
                     "0": "Yes",
                     "1": "No - they left up to 5 years ago",
                     "2": "No - they left more than 5 years ago",
+                    "divider": true,
                     "3": "Prefer not to say"
                   }
                 },
@@ -951,6 +954,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
+                    "divider": true,
                     "2": "Prefer not to say"
                   }
                 }
@@ -968,6 +972,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
+                    "divider": true,
                     "2": "Prefer not to say"
                   }
                 }
@@ -985,6 +990,7 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
+                    "divider": true,
                     "2": "Prefer not to say"
                   }
                 }
@@ -1005,9 +1011,8 @@
                     "housingneeds_c": "Level access housing",
                     "housingneeds_f": "Other disability requirements",
                     "housingneeds_g": "No disability requirements",
-                    "divider_a": true,
-                    "housingneeds_h": "Do not know",
-                    "divider_b": true,
+                    "divider": true,
+                    "housingneeds_h": "Don’t know",
                     "accessibility_requirements_prefer_not_to_say": "Prefer not to say"
                   }
                 }
@@ -1139,8 +1144,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "1": "Yes",
+                    "0": "No"
                   },
                   "conditional_for": {
                     "property_postcode": ["Yes"]
@@ -1171,8 +1176,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "1": "Yes",
+                    "0": "No"
                   }
                 }
               },
@@ -1515,7 +1520,7 @@
               "description": "",
               "questions": {
                 "why_dont_you_know_la": {
-                  "check_answer_label": "Reason for not knowing local authority",
+                  "check_answer_label": "Reason you don’t know the postcode or local authority",
                   "header": "Give a reason why you don’t know the postcode or local authority",
                   "hint_text": "",
                   "type": "textarea"
@@ -1528,13 +1533,13 @@
               "description": "",
               "questions": {
                 "first_time_property_let_as_social_housing": {
-                  "check_answer_label": "Is this the first time the property has been let as social housing?",
+                  "check_answer_label": "First time being let as social-housing?",
                   "header": "Is this the first time the property has been let as social housing?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "1": "Yes",
+                    "0": "No"
                   }
                 }
               },
@@ -1545,15 +1550,16 @@
               "description": "",
               "questions": {
                 "unitletas": {
-                  "check_answer_label": "Type of let",
+                  "check_answer_label": "Most recent let type",
                   "header": "What type was the property most recently let as?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Social rent basis",
                     "1": "Affordable rent basis",
                     "2": "Intermediate rent basis",
-                    "3": "Do not know"
+                    "0": "Social rent basis",
+                    "divider": true,
+                    "3": "Don’t know"
                   }
                 }
               },
@@ -1567,7 +1573,7 @@
               "description": "",
               "questions": {
                 "rsnvac": {
-                  "check_answer_label": "Reason for vacant property",
+                  "check_answer_label": "Vacancy reason",
                   "header": "What is the reason for the property being vacant?",
                   "hint_text": "",
                   "type": "radio",
@@ -1596,13 +1602,13 @@
               "description": "",
               "questions": {
                 "rsnvac": {
-                  "check_answer_label": "What is the reason for the property vacancy?",
+                  "check_answer_label": "Vacancy reason",
                   "header": "What is the reason for the property being vacant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "11": "First let of newbuild property",
-                    "12": "First let of conversion/rehabilitation/acquired property",
+                    "11": "First let of new-build property",
+                    "12": "First let of conversion, rehabilitation or acquired property",
                     "13": "First let of leased property"
                   }
                 }
@@ -1617,13 +1623,14 @@
               "description": "",
               "questions": {
                 "offered": {
-                  "check_answer_label": "Number of times property has been offered since available for relet",
-                  "header": "How many times has this unit been previously offered since becoming available for relet (after the last tenancy ended)?",
+                  "check_answer_label": "Times previously offered since becoming available",
+                  "header": "How many times has the property been previously offered since becoming available for re-let?",
                   "hint_text": "This is after the last tenancy ended. If the property is being let for the first time, enter 0",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               },
               "depends_on": {
@@ -1636,13 +1643,14 @@
               "description": "",
               "questions": {
                 "offered": {
-                  "check_answer_label": "How many times has the property been previously offered since becoming available?",
+                  "check_answer_label": "Times previously offered since becoming available",
                   "header": "How many times has the property been previously offered since becoming available?",
                   "hint_text": "If the property is being let for the first time, enter 0",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               },
               "depends_on": {
@@ -1660,13 +1668,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Flat / maisonette",
-                    "1": "Bed-sit",
-                    "2": "House",
+                    "1": "Bedsit",
                     "3": "Bungalow",
-                    "4": "Shared flat / maisonette",
+                    "0": "Flat or maisonette",
+                    "2": "House",
+                    "4": "Shared flat or maisonette",
                     "5": "Shared house",
                     "6": "Shared bungalow",
+                    "divider": true,
                     "7": "Other"
                   }
                 }
@@ -1678,12 +1687,12 @@
               "questions": {
                 "builtype": {
                   "check_answer_label": "Type of building",
-                  "header": "Which type of building is the property?",
+                  "header": "What type of building is the property?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Purpose built",
-                    "1": "Converted from previous residential or non-residential property"
+                    "1": "Converted from previous residential or non-residential property",
+                    "0": "Purpose built"
                   }
                 }
               }
@@ -1694,7 +1703,7 @@
               "questions": {
                 "wchair": {
                   "check_answer_label": "Property built or adapted to wheelchair-user standards",
-                  "header": "Is property built or adapted to wheelchair user standards?",
+                  "header": "Is the property built or adapted to wheelchair-user standards?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1711,11 +1720,11 @@
                 "beds": {
                   "check_answer_label": "Number of bedrooms",
                   "header": "How many bedrooms does the property have?",
-                  "hint_text": "If shared accommodation, enter number of bedrooms occupied by this household; a bed-sit has 1 bedroom",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               },
               "depends_on": { "needstype": "General needs" }
@@ -1727,12 +1736,12 @@
                 "property_void_date": {
                   "check_answer_label": "Void or renewal date",
                   "header": "What is the void or renewal date?",
-                  "hint_text": "",
+                  "hint_text": "For example, 27 3 2021",
                   "type": "date"
                 }
               },
               "depends_on": {
-                "rsnvac": "First let of newbuild property",
+                "rsnvac": "First let of new-build property",
                 "tenant_same_property_renewal": "No"
               }
             },
@@ -1741,8 +1750,8 @@
               "description": "",
               "questions": {
                 "property_void_date": {
-                  "check_answer_label": "New build handover date",
-                  "header": "What is the new build handover date?",
+                  "check_answer_label": "New-build handover date",
+                  "header": "What is the new-build handover date?",
                   "hint_text": "",
                   "type": "date"
                 }
@@ -1765,8 +1774,8 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "No",
-                    "1": "Yes"
+                    "1": "Yes",
+                    "0": "No"
                   },
                   "conditional_for": {
                     "mrcdate": ["Yes"]
@@ -1780,7 +1789,7 @@
                 }
               },
               "depends_on": {
-                "rsnvac": "First let of newbuild property",
+                "rsnvac": "First let of new-build property",
                 "tenant_same_property_renewal": "No"
               }
             }
@@ -1857,7 +1866,8 @@
                     "0": "All",
                     "1": "Some",
                     "2": "None",
-                    "3": "Do not know"
+                    "divider": true,
+                    "3": "Don’t know"
                   }
                 }
               }
@@ -1877,7 +1887,8 @@
                     "2": "Universal Credit without housing element and no Housing Benefit",
                     "3": "Universal Credit and Housing Benefit",
                     "4": "Not Housing Benefit or Universal Credit",
-                    "5": "Do not know",
+                    "divider": true,
+                    "5": "Don’t know",
                     "6": "Prefer not to say"
                   }
                 }
@@ -1968,7 +1979,8 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
-                    "2": "Do not know"
+                    "divider": true,
+                    "2": "Don’t know"
                   },
                   "conditional_for": {
                     "tshortfall": ["Yes"]
@@ -2012,7 +2024,8 @@
                     "4": "3 to 4 years",
                     "5": "4 to 5 years",
                     "6": "5 years or more",
-                    "7": "Do not know"
+                    "divider": true,
+                    "7": "Don’t know"
                   }
                 }
               }
@@ -2034,7 +2047,8 @@
                     "4": "3 to 4 years",
                     "5": "4 to 5 years",
                     "6": "5 years or more",
-                    "7": "Do not know"
+                    "divider": true,
+                    "7": "Don’t know"
                   }
                 }
               }
@@ -2461,7 +2475,8 @@
                   "answer_options": {
                     "0": "Yes",
                     "1": "No",
-                    "2": "Do not know"
+                    "divider": true,
+                    "2": "Don’t know"
                   },
                   "conditional_for": {
                     "reasonable_preference_reason": ["Yes"]
@@ -2478,7 +2493,7 @@
                     "rp_medwel": "A need to move on medical and welfare grounds (including a disability)",
                     "rp_hardship": "A need to move to avoid hardship to themselves or others",
                     "divider": true,
-                    "rp_dontknow": "Do not know"
+                    "rp_dontknow": "Don’t know"
                   }
                 }
               }

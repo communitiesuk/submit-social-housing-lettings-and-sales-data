@@ -4,7 +4,7 @@ module Constants::CaseLog
     "Yes - removal of the spare room subsidy" => 4,
     "Yes - both the benefit cap and the removal of the spare room subsidy" => 6,
     "No" => 2,
-    "Do not know" => 3,
+    "Don’t know" => 3,
     "Prefer not to say" => 100,
   }.freeze
 
@@ -12,7 +12,7 @@ module Constants::CaseLog
     "Social rent basis" => 1,
     "Affordable rent basis" => 2,
     "Intermediate rent basis" => 4,
-    "Do not know" => 3,
+    "Don’t know" => 3,
   }.freeze
 
   BUILTYPE = {
@@ -147,7 +147,7 @@ module Constants::CaseLog
   POLAR_WITH_UNKNOWN = {
     "No" => 2,
     "Yes" => 1,
-    "Do not know" => 3,
+    "Don’t know" => 3,
   }.freeze
 
   TENANCY = {
@@ -164,8 +164,8 @@ module Constants::CaseLog
   }.freeze
 
   RSNVAC = {
-    "First let of newbuild property" => 15,
-    "First let of conversion/rehabilitation/acquired property" => 16,
+    "First let of new-build property" => 15,
+    "First let of conversion, rehabilitation or acquired property" => 16,
     "First let of leased property" => 17,
     "Tenant evicted due to arrears" => 10,
     "Tenant evicted due to ASB or other reason" => 11,
@@ -181,11 +181,11 @@ module Constants::CaseLog
   }.freeze
 
   UNITTYPE_GN = {
-    "Flat / maisonette" => 1,
-    "Bed-sit" => 2,
+    "Flat or maisonette" => 1,
+    "Bedsit" => 2,
     "House" => 7,
     "Bungalow" => 8,
-    "Shared flat / maisonette" => 4,
+    "Shared flat or maisonette" => 4,
     "Shared house" => 9,
     "Shared bungalow" => 10,
     "Other" => 6,
@@ -201,7 +201,7 @@ module Constants::CaseLog
     "All" => 1,
     "Some" => 2,
     "None" => 3,
-    "Do not know" => 4,
+    "Don’t know" => 4,
   }.freeze
 
   PERIOD = {
@@ -225,7 +225,7 @@ module Constants::CaseLog
     "3 to 4 years" => 9,
     "4 to 5 years" => 10,
     "5 years or more" => 5,
-    "Do not know" => 6,
+    "Don’t know" => 6,
   }.freeze
 
   HOUSING_BENEFIT = {
@@ -234,7 +234,7 @@ module Constants::CaseLog
     "Universal Credit without housing element and no Housing Benefit" => 7,
     "Universal Credit and Housing Benefit" => 8,
     "Not Housing Benefit or Universal Credit" => 9,
-    "Do not know" => 3,
+    "Don’t know" => 3,
     "Prefer not to say" => 100,
   }.freeze
 
@@ -271,7 +271,7 @@ module Constants::CaseLog
     "Discharged from prison" => 44,
     "Discharged from long stay hospital or similar institution" => 45,
     "Other" => 20,
-    "Do not know" => 28,
+    "Don’t know" => 28,
     "Prefer not to say" => 100,
   }.freeze
 

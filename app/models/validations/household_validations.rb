@@ -20,8 +20,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_reason_for_leaving_last_settled_home(record)
-    if record.reason == "Do not know" && record.underoccupation_benefitcap != "Do not know"
-      record.errors.add :underoccupation_benefitcap, "must be do not know if tenant’s main reason for leaving is do not know"
+    if record.reason == "Don’t know" && record.underoccupation_benefitcap != "Don’t know"
+      record.errors.add :underoccupation_benefitcap, "must be don’t know if tenant’s main reason for leaving is don’t know"
     end
   end
 
@@ -86,7 +86,7 @@ module Validations::HouseholdValidations
 
   def validate_shared_housing_rooms(record)
     unless record.unittype_gn.nil?
-      if record.unittype_gn == "Bed-sit" && record.beds != 1 && record.beds.present?
+      if record.unittype_gn == "Bedsit" && record.beds != 1 && record.beds.present?
         record.errors.add :unittype_gn, "A bedsit can only have one bedroom"
       end
 

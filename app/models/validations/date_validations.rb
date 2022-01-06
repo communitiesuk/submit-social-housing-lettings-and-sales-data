@@ -45,8 +45,8 @@ private
   end
 
   def is_rsnvac_first_let?(record)
-    record["rsnvac"] == "First let of newbuild property" ||
-      record["rsnvac"] == "First let of conversion/rehabilitation/acquired property" ||
+    record["rsnvac"] == "First let of new-build property" ||
+      record["rsnvac"] == "First let of conversion, rehabilitation or acquired property" ||
       record["rsnvac"] == "First let of leased property"
   end
 end
