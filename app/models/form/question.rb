@@ -34,11 +34,11 @@ class Form::Question
 
     return case_log[id].to_s if case_log[id].present?
 
-    inferred_check_answers_value.present? ? inferred_check_answers_value["value"] : ""
+    has_inferred_check_answers_value?(case_log) ? inferred_check_answers_value["value"] : ""
   end
 
   def get_inferred_answers(case_log)
-    return filter_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s } if inferred_answers
+    return enabled_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s } if inferred_answers
 
     []
   end
@@ -98,7 +98,7 @@ private
     end
   end
 
-  def filter_inferred_answers(inferred_answers, case_log)
+  def enabled_inferred_answers(inferred_answers, case_log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
   end
 end
