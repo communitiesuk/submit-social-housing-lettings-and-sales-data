@@ -1,11 +1,4 @@
-<details class="govuk-details" data-module="govuk-details">
-  <summary class="govuk-details__summary">
-    <span class="govuk-details__summary-text">
-      What counts as income?
-    </span>
-  </summary>
-  <div class="govuk-details__text">
-
+<%= govuk_details(summary_text: 'What counts as income?') do %>
   <p class="govuk-body">You should include any income from:</p>
   <ul class="govuk-list govuk-list--bullet">
     <li>employment</li>
@@ -20,6 +13,4 @@
     <li>child benefit</li>
     <li>council tax support</li>
   </ul>
-
-  </div>
-</details>
+<% end %>
