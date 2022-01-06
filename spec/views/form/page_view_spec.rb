@@ -2,7 +2,6 @@ require "rails_helper"
 require_relative "../../request_helper"
 
 RSpec.describe "form/page" do
-
   before do
     RequestHelper.stub_http_requests
   end
@@ -30,7 +29,7 @@ RSpec.describe "form/page" do
     end
 
     context "with radio type" do
-      let(:attribs) { { type: "radio", answer_options: {"1": "A", "2": "B"} } }
+      let(:attribs) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for radio questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -51,14 +50,14 @@ RSpec.describe "form/page" do
     end
 
     context "with select type" do
-      let(:attribs) { { type: "select", answer_options: {"1": "A", "2": "B"} } }
+      let(:attribs) { { type: "select", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for select questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with checkbox type" do
-      let(:attribs) { { type: "checkbox", answer_options: {"1": "A", "2": "B"} } }
+      let(:attribs) { { type: "checkbox", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for checkbox questions" do
         expect(rendered).to match(expected_guidance)
       end
