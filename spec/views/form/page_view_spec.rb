@@ -11,6 +11,7 @@ RSpec.describe "form/page" do
   let(:subsection) { form.get_subsection("income_and_benefits") }
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
+  let(:initial_attribs) { { type: "numeric", answer_options: nil } }
 
   def assign_attributes(object, attrs)
     attrs.each_pair do |attr, value|
@@ -20,12 +21,17 @@ RSpec.describe "form/page" do
 
   context "given a question with extra guidance" do
     let(:expected_guidance) { /What counts as income?/ }
+
     before do
       assign(:case_log, case_log)
       assign(:page, page)
       assign(:subsection, subsection)
       assign_attributes(question, attribs)
       render
+    end
+
+    after do
+      assign_attributes(question, initial_attribs)
     end
 
     context "with radio type" do
