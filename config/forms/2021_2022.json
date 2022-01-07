@@ -1832,18 +1832,9 @@
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "step": "1"
-                },
-                "incfreq": {
-                  "check_answer_label": "Income Frequency",
-                  "header": "How often do they receive this income?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Weekly",
-                    "1": "Monthly",
-                    "2": "Yearly"
-                  }
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": ""
                 }
               },
               "soft_validations": {
