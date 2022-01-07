@@ -131,6 +131,11 @@ The JSON should follow the structure:
                   "conditional_for": {
                     "[snake_case_question_to_enable_1_name_string]": ["condition-that-enables"],
                     "[snake_case_question_to_enable_2_name_string]": ["condition-that-enables"]
+                  },
+                  "inferred_answers": { "field_that_gets_inferred_from_current_field": { "is_that_field_inferred": true } },
+                  "inferred_check_answers_value": {
+                    "condition": { "field_name_for_inferred_check_answers_condition": "field_value_for_inferred_check_answers_condition" },
+                    "value": "Inferred value that gets displayed if condition is met"
                   }
                 }
               },
