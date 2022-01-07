@@ -24,8 +24,12 @@ RSpec.describe "Accessible Automcomplete" do
     expect(page).to have_selector("#tcharge_div", visible: false)
   end
 
-  it "does show when js is enabled", js: true do
+  it "does show when js is enabled and calculates the total", js: true do
     visit("/logs/#{case_log.id}/rent")
     expect(page).to have_selector("#tcharge_div", visible: true)
+    fill_in("case-log-brent-field", with: 5)
+    expect(find("#case-log-tcharge-field").value).to eq("5")
+    fill_in("case-log-pscharge-field", with: 3)
+    expect(find("#case-log-tcharge-field").value).to eq("8")
   end
 end
