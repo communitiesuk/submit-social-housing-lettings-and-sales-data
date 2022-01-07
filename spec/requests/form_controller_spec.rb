@@ -66,6 +66,13 @@ RSpec.describe FormController, type: :request do
             expect(response).to have_http_status(:not_found)
           end
         end
+
+        context "a form page that has custom guidance" do
+          it "displays the correct partial" do
+            get "/logs/#{case_log.id}/net-income", headers: headers, params: {}
+            expect(response.body).to match("What counts as income?")
+          end
+        end
       end
 
       context "check answers pages" do
