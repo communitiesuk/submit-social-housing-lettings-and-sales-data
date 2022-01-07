@@ -325,11 +325,11 @@ private
       dynamically_not_required << "tenancyother"
     end
 
-    if net_income_known == "Tenant prefers not to say"
-      dynamically_not_required << "earnings"
-    else
-      dynamically_not_required << "incref"
-    end
+    dynamically_not_required << if net_income_known == "Tenant prefers not to say"
+                                  "earnings"
+                                else
+                                  "incref"
+                                end
 
     start_range = (other_hhmemb || 0) + 2
     (start_range..8).each do |n|

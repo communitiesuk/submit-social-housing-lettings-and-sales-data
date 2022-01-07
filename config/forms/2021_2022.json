@@ -1804,7 +1804,7 @@
           "label": "Income and benefits",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
-            "net_income": {
+            "net_income_known": {
               "header": "Household’s combined income",
               "description": "",
               "questions": {
@@ -1820,21 +1820,23 @@
                     "2": "Yes – the household has a yearly income",
                     "divider_a": true,
                     "3": "Tenant prefers not to say"
-                  },
-                  "conditional_for": {
-                    "earnings": ["Yes"],
-                    "incfreq": ["Yes"]
                   }
-                },
+                }
+              }
+            },
+            "net_income": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "earnings": {
                   "check_answer_label": "Income",
-                  "header": "What is the tenant’s /and partner’s combined income after tax?",
+                  "header": "How much income does the household have in total every week?",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
                   "step": "1",
                   "prefix": "£",
-                  "suffix": ""
+                  "suffix": "incfreq"
                 }
               },
               "soft_validations": {

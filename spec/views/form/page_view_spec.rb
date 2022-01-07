@@ -11,7 +11,7 @@ RSpec.describe "form/page" do
   let(:subsection) { form.get_subsection("income_and_benefits") }
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
-  let(:initial_attribs) { { type: "numeric", answer_options: nil } }
+  let(:initial_attribs) { { type: "numeric", answer_options: nil, prefix: nil, suffix: nil } }
 
   def assign_attributes(object, attrs)
     attrs.each_pair do |attr, value|
@@ -19,9 +19,35 @@ RSpec.describe "form/page" do
     end
   end
 
-  context "given a question with extra guidance" do
-    let(:expected_guidance) { /What counts as income?/ }
+  after do
+    # Revert any changes we've made to avoid affecting other specs as the form,
+    # subsection, page, question objects being acted on are in memory
+    assign_attributes(question, initial_attribs)
+  end
 
+  context "given a numeric question with prefix and suffix" do
+    let(:attribs) { { type: "numeric", prefix: "£", suffix: "incfreq" } }
+    let(:net_income_known) { "Yes – the household has a weekly income" }
+    let(:expected_suffix) { "Weekly" }
+
+    before do
+      case_log.update!(net_income_known: net_income_known)
+      assign(:case_log, case_log)
+      assign(:page, page)
+      assign(:subsection, subsection)
+      assign_attributes(question, attribs)
+      render
+    end
+
+    it "renders prefix and suffix text" do
+      expect(rendered).to match(/govuk-input__prefix/)
+      expect(rendered).to match(/£/)
+      expect(rendered).to match(/govuk-input__suffix/)
+      expect(rendered).to match(expected_suffix)
+    end
+  end
+
+  context "given a question with extra guidance" do
     before do
       assign(:case_log, case_log)
       assign(:page, page)
@@ -30,11 +56,7 @@ RSpec.describe "form/page" do
       render
     end
 
-    after do
-      # Revert any changes we've made to avoid affecting other specs as the form,
-      # subsection, page, question objects being acted on are in memory
-      assign_attributes(question, initial_attribs)
-    end
+    let(:expected_guidance) { /What counts as income?/ }
 
     context "with radio type" do
       let(:attribs) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }

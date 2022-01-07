@@ -3,7 +3,7 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial
+                :guidance_partial, :prefix, :suffix
 
   def initialize(id, hsh, page)
     @id = id
@@ -24,6 +24,8 @@ class Form::Question
     @inferred_answers = hsh["inferred_answers"]
     @inferred_check_answers_value = hsh["inferred_check_answers_value"]
     @hidden_in_check_answers = hsh["hidden_in_check_answers"]
+    @prefix = hsh["prefix"]
+    @suffix = hsh["suffix"]
     @page = page
   end
 
@@ -78,6 +80,18 @@ class Form::Question
     return false if id == "gdpr_acceptance" && case_log[id] == "No"
 
     case_log[id].present?
+  end
+
+  def prefix_text(case_log = nil)
+    return prefix.to_s unless prefix && case_log.respond_to?(prefix)
+
+    case_log.public_send(prefix).to_s
+  end
+
+  def suffix_text(case_log = nil)
+    return suffix.to_s unless suffix && case_log.respond_to?(suffix)
+
+    case_log.public_send(suffix).to_s
   end
 
 private
