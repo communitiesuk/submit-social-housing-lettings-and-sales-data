@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_14_163230) do
+ActiveRecord::Schema.define(version: 2022_01_07_103143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,7 +127,6 @@ ActiveRecord::Schema.define(version: 2021_12_14_163230) do
     t.datetime "discarded_at"
     t.string "tenancyother"
     t.integer "override_net_income_validation"
-    t.string "net_income_known"
     t.string "gdpr_acceptance"
     t.string "gdpr_declined"
     t.string "property_owner_organisation"
@@ -163,9 +162,9 @@ ActiveRecord::Schema.define(version: 2021_12_14_163230) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "property_void_date"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
+    t.datetime "property_void_date"
     t.integer "renttype"
     t.integer "needstype"
     t.integer "lettype"
@@ -178,6 +177,7 @@ ActiveRecord::Schema.define(version: 2021_12_14_163230) do
     t.integer "totchild"
     t.integer "totelder"
     t.integer "totadult"
+    t.integer "net_income_known"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
