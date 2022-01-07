@@ -372,7 +372,9 @@
                     "type": "numeric",
                     "min": 0,
                     "step": 1,
-                    "width": 5
+                    "width": 5,
+                    "prefix": "£",
+                    "suffix": "incfreq"
                   },
                   "incfreq": {
                     "check_answer_label": "Income Frequency",

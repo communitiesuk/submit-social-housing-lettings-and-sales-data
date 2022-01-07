@@ -1167,6 +1167,17 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "net_income" do
+      it "infers the income frequency" do
+        case_log.update!(net_income_known: "Yes – the household has a weekly income")
+        expect(case_log.reload.incfreq).to eq("Weekly")
+        case_log.update!(net_income_known: "Yes – the household has a monthly income")
+        expect(case_log.reload.incfreq).to eq("Monthly")
+        case_log.update!(net_income_known: "Yes – the household has a yearly income")
+        expect(case_log.reload.incfreq).to eq("Yearly")
+      end
+    end
+
     context "household members derived vars" do
       let!(:household_case_log) do
         CaseLog.create({

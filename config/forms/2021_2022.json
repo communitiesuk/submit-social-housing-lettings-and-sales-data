@@ -1804,7 +1804,7 @@
           "label": "Income and benefits",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
-            "net_income": {
+            "net_income_known": {
               "header": "Household’s combined income",
               "description": "",
               "questions": {
@@ -1820,30 +1820,76 @@
                     "2": "Yes – the household has a yearly income",
                     "divider_a": true,
                     "3": "Tenant prefers not to say"
-                  },
-                  "conditional_for": {
-                    "earnings": ["Yes"],
-                    "incfreq": ["Yes"]
                   }
-                },
+                }
+              }
+            },
+            "weekly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a weekly income" },
+              "header": "",
+              "description": "",
+              "questions": {
                 "earnings": {
                   "check_answer_label": "Income",
-                  "header": "What is the tenant’s /and partner’s combined income after tax?",
+                  "header": "How much income does the household have in total every week?",
                   "hint_text": "",
                   "type": "numeric",
                   "min": 0,
-                  "step": "1"
-                },
-                "incfreq": {
-                  "check_answer_label": "Income Frequency",
-                  "header": "How often do they receive this income?",
-                  "hint_text": "",
-                  "type": "radio",
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": "every week"
+                }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
                   "answer_options": {
-                    "0": "Weekly",
-                    "1": "Monthly",
-                    "2": "Yearly"
+                    "override_net_income_validation": "Yes"
                   }
+                }
+              }
+            },
+            "monthly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a monthly income" },
+              "header": "",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Income",
+                  "header": "How much income does the household have in total every month?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": "every month"
+                }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
+                  }
+                }
+              }
+            },
+            "yearly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a yearly income" },
+              "header": "",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Income",
+                  "header": "How much income does the household have in total every year?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": "every year"
                 }
               },
               "soft_validations": {

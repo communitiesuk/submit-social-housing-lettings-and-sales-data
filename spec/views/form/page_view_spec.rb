@@ -11,7 +11,7 @@ RSpec.describe "form/page" do
   let(:subsection) { form.get_subsection("income_and_benefits") }
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
-  let(:initial_attribs) { { type: "numeric", answer_options: nil } }
+  let(:initial_attribs) { { type: "numeric", answer_options: nil, prefix: nil, suffix: nil } }
 
   def assign_attributes(object, attrs)
     attrs.each_pair do |attr, value|
@@ -19,22 +19,33 @@ RSpec.describe "form/page" do
     end
   end
 
+  before do
+    assign(:case_log, case_log)
+    assign(:page, page)
+    assign(:subsection, subsection)
+    assign_attributes(question, attribs)
+    render
+  end
+
+  after do
+    # Revert any changes we've made to avoid affecting other specs as the form,
+    # subsection, page, question objects being acted on are in memory
+    assign_attributes(question, initial_attribs)
+  end
+
+  context "given a numeric question with prefix and suffix" do
+    let(:attribs) { { type: "numeric", prefix: "£", suffix: "every week" } }
+
+    it "renders prefix and suffix text" do
+      expect(rendered).to match(/govuk-input__prefix/)
+      expect(rendered).to match(/£/)
+      expect(rendered).to match(/govuk-input__suffix/)
+      expect(rendered).to match("every week")
+    end
+  end
+
   context "given a question with extra guidance" do
     let(:expected_guidance) { /What counts as income?/ }
-
-    before do
-      assign(:case_log, case_log)
-      assign(:page, page)
-      assign(:subsection, subsection)
-      assign_attributes(question, attribs)
-      render
-    end
-
-    after do
-      # Revert any changes we've made to avoid affecting other specs as the form,
-      # subsection, page, question objects being acted on are in memory
-      assign_attributes(question, initial_attribs)
-    end
 
     context "with radio type" do
       let(:attribs) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
