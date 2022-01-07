@@ -214,7 +214,7 @@ private
       self.month = startdate.month
       self.year = startdate.year
     end
-    self.incref = 1 if net_income_known == "Prefer not to say"
+    self.incref = 1 if net_income_known == "Tenant prefers not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
@@ -316,7 +316,7 @@ private
       dynamically_not_required << "tenancyother"
     end
 
-    unless net_income_known == "Yes"
+    if net_income_known == "No"
       dynamically_not_required << "earnings"
       dynamically_not_required << "incfreq"
     end
@@ -329,7 +329,7 @@ private
       dynamically_not_required << "ecstat#{n}"
     end
 
-    if net_income_known != "Prefer not to say"
+    if net_income_known != "Tenant prefers not to say"
       dynamically_not_required << "incref"
     end
 
