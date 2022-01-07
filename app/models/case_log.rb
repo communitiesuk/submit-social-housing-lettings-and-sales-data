@@ -223,7 +223,9 @@ private
     if property_postcode.blank? || postcode_known == "No"
       reset_location_fields
     else
-      self.la = get_la(property_postcode)
+      inferred_la = get_inferred_la(property_postcode)
+      self.is_la_inferred = inferred_la.present?
+      self.la = inferred_la if inferred_la.present?
     end
     if property_postcode.present?
       self.postcode = UKPostcode.parse(property_postcode).outcode
@@ -255,15 +257,12 @@ private
     end
   end
 
-  def get_la(postcode)
+  def get_inferred_la(postcode)
     postcode_lookup = nil
     Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
     if postcode_lookup && postcode_lookup.info.present?
-      self.is_la_inferred = true
-      return postcode_lookup.admin_district
+      postcode_lookup.admin_district
     end
-    self.la = nil
-    self.is_la_inferred = false
   end
 
   def reset_location_fields

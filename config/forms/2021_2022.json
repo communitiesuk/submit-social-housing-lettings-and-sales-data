@@ -1154,7 +1154,7 @@
                 },
                 "property_postcode": {
                   "check_answer_label": "Postcode",
-                  "header": "",
+                  "header": "What is the property's postcode?",
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
