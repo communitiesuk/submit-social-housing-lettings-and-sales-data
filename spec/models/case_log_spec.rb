@@ -1178,6 +1178,24 @@ RSpec.describe Form, type: :model do
       end
     end
 
+    context "rent and charges" do
+      let!(:case_log) do
+        CaseLog.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          brent: 5,
+          scharge: 10,
+          pscharge: 3,
+          supcharg: 12
+        })
+      end
+
+      it "correctly sums rental charges" do
+        record_from_db = ActiveRecord::Base.connection.execute("select tcharge from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["tcharge"]).to eq(30)
+      end
+    end
+
     context "household members derived vars" do
       let!(:household_case_log) do
         CaseLog.create({
