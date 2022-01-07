@@ -153,7 +153,7 @@ RSpec.describe Form, type: :model do
     context "reason for leaving last settled home validation" do
       it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
         expect {
-          CaseLog.create!(reason: "Do not know",
+          CaseLog.create!(reason: "Don’t know",
                           underoccupation_benefitcap: "Yes - benefit cap",
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
@@ -290,7 +290,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Do not know",
+            unitletas: "Don’t know",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -301,7 +301,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of newbuild property",
+            rsnvac: "First let of new-build property",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -309,7 +309,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of conversion/rehabilitation/acquired property",
+            rsnvac: "First let of conversion, rehabilitation or acquired property",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -365,7 +365,7 @@ RSpec.describe Form, type: :model do
 
       it "A bedsit must only have one room" do
         expect {
-          CaseLog.create!(unittype_gn: "Bed-sit",
+          CaseLog.create!(unittype_gn: "Bedsit",
                           beds: 2,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
@@ -374,7 +374,7 @@ RSpec.describe Form, type: :model do
 
       it "A bedsit must only have one room" do
         expect {
-          CaseLog.create!(unittype_gn: "Bed-sit",
+          CaseLog.create!(unittype_gn: "Bedsit",
                           beds: 0,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
@@ -741,7 +741,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of newbuild property",
+            rsnvac: "First let of new-build property",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -750,7 +750,7 @@ RSpec.describe Form, type: :model do
         expect {
           CaseLog.create!(
             mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of conversion/rehabilitation/acquired property",
+            rsnvac: "First let of conversion, rehabilitation or acquired property",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -888,14 +888,14 @@ RSpec.describe Form, type: :model do
     context "Validate type of unit" do
       it "Cannot be bedsit if no of bedrooms is greater than 1" do
         expect {
-          CaseLog.create!(unittype_gn: "Bed-sit",
+          CaseLog.create!(unittype_gn: "Bedsit",
                           beds: 2,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
-          CaseLog.create!(unittype_gn: "Bed-sit",
+          CaseLog.create!(unittype_gn: "Bedsit",
                           beds: 1,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)

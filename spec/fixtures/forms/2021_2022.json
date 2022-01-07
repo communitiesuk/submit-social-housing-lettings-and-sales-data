@@ -162,7 +162,8 @@
                     "answer_options": {
                       "0": "Yes",
                       "1": "No",
-                      "2": "Do not know",
+                      "divider": true,
+                      "2": "Don’t know",
                       "3": "Prefer not to say"
                     }
                   }
@@ -179,8 +180,8 @@
                       "housingneeds_a": "Fully wheelchair accessible housing",
                       "housingneeds_b": "Wheelchair access to essential rooms",
                       "housingneeds_c": "Level access housing",
-                      "divider_a": true,
-                      "housingneeds_h": "Do not know"
+                      "divider": true,
+                      "housingneeds_h": "Don’t know"
                     }
                   }
                 }
@@ -280,8 +281,8 @@
               "property_wheelchair_accessible": {
                 "questions": {
                   "wchair": {
-                    "check_answer_label": "Is property built or adapted to wheelchair user standards?",
-                    "header": "Is property built or adapted to wheelchair user standards?",
+                    "check_answer_label": "Wheelchair adaptation",
+                    "header": "Is the property built or adapted to wheelchair-user standards?",
                     "type": "radio",
                     "answer_options": {
                       "0": "Yes",
@@ -561,7 +562,8 @@
                       "4": "3 to 4 years",
                       "5": "4 to 5 years",
                       "6": "5 years or more",
-                      "7": "Do not know"
+                      "divider": true,
+                      "7": "Don’t know"
                     }
                   }
                 }
@@ -580,7 +582,8 @@
                       "4": "3 to 4 years",
                       "5": "4 to 5 years",
                       "6": "5 years or more",
-                      "7": "Do not know"
+                      "divider": true,
+                      "7": "Don’t know"
                     }
                   }
                 }

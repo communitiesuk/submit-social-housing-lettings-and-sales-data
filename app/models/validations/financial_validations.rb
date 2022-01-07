@@ -38,7 +38,7 @@ module Validations::FinancialValidations
   def validate_hbrentshortfall(record)
     is_present = record.hbrentshortfall.present?
     is_yes = record.hbrentshortfall == "Yes"
-    hb_donotknow = record.hb == "Do not know"
+    hb_donotknow = record.hb == "Don’t know"
     hb_no_hb_or_uc = record.hb == "Not Housing Benefit or Universal Credit"
     hb_uc_no_hb = record.hb == "Universal Credit without housing element and no Housing Benefit"
     hb_no_uc = record.hb == "Housing Benefit, but not Universal Credit"

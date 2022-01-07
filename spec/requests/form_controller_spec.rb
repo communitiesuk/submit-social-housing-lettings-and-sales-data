@@ -216,7 +216,7 @@ RSpec.describe FormController, type: :request do
                     "housingneeds_f" => "Other disability requirements",
                     "housingneeds_g" => "No disability requirements",
                     "divider_a" => true,
-                    "housingneeds_h" => "Do not know",
+                    "housingneeds_h" => "Don’t know",
                     "divider_b" => true,
                     "accessibility_requirements_prefer_not_to_say" => "Prefer not to say" },
                 }, nil

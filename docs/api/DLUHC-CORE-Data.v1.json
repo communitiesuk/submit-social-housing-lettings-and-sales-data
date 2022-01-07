@@ -761,7 +761,7 @@
               "Discharged from prison",
               "Discharged from long stay hospital or similar institution",
               "Other",
-              "Do not know",
+              "Don’t know",
               "Prefer not to say"
             ]
           },
@@ -773,7 +773,7 @@
               "Yes - removal of the spare room subsidy",
               "Yes - both the benefit cap and the removal of the spare room subsidy",
               "No",
-              "Do not know",
+              "Don’t know",
               "Prefer not to say"
             ]
           },
@@ -894,7 +894,7 @@
           "benefits": {
             "type": "string",
             "minLength": 1,
-            "enum": ["All", "Some", "None", "Do not know"]
+            "enum": ["All", "Some", "None", "Don’t know"]
           },
           "hb": {
             "type": "string",
