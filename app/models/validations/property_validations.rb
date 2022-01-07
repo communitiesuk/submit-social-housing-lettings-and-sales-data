@@ -33,4 +33,10 @@ module Validations::PropertyValidations
       record.errors.add :unitletas, "Property cannot have a previous let type if it is being let as social housing for the first time"
     end
   end
+
+  def validate_property_postcode(record)
+    if record.postcode_known == "Yes" && record.property_postcode.blank?
+      record.errors.add :property_postcode, "Enter a postcode in the correct format, for example AA1 1AA"
+    end
+  end
 end
