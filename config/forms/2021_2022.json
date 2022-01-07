@@ -1978,6 +1978,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -1988,6 +1990,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -1998,6 +2002,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2008,6 +2014,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2018,6 +2026,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "readonly": true,
                   "requires_js": true
                 },
