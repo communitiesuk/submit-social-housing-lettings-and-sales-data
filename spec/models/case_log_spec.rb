@@ -1165,7 +1165,7 @@ RSpec.describe Form, type: :model do
           brent: 5,
           scharge: 10,
           pscharge: 3,
-          supcharg: 12
+          supcharg: 12,
         })
       end
 
