@@ -82,18 +82,6 @@ class Form::Question
     case_log[id].present?
   end
 
-  def prefix_text(case_log = nil)
-    return prefix.to_s unless prefix && case_log.respond_to?(prefix)
-
-    case_log.public_send(prefix).to_s
-  end
-
-  def suffix_text(case_log = nil)
-    return suffix.to_s unless suffix && case_log.respond_to?(suffix)
-
-    case_log.public_send(suffix).to_s
-  end
-
 private
 
   def checkbox_answer_label(case_log)

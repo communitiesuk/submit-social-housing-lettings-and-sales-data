@@ -19,6 +19,14 @@ RSpec.describe "form/page" do
     end
   end
 
+  before do
+    assign(:case_log, case_log)
+    assign(:page, page)
+    assign(:subsection, subsection)
+    assign_attributes(question, attribs)
+    render
+  end
+
   after do
     # Revert any changes we've made to avoid affecting other specs as the form,
     # subsection, page, question objects being acted on are in memory
@@ -26,36 +34,17 @@ RSpec.describe "form/page" do
   end
 
   context "given a numeric question with prefix and suffix" do
-    let(:attribs) { { type: "numeric", prefix: "£", suffix: "incfreq" } }
-    let(:net_income_known) { "Yes – the household has a weekly income" }
-    let(:expected_suffix) { "Weekly" }
-
-    before do
-      case_log.update!(net_income_known: net_income_known)
-      assign(:case_log, case_log)
-      assign(:page, page)
-      assign(:subsection, subsection)
-      assign_attributes(question, attribs)
-      render
-    end
+    let(:attribs) { { type: "numeric", prefix: "£", suffix: "every week" } }
 
     it "renders prefix and suffix text" do
       expect(rendered).to match(/govuk-input__prefix/)
       expect(rendered).to match(/£/)
       expect(rendered).to match(/govuk-input__suffix/)
-      expect(rendered).to match(expected_suffix)
+      expect(rendered).to match("every week")
     end
   end
 
   context "given a question with extra guidance" do
-    before do
-      assign(:case_log, case_log)
-      assign(:page, page)
-      assign(:subsection, subsection)
-      assign_attributes(question, attribs)
-      render
-    end
-
     let(:expected_guidance) { /What counts as income?/ }
 
     context "with radio type" do

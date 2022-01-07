@@ -1824,7 +1824,8 @@
                 }
               }
             },
-            "net_income": {
+            "weekly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a weekly income" },
               "header": "",
               "description": "",
               "questions": {
@@ -1836,7 +1837,59 @@
                   "min": 0,
                   "step": "1",
                   "prefix": "£",
-                  "suffix": "incfreq"
+                  "suffix": "every week"
+                }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
+                  }
+                }
+              }
+            },
+            "monthly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a monthly income" },
+              "header": "",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Income",
+                  "header": "How much income does the household have in total every month?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": "every month"
+                }
+              },
+              "soft_validations": {
+                "override_net_income_validation": {
+                  "check_answer_label": "Net income confirmed?",
+                  "type": "validation_override",
+                  "answer_options": {
+                    "override_net_income_validation": "Yes"
+                  }
+                }
+              }
+            },
+            "yearly_net_income": {
+              "depends_on": { "net_income_known": "Yes – the household has a yearly income" },
+              "header": "",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Income",
+                  "header": "How much income does the household have in total every year?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "prefix": "£",
+                  "suffix": "every year"
                 }
               },
               "soft_validations": {

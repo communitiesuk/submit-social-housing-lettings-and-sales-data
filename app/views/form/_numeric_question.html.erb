@@ -6,7 +6,7 @@
     hint: { text: question.hint_text&.html_safe },
     min: question.min, max: question.max, step: question.step,
     width: question.width, :readonly => question.read_only?,
-    prefix_text: question.prefix_text(@case_log),
-    suffix_text: question.suffix_text(@case_log),
+    prefix_text: question.prefix.to_s,
+    suffix_text: question.suffix.to_s,
    **stimulus_html_attributes(question)
 %>
