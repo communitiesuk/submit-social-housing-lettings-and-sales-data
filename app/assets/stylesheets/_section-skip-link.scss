@@ -1,0 +1,9 @@
+.app-section-skip-link {
+  @include all.govuk-visually-hidden-focusable;
+  @include all.govuk-typography-common;
+  @include all.govuk-link-decoration;
+  @include all.govuk-link-style-text;
+
+  display: inline-block;
+  padding: govuk-spacing(2) govuk-spacing(3);
+}

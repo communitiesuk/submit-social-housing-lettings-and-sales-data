@@ -1,0 +1,44 @@
+.app-table-group {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: govuk-spacing(-3) govuk-spacing(-3) govuk-spacing(3);
+  padding: 0 govuk-spacing(3);
+  scrollbar-color: all.$govuk-text-colour all.govuk-colour("light-grey");
+
+  .govuk-table {
+    margin-bottom: -1px;
+  }
+
+  .govuk-table__header,
+  .govuk-table__cell {
+    white-space: nowrap;
+  }
+
+  &::-webkit-scrollbar {
+    height: govuk-spacing(1);
+    width: govuk-spacing(1);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: all.$govuk-text-colour;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: all.govuk-colour("light-grey");
+  }
+}
+
+.app-table-group:focus {
+  box-shadow: 0 0 0 #{all.$govuk-focus-width * 2} all.$govuk-focus-colour;
+  outline: all.$govuk-focus-width solid all.govuk-colour("black");
+}
+
+.app-table-group:focus:not(:focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.app-table-group:focus-visible {
+  box-shadow: 0 0 0 #{all.$govuk-focus-width * 2} all.$govuk-focus-colour;
+  outline: all.$govuk-focus-width solid all.govuk-colour("black");
+}

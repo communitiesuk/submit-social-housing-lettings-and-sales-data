@@ -1,0 +1,50 @@
+// Entry point for your Sass build
+@use "govuk-frontend/govuk/all";
+
+@function frontend-font-url($filename) {
+  @return url("~assets/fonts/" + $filename);
+}
+
+@function frontend-image-url($filename) {
+  @return url("~assets/images/" + $filename);
+}
+
+all.$govuk-font-url-function: frontend-font-url;
+all.$govuk-image-url-function: frontend-image-url;
+all.$govuk-global-styles: true;
+
+@import "accessible-autocomplete";
+@import "button";
+@import "figure";
+@import "input";
+@import "related-navigation";
+@import "section-skip-link";
+@import "tab-navigation";
+@import "table-group";
+@import "task-list";
+@import "template";
+@import "panel";
+
+// Turbo
+.turbo-progress-bar {
+  height: govuk-spacing(1);
+  background-color: all.$govuk-brand-colour;
+}
+
+// App utilities
+.app-\!-colour-muted {
+  color: all.$govuk-secondary-text-colour !important;
+}
+
+.app-\!-font-tabular {
+  @include all.govuk-font($size: false, $tabular: true);
+}
+
+// Overrides
+.govuk-button-group {
+  align-items: center;
+}
+
+.govuk-tag {
+  white-space: nowrap;
+}

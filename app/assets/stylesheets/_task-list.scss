@@ -1,0 +1,54 @@
+.app-task-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  @include all.govuk-media-query($from: tablet) {
+    min-width: 400px;
+  }
+}
+
+.app-task-list__section-heading {
+  @include all.govuk-font($size:24, $weight: bold);
+  display: table;
+  margin-top: govuk-spacing(0);
+  margin-bottom: govuk-spacing(4);
+}
+
+.app-task-list__items {
+  @include all.govuk-font($size: 19);
+  @include all.govuk-responsive-margin(9, "bottom");
+  list-style: none;
+  padding-left: 0;
+}
+
+.app-task-list__item {
+  @include all.govuk-clearfix;
+  border-bottom: 1px solid all.$govuk-border-colour;
+  padding-top: govuk-spacing(2);
+  padding-bottom: govuk-spacing(2);
+}
+
+.app-task-list__item:first-child {
+  border-top: 1px solid all.$govuk-border-colour;
+}
+
+.app-task-list__task-name {
+  display: block;
+
+  @include all.govuk-media-query($from: 450px) {
+    float: left;
+  }
+}
+
+.app-task-list__tag {
+  margin-top: govuk-spacing(2);
+  margin-bottom: govuk-spacing(1);
+
+  @include all.govuk-media-query($from: 450px) {
+    float: right;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

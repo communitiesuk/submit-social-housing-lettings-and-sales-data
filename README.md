@@ -37,10 +37,23 @@ Pre-requisites:
 6. Install the frontend depenencies:\
   `yarn install`
 
-7. Start the Rails server:\
-  `bundle exec rails s`
+7. Start dev servers using foreman:\
+  `./bin/dev`
+
+  Or start the server individually:\
+
+  a. Rails:\
+    `bundle exec rails s`
+
+  b. JS (for hot reloading):\
+    `yarn build --watch`
+
+  c. CSS (for hot reloading):\
+    `yarn build:css --watch`
 
 The Rails server will start on <http://localhost:3000>.
+
+Front end assets are bundled with esbuild and the asset pipeline. Images and fonts are loaded from the GOVUK frontend NPM package by running `cp -rT node_modules/govuk-frontend/govuk/assets/fonts app/assets/builds/fonts && cp -rT node_modules/govuk-frontend/govuk/assets/images app/assets/builds/images` which is done automatically as a post yarn install task.
 
 ### Using Docker
 

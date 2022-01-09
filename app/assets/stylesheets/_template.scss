@@ -1,0 +1,5 @@
+.app-template--wide {
+  .govuk-width-container {
+    @include all.govuk-width-container(1100px);
+  }
+}
