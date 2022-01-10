@@ -11,10 +11,10 @@ RSpec.describe "form/page" do
   let(:subsection) { form.get_subsection("income_and_benefits") }
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
-  let(:initial_page_attribs) { { description: nil, hide_subsection_label: nil } }
-  let(:initial_question_attribs) { { type: "numeric", answer_options: nil, prefix: nil, suffix: nil } }
-  let(:page_attribs) { {} }
-  let(:question_attribs) { {} }
+  let(:initial_page_attributes) { { description: nil, hide_subsection_label: nil } }
+  let(:initial_question_attributes) { { type: "numeric", answer_options: nil, prefix: nil, suffix: nil } }
+  let(:page_attributes) { {} }
+  let(:question_attributes) { {} }
 
   def assign_attributes(object, attrs)
     attrs.each_pair do |attr, value|
@@ -26,21 +26,21 @@ RSpec.describe "form/page" do
     assign(:case_log, case_log)
     assign(:page, page)
     assign(:subsection, subsection)
-    assign_attributes(page, page_attribs)
-    assign_attributes(question, question_attribs)
+    assign_attributes(page, page_attributes)
+    assign_attributes(question, question_attributes)
     render
   end
 
   after do
     # Revert any changes we've made to avoid affecting other specs as the form,
     # subsection, page, question objects being acted on are in memory
-    assign_attributes(page, initial_page_attribs)
-    assign_attributes(question, initial_question_attribs)
+    assign_attributes(page, initial_page_attributes)
+    assign_attributes(question, initial_question_attributes)
   end
 
   context "given a page with a description" do
     let(:description) { "Test description <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">with link</a>." }
-    let(:page_attribs) { { description: description } }
+    let(:page_attributes) { { description: description } }
     let(:expected_html) { '<p class="govuk-body govuk-body-m">Test description <a class="govuk-link" href="/files/privacy-notice.pdf">with link</a>.</p>' }
 
     it "renders the description" do
@@ -56,7 +56,7 @@ RSpec.describe "form/page" do
   end
 
   context "given a page with a header and hide_subsection_label true" do
-    let(:page_attribs) { { hide_subsection_label: true } }
+    let(:page_attributes) { { hide_subsection_label: true } }
 
     it "renders the header but not the subsection label" do
       expect(rendered).to match(page.header)
@@ -65,7 +65,7 @@ RSpec.describe "form/page" do
   end
 
   context "given a numeric question with prefix and suffix" do
-    let(:question_attribs) { { type: "numeric", prefix: "£", suffix: "every week" } }
+    let(:question_attributes) { { type: "numeric", prefix: "£", suffix: "every week" } }
 
     it "renders prefix and suffix text" do
       expect(rendered).to match(/govuk-input__prefix/)
@@ -79,42 +79,42 @@ RSpec.describe "form/page" do
     let(:expected_guidance) { /What counts as income?/ }
 
     context "with radio type" do
-      let(:question_attribs) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
+      let(:question_attributes) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for radio questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with text type" do
-      let(:question_attribs) { { type: "text", answer_options: nil } }
+      let(:question_attributes) { { type: "text", answer_options: nil } }
       it "renders the guidance partial for text questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with numeric type" do
-      let(:question_attribs) { { type: "numeric", answer_options: nil } }
+      let(:question_attributes) { { type: "numeric", answer_options: nil } }
       it "renders the guidance partial for numeric questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with select type" do
-      let(:question_attribs) { { type: "select", answer_options: { "1": "A", "2": "B" } } }
+      let(:question_attributes) { { type: "select", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for select questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with checkbox type" do
-      let(:question_attribs) { { type: "checkbox", answer_options: { "1": "A", "2": "B" } } }
+      let(:question_attributes) { { type: "checkbox", answer_options: { "1": "A", "2": "B" } } }
       it "renders the guidance partial for checkbox questions" do
         expect(rendered).to match(expected_guidance)
       end
     end
 
     context "with date type" do
-      let(:question_attribs) { { type: "date", answer_options: nil } }
+      let(:question_attributes) { { type: "date", answer_options: nil } }
       it "renders the guidance partial for date questions" do
         expect(rendered).to match(expected_guidance)
       end
