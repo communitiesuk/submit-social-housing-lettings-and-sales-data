@@ -6,7 +6,7 @@
       <%= content_for(:title) %>
     </h1>
 
-    <%= govuk_button_link_to "Create new log", case_logs_path, method: :post %>
+    <%= govuk_button_to "Create new log", case_logs_path %>
 
     <% if @in_progress_case_logs.present? %>
       <%= render partial: "log_list", locals: { case_logs: @in_progress_case_logs, title: "Logs you need to complete", date_title: "Last Changed" } %>
