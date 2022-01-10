@@ -17,7 +17,7 @@ module Validations::FinancialValidations
       is_employed = EMPLOYED_STATUSES.include?(economic_status)
       relationship = record["relat#{n}"]
       is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
-      if is_employed && is_partner_or_main && record.benefits == "All"
+      if is_employed && is_partner_or_main && record.benefits == "1. All"
         record.errors.add :benefits, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       end
     end

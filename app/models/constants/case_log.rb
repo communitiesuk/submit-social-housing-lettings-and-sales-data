@@ -198,10 +198,10 @@ module Constants::CaseLog
   }.freeze
 
   BENEFITS = {
-    "All" => 1,
-    "Some" => 2,
-    "None" => 3,
-    "Don’t know" => 4,
+    "1. All" => 1,
+    "2. Some" => 2,
+    "3. None" => 3,
+    "4. Don’t know" => 4,
   }.freeze
 
   PERIOD = {

@@ -404,8 +404,8 @@
                     "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "All",
-                      "1": "Some"
+                      "0": "1. All",
+                      "1": "2. Some"
                     }
                   }
                 }

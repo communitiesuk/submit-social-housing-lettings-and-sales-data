@@ -408,7 +408,7 @@ RSpec.describe Form, type: :model do
       it "Cannot be All if person 1 works full time" do
         expect {
           CaseLog.create!(
-            benefits: "All",
+            benefits: "1. All",
             ecstat1: "Full-time - 30 hours or more",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -419,7 +419,7 @@ RSpec.describe Form, type: :model do
       it "Cannot be All if person 1 works part time" do
         expect {
           CaseLog.create!(
-            benefits: "All",
+            benefits: "1. All",
             ecstat1: "Part-time - Less than 30 hours",
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -430,7 +430,7 @@ RSpec.describe Form, type: :model do
       it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
         expect {
           CaseLog.create!(
-            benefits: "All",
+            benefits: "1. All",
             relat2: "Partner",
             ecstat2: "Part-time - Less than 30 hours",
             owning_organisation: owning_organisation,

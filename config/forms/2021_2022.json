@@ -1937,15 +1937,15 @@
               "questions": {
                 "benefits": {
                   "check_answer_label": "Benefits as a proportion of income",
-                  "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
-                  "hint_text": "",
+                  "header": "How much of the household's income is from Universal Credit, state pensions or benefits?",
+                  "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
-                    "0": "All",
-                    "1": "Some",
-                    "2": "None",
+                    "0": "1. All",
+                    "1": "2. Some",
+                    "2": "3. None",
                     "divider": true,
-                    "3": "Don’t know"
+                    "3": "4. Don’t know"
                   }
                 }
               }

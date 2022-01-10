@@ -71,7 +71,7 @@ FactoryBot.define do
       offered { 2 }
       wchair { "Yes" }
       earnings { 68 }
-      benefits { "Some" }
+      benefits { "2. Some" }
       period { "Fortnightly" }
       brent { 200 }
       scharge { 50 }
