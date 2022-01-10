@@ -102,6 +102,24 @@ RSpec.describe "validations" do
     end
   end
 
+  describe "Compound validations" do
+    context "when you select two compatible answers, that become incompatible if the first answer changes", js: true do
+      it "clears the second answer on change of the first" do
+        case_log.update!(other_hhmemb: 1, relat2: "Partner", age2: 32, sex2: "Female", ecstat2: "Not seeking work")
+        visit("/logs/#{id}/conditional-question")
+        choose("case-log-preg-occ-yes-field", allow_label_click: true)
+        click_button("Save and continue")
+        choose("case-log-cbl-yes-field", allow_label_click: true)
+        click_button("Save and continue")
+        page.go_back
+        click_link("Back")
+        choose("case-log-preg-occ-no-field", allow_label_click: true)
+        click_button("Save and continue")
+        expect(case_log.reload.cbl).to be_nil
+      end
+    end
+  end
+
   describe "Soft Validation" do
     context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
       let(:case_log) do
