@@ -205,7 +205,7 @@
                   "properties": {}
                 },
                 "examples": {
-                  "Invalid Age & Reasonable Preference": {
+                  "Invalid Age and Reasonable Preference": {
                     "value": {
                       "errors": {
                         "reasonable_preference_reason": [
@@ -393,9 +393,9 @@
               "White: Irish",
               "White: Gypsy/Irish Traveller",
               "White: Other",
-              "Mixed: White & Black Caribbean",
-              "Mixed: White & Black African",
-              "Mixed: White & Asian",
+              "Mixed: White and Black Caribbean",
+              "Mixed: White and Black African",
+              "Mixed: White and Asian",
               "Mixed: Other",
               "Asian or Asian British: Indian",
               "Asian or Asian British: Pakistani",

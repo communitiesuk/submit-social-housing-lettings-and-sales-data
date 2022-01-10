@@ -18,7 +18,7 @@ Front end
 - In the same app codebase
 - ERB templates
 
-Code Style & Linting
+Code style and linting
 - Gov.uk Rubocop for Ruby style
 - .editorconfig for whitespace, newlines etc
 
