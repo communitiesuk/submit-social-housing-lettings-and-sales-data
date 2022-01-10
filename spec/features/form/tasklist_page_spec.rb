@@ -32,13 +32,13 @@ RSpec.describe "Task List" do
   end
 
   it "shows the number of completed sections if no sections are completed" do
-    visit("/case-logs/#{empty_case_log.id}")
+    visit("/logs/#{empty_case_log.id}")
     expect(page).to have_content("You’ve completed 0 of 10 sections.")
   end
 
   it "shows the number of completed sections if one section is completed" do
     answer_all_questions_in_income_subsection(empty_case_log)
-    visit("/case-logs/#{empty_case_log.id}")
+    visit("/logs/#{empty_case_log.id}")
     expect(page).to have_content("You’ve completed 1 of 10 sections.")
   end
 end
