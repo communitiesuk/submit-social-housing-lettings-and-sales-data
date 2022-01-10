@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_10_115720) do
+ActiveRecord::Schema.define(version: 2022_01_07_103143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,9 +162,9 @@ ActiveRecord::Schema.define(version: 2022_01_10_115720) do
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "property_void_date"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
+    t.datetime "property_void_date"
     t.integer "renttype"
     t.integer "needstype"
     t.integer "lettype"
