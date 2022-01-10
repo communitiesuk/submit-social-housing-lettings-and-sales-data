@@ -1799,10 +1799,10 @@
       }
     },
     "rent_and_charges": {
-      "label": "Rent and charges",
+      "label": "Finances",
       "subsections": {
         "income_and_benefits": {
-          "label": "Income and benefits",
+          "label": "Income, benefits and outgoings",
           "depends_on": { "about_this_log": "completed" },
           "pages": {
             "net_income_known": {
@@ -1826,7 +1826,9 @@
               }
             },
             "weekly_net_income": {
-              "depends_on": { "net_income_known": "Yes – the household has a weekly income" },
+              "depends_on": {
+                "net_income_known": "Yes – the household has a weekly income"
+              },
               "header": "",
               "description": "",
               "questions": {
@@ -1852,7 +1854,9 @@
               }
             },
             "monthly_net_income": {
-              "depends_on": { "net_income_known": "Yes – the household has a monthly income" },
+              "depends_on": {
+                "net_income_known": "Yes – the household has a monthly income"
+              },
               "header": "",
               "description": "",
               "questions": {
@@ -1878,7 +1882,9 @@
               }
             },
             "yearly_net_income": {
-              "depends_on": { "net_income_known": "Yes – the household has a yearly income" },
+              "depends_on": {
+                "net_income_known": "Yes – the household has a yearly income"
+              },
               "header": "",
               "description": "",
               "questions": {
@@ -1903,6 +1909,28 @@
                 }
               }
             },
+            "housing_benefit": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "hb": {
+                  "check_answer_label": "Universal Credit & Housing Benefit",
+                  "header": "Is the household likely to be receiving any of these housing-related benefits?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "1. Housing benefit",
+                    "1": "6. Universal Credit with housing element (excluding housing benefit)",
+                    "2": "8. Housing benefit and Universal Credit (without housing element)",
+                    "3": "7. Universal Credit (without housing element)",
+                    "4": "9. None",
+                    "divider": true,
+                    "5": "3. Don't know",
+                    "6": "10. Tenant prefers not to say"
+                  }
+                }
+              }
+            },
             "net_income_uc_proportion": {
               "header": "",
               "description": "",
@@ -1918,28 +1946,6 @@
                     "2": "None",
                     "divider": true,
                     "3": "Don’t know"
-                  }
-                }
-              }
-            },
-            "housing_benefit": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "hb": {
-                  "check_answer_label": "Housing-related benefits received",
-                  "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Housing Benefit, but not Universal Credit",
-                    "1": "Universal Credit with housing element, but not Housing Benefit",
-                    "2": "Universal Credit without housing element and no Housing Benefit",
-                    "3": "Universal Credit and Housing Benefit",
-                    "4": "Not Housing Benefit or Universal Credit",
-                    "divider": true,
-                    "5": "Don’t know",
-                    "6": "Prefer not to say"
                   }
                 }
               }

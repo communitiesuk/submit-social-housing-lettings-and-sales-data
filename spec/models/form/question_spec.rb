@@ -145,7 +145,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       it "knows whether it is enabled or not for met conditions" do
-        case_log.hb = "Housing Benefit, but not Universal Credit"
+        case_log.hb = "1. Housing benefit"
         expect(subject.enabled?(case_log)).to be true
       end
     end

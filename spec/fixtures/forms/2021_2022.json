@@ -417,11 +417,11 @@
                     "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Housing Benefit, but not Universal Credit",
-                      "1": "Prefer not to say"
+                      "0": "1. Housing benefit",
+                      "1": "10. Tenant prefers not to say"
                     },
                     "conditional_for": {
-                      "conditional_question": ["Housing Benefit, but not Universal Credit"]
+                      "conditional_question": ["1. Housing benefit"]
                     }
                   },
                   "conditional_question": {

@@ -38,15 +38,15 @@ module Validations::FinancialValidations
   def validate_hbrentshortfall(record)
     is_present = record.hbrentshortfall.present?
     is_yes = record.hbrentshortfall == "Yes"
-    hb_donotknow = record.hb == "Don’t know"
-    hb_no_hb_or_uc = record.hb == "Not Housing Benefit or Universal Credit"
-    hb_uc_no_hb = record.hb == "Universal Credit without housing element and no Housing Benefit"
-    hb_no_uc = record.hb == "Housing Benefit, but not Universal Credit"
-    hb_uc_no_he_hb = record.hb == "Universal Credit with housing element, but not Housing Benefit"
-    hb_and_uc = record.hb == "Universal Credit and Housing Benefit"
+    hb_donotknow = record.hb == "3. Don't know"
+    hb_none = record.hb == "9. None"
+    hb_uc_no_hb = record.hb == "7. Universal Credit (without housing element)"
+    hb_no_uc = record.hb == "1. Housing benefit"
+    hb_uc_no_he_hb = record.hb == "6. Universal Credit with housing element (excluding housing benefit)"
+    hb_and_uc = record.hb == "8. Housing benefit and Universal Credit (without housing element)"
 
     conditions = [
-      { condition: is_yes && (hb_donotknow || hb_no_hb_or_uc || hb_uc_no_hb), error: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown" },
+      { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown" },
       { condition: (hb_no_uc || hb_uc_no_he_hb || hb_and_uc) && !is_present, error: "Must be completed if Universal credit and/or Housing Benefit received" },
     ]
 
