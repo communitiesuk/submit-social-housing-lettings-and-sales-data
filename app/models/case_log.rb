@@ -251,7 +251,6 @@ private
     self.postcod2 = UKPostcode.parse(property_postcode).incode
   end
 
-  # Called when the postcode is not known
   def reset_location_fields!
     if is_la_inferred == true
       self.la = nil
