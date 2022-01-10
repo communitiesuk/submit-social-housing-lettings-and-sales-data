@@ -26,9 +26,10 @@
               }
             },
             "gdpr_declined": {
+              "hide_subsection_label": true,
               "header": "You cannot use this service",
               "hint_text": "",
-              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
+              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">DLUHC privacy notice</a>.<br /><br /><a class=\"govuk-link\" href=\"/logs\">Go to your logs</a>",
               "questions": {},
               "depends_on": { "gdpr_acceptance": "No" }
             },
