@@ -144,6 +144,11 @@ module Constants::CaseLog
     "Yes" => 1,
   }.freeze
 
+  POLAR3 = {
+    "No" => 1,
+    "Yes" => 0,
+  }.freeze
+
   POLAR_WITH_UNKNOWN = {
     "No" => 2,
     "Yes" => 1,

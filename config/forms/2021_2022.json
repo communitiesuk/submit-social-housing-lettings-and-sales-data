@@ -1949,6 +1949,23 @@
                   }
                 }
               }
+            },
+            "rent_or_other_charges": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "nocharge": {
+                  "check_answer_label": "Does the household pay rent or other charges for the accommodation?",
+                  "header": "Does the household pay rent or other charges for the accommodation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No"
+                  }
+                }
+              },
+              "depends_on": { "needstype": "Supported housing" }
             }
           }
         },
