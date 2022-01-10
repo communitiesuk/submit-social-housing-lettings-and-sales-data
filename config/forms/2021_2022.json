@@ -1979,6 +1979,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -1989,6 +1991,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -1999,6 +2003,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2009,6 +2015,8 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "prefix": "£",
+                  "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2019,7 +2027,10 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "readonly": true
+                  "prefix": "£",
+                  "suffix": "every week",
+                  "readonly": true,
+                  "requires_js": true
                 },
                 "hbrentshortfall": {
                   "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",

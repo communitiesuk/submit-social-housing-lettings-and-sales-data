@@ -1040,24 +1040,18 @@ RSpec.describe Form, type: :model do
     end
 
     it "correctly derives and saves partial and full postcodes" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select postcode, postcod2 from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["postcode"]).to eq("M1")
       expect(record_from_db["postcod2"]).to eq("1AE")
     end
 
     it "correctly derives and saves partial and full previous postcodes" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select ppostc1, ppostc2 from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["ppostc1"]).to eq("M2")
       expect(record_from_db["ppostc2"]).to eq("2AE")
     end
 
     it "correctly derives and saves partial and full major repairs date" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select mrcday, mrcmonth, mrcyear, mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
       expect(record_from_db["mrcdate"].month).to eq(5)
@@ -1068,38 +1062,28 @@ RSpec.describe Form, type: :model do
     end
 
     it "correctly derives and saves incref" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select incref from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["incref"]).to eq(1)
     end
 
     it "correctly derives and saves hhmemb" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["hhmemb"]).to eq(7)
     end
 
     it "correctly derives and saves renttype" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select renttype from case_logs where id=#{case_log.id}").to_a[0]
       expect(case_log.renttype).to eq("Intermediate Rent")
       expect(record_from_db["renttype"]).to eq(3)
     end
 
     it "correctly derives and saves lettype" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
       expect(case_log.lettype).to eq("Intermediate Rent General needs PRP")
       expect(record_from_db["lettype"]).to eq(9)
     end
 
     it "correctly derives and saves day, month, year from start date" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select day, month, year, startdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["startdate"].day).to eq(10)
       expect(record_from_db["startdate"].month).to eq(10)
@@ -1125,8 +1109,6 @@ RSpec.describe Form, type: :model do
       end
 
       it "correctly infers la" do
-        address_case_log.reload
-
         record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(address_case_log.la).to eq("Manchester")
         expect(record_from_db["la"]).to eq("E08000003")
@@ -1139,7 +1121,6 @@ RSpec.describe Form, type: :model do
 
       it "correctly resets all fields if property postcode not known" do
         address_case_log.update!({ postcode_known: "No" })
-        address_case_log.reload
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq(nil)
@@ -1150,7 +1131,6 @@ RSpec.describe Form, type: :model do
       it "changes the LA if property postcode changes from not known to known and provided" do
         address_case_log.update!({ postcode_known: "No" })
         address_case_log.update!({ la: "Westminster" })
-        address_case_log.reload
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq(nil)
@@ -1158,7 +1138,6 @@ RSpec.describe Form, type: :model do
         expect(record_from_db["la"]).to eq("E09000033")
 
         address_case_log.update!({ postcode_known: "Yes", property_postcode: "M1 1AD" })
-        address_case_log.reload
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq("M1 1AD")
@@ -1175,6 +1154,24 @@ RSpec.describe Form, type: :model do
         expect(case_log.reload.incfreq).to eq("Monthly")
         case_log.update!(net_income_known: "Yes – the household has a yearly income")
         expect(case_log.reload.incfreq).to eq("Yearly")
+      end
+    end
+
+    context "rent and charges" do
+      let!(:case_log) do
+        CaseLog.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          brent: 5,
+          scharge: 10,
+          pscharge: 3,
+          supcharg: 12,
+        })
+      end
+
+      it "correctly sums rental charges" do
+        record_from_db = ActiveRecord::Base.connection.execute("select tcharge from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["tcharge"]).to eq(30)
       end
     end
 
@@ -1200,22 +1197,16 @@ RSpec.describe Form, type: :model do
       end
 
       it "correctly derives and saves totchild" do
-        household_case_log.reload
-
         record_from_db = ActiveRecord::Base.connection.execute("select totchild from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totchild"]).to eq(3)
       end
 
       it "correctly derives and saves totelder" do
-        household_case_log.reload
-
         record_from_db = ActiveRecord::Base.connection.execute("select totelder from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totelder"]).to eq(2)
       end
 
       it "correctly derives and saves totadult" do
-        household_case_log.reload
-
         record_from_db = ActiveRecord::Base.connection.execute("select totadult from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totadult"]).to eq(3)
       end

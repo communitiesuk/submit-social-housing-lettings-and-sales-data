@@ -64,6 +64,6 @@ class Form::Subsection
   end
 
   def displayed_to_user?(case_log, question)
-    question.page.routed_to?(case_log) && question.enabled?(case_log)
+    question.page.routed_to?(case_log) && question.enabled?(case_log) && !question.read_only?
   end
 end

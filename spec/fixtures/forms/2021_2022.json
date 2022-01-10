@@ -537,7 +537,8 @@
                     "min": 0,
                     "step": 1,
                     "width": 4,
-                    "readonly": true
+                    "readonly": true,
+                    "requires_js": true
                   }
                 }
               }
