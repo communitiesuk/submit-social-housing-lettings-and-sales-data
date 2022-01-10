@@ -3,6 +3,8 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
+      <% breadcrumbs = { "Logs" => "/logs", "Log" => "/logs/" + @case_log.id.to_s, subsection.id.humanize => "" } %>
+      <%= govuk_breadcrumbs(breadcrumbs: breadcrumbs) %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= subsection.id.humanize %></span>
         Check your answers
