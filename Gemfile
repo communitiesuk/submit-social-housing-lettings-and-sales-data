@@ -19,7 +19,7 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "govuk-components"
 # GOV UK component form builder DSL
 gem "govuk_design_system_formbuilder"
-# Turbo & Stimulus
+# Turbo and Stimulus
 gem "hotwire-rails"
 # Soft delete ActiveRecords objects
 gem "discard"

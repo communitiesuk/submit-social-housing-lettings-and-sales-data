@@ -413,7 +413,7 @@
               "housing_benefit": {
                 "questions": {
                   "hb": {
-                    "check_answer_label": "Universal Credit & Housing Benefit",
+                    "check_answer_label": "Housing-related benefits received",
                     "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                     "type": "radio",
                     "answer_options": {
