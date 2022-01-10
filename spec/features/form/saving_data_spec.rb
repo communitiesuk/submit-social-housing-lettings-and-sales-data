@@ -75,7 +75,7 @@ RSpec.describe "Form Saving Data" do
 
   it "displays number answers in inputs if they are already saved" do
     visit("/logs/#{id}/property-postcode")
-    expect(page).to have_field("case-log-property-postcode-field", with: "P0 5ST")
+    expect(page).to have_field("case-log-property-postcode-field", with: "PO5 3TE")
   end
 
   it "displays text answers in inputs if they are already saved" do

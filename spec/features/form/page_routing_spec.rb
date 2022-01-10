@@ -51,7 +51,7 @@ RSpec.describe "Form Page Routing" do
   context "inferred answers routing", js: true do
     it "shows question if the answer could not be inferred" do
       visit("/logs/#{id}/property-postcode")
-      fill_in("case-log-property-postcode-field", with: "P0 5ST")
+      fill_in("case-log-property-postcode-field", with: "PO5 3TE")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
     end

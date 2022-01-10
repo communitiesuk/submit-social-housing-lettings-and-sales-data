@@ -261,7 +261,7 @@ RSpec.describe CaseLogsController, type: :request do
                                      owning_organisation: organisation,
                                      managing_organisation: organisation,
                                      postcode_known: "Yes",
-                                     property_postcode: "P0 0ST")
+                                     property_postcode: "PO5 3TE")
         id = case_log.id
         get "/logs/#{id}/property-information/check-answers"
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
@@ -282,7 +282,7 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "PATCH" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "M1 1AE")
     end
     let(:params) do
       { tenant_code: "New Value" }
@@ -300,7 +300,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.property_postcode).to eq("Old Value")
+      expect(case_log.property_postcode).to eq("M1 1AE")
     end
 
     context "invalid case log id" do
@@ -340,7 +340,7 @@ RSpec.describe CaseLogsController, type: :request do
   # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
   describe "PUT" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "Old Value")
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "SW1A 2AA")
     end
     let(:params) do
       { tenant_code: "New Value" }
@@ -358,7 +358,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.property_postcode).to eq("Old Value")
+      expect(case_log.property_postcode).to eq("SW1A 2AA")
     end
 
     context "invalid case log id" do

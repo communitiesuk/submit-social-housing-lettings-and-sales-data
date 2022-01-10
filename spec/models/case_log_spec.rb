@@ -1119,6 +1119,11 @@ RSpec.describe Form, type: :model do
           .to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
       end
 
+      it "errors if the property postcode is not valid" do
+        expect { address_case_log.update!({ property_postcode: "invalid_postcode" }) }
+          .to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
+      end
+
       it "correctly resets all fields if property postcode not known" do
         address_case_log.update!({ postcode_known: "No" })
 

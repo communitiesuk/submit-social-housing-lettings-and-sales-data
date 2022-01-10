@@ -3,6 +3,8 @@ module Validations::PropertyValidations
   # or 'validate_' to run on submit as well
   include Constants::CaseLog
 
+  POSTCODE_REGEXP = /^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/
+
   def validate_property_number_of_times_relet(record)
     if record.offered && !/^[1-9]$|^0[1-9]$|^1[0-9]$|^20$/.match?(record.offered.to_s)
       record.errors.add :offered, "Property number of times relet must be between 0 and 20"
@@ -35,8 +37,10 @@ module Validations::PropertyValidations
   end
 
   def validate_property_postcode(record)
-    if record.postcode_known == "Yes" && record.property_postcode.blank?
-      record.errors.add :property_postcode, "Enter a postcode in the correct format, for example AA1 1AA"
+    postcode = record.property_postcode
+    if record.postcode_known == "Yes" && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+      error_message = "Enter a postcode in the correct format, for example AA1 1AA"
+      record.errors.add :property_postcode, error_message
     end
   end
 end
