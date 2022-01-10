@@ -32,11 +32,6 @@ class Form::Page
 
     depends_on.all? do |question, value|
       !case_log[question].nil? && case_log[question] == value
-      if question == "conditions"
-        return value.all? { |condition| eval(condition) }
-      end
-
-      case_log[question].present? && case_log[question] == value
     end
   end
 end
