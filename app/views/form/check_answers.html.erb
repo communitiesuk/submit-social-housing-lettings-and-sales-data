@@ -1,6 +1,6 @@
 <% content_for :title, "#{subsection.id.humanize} - Check your answers" %>
 <% breadcrumbs = { "Logs" => "/logs", "Log" => "/logs/" + @case_log.id.to_s, subsection.id.humanize => "" } %>
-<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: breadcrumbs)%>
+<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: breadcrumbs) %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
