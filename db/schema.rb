@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(version: 2022_01_10_115720) do
     t.integer "totelder"
     t.integer "totadult"
     t.integer "net_income_known"
+    t.string "has_benefits"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"

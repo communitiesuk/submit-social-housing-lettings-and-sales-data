@@ -274,6 +274,7 @@ private
     self.property_postcode = nil
     self.postcode = nil
     self.postcod2 = nil
+    self.has_benefits = get_has_benefits
   end
 
   def get_totelder
@@ -301,6 +302,13 @@ private
     if postcode_lookup && postcode_lookup.info.present?
       postcode_lookup.admin_district
     end
+  end
+
+  def get_has_benefits
+    return "yes" if ["1. Housing benefit",
+                     "6. Universal Credit with housing element (excluding housing benefit)",
+                     "7. Universal Credit (without housing element)",
+                     "8. Housing benefit and Universal Credit (without housing element)"].include?(hb)
   end
 
   def all_fields_completed?
