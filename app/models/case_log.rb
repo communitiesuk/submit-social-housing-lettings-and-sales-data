@@ -35,9 +35,10 @@ class CaseLog < ApplicationRecord
   default_scope -> { kept }
 
   validates_with CaseLogValidator
-  before_validation :update_status!
+  before_save :update_status!
   before_validation :process_postcode_changes!, if: :property_postcode_changed?
   before_validation :reset_location_fields!, unless: :postcode_known?
+  before_validation :set_derived_fields!
 
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, class_name: "Organisation"
@@ -203,10 +204,9 @@ private
                   else
                     "in_progress"
                   end
-    set_derived_fields
   end
 
-  def set_derived_fields
+  def set_derived_fields!
     if previous_postcode.present?
       self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
       self.ppostc2 = UKPostcode.parse(previous_postcode).incode
