@@ -82,7 +82,7 @@ RSpec.describe "Form Page Routing" do
       click_button("Save and continue")
       visit("/logs/#{id}")
       click_link(text: "Tenancy information")
-      expect(page).to have_current_path("/case-logs/#{id}/joint-tenancy")
+      expect(page).to have_current_path("/logs/#{id}/joint-tenancy")
     end
 
     it "the first question in tenancy information section is not joint tenancy if startdate is in 2021/22 period" do
@@ -93,7 +93,7 @@ RSpec.describe "Form Page Routing" do
       click_button("Save and continue")
       visit("/logs/#{id}")
       click_link(text: "Tenancy information")
-      expect(page).to have_current_path("/case-logs/#{id}/tenancy-code")
+      expect(page).to have_current_path("/logs/#{id}/tenancy-code")
     end
   end
 end
