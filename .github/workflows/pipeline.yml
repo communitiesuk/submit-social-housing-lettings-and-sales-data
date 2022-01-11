@@ -57,6 +57,7 @@ jobs:
         with:
           # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
+          cache-version: 1
       - name: Set up node
         uses: actions/setup-node@v2
         with:
