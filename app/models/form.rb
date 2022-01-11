@@ -53,4 +53,24 @@ class Form
       c.map { |k, v| v.keys.map { |key| Hash(from: k, to: key, cond: v[key]) } }
     }.flatten
   end
+
+  def invalidated_pages(case_log)
+    pages.reject { |p| p.routed_to?(case_log) }
+  end
+
+  def invalidated_questions(case_log)
+    (invalidated_page_questions(case_log) + invalidated_conditional_questions(case_log)).uniq
+  end
+
+  def invalidated_page_questions(case_log)
+    invalidated_pages(case_log).flat_map(&:questions) || []
+  end
+
+  def invalidated_conditional_questions(case_log)
+    questions.reject { |q| q.enabled?(case_log) } || []
+  end
+
+  def readonly_questions
+    questions.select(&:read_only?)
+  end
 end

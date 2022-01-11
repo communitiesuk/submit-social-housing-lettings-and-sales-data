@@ -24,7 +24,7 @@ class Form::Page
   def routed_to?(case_log)
     return true unless depends_on
 
-    depends_on.all? do |question, value|
+    subsection.enabled?(case_log) && depends_on.all? do |question, value|
       !case_log[question].nil? && case_log[question] == value
     end
   end

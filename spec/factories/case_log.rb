@@ -38,7 +38,7 @@ FactoryBot.define do
       tenant_code { "BZ737" }
       postcode { "NW1 7TY" }
       age1 { 35 }
-      sex1 { "F" }
+      sex1 { "Female" }
       ethnic { 2 }
       national { 4 }
       prevten { "Private sector tenancy" }
@@ -54,7 +54,7 @@ FactoryBot.define do
       leftreg { "No - they left up to 5 years ago" }
       reservist { "No" }
       illness { "Yes" }
-      preg_occ { "No" }
+      preg_occ { "Yes" }
       accessibility_requirements { "No" }
       condition_effects { "dummy" }
       tenancy_code { "BZ757" }

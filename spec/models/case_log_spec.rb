@@ -722,8 +722,8 @@ RSpec.describe Form, type: :model do
       it "cannot be later than the tenancy start date" do
         expect {
           CaseLog.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            startdate: Date.new(2020, 10, 9),
+            mrcdate: Date.new(2021, 10, 10),
+            startdate: Date.new(2021, 10, 9),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -731,8 +731,8 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(
-            mrcdate: Date.new(2020, 10, 9),
-            startdate: Date.new(2020, 10, 10),
+            mrcdate: Date.new(2021, 10, 9),
+            startdate: Date.new(2021, 10, 10),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -771,7 +771,7 @@ RSpec.describe Form, type: :model do
       it "must have less than two years between the tenancy start date and major repairs date" do
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2021, 10, 10),
             mrcdate: Date.new(2017, 10, 10),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -784,7 +784,7 @@ RSpec.describe Form, type: :model do
       it "must have less than 10 years between the tenancy start date and void" do
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2009, 10, 10),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -793,7 +793,7 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2015, 10, 10),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -804,8 +804,8 @@ RSpec.describe Form, type: :model do
       it "must be before the tenancy start date" do
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
-            property_void_date: Date.new(2021, 10, 10),
+            startdate: Date.new(2021, 10, 10),
+            property_void_date: Date.new(2021, 10, 11),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
@@ -813,7 +813,7 @@ RSpec.describe Form, type: :model do
 
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2019, 10, 10),
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
@@ -824,7 +824,7 @@ RSpec.describe Form, type: :model do
       it "must be before major repairs date if major repairs date provided" do
         expect {
           CaseLog.create!(
-            startdate: Date.new(2020, 10, 10),
+            startdate: Date.new(2021, 10, 10),
             mrcdate: Date.new(2019, 10, 10),
             property_void_date: Date.new(2019, 11, 11),
             owning_organisation: owning_organisation,

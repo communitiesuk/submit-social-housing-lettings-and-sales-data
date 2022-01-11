@@ -157,7 +157,7 @@ class BulkUpload
       mrcmonth: row[93],
       mrcyear: row[94],
       # supported_scheme: row[95],
-      startdate: row[96].to_s + row[97].to_s + row[98].to_s,
+      startdate: date_time(row[98], row[97], row[96]),
       # startdate_day: row[96],
       # startdate_month: row[97],
       # startdate_year: row[98],
@@ -199,6 +199,12 @@ class BulkUpload
       gdpr_acceptance: 1,
       gdpr_declined: 0,
     }
+  end
+
+  def date_time(year, month, day)
+    return unless year && month && day
+
+    Time.zone.local("20#{year}", month.to_s, day.to_s)
   end
 
   def other_hhmemb(row)
