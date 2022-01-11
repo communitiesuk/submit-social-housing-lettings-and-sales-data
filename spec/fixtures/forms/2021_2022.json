@@ -276,7 +276,7 @@
                     }
                   }
                 },
-                "depends_on": {"is_la_inferred": false}
+                "depends_on": [{"is_la_inferred": false}]
               },
               "property_wheelchair_accessible": {
                 "questions": {
@@ -321,7 +321,7 @@
                     }
                   }
                 },
-                "depends_on": { "preg_occ": "Yes" }
+                "depends_on": [{ "preg_occ": "Yes" }, { "wchair" : "Yes" }]
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -335,7 +335,7 @@
                     }
                   }
                 },
-                "depends_on": { "preg_occ": "No" }
+                "depends_on": [{ "preg_occ": "No" }]
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -349,7 +349,7 @@
                     }
                   }
                 },
-                "depends_on": { "preg_occ": "No", "sex1": "Male" }
+                "depends_on": [{ "preg_occ": "No", "sex1": "Male" }]
               }
             }
           }
@@ -436,7 +436,7 @@
                 }
               },
               "dependent_page": {
-                "depends_on": { "incfreq": "Weekly" },
+                "depends_on": [{ "incfreq": "Weekly" }],
                 "questions": {
                   "dependent_question": {
                     "check_answer_label": "Dependent Question",
@@ -642,7 +642,7 @@
         "subsections": {
           "declaration": {
             "label": "Declaration",
-            "depends_on": {
+            "depends_on": [{
               "household_characteristics": "completed",
               "household_needs": "completed",
               "tenancy_information": "completed",
@@ -650,7 +650,7 @@
               "income_and_benefits": "completed",
               "rent": "completed",
               "local_authority": "completed"
-            },
+            }],
             "pages": {
               "declaration": {
                 "questions": {

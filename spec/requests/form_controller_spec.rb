@@ -269,12 +269,28 @@ RSpec.describe FormController, type: :request do
           }
         end
 
+        let(:case_log_form_conditional_question_wchair_yes_params) do
+          {
+            id: case_log.id,
+            case_log: {
+              page: "property_wheelchair_accessible",
+              wchair: "Yes",
+            },
+          }
+        end
+
         it "routes to the appropriate conditional page based on the question answer of the current page" do
           post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_yes_params
           expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-yes-page")
 
           post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
           expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-no-page")
+        end
+
+        it "routes to the page if at least one of the condition sets is met" do
+          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_wchair_yes_params
+          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
+          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-yes-page")
         end
       end
 

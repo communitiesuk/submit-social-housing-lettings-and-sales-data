@@ -31,7 +31,7 @@
               "hint_text": "",
               "description": "We cannot accept data about a tenant or buyer unless they’ve seen the <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">DLUHC privacy notice</a>.<br /><br /><a class=\"govuk-link\" href=\"/logs\">Go to your logs</a>",
               "questions": {},
-              "depends_on": { "gdpr_acceptance": "No" }
+              "depends_on": [{ "gdpr_acceptance": "No" }]
             },
             "organisation_details": {
               "header": "Organisation details",
@@ -58,7 +58,7 @@
                   }
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes" }
+              "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
             "sale_or_letting": {
               "header": "",
@@ -75,7 +75,7 @@
                   }
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes" }
+              "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
             "tenant_same_property_renewal": {
               "header": "",
@@ -92,10 +92,10 @@
                   }
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Letting"
-              }
+              }]
             },
             "startdate": {
               "header": "",
@@ -108,10 +108,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Letting"
-              }
+              }]
             },
             "about_this_letting": {
               "header": "Tell us about this letting",
@@ -152,10 +152,10 @@
                   }
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Letting"
-              }
+              }]
             },
             "tenant_code": {
               "header": "",
@@ -169,10 +169,10 @@
                   "width": 10
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Letting"
-              }
+              }]
             },
             "property_reference": {
               "header": "",
@@ -186,7 +186,7 @@
                   "width": 10
                 }
               },
-              "depends_on": { "gdpr_acceptance": "Yes" }
+              "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
             "sale_completion_date": {
               "header": "",
@@ -199,10 +199,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Sale"
-              }
+              }]
             },
             "purchaser_code": {
               "header": "",
@@ -216,10 +216,10 @@
                   "width": 10
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "gdpr_acceptance": "Yes",
                 "sale_or_letting": "Sale"
-              }
+              }]
             }
           }
         }
@@ -230,7 +230,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "person_1_age": {
               "header": "",
@@ -779,7 +779,7 @@
         },
         "household_situation": {
           "label": "Household situation",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "previous_housing_situation": {
               "header": "",
@@ -907,7 +907,7 @@
         },
         "household_needs": {
           "label": "Household needs",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -1052,7 +1052,7 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1133,7 +1133,7 @@
         },
         "property_information": {
           "label": "Property information",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "property_postcode": {
               "header": "",
@@ -1182,7 +1182,7 @@
                   }
                 }
               },
-              "depends_on": { "is_la_inferred": false }
+              "depends_on": [{ "is_la_inferred": false }]
             },
             "select_local_authority": {
               "header": "",
@@ -1514,7 +1514,7 @@
                   }
                 }
               },
-              "depends_on": { "la_known": "Yes", "is_la_inferred": false }
+              "depends_on": [{ "la_known": "Yes", "is_la_inferred": false }]
             },
             "why_dont_you_know_la": {
               "header": "",
@@ -1527,7 +1527,7 @@
                   "type": "textarea"
                 }
               },
-              "depends_on": { "la_known": "No", "is_la_inferred": false }
+              "depends_on": [{ "la_known": "No", "is_la_inferred": false }]
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
@@ -1544,7 +1544,7 @@
                   }
                 }
               },
-              "depends_on": { "tenant_same_property_renewal": "No" }
+              "depends_on": [{ "tenant_same_property_renewal": "No" }]
             },
             "unitletas": {
               "header": "",
@@ -1564,10 +1564,10 @@
                   }
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "property_vacancy_reason_not_first_let": {
               "header": "",
@@ -1593,10 +1593,10 @@
                   }
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "property_vacancy_reason_first_let": {
               "header": "",
@@ -1614,10 +1614,10 @@
                   }
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "first_time_property_let_as_social_housing": "Yes",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "property_number_of_times_relet_not_social_let": {
               "header": "",
@@ -1634,10 +1634,10 @@
                   "width": 2
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "property_number_of_times_relet_social_let": {
               "header": "",
@@ -1654,10 +1654,10 @@
                   "width": 2
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "first_time_property_let_as_social_housing": "Yes",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "property_unit_type": {
               "header": "",
@@ -1728,7 +1728,7 @@
                   "width": 2
                 }
               },
-              "depends_on": { "needstype": "General needs" }
+              "depends_on": [{ "needstype": "General needs" }]
             },
             "void_or_renewal_date": {
               "header": "",
@@ -1741,10 +1741,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "rsnvac": "First let of new-build property",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             },
             "new_build_handover_date": {
               "header": "",
@@ -1757,13 +1757,13 @@
                   "type": "date"
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "tenant_same_property_renewal": "No",
                 "rsnvac": [
                   "First let of conversion, rehabilitation or acquired property?",
                   "First let of leased property"
                 ]
-              }
+              }]
             },
             "property_major_repairs": {
               "header": "",
@@ -1789,10 +1789,10 @@
                   "type": "date"
                 }
               },
-              "depends_on": {
+              "depends_on": [{
                 "rsnvac": "First let of new-build property",
                 "tenant_same_property_renewal": "No"
-              }
+              }]
             }
           }
         }
@@ -1803,7 +1803,7 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income, benefits and outgoings",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "net_income_known": {
               "header": "Household’s combined income",
@@ -1826,9 +1826,7 @@
               }
             },
             "weekly_net_income": {
-              "depends_on": {
-                "net_income_known": "Yes – the household has a weekly income"
-              },
+              "depends_on": [{ "net_income_known": "Yes – the household has a weekly income" }],
               "header": "",
               "description": "",
               "questions": {
@@ -1854,9 +1852,7 @@
               }
             },
             "monthly_net_income": {
-              "depends_on": {
-                "net_income_known": "Yes – the household has a monthly income"
-              },
+              "depends_on": [{ "net_income_known": "Yes – the household has a monthly income" }],
               "header": "",
               "description": "",
               "questions": {
@@ -1882,9 +1878,7 @@
               }
             },
             "yearly_net_income": {
-              "depends_on": {
-                "net_income_known": "Yes – the household has a yearly income"
-              },
+              "depends_on": [{ "net_income_known": "Yes – the household has a yearly income" }],
               "header": "",
               "description": "",
               "questions": {
@@ -1965,13 +1959,42 @@
                   }
                 }
               },
-              "depends_on": { "needstype": "Supported housing" }
+              "depends_on": [{ "needstype": "Supported housing" }]
+            },
+            "rent_period": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "period": {
+                  "check_answer_label": "Rent Period",
+                  "header": "How often does the household pay rent and other charges?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Weekly for 52 weeks",
+                    "1": "Fortnightly",
+                    "2": "Four-weekly",
+                    "3": "Calendar monthly",
+                    "4": "Weekly for 50 weeks",
+                    "5": "Weekly for 49 weeks",
+                    "6": "Weekly for 48 weeks",
+                    "7": "Weekly for 47 weeks",
+                    "8": "Weekly for 46 weeks",
+                    "9": "Weekly for 53 weeks"
+                  }
+                }
+              },
+              "depends_on" : [{
+                "nocharge": "Yes"
+              },{
+                "nocharge": null
+              }]
             }
           }
         },
         "rent": {
           "label": "Rent",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "rent": {
               "header": "",
@@ -2089,7 +2112,7 @@
       "subsections": {
         "local_authority": {
           "label": "Local authority",
-          "depends_on": { "about_this_log": "completed" },
+          "depends_on": [{ "about_this_log": "completed" }],
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -2627,7 +2650,7 @@
       "subsections": {
         "declaration": {
           "label": "Declaration",
-          "depends_on": {
+          "depends_on": [{
             "about_this_log": "completed",
             "household_characteristics": "completed",
             "household_situation": "completed",
@@ -2637,7 +2660,7 @@
             "income_and_benefits": "completed",
             "rent": "completed",
             "local_authority": "completed"
-          },
+          }],
           "pages": {
             "declaration": {
               "header": "",
