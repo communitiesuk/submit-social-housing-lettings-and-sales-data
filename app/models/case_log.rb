@@ -142,8 +142,14 @@ class CaseLog < ApplicationRecord
   end
 
   def form_name
-    start_year = year || 2021
-    "#{start_year}_#{start_year + 1}"
+    return "2021_2022" unless startdate
+
+    window_end_date = Time.zone.local(startdate.year, 4, 1)
+    if startdate < window_end_date
+      "#{startdate.year - 1}_#{startdate.year}"
+    else
+      "#{startdate.year}_#{startdate.year + 1}"
+    end
   end
 
   def self.editable_fields

@@ -10,9 +10,11 @@ RSpec.describe Form, type: :model do
 
   describe "#form" do
     let(:case_log) { FactoryBot.build(:case_log) }
-    let(:case_log_year_2) { FactoryBot.build(:case_log, year: 2023) }
+    let(:case_log_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2022, 1, 1)) }
+    let(:case_log_year_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2023, 5, 1)) }
     it "has returns the correct form based on the start date" do
       expect(case_log.form_name).to eq("2021_2022")
+      expect(case_log_2.form_name).to eq("2021_2022")
       expect(case_log_year_2.form_name).to eq("2023_2024")
       expect(case_log.form).to be_a(Form)
     end
