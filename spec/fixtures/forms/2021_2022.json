@@ -461,8 +461,8 @@
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Weekly for 52 weeks",
-                      "1": "Fortnightly"
+                      "0": "1. Weekly for 52 weeks",
+                      "1": "2. Every 2 weeks"
                     }
                   },
                   "brent": {

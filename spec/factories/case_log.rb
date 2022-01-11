@@ -72,7 +72,7 @@ FactoryBot.define do
       wchair { "Yes" }
       earnings { 68 }
       benefits { "2. Some" }
-      period { "Fortnightly" }
+      period { "2. Every 2 weeks" }
       brent { 200 }
       scharge { 50 }
       pscharge { 40 }

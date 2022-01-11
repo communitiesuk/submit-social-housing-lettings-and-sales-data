@@ -1971,16 +1971,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Weekly for 52 weeks",
-                    "1": "Fortnightly",
-                    "2": "Four-weekly",
-                    "3": "Calendar monthly",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks",
-                    "9": "Weekly for 53 weeks"
+                    "0": "1. Weekly for 52 weeks",
+                    "1": "2. Every 2 weeks",
+                    "2": "3. Every 4 weeks",
+                    "3": "4. Every calendar month",
+                    "4": "5. Weekly for 50 weeks",
+                    "5": "6. Weekly for 49 weeks",
+                    "6": "7. Weekly for 48 weeks",
+                    "7": "8. Weekly for 47 weeks",
+                    "8": "9. Weekly for 46 weeks"
                   }
                 }
               },
