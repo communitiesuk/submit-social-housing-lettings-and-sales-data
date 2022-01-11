@@ -149,6 +149,8 @@ FactoryBot.define do
       builtype { 1 }
       unitletas { 2 }
       nocharge { "No" }
+      is_carehome { "No" }
+      chcharge { 7 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

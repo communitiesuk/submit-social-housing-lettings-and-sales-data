@@ -1988,35 +1988,37 @@
               },{
                 "nocharge": null
               }]
-            }
-          }
-        },
-        "rent": {
-          "label": "Rent",
-          "depends_on": [{ "about_this_log": "completed" }],
-          "pages": {
+            },
+            "care_home": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "is_carehome": {
+                  "check_answer_label": "Is this accommodation a care home?",
+                  "header": "Is this accommodation a care home?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": "Yes",
+                    "0": "No"
+                  },
+                  "conditional_for": {
+                    "chcharge": ["Yes"]
+                  }
+                },
+                "chcharge": {
+                  "check_answer_label": "How much does the household pay every [PERIOD]?",
+                  "header": "How much does the household pay every [PERIOD]?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "width": 5
+                }
+              }
+            },
             "rent": {
               "header": "",
               "description": "",
               "questions": {
-                "period": {
-                  "check_answer_label": "Rent Period",
-                  "header": "Which period are rent and other charges due?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Weekly for 52 weeks",
-                    "1": "Fortnightly",
-                    "2": "Four-weekly",
-                    "3": "Calendar monthly",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks",
-                    "9": "Weekly for 53 weeks"
-                  }
-                },
                 "brent": {
                   "check_answer_label": "Basic Rent",
                   "header": "What is the basic rent?",
@@ -2076,22 +2078,30 @@
                   "suffix": "every week",
                   "readonly": true,
                   "requires_js": true
-                },
+                }
+              }
+            },
+            "rent_shortfall":{
+              "header": "",
+              "description": "",
+              "questions": {
                 "hbrentshortfall": {
-                  "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
-                  "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider": true,
-                    "2": "Don’t know"
-                  },
-                  "conditional_for": {
-                    "tshortfall": ["Yes"]
-                  }
-                },
+                "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                "hint_text": "",
+                "type": "radio",
+                "answer_options": {
+                  "0": "Yes",
+                  "1": "No"
+                }
+              }
+              },
+              "depends_on": [{"has_benefits": "yes"}]
+            },
+            "rent_shortfall_amount":{
+              "header": "",
+              "description": "",
+              "questions": {
                 "tshortfall": {
                   "check_answer_label": "Outstanding amount",
                   "header": "What do you expect the amount to be?",
@@ -2100,7 +2110,10 @@
                   "min": 0,
                   "step": 1
                 }
-              }
+              },
+              "depends_on": [{"has_benefits": "yes",
+                "hbrentshortfall": "Yes"
+              }]
             }
           }
         }
