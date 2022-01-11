@@ -31,6 +31,7 @@ module Validations::FinancialValidations
     end
 
     if record.weekly_net_income < record.applicable_income_range.hard_min
+      pp record
       record.errors.add :earnings, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
     end
   end
