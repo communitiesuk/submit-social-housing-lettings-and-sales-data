@@ -22,9 +22,17 @@ class Form::Page
   end
 
   def routed_to?(case_log)
+    return true unless depends_on || subsection.depends_on
+
+    subsection.enabled?(case_log) && depends_on_met(case_log)
+  end
+
+private
+
+  def depends_on_met(case_log)
     return true unless depends_on
 
-    subsection.enabled?(case_log) && depends_on.all? do |question, value|
+    depends_on.all? do |question, value|
       !case_log[question].nil? && case_log[question] == value
     end
   end
