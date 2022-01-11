@@ -185,7 +185,7 @@ RSpec.describe Form, type: :model do
     context "armed forces injured validation" do
       it "must be answered if tenant was a regular or reserve in armed forces" do
         expect {
-          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
                           reservist: nil,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
@@ -507,7 +507,7 @@ RSpec.describe Form, type: :model do
     context "armed forces active validation" do
       it "must be answered if ever served in the forces as a regular" do
         expect {
-          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
                           leftreg: nil,
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
@@ -526,7 +526,7 @@ RSpec.describe Form, type: :model do
       # Crossover over tests here as injured must be answered as well for no error
       it "must be answered if ever served in the forces as a regular" do
         expect do
-          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (exc. National Service)",
+          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
                           leftreg: "Yes",
                           reservist: "Yes",
                           owning_organisation: owning_organisation,
