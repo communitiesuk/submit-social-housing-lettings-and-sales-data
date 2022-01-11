@@ -7,7 +7,7 @@ class FormHandler
   end
 
   def get_form(form)
-    @forms[form] ||= Form.new(form)
+    @forms[form]
   end
 
 private

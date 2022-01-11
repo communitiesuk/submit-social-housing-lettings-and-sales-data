@@ -8,7 +8,7 @@ FactoryBot.define do
       tenant_same_property_renewal { "No" }
       needstype { 1 }
       rent_type { 1 }
-      startdate { Time.zone.local(2022, 1, 1) }
+      startdate { Time.zone.local(2022, 5, 1) }
       year { 2022 }
     end
     trait :in_progress do
