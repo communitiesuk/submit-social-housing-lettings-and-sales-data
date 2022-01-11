@@ -247,7 +247,7 @@ RSpec.describe CaseLogsController, type: :request do
           FactoryBot.create(
             :case_log,
             :about_completed,
-            startdate: Time.zone.local(2022, 10, 10), 
+            startdate: Time.zone.local(2022, 10, 10),
             owning_organisation: organisation,
             managing_organisation: organisation,
           )
