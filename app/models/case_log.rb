@@ -36,6 +36,9 @@ class CaseLog < ApplicationRecord
 
   validates_with CaseLogValidator
   before_save :update_status!
+  before_validation :process_postcode_changes!, if: :property_postcode_changed?
+  before_validation :reset_location_fields!, unless: :postcode_known?
+  before_validation :set_derived_fields!
 
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, class_name: "Organisation"
@@ -168,6 +171,10 @@ class CaseLog < ApplicationRecord
     status == "in_progress"
   end
 
+  def postcode_known?
+    postcode_known == "Yes"
+  end
+
   def weekly_net_income
     return unless earnings && incfreq
 
@@ -203,10 +210,9 @@ private
                   else
                     "in_progress"
                   end
-    set_derived_fields
   end
 
-  def set_derived_fields
+  def set_derived_fields!
     if previous_postcode.present?
       self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
       self.ppostc2 = UKPostcode.parse(previous_postcode).incode
@@ -234,24 +240,31 @@ private
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
-    self.is_la_inferred = false if is_la_inferred.nil?
-    if property_postcode.blank? || postcode_known == "No"
-      reset_location_fields
-    else
-      inferred_la = get_inferred_la(property_postcode)
-      self.is_la_inferred = inferred_la.present?
-      self.la = inferred_la if inferred_la.present?
-    end
-    if property_postcode.present?
-      self.postcode = UKPostcode.parse(property_postcode).outcode
-      self.postcod2 = UKPostcode.parse(property_postcode).incode
-    else
-      self.postcode = self.postcod2 = nil
-    end
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
     self.tcharge = brent.to_i + scharge.to_i + pscharge.to_i + supcharg.to_i
+  end
+
+  def process_postcode_changes!
+    return if property_postcode.blank?
+
+    self.postcode_known = "Yes"
+    inferred_la = get_inferred_la(property_postcode)
+    self.is_la_inferred = inferred_la.present?
+    self.la = inferred_la if inferred_la.present?
+    self.postcode = UKPostcode.parse(property_postcode).outcode
+    self.postcod2 = UKPostcode.parse(property_postcode).incode
+  end
+
+  def reset_location_fields!
+    if is_la_inferred == true
+      self.la = nil
+    end
+    self.is_la_inferred = false
+    self.property_postcode = nil
+    self.postcode = nil
+    self.postcod2 = nil
   end
 
   def get_totelder
@@ -279,14 +292,6 @@ private
     if postcode_lookup && postcode_lookup.info.present?
       postcode_lookup.admin_district
     end
-  end
-
-  def reset_location_fields
-    if is_la_inferred == true
-      self.la = nil
-    end
-    self.is_la_inferred = false
-    self.property_postcode = nil
   end
 
   def all_fields_completed?

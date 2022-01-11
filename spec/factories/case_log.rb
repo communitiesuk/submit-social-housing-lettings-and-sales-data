@@ -14,7 +14,7 @@ FactoryBot.define do
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }
-      property_postcode { "P0 5ST" }
+      property_postcode { "PO5 3TE" }
       previous_postcode { "SW2 6HI" }
       age1 { "17" }
     end
