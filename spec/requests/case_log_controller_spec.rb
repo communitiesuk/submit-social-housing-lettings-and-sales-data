@@ -243,16 +243,25 @@ RSpec.describe CaseLogsController, type: :request do
 
       context "tenancy information pages" do
         let(:headers) { { "Accept" => "text/html" } }
+        let!(:case_log_22_23_period) do
+          FactoryBot.create(
+            :case_log,
+            :about_completed,
+            startdate: Time.zone.local(2022, 10, 10), 
+            owning_organisation: organisation,
+            managing_organisation: organisation,
+          )
+        end
 
-        it "has a joint tenancy page that can be visited" do
+        it "has a joint tenancy page that can be visited if the case log is in the 2022-2023 period" do
           sign_in user
-          get "/logs/#{case_log.id}/joint-tenancy", headers: headers, params: { case_log_id: case_log.id }
+          get "/logs/#{case_log_22_23_period.id}/joint-tenancy", headers: headers, params: { case_log_id: case_log_22_23_period.id }
           expect(response).to have_http_status(:success)
         end
 
         it "has a letting in sheltered accomondation page that can be visited" do
           sign_in user
-          get "/logs/#{case_log.id}/letting-in-sheltered-accomodation", headers: headers, params: { case_log_id: case_log.id }
+          get "/logs/#{case_log_22_23_period.id}/letting-in-sheltered-accomodation", headers: headers, params: { case_log_id: case_log_22_23_period.id }
           expect(response).to have_http_status(:success)
         end
       end

@@ -1,5 +1,7 @@
 {
     "form_type": "lettings",
+    "start_year": 2021,
+    "end_year": 2022,
     "sections": {
       "household": {
         "label": "About the household",
@@ -250,24 +252,6 @@
           "tenancy_information": {
             "label": "Tenancy information",
             "pages": {
-              "joint_tenancy": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "jointtenancy": {
-                    "check_answer_label": "Is this a joint tenancy?",
-                    "header": "Is this a joint tenancy?",
-                    "hint_text": "",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": "Yes",
-                      "1": "No",
-                      "2": "Don't know"
-                    }
-                  }
-                },
-                "depends_on": { "conditions" : ["is_22_23_log?(case_log[\"startdate\"])"] }
-              },
               "tenancy_code": {
                 "questions": {
                   "tenancy_code": {

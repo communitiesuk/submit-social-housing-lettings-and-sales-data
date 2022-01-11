@@ -1,5 +1,7 @@
 {
     "form_type": "lettings",
+    "start_year": 2022,
+    "end_year": 2023,
     "sections": {
       "about_this_log": {
         "label": "About this log",
@@ -163,6 +165,174 @@
                     "width": 10
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "tenancy_and_property": {
+        "label": "Tenancy and property information",
+        "subsections": {
+          "tenancy_information": {
+            "label": "Tenancy information",
+            "pages": {
+              "joint_tenancy": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "jointtenancy": {
+                    "check_answer_label": "Is this a joint tenancy?",
+                    "header": "Is this a joint tenancy?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No",
+                      "2": "Don't know"
+                    }
+                  }
+                }
+              },
+              "tenancy_code": {
+                "questions": {
+                  "tenancy_code": {
+                    "check_answer_label": "What is the tenancy code?",
+                    "header": "What is the tenancy code?",
+                    "type": "text",
+                    "width": 10
+                  }
+                }
+              },
+              "letting_in_sheltered_accomodation": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "lettinginshelteredaccomodation": {
+                    "check_answer_label": "Is this letting in sheltered accommodation?",
+                    "header": "Is this letting in sheltered accommodation?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes - sheltered housing",
+                      "1": "Yes - extra care housing",
+                      "2": "No",
+                      "3": "Don't know"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "property_information": {
+            "label": "Property information",
+            "pages": {
+              "property_postcode": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "property_postcode": {
+                    "check_answer_label": "Postcode",
+                    "header": "",
+                    "hint_text": "",
+                    "type": "text",
+                    "width": 5,
+                    "inferred_answers": { "la": { "is_la_inferred": true } },
+                    "inferred_check_answers_value": {
+                      "condition": { "postcode_known": "No" },
+                      "value": "Not known"
+                    }
+                  }
+                }
+              },
+              "do_you_know_the_local_authority": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "la_known": {
+                    "check_answer_label": "Do you know what local authority the property is located in?",
+                    "header": "Do you know what local authority the property is located in?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "No",
+                      "1": "Yes"
+                    }
+                  }
+                },
+                "depends_on": {"is_la_inferred": false}
+              },
+              "property_wheelchair_accessible": {
+                "questions": {
+                  "wchair": {
+                    "check_answer_label": "Wheelchair adaptation",
+                    "header": "Is the property built or adapted to wheelchair-user standards?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "conditional_question": {
+            "label": "Conditional question",
+            "pages": {
+              "conditional_question": {
+                "questions": {
+                  "preg_occ": {
+                    "check_answer_label": "Has the condition been met?",
+                    "header": "Has the condition been met?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                }
+              },
+              "conditional_question_yes_page": {
+                "questions": {
+                  "cbl": {
+                    "check_answer_label": "Has the next condition been met?",
+                    "header": "Has the next condition been met?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                },
+                "depends_on": { "preg_occ": "Yes" }
+              },
+              "conditional_question_no_page": {
+                "questions": {
+                  "conditional_question_no_question": {
+                    "check_answer_label": "Has the condition not been met?",
+                    "header": "Has the next condition not been met?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                },
+                "depends_on": { "preg_occ": "No" }
+              },
+              "conditional_question_no_second_page": {
+                "questions": {
+                  "conditional_question_no_second_question": {
+                    "check_answer_label": "Has the condition not been met again?",
+                    "header": "Has the next condition not been met again?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": "Yes",
+                      "1": "No"
+                    }
+                  }
+                },
+                "depends_on": { "preg_occ": "No", "sex1": "Male" }
               }
             }
           }

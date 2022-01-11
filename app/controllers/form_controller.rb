@@ -35,6 +35,7 @@ class FormController < ApplicationController
         if @case_log
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
+          binding.pry
           if @page.routed_to?(@case_log) && @page.subsection.enabled?(@case_log)
             render "form/page"
           else
