@@ -35,7 +35,7 @@ gem "roo"
 gem "json-schema"
 # Authentication
 # Point at branch until devise is compatible with Turbo, see https://github.com/heartcombo/devise/pull/5340
-gem "devise", github: "ghiculescu/devise", branch: "error-code-422"
+gem "devise", github: "baarkerlounger/devise", branch: "dluhc-fixes"
 # UK postcode parsing and validation
 gem "uk_postcode"
 # Get rich data from postcode lookups. Wraps postcodes.io
