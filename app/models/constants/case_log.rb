@@ -1081,4 +1081,9 @@ module Constants::CaseLog
     "Yes – the household has a yearly income" => 2,
     "Tenant prefers not to say" => 3,
   }.freeze
+
+  HAS_BENEFITS_OPTIONS = ["1. Housing benefit",
+                          "6. Universal Credit with housing element (excluding housing benefit)",
+                          "7. Universal Credit (without housing element)",
+                          "8. Housing benefit and Universal Credit (without housing element)"].freeze
 end

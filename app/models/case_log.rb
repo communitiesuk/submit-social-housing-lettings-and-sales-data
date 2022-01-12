@@ -311,10 +311,7 @@ private
   end
 
   def get_has_benefits
-    return "yes" if ["1. Housing benefit",
-                     "6. Universal Credit with housing element (excluding housing benefit)",
-                     "7. Universal Credit (without housing element)",
-                     "8. Housing benefit and Universal Credit (without housing element)"].include?(hb)
+    return "Yes" if HAS_BENEFITS_OPTIONS.include?(hb)
   end
 
   def all_fields_completed?

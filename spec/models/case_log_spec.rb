@@ -1225,7 +1225,7 @@ RSpec.describe Form, type: :model do
       case_log.reload
 
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["has_benefits"]).to eq("yes")
+      expect(record_from_db["has_benefits"]).to eq("Yes")
     end
   end
 end

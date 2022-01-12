@@ -2611,7 +2611,7 @@
                 }
               }
               },
-              "depends_on": [{ "has_benefits": "yes", "nocharge": "Yes" },{ "has_benefits": "yes", "nocharge": null }]
+              "depends_on": [{ "has_benefits": "Yes", "nocharge": "Yes" },{ "has_benefits": "yes", "nocharge": null }]
             },
             "rent_shortfall_amount":{
               "header": "",
@@ -2626,7 +2626,7 @@
                   "step": 1
                 }
               },
-              "depends_on": [{"has_benefits": "yes",
+              "depends_on": [{"has_benefits": "Yes",
                 "hbrentshortfall": "Yes"
               }]
             }
