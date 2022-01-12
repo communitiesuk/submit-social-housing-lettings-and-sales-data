@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_103143) do
+ActiveRecord::Schema.define(version: 2022_01_12_151048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,11 @@ ActiveRecord::Schema.define(version: 2022_01_07_103143) do
     t.integer "totelder"
     t.integer "totadult"
     t.integer "net_income_known"
+    t.string "has_benefits"
+    t.integer "nocharge"
+    t.integer "is_carehome"
+    t.decimal "chcharge"
+    t.integer "household_charge"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"

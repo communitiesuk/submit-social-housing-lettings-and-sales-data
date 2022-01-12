@@ -1038,6 +1038,8 @@ RSpec.describe Form, type: :model do
         other_hhmemb: 6,
         rent_type: "London living rent",
         needstype: "General needs",
+        hb: "Housing benefit",
+        hbrentshortfall: "No",
       })
     end
 
@@ -1217,6 +1219,13 @@ RSpec.describe Form, type: :model do
         record_from_db = ActiveRecord::Base.connection.execute("select totadult from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totadult"]).to eq(3)
       end
+    end
+
+    it "correctly derives and saves has_benefits" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["has_benefits"]).to eq("Yes")
     end
   end
 end

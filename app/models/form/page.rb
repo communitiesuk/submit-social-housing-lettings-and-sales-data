@@ -32,8 +32,10 @@ private
   def depends_on_met(case_log)
     return true unless depends_on
 
-    depends_on.all? do |question, value|
-      !case_log[question].nil? && case_log[question] == value
+    depends_on.any? do |conditions_set|
+      conditions_set.all? do |question, value|
+        value.nil? ? case_log[question] == value : !case_log[question].nil? && case_log[question] == value
+      end
     end
   end
 end

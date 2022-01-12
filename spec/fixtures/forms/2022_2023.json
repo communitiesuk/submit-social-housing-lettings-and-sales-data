@@ -29,7 +29,7 @@
                 "description": "We cannot accept data about a tenant or buyer unless they’ve seen the DLUHC privacy notice.",
                 "questions": {
                 },
-                "depends_on": { "gdpr_acceptance": "No" }
+                "depends_on": [{ "gdpr_acceptance": "No" }]
               },
               "sale_or_letting": {
                 "header": "",
@@ -46,7 +46,7 @@
                     }
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes" }
+                "depends_on": [{ "gdpr_acceptance": "Yes" }]
               },
               "tenant_same_property_renewal": {
                 "header": "",
@@ -63,7 +63,7 @@
                     }
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+                "depends_on": [{ "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }]
               },
               "startdate": {
                 "header": "",
@@ -76,7 +76,7 @@
                     "type": "date"
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+                "depends_on": [{ "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }]
               },
               "about_this_letting": {
                 "header": "Tell us about this letting",
@@ -115,7 +115,7 @@
                     }
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }
+                "depends_on": [{ "gdpr_acceptance": "Yes", "sale_or_letting": "Letting" }]
               },
               "sale_completion_date": {
                 "header": "",
@@ -128,7 +128,7 @@
                     "type": "date"
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+                "depends_on": [{ "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }]
               },
               "purchaser_code": {
                 "header": "",
@@ -142,7 +142,7 @@
                     "width": 10
                   }
                 },
-                "depends_on": { "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }
+                "depends_on": [{ "gdpr_acceptance": "Yes", "sale_or_letting": "Sale" }]
               }
             }
           }

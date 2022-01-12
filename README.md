@@ -141,7 +141,7 @@ The JSON should follow the structure:
                   }
                 }
               },
-              "depends_on": { "question_key": "answer_value_required_for_this_page_to_be_shown" }
+              "depends_on": [{ "question_key": "answer_value_required_for_this_page_to_be_shown" }]
             }
           }
         }
@@ -171,9 +171,9 @@ Assumptions made by the format:
 
   ```jsonc
   "page_1": { "questions": { "question_1: "answer_options": ["A", "B"] } },
-  "page_2": { "questions": { "question_2: "answer_options": ["C", "D"] }, "depends_on": { "question_1": "A" } },
-  "page_3": { "questions": { "question_3: "answer_options": ["E", "F"] }, "depends_on": { "question_1": "A" } },
-  "page_4": { "questions": { "question_4: "answer_options": ["G", "H"] }, "depends_on": { "question_1": "B" } },
+  "page_2": { "questions": { "question_2: "answer_options": ["C", "D"] }, "depends_on": [{ "question_1": "A" }] },
+  "page_3": { "questions": { "question_3: "answer_options": ["E", "F"] }, "depends_on": [{ "question_1": "A" }] },
+  "page_4": { "questions": { "question_4: "answer_options": ["G", "H"] }, "depends_on": [{ "question_1": "B" }] },
   ```
 
 ## JSON Form Validation against Schema
