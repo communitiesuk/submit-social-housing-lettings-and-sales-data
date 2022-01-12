@@ -145,7 +145,8 @@
     "void_or_renewal_date": "05/05/2020",
     "tenant_same_property_renewal": "Yes",
     "new_build_handover_date": "01/01/2019",
-    "nocharge": "No",
+    "has_benefits": "Yes",
+    "household_charge": "Yes",
     "is_carehome": "Yes",
     "chcharge":  "6"
   }

@@ -148,7 +148,8 @@ FactoryBot.define do
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
-      nocharge { "No" }
+      household_charge { "Yes" }
+      has_benefits { "Yes" }
       is_carehome { "No" }
       chcharge { 7 }
     end
