@@ -34,7 +34,7 @@ private
 
     depends_on.any? do |conditions_set|
       conditions_set.all? do |question, value|
-        !case_log[question].nil? && case_log[question] == value
+        value.nil? ? case_log[question] == value : !case_log[question].nil? && case_log[question] == value
       end
     end
   end

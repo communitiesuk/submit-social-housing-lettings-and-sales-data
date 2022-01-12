@@ -2291,6 +2291,55 @@
                 "period": "9. Weekly for 46 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
+              },
+              {
+                "period": "1. Weekly for 52 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "1. Weekly for 52 weeks",
+                "nocharge": null,
+                "is_carehome": null
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "nocharge": null,
+                "is_carehome": null
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "nocharge": null,
+                "is_carehome": null
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "nocharge": null,
+                "is_carehome": null
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "nocharge": null,
+                "is_carehome": null
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "nocharge": "Yes",
+                "is_carehome": null
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "nocharge": null,
+                "is_carehome": null
               }
               ]
             },
@@ -2367,6 +2416,15 @@
                 "nocharge": null,
                 "period": "2. Every 2 weeks",
                 "is_carehome": "No"
+              },
+              {
+                "nocharge": "Yes",
+                "period": "2. Every 2 weeks",
+                "is_carehome": null
+              },{
+                "nocharge": null,
+                "period": "2. Every 2 weeks",
+                "is_carehome": null
               }]
             },
             "rent_4_weekly": {
@@ -2442,6 +2500,15 @@
                 "nocharge": null,
                 "period": "3. Every 4 weeks",
                 "is_carehome": "No"
+              },
+              {
+                "nocharge": "Yes",
+                "period": "3. Every 4 weeks",
+                "is_carehome": null
+              },{
+                "nocharge": null,
+                "period": "3. Every 4 weeks",
+                "is_carehome": null
               }]
             },
             "rent_monthly": {
@@ -2517,7 +2584,17 @@
                 "nocharge": null,
                 "period":  "4. Every calendar month",
                 "is_carehome": "No"
-              }]
+              },
+              {
+                "nocharge": "Yes",
+                "period":  "4. Every calendar month",
+                "is_carehome": null
+              },{
+                "nocharge": null,
+                "period":  "4. Every calendar month",
+                "is_carehome": null
+              }
+              ]
             },
             "rent_shortfall":{
               "header": "",
