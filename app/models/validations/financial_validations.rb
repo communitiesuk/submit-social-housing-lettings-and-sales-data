@@ -17,7 +17,7 @@ module Validations::FinancialValidations
       is_employed = EMPLOYED_STATUSES.include?(economic_status)
       relationship = record["relat#{n}"]
       is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
-      if is_employed && is_partner_or_main && record.benefits == "1. All"
+      if is_employed && is_partner_or_main && record.benefits == "All"
         record.errors.add :benefits, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       end
     end
@@ -38,12 +38,12 @@ module Validations::FinancialValidations
   def validate_hbrentshortfall(record)
     is_present = record.hbrentshortfall.present?
     is_yes = record.hbrentshortfall == "Yes"
-    hb_donotknow = record.hb == "3. Don't know"
-    hb_none = record.hb == "9. None"
-    hb_uc_no_hb = record.hb == "7. Universal Credit (without housing element)"
-    hb_no_uc = record.hb == "1. Housing benefit"
-    hb_uc_no_he_hb = record.hb == "6. Universal Credit with housing element (excluding housing benefit)"
-    hb_and_uc = record.hb == "8. Housing benefit and Universal Credit (without housing element)"
+    hb_donotknow = record.hb == "Don't know"
+    hb_none = record.hb == "None"
+    hb_uc_no_hb = record.hb == "Universal Credit (without housing element)"
+    hb_no_uc = record.hb == "Housing benefit"
+    hb_uc_no_he_hb = record.hb == "Universal Credit with housing element (excluding housing benefit)"
+    hb_and_uc = record.hb == "Housing benefit and Universal Credit (without housing element)"
 
     conditions = [
       { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown" },

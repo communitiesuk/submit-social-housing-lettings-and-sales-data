@@ -203,22 +203,22 @@ module Constants::CaseLog
   }.freeze
 
   BENEFITS = {
-    "1. All" => 1,
-    "2. Some" => 2,
-    "3. None" => 3,
-    "4. Don’t know" => 4,
+    "All" => 1,
+    "Some" => 2,
+    "None" => 3,
+    "Don’t know" => 4,
   }.freeze
 
   PERIOD = {
-    "1. Weekly for 52 weeks" => 1,
-    "2. Every 2 weeks" => 2,
-    "3. Every 4 weeks" => 3,
-    "4. Every calendar month" => 4,
-    "5. Weekly for 50 weeks" => 5,
-    "6. Weekly for 49 weeks" => 6,
-    "7. Weekly for 48 weeks" => 7,
-    "8. Weekly for 47 weeks" => 8,
-    "9. Weekly for 46 weeks" => 9,
+    "Weekly for 52 weeks" => 1,
+    "Every 2 weeks" => 2,
+    "Every 4 weeks" => 3,
+    "Every calendar month" => 4,
+    "Weekly for 50 weeks" => 5,
+    "Weekly for 49 weeks" => 6,
+    "Weekly for 48 weeks" => 7,
+    "Weekly for 47 weeks" => 8,
+    "Weekly for 46 weeks" => 9,
   }.freeze
 
   LATIME = {
@@ -233,13 +233,13 @@ module Constants::CaseLog
   }.freeze
 
   HOUSING_BENEFIT = {
-    "1. Housing benefit" => 1,
-    "6. Universal Credit with housing element (excluding housing benefit)" => 6,
-    "7. Universal Credit (without housing element)" => 7,
-    "8. Housing benefit and Universal Credit (without housing element)" => 8,
-    "9. None" => 9,
-    "3. Don't know" => 3,
-    "10. Tenant prefers not to say" => 100,
+    "Housing benefit" => 1,
+    "Universal Credit with housing element (excluding housing benefit)" => 6,
+    "Universal Credit (without housing element)" => 7,
+    "Housing benefit and Universal Credit (without housing element)" => 8,
+    "None" => 9,
+    "Don't know" => 3,
+    "Tenant prefers not to say" => 100,
   }.freeze
 
   REASON = {
@@ -1082,8 +1082,8 @@ module Constants::CaseLog
     "Tenant prefers not to say" => 3,
   }.freeze
 
-  HAS_BENEFITS_OPTIONS = ["1. Housing benefit",
-                          "6. Universal Credit with housing element (excluding housing benefit)",
-                          "7. Universal Credit (without housing element)",
-                          "8. Housing benefit and Universal Credit (without housing element)"].freeze
+  HAS_BENEFITS_OPTIONS = ["Housing benefit",
+                          "Universal Credit with housing element (excluding housing benefit)",
+                          "Universal Credit (without housing element)",
+                          "Housing benefit and Universal Credit (without housing element)"].freeze
 end

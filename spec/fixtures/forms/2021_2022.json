@@ -404,8 +404,8 @@
                     "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "1. All",
-                      "1": "2. Some"
+                      "0": "All",
+                      "1": "Some"
                     }
                   }
                 }
@@ -417,11 +417,11 @@
                     "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "1. Housing benefit",
-                      "1": "10. Tenant prefers not to say"
+                      "0": "Housing benefit",
+                      "1": "Tenant prefers not to say"
                     },
                     "conditional_for": {
-                      "conditional_question": ["1. Housing benefit"]
+                      "conditional_question": ["Housing benefit"]
                     }
                   },
                   "conditional_question": {
@@ -461,8 +461,8 @@
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "1. Weekly for 52 weeks",
-                      "1": "2. Every 2 weeks"
+                      "0": "Weekly for 52 weeks",
+                      "1": "Every 2 weeks"
                     }
                   },
                   "brent": {

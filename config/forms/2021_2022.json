@@ -1913,14 +1913,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "1. Housing benefit",
-                    "1": "6. Universal Credit with housing element (excluding housing benefit)",
-                    "2": "8. Housing benefit and Universal Credit (without housing element)",
-                    "3": "7. Universal Credit (without housing element)",
-                    "4": "9. None",
+                    "0": "Housing benefit",
+                    "1": "Universal Credit with housing element (excluding housing benefit)",
+                    "2": "Housing benefit and Universal Credit (without housing element)",
+                    "3": "Universal Credit (without housing element)",
+                    "4": "None",
                     "divider": true,
-                    "5": "3. Don't know",
-                    "6": "10. Tenant prefers not to say"
+                    "5": "Don't know",
+                    "6": "Tenant prefers not to say"
                   }
                 }
               }
@@ -1935,11 +1935,11 @@
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
-                    "0": "1. All",
-                    "1": "2. Some",
-                    "2": "3. None",
+                    "0": "All",
+                    "1": "Some",
+                    "2": "None",
                     "divider": true,
-                    "3": "4. Don’t know"
+                    "3": "Don’t know"
                   }
                 }
               }
@@ -1971,15 +1971,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "1. Weekly for 52 weeks",
-                    "1": "2. Every 2 weeks",
-                    "2": "3. Every 4 weeks",
-                    "3": "4. Every calendar month",
-                    "4": "5. Weekly for 50 weeks",
-                    "5": "6. Weekly for 49 weeks",
-                    "6": "7. Weekly for 48 weeks",
-                    "7": "8. Weekly for 47 weeks",
-                    "8": "9. Weekly for 46 weeks"
+                    "0": "Weekly for 52 weeks",
+                    "1": "Every 2 weeks",
+                    "2": "Every 4 weeks",
+                    "3": "Every calendar month",
+                    "4": "Weekly for 50 weeks",
+                    "5": "Weekly for 49 weeks",
+                    "6": "Weekly for 48 weeks",
+                    "7": "Weekly for 47 weeks",
+                    "8": "Weekly for 46 weeks"
                   }
                 }
               },
@@ -2017,51 +2017,51 @@
                 }
               },
               "depends_on" : [{
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               }
@@ -2095,11 +2095,11 @@
                 }
               },
               "depends_on" : [{
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               }]
@@ -2132,11 +2132,11 @@
                 }
               },
               "depends_on" : [{
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "needstype": "Supported housing",
                 "nocharge": null
               }]
@@ -2169,11 +2169,11 @@
                 }
               },
               "depends_on" : [{
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "needstype": "Supported housing",
                 "nocharge": "Yes"
               },{
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "needstype": "Supported housing",
                 "nocharge": null
               }]
@@ -2244,100 +2244,100 @@
                 }
               },
               "depends_on" : [{
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "nocharge": "Yes",
                 "is_carehome": "No"
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "nocharge": null,
                 "is_carehome": "No"
               },
               {
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "1. Weekly for 52 weeks",
+                "period": "Weekly for 52 weeks",
                 "nocharge": null,
                 "is_carehome": null
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "5. Weekly for 50 weeks",
+                "period": "Weekly for 50 weeks",
                 "nocharge": null,
                 "is_carehome": null
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "6. Weekly for 49 weeks",
+                "period": "Weekly for 49 weeks",
                 "nocharge": null,
                 "is_carehome": null
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "7. Weekly for 48 weeks",
+                "period": "Weekly for 48 weeks",
                 "nocharge": null,
                 "is_carehome": null
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "8. Weekly for 47 weeks",
+                "period": "Weekly for 47 weeks",
                 "nocharge": null,
                 "is_carehome": null
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "nocharge": "Yes",
                 "is_carehome": null
               },{
-                "period": "9. Weekly for 46 weeks",
+                "period": "Weekly for 46 weeks",
                 "nocharge": null,
                 "is_carehome": null
               }
@@ -2410,20 +2410,20 @@
               },
               "depends_on" : [{
                 "nocharge": "Yes",
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "is_carehome": "No"
               },{
                 "nocharge": null,
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "is_carehome": "No"
               },
               {
                 "nocharge": "Yes",
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "is_carehome": null
               },{
                 "nocharge": null,
-                "period": "2. Every 2 weeks",
+                "period": "Every 2 weeks",
                 "is_carehome": null
               }]
             },
@@ -2494,20 +2494,20 @@
               },
               "depends_on" : [{
                 "nocharge": "Yes",
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "is_carehome": "No"
               },{
                 "nocharge": null,
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "is_carehome": "No"
               },
               {
                 "nocharge": "Yes",
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "is_carehome": null
               },{
                 "nocharge": null,
-                "period": "3. Every 4 weeks",
+                "period": "Every 4 weeks",
                 "is_carehome": null
               }]
             },
@@ -2578,20 +2578,20 @@
               },
               "depends_on" : [{
                 "nocharge": "Yes",
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "is_carehome": "No"
               },{
                 "nocharge": null,
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "is_carehome": "No"
               },
               {
                 "nocharge": "Yes",
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "is_carehome": null
               },{
                 "nocharge": null,
-                "period":  "4. Every calendar month",
+                "period":  "Every calendar month",
                 "is_carehome": null
               }
               ]

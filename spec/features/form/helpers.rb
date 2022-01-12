@@ -10,9 +10,9 @@ module Helpers
     fill_in("case-log-earnings-field", with: 18_000)
     choose("case-log-incfreq-yearly-field")
     click_button("Save and continue")
-    choose("case-log-benefits-1-all-field")
+    choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-hb-10-tenant-prefers-not-to-say-field")
+    choose("case-log-hb-tenant-prefers-not-to-say-field")
     click_button("Save and continue")
   end
 
