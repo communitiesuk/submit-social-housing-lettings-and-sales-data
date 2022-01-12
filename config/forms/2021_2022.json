@@ -1096,7 +1096,7 @@
                   "type": "text"
                 }
               },
-              "depends_on": { "starter_tenancy": "No" }
+              "depends_on": { "startertenancy": "No" }
             },
             "tenancy_type_starter_text": {
               "header": "",
@@ -1124,7 +1124,7 @@
                   "type": "text"
                 }
               },
-              "depends_on": { "starter_tenancy": "Yes" }
+              "depends_on": { "startertenancy": "Yes" }
             },
             "fixed_term_tenancy": {
               "header": "",
@@ -1140,7 +1140,7 @@
                   "step": 1
                 }
               },
-              "depends_on": { "tenancy": ["Secure (including flexible)", "Assured Shorthold"] }
+              "depends_on": [{ "tenancy": "Secure (including flexible)" }, {"tenancy": "Assured Shorthold" }]
             },
             "letting_in_sheltered_accomodation": {
               "header": "",
