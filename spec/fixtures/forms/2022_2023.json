@@ -36,13 +36,13 @@
                 "description": "",
                 "questions": {
                   "sale_or_letting": {
-                    "check_answer_label": "Sale or letting",
-                    "header": "Is this a sale or a letting?",
+                    "check_answer_label": "Letting or sale",
+                    "header": "Is this a letting or sale?",
                     "hint_text": "",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Sale",
-                      "1": "Letting"
+                      "1": "Letting",
+                      "0": "Sale"
                     }
                   }
                 },

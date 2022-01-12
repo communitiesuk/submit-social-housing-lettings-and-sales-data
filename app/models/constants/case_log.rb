@@ -35,9 +35,9 @@ module Constants::CaseLog
   }.freeze
 
   ETHNIC = {
-    "White: English/Scottish/Welsh/Northern Irish/British" => 1,
+    "White: English, Welsh, Scottish, Northern Irish or British" => 1,
     "White: Irish" => 2,
-    "White: Gypsy/Irish Traveller" => 18,
+    "White: Gypsy or Irish Traveller" => 18,
     "White: Other" => 3,
     "Mixed: White and Black Caribbean" => 4,
     "Mixed: White and Black African" => 5,
@@ -77,7 +77,7 @@ module Constants::CaseLog
 
   NATIONAL = {
     "UK national resident in UK" => 1,
-    "A current or former reserve in the UK Armed Forces (exc. National Service)" => 100,
+    "A current or former reserve in the UK Armed Forces (excluding National Service)" => 100,
     "UK national returning from residence overseas" => 2,
     "Czech Republic" => 3,
     "Estonia" => 4,
@@ -981,10 +981,10 @@ module Constants::CaseLog
   }.freeze
 
   ARMED_FORCES = {
-    "A current or former regular in the UK Armed Forces (exc. National Service)" => 1,
+    "A current or former regular in the UK Armed Forces (excluding National Service)" => 1,
     "No" => 2,
     "Tenant prefers not to say" => 3,
-    "A current or former reserve in the UK Armed Forces (exc. National Service)" => 4,
+    "A current or former reserve in the UK Armed Forces (excluding National Service)" => 4,
     "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years" => 5,
   }.freeze
 

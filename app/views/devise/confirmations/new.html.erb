@@ -6,6 +6,7 @@
   <%= f.govuk_email_field :email,
     label: { text: "Email address" },
     autocomplete: "email",
+    spellcheck: "false",
     value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
   %>
 
