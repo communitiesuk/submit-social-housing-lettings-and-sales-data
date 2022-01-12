@@ -63,5 +63,17 @@ RSpec.describe Form::Page, type: :model do
         expect(subject.routed_to?(case_log)).to be true
       end
     end
+
+    context "when the page's subsection has routing conditions" do
+      let(:section_id) { "submission" }
+      let(:subsection_id) { "declaration" }
+      let(:page_id) { "declaration" }
+      let(:completed_case_log) { FactoryBot.build(:case_log, :completed, incfreq: "Weekly") }
+
+      it "evaluates the sections dependencies" do
+        expect(subject.routed_to?(case_log)).to be false
+        expect(subject.routed_to?(completed_case_log)).to be true
+      end
+    end
   end
 end

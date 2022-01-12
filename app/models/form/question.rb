@@ -80,7 +80,7 @@ class Form::Question
     # Special case as No is a valid answer but doesn't let you progress and use the service
     return false if id == "gdpr_acceptance" && case_log[id] == "No"
 
-    case_log[id].present?
+    case_log[id].present? || !case_log.respond_to?(id.to_sym)
   end
 
 private
