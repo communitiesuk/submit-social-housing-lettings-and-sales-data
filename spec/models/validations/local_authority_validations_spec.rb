@@ -1,7 +1,7 @@
 require "rails_helper"
 require_relative "../../request_helper"
 
-RSpec.describe Form, type: :model do
+RSpec.describe CaseLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:managing_organisation) { owning_organisation }
 
@@ -28,7 +28,7 @@ RSpec.describe Validations::LocalAuthorityValidations do
   let(:record) { FactoryBot.create(:case_log) }
 
   describe "#validate_previous_accommodation_postcode" do
-    it "does not create an error if the record previous_postcode is missing" do
+    it "does not add an error if the record previous_postcode is missing" do
       record.previous_postcode = nil
       subject.validate_previous_accommodation_postcode(record)
       expect(record.errors).to be_empty
