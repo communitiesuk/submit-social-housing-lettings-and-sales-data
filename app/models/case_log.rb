@@ -240,12 +240,16 @@ private
     case net_income_known
     when "Yes – the household has a weekly income"
       self.incfreq = "Weekly"
+      self.incref = nil
     when "Yes – the household has a monthly income"
       self.incfreq = "Monthly"
+      self.incref = nil
     when "Yes – the household has a yearly income"
       self.incfreq = "Yearly"
+      self.incref = nil
     when "Tenant prefers not to say"
       self.incref = 1
+      self.incfreq = nil
     end
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]

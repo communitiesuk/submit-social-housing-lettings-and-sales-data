@@ -1989,7 +1989,7 @@
                 "nocharge": null
               }]
             },
-            "care_home": {
+            "care_home_weekly": {
               "header": "",
               "description": "",
               "questions": {
@@ -2007,22 +2007,185 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every [PERIOD]?",
-                  "header": "How much does the household pay every [PERIOD]?",
+                  "check_answer_label": "How much does the household pay every week?",
+                  "header": "How much does the household pay every week?",
                   "hint_text": "",
                   "type": "numeric",
-                  "width": 5
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": "every week"
                 }
+              },
+              "depends_on" : [{
+                "period": "1. Weekly for 52 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "1. Weekly for 52 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
               }
+              ]
             },
-            "rent": {
+            "care_home_bi_weekly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "is_carehome": {
+                  "check_answer_label": "Is this accommodation a care home?",
+                  "header": "Is this accommodation a care home?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": "Yes",
+                    "0": "No"
+                  },
+                  "conditional_for": {
+                    "chcharge": ["Yes"]
+                  }
+                },
+                "chcharge": {
+                  "check_answer_label": "How much does the household pay every 2 weeks?",
+                  "header": "How much does the household pay every 2 weeks?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks"
+                }
+              },
+              "depends_on" : [{
+                "period": "2. Every 2 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "2. Every 2 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              }]
+            },
+            "care_home_4_weekly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "is_carehome": {
+                  "check_answer_label": "Is this accommodation a care home?",
+                  "header": "Is this accommodation a care home?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": "Yes",
+                    "0": "No"
+                  },
+                  "conditional_for": {
+                    "chcharge": ["Yes"]
+                  }
+                },
+                "chcharge": {
+                  "check_answer_label": "How much does the household pay every 4 weeks?",
+                  "header": "How much does the household pay every 4 weeks?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks"
+                }
+              },
+              "depends_on" : [{
+                "period": "3. Every 4 weeks",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period": "3. Every 4 weeks",
+                "needstype": "Supported housing",
+                "nocharge": null
+              }]
+            },
+            "care_home_monthly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "is_carehome": {
+                  "check_answer_label": "Is this accommodation a care home?",
+                  "header": "Is this accommodation a care home?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": "Yes",
+                    "0": "No"
+                  },
+                  "conditional_for": {
+                    "chcharge": ["Yes"]
+                  }
+                },
+                "chcharge": {
+                  "check_answer_label": "How much does the household pay every month?",
+                  "header": "How much does the household pay every month?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": "month"
+                }
+              },
+              "depends_on" : [{
+                "period":  "4. Every calendar month",
+                "needstype": "Supported housing",
+                "nocharge": "Yes"
+              },{
+                "period":  "4. Every calendar month",
+                "needstype": "Supported housing",
+                "nocharge": null
+              }]
+            },
+            "rent_weekly": {
               "header": "",
               "description": "",
               "questions": {
                 "brent": {
                   "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent?",
-                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "header": "What is the basic rent every week?",
+                  "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2034,7 +2197,7 @@
                 "scharge": {
                   "check_answer_label": "Service Charge",
                   "header": "What is the service charge?",
-                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2046,7 +2209,7 @@
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
+                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2058,7 +2221,7 @@
                 "supcharg": {
                   "check_answer_label": "Support Charge",
                   "header": "What is the support charge?",
-                  "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
+                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2069,8 +2232,8 @@
                 },
                 "tcharge": {
                   "check_answer_label": "Total Charge",
-                  "header": "Total charge?",
-                  "hint_text": "This is the total of rent and all charges",
+                  "header": "Total charge",
+                  "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2079,7 +2242,282 @@
                   "readonly": true,
                   "requires_js": true
                 }
+              },
+              "depends_on" : [{
+                "period": "1. Weekly for 52 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "1. Weekly for 52 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "5. Weekly for 50 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "6. Weekly for 49 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "7. Weekly for 48 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "8. Weekly for 47 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "nocharge": "Yes",
+                "is_carehome": "No"
+              },{
+                "period": "9. Weekly for 46 weeks",
+                "nocharge": null,
+                "is_carehome": "No"
               }
+              ]
+            },
+            "rent_bi_weekly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "brent": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent every 2 weeks?",
+                  "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "scharge": {
+                  "check_answer_label": "Service Charge",
+                  "header": "What is the service charge?",
+                  "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "pscharge": {
+                  "check_answer_label": "Personal Service Charge",
+                  "header": "What is the personal service charge?",
+                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "supcharg": {
+                  "check_answer_label": "Support Charge",
+                  "header": "What is the support charge?",
+                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "tcharge": {
+                  "check_answer_label": "Total Charge",
+                  "header": "Total charge",
+                  "hint_text": "This is the total for rent and all charges.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 2 weeks",
+                  "readonly": true,
+                  "requires_js": true
+                }
+              },
+              "depends_on" : [{
+                "nocharge": "Yes",
+                "period": "2. Every 2 weeks",
+                "is_carehome": "No"
+              },{
+                "nocharge": null,
+                "period": "2. Every 2 weeks",
+                "is_carehome": "No"
+              }]
+            },
+            "rent_4_weekly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "brent": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent every 4 weeks?",
+                  "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "scharge": {
+                  "check_answer_label": "Service Charge",
+                  "header": "What is the service charge?",
+                  "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "pscharge": {
+                  "check_answer_label": "Personal Service Charge",
+                  "header": "What is the personal service charge?",
+                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "supcharg": {
+                  "check_answer_label": "Support Charge",
+                  "header": "What is the support charge?",
+                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "tcharge": {
+                  "check_answer_label": "Total Charge",
+                  "header": "Total charge",
+                  "hint_text": "This is the total for rent and all charges.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every 4 weeks",
+                  "readonly": true,
+                  "requires_js": true
+                }
+              },
+              "depends_on" : [{
+                "nocharge": "Yes",
+                "period": "3. Every 4 weeks",
+                "is_carehome": "No"
+              },{
+                "nocharge": null,
+                "period": "3. Every 4 weeks",
+                "is_carehome": "No"
+              }]
+            },
+            "rent_monthly": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "brent": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent every month?",
+                  "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every month",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "scharge": {
+                  "check_answer_label": "Service Charge",
+                  "header": "What is the service charge?",
+                  "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every month",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "pscharge": {
+                  "check_answer_label": "Personal Service Charge",
+                  "header": "What is the personal service charge?",
+                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every month",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "supcharg": {
+                  "check_answer_label": "Support Charge",
+                  "header": "What is the support charge?",
+                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every month",
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "tcharge": {
+                  "check_answer_label": "Total Charge",
+                  "header": "Total charge",
+                  "hint_text": "This is the total for rent and all charges.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "prefix": "£",
+                  "suffix": "every month",
+                  "readonly": true,
+                  "requires_js": true
+                }
+              },
+              "depends_on" : [{
+                "nocharge": "Yes",
+                "period":  "4. Every calendar month",
+                "is_carehome": "No"
+              },{
+                "nocharge": null,
+                "period":  "4. Every calendar month",
+                "is_carehome": "No"
+              }]
             },
             "rent_shortfall":{
               "header": "",
@@ -2096,7 +2534,7 @@
                 }
               }
               },
-              "depends_on": [{"has_benefits": "yes"}]
+              "depends_on": [{ "has_benefits": "yes", "nocharge": "Yes" },{ "has_benefits": "yes", "nocharge": null }]
             },
             "rent_shortfall_amount":{
               "header": "",
@@ -2105,7 +2543,7 @@
                 "tshortfall": {
                   "check_answer_label": "Outstanding amount",
                   "header": "What do you expect the amount to be?",
-                  "hint_text": "If the amount is unknown you can estimate",
+                  "hint_text": "Give an estimated amount if you don't know the exact figure.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1
