@@ -48,6 +48,8 @@ class CaseLog < ApplicationRecord
   scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
 
   enum status: { "not_started" => 0, "in_progress" => 1, "completed" => 2 }
+  enum letting_in_sheltered_accomodation: { "Yes - sheltered housing" => 0, "Yes - extra care housing" => 1, "No" => 2, "Don't know" => 3 }
+
   enum ethnic: ETHNIC
   enum national: NATIONAL, _suffix: true
   enum ecstat1: ECSTAT, _suffix: true

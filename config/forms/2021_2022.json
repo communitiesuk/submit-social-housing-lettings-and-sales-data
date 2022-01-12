@@ -1146,7 +1146,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "lettinginshelteredaccomodation": {
+                "letting_in_sheltered_accomodation": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
