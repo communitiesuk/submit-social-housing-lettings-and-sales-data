@@ -72,36 +72,6 @@ RSpec.describe Form, type: :model do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    it "validates number of relets is a number" do
-      expect {
-        CaseLog.create!(
-          offered: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates number of relets is under 20" do
-      expect {
-        CaseLog.create!(
-          offered: 21,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates number of relets is over 0" do
-      expect {
-        CaseLog.create!(
-          offered: 0,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
     context "reasonable preference is yes" do
       it "validates a reason must be selected" do
         expect {
