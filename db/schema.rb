@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 2022_01_11_140400) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: 6
-    t.datetime "remember_created_at", precision: 6
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -124,7 +124,7 @@ ActiveRecord::Schema.define(version: 2022_01_11_140400) do
     t.integer "rp_medwel"
     t.integer "rp_hardship"
     t.integer "rp_dontknow"
-    t.datetime "discarded_at", precision: 6
+    t.datetime "discarded_at"
     t.string "tenancyother"
     t.integer "override_net_income_validation"
     t.string "gdpr_acceptance"
@@ -149,20 +149,20 @@ ActiveRecord::Schema.define(version: 2022_01_11_140400) do
     t.string "ppostc1"
     t.string "ppostc2"
     t.integer "property_relet"
-    t.datetime "mrcdate", precision: 6
+    t.datetime "mrcdate"
     t.integer "mrcday"
     t.integer "mrcmonth"
     t.integer "mrcyear"
     t.integer "other_hhmemb"
     t.integer "incref"
-    t.datetime "sale_completion_date", precision: 6
-    t.datetime "startdate", precision: 6
+    t.datetime "sale_completion_date"
+    t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
     t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "property_void_date", precision: 6
+    t.datetime "property_void_date"
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -206,15 +206,15 @@ ActiveRecord::Schema.define(version: 2022_01_11_140400) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: 6
-    t.datetime "remember_created_at", precision: 6
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: 6
-    t.datetime "last_sign_in_at", precision: 6
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
