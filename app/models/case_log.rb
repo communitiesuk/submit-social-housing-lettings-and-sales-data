@@ -254,6 +254,7 @@ private
     self.totelder = get_totelder
     self.totadult = get_totadult
     self.tcharge = brent.to_i + scharge.to_i + pscharge.to_i + supcharg.to_i
+    self.has_benefits = get_has_benefits
   end
 
   def process_postcode_changes!
@@ -275,7 +276,6 @@ private
     self.property_postcode = nil
     self.postcode = nil
     self.postcod2 = nil
-    self.has_benefits = get_has_benefits
   end
 
   def get_totelder
