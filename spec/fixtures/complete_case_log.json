@@ -148,6 +148,7 @@
     "has_benefits": "Yes",
     "household_charge": "Yes",
     "is_carehome": "Yes",
-    "chcharge":  "6"
+    "chcharge":  "6",
+    "letting_in_sheltered_accomodation": "No"
   }
 }

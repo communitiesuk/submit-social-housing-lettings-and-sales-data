@@ -152,6 +152,7 @@ FactoryBot.define do
       has_benefits { "Yes" }
       is_carehome { "No" }
       chcharge { 7 }
+      letting_in_sheltered_accomodation { 2 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
