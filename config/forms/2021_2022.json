@@ -1096,7 +1096,7 @@
                   "type": "text"
                 }
               },
-              "depends_on": { "startertenancy": "No" }
+              "depends_on": [{ "startertenancy": "No" }]
             },
             "tenancy_type_starter_text": {
               "header": "",
@@ -1124,7 +1124,7 @@
                   "type": "text"
                 }
               },
-              "depends_on": { "startertenancy": "Yes" }
+              "depends_on": [{ "startertenancy": "Yes" }]
             },
             "fixed_term_tenancy": {
               "header": "",
@@ -1159,7 +1159,7 @@
                   }
                 }
               },
-              "depends_on": { "needstype": "Supported housing" }
+              "depends_on": [{ "needstype": "Supported housing" }]
             }
           }
         },
