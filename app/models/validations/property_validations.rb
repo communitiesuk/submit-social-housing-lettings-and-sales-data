@@ -7,13 +7,13 @@ module Validations::PropertyValidations
 
   def validate_property_number_of_times_relet(record)
     if record.offered && !/^[1-9]$|^0[1-9]$|^1[0-9]$|^20$/.match?(record.offered.to_s)
-      record.errors.add :offered, "Property number of times relet must be between 0 and 20"
+      record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
     end
   end
 
   def validate_la(record)
     if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && (record.rent_type == "London Affordable rent" || record.rent_type == "London living rent")
-      record.errors.add :la, "Local authority has to be in London"
+      record.errors.add :la, I18n.t("validations.property.la.london_rent")
     end
   end
 
@@ -22,24 +22,24 @@ module Validations::PropertyValidations
                                "First let of leased property"].freeze
   def validate_rsnvac(record)
     if !record.first_time_property_let_as_social_housing? && FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)
-      record.errors.add :rsnvac, "Reason for vacancy cannot be first let if unit has been previously let as social housing"
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_not_social")
     end
 
     if record.first_time_property_let_as_social_housing? && record.rsnvac.present? && !FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)
-      record.errors.add :rsnvac, "Reason for vacancy must be first let if unit has been previously let as social housing"
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_social")
     end
   end
 
   def validate_unitletas(record)
     if record.first_time_property_let_as_social_housing? && record.unitletas.present?
-      record.errors.add :unitletas, "Property cannot have a previous let type if it is being let as social housing for the first time"
+      record.errors.add :unitletas, I18n.t("validations.property.rsnvac.previous_let_social")
     end
   end
 
   def validate_property_postcode(record)
     postcode = record.property_postcode
     if record.postcode_known == "Yes" && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
-      error_message = "Enter a postcode in the correct format, for example AA1 1AA"
+      error_message = I18n.t("validations.postcode")
       record.errors.add :property_postcode, error_message
     end
   end

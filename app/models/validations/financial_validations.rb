@@ -3,10 +3,10 @@ module Validations::FinancialValidations
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
     if record.hbrentshortfall == "Yes" && record.tshortfall.blank?
-      record.errors.add :tshortfall, "You must answer the oustanding amout question if you have outstanding rent or charges."
+      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.outstanding_amount_required")
     end
     if record.hbrentshortfall == "No" && record.tshortfall.present?
-      record.errors.add :tshortfall, "You must not answer the oustanding amout question if you don't have outstanding rent or charges."
+      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
     end
   end
 
@@ -18,7 +18,7 @@ module Validations::FinancialValidations
       relationship = record["relat#{n}"]
       is_partner_or_main = relationship == "Partner" || (relationship.nil? && economic_status.present?)
       if is_employed && is_partner_or_main && record.benefits == "All"
-        record.errors.add :benefits, "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+        record.errors.add :benefits, I18n.t("validations.financial.benefits.part_or_full_time")
       end
     end
   end
@@ -27,11 +27,11 @@ module Validations::FinancialValidations
     return unless record.ecstat1 && record.weekly_net_income
 
     if record.weekly_net_income > record.applicable_income_range.hard_max
-      record.errors.add :earnings, "Net income cannot be greater than #{record.applicable_income_range.hard_max} given the tenant's working situation"
+      record.errors.add :earnings, I18n.t("validations.financial.earnings.under_hard_max", hard_max: record.applicable_income_range.hard_max)
     end
 
     if record.weekly_net_income < record.applicable_income_range.hard_min
-      record.errors.add :earnings, "Net income cannot be less than #{record.applicable_income_range.hard_min} given the tenant's working situation"
+      record.errors.add :earnings, I18n.t("validations.financial.earnings.over_hard_min", hard_min: record.applicable_income_range.hard_min)
     end
   end
 
@@ -46,8 +46,8 @@ module Validations::FinancialValidations
     hb_and_uc = record.hb == "Housing benefit and Universal Credit (without housing element)"
 
     conditions = [
-      { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown" },
-      { condition: (hb_no_uc || hb_uc_no_he_hb || hb_and_uc) && !is_present, error: "Must be completed if Universal credit and/or Housing Benefit received" },
+      { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits") },
+      { condition: (hb_no_uc || hb_uc_no_he_hb || hb_and_uc) && !is_present, error: I18n.t("validations.financial.hbrentshortfall.amount_required") },
     ]
 
     conditions.each { |condition| condition[:condition] ? (record.errors.add :hbrentshortfall, condition[:error]) : nil }

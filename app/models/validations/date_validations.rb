@@ -2,29 +2,29 @@ module Validations::DateValidations
   def validate_property_major_repairs(record)
     date_valid?("mrcdate", record)
     if record["startdate"].present? && record["mrcdate"].present? && record["startdate"] < record["mrcdate"]
-      record.errors.add :mrcdate, "Major repairs date must be before the tenancy start date"
+      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.before_tenancy_start")
     end
 
     if is_rsnvac_first_let?(record) && record["mrcdate"].present?
-      record.errors.add :mrcdate, "Major repairs date must not be completed if the tenancy is first let"
+      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.not_first_let")
     end
 
     if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 730
-      record.errors.add :mrcdate, "The major repairs completion date should be no more than 730 days before the tenancy start date"
+      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.730_days_before_tenancy_start")
     end
   end
 
   def validate_property_void_date(record)
     if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date - record["property_void_date"].to_date > 3650
-      record.errors.add :property_void_date, "The void date must be no more than 10 years before the tenancy start date"
+      record.errors.add :property_void_date, I18n.t("validations.property.void_date.ten_years_before_tenancy_start")
     end
 
     if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date < record["property_void_date"].to_date
-      record.errors.add :property_void_date, "Void date must be before the tenancy start date"
+      record.errors.add :property_void_date, I18n.t("validations.property.void_date.before_tenancy_start")
     end
 
     if record["property_void_date"].present? && record["mrcdate"].present? && record["mrcdate"].to_date < record["property_void_date"].to_date
-      record.errors.add :property_void_date, "Void date must be after the major repair date if a major repair date has been provided"
+      record.errors.add :property_void_date, I18n.t("validations.property.void_date.after_mrcdate")
     end
   end
 
@@ -40,7 +40,7 @@ private
 
   def date_valid?(question, record)
     if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
-      record.errors.add question, "Please enter a valid date"
+      record.errors.add question, I18n.t("validations.date")
     end
   end
 
