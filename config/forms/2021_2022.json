@@ -1105,7 +1105,7 @@
                 "tenancy": {
                   "check_answer_label": "Type of main tenancy after the starter period has ended?",
                   "header": "What is the type of tenancy after the starter period has ended?",
-                  "hint_text": "This is also known as an 'introductory period'.",
+                  "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
                     "0": "Assured",
