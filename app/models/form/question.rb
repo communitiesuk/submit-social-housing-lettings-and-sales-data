@@ -33,6 +33,11 @@ class Form::Question
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
+  def get_answer_label(case_log)
+    answer = answer_label(case_log)
+    answer.present? ? [prefix, answer_label(case_log), suffix].join("") : ""
+  end
+
   def answer_label(case_log)
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id].strftime("%d %b %Y") if type == "date"

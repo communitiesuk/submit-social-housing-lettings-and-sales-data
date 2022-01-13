@@ -1872,7 +1872,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week"
+                  "suffix": " every week"
                 }
               },
               "soft_validations": {
@@ -1899,7 +1899,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month"
+                  "suffix": " every month"
                 }
               },
               "soft_validations": {
@@ -1926,7 +1926,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every year"
+                  "suffix": " every year"
                 }
               },
               "soft_validations": {
@@ -2049,7 +2049,7 @@
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week"
+                  "suffix": " every week"
                 }
               },
               "depends_on" : [{
@@ -2227,7 +2227,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2240,7 +2240,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2253,7 +2253,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2266,7 +2266,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2279,7 +2279,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2397,7 +2397,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2410,7 +2410,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2423,7 +2423,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2436,7 +2436,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2449,7 +2449,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2486,7 +2486,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2499,7 +2499,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2512,7 +2512,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2525,7 +2525,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2538,7 +2538,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2575,7 +2575,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2588,7 +2588,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2601,7 +2601,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2614,7 +2614,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge"
                 },
@@ -2627,7 +2627,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "readonly": true,
                   "requires_js": true
                 }
