@@ -8,10 +8,13 @@
       </h2>
       <ul class="app-task-list__items">
         <% section.subsections.map do |subsection| %>
-          <li class="app-task-list__item" id=<%= subsection.id %>>
-            <% subsection_status = subsection.status(@case_log) %>
-            <%= subsection_link(subsection, @case_log) %>
-            <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
+          <% subsection_status = subsection.status(@case_log) %>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <%= subsection_link(subsection, @case_log) %>
+            </span>
+            <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>"
+                    id=<%= subsection.id.dasherize %>>
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
           </li>

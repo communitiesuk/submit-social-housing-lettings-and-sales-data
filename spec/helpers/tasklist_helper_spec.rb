@@ -67,8 +67,8 @@ RSpec.describe TasklistHelper do
         allow(subsection).to receive(:status).with(case_log).and_return(:cannot_start_yet)
       end
 
-      it "returns a # link" do
-        expect(subsection_link(subsection, case_log)).to match(/#/)
+      it "returns the label instead of a link" do
+        expect(subsection_link(subsection, case_log)).to match(subsection.label)
       end
     end
   end
