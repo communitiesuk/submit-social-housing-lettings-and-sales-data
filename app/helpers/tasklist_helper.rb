@@ -37,7 +37,7 @@ module TasklistHelper
   def subsection_link(subsection, case_log)
     if subsection.status(case_log) != :cannot_start_yet
       next_page_path = first_page_or_check_answers(subsection, case_log).to_s
-      govuk_link_to(subsection.label, next_page_path.dasherize, class: "task-name")
+      govuk_link_to(subsection.label, next_page_path.dasherize, aria: { describedby: subsection.id.dasherize })
     else
       subsection.label
     end
