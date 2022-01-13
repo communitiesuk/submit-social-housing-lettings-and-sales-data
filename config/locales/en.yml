@@ -33,3 +33,87 @@ en:
   service_name: "Submit social housing lettings and sales data (CORE)"
   organisation:
     updated: "Organisation details updated"
+
+  validations:
+    date: "Please enter a valid date"
+    postcode: "Enter a postcode in the correct format, for example AA1 1AA"
+
+    property:
+      mrcdate:
+        before_tenancy_start: "Major repairs date must be before the tenancy start date"
+        not_first_let: "Major repairs date must not be completed if the tenancy is first let"
+        730_days_before_tenancy_start: "The major repairs completion date should be no more than 730 days before the tenancy start date"
+      void_date:
+        ten_years_before_tenancy_start: "The void date must be no more than 10 years before the tenancy start date"
+        before_tenancy_start: "Void date must be before the tenancy start date"
+        after_mrcdate: "Void date must be after the major repair date if a major repair date has been provided"
+      offered:
+        relet_number: "Property number of times relet must be between 0 and 20"
+      la:
+        london_rent: "Local authority has to be in London"
+      rsnvac:
+        first_let_not_social: "Reason for vacancy cannot be first let if unit has been previously let as social housing"
+        first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
+        previous_let_social: "Property cannot have a previous let type if it is being let as social housing for the first time"
+
+    financial:
+      tshortfall:
+        outstanding_amount_required: "You must answer the outstanding amount question if you have outstanding rent or charges."
+        outstanding_amount_not_required: "You must not answer the outstanding amount question if you don't have outstanding rent or charges."
+      hbrentshortfall:
+        outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
+        amount_required: "Must be completed if Universal credit and/or Housing Benefit received"
+      benefits:
+        part_or_full_time: "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+      earnings:
+        under_hard_max: "Net income cannot be greater than %{hard_max} given the tenant's working situation"
+        over_hard_min: "Net income cannot be less than %{hard_min} given the tenant's working situation"
+
+    household:
+      reasonpref:
+        not_homeless: "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
+      reasonable_preference_reason:
+        reason_required: "If reasonable preference is \"Yes\", a reason must be given"
+        reason_not_required: "If reasonable preference is \"No\", no reasons should be given"
+      underoccupation_benefitcap:
+        dont_know_required: "must be don’t know if tenant’s main reason for leaving is don’t know"
+      reservist:
+        inquiry_required: "You must answer the armed forces injury question if the tenant has served in the armed forces"
+        inquiry_not_required: "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
+      leftreg:
+        question_required: "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
+        question_not_required: "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
+      preg_occ:
+        no_female: "You must answer no as there are no female tenants aged 16-50 in the property"
+      age:
+        over_16: "Tenant age must be an integer between 16 and 120"
+        must_be_valid: "Tenant age must be an integer between 0 and 120"
+        retired_male: "Male tenant who is retired must be 65 or over"
+        retired_female: "Female tenant who is retired must be 60 or over"
+      ecstat:
+        retired_over_70: "Tenant %{person_num} must be retired if over 70"
+        child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
+        student_16_19: "If age is between 16 and 19 - tenant %{person_num} must be a full time student or prefer not to say."
+      relat:
+        child_under_16: "Tenant %{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
+        one_partner: "Number of partners cannot be greater than 1"
+      housingneeds_a:
+        one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
+      unittype_gn:
+        one_bedroom_bedsit: "A bedsit can only have one bedroom"
+        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
+        one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
+
+    tenancy:
+      length:
+        fixed_term_not_required: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term"
+        shorthold: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years"
+        secure: "Secure (including flexible) should be between 2 and 99 years or not specified"
+
+  soft_validations:
+    net_income:
+      hint_text: "This is based on the tenant's work situation: %{ecstat1}"
+      in_soft_min_range:
+        message: "Net income is lower than expected based on the main tenant's working situation. Are you sure this is correct?"
+      in_soft_max_range:
+        message: "Net income is higher than expected based on the main tenant's working situation. Are you sure this is correct?"

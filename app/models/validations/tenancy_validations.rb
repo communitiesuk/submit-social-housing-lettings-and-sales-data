@@ -7,9 +7,9 @@ module Validations::TenancyValidations
     is_secure = record.tenancy == "Secure (including flexible)"
     is_ast = record.tenancy == "Assured Shorthold"
     conditions = [
-      { condition: !(is_secure || is_ast) && is_present, error: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term" },
-      { condition: is_ast && !is_in_range,  error: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years" },
-      { condition: is_secure && (!is_in_range && is_present), error: "Secure (including flexible) should be between 2 and 99 years or not specified" },
+      { condition: !(is_secure || is_ast) && is_present, error: I18n.t("validations.tenancy.length.fixed_term_not_required") },
+      { condition: is_ast && !is_in_range,  error: I18n.t("validations.tenancy.length.shorthold") },
+      { condition: is_secure && (!is_in_range && is_present), error: I18n.t("validations.tenancy.length.secure") },
     ]
 
     conditions.each { |condition| condition[:condition] ? (record.errors.add :tenancylength, condition[:error]) : nil }
