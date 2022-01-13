@@ -78,8 +78,8 @@ en:
       underoccupation_benefitcap:
         dont_know_required: "must be don’t know if tenant’s main reason for leaving is don’t know"
       reservist:
-        inquiry_required: "You must answer the armed forces injury question if the tenant has served in the armed forces"
-        inquiry_not_required: "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
+        injury_required: "You must answer the armed forces injury question if the tenant has served in the armed forces"
+        injury_not_required: "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
       leftreg:
         question_required: "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
         question_not_required: "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"

@@ -27,11 +27,11 @@ module Validations::HouseholdValidations
 
   def validate_armed_forces_injured(record)
     if (record.armedforces == "A current or former regular in the UK Armed Forces (excluding National Service)" || record.armedforces == "A current or former reserve in the UK Armed Forces (excluding National Service)") && record.reservist.blank?
-      record.errors.add :reservist, I18n.t("validations.household.reservist.inquiry_required")
+      record.errors.add :reservist, I18n.t("validations.household.reservist.injury_required")
     end
 
     if (record.armedforces == "No" || record.armedforces == "Prefer not to say") && record.reservist.present?
-      record.errors.add :reservist, I18n.t("validations.household.reservist.inquiry_not_required")
+      record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
   end
 
