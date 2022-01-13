@@ -206,15 +206,14 @@ module Constants::CaseLog
 
   PERIOD = {
     "Weekly for 52 weeks" => 1,
-    "Fortnightly" => 2,
-    "Four-weekly" => 3,
-    "Calendar monthly" => 4,
+    "Every 2 weeks" => 2,
+    "Every 4 weeks" => 3,
+    "Every calendar month" => 4,
     "Weekly for 50 weeks" => 5,
     "Weekly for 49 weeks" => 6,
     "Weekly for 48 weeks" => 7,
     "Weekly for 47 weeks" => 8,
     "Weekly for 46 weeks" => 9,
-    "Weekly for 53 weeks" => 10,
   }.freeze
 
   LATIME = {
@@ -229,13 +228,13 @@ module Constants::CaseLog
   }.freeze
 
   HOUSING_BENEFIT = {
-    "Housing Benefit, but not Universal Credit" => 1,
-    "Universal Credit with housing element, but not Housing Benefit" => 6,
-    "Universal Credit without housing element and no Housing Benefit" => 7,
-    "Universal Credit and Housing Benefit" => 8,
-    "Not Housing Benefit or Universal Credit" => 9,
-    "Don’t know" => 3,
-    "Prefer not to say" => 100,
+    "Housing benefit" => 1,
+    "Universal Credit with housing element (excluding housing benefit)" => 6,
+    "Universal Credit (without housing element)" => 7,
+    "Housing benefit and Universal Credit (without housing element)" => 8,
+    "None" => 9,
+    "Don't know" => 3,
+    "Tenant prefers not to say" => 100,
   }.freeze
 
   REASON = {
@@ -1077,4 +1076,9 @@ module Constants::CaseLog
     "Yes – the household has a yearly income" => 2,
     "Tenant prefers not to say" => 3,
   }.freeze
+
+  HAS_BENEFITS_OPTIONS = ["Housing benefit",
+                          "Universal Credit with housing element (excluding housing benefit)",
+                          "Universal Credit (without housing element)",
+                          "Housing benefit and Universal Credit (without housing element)"].freeze
 end

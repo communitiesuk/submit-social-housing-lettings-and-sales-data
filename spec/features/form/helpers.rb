@@ -12,7 +12,7 @@ module Helpers
     click_button("Save and continue")
     choose("case-log-benefits-all-field")
     click_button("Save and continue")
-    choose("case-log-hb-prefer-not-to-say-field")
+    choose("case-log-hb-tenant-prefers-not-to-say-field")
     click_button("Save and continue")
   end
 

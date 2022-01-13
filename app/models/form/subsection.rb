@@ -18,8 +18,10 @@ class Form::Subsection
   def enabled?(case_log)
     return true unless depends_on
 
-    depends_on.all? do |subsection_id, dependent_status|
-      form.get_subsection(subsection_id).status(case_log) == dependent_status.to_sym
+    depends_on.any? do |conditions_set|
+      conditions_set.all? do |subsection_id, dependent_status|
+        form.get_subsection(subsection_id).status(case_log) == dependent_status.to_sym
+      end
     end
   end
 

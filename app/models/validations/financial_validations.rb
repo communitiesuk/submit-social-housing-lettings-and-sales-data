@@ -38,15 +38,15 @@ module Validations::FinancialValidations
   def validate_hbrentshortfall(record)
     is_present = record.hbrentshortfall.present?
     is_yes = record.hbrentshortfall == "Yes"
-    hb_donotknow = record.hb == "Don’t know"
-    hb_no_hb_or_uc = record.hb == "Not Housing Benefit or Universal Credit"
-    hb_uc_no_hb = record.hb == "Universal Credit without housing element and no Housing Benefit"
-    hb_no_uc = record.hb == "Housing Benefit, but not Universal Credit"
-    hb_uc_no_he_hb = record.hb == "Universal Credit with housing element, but not Housing Benefit"
-    hb_and_uc = record.hb == "Universal Credit and Housing Benefit"
+    hb_donotknow = record.hb == "Don't know"
+    hb_none = record.hb == "None"
+    hb_uc_no_hb = record.hb == "Universal Credit (without housing element)"
+    hb_no_uc = record.hb == "Housing benefit"
+    hb_uc_no_he_hb = record.hb == "Universal Credit with housing element (excluding housing benefit)"
+    hb_and_uc = record.hb == "Housing benefit and Universal Credit (without housing element)"
 
     conditions = [
-      { condition: is_yes && (hb_donotknow || hb_no_hb_or_uc || hb_uc_no_hb), error: I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits") },
+      { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits") },
       { condition: (hb_no_uc || hb_uc_no_he_hb || hb_and_uc) && !is_present, error: I18n.t("validations.financial.hbrentshortfall.amount_required") },
     ]
 

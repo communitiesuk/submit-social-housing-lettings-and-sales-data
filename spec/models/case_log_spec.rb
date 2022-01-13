@@ -1038,6 +1038,8 @@ RSpec.describe Form, type: :model do
         other_hhmemb: 6,
         rent_type: "London living rent",
         needstype: "General needs",
+        hb: "Housing benefit",
+        hbrentshortfall: "No",
       })
     end
 
@@ -1216,6 +1218,30 @@ RSpec.describe Form, type: :model do
       it "correctly derives and saves totadult" do
         record_from_db = ActiveRecord::Base.connection.execute("select totadult from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totadult"]).to eq(3)
+      end
+    end
+
+    it "correctly derives and saves has_benefits" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["has_benefits"]).to eq("Yes")
+    end
+  end
+
+  describe "resetting invalidated fields" do
+    context "when a question that has already been answered, no longer has met dependencies" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+
+      it "clears the answer" do
+        expect { case_log.update!(preg_occ: nil) }.to change { case_log.cbl }.from("Yes").to(nil)
+      end
+    end
+
+    context "two pages with the same question key, only one's dependency is met" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+      it "does not clear the answer" do
+        expect(case_log.cbl).to eq("Yes")
       end
     end
   end

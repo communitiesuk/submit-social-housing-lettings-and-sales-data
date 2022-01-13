@@ -72,7 +72,7 @@ FactoryBot.define do
       wchair { "Yes" }
       earnings { 68 }
       benefits { "Some" }
-      period { "Fortnightly" }
+      period { "Every 2 weeks" }
       brent { 200 }
       scharge { 50 }
       pscharge { 40 }
@@ -148,6 +148,10 @@ FactoryBot.define do
       armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
+      household_charge { "Yes" }
+      has_benefits { "Yes" }
+      is_carehome { "No" }
+      chcharge { 7 }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
