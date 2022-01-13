@@ -1155,6 +1155,7 @@
                     "0": "Yes - sheltered housing",
                     "1": "Yes - extra care housing",
                     "2": "No",
+                    "divider": true,
                     "3": "Don't know"
                   }
                 }
