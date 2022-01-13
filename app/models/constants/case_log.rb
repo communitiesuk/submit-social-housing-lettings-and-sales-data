@@ -1092,6 +1092,6 @@ module Constants::CaseLog
     "Yes - sheltered housing" => 1,
     "Yes - extra care housing" => 2,
     "No" => 3,
-    "Don't know" => 4,
+    "Don’t know" => 4,
   }.freeze
 end
