@@ -31,4 +31,22 @@ RSpec.describe Form, type: :model do
       expect(form.next_page_redirect_path(previous_conditional_page, case_log)).to eq("case_log_conditional_question_no_page_path")
     end
   end
+
+  describe "invalidated_page_questions" do
+    context "dependencies not met" do
+      let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question declaration] }
+      it "returns an array of question keys whose pages conditions are not met" do
+        expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
+      end
+    end
+
+    context "two pages with the same question, only one has dependencies met" do
+      let(:expected_invalid) { %w[la_known conditional_question_no_second_question dependent_question declaration] }
+
+      it "returns an array of question keys whose pages conditions are not met" do
+        case_log["preg_occ"] = "No"
+        expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
+      end
+    end
+  end
 end
