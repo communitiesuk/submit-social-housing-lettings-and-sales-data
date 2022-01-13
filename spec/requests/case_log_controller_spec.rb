@@ -72,7 +72,7 @@ RSpec.describe CaseLogsController, type: :request do
       it "validates case log parameters" do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to match_array([["offered", ["Number of times property has been offered for relet must be a number between 0 and 20"]], ["age1", ["Tenant age must be an integer between 16 and 120"]]])
+        expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.household.age.must_be_valid", lower_bound: 16)]]])
       end
     end
 

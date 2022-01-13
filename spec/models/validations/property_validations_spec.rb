@@ -26,7 +26,7 @@ RSpec.describe Validations::PropertyValidations do
   let(:subject) { subject_class.new }
   let(:subject_class) { Class.new { include Validations::PropertyValidations } }
   let(:record) { FactoryBot.create(:case_log) }
-  let(:expected_error) { "Number of times property has been offered for relet must be a number between 0 and 20" }
+  let(:expected_error) { I18n.t("validations.property.offered.relet_number") }
 
   describe "#validate_property_number_of_times_relet" do
     it "does not add an error if the record offered is missing" do
