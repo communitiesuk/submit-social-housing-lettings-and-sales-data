@@ -1080,10 +1080,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Secure (including flexible)",
-                    "1": "Assured",
-                    "2": "Assured Shorthold",
-                    "3": "Licence agreement (almshouses only)",
+                    "0": "Assured",
+                    "1": "Assured Shorthold",
+                    "2": "Licence agreement (almshouses only)",
+                    "3": "Secure (including flexible)",
                     "4": "Other"
                   },
                   "conditional_for": {
@@ -1108,10 +1108,10 @@
                   "hint_text": "This is also known as an 'introductory period'.",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Secure (including flexible)",
-                    "1": "Assured",
-                    "2": "Assured Shorthold",
-                    "3": "Licence agreement (almshouses only)",
+                    "0": "Assured",
+                    "1": "Assured Shorthold",
+                    "2": "Licence agreement (almshouses only)",
+                    "3": "Secure (including flexible)",
                     "4": "Other"
                   },
                   "conditional_for": {
@@ -2003,15 +2003,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Weekly for 52 weeks",
+                    "0": "Calendar monthly",
                     "1": "Fortnightly",
                     "2": "Four-weekly",
-                    "3": "Calendar monthly",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks",
+                    "3": "Weekly for 46 weeks",
+                    "4": "Weekly for 47 weeks",
+                    "5": "Weekly for 48 weeks",
+                    "6": "Weekly for 49 weeks",
+                    "7": "Weekly for 50 weeks",
+                    "8": "Weekly for 52 weeks",
                     "9": "Weekly for 53 weeks"
                   }
                 }
