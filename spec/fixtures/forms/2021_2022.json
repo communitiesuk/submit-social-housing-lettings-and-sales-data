@@ -325,7 +325,7 @@
               },
               "conditional_question_no_page": {
                 "questions": {
-                  "conditional_question_no_question": {
+                  "cbl": {
                     "check_answer_label": "Has the condition not been met?",
                     "header": "Has the next condition not been met?",
                     "type": "radio",

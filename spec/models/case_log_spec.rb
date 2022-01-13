@@ -1228,4 +1228,21 @@ RSpec.describe Form, type: :model do
       expect(record_from_db["has_benefits"]).to eq("Yes")
     end
   end
+
+  describe "resetting invalidated fields" do
+    context "when a question that has already been answered, no longer has met dependencies" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+
+      it "clears the answer" do
+        expect { case_log.update!(preg_occ: nil) }.to change { case_log.cbl }.from("Yes").to(nil)
+      end
+    end
+
+    context "two pages with the same question key, only one's dependency is met" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+      it "does not clear the answer" do
+        expect(case_log.cbl).to eq("Yes")
+      end
+    end
+  end
 end

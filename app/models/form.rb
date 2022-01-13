@@ -59,11 +59,13 @@ class Form
   end
 
   def invalidated_questions(case_log)
-    (invalidated_page_questions(case_log) + invalidated_conditional_questions(case_log)).uniq
+    invalidated_page_questions(case_log) + invalidated_conditional_questions(case_log)
   end
 
   def invalidated_page_questions(case_log)
-    invalidated_pages(case_log).flat_map(&:questions) || []
+    pages_that_are_routed_to = pages.select { |p| p.routed_to?(case_log) }
+    enabled_question_ids = pages_that_are_routed_to.flat_map(&:questions).map(&:id) || []
+    invalidated_pages(case_log).flat_map(&:questions).reject { |q| enabled_question_ids.include?(q.id) } || []
   end
 
   def invalidated_conditional_questions(case_log)
