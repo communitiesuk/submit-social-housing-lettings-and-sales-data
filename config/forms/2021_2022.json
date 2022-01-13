@@ -1070,36 +1070,20 @@
                 }
               }
             },
-            "fixed_term_tenancy": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancylength": {
-                  "check_answer_label": "If the main tenancy is a fixed term tenancy, please provide the length of the fixed term (to the nearest year) excluding any starter/introductory period",
-                  "header": "If fixed-term, what is the length of the fixed-term tenancy after any starter period?",
-                  "hint_text": "To the nearest year",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1,
-                  "width": 4
-                }
-              }
-            },
             "tenancy_type": {
               "header": "",
               "description": "",
               "questions": {
                 "tenancy": {
-                  "check_answer_label": "Type of main tenancy (after any starter/introductory period)",
-                  "header": "What is the type of tenancy after the starter period has ended?",
+                  "check_answer_label": "Type of main tenancy",
+                  "header": "What is the type of tenancy?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Secure (including flexible)",
-                    "1": "Assured",
-                    "2": "Assured Shorthold",
-                    "3": "Licence agreement (almshouses only)",
+                    "0": "Assured",
+                    "1": "Assured Shorthold",
+                    "2": "Licence agreement (almshouses only)",
+                    "3": "Secure (including flexible)",
                     "4": "Other"
                   },
                   "conditional_for": {
@@ -1111,23 +1095,72 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": [{ "startertenancy": "No" }]
             },
-            "letting_provider": {
+            "tenancy_type_starter_text": {
               "header": "",
               "description": "",
               "questions": {
-                "landlord": {
-                  "check_answer_label": "Provider",
-                  "header": "Who is the letting provider?",
+                "tenancy": {
+                  "check_answer_label": "Type of main tenancy after the starter period has ended?",
+                  "header": "What is the type of tenancy after the starter period has ended?",
+                  "hint_text": "This is also known as an ‘introductory period’.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Assured",
+                    "1": "Assured Shorthold",
+                    "2": "Licence agreement (almshouses only)",
+                    "3": "Secure (including flexible)",
+                    "4": "Other"
+                  },
+                  "conditional_for": {
+                    "tenancyother": ["Other"]
+                  }
+                },
+                "tenancyother": {
+                  "header": "Please state the tenancy type",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [{ "startertenancy": "Yes" }]
+            },
+            "fixed_term_tenancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenancylength": {
+                  "check_answer_label": "Length of fixed-term tenancy",
+                  "header": "What is the length of the fixed-term tenancy to the nearest year?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": [{ "tenancy": "Secure (including flexible)" }, {"tenancy": "Assured Shorthold" }]
+            },
+            "letting_in_sheltered_accomodation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "letting_in_sheltered_accomodation": {
+                  "check_answer_label": "Is this letting in sheltered accommodation?",
+                  "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "This landlord",
-                    "1": "Another registered provider - includes housing association or local authority"
+                    "0": "Yes - sheltered housing",
+                    "1": "Yes - extra care housing",
+                    "2": "No",
+                    "divider": true,
+                    "3": "Don’t know"
                   }
                 }
-              }
+              },
+              "depends_on": [{ "needstype": "Supported housing" }]
             }
           }
         },
@@ -1962,6 +1995,41 @@
               "depends_on": [{ "needstype": "Supported housing" }]
             },
             "rent_period": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "period": {
+                  "check_answer_label": "Rent Period",
+                  "header": "How often does the household pay rent and other charges?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Calendar monthly",
+                    "1": "Fortnightly",
+                    "2": "Four-weekly",
+                    "3": "Weekly for 46 weeks",
+                    "4": "Weekly for 47 weeks",
+                    "5": "Weekly for 48 weeks",
+                    "6": "Weekly for 49 weeks",
+                    "7": "Weekly for 50 weeks",
+                    "8": "Weekly for 52 weeks",
+                    "9": "Weekly for 53 weeks"
+                  }
+                }
+              },
+              "depends_on" : [{
+                "nocharge": "Yes"
+              },{
+                "nocharge": null
+              }]
+            }
+          }
+        },
+        "rent": {
+          "label": "Rent",
+          "depends_on": [{ "about_this_log": "completed" }],
+          "pages": {
+            "rent": {
               "header": "",
               "description": "",
               "questions": {
