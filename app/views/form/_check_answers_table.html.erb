@@ -3,7 +3,9 @@
     <%= question.check_answer_label.to_s.present? ?  question.check_answer_label.to_s : question.header.to_s %>
   <dt>
   <dd class="govuk-summary-list__value">
-    <%= question.answer_label(@case_log) %> <br/>
+    <%= question.prefix.present? ? " " + question.prefix  : ""%>
+    <%= question.answer_label(@case_log) %>
+    <%= question.suffix.present? ? " " + question.suffix : "" %><br/>
     <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
      <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span><br/>
     <% end %>

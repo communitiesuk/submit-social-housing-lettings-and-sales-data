@@ -1843,7 +1843,7 @@
               "description": "",
               "questions": {
                 "net_income_known": {
-                  "check_answer_label": "Income known",
+                  "check_answer_label": "Household’s combined income after tax",
                   "header": "Do you know the household’s combined income after tax?",
                   "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
@@ -1864,7 +1864,7 @@
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every week?",
                   "hint_text": "",
                   "type": "numeric",
