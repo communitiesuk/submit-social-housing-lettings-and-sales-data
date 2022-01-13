@@ -1081,4 +1081,17 @@ module Constants::CaseLog
                           "Universal Credit with housing element (excluding housing benefit)",
                           "Universal Credit (without housing element)",
                           "Housing benefit and Universal Credit (without housing element)"].freeze
+
+  STATUS = { 
+    "not_started" => 0, 
+    "in_progress" => 1, 
+    "completed" => 2 
+  }.freeze
+
+  SHELTERED_ACCOMODATION = {
+    "Yes - sheltered housing" => 0, 
+    "Yes - extra care housing" => 1, 
+    "No" => 2, 
+    "Don't know" => 3 
+  }.freeze
 end
