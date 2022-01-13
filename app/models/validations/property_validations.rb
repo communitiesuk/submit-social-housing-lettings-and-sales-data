@@ -6,7 +6,19 @@ module Validations::PropertyValidations
   POSTCODE_REGEXP = /^(([A-Z]{1,2}[0-9][A-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][A-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[A-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/i
 
   def validate_property_number_of_times_relet(record)
-    if record.offered && !/^[1-9]$|^0[1-9]$|^1[0-9]$|^20$/.match?(record.offered.to_s)
+    return unless record.offered
+
+    # Since offered is an integer type ActiveRecord will automatically cast that for us
+    # but it's type casting is a little lax so "random" becomes 0. To make sure that doesn't pass
+    # validation and then get silently dropped we attempt strict type casting on the original value
+    # as part of our validation.
+    begin
+      Integer(record.offered_before_type_cast)
+    rescue ArgumentError
+      record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
+    end
+
+    if record.offered.negative? || record.offered > 20
       record.errors.add :offered, I18n.t("validations.property.offered.relet_number")
     end
   end

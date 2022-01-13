@@ -63,11 +63,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_person_1_age(record)
-    return unless record.age1
-
-    if !record.age1.is_a?(Integer) || record.age1 < 16 || record.age1 > 120
-      record.errors.add :age1, I18n.t("validations.household.age.over_16")
-    end
+    validate_person_age(record, 1, 16)
   end
 
   def validate_person_1_economic(record)
@@ -110,12 +106,18 @@ private
     end
   end
 
-  def validate_person_age(record, person_num)
+  def validate_person_age(record, person_num, lower_bound = 1)
     age = record.public_send("age#{person_num}")
     return unless age
 
-    if !age.is_a?(Integer) || age < 1 || age > 120
-      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid")
+    begin
+      Integer(record.public_send("age#{person_num}_before_type_cast"))
+    rescue ArgumentError
+      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound: lower_bound)
+    end
+
+    if age < lower_bound || age > 120
+      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound: lower_bound)
     end
   end
 

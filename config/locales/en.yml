@@ -86,8 +86,7 @@ en:
       preg_occ:
         no_female: "You must answer no as there are no female tenants aged 16-50 in the property"
       age:
-        over_16: "Tenant age must be an integer between 16 and 120"
-        must_be_valid: "Tenant age must be an integer between 0 and 120"
+        must_be_valid: "Tenant age must be an integer between %{lower_bound} and 120"
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
       ecstat:
