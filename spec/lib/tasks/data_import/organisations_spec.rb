@@ -13,6 +13,6 @@ describe "rake data_import:organisations", type: :task do
 
   it "creates an organisation from the given XML file" do
     expect { task.invoke(fixture_path) }.to change(Organisation, :count).by(1)
-    expect(Organisation.last.old_visible_id).to eq(1034)
+    expect(Organisation.find_by(old_visible_id: 1034).name).to eq("HA Ltd")
   end
 end
