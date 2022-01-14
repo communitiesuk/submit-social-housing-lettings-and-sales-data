@@ -1944,7 +1944,7 @@
               "description": "",
               "questions": {
                 "hb": {
-                  "check_answer_label": "Universal Credit & Housing Benefit",
+                  "check_answer_label": "Housing-related benefits received",
                   "header": "Is the household likely to be receiving any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1966,7 +1966,7 @@
               "description": "",
               "questions": {
                 "benefits": {
-                  "check_answer_label": "Benefits as a proportion of income",
+                  "check_answer_label": "Household income from Universal credit, state pension or benefits",
                   "header": "How much of the household's income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
@@ -1985,7 +1985,7 @@
               "description": "",
               "questions": {
                 "household_charge": {
-                  "check_answer_label": "Does the household pay rent or other charges for the accommodation?",
+                  "check_answer_label": "Does the household pay rent or charges?",
                   "header": "Does the household pay rent or other charges for the accommodation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2002,7 +2002,7 @@
               "description": "",
               "questions": {
                 "period": {
-                  "check_answer_label": "Rent Period",
+                  "check_answer_label": "Frequency of household rent and charges",
                   "header": "How often does the household pay rent and other charges?",
                   "hint_text": "",
                   "type": "radio",
@@ -2030,7 +2030,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2043,7 +2043,7 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every week?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every week?",
                   "hint_text": "",
                   "type": "numeric",
@@ -2108,7 +2108,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2121,7 +2121,7 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every 2 weeks?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every 2 weeks?",
                   "hint_text": "",
                   "type": "numeric",
@@ -2145,7 +2145,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2158,7 +2158,7 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every 4 weeks?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every 4 weeks?",
                   "hint_text": "",
                   "type": "numeric",
@@ -2182,7 +2182,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2195,7 +2195,7 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every month?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every month?",
                   "hint_text": "",
                   "type": "numeric",
@@ -2229,7 +2229,8 @@
                   "prefix": "£",
                   "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2242,7 +2243,8 @@
                   "prefix": "£",
                   "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2255,7 +2257,8 @@
                   "prefix": "£",
                   "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2268,7 +2271,8 @@
                   "prefix": "£",
                   "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
                   "check_answer_label": "Total Charge",
@@ -2399,7 +2403,8 @@
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2412,7 +2417,8 @@
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2425,7 +2431,8 @@
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2438,7 +2445,8 @@
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
                   "check_answer_label": "Total Charge",
@@ -2488,7 +2496,8 @@
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2501,7 +2510,8 @@
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2514,7 +2524,8 @@
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2527,7 +2538,8 @@
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
                   "check_answer_label": "Total Charge",
@@ -2577,7 +2589,8 @@
                   "prefix": "£",
                   "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2590,7 +2603,8 @@
                   "prefix": "£",
                   "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2603,7 +2617,8 @@
                   "prefix": "£",
                   "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2616,7 +2631,8 @@
                   "prefix": "£",
                   "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
                   "check_answer_label": "Total Charge",
