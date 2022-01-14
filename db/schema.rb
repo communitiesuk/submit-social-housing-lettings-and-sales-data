@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_12_151048) do
+ActiveRecord::Schema.define(version: 2022_01_14_105351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -191,7 +191,7 @@ ActiveRecord::Schema.define(version: 2022_01_12_151048) do
 
   create_table "organisations", force: :cascade do |t|
     t.string "name"
-    t.integer "phone"
+    t.string "phone"
     t.integer "providertype"
     t.string "address_line1"
     t.string "address_line2"
@@ -202,6 +202,22 @@ ActiveRecord::Schema.define(version: 2022_01_12_151048) do
     t.string "managing_agents"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active"
+    t.integer "old_association_type"
+    t.string "software_supplier_id"
+    t.string "housing_management_system"
+    t.boolean "choice_based_lettings"
+    t.boolean "common_housing_register"
+    t.boolean "choice_allocation_policy"
+    t.integer "cbl_proportion_percentage"
+    t.boolean "enter_affordable_logs"
+    t.boolean "owns_affordable_logs"
+    t.string "housing_registration_no"
+    t.integer "general_needs_units"
+    t.integer "supported_housing_units"
+    t.integer "unspecified_units"
+    t.string "old_org_id"
+    t.integer "old_visible_id"
   end
 
   create_table "users", force: :cascade do |t|
