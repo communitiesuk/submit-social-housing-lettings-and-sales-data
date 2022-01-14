@@ -17,7 +17,7 @@ RSpec.describe CaseLog do
           owning_organisation: owning_organisation,
           managing_organisation: managing_organisation,
         )
-      }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
+      }.to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
     end
   end
 end
@@ -50,7 +50,7 @@ RSpec.describe Validations::LocalAuthorityValidations do
       record.previous_postcode = "invalid"
       subject.validate_previous_accommodation_postcode(record)
       expect(record.errors).to_not be_empty
-      expect(record.errors["previous_postcode"]).to include(match /Enter a postcode in the correct format/)
+      expect(record.errors["previous_postcode"]).to include(match I18n.t("validations.postcode"))
     end
   end
 end

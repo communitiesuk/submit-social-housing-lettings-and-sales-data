@@ -668,7 +668,7 @@ RSpec.describe Form, type: :model do
         it "updates soft errors" do
           expect(case_log.has_no_unresolved_soft_errors?).to be false
           expect(case_log.soft_errors["override_net_income_validation"].message)
-            .to match(/Net income is higher than expected/)
+            .to match(I18n.t("soft_validations.net_income.in_soft_max_range.message"))
         end
       end
 
@@ -683,7 +683,7 @@ RSpec.describe Form, type: :model do
         it "updates soft errors" do
           expect(case_log.has_no_unresolved_soft_errors?).to be false
           expect(case_log.soft_errors["override_net_income_validation"].message)
-            .to match(/Net income is lower than expected/)
+            .to match(I18n.t("soft_validations.net_income.in_soft_min_range.message"))
         end
       end
     end
@@ -1090,12 +1090,12 @@ RSpec.describe Form, type: :model do
 
       it "errors if the property postcode is emptied" do
         expect { address_case_log.update!({ property_postcode: "" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
       it "errors if the property postcode is not valid" do
         expect { address_case_log.update!({ property_postcode: "invalid_postcode" }) }
-          .to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
       it "correctly resets all fields if property postcode not known" do
