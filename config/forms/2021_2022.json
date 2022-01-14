@@ -1870,6 +1870,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": "1",
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week"
                 }
@@ -1896,6 +1897,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": "1",
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month"
                 }
@@ -1922,6 +1924,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": "1",
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every year"
                 }
@@ -1995,41 +1998,6 @@
               "depends_on": [{ "needstype": "Supported housing" }]
             },
             "rent_period": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "period": {
-                  "check_answer_label": "Rent Period",
-                  "header": "How often does the household pay rent and other charges?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Calendar monthly",
-                    "1": "Fortnightly",
-                    "2": "Four-weekly",
-                    "3": "Weekly for 46 weeks",
-                    "4": "Weekly for 47 weeks",
-                    "5": "Weekly for 48 weeks",
-                    "6": "Weekly for 49 weeks",
-                    "7": "Weekly for 50 weeks",
-                    "8": "Weekly for 52 weeks",
-                    "9": "Weekly for 53 weeks"
-                  }
-                }
-              },
-              "depends_on" : [{
-                "nocharge": "Yes"
-              },{
-                "nocharge": null
-              }]
-            }
-          }
-        },
-        "rent": {
-          "label": "Rent",
-          "depends_on": [{ "about_this_log": "completed" }],
-          "pages": {
-            "rent": {
               "header": "",
               "description": "",
               "questions": {
@@ -2257,6 +2225,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2269,6 +2238,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2281,6 +2251,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2293,6 +2264,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2305,6 +2277,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every week",
                   "readonly": true,
@@ -2422,6 +2395,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2434,6 +2408,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2446,6 +2421,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2458,6 +2434,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2470,6 +2447,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 2 weeks",
                   "readonly": true,
@@ -2506,6 +2484,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2518,6 +2497,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2530,6 +2510,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2542,6 +2523,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2554,6 +2536,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every 4 weeks",
                   "readonly": true,
@@ -2590,6 +2573,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2602,6 +2586,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2614,6 +2599,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2626,6 +2612,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
@@ -2638,6 +2625,7 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
+                  "width": 5,
                   "prefix": "£",
                   "suffix": "every month",
                   "readonly": true,
@@ -2691,7 +2679,8 @@
                   "hint_text": "Give an estimated amount if you don't know the exact figure.",
                   "type": "numeric",
                   "min": 0,
-                  "step": 1
+                  "step": 1,
+                  "width": 5
                 }
               },
               "depends_on": [{"has_benefits": "Yes",
