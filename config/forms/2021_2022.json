@@ -2680,7 +2680,9 @@
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
-                  "width": 5
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": "every month"
                 }
               },
               "depends_on": [{"has_benefits": "Yes",

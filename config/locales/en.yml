@@ -58,11 +58,9 @@ en:
 
     financial:
       tshortfall:
-        outstanding_amount_required: "You must answer the outstanding amount question if you have outstanding rent or charges."
         outstanding_amount_not_required: "You must not answer the outstanding amount question if you don't have outstanding rent or charges."
       hbrentshortfall:
         outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
-        amount_required: "Must be completed if Universal credit and/or Housing Benefit received"
       benefits:
         part_or_full_time: "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       earnings:

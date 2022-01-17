@@ -355,15 +355,6 @@ RSpec.describe Form, type: :model do
     end
 
     context "outstanding rent or charges validation" do
-      it "must be anwered if answered yes to outstanding rent or charges" do
-        expect {
-          CaseLog.create!(hbrentshortfall: "Yes",
-                          tshortfall: nil,
-                          owning_organisation: owning_organisation,
-                          managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       it "must be not be anwered if answered no to outstanding rent or charges" do
         expect {
           CaseLog.create!(hbrentshortfall: "No",

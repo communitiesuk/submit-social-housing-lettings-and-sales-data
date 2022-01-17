@@ -2,9 +2,6 @@ module Validations::FinancialValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)
-    if record.hbrentshortfall == "Yes" && record.tshortfall.blank?
-      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.outstanding_amount_required")
-    end
     if record.hbrentshortfall == "No" && record.tshortfall.present?
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.outstanding_amount_not_required")
     end
@@ -35,21 +32,14 @@ module Validations::FinancialValidations
     end
   end
 
-  def validate_hbrentshortfall(record)
-    is_present = record.hbrentshortfall.present?
+  def validate_tshortfall(record)
     is_yes = record.hbrentshortfall == "Yes"
     hb_donotknow = record.hb == "Don't know"
     hb_none = record.hb == "None"
     hb_uc_no_hb = record.hb == "Universal Credit (without housing element)"
-    hb_no_uc = record.hb == "Housing benefit"
-    hb_uc_no_he_hb = record.hb == "Universal Credit with housing element (excluding housing benefit)"
-    hb_and_uc = record.hb == "Housing benefit and Universal Credit (without housing element)"
 
-    conditions = [
-      { condition: is_yes && (hb_donotknow || hb_none || hb_uc_no_hb), error: I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits") },
-      { condition: (hb_no_uc || hb_uc_no_he_hb || hb_and_uc) && !is_present, error: I18n.t("validations.financial.hbrentshortfall.amount_required") },
-    ]
-
-    conditions.each { |condition| condition[:condition] ? (record.errors.add :hbrentshortfall, condition[:error]) : nil }
+    if is_yes && (hb_donotknow || hb_none || hb_uc_no_hb)
+      record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
+    end
   end
 end
