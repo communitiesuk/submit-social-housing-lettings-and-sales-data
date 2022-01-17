@@ -70,9 +70,9 @@ class Form::Question
 
   def update_answer_link_name(case_log)
     if type == "checkbox"
-      answer_options.keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
+      answer_options.keys.any? { |key| case_log[key] == "Yes" } ? "Change <span class=\"govuk-visually-hidden\">#{check_answer_label.to_s.downcase}</span>".html_safe : "Answer"
     else
-      case_log[id].blank? ? "Answer" : "Change"
+      case_log[id].blank? ? "Answer" : "Change <span class=\"govuk-visually-hidden\">#{check_answer_label.to_s.downcase}</span>".html_safe
     end
   end
 
