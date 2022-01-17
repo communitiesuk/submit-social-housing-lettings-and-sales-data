@@ -59,9 +59,11 @@ RSpec.describe "Form Check Answers Page" do
       expect(page).to have_content("Non-binary")
     end
 
+    # Regex explanation: match the string "Answer" but not if it's follow by "the missing questions"
+    # This way only the links in the table will get picked up
     it "should have an answer link for questions missing an answer" do
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 4
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 0
       expect(page).to have_link("Answer", href: "/logs/#{empty_case_log.id}/person-1-age")
     end
@@ -69,20 +71,20 @@ RSpec.describe "Form Check Answers Page" do
     it "should have a change link for answered questions" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 3
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
       assert_selector "a", text: "Change", count: 1
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age")
     end
 
     it "should have a change link for answered questions" do
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 5
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
       assert_selector "a", text: "Change", count: 0
       visit("/logs/#{empty_case_log.id}/accessibility-requirements")
       check("case-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer\z/, count: 4
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 1
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements")
     end

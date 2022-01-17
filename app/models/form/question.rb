@@ -69,11 +69,12 @@ class Form::Question
   end
 
   def update_answer_link_name(case_log)
-    if type == "checkbox"
-      answer_options.keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
-    else
-      case_log[id].blank? ? "Answer" : "Change"
-    end
+    link_type = if type == "checkbox"
+                  answer_options.keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
+                else
+                  case_log[id].blank? ? "Answer" : "Change"
+                end
+    "#{link_type}<span class=\"govuk-visually-hidden\"> #{check_answer_label.to_s.downcase}</span>".html_safe
   end
 
   def completed?(case_log)
