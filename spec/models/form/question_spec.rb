@@ -107,7 +107,7 @@ RSpec.describe Form::Question, type: :model do
     it "has an update answer link text helper" do
       expect(subject.update_answer_link_name(case_log)).to eq("Answer")
       case_log[question_id] = 5
-      expect(subject.update_answer_link_name(case_log)).to include("Change")
+      expect(subject.update_answer_link_name(case_log)).to eq("Change<span class=\"govuk-visually-hidden\"> income</span>")
     end
 
     context "when type is date" do
