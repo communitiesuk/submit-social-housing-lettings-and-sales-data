@@ -2007,15 +2007,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Weekly for 52 weeks",
-                    "1": "Every 2 weeks",
-                    "2": "Every 4 weeks",
-                    "3": "Every calendar month",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks"
+                    "0": "Every 2 weeks",
+                    "1": "Every 4 weeks",
+                    "2": "Every calendar month",
+                    "3": "Weekly for 50 weeks",
+                    "4": "Weekly for 49 weeks",
+                    "5": "Weekly for 48 weeks",
+                    "6": "Weekly for 47 weeks",
+                    "7": "Weekly for 46 weeks",
+                    "8": "Weekly for 52 weeks"
                   }
                 }
               },
@@ -2275,7 +2275,7 @@
                   "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2449,7 +2449,7 @@
                   "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2542,7 +2542,7 @@
                   "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2635,7 +2635,7 @@
                   "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2673,7 +2673,7 @@
               "description": "",
               "questions": {
                 "hbrentshortfall": {
-                "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                "check_answer_label": "Outstanding amount for basic rent and charges",
                 "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
                 "hint_text": "",
                 "type": "radio",
@@ -2690,7 +2690,7 @@
               "description": "",
               "questions": {
                 "tshortfall": {
-                  "check_answer_label": "Outstanding amount",
+                  "check_answer_label": "Estimated outstanding amount",
                   "header": "What do you expect the amount to be?",
                   "hint_text": "Give an estimated amount if you don't know the exact figure.",
                   "type": "numeric",
