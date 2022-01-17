@@ -2,7 +2,7 @@ class Auth::SessionsController < Devise::SessionsController
   include Helpers::Email
 
   def create
-    self.resource = resource_class.new
+    self.resource = resource_class.new(sign_in_params)
     if params.dig("user", "email").empty?
       resource.errors.add :email, "Enter an email address"
     elsif !email_valid?(params.dig("user", "email"))
