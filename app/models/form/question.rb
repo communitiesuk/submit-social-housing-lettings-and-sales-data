@@ -34,8 +34,9 @@ class Form::Question
   delegate :form, to: :subsection
 
   def get_answer_label(case_log)
-    answer = answer_label(case_log)
-    answer.present? ? [prefix, answer_label(case_log), suffix].join("") : ""
+    answer = ActionController::Base.helpers.number_to_currency(answer_label(case_log), delimiter: ",", format: "%n")
+
+    answer.present? ? [prefix, answer, suffix].join("") : ""
   end
 
   def answer_label(case_log)
