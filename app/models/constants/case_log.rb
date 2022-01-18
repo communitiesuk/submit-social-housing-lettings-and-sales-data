@@ -1071,9 +1071,9 @@ module Constants::CaseLog
   }.freeze
 
   NET_INCOME_KNOWN = {
-    "Yes – the household has a weekly income" => 0,
-    "Yes – the household has a monthly income" => 1,
-    "Yes – the household has a yearly income" => 2,
+    "Weekly" => 0,
+    "Monthly" => 1,
+    "Annually" => 2,
     "Tenant prefers not to say" => 3,
   }.freeze
 

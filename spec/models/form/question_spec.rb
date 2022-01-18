@@ -74,7 +74,7 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when the question is read only" do
-    let(:subsection_id) { "rent" }
+    let(:subsection_id) { "rent_and_charges" }
     let(:page_id) { "rent" }
     let(:question_id) { "tcharge" }
 
@@ -101,7 +101,7 @@ RSpec.describe Form::Question, type: :model do
 
     it "has an answer label" do
       case_log.earnings = 100
-      expect(subject.answer_label(case_log)).to eq("100")
+      expect(subject.answer_label(case_log)).to eq("100.0")
     end
 
     it "has an update answer link text helper" do

@@ -241,17 +241,19 @@ private
       self.year = startdate.year
     end
     case net_income_known
-    when "Yes – the household has a weekly income"
+    when "Weekly"
       self.incfreq = "Weekly"
       self.incref = nil
-    when "Yes – the household has a monthly income"
+    when "Monthly"
       self.incfreq = "Monthly"
       self.incref = nil
-    when "Yes – the household has a yearly income"
+    when "Annually"
       self.incfreq = "Yearly"
       self.incref = nil
     when "Tenant prefers not to say"
       self.incref = 1
+      self.incfreq = nil
+    when "Don’t know"
       self.incfreq = nil
     end
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?

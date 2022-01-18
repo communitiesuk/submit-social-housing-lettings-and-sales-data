@@ -1843,23 +1843,24 @@
               "description": "",
               "questions": {
                 "net_income_known": {
-                  "check_answer_label": "Household’s combined income after tax",
+                  "check_answer_label": "How often household receives income",
                   "header": "Do you know the household’s combined income after tax?",
                   "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes – the household has a weekly income",
-                    "1": "Yes – the household has a monthly income",
-                    "2": "Yes – the household has a yearly income",
+                    "0": "Weekly",
+                    "1": "Monthly",
+                    "2": "Annually",
                     "divider_a": true,
-                    "3": "Tenant prefers not to say"
+                    "3": "Don't know",
+                    "4": "Tenant prefers not to say"
                   }
                 }
               }
             },
             "weekly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a weekly income" }],
+              "depends_on": [{ "net_income_known": "Weekly" }],
               "header": "",
               "description": "",
               "questions": {
@@ -1886,12 +1887,12 @@
               }
             },
             "monthly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a monthly income" }],
+              "depends_on": [{ "net_income_known": "Monthly" }],
               "header": "",
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every month?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1913,12 +1914,12 @@
               }
             },
             "yearly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a yearly income" }],
+              "depends_on": [{ "net_income_known": "Annually" }],
               "header": "",
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every year?",
                   "hint_text": "",
                   "type": "numeric",

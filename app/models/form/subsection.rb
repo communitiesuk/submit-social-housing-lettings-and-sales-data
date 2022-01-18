@@ -31,7 +31,7 @@ class Form::Subsection
     end
 
     qs = applicable_questions(case_log)
-    return :not_started if qs.all? { |question| case_log[question.id].blank? }
+    return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
     return :completed if qs.all? { |question| question.completed?(case_log) }
 
     :in_progress
