@@ -1,0 +1,14 @@
+---
+applications:
+  - name: dluhc-core
+    buildpacks:
+      - https://github.com/cloudfoundry/ruby-buildpack.git
+    env:
+      RAILS_ENV: production
+    processes:
+      - type: web
+        command: rake db:migrate && bin/rails server
+        instances: 4
+        memory: 512M
+    services:
+      - dluhc-core-production-postgres
