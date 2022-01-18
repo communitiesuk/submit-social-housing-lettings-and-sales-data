@@ -95,7 +95,7 @@ test:
   public_output_path: packs-test
 
 
-sandbox:
+staging:
   <<: *default
 
 production:

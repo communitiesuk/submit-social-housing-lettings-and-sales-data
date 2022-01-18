@@ -4,11 +4,11 @@ applications:
     buildpacks:
       - https://github.com/cloudfoundry/ruby-buildpack.git
     env:
-      RAILS_ENV: sandbox
+      RAILS_ENV: staging
     processes:
       - type: web
         command: rake db:migrate && bin/rails server
         instances: 2
         memory: 512M
     services:
-      - dluhc-core-sandbox-postgres
+      - dluhc-core-staging-postgres
