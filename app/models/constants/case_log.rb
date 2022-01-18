@@ -1075,6 +1075,7 @@ module Constants::CaseLog
     "Monthly" => 1,
     "Annually" => 2,
     "Tenant prefers not to say" => 3,
+    "Don't know" => 4,
   }.freeze
 
   HAS_BENEFITS_OPTIONS = ["Housing benefit",
