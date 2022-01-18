@@ -3197,7 +3197,7 @@
               "questions": {
                 "cbl": {
                   "check_answer_label": "Choice-based letting?",
-                  "header": "Was the letting made under choice-based lettings (cbl)? ",
+                  "header": "Was the letting made under choice-based lettings (CBL)? ",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -3207,7 +3207,7 @@
                 },
                 "chr": {
                   "check_answer_label": "Common housing register letting?",
-                  "header": "Was the letting made under common housing register (chr)? ",
+                  "header": "Was the letting made under common housing register (CHR)? ",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -3217,7 +3217,7 @@
                 },
                 "cap": {
                   "check_answer_label": "Common allocation policy letting?",
-                  "header": "Was the letting made under common allocation policy (cap)? ",
+                  "header": "Was the letting made under common allocation policy (CAP)? ",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
