@@ -2216,7 +2216,7 @@
               }]
             },
             "rent_weekly": {
-              "header": "",
+              "header": "Household rent and charges",
               "description": "",
               "questions": {
                 "brent": {
@@ -2390,7 +2390,7 @@
               ]
             },
             "rent_bi_weekly": {
-              "header": "",
+              "header": "Household rent and charges",
               "description": "",
               "questions": {
                 "brent": {
@@ -2483,7 +2483,7 @@
               }]
             },
             "rent_4_weekly": {
-              "header": "",
+              "header": "Household rent and charges",
               "description": "",
               "questions": {
                 "brent": {
@@ -2576,7 +2576,7 @@
               }]
             },
             "rent_monthly": {
-              "header": "",
+              "header": "Household rent and charges",
               "description": "",
               "questions": {
                 "brent": {
