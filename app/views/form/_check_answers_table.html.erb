@@ -3,7 +3,7 @@
     <%= question.check_answer_label.to_s.present? ?  question.check_answer_label.to_s : question.header.to_s %>
   <dt>
   <dd class="govuk-summary-list__value">
-    <%= question.get_answer_label(@case_log) %><br/>
+    <%= get_answer_label(question, @case_log) %><br/>
     <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
      <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span><br/>
     <% end %>

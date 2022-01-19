@@ -33,12 +33,6 @@ class Form::Question
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
-  def get_answer_label(case_log)
-    answer = ActionController::Base.helpers.number_to_currency(answer_label(case_log), delimiter: ",", format: "%n")
-
-    answer.present? ? [prefix, answer, suffix].join("") : ""
-  end
-
   def answer_label(case_log)
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id].strftime("%d %b %Y") if type == "date"

@@ -12,6 +12,16 @@ module CheckAnswersHelper
     end
   end
 
+  def get_answer_label(question, case_log)
+    answer = ActionController::Base.helpers.number_to_currency(question.answer_label(case_log), delimiter: ",", format: "%n")
+
+    if answer.present?
+      [question.prefix, answer, question.suffix].join("")
+    else
+      "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+    end
+  end
+
 private
 
   def create_next_missing_question_link(subsection, case_log)
