@@ -123,7 +123,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "reason for leaving last settled home validation" do
-      it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
+      it "Reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
         expect {
           CaseLog.create!(reason: "Don’t know",
                           underoccupation_benefitcap: "Yes - benefit cap",

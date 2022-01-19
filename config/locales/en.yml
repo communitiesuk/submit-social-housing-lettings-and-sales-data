@@ -58,7 +58,7 @@ en:
 
     financial:
       tshortfall:
-        outstanding_amount_not_required: "You must not answer the outstanding amount question if you don't have outstanding rent or charges."
+        outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges."
       hbrentshortfall:
         outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
       benefits:

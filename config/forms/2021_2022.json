@@ -1853,7 +1853,7 @@
                     "1": "Monthly",
                     "2": "Annually",
                     "divider_a": true,
-                    "3": "Don't know",
+                    "3": "Don’t know",
                     "4": "Tenant prefers not to say"
                   }
                 }
@@ -1956,7 +1956,7 @@
                     "3": "Universal Credit (without housing element)",
                     "4": "None",
                     "divider": true,
-                    "5": "Don't know",
+                    "5": "Don’t know",
                     "6": "Tenant prefers not to say"
                   }
                 }
@@ -2128,7 +2128,7 @@
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks"
+                  "suffix": " every 2 weeks"
                 }
               },
               "depends_on" : [{
@@ -2165,7 +2165,7 @@
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks"
+                  "suffix": " every 4 weeks"
                 }
               },
               "depends_on" : [{
@@ -2202,7 +2202,7 @@
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "month"
+                  "suffix": " every month"
                 }
               },
               "depends_on" : [{
@@ -2693,13 +2693,13 @@
                 "tshortfall": {
                   "check_answer_label": "Estimated outstanding amount",
                   "header": "What do you expect the amount to be?",
-                  "hint_text": "Give an estimated amount if you don't know the exact figure.",
+                  "hint_text": "Give an estimated amount if you don’t know the exact figure.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month"
+                  "suffix": " every month"
                 }
               },
               "depends_on": [{"has_benefits": "Yes",

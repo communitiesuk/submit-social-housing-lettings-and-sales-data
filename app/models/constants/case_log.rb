@@ -233,7 +233,7 @@ module Constants::CaseLog
     "Universal Credit (without housing element)" => 7,
     "Housing benefit and Universal Credit (without housing element)" => 8,
     "None" => 9,
-    "Don't know" => 3,
+    "Don’t know" => 3,
     "Tenant prefers not to say" => 100,
   }.freeze
 
@@ -1075,7 +1075,7 @@ module Constants::CaseLog
     "Monthly" => 1,
     "Annually" => 2,
     "Tenant prefers not to say" => 3,
-    "Don't know" => 4,
+    "Don’t know" => 4,
   }.freeze
 
   HAS_BENEFITS_OPTIONS = ["Housing benefit",
