@@ -118,11 +118,10 @@ jobs:
         CF_ORG: ${{ secrets.CF_ORG }}
         API_USER: ${{ secrets.API_USER }}
         API_KEY: ${{ secrets.API_KEY }}
-        APP_NAME: dluhc-core
+        APP_NAME: dluhc-core-staging
         GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
         APP_HOST: ${{ secrets.APP_HOST }}
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        MANIFEST_FILE: staging_manifest.yml
       run: |
         cf7 api $CF_API_ENDPOINT
         cf7 auth
@@ -132,4 +131,4 @@ jobs:
         cf7 set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
         cf7 set-env $APP_NAME APP_HOST $APP_HOST
         cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-        cf7 push --strategy rolling -f $MANIFEST_FILE
+        cf7 push $APP_NAME --strategy rolling

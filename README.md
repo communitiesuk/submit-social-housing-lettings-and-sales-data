@@ -53,18 +53,18 @@ Note `docker-compose` runs the production docker image (`RAILS_ENV=production`) 
 
 This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:
 
-1. Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (sandbox/production).
+1. Contact your organisation manager to get an account in `dluhc-core` organization and in the relevant spaces (staging/production).
 
 2. [Install the Cloud Foundry CLI](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html)
 
 3. Login:\
 `cf login -a api.london.cloud.service.gov.uk -u <your_username>`
 
-4. Set your deployment target (sandbox/production):\
+4. Set your deployment target (staging/production):\
 `cf target -o dluhc-core -s <deploy_environment>`
 
 5. Deploy:\
-`cf push dluhc-core --strategy rolling`. This will use the [manifest file](manifest.yml)
+`cf push dluhc-core --strategy rolling`. This will use the [manifest file](staging_manifest.yml)
 
 Once the app is deployed:
 
