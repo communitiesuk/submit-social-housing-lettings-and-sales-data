@@ -2684,7 +2684,7 @@
                 }
               }
               },
-              "depends_on": [{ "has_benefits": "Yes", "household_charge": "Yes" },{ "has_benefits": "yes", "household_charge": null }]
+              "depends_on": [{ "has_benefits": "Yes", "household_charge": "Yes" },{ "has_benefits": "Yes", "household_charge": null }]
             },
             "rent_shortfall_amount":{
               "header": "",
