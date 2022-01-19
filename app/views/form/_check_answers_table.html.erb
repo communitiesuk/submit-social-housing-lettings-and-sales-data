@@ -1,7 +1,7 @@
 <div class="govuk-summary-list__row">
   <dt class="govuk-summary-list__key">
     <%= question.check_answer_label.to_s.present? ?  question.check_answer_label.to_s : question.header.to_s %>
-  <dt>
+  </dt>
   <dd class="govuk-summary-list__value">
     <%= get_answer_label(question, @case_log) %><br/>
     <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
