@@ -101,7 +101,7 @@ RSpec.describe Form::Question, type: :model do
 
     it "has an answer label" do
       case_log.earnings = 100
-      expect(subject.answer_label(case_log)).to eq("100.0")
+      expect(subject.answer_label(case_log)).to eq("100")
     end
 
     it "has an update answer link text helper" do
