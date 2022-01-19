@@ -1844,7 +1844,7 @@
               "questions": {
                 "net_income_known": {
                   "check_answer_label": "How often household receives income",
-                  "header": "Do you know the household’s combined income after tax?",
+                  "header": "How often does the household receive income?",
                   "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
@@ -2675,7 +2675,7 @@
               "questions": {
                 "hbrentshortfall": {
                 "check_answer_label": "Outstanding amount for basic rent and charges",
-                "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                "header": "After the household has received any housing-related benefits, will there be an outstanding amount for basic rent and eligible charges?",
                 "hint_text": "",
                 "type": "radio",
                 "answer_options": {
@@ -2692,7 +2692,7 @@
               "questions": {
                 "tshortfall": {
                   "check_answer_label": "Estimated outstanding amount",
-                  "header": "What do you expect the amount to be?",
+                  "header": "What do you expect the outstanding amount to be?",
                   "hint_text": "Give an estimated amount if you don’t know the exact figure.",
                   "type": "numeric",
                   "min": 0,
