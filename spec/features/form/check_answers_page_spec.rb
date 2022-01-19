@@ -44,7 +44,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "has question headings based on the subsection" do
       visit("/logs/#{id}/#{subsection}/check-answers")
-      question_labels = ["Tenant code", "Tenant's age", "Tenant's gender", "Number of Other Household Members"]
+      question_labels = ["Tenant code", "Tenant’s age", "Tenant’s gender", "Number of Other Household Members"]
       question_labels.each do |label|
         expect(page).to have_content(label)
       end

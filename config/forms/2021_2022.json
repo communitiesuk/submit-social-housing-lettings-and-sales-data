@@ -1188,7 +1188,7 @@
                 },
                 "property_postcode": {
                   "check_answer_label": "Postcode",
-                  "header": "What is the property's postcode?",
+                  "header": "What is the property’s postcode?",
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
@@ -1370,7 +1370,7 @@
                     "E09000019": "Islington",
                     "E09000020": "Kensington and Chelsea",
                     "E07000153": "Kettering",
-                    "E07000146": "King's Lynn and West Norfolk",
+                    "E07000146": "King’s Lynn and West Norfolk",
                     "E06000010": "Kingston upon Hull, City of",
                     "E09000021": "Kingston upon Thames",
                     "E08000034": "Kirklees",
@@ -1967,7 +1967,7 @@
               "questions": {
                 "benefits": {
                   "check_answer_label": "Household income from Universal credit, state pension or benefits",
-                  "header": "How much of the household's income is from Universal Credit, state pensions or benefits?",
+                  "header": "How much of the household’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
@@ -2948,7 +2948,7 @@
                     "E09000019": "Islington",
                     "E09000020": "Kensington and Chelsea",
                     "E07000153": "Kettering",
-                    "E07000146": "King's Lynn and West Norfolk",
+                    "E07000146": "King’s Lynn and West Norfolk",
                     "E06000010": "Kingston upon Hull, City of",
                     "E09000021": "Kingston upon Thames",
                     "E08000034": "Kirklees",
