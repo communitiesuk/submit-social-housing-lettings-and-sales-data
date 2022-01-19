@@ -123,7 +123,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "reason for leaving last settled home validation" do
-      it "Reason for leaving must be don't know if reason for leaving settled home (Q9a) is don't know." do
+      it "Reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
         expect {
           CaseLog.create!(reason: "Don’t know",
                           underoccupation_benefitcap: "Yes - benefit cap",
@@ -1118,11 +1118,11 @@ RSpec.describe Form, type: :model do
 
     context "net_income" do
       it "infers the income frequency" do
-        case_log.update!(net_income_known: "Yes – the household has a weekly income")
+        case_log.update!(net_income_known: "Weekly")
         expect(case_log.reload.incfreq).to eq("Weekly")
-        case_log.update!(net_income_known: "Yes – the household has a monthly income")
+        case_log.update!(net_income_known: "Monthly")
         expect(case_log.reload.incfreq).to eq("Monthly")
-        case_log.update!(net_income_known: "Yes – the household has a yearly income")
+        case_log.update!(net_income_known: "Annually")
         expect(case_log.reload.incfreq).to eq("Yearly")
       end
     end

@@ -233,7 +233,7 @@ module Constants::CaseLog
     "Universal Credit (without housing element)" => 7,
     "Housing benefit and Universal Credit (without housing element)" => 8,
     "None" => 9,
-    "Don't know" => 3,
+    "Don’t know" => 3,
     "Tenant prefers not to say" => 100,
   }.freeze
 
@@ -1071,10 +1071,11 @@ module Constants::CaseLog
   }.freeze
 
   NET_INCOME_KNOWN = {
-    "Yes – the household has a weekly income" => 0,
-    "Yes – the household has a monthly income" => 1,
-    "Yes – the household has a yearly income" => 2,
+    "Weekly" => 0,
+    "Monthly" => 1,
+    "Annually" => 2,
     "Tenant prefers not to say" => 3,
+    "Don’t know" => 4,
   }.freeze
 
   HAS_BENEFITS_OPTIONS = ["Housing benefit",

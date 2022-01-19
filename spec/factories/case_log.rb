@@ -112,7 +112,7 @@ FactoryBot.define do
       discarded_at { nil }
       tenancyother { nil }
       override_net_income_validation { nil }
-      net_income_known { "Yes – the household has a weekly income" }
+      net_income_known { "Weekly" }
       gdpr_acceptance { "Yes" }
       gdpr_declined { "No" }
       property_owner_organisation { "Test" }

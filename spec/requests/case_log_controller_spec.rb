@@ -278,6 +278,11 @@ RSpec.describe CaseLogsController, type: :request do
         get "/logs/#{id}/property-information/check-answers"
         expect(CGI.unescape_html(response.body)).to include("Not known")
       end
+
+      it "shows `you haven't answered this question` if the question wasn't answered" do
+        get "/logs/#{id}/income-and-benefits/check-answers"
+        expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
+      end
     end
   end
 

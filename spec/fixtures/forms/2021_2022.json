@@ -451,7 +451,7 @@
               }
             }
           },
-          "rent": {
+          "rent_and_charges": {
             "label": "Rent",
             "pages": {
               "rent": {
@@ -648,7 +648,7 @@
               "tenancy_information": "completed",
               "property_information": "completed",
               "income_and_benefits": "completed",
-              "rent": "completed",
+              "rent_and_charges": "completed",
               "local_authority": "completed"
             }],
             "pages": {

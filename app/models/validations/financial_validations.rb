@@ -34,7 +34,7 @@ module Validations::FinancialValidations
 
   def validate_tshortfall(record)
     is_yes = record.hbrentshortfall == "Yes"
-    hb_donotknow = record.hb == "Don't know"
+    hb_donotknow = record.hb == "Don’t know"
     hb_none = record.hb == "None"
     hb_uc_no_hb = record.hb == "Universal Credit (without housing element)"
 

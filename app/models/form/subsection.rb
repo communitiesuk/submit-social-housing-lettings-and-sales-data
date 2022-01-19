@@ -31,7 +31,7 @@ class Form::Subsection
     end
 
     qs = applicable_questions(case_log)
-    return :not_started if qs.all? { |question| case_log[question.id].blank? }
+    return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
     return :completed if qs.all? { |question| question.completed?(case_log) }
 
     :in_progress
@@ -66,6 +66,6 @@ class Form::Subsection
   end
 
   def displayed_to_user?(case_log, question)
-    question.page.routed_to?(case_log) && question.enabled?(case_log) && !question.read_only?
+    question.page.routed_to?(case_log) && question.enabled?(case_log)
   end
 end

@@ -1843,28 +1843,29 @@
               "description": "",
               "questions": {
                 "net_income_known": {
-                  "check_answer_label": "Income known",
-                  "header": "Do you know the household’s combined income after tax?",
+                  "check_answer_label": "How often household receives income",
+                  "header": "How often does the household receive income?",
                   "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes – the household has a weekly income",
-                    "1": "Yes – the household has a monthly income",
-                    "2": "Yes – the household has a yearly income",
+                    "0": "Weekly",
+                    "1": "Monthly",
+                    "2": "Annually",
                     "divider_a": true,
-                    "3": "Tenant prefers not to say"
+                    "3": "Don’t know",
+                    "4": "Tenant prefers not to say"
                   }
                 }
               }
             },
             "weekly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a weekly income" }],
+              "depends_on": [{ "net_income_known": "Weekly" }],
               "header": "",
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every week?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1872,7 +1873,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week"
+                  "suffix": " every week"
                 }
               },
               "soft_validations": {
@@ -1886,12 +1887,12 @@
               }
             },
             "monthly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a monthly income" }],
+              "depends_on": [{ "net_income_known": "Monthly" }],
               "header": "",
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every month?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1899,7 +1900,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month"
+                  "suffix": " every month"
                 }
               },
               "soft_validations": {
@@ -1913,12 +1914,12 @@
               }
             },
             "yearly_net_income": {
-              "depends_on": [{ "net_income_known": "Yes – the household has a yearly income" }],
+              "depends_on": [{ "net_income_known": "Annually" }],
               "header": "",
               "description": "",
               "questions": {
                 "earnings": {
-                  "check_answer_label": "Income",
+                  "check_answer_label": "Total household income",
                   "header": "How much income does the household have in total every year?",
                   "hint_text": "",
                   "type": "numeric",
@@ -1926,7 +1927,7 @@
                   "step": "1",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every year"
+                  "suffix": " every year"
                 }
               },
               "soft_validations": {
@@ -1944,7 +1945,7 @@
               "description": "",
               "questions": {
                 "hb": {
-                  "check_answer_label": "Universal Credit & Housing Benefit",
+                  "check_answer_label": "Housing-related benefits received",
                   "header": "Is the household likely to be receiving any of these housing-related benefits?",
                   "hint_text": "",
                   "type": "radio",
@@ -1955,7 +1956,7 @@
                     "3": "Universal Credit (without housing element)",
                     "4": "None",
                     "divider": true,
-                    "5": "Don't know",
+                    "5": "Don’t know",
                     "6": "Tenant prefers not to say"
                   }
                 }
@@ -1966,7 +1967,7 @@
               "description": "",
               "questions": {
                 "benefits": {
-                  "check_answer_label": "Benefits as a proportion of income",
+                  "check_answer_label": "Household income from Universal credit, state pension or benefits",
                   "header": "How much of the household's income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
@@ -1985,7 +1986,7 @@
               "description": "",
               "questions": {
                 "household_charge": {
-                  "check_answer_label": "Does the household pay rent or other charges for the accommodation?",
+                  "check_answer_label": "Does the household pay rent or charges?",
                   "header": "Does the household pay rent or other charges for the accommodation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2002,20 +2003,20 @@
               "description": "",
               "questions": {
                 "period": {
-                  "check_answer_label": "Rent Period",
+                  "check_answer_label": "Frequency of household rent and charges",
                   "header": "How often does the household pay rent and other charges?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Weekly for 52 weeks",
-                    "1": "Every 2 weeks",
-                    "2": "Every 4 weeks",
-                    "3": "Every calendar month",
-                    "4": "Weekly for 50 weeks",
-                    "5": "Weekly for 49 weeks",
-                    "6": "Weekly for 48 weeks",
-                    "7": "Weekly for 47 weeks",
-                    "8": "Weekly for 46 weeks"
+                    "0": "Every 2 weeks",
+                    "1": "Every 4 weeks",
+                    "2": "Every calendar month",
+                    "3": "Weekly for 50 weeks",
+                    "4": "Weekly for 49 weeks",
+                    "5": "Weekly for 48 weeks",
+                    "6": "Weekly for 47 weeks",
+                    "7": "Weekly for 46 weeks",
+                    "8": "Weekly for 52 weeks"
                   }
                 }
               },
@@ -2030,7 +2031,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2043,13 +2044,13 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every week?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every week?",
                   "hint_text": "",
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week"
+                  "suffix": " every week"
                 }
               },
               "depends_on" : [{
@@ -2108,7 +2109,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2121,13 +2122,13 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every 2 weeks?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every 2 weeks?",
                   "hint_text": "",
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks"
+                  "suffix": " every 2 weeks"
                 }
               },
               "depends_on" : [{
@@ -2145,7 +2146,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2158,13 +2159,13 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every 4 weeks?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every 4 weeks?",
                   "hint_text": "",
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks"
+                  "suffix": " every 4 weeks"
                 }
               },
               "depends_on" : [{
@@ -2182,7 +2183,7 @@
               "description": "",
               "questions": {
                 "is_carehome": {
-                  "check_answer_label": "Is this accommodation a care home?",
+                  "check_answer_label": "Care home accommodation",
                   "header": "Is this accommodation a care home?",
                   "hint_text": "",
                   "type": "radio",
@@ -2195,13 +2196,13 @@
                   }
                 },
                 "chcharge": {
-                  "check_answer_label": "How much does the household pay every month?",
+                  "check_answer_label": "Care home charges",
                   "header": "How much does the household pay every month?",
                   "hint_text": "",
                   "type": "numeric",
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "month"
+                  "suffix": " every month"
                 }
               },
               "depends_on" : [{
@@ -2227,9 +2228,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2240,9 +2242,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2253,9 +2256,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2266,12 +2270,13 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2279,7 +2284,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every week",
+                  "suffix": " every week",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2397,9 +2402,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2410,9 +2416,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2423,9 +2430,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2436,12 +2444,13 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2449,7 +2458,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 2 weeks",
+                  "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2486,9 +2495,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2499,9 +2509,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2512,9 +2523,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2525,12 +2537,13 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2538,7 +2551,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every 4 weeks",
+                  "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2575,9 +2588,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "scharge": {
                   "check_answer_label": "Service Charge",
@@ -2588,9 +2602,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal Service Charge",
@@ -2601,9 +2616,10 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "supcharg": {
                   "check_answer_label": "Support Charge",
@@ -2614,12 +2630,13 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
-                  "result-field": "tcharge"
+                  "result-field": "tcharge",
+                  "hidden_in_check_answers": true
                 },
                 "tcharge": {
-                  "check_answer_label": "Total Charge",
+                  "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
                   "type": "numeric",
@@ -2627,7 +2644,7 @@
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month",
+                  "suffix": " every month",
                   "readonly": true,
                   "requires_js": true
                 }
@@ -2657,8 +2674,8 @@
               "description": "",
               "questions": {
                 "hbrentshortfall": {
-                "check_answer_label": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
-                "header": "After housing benefit and/or housing element of UC payment is received, will there be an outstanding amount for basic rent and/or benefit eligible charges?",
+                "check_answer_label": "Outstanding amount for basic rent and charges",
+                "header": "After the household has received any housing-related benefits, will there be an outstanding amount for basic rent and eligible charges?",
                 "hint_text": "",
                 "type": "radio",
                 "answer_options": {
@@ -2674,15 +2691,15 @@
               "description": "",
               "questions": {
                 "tshortfall": {
-                  "check_answer_label": "Outstanding amount",
-                  "header": "What do you expect the amount to be?",
-                  "hint_text": "Give an estimated amount if you don't know the exact figure.",
+                  "check_answer_label": "Estimated outstanding amount",
+                  "header": "What do you expect the outstanding amount to be?",
+                  "hint_text": "Give an estimated amount if you don’t know the exact figure.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": "every month"
+                  "suffix": " every month"
                 }
               },
               "depends_on": [{"has_benefits": "Yes",

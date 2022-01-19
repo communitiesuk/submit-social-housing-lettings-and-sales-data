@@ -74,7 +74,7 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when the question is read only" do
-    let(:subsection_id) { "rent" }
+    let(:subsection_id) { "rent_and_charges" }
     let(:page_id) { "rent" }
     let(:question_id) { "tcharge" }
 
