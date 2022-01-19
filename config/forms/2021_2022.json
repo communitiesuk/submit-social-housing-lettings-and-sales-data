@@ -873,8 +873,8 @@
                     "28": "Death of household member in last settled accomodation",
                     "29": "Discharged from prison",
                     "30": "Discharged from long stay hospital or similar institution",
-                    "divider": true,
                     "31": "Other",
+                    "divider": true,
                     "32": "Don’t know",
                     "33": "Prefer not to say"
                   },
@@ -1188,7 +1188,7 @@
                 },
                 "property_postcode": {
                   "check_answer_label": "Postcode",
-                  "header": "What is the property's postcode?",
+                  "header": "What is the property’s postcode?",
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
@@ -1370,7 +1370,7 @@
                     "E09000019": "Islington",
                     "E09000020": "Kensington and Chelsea",
                     "E07000153": "Kettering",
-                    "E07000146": "King's Lynn and West Norfolk",
+                    "E07000146": "King’s Lynn and West Norfolk",
                     "E06000010": "Kingston upon Hull, City of",
                     "E09000021": "Kingston upon Thames",
                     "E08000034": "Kirklees",
@@ -1709,7 +1709,6 @@
                     "4": "Shared flat or maisonette",
                     "5": "Shared house",
                     "6": "Shared bungalow",
-                    "divider": true,
                     "7": "Other"
                   }
                 }
@@ -1951,8 +1950,8 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Housing benefit",
-                    "1": "Universal Credit with housing element (excluding housing benefit)",
                     "2": "Housing benefit and Universal Credit (without housing element)",
+                    "1": "Universal Credit with housing element (excluding housing benefit)",
                     "3": "Universal Credit (without housing element)",
                     "4": "None",
                     "divider": true,
@@ -1968,7 +1967,7 @@
               "questions": {
                 "benefits": {
                   "check_answer_label": "Household income from Universal credit, state pension or benefits",
-                  "header": "How much of the household's income is from Universal Credit, state pensions or benefits?",
+                  "header": "How much of the household’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
@@ -2949,7 +2948,7 @@
                     "E09000019": "Islington",
                     "E09000020": "Kensington and Chelsea",
                     "E07000153": "Kettering",
-                    "E07000146": "King's Lynn and West Norfolk",
+                    "E07000146": "King’s Lynn and West Norfolk",
                     "E06000010": "Kingston upon Hull, City of",
                     "E09000021": "Kingston upon Thames",
                     "E08000034": "Kirklees",

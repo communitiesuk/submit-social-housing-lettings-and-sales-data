@@ -20,8 +20,8 @@
               "person_1_age": {
                 "questions": {
                   "age1": {
-                    "check_answer_label": "Tenant's age",
-                    "header": "What is the tenant's age?",
+                    "check_answer_label": "Tenant’s age",
+                    "header": "What is the tenant’s age?",
                     "type": "numeric",
                     "min": 0,
                     "max": 150,
@@ -33,8 +33,8 @@
               "person_1_gender": {
                 "questions": {
                   "sex1": {
-                    "check_answer_label": "Tenant's gender",
-                    "header": "Which of these best describes the tenant's gender identity?",
+                    "check_answer_label": "Tenant’s gender",
+                    "header": "Which of these best describes the tenant’s gender identity?",
                     "type": "radio",
                     "answer_options": {
                       "0": "Female",
@@ -64,8 +64,8 @@
                     }
                   },
                   "relat2": {
-                    "check_answer_label": "Person 2's relationship to lead tenant",
-                    "header": "What's person 2's relationship to lead tenant",
+                    "check_answer_label": "Person 2’s relationship to lead tenant",
+                    "header": "What’s person 2’s relationship to lead tenant",
                     "type": "radio",
                     "answer_options": {
                       "0": "Other",
@@ -73,8 +73,8 @@
                     }
                   },
                   "age2": {
-                    "check_answer_label": "Person 2's age",
-                    "header": "What's person 2's age",
+                    "check_answer_label": "Person 2’s age",
+                    "header": "What’s person 2’s age",
                     "type": "numeric",
                     "min": 0,
                     "max": 150,
@@ -82,8 +82,8 @@
                     "width": 2
                   },
                   "sex2": {
-                    "check_answer_label": "Person 2's gender",
-                    "header": "Which of these best describes person 2's gender identity?",
+                    "check_answer_label": "Person 2’s gender",
+                    "header": "Which of these best describes person 2’s gender identity?",
                     "type": "radio",
                     "answer_options": {
                       "0": "Female",
@@ -93,8 +93,8 @@
                     }
                   },
                   "ecstat2": {
-                    "check_answer_label": "Person 2's Work",
-                    "header": "Which of these best describes person 2's working situation?",
+                    "check_answer_label": "Person 2’s Work",
+                    "header": "Which of these best describes person 2’s working situation?",
                     "type": "radio",
                     "answer_options": {
                       "0": "Other",

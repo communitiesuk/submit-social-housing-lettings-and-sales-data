@@ -64,8 +64,8 @@ en:
       benefits:
         part_or_full_time: "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       earnings:
-        under_hard_max: "Net income cannot be greater than %{hard_max} given the tenant's working situation"
-        over_hard_min: "Net income cannot be less than %{hard_min} given the tenant's working situation"
+        under_hard_max: "Net income cannot be greater than %{hard_max} given the tenant’s working situation"
+        over_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
 
     household:
       reasonpref:
@@ -92,7 +92,7 @@ en:
         child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
         student_16_19: "If age is between 16 and 19 - tenant %{person_num} must be a full time student or prefer not to say."
       relat:
-        child_under_16: "Tenant %{person_num}'s relationship to tenant 1 must be Child if their age is under 16"
+        child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be Child if their age is under 16"
         one_partner: "Number of partners cannot be greater than 1"
       housingneeds_a:
         one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
@@ -109,8 +109,8 @@ en:
 
   soft_validations:
     net_income:
-      hint_text: "This is based on the tenant's work situation: %{ecstat1}"
+      hint_text: "This is based on the tenant’s work situation: %{ecstat1}"
       in_soft_min_range:
-        message: "Net income is lower than expected based on the main tenant's working situation. Are you sure this is correct?"
+        message: "Net income is lower than expected based on the main tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
-        message: "Net income is higher than expected based on the main tenant's working situation. Are you sure this is correct?"
+        message: "Net income is higher than expected based on the main tenant’s working situation. Are you sure this is correct?"

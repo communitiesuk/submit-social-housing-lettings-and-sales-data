@@ -1,6 +1,8 @@
 <% content_for :title, "Log #{@case_log.id}" %>
-<% breadcrumbs = { "Logs" => "/logs", content_for(:title) => "" } %>
-<% content_for :breadcrumbs,  govuk_breadcrumbs(breadcrumbs: breadcrumbs) %>
+<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+  "Logs" => "/logs",
+  content_for(:title) => ""
+}) %>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
