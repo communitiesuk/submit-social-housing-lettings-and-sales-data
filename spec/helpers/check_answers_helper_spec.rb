@@ -8,11 +8,9 @@ RSpec.describe CheckAnswersHelper do
 
   describe "display_answered_questions_summary" do
     context "given a section that hasn't been completed yet" do
-      it "returns a link to the next unanswered question" do
+      it "returns that you have unanswered questions" do
         expect(display_answered_questions_summary(subsection, case_log))
-          .to match(/You answered 2 of 4 questions/)
-        expect(display_answered_questions_summary(subsection, case_log))
-          .to match(/href/)
+          .to match(/You have answered 2 of 4 questions./)
       end
     end
 
@@ -21,7 +19,7 @@ RSpec.describe CheckAnswersHelper do
         case_log.sex1 = "F"
         case_log.other_hhmemb = 0
         expect(display_answered_questions_summary(subsection, case_log))
-          .to match(/You answered all the questions/)
+          .to match(/You answered all the questions./)
         expect(display_answered_questions_summary(subsection, case_log))
           .not_to match(/href/)
       end

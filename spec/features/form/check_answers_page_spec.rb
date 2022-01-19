@@ -89,26 +89,6 @@ RSpec.describe "Form Check Answers Page" do
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements")
     end
 
-    it "should have a link pointing to the first question if no questions are answered" do
-      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
-      expect(page).to have_content("You answered 0 of 4 questions")
-      expect(page).to have_link("Answer the missing questions", href: "/logs/#{empty_case_log.id}/tenant-code")
-    end
-
-    it "should have a link pointing to the next empty question if some questions are answered" do
-      fill_in_number_question(empty_case_log.id, "earnings", 18_000, "net-income")
-
-      visit("/logs/#{empty_case_log.id}/income-and-benefits/check-answers")
-      expect(page).to have_content("You answered 1 of 4 questions")
-      expect(page).to have_link("Answer the missing questions", href: "/logs/#{empty_case_log.id}/net-income")
-    end
-
-    it "should not display the missing answer questions link if all questions are answered" do
-      answer_all_questions_in_income_subsection(empty_case_log)
-      expect(page).to have_content("You answered all the questions")
-      assert_selector "a", text: "Answer the missing questions", count: 0
-    end
-
     it "does not display conditional questions that were not visited" do
       visit("/logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?"]

@@ -15,7 +15,7 @@
 
       <%= display_answered_questions_summary(subsection, @case_log) %>
 
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <dl class="govuk-summary-list">
         <% subsection.applicable_questions(@case_log).each do |question| %>
           <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
         <% end %>
