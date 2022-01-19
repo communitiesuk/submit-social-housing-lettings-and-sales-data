@@ -873,8 +873,8 @@
                     "28": "Death of household member in last settled accomodation",
                     "29": "Discharged from prison",
                     "30": "Discharged from long stay hospital or similar institution",
-                    "divider": true,
                     "31": "Other",
+                    "divider": true,
                     "32": "Don’t know",
                     "33": "Prefer not to say"
                   },
@@ -1709,7 +1709,6 @@
                     "4": "Shared flat or maisonette",
                     "5": "Shared house",
                     "6": "Shared bungalow",
-                    "divider": true,
                     "7": "Other"
                   }
                 }
@@ -1951,8 +1950,8 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Housing benefit",
-                    "1": "Universal Credit with housing element (excluding housing benefit)",
                     "2": "Housing benefit and Universal Credit (without housing element)",
+                    "1": "Universal Credit with housing element (excluding housing benefit)",
                     "3": "Universal Credit (without housing element)",
                     "4": "None",
                     "divider": true,
