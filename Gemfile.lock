@@ -7,16 +7,6 @@ GIT
       ruby2_keywords (>= 0.0.2, < 1.0)
 
 GIT
-  remote: https://github.com/activeadmin/inherited_resources.git
-  revision: a0a350245a2ec76c040f8751707c1d98792534dd
-  specs:
-    inherited_resources (1.13.0)
-      actionpack (>= 5.2, < 7.1)
-      has_scope (~> 0.6)
-      railties (>= 5.2, < 7.1)
-      responders (>= 2, < 4)
-
-GIT
   remote: https://github.com/baarkerlounger/devise.git
   revision: 0f585ea6683a06858863597628b48610731c2613
   branch: dluhc-fixes
@@ -30,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: 12ef798e1a02084565fa2ea698e26334dbc56e42
+  revision: 8ccc35b8144482284c90b0af74a01e940765f7a6
   branch: feature/railties-7
   specs:
     activeadmin (2.9.0)
@@ -183,6 +173,11 @@ GEM
       turbo-rails
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
+    inherited_resources (1.13.1)
+      actionpack (>= 5.2, < 7.1)
+      has_scope (~> 0.6)
+      railties (>= 5.2, < 7.1)
+      responders (>= 2, < 4)
     iniparse (1.5.0)
     io-wait (0.2.1)
     jquery-rails (4.4.0)
@@ -216,7 +211,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.15.0)
-    msgpack (1.4.2)
+    msgpack (1.4.3)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -438,7 +433,6 @@ DEPENDENCIES
   govuk-components
   govuk_design_system_formbuilder
   hotwire-rails
-  inherited_resources!
   json-schema
   listen (~> 3.3)
   overcommit (>= 0.37.0)

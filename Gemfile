@@ -26,7 +26,6 @@ gem "discard"
 # Administration framework
 gem "activeadmin", git: "https://github.com/tagliala/activeadmin.git", branch: "feature/railties-7"
 gem "arbre", github: "activeadmin/arbre"
-gem "inherited_resources", git: "https://github.com/activeadmin/inherited_resources.git"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
