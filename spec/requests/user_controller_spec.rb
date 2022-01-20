@@ -1,7 +1,6 @@
 require "rails_helper"
-require_relative "../support/devise"
 
-RSpec.describe UsersController, type: :request do
+RSpec.describe "password_reset", type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:unauthorised_user) { FactoryBot.create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
@@ -46,21 +45,48 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "update password" do
-        let(:params) do
-          {
-            id: user.id, user: { password: new_value, password_confirmation: "something_else" }
-          }
+        context "valid reset token" do
+          let(:params) do
+            {
+              id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+            }
+          end
+
+          before do
+            sign_in user
+            put "/users/#{user.id}", headers: headers, params: params
+          end
+
+          it "shows an error if passwords don't match" do
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_content("Password confirmation doesn't match Password")
+          end
         end
 
-        before do
-          sign_in user
-          put "/users/#{user.id}", headers: headers, params: params
-        end
+        context "reset token more than 3 hours old" do
+          let(:raw) { user.send_reset_password_instructions }
+          let(:params) do
+            {
+              id: user.id,
+              user: {
+                password: new_value,
+                password_confirmation: new_value,
+                reset_password_token: raw,
+              },
+            }
+          end
 
-        it "shows an error if passwords don't match" do
-          expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_selector("#error-summary-title")
-          expect(page).to have_content("Password confirmation doesn't match Password")
+          before do
+            allow_any_instance_of(User).to receive(:reset_password_sent_at).and_return(4.hours.ago)
+            put "/users/password", headers: headers, params: params
+          end
+
+          it "shows an error" do
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_content("Reset password token has expired, please request a new one")
+          end
         end
       end
     end
