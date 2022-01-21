@@ -1,7 +1,8 @@
 module QuestionAttributeHelper
   def stimulus_html_attributes(question)
     attribs = [
-      numeric_question_html_attributes(question)
+      numeric_question_html_attributes(question),
+      conditional_html_attributes(question),
     ]
     merge_controller_attributes(*attribs)
   end
@@ -17,6 +18,17 @@ private
       "data-action": "numeric-question#calculateFields",
       "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
       "data-calculated": question.fields_to_add.to_json,
+    }
+  end
+
+  # TODO: remove this once all conditional questions no longer need JS
+  def conditional_html_attributes(question)
+    return {} if question.conditional_for.blank? || question.type == "radio"
+
+    {
+      "data-controller": "conditional-question",
+      "data-action": "conditional-question#displayConditional",
+      "data-info": question.conditional_for.to_json,
     }
   end
 end
