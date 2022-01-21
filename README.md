@@ -69,10 +69,10 @@ This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/).
 Once the app is deployed:
 
 1. Get a Rails console:\
-`cf ssh dluhc-core -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
+`cf ssh dluhc-core-staging -t -c "/tmp/lifecycle/launcher /home/vcap/app 'rails console' ''"`
 
 2. Check logs:\
-`cf logs dluhc-core --recent`
+`cf logs dluhc-core-staging --recent`
 
 #### Troubleshooting deployments
 

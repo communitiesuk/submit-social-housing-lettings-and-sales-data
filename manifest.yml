@@ -13,7 +13,6 @@ applications:
     <<: *defaults
     env:
       RAILS_ENV: staging
-    host: staging-submit-social-housing-lettings-sales-data.london.cloudapps.digital
     services:
       - dluhc-core-staging-postgres
 
@@ -21,6 +20,6 @@ applications:
     <<: *defaults
     env:
       RAILS_ENV: production
-    host: submit-social-housing-lettings-sales-data.london.cloudapps.digital
+    host: submit-social-housing-lettings-sales-data
     services:
       - dluhc-core-production-postgres
