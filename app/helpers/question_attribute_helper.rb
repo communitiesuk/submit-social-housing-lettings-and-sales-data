@@ -10,6 +10,7 @@ module QuestionAttributeHelper
 private
 
   def numeric_question_html_attributes(question)
+    return { "style": "background-color: #f3f2f1;" } if question.read_only?
     return {} if question.fields_to_add.blank? || question.result_field.blank?
 
     {
