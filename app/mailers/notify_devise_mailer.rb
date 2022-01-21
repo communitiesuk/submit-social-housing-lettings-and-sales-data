@@ -38,16 +38,7 @@ class NotifyDeviseMailer < Devise::Mailer
     send_email(record.email, template_id, personalisation)
   end
 
-  def unlock_instructions(record, token, opts = {})
-    @token = token
-    devise_mail(record, :unlock_instructions, opts)
-  end
-
   def email_changed(record, opts = {})
-    devise_mail(record, :email_changed, opts)
-  end
-
-  def password_change(record, opts = {})
-    devise_mail(record, :password_change, opts)
+    # devise_mail(record, :email_changed, opts)
   end
 end
