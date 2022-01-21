@@ -7,7 +7,7 @@ RSpec.describe QuestionAttributeHelper do
 
   describe "html attributes" do
     it "returns empty hash if fields-to-add or result-field are empty " do
-      question = questions.find { |q| q.id == "tcharge" }
+      question = form.get_page("weekly_net_income").questions.find { |q| q.id == "earnings" }
       expect(stimulus_html_attributes(question)).to eq({})
     end
 

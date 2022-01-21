@@ -541,6 +541,23 @@
                     "requires_js": true
                   }
                 }
+              },
+              "weekly_net_income": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "earnings": {
+                    "check_answer_label": "Total household income",
+                    "header": "How much income does the household have in total every week?",
+                    "hint_text": "",
+                    "type": "numeric",
+                    "min": 0,
+                    "step": "1",
+                    "width": 5,
+                    "prefix": "£",
+                    "suffix": " every week"
+                  }
+                }
               }
             }
           }
