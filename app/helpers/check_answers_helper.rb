@@ -12,7 +12,7 @@ module CheckAnswersHelper
   end
 
   def get_answer_label(question, case_log)
-    answer = ActionController::Base.helpers.number_to_currency(question.answer_label(case_log), delimiter: ",", format: "%n")
+    answer = question.prefix == "£" ? ActionController::Base.helpers.number_to_currency(question.answer_label(case_log), delimiter: ",", format: "%n") : question.answer_label(case_log)
 
     if answer.present?
       [question.prefix, answer, question.suffix].join("")
