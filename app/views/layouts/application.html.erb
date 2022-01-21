@@ -38,7 +38,7 @@
     <%= govuk_header(
         logotype: 'GOV.UK',
         service_name: t('service_name'),
-        service_url: '/'
+        service_url: current_user.nil? ? "/" : '/logs'
       ) do |component|
         if current_user.nil?
           component.navigation_item(text: 'Sign in', href: user_session_path)

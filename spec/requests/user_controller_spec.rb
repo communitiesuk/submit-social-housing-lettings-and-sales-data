@@ -90,6 +90,14 @@ RSpec.describe "password_reset", type: :request do
         end
       end
     end
+
+    describe "title link" do
+      it "routes user to the /logs page" do
+        get "/", headers: headers, params: {}
+        expected_link = "href=\"/\">#{I18n.t('service_name')}</a>"
+        expect(CGI.unescape_html(response.body)).to include(expected_link)
+      end
+    end
   end
 
   describe "#show" do
@@ -222,6 +230,18 @@ RSpec.describe "password_reset", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(page).to have_selector("#error-summary-title")
       end
+    end
+  end
+
+  describe "title link" do
+    before do
+      sign_in user
+    end
+
+    it "routes user to the /logs page" do
+      get "/", headers: headers, params: {}
+      expected_link = "href=\"/logs\">#{I18n.t('service_name')}</a>"
+      expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
   end
 end
