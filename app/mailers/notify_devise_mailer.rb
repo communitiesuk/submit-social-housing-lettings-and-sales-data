@@ -1,5 +1,5 @@
 class NotifyDeviseMailer < Devise::Mailer
-  require 'notifications/client'
+  require "notifications/client"
 
   def notify_client
     @notify_client ||= ::Notifications::Client.new(ENV["GOVUK_NOTIFY_API_KEY"])
@@ -13,27 +13,27 @@ class NotifyDeviseMailer < Devise::Mailer
     notify_client.send_email(
       email_address: email,
       template_id: template_id,
-      personalisation: personalisation
+      personalisation: personalisation,
     )
   end
 
-  def reset_password_instructions(record, token, opts = {})
+  def reset_password_instructions(record, token, _opts = {})
     template_id = "4593417c-500f-452c-8111-0f9d311aad0e"
     personalisation = {
       name: record.name,
       email: record.email,
-      link: "https://#{host}/users/password/edit?reset_password_token=#{token}"
+      link: "https://#{host}/users/password/edit?reset_password_token=#{token}",
     }
     send_email(record.email, template_id, personalisation)
   end
 
-  def confirmation_instructions(record, token, opts = {})
+  def confirmation_instructions(record, token, _opts = {})
     template_id = "00cd7163-4213-4596-b4f9-9e72796e0d76"
     personalisation = {
       name: record.name,
       email: record.email,
       organisation: record.organisation.name,
-      link: "https://#{host}/users/confirmation?confirmation_token=#{token}"
+      link: "https://#{host}/users/confirmation?confirmation_token=#{token}",
     }
     send_email(record.email, template_id, personalisation)
   end

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     passwords: "user/passwords",
     sessions: "user/sessions",
-    confirmations: "user/confirmations"
+    confirmations: "user/confirmations",
   }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
