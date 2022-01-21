@@ -38,7 +38,15 @@ class NotifyDeviseMailer < Devise::Mailer
     send_email(record.email, template_id, personalisation)
   end
 
+  def unlock_instructions(record, token, opts = {})
+    super
+  end
+
   def email_changed(record, opts = {})
-    # devise_mail(record, :email_changed, opts)
+    super
+  end
+
+  def password_change(record, opts = {})
+    super
   end
 end
