@@ -2,9 +2,9 @@ class User < ApplicationRecord
   include Constants::User
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-         :trackable
+         :trackable, :confirmable
 
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation

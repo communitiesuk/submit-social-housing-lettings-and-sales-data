@@ -10,5 +10,9 @@ FactoryBot.define do
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
+    confirmed_at { Time.zone.now }
+    trait :unconfirmed do
+      confirmed_at { nil }
+    end
   end
 end

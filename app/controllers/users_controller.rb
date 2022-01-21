@@ -34,7 +34,6 @@ class UsersController < ApplicationController
       render :new, status: :unprocessable_entity
     else
       @user = User.create!(user_params.merge(org_params).merge(password_params))
-      @user.send_reset_password_instructions
       redirect_to users_organisation_path(current_user.organisation)
     end
   end

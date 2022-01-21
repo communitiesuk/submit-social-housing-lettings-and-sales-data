@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users, controllers: {
-    passwords: "auth/passwords",
-    sessions: "auth/sessions",
+    passwords: "user/passwords",
+    sessions: "user/sessions",
+    confirmations: "user/confirmations",
   }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }
 
   devise_scope :user do
-    get "confirmations/reset", to: "auth/passwords#reset_confirmation"
+    get "password/reset", to: "user/passwords#reset_confirmation"
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

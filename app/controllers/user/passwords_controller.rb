@@ -1,4 +1,4 @@
-class Auth::PasswordsController < Devise::PasswordsController
+class User::PasswordsController < Devise::PasswordsController
   include Helpers::Email
 
   def reset_confirmation
@@ -11,7 +11,7 @@ class Auth::PasswordsController < Devise::PasswordsController
       resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
       render "devise/passwords/new", status: :unprocessable_entity
     else
-      render "devise/confirmations/reset"
+      render "devise/passwords/reset_confirmation"
     end
   end
 
@@ -30,6 +30,6 @@ class Auth::PasswordsController < Devise::PasswordsController
 protected
 
   def after_sending_reset_password_instructions_path_for(_resource)
-    confirmations_reset_path(email: params.dig("user", "email"))
+    password_reset_path(email: params.dig("user", "email"))
   end
 end

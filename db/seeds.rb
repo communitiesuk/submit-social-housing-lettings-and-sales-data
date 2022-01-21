@@ -21,6 +21,7 @@ User.create!(
   password: "password",
   organisation: org,
   role: "data_provider",
+  confirmed_at: Time.zone.now,
 )
 
 User.create!(
@@ -28,6 +29,7 @@ User.create!(
   password: "password",
   organisation: org,
   role: "data_coordinator",
+  confirmed_at: Time.zone.now,
 )
 
 AdminUser.create!(email: "admin@example.com", password: "password")

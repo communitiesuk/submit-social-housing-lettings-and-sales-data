@@ -37,6 +37,18 @@ RSpec.describe "password_reset", type: :request do
       end
     end
 
+    describe "confirm" do
+      context "a user that has not confirmed their email and set a password" do
+        let(:user) { FactoryBot.create(:user, :unconfirmed) }
+        let(:raw) { user.send_confirmation_instructions }
+
+        it "renders the user set password view" do
+          get "/users/confirmation?confirmation_token=#{raw}"
+          expect(page).to have_css("h1", class: "govuk-heading-l", text: "Set your password")
+        end
+      end
+    end
+
     describe "reset password" do
       it "renders the user edit password view" do
         _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
@@ -45,16 +57,21 @@ RSpec.describe "password_reset", type: :request do
       end
 
       context "update password" do
-        context "valid reset token" do
+        context "valid confirmation token" do
+          let(:raw) { user.send_reset_password_instructions }
           let(:params) do
             {
-              id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+              id: user.id,
+              user: {
+                password: new_value,
+                password_confirmation: "something_else",
+                reset_password_token: raw,
+              },
             }
           end
 
           before do
-            sign_in user
-            put "/users/#{user.id}", headers: headers, params: params
+            put "/users/password", headers: headers, params: params
           end
 
           it "shows an error if passwords don't match" do

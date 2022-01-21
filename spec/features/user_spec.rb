@@ -63,7 +63,7 @@ RSpec.describe "User Features" do
       visit("/users/password/new")
       fill_in("user[email]", with: "idontexist@example.com")
       click_button("Send email")
-      expect(page).to have_current_path("/confirmations/reset?email=idontexist%40example.com")
+      expect(page).to have_current_path("/password/reset?email=idontexist%40example.com")
     end
 
     it " is sent a reset password email" do
