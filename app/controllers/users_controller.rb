@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     elsif user_params.key?("password")
       format_error_messages
-      render :edit_password, status: :unprocessable_entity
+      render "devise/passwords/edit", status: :unprocessable_entity
     else
       format_error_messages
       render :edit, status: :unprocessable_entity
@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def edit_password
-    render :edit_password
+    render "devise/passwords/edit"
   end
 
 private
