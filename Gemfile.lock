@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/activeadmin/arbre.git
-  revision: 305c221a2131be8dd0d96955f9b0a328dfa4beba
+  revision: dcea09da31322f2bc9bdfc32eb14ec0aaf34ae92
   specs:
     arbre (1.4.0)
       activesupport (>= 3.0.0, < 7.1)
