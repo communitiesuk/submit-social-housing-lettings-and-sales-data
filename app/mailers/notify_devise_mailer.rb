@@ -5,6 +5,10 @@ class NotifyDeviseMailer < Devise::Mailer
     @notify_client ||= ::Notifications::Client.new(ENV["GOVUK_NOTIFY_API_KEY"])
   end
 
+  def host
+    @host ||= ENV["APP_HOST"]
+  end
+
   def send_email(email, template_id, personalisation)
     notify_client.send_email(
       email_address: email,
@@ -18,7 +22,7 @@ class NotifyDeviseMailer < Devise::Mailer
     personalisation = {
       name: record.name,
       email: record.email,
-      link: "#{ENV['host']}/users/password/edit?reset_password_token=#{token}"
+      link: "https://#{host}/users/password/edit?reset_password_token=#{token}"
     }
     send_email(record.email, template_id, personalisation)
   end
@@ -29,8 +33,9 @@ class NotifyDeviseMailer < Devise::Mailer
       name: record.name,
       email: record.email,
       organisation: record.organisation.name,
-      link: "#{ENV['host']}/users/password/edit?reset_password_token=#{token}"
+      link: "https://#{host}/users/confirmation?confirmation_token=#{token}"
     }
+    send_email(record.email, template_id, personalisation)
   end
 
   def unlock_instructions(record, token, opts = {})
