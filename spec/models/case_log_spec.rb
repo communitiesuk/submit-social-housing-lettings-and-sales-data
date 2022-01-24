@@ -907,6 +907,25 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context "Validate reason for vacancy" do
+      def check_rsnvac_validation(prevten)
+        expect {
+          CaseLog.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
+                          prevten: prevten,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it "cannot be temp accomodation if previous tenancy was non temp" do
+        check_rsnvac_validation("Tied housing or rented with job")
+        check_rsnvac_validation("Supported housing")
+        check_rsnvac_validation("Sheltered accomodation")
+        check_rsnvac_validation("Home Office Asylum Support")
+        check_rsnvac_validation("Other")
+      end
+    end
   end
 
   describe "status" do

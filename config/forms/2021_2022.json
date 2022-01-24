@@ -790,7 +790,7 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Owner occupation (private) ",
+                    "0": "Owner occupation (private)",
                     "1": "Owner occupation (low cost home ownership)",
                     "2": "Private sector tenancy",
                     "3": "Tied housing or rented with job",

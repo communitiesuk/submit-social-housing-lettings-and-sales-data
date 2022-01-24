@@ -84,6 +84,18 @@ module Validations::HouseholdValidations
     end
   end
 
+  NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
+                            "Supported housing",
+                            "Sheltered accomodation",
+                            "Home Office Asylum Support",
+                            "Other"].freeze
+
+  def validate_property_vacancy_reason_not_first_let(record)
+    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
+    end
+  end
+
 private
 
   def women_of_child_bearing_age_in_household(record)

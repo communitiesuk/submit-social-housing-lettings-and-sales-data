@@ -103,11 +103,11 @@ module Constants::CaseLog
   }.freeze
 
   PREVIOUS_TENANCY = {
-    "Owner occupation (private) " => 26,
+    "Owner occupation (private)" => 26,
     "Owner occupation (low cost home ownership)" => 27,
     "Private sector tenancy" => 3,
     "Tied housing or rented with job" => 4,
-    "Supported housing" => 5,
+    "Supported housing" => 6,
     "Sheltered accomodation" => 8,
     "Residential care home" => 9,
     "Living with friends or family" => 28,
