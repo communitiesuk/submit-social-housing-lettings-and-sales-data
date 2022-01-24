@@ -34,7 +34,7 @@ RSpec.describe "Form Conditional Questions" do
       choose("case-log-armedforces-no-field", allow_label_click: true)
       expect(page).not_to have_field("case-log-leftreg-field")
       choose("case-log-armedforces-a-current-or-former-regular-in-the-uk-armed-forces-excluding-national-service-field", allow_label_click: true)
-      expect(page).to have_css("#case-log-leftreg-field", text: "")
+      expect(page).to have_field("case-log-leftreg-field", with: "")
     end
   end
 end
