@@ -23,6 +23,7 @@ export default class extends Controller {
 
       Object.entries(conditional_for).map(([targetQuestion, conditions]) => {
         let div = document.getElementById(targetQuestion + "_div")
+        if (div == null) return;
         if(conditions.includes(selectedValue)) {
           div.style.display = "block"
         } else {

@@ -9,10 +9,11 @@
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
       <% else %>
-        <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) do %>
-          <% conditional_key = question.conditional_for&.find { |_, cval| cval.include? val }&.first %>
-          <% if conditional_key %>
-            <% conditional_question = @page.questions.find { |q| q.id == conditional_key } %>
+        <% conditional_question = find_conditional_question(@page, question.conditional_for, val) %>
+        <% if conditional_question.nil? %>
+          <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) %>
+        <% else %>
+          <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) do %>
             <%= render partial: "#{conditional_question.type}_question", locals: { question: conditional_question, caption: caption, page_header: page_header, f: f } %>
           <% end %>
         <% end %>

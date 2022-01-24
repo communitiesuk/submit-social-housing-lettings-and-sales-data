@@ -27,6 +27,15 @@ class Form::Page
     subsection.enabled?(case_log) && depends_on_met(case_log)
   end
 
+  # We expect to render only one radio question (with conditionals)
+  def questions_to_render
+    if questions.first.type == "radio"
+      [questions.first]
+    else
+      questions
+    end
+  end
+
 private
 
   def depends_on_met(case_log)

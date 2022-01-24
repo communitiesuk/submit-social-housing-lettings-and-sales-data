@@ -5,15 +5,11 @@
 require.context('govuk-frontend/govuk/assets')
 
 import '../styles/application.scss'
-import Rails from "@rails/ujs"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
-import { initAll } from 'govuk-frontend'
+import "controllers"
 import "@hotwired/turbo-rails"
+import { initAll } from 'govuk-frontend'
 
-
-Rails.start()
 ActiveStorage.start()
 initAll()
-
-import "controllers"
