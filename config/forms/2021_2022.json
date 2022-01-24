@@ -827,7 +827,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days",
-                    "1": "Yes - other homelessness ",
+                    "1": "Yes - other homelessness",
                     "2": "No"
                   }
                 }
