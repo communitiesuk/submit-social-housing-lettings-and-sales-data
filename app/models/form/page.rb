@@ -29,14 +29,14 @@ class Form::Page
 
   def non_conditional_questions
     @non_conditional_questions ||= questions.reject do |q|
-      conditional_questions_ids.include?(q.id)
+      conditional_question_ids.include?(q.id)
     end
   end
 
 private
 
-  def conditional_questions_ids
-    @conditional_questions ||= questions.flat_map { |q|
+  def conditional_question_ids
+    @conditional_question_ids ||= questions.flat_map { |q|
       next if q.conditional_for.blank?
 
       # TODO: remove this condition once all conditional questions no longer need JS

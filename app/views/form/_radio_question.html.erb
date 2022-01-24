@@ -9,7 +9,7 @@
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
       <% else %>
-        <% conditional_question = find_conditional_question(@page, question.conditional_for, val) %>
+        <% conditional_question = find_conditional_question(@page, question, val) %>
         <% if conditional_question.nil? %>
           <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) %>
         <% else %>

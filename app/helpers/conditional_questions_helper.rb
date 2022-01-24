@@ -3,10 +3,10 @@ module ConditionalQuestionsHelper
     page.questions.map(&:conditional_for).compact.map(&:keys).flatten
   end
 
-  def find_conditional_question(page, conditional_for, answer_value)
-    return if conditional_for.nil?
+  def find_conditional_question(page, question, answer_value)
+    return if question.conditional_for.nil?
 
-    conditional_key = conditional_for.find { |_, conditional_value| conditional_value.include? answer_value }&.first
+    conditional_key = question.conditional_for.find { |_, conditional_value| conditional_value.include? answer_value }&.first
     page.questions.find { |q| q.id == conditional_key }
   end
 
