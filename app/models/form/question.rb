@@ -35,7 +35,7 @@ class Form::Question
 
   def answer_label(case_log)
     return checkbox_answer_label(case_log) if type == "checkbox"
-    return case_log[id].strftime("%d %b %Y") if type == "date"
+    return case_log[id].to_formatted_s(:govuk_date) if type == "date"
 
     return case_log[id].to_s if case_log[id].present?
 

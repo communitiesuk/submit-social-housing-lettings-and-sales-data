@@ -18,7 +18,7 @@
       <%= body.row do |row|
         row.cell(text: simple_format(user_cell(user), {}, wrapper_tag: "div"))
         row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div"))
-        row.cell(text: user.last_sign_in_at&.strftime("%d %b %Y") )
+        row.cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date) )
       end %>
     <% end %>
   <% end %>

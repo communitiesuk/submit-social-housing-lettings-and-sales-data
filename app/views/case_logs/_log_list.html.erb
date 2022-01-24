@@ -21,7 +21,7 @@
         <%= log.tenant_code %>
       </td>
       <td id="last-changed" class="govuk-table__cell">
-        <%= log.updated_at.strftime("%d %b %Y") %>
+        <%= log.updated_at.to_formatted_s(:govuk_date) %>
       </td>
     </tr>
     <% end %>

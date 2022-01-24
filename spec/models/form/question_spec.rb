@@ -118,7 +118,7 @@ RSpec.describe Form::Question, type: :model do
 
       it "displays a formatted answer label" do
         case_log.mrcdate = Time.zone.local(2021, 10, 11)
-        expect(subject.answer_label(case_log)).to eq("11 Oct 2021")
+        expect(subject.answer_label(case_log)).to eq("11 October 2021")
       end
     end
 
