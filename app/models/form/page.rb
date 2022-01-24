@@ -37,7 +37,8 @@ class Form::Page
     @conditional_questions ||= questions.flat_map { |q|
       next if q.conditional_for.blank?
 
-      q.conditional_for.keys
+      # TODO: remove this condition once all conditional questions no longer need JS
+      q.conditional_for.keys if q.type == "radio"
     }.compact
   end
 
