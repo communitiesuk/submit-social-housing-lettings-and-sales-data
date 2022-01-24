@@ -6,7 +6,7 @@
     answers,
     :id,
     :name,
-    caption: caption(caption, page_header, conditional),
+    caption: caption(caption_text, page_header, conditional),
     label: legend(question, page_header, conditional),
     hint: { text: question.hint_text&.html_safe },
     options: { disabled: [""], selected: selected },

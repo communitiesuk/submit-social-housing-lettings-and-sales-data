@@ -1,8 +1,8 @@
 module QuestionViewHelper
-  def caption(caption, page_header, conditional)
-    return nil unless caption && page_header.blank? && !conditional
+  def caption(caption_text, page_header, conditional)
+    return nil unless caption_text && page_header.blank? && !conditional
 
-    { text: caption.html_safe, size: "l" }
+    { text: caption_text.html_safe, size: "l" }
   end
 
   def legend(question, page_header, conditional)
