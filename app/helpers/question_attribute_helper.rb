@@ -21,9 +21,8 @@ private
     }
   end
 
-  # TODO: remove this once all conditional questions no longer need JS
   def conditional_html_attributes(question)
-    return {} if question.conditional_for.blank? || question.type == "radio"
+    return {} if question.conditional_for.blank?
 
     {
       "data-controller": "conditional-question",

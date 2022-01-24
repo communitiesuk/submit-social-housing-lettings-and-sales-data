@@ -20,21 +20,11 @@ export default class extends Controller {
     if(this.element.checked) {
       let selectedValue = this.element.value
       let conditional_for = JSON.parse(this.element.dataset.info)
-
       Object.entries(conditional_for).map(([targetQuestion, conditions]) => {
-        let div = document.getElementById(targetQuestion + "_div")
-        if (div == null) return;
+        let input = document.getElementById(`case-log-${targetQuestion.replaceAll("_","-")}-field`)
         if(conditions.includes(selectedValue)) {
-          div.style.display = "block"
         } else {
-          div.style.display = "none"
-          let buttons = document.getElementsByName(`case_log[${targetQuestion}]`);
-          if (buttons.length == 0){
-            buttons = document.getElementsByName(`case_log[${targetQuestion}][]`);
-          }
-          Object.entries(buttons).map(([idx, button]) => {
-            button.checked = false;
-          })
+          input.value = ""
         }
       })
     }

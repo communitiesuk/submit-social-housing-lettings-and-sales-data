@@ -14,7 +14,13 @@
           <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) %>
         <% else %>
           <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) do %>
-            <%= render partial: "#{conditional_question.type}_question", locals: { question: conditional_question, caption: caption, page_header: page_header, f: f } %>
+            <%= render partial: "#{conditional_question.type}_question", locals: {
+              question: conditional_question,
+              caption: caption,
+              page_header: page_header,
+              f: f,
+              conditional: true
+            } %>
           <% end %>
         <% end %>
       <% end %>
