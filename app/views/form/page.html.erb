@@ -31,7 +31,7 @@
 
       <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
         <%= f.govuk_error_summary %>
-        <% @page.questions.map do |question| %>
+        <% @page.non_conditional_questions.map do |question| %>
           <div id=<%= question.id + "_div " %> >
             <% if question.read_only? %>
               <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">

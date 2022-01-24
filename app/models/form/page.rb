@@ -27,14 +27,19 @@ class Form::Page
     subsection.enabled?(case_log) && depends_on_met(case_log)
   end
 
-  # We expect to render only one radio question (with conditionals)
-  # def questions_to_render
-  #   if questions.first.type == "radio"
-  #     [questions.first]
-  #   else
-  #     questions
-  #   end
-  # end
+  def non_conditional_questions
+    @non_conditional_questions ||= questions.reject do |q|
+      conditional_questions.include?(q.id)
+    end
+  end
+
+  def conditional_questions
+    @conditional_questions ||= questions.flat_map { |q|
+      next if q.conditional_for.blank?
+
+      q.conditional_for.keys
+    }.compact
+  end
 
 private
 

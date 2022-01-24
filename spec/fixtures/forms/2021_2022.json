@@ -124,32 +124,14 @@
                       "4": "Tenant prefers not to say"
                     },
                     "conditional_for": {
-                      "leftreg": ["A current or former regular in the UK Armed Forces (excluding National Service)"],
-                      "reservist": ["A current or former regular in the UK Armed Forces (excluding National Service)"]
+                      "leftreg": ["A current or former regular in the UK Armed Forces (excluding National Service)"]
                     }
                   },
                   "leftreg": {
                     "header": "Are they still serving?",
                     "hint_text": "",
-                    "type": "radio",
-                    "check_answer_label": "When did they leave the Armed Forces?",
-                    "answer_options": {
-                      "0": "Yes",
-                      "1": "No - they left up to 5 years ago",
-                      "2": "No - they left more than 5 years ago",
-                      "3": "Prefer not to say"
-                    }
-                  },
-                  "reservist": {
-                    "header": "Were they seriously injured or ill as a result of their service?",
-                    "hint_text": "",
-                    "type": "radio",
-                    "check_answer_label": "Has anyone in the household been seriously injured or ill as a result of their service in the armed forces?",
-                    "answer_options": {
-                      "0": "Yes",
-                      "1": "No",
-                      "2": "Prefer not to say"
-                    }
+                    "type": "text",
+                    "check_answer_label": "When did they leave the Armed Forces?"
                   }
                 }
               },
