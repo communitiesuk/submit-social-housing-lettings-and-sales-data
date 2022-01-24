@@ -1,8 +1,8 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
 
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
-    caption: caption && !page_header.present? ? { text: caption.html_safe, size: "l" } : nil,
-    legend: { text: question.header.html_safe, size: !page_header.present? ? "l" : "m", tag: !page_header.present? ? "h1" : "h2" },
+    caption: caption(caption, page_header, conditional),
+    legend: legend(question, page_header, conditional),
     hint: { text: question.hint_text&.html_safe } do %>
 
     <% question.answer_options.map do |key, val| %>

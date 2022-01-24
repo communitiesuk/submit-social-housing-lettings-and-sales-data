@@ -36,7 +36,7 @@
             <% if question.read_only? %>
               <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
             <% end %>
-            <%= render partial: "form/#{question.type}_question", locals: { question: question, caption: @subsection.label, page_header: @page.header, f: f } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question: question, caption: @subsection.label, page_header: @page.header, f: f, conditional: false } %>
           </div>
         <% end %>
 
