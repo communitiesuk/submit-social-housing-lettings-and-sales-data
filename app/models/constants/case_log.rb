@@ -1096,6 +1096,22 @@ module Constants::CaseLog
     "Don’t know" => 4,
   }.freeze
 
+  REFERRAL = {
+    "Internal transfer" => 1,
+    "Tenant applied directly (no referral or nomination)" => 2,
+    "Private registered provider (PRP) lettings only - nominated by a local housing authority" => 3,
+    "Private registered provider (PRP) supported lettings only - referred by local authority housing department" => 4,
+    "Re-located through official housing mobility scheme" => 8,
+    "Other social landlord" => 10,
+    "Community learning disability team" => 9,
+    "Police, probation or prison" => 12,
+    "Youth offending team" => 13,
+    "Community mental health team" => 14,
+    "Health service" => 15,
+    "Voluntary agency" => 7,
+    "Other" => 16,
+  }.freeze
+
   NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
                             "Supported housing",
                             "Sheltered accomodation",

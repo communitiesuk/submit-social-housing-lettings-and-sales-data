@@ -3245,6 +3245,33 @@
                   }
                 }
               }
+            },
+            "referral": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Internal transfer",
+                    "1": "Tenant applied directly (no referral or nomination)",
+                    "2": "Private registered provider (PRP) lettings only - nominated by a local housing authority",
+                    "3": "Private registered provider (PRP) supported lettings only - referred by local authority housing department",
+                    "4": "Re-located through official housing mobility scheme",
+                    "5": "Other social landlord",
+                    "6": "Community learning disability team",
+                    "7": "Police, probation or prison",
+                    "8": "Youth offending team",
+                    "9": "Community mental health team",
+                    "10": "Health service",
+                    "11": "Voluntary agency",
+                    "12": "Other"
+                  }
+                }
+              }
             }
           }
         }

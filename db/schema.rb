@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_14_105351) do
+ActiveRecord::Schema.define(version: 2022_01_24_121642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,15 +84,9 @@ ActiveRecord::Schema.define(version: 2022_01_14_105351) do
     t.integer "beds"
     t.integer "offered"
     t.integer "wchair"
-    t.integer "earnings"
     t.integer "incfreq"
     t.integer "benefits"
     t.integer "period"
-    t.integer "brent"
-    t.integer "scharge"
-    t.integer "pscharge"
-    t.integer "supcharg"
-    t.integer "tcharge"
     t.integer "layear"
     t.integer "lawaitlist"
     t.string "property_postcode"
@@ -143,7 +137,6 @@ ActiveRecord::Schema.define(version: 2022_01_14_105351) do
     t.string "prevloc"
     t.integer "hb"
     t.integer "hbrentshortfall"
-    t.integer "tshortfall"
     t.string "postcode"
     t.string "postcod2"
     t.string "ppostc1"
@@ -181,9 +174,17 @@ ActiveRecord::Schema.define(version: 2022_01_14_105351) do
     t.string "has_benefits"
     t.integer "nocharge"
     t.integer "is_carehome"
-    t.decimal "chcharge"
     t.integer "letting_in_sheltered_accomodation"
     t.integer "household_charge"
+    t.integer "earnings"
+    t.integer "brent"
+    t.integer "scharge"
+    t.integer "pscharge"
+    t.integer "supcharg"
+    t.integer "tcharge"
+    t.integer "tshortfall"
+    t.integer "chcharge"
+    t.integer "referral"
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
