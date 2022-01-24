@@ -5,8 +5,15 @@ RSpec.describe "User Features" do
   include Helpers
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
+  let(:set_password_template_id) { DeviseNotifyMailer::SET_PASSWORD_TEMPLATE_ID }
+  let(:notify_client) { double(Notifications::Client) }
+  let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
 
   before do
+    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+    allow_any_instance_of(DeviseNotifyMailer).to receive(:host).and_return("test.com")
+    allow_any_instance_of(User).to receive(:set_reset_password_token).and_return(reset_password_token)
+    allow(notify_client).to receive(:send_email).and_return(true)
     sign_in user
   end
 
@@ -39,7 +46,19 @@ RSpec.describe "User Features" do
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "new_user@example.com")
         choose("user-role-data-provider-field")
-        expect { click_button("Continue") }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(notify_client).to receive(:send_email).with(
+          {
+            email_address: "new_user@example.com",
+            template_id: set_password_template_id,
+            personalisation: {
+              name: "New User",
+              email: "new_user@example.com",
+              organisation: organisation.name,
+              link: "https://test.com/users/password/edit?reset_password_token=#{reset_password_token}",
+            },
+          },
+        )
+        click_button("Continue")
         expect(page).to have_current_path("/organisations/#{org_id}/users")
         expect(User.last.role).to eq("data_provider")
       end
