@@ -29,11 +29,13 @@ class Form::Page
 
   def non_conditional_questions
     @non_conditional_questions ||= questions.reject do |q|
-      conditional_questions.include?(q.id)
+      conditional_questions_ids.include?(q.id)
     end
   end
 
-  def conditional_questions
+private
+
+  def conditional_questions_ids
     @conditional_questions ||= questions.flat_map { |q|
       next if q.conditional_for.blank?
 
@@ -41,8 +43,6 @@ class Form::Page
       q.conditional_for.keys if q.type == "radio"
     }.compact
   end
-
-private
 
   def depends_on_met(case_log)
     return true unless depends_on
