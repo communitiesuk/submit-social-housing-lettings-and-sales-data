@@ -28,13 +28,13 @@ class Form::Page
   end
 
   # We expect to render only one radio question (with conditionals)
-  def questions_to_render
-    if questions.first.type == "radio"
-      [questions.first]
-    else
-      questions
-    end
-  end
+  # def questions_to_render
+  #   if questions.first.type == "radio"
+  #     [questions.first]
+  #   else
+  #     questions
+  #   end
+  # end
 
 private
 

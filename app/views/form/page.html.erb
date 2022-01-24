@@ -11,6 +11,8 @@
   ) %>
 <% end %>
 
+<div data-controller="govukfrontend"></div>
+
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -29,7 +31,7 @@
 
       <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
         <%= f.govuk_error_summary %>
-        <% @page.questions_to_render.map do |question| %>
+        <% @page.questions.map do |question| %>
           <div id=<%= question.id + "_div " %> >
             <% if question.read_only? %>
               <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
