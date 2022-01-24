@@ -33,7 +33,5 @@ module DataCollector
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.exceptions_app = routes
-
-    config.action_view.form_with_generates_remote_forms = false
   end
 end

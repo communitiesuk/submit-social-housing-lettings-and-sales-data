@@ -153,16 +153,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "armed forces injured validation" do
-      it "must be answered if tenant was a regular or reserve in armed forces" do
-        expect {
-          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
-                          reservist: nil,
-                          owning_organisation: owning_organisation,
-                          managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must be answered if tenant was not a regular or reserve in armed forces" do
+      it "must not be answered if tenant was not a regular or reserve in armed forces" do
         expect {
           CaseLog.create!(armedforces: "No",
                           reservist: "Yes",
@@ -466,15 +457,6 @@ RSpec.describe Form, type: :model do
     end
 
     context "armed forces active validation" do
-      it "must be answered if ever served in the forces as a regular" do
-        expect {
-          CaseLog.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
-                          leftreg: nil,
-                          owning_organisation: owning_organisation,
-                          managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       it "must not be answered if not ever served as a regular" do
         expect {
           CaseLog.create!(armedforces: "No",
