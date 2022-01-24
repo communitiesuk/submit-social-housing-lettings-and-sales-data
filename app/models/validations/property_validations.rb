@@ -55,4 +55,10 @@ module Validations::PropertyValidations
       record.errors.add :property_postcode, error_message
     end
   end
+
+  def validate_property_vacancy_reason_not_first_let(record)
+    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
+    end
+  end
 end

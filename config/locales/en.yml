@@ -101,6 +101,8 @@ en:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
+      prevten:
+        non_temp_accommodation: "Previous tenancy cannot be a non temporary accommodation if the vacancy reason is \"Relet to tenant who occupied same property as temporary accommodation\""
 
     tenancy:
       length:

@@ -1095,4 +1095,10 @@ module Constants::CaseLog
     "No" => 3,
     "Don’t know" => 4,
   }.freeze
+
+  NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
+                            "Supported housing",
+                            "Sheltered accomodation",
+                            "Home Office Asylum Support",
+                            "Other"].freeze
 end
