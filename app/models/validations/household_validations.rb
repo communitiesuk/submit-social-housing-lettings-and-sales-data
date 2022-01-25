@@ -4,10 +4,6 @@ module Validations::HouseholdValidations
   def validate_reasonable_preference(record)
     if record.homeless == "No" && record.reasonpref == "Yes"
       record.errors.add :reasonpref, I18n.t("validations.household.reasonpref.not_homeless")
-    elsif record.reasonpref == "Yes"
-      if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].none? { |a| a == "Yes" }
-        record.errors.add :reasonable_preference_reason, I18n.t("validations.household.reasonable_preference_reason.reason_required")
-      end
     elsif record.reasonpref == "No"
       if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].any? { |a| a == "Yes" }
         record.errors.add :reasonable_preference_reason, I18n.t("validations.household.reasonable_preference_reason.reason_not_required")

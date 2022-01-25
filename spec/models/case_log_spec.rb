@@ -73,19 +73,6 @@ RSpec.describe Form, type: :model do
     end
 
     context "reasonable preference is yes" do
-      it "validates a reason must be selected" do
-        expect {
-          CaseLog.create!(reasonpref: "Yes",
-                          rp_homeless: nil,
-                          rp_insan_unsat: nil,
-                          rp_medwel: nil,
-                          rp_hardship: nil,
-                          rp_dontknow: nil,
-                          owning_organisation: owning_organisation,
-                          managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       it "validates that previously homeless should be selected" do
         expect {
           CaseLog.create!(
