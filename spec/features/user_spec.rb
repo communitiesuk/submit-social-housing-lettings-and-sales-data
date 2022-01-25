@@ -31,7 +31,17 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/logs")
     end
 
-    it " can log out again" do
+    it " can log out again", js: true do
+      visit("/logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: "pAssword1")
+      click_button("Sign in")
+      click_link("Sign out")
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("Start now")
+    end
+
+    it " can log out again with js disabled" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
