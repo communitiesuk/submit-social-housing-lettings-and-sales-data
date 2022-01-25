@@ -827,7 +827,7 @@
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days",
-                    "1": "Yes - other homelessness ",
+                    "1": "Yes - other homelessness",
                     "2": "No"
                   }
                 }
@@ -924,16 +924,15 @@
                     "2": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years",
                     "3": "No",
                     "4": "Tenant prefers not to say"
-                  },
-                  "conditional_for": {
-                    "leftreg": [
-                      "A current or former regular in the UK Armed Forces (excluding National Service)"
-                    ],
-                    "reservist": [
-                      "A current or former regular in the UK Armed Forces (excluding National Service)"
-                    ]
                   }
-                },
+                }
+              }
+            },
+            "armed_forces_member": {
+              "header": "Experience of the UK Armed Forces",
+              "description": "",
+              "depends_on": [{ "armedforces": "A current or former regular in the UK Armed Forces (excluding National Service)" }],
+              "questions": {
                 "leftreg": {
                   "header": "Are they still serving?",
                   "hint_text": "",
@@ -3186,11 +3185,15 @@
                     "1": "No",
                     "divider": true,
                     "2": "Don’t know"
-                  },
-                  "conditional_for": {
-                    "reasonable_preference_reason": ["Yes"]
                   }
-                },
+                }
+              }
+            },
+            "reasonable_preference_reason": {
+              "header": "Reason for reasonable preference being given",
+              "description": "",
+              "depends_on": [{ "reasonpref": "Yes" }],
+              "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why were they given reasonable preference?",

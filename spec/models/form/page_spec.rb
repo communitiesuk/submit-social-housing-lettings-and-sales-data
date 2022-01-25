@@ -44,6 +44,16 @@ RSpec.describe Form::Page, type: :model do
     expect(subject.expected_responses.map(&:id)).to eq(expected_responses)
   end
 
+  context "page with conditional questions" do
+    let(:page_id) { "housing_benefit" }
+
+    it "knows which questions are not conditional" do
+      expected_non_conditional_questions = %w[hb]
+      expect(subject.non_conditional_questions.map(&:id))
+        .to eq(expected_non_conditional_questions)
+    end
+  end
+
   context "for a given case log" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
 

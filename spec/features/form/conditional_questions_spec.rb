@@ -30,13 +30,11 @@ RSpec.describe "Form Conditional Questions" do
       visit("/logs/#{id}/armed-forces")
       # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
       choose("case-log-armedforces-a-current-or-former-regular-in-the-uk-armed-forces-excluding-national-service-field", allow_label_click: true)
-      expect(page).to have_selector("#reservist_div")
-      choose("case-log-reservist-no-field", allow_label_click: true)
-      expect(page).to have_checked_field("case-log-reservist-no-field", visible: false)
+      fill_in("case-log-leftreg-field", with: "text")
       choose("case-log-armedforces-no-field", allow_label_click: true)
-      expect(page).not_to have_selector("#reservist_div")
+      expect(page).not_to have_field("case-log-leftreg-field")
       choose("case-log-armedforces-a-current-or-former-regular-in-the-uk-armed-forces-excluding-national-service-field", allow_label_click: true)
-      expect(page).to have_unchecked_field("case-log-reservist-no-field", visible: false)
+      expect(page).to have_field("case-log-leftreg-field", with: "")
     end
   end
 end

@@ -120,6 +120,11 @@ RSpec.describe Form::Question, type: :model do
         case_log.mrcdate = Time.zone.local(2021, 10, 11)
         expect(subject.answer_label(case_log)).to eq("11 October 2021")
       end
+
+      it "can handle nils" do
+        case_log.mrcdate = nil
+        expect(subject.answer_label(case_log)).to eq("")
+      end
     end
 
     context "when type is checkbox" do

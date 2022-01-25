@@ -27,7 +27,22 @@ class Form::Page
     subsection.enabled?(case_log) && depends_on_met(case_log)
   end
 
+  def non_conditional_questions
+    @non_conditional_questions ||= questions.reject do |q|
+      conditional_question_ids.include?(q.id)
+    end
+  end
+
 private
+
+  def conditional_question_ids
+    @conditional_question_ids ||= questions.flat_map { |q|
+      next if q.conditional_for.blank?
+
+      # TODO: remove this condition once all conditional questions no longer need JS
+      q.conditional_for.keys if q.type == "radio"
+    }.compact
+  end
 
   def depends_on_met(case_log)
     return true unless depends_on

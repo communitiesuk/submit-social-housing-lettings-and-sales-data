@@ -159,9 +159,11 @@ Assumptions made by the format:
 - All pages have at least 1 question
 - The ActiveRecord case log model has a field for each question name (must match). In the case of checkbox questions it must have one field for every answer option (again names must match).
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
-- For conditionally shown questions conditions that have been implemented and can be used are:
+- For conditionally shown questions, conditions that have been implemented and can be used are:
   - Radio question answer option selected matches one of conditional e.g. ["answer-options-1-string", "answer-option-3-string"]
   - Numeric question value matches condition e.g. [">2"], ["<7"] or ["== 6"]
+- When the top level question is a radio button and the conditional question is a numeric, text or date field then the conditional question is shown inline
+- When the conditional question is a radio, checkbox or select field it should be displayed on it's own page and "depends_on" should be used rather than "conditional_for"
 
   Page routing:
 
