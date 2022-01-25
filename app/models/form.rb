@@ -46,6 +46,26 @@ class Form
       "case_log_#{nxt_page}_path"
     end
   end
+  
+  def next_incomplete_section_redirect_path(subsection, case_log)
+    subsection_ids = subsections.map(&:id)
+    
+    if(case_log.status == "completed")
+      next_subsection = get_subsection(subsection_ids[subsection_ids.length - 1])
+      first_question_in_subsection = next_subsection.pages.first.id
+      return "#{first_question_in_subsection}".dasherize
+    end
+    
+    next_subsection_id_index = subsection_ids.index(subsection.id) + 1
+    next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
+
+    if(next_subsection.status(case_log) == :completed)
+      next_incomplete_section_redirect_path(next_subsection, case_log)
+    else
+      first_question_in_subsection = next_subsection.pages.first.id
+      return "#{first_question_in_subsection}".dasherize
+    end
+  end
 
   def conditional_question_conditions
     conditions = questions.map { |q| Hash(q.id => q.conditional_for) if q.conditional_for.present? }.compact

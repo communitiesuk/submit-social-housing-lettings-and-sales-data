@@ -22,6 +22,14 @@ RSpec.describe "Form Check Answers Page" do
       managing_organisation: user.organisation,
     )
   end
+  let(:completed_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :completed,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
   let(:id) { case_log.id }
 
   before do
@@ -115,6 +123,57 @@ RSpec.describe "Form Check Answers Page" do
       excluded_question_labels = ["Has the next condition been met?"]
       excluded_question_labels.each do |label|
         expect(page).not_to have_content(label)
+      end
+    end
+
+    context "when the user wants to bypass the tasklist page from check answers" do
+      let(:section_completed_case_log) do
+        FactoryBot.create(
+          :case_log,
+          :in_progress,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          tenant_code: "123",
+          age1: 35,
+          sex1: "Male",
+          other_hhmemb: 0
+        )
+      end
+
+      let(:skip_section_case_log) do
+        FactoryBot.create(
+          :case_log,
+          :in_progress,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          tenant_code: "123",
+          age1: 35,
+          sex1: "Male",
+          other_hhmemb: 0,
+          armedforces: "No",
+          illness: "No",
+          accessibility_requirements: "Don’t know",
+          la: "York",
+          condition_effects: "Hearing - such as deafness or partial hearing"
+        )
+      end
+
+      it "they can click a button to move onto the next section" do
+        visit("/logs/#{section_completed_case_log.id}/household-characteristics/check-answers")
+        click_link("Save and go to next incomplete section")
+        expect(page).to have_current_path("/logs/#{section_completed_case_log.id}/armed-forces")
+      end
+      
+      it "they can click a button to skip sections until the next incomplete section" do
+        visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
+        click_link("Save and go to next incomplete section")
+        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/tenancy-code")
+      end 
+
+      it "they can click a button to move to the submission section when all sections have been completed", js:true do
+        visit("/logs/#{completed_case_log.id}/local-authority/check-answers")
+        click_link("Save and go to submit")
+        expect(page).to have_current_path("/logs/#{completed_case_log.id}/declaration")
       end
     end
   end

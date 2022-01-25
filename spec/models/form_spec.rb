@@ -33,6 +33,38 @@ RSpec.describe Form, type: :model do
     end
   end
 
+  describe "next_incomplete_section_redirect_path" do
+    let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+    let(:subsection) { form.get_subsection("household_characteristics") }
+
+    context "when a user is on the check answers page for a subsection" do
+
+      before do
+        case_log.tenant_code = "123"
+        case_log.age1 = 35
+        case_log.sex1 = "Male"
+        case_log.other_hhmemb = 0
+      end
+
+      it "returns the first page of the next incomplete subsection" do
+        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("armed-forces")
+      end
+
+      it "returns the first page of the next incomplete subsection (skipping completed subsections)" do
+        case_log.armedforces = "No"
+        case_log.illness = "No"
+        case_log.accessibility_requirements = "Don’t know"
+        case_log.la = "York"
+        case_log.condition_effects = "Hearing - such as deafness or partial hearing"
+        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("tenancy-code")
+      end
+
+      it "returns the declaration section if all sections are complete" do
+        expect(form.next_incomplete_section_redirect_path(subsection, completed_case_log)).to eq("declaration")
+      end
+    end
+  end
+
   describe "invalidated_page_questions" do
     context "when dependencies are not met" do
       let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question declaration] }

@@ -22,7 +22,13 @@
       </dl>
 
       <%= form_with model: @case_log, method: "get" do |f| %>
-        <%= f.govuk_submit "Save and continue"  %>
+        <%= f.govuk_submit 'Save and continue' do %>
+          <% if @case_log.status == "in_progress" %>
+            <a class="govuk-button govuk-button--secondary" href=<%= "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}" %>>Save and go to next incomplete section</a>
+          <% elsif @case_log.status == "completed" %>
+            <a class="govuk-button govuk-button--secondary" href=<%= "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}" %>>Save and go to submit</a>
+          <% end%>
+        <% end %>
       <% end %>
     </div>
   </div>
