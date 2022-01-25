@@ -32,7 +32,7 @@ class Form::Subsection
 
     qs = applicable_questions(case_log)
     return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
-    return :completed if qs.all? { |question| question.completed?(case_log) }
+    return :completed if qs.all? { |question| question.type == "checkbox" ? question.answer_options.keys.any? { |key| case_log[key] == "Yes" } : question.completed?(case_log) }
 
     :in_progress
   end
@@ -58,7 +58,7 @@ class Form::Subsection
   end
 
   def answered_questions(case_log)
-    applicable_questions(case_log).select { |question|  question.type == "checkbox"? question.answer_options.keys.any? { |key| case_log[key] == "Yes" } : case_log[question.id].present? }
+    applicable_questions(case_log).select { |question| question.type == "checkbox" ? question.answer_options.keys.any? { |key| case_log[key] == "Yes" } : case_log[question.id].present? }
   end
 
   def unanswered_questions(case_log)

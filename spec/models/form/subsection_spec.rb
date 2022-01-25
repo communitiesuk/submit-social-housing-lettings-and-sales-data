@@ -35,6 +35,17 @@ RSpec.describe Form::Subsection, type: :model do
       expect(subject.status(case_log)).to eq(:in_progress)
     end
 
+    it "has a completed status for completed subsection" do
+      subsection_definition = section_definition["subsections"]["household_needs"]
+      subject = Form::Subsection.new("household_needs", subsection_definition, section)
+      case_log.armedforces = "No"
+      case_log.illness = "No"
+      case_log.housingneeds_a = "Yes"
+      case_log.la = "York"
+      case_log.illness_type_1 = "Yes"
+      expect(subject.status(case_log)).to eq(:completed)
+    end
+
     it "has status helpers" do
       expect(subject.is_incomplete?(case_log)).to be(true)
       expect(subject.is_started?(case_log)).to be(true)
@@ -47,8 +58,8 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has question helpers for the number of answered questions" do
-      subsection_definition = section_definition["subsections"]["household_needs"] 
-      subject = Form::Subsection.new("household_needs", subsection_definition, section) 
+      subsection_definition = section_definition["subsections"]["household_needs"]
+      subject = Form::Subsection.new("household_needs", subsection_definition, section)
       expected_questions = %w[armedforces illness accessibility_requirements la condition_effects]
       case_log.armedforces = "No"
       case_log.illness = "No"

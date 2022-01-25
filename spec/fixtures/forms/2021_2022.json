@@ -441,7 +441,7 @@
                   "dependent_question": {
                     "check_answer_label": "Dependent Question",
                     "header": "Question to test page routing",
-                    "type": "checkbox",
+                    "type": "radio",
                     "answer_options": {
                       "0": "Option A",
                       "1": "Option B"
