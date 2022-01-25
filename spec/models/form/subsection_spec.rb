@@ -47,9 +47,16 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has question helpers for the number of answered questions" do
-      expected_questions = %w[tenant_code age1]
+      subsection_definition = section_definition["subsections"]["household_needs"] 
+      subject = Form::Subsection.new("household_needs", subsection_definition, section) 
+      expected_questions = %w[armedforces illness accessibility_requirements la condition_effects]
+      case_log.armedforces = "No"
+      case_log.illness = "No"
+      case_log.housingneeds_a = "Yes"
+      case_log.la = "York"
+      case_log.illness_type_1 = "Yes"
       expect(subject.answered_questions(case_log).map(&:id)).to eq(expected_questions)
-      expect(subject.answered_questions_count(case_log)).to eq(2)
+      expect(subject.answered_questions_count(case_log)).to eq(5)
     end
 
     it "has a question helpers for the unanswered questions" do
