@@ -1,8 +1,8 @@
 class DeviseNotifyMailer < Devise::Mailer
   require "notifications/client"
 
-  RESET_PASSWORD_TEMPLATE_ID = "4593417c-500f-452c-8111-0f9d311aad0e".freeze
-  SET_PASSWORD_TEMPLATE_ID   = "00cd7163-4213-4596-b4f9-9e72796e0d76".freeze
+  RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
+  SET_PASSWORD_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
 
   def notify_client
     @notify_client ||= ::Notifications::Client.new(ENV["GOVUK_NOTIFY_API_KEY"])
