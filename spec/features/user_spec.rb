@@ -1,6 +1,17 @@
 require "rails_helper"
+
 RSpec.describe "User Features" do
-  let!(:user) { FactoryBot.create(:user) }
+  let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
+  let(:reset_password_template_id) { DeviseNotifyMailer::RESET_PASSWORD_TEMPLATE_ID }
+  let(:notify_client) { double(Notifications::Client) }
+  let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+  before do
+    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+    allow_any_instance_of(DeviseNotifyMailer).to receive(:host).and_return("test.com")
+    allow(notify_client).to receive(:send_email).and_return(true)
+    allow_any_instance_of(User).to receive(:set_reset_password_token).and_return(reset_password_token)
+  end
+
   context "A user navigating to case logs" do
     it " is required to log in" do
       visit("/logs")
@@ -66,10 +77,22 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/confirmations/reset?email=idontexist%40example.com")
     end
 
-    it " is sent a reset password email" do
+    it " is sent a reset password email via Notify" do
+      expect(notify_client).to receive(:send_email).with(
+        {
+          email_address: user.email,
+          template_id: reset_password_template_id,
+          personalisation: {
+            name: user.name,
+            email: user.email,
+            organisation: user.organisation.name,
+            link: "https://test.com/users/password/edit?reset_password_token=#{reset_password_token}",
+          },
+        },
+      )
       visit("/users/password/new")
       fill_in("user[email]", with: user.email)
-      expect { click_button("Send email") }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      click_button("Send email")
     end
   end
 

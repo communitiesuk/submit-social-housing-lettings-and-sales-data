@@ -1,12 +1,18 @@
 require "rails_helper"
 
-RSpec.describe "password_reset", type: :request do
+RSpec.describe UsersController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:unauthorised_user) { FactoryBot.create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:new_value) { "new test name" }
   let(:params) { { id: user.id, user: { name: new_value } } }
+  let(:notify_client) { double(Notifications::Client) }
+
+  before do
+    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+    allow(notify_client).to receive(:send_email).and_return(true)
+  end
 
   context "a not signed in user" do
     describe "#show" do
