@@ -1138,16 +1138,16 @@ RSpec.describe Form, type: :model do
         CaseLog.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          brent: 5,
-          scharge: 10,
+          brent: 5.77,
+          scharge: 10.01,
           pscharge: 3,
-          supcharg: 12,
+          supcharg: 12.2,
         })
       end
 
       it "correctly sums rental charges" do
         record_from_db = ActiveRecord::Base.connection.execute("select tcharge from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["tcharge"]).to eq(30)
+        expect(record_from_db["tcharge"]).to eq(30.98)
       end
     end
 
