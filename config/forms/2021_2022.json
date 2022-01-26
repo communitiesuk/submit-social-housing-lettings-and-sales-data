@@ -1211,7 +1211,16 @@
                   "answer_options": {
                     "1": "Yes",
                     "0": "No"
+                  },
+                  "conditional_for": {
+                    "why_dont_you_know_la": ["No"]
                   }
+                },
+                "why_dont_you_know_la": {
+                  "check_answer_label": "Reason you don’t know the postcode or local authority",
+                  "header": "Give a reason why you don’t know the postcode or local authority",
+                  "hint_text": "",
+                  "type": "textarea"
                 }
               },
               "depends_on": [{ "is_la_inferred": false }]
@@ -1547,19 +1556,6 @@
                 }
               },
               "depends_on": [{ "la_known": "Yes", "is_la_inferred": false }]
-            },
-            "why_dont_you_know_la": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "why_dont_you_know_la": {
-                  "check_answer_label": "Reason you don’t know the postcode or local authority",
-                  "header": "Give a reason why you don’t know the postcode or local authority",
-                  "hint_text": "",
-                  "type": "textarea"
-                }
-              },
-              "depends_on": [{ "la_known": "No", "is_la_inferred": false }]
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
