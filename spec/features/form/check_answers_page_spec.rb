@@ -152,9 +152,24 @@ RSpec.describe "Form Check Answers Page" do
           other_hhmemb: 0,
           armedforces: "No",
           illness: "No",
-          accessibility_requirements: "Don’t know",
+          housingneeds_h: "Yes",
           la: "York",
-          condition_effects: "Hearing - such as deafness or partial hearing"
+          illness_type_1: "Yes"
+        )
+      end
+
+      let(:cycle_sections_case_log) do
+        FactoryBot.create(
+          :case_log,
+          :in_progress,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          layear: "1 to 2 years",
+          lawaitlist: "Less than 1 year",
+          property_postcode: "NW1 5TY",
+          reason: "Permanently decanted from another property owned by this landlord",
+          previous_postcode: "SE2 6RT",
+          mrcdate: Time.zone.parse("03/11/2019")
         )
       end
 
@@ -168,6 +183,12 @@ RSpec.describe "Form Check Answers Page" do
         visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/tenancy-code")
+      end 
+
+      it "they can click a button to cycle around to the next incomplete section" do
+        visit("/logs/#{cycle_sections_case_log.id}/local-authority/check-answers")
+        click_link("Save and go to next incomplete section")
+        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code")
       end 
 
       it "they can click a button to move to the submission section when all sections have been completed", js:true do

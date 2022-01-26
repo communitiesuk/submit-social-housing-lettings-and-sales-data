@@ -36,6 +36,7 @@ RSpec.describe Form, type: :model do
   describe "next_incomplete_section_redirect_path" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
     let(:subsection) { form.get_subsection("household_characteristics") }
+    let(:later_subsection) { form.get_subsection("local_authority") }
 
     context "when a user is on the check answers page for a subsection" do
 
@@ -53,10 +54,20 @@ RSpec.describe Form, type: :model do
       it "returns the first page of the next incomplete subsection (skipping completed subsections)" do
         case_log.armedforces = "No"
         case_log.illness = "No"
-        case_log.accessibility_requirements = "Don’t know"
+        case_log.housingneeds_a = "Yes"
         case_log.la = "York"
-        case_log.condition_effects = "Hearing - such as deafness or partial hearing"
+        case_log.illness_type_1 = "Yes"
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("tenancy-code")
+      end
+
+      it "returns the next incomplete section by cycling back around if next subsections are completed" do
+        case_log.layear = "1 to 2 years"
+        case_log.lawaitlist = "Less than 1 year"
+        case_log.property_postcode = "NW1 5TY"
+        case_log.reason = "Permanently decanted from another property owned by this landlord"
+        case_log.previous_postcode = "SE2 6RT"
+        case_log.mrcdate = Time.zone.parse("03/11/2019")
+        expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
       end
 
       it "returns the declaration section if all sections are complete" do

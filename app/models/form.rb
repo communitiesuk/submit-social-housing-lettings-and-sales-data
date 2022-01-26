@@ -55,10 +55,13 @@ class Form
       first_question_in_subsection = next_subsection.pages.first.id
       return "#{first_question_in_subsection}".dasherize
     end
-    
+
     next_subsection_id_index = subsection_ids.index(subsection.id) + 1
     next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
 
+    if(next_subsection.id == "declaration" && case_log.status != "completed")
+      next_subsection = get_subsection(subsection_ids[0])
+    end
     if(next_subsection.status(case_log) == :completed)
       next_incomplete_section_redirect_path(next_subsection, case_log)
     else
