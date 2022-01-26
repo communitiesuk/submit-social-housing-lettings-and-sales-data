@@ -60,17 +60,17 @@ RSpec.describe "Form Saving Data" do
   it "updates total value of the rent", js: true do
     visit("/logs/#{id}/rent")
 
-    fill_in("case-log-brent-field", with: 3)
-    expect(page).to have_field("case-log-tcharge-field", with: "3")
+    fill_in("case-log-brent-field", with: 3.02)
+    expect(page).to have_field("case-log-tcharge-field", with: "3.02")
 
-    fill_in("case-log-scharge-field", with: 2)
-    expect(page).to have_field("case-log-tcharge-field", with: "5")
+    fill_in("case-log-scharge-field", with: 2.8)
+    expect(page).to have_field("case-log-tcharge-field", with: "5.82")
 
     fill_in("case-log-pscharge-field", with: 1)
-    expect(page).to have_field("case-log-tcharge-field", with: "6")
+    expect(page).to have_field("case-log-tcharge-field", with: "6.82")
 
-    fill_in("case-log-supcharg-field", with: 4)
-    expect(page).to have_field("case-log-tcharge-field", with: "10")
+    fill_in("case-log-supcharg-field", with: 4.11)
+    expect(page).to have_field("case-log-tcharge-field", with: "10.93")
   end
 
   it "displays number answers in inputs if they are already saved" do
