@@ -129,7 +129,7 @@ RSpec.describe "User Features" do
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/")
+      expect(page).to have_current_path("/logs")
     end
 
     it "tries to access account page, redirects to log in page" do

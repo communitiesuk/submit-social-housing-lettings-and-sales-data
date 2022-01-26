@@ -247,6 +247,7 @@ RSpec.describe UsersController, type: :request do
     it "routes user to the /logs page" do
       get "/", headers: headers, params: {}
       expected_link = "href=\"/logs\">#{I18n.t('service_name')}</a>"
+      follow_redirect!
       expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
   end
