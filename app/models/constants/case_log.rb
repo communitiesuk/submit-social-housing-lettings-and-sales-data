@@ -1112,6 +1112,13 @@ module Constants::CaseLog
     "Other" => 16,
   }.freeze
 
+  REFERRAL_INVALID_TMP = ["Re-located through official housing mobility scheme",
+                          "Other social landlord",
+                          "Police, probation or prison",
+                          "Youth offending team",
+                          "Community mental health team",
+                          "Health service"].freeze
+
   NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
                             "Supported housing",
                             "Sheltered accomodation",

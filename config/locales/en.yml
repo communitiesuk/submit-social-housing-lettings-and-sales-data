@@ -56,6 +56,7 @@ en:
         first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
         previous_let_social: "Property cannot have a previous let type if it is being let as social housing for the first time"
         non_temp_accommodation: "Vacancy reason cannot be \"Relet to tenant who occupied same property as temporary accommodation\" if previous tenancy is a non temporary accommodation"
+        referral_invalid: "Vacancy reason cannot be \"Relet to tenant who occupied same property as temporary accommodation\" if source of referral for letting is ..."
 
     financial:
       tshortfall:
@@ -109,6 +110,10 @@ en:
         fixed_term_not_required: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term"
         shorthold: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years"
         secure: "Secure (including flexible) should be between 2 and 99 years or not specified"
+
+    local_authority:
+      referral:
+        rsnvac_non_temp: "Source of referral for letting cannot be ... if the vacancy reason is \"Relet to tenant who occupied same property as temporary accommodation\""
 
   soft_validations:
     net_income:

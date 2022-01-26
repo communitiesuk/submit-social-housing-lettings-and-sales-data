@@ -918,12 +918,30 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
+      def check_rsnvac_referral_validation(referral)
+        expect {
+          CaseLog.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
+                          referral: referral,
+                          owning_organisation: owning_organisation,
+                          managing_organisation: managing_organisation)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
       it "cannot be temp accomodation if previous tenancy was non temp" do
         check_rsnvac_validation("Tied housing or rented with job")
         check_rsnvac_validation("Supported housing")
         check_rsnvac_validation("Sheltered accomodation")
         check_rsnvac_validation("Home Office Asylum Support")
         check_rsnvac_validation("Other")
+      end
+
+      it "cannot be temp accomodation if source of letting referral " do
+        check_rsnvac_referral_validation("Re-located through official housing mobility scheme")
+        check_rsnvac_referral_validation("Other social landlord")
+        check_rsnvac_referral_validation("Police, probation or prison")
+        check_rsnvac_referral_validation("Youth offending team")
+        check_rsnvac_referral_validation("Community mental health team")
+        check_rsnvac_referral_validation("Health service")
       end
     end
   end

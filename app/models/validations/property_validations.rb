@@ -40,6 +40,14 @@ module Validations::PropertyValidations
     if record.first_time_property_let_as_social_housing? && record.rsnvac.present? && !FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_social")
     end
+
+    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
+    end
+
+    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
+      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
+    end
   end
 
   def validate_unitletas(record)
@@ -53,12 +61,6 @@ module Validations::PropertyValidations
     if record.postcode_known == "Yes" && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
       error_message = I18n.t("validations.postcode")
       record.errors.add :property_postcode, error_message
-    end
-  end
-
-  def validate_property_vacancy_reason_not_first_let(record)
-    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
-      record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
     end
   end
 end
