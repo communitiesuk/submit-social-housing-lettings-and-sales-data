@@ -31,7 +31,7 @@ development:
   database: data_collector_development
   host: localhost
 
-sandbox:
+staging:
   <<: *default
 
   # The specified database role being used to connect to postgres.

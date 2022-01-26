@@ -1,14 +1,25 @@
 ---
+defaults: &defaults
+  buildpacks:
+    - https://github.com/cloudfoundry/ruby-buildpack.git
+  processes:
+    - type: web
+      command: rake db:migrate && bin/rails server
+      instances: 2
+      memory: 512M
+
 applications:
-  - name: dluhc-core
-    buildpacks:
-      - https://github.com/cloudfoundry/ruby-buildpack.git
+  - name: dluhc-core-staging
+    <<: *defaults
     env:
-      RAILS_ENV: sandbox
-    processes:
-      - type: web
-        command: rake db:migrate && bin/rails server
-        instances: 2
-        memory: 512M
+      RAILS_ENV: staging
     services:
-      - dluhc-core-sandbox-postgres
+      - dluhc-core-staging-postgres
+
+  - name: dluhc-core-production
+    <<: *defaults
+    env:
+      RAILS_ENV: production
+    host: submit-social-housing-lettings-sales-data
+    services:
+      - dluhc-core-production-postgres
