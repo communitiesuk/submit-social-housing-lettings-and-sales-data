@@ -80,6 +80,7 @@ class Form::Question
   def completed?(case_log)
     # Special case as No is a valid answer but doesn't let you progress and use the service
     return false if id == "gdpr_acceptance" && case_log[id] == "No"
+    return answer_options.keys.any? { |key| case_log[key] == "Yes" } if type == "checkbox"
 
     case_log[id].present? || !case_log.respond_to?(id.to_sym)
   end
