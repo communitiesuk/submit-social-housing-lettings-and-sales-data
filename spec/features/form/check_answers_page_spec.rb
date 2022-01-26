@@ -136,7 +136,7 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: "123",
           age1: 35,
           sex1: "Male",
-          other_hhmemb: 0
+          other_hhmemb: 0,
         )
       end
 
@@ -154,7 +154,7 @@ RSpec.describe "Form Check Answers Page" do
           illness: "No",
           housingneeds_h: "Yes",
           la: "York",
-          illness_type_1: "Yes"
+          illness_type_1: "Yes",
         )
       end
 
@@ -169,7 +169,7 @@ RSpec.describe "Form Check Answers Page" do
           property_postcode: "NW1 5TY",
           reason: "Permanently decanted from another property owned by this landlord",
           previous_postcode: "SE2 6RT",
-          mrcdate: Time.zone.parse("03/11/2019")
+          mrcdate: Time.zone.parse("03/11/2019"),
         )
       end
 
@@ -178,20 +178,20 @@ RSpec.describe "Form Check Answers Page" do
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{section_completed_case_log.id}/armed-forces")
       end
-      
+
       it "they can click a button to skip sections until the next incomplete section" do
         visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/tenancy-code")
-      end 
+      end
 
       it "they can click a button to cycle around to the next incomplete section" do
         visit("/logs/#{cycle_sections_case_log.id}/local-authority/check-answers")
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code")
-      end 
+      end
 
-      it "they can click a button to move to the submission section when all sections have been completed", js:true do
+      it "they can click a button to move to the submission section when all sections have been completed", js: true do
         visit("/logs/#{completed_case_log.id}/local-authority/check-answers")
         click_link("Save and go to submit")
         expect(page).to have_current_path("/logs/#{completed_case_log.id}/declaration")

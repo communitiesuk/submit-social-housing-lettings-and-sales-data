@@ -39,7 +39,6 @@ RSpec.describe Form, type: :model do
     let(:later_subsection) { form.get_subsection("local_authority") }
 
     context "when a user is on the check answers page for a subsection" do
-
       before do
         case_log.tenant_code = "123"
         case_log.age1 = 35
