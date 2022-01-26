@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_24_121642) do
+ActiveRecord::Schema.define(version: 2022_01_26_101743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,14 +177,14 @@ ActiveRecord::Schema.define(version: 2022_01_24_121642) do
     t.integer "letting_in_sheltered_accomodation"
     t.integer "household_charge"
     t.integer "earnings"
-    t.integer "brent"
-    t.integer "scharge"
-    t.integer "pscharge"
-    t.integer "supcharg"
-    t.integer "tcharge"
-    t.integer "tshortfall"
-    t.integer "chcharge"
     t.integer "referral"
+    t.decimal "brent", precision: 10, scale: 2
+    t.decimal "scharge", precision: 10, scale: 2
+    t.decimal "pscharge", precision: 10, scale: 2
+    t.decimal "supcharg", precision: 10, scale: 2
+    t.decimal "tcharge", precision: 10, scale: 2
+    t.decimal "tshortfall", precision: 10, scale: 2
+    t.decimal "chcharge", precision: 10, scale: 2
     t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
