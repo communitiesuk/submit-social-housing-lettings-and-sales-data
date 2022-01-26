@@ -12,7 +12,6 @@ RSpec.describe "Start Page Features" do
 
     it "takes you to your logs" do
       visit("/")
-      click_link("Start now")
       expect(page).to have_current_path("/logs")
     end
   end
