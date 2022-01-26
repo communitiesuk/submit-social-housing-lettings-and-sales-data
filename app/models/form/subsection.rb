@@ -58,7 +58,7 @@ class Form::Subsection
   end
 
   def answered_questions(case_log)
-    applicable_questions(case_log).select { |question| case_log[question.id].present? }
+    applicable_questions(case_log).select { |question| question.completed?(case_log) }
   end
 
   def unanswered_questions(case_log)
