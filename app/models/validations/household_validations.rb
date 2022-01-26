@@ -1,4 +1,6 @@
 module Validations::HouseholdValidations
+  include Constants::CaseLog
+
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_reasonable_preference(record)
@@ -81,6 +83,12 @@ module Validations::HouseholdValidations
       if record.unittype_gn.include?("Shared") && !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.household.unittype_gn.one_three_bedroom_single_tenant_shared")
       end
+    end
+  end
+
+  def validate_previous_housing_situation(record)
+    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+      record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
     end
   end
 

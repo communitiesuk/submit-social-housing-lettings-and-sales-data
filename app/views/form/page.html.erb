@@ -30,6 +30,7 @@
       <% end %>
 
       <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+        <% remove_other_page_errors(@case_log, @page) %>
         <%= f.govuk_error_summary %>
         <% @page.non_conditional_questions.map do |question| %>
           <div id=<%= question.id + "_div " %><%= display_question_key_div(@page, question) %> >
