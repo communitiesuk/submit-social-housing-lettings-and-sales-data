@@ -1,7 +1,7 @@
 ---
 defaults: &defaults
   buildpacks:
-    - ruby_buildpack
+    - https://github.com/cloudfoundry/ruby-buildpack.git
   processes:
     - type: web
       command: bundle exec rake cf:on_first_instance db:migrate && bin/rails server
