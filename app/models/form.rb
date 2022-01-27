@@ -50,7 +50,7 @@ class Form
   def next_incomplete_section_redirect_path(subsection, case_log)
     subsection_ids = subsections.map(&:id)
 
-    if case_log.status == "completed"
+    if case_log.status == "completed" || all_subsections_except_declaration_completed?(case_log)
       next_subsection = get_subsection(subsection_ids[subsection_ids.length - 1])
       first_question_in_subsection = next_subsection.pages.first.id
       return first_question_in_subsection.to_s.dasherize
@@ -62,12 +62,21 @@ class Form
     if next_subsection.id == "declaration" && case_log.status != "completed"
       next_subsection = get_subsection(subsection_ids[0])
     end
+
     if next_subsection.status(case_log) == :completed
       next_incomplete_section_redirect_path(next_subsection, case_log)
     else
       first_question_in_subsection = next_subsection.pages.first.id
       first_question_in_subsection.to_s.dasherize
     end
+  end
+
+  def all_subsections_except_declaration_completed?(case_log)
+    subsection_ids = subsections.map(&:id)
+    subsection_ids.delete_at(subsection_ids.length - 1)
+    return true if subsection_ids.all? { |subsection_id| get_subsection(subsection_id).status(case_log) == :completed }
+
+    false
   end
 
   def conditional_question_conditions
