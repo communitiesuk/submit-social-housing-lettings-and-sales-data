@@ -16,7 +16,7 @@
                 "gdpr_acceptance": {
                   "check_answer_label": "Privacy notice seen",
                   "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
-                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service",
+                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
@@ -83,8 +83,8 @@
               "questions": {
                 "tenant_same_property_renewal": {
                   "check_answer_label": "Property renewal",
-                  "header": "Is this a renewal to the same tenant in the same property?",
-                  "hint_text": "",
+                  "header": "Is this letting a renewal?",
+                  "hint_text": "A renewal is a letting to the same tenant in the same property.",
                   "type": "radio",
                   "answer_options": {
                     "1": "Yes",
@@ -104,7 +104,7 @@
                 "startdate": {
                   "check_answer_label": "Tenancy start date",
                   "header": "What is the tenancy start date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -195,7 +195,7 @@
                 "sale_completion_date": {
                   "check_answer_label": "Sale completion date",
                   "header": "What is the sale completion date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -372,7 +372,7 @@
                 "other_hhmemb": {
                   "check_answer_label": "Number of other household members",
                   "header": "How many other people are there in the household?",
-                  "hint_text": "The maximum number of others is 7",
+                  "hint_text": "The maximum number of others is 7.",
                   "type": "numeric",
                   "min": 0,
                   "max": 7,
@@ -915,7 +915,7 @@
               "questions": {
                 "armedforces": {
                   "header": "Is anyone in the household...",
-                  "hint_text": "This excludes national service",
+                  "hint_text": "This excludes national service.",
                   "type": "radio",
                   "check_answer_label": "Armed Forces",
                   "answer_options": {
@@ -1002,7 +1002,7 @@
               "questions": {
                 "accessibility_requirements": {
                   "header": "Are any of these affected by their condition or illness?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
@@ -1024,7 +1024,7 @@
               "questions": {
                 "condition_effects": {
                   "header": "Are any of these affected by their condition or illness?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
@@ -1653,8 +1653,8 @@
               "questions": {
                 "offered": {
                   "check_answer_label": "Times previously offered since becoming available",
-                  "header": "How many times has the property been previously offered since becoming available for re-let?",
-                  "hint_text": "This is after the last tenancy ended. If the property is being let for the first time, enter 0",
+                  "header": "Since becoming available for re-let, how many times has the property been previously offered?",
+                  "hint_text": "If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1673,8 +1673,8 @@
               "questions": {
                 "offered": {
                   "check_answer_label": "Times previously offered since becoming available",
-                  "header": "How many times has the property been previously offered since becoming available?",
-                  "hint_text": "If the property is being let for the first time, enter 0",
+                  "header": "Since becoming available, how many times has the property been previously offered?",
+                  "hint_text": "If the property is being let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1748,6 +1748,7 @@
                 "beds": {
                   "check_answer_label": "Number of bedrooms",
                   "header": "How many bedrooms does the property have?",
+                  "hint_text": "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1764,7 +1765,7 @@
                 "property_void_date": {
                   "check_answer_label": "Void or renewal date",
                   "header": "What is the void or renewal date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -1799,7 +1800,7 @@
                 "majorrepairs": {
                   "check_answer_label": "Major repairs carried out during void period",
                   "header": "Were any major repairs carried out during the void period?",
-                  "hint_text": "",
+                  "hint_text": "Major repairs are works that could not be reasonably carried out with a tenant living at the property. For example, structural repairs.",
                   "type": "radio",
                   "answer_options": {
                     "1": "Yes",
@@ -1812,7 +1813,7 @@
                 "mrcdate": {
                   "check_answer_label": "Completion date of repairs",
                   "header": "When were the repairs completed?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -2669,8 +2670,8 @@
               "questions": {
                 "hbrentshortfall": {
                 "check_answer_label": "Outstanding amount for basic rent and charges",
-                "header": "After the household has received any housing-related benefits, will there be an outstanding amount for basic rent and eligible charges?",
-                "hint_text": "",
+                "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+                "hint_text": "Also known as the ‘outstanding amount’.",
                 "type": "radio",
                 "answer_options": {
                   "0": "Yes",
@@ -2764,7 +2765,7 @@
                 "prevloc": {
                   "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
-                  "hint_text": "Includes temporary accommodation",
+                  "hint_text": "Includes temporary accommodation.",
                   "type": "select",
                   "answer_options": {
                     "": "Select an option",
@@ -3162,7 +3163,7 @@
                 "previous_postcode": {
                   "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
-                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed.",
                   "type": "text"
                 }
               }
@@ -3193,7 +3194,7 @@
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why were they given reasonable preference?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": "Homeless or about to lose their home (within 56 days)",
