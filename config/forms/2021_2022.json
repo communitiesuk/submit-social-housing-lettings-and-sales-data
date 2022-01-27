@@ -83,8 +83,8 @@
               "questions": {
                 "tenant_same_property_renewal": {
                   "check_answer_label": "Property renewal",
-                  "header": "Is this a renewal to the same tenant in the same property?",
-                  "hint_text": "",
+                  "header": "Is this letting a renewal?",
+                  "hint_text": "A renewal is a letting to the same tenant in the same property.",
                   "type": "radio",
                   "answer_options": {
                     "1": "Yes",
@@ -1653,8 +1653,8 @@
               "questions": {
                 "offered": {
                   "check_answer_label": "Times previously offered since becoming available",
-                  "header": "How many times has the property been previously offered since becoming available for re-let?",
-                  "hint_text": "This is after the last tenancy ended. If the property is being let for the first time, enter 0",
+                  "header": "Since becoming available for re-let, how many times has the property been previously offered?",
+                  "hint_text": "If the property is being offered for let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1673,8 +1673,8 @@
               "questions": {
                 "offered": {
                   "check_answer_label": "Times previously offered since becoming available",
-                  "header": "How many times has the property been previously offered since becoming available?",
-                  "hint_text": "If the property is being let for the first time, enter 0",
+                  "header": "Since becoming available, how many times has the property been previously offered?",
+                  "hint_text": "If the property is being let for the first time, enter 0.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1748,6 +1748,7 @@
                 "beds": {
                   "check_answer_label": "Number of bedrooms",
                   "header": "How many bedrooms does the property have?",
+                  "hint_text": "If shared accommodation, enter the number of bedrooms occupied by this household. A bedsit has 1 bedroom.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
@@ -1799,7 +1800,7 @@
                 "majorrepairs": {
                   "check_answer_label": "Major repairs carried out during void period",
                   "header": "Were any major repairs carried out during the void period?",
-                  "hint_text": "",
+                  "hint_text": "Major repairs are works that could not be reasonably carried out with a tenant living at the property. For example, structural repairs.",
                   "type": "radio",
                   "answer_options": {
                     "1": "Yes",
@@ -2669,8 +2670,8 @@
               "questions": {
                 "hbrentshortfall": {
                 "check_answer_label": "Outstanding amount for basic rent and charges",
-                "header": "After the household has received any housing-related benefits, will there be an outstanding amount for basic rent and eligible charges?",
-                "hint_text": "",
+                "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+                "hint_text": "Also known as the ‘outstanding amount’.",
                 "type": "radio",
                 "answer_options": {
                   "0": "Yes",
