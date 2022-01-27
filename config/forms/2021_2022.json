@@ -60,23 +60,6 @@
               },
               "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
-            "sale_or_letting": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "sale_or_letting": {
-                  "check_answer_label": "Letting or sale",
-                  "header": "Is this a letting or sale?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "1": "Letting",
-                    "0": "Sale"
-                  }
-                }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
-            },
             "tenant_same_property_renewal": {
               "header": "",
               "description": "",
@@ -93,8 +76,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "startdate": {
@@ -109,8 +91,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "about_this_letting": {
@@ -153,8 +134,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "tenant_code": {
@@ -170,8 +150,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "property_reference": {
@@ -187,39 +166,6 @@
                 }
               },
               "depends_on": [{ "gdpr_acceptance": "Yes" }]
-            },
-            "sale_completion_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "sale_completion_date": {
-                  "check_answer_label": "Sale completion date",
-                  "header": "What is the sale completion date?",
-                  "hint_text": "For example, 27 3 2021.",
-                  "type": "date"
-                }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Sale"
-              }]
-            },
-            "purchaser_code": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "purchaser_code": {
-                  "check_answer_label": "Purchaser code",
-                  "header": "What is the purchaser code?",
-                  "hint_text": "",
-                  "type": "text",
-                  "width": 10
-                }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Sale"
-              }]
             }
           }
         }
