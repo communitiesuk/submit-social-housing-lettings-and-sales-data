@@ -3,11 +3,11 @@
   "start_year": 2021,
   "end_year": 2022,
   "sections": {
-    "about_this_log": {
-      "label": "About this log",
+    "setup": {
+      "label": "Before you start",
       "subsections": {
-        "about_this_log": {
-          "label": "About this log",
+        "setup": {
+          "label": "Set up your lettings log",
           "pages": {
             "gdpr_acceptance": {
               "header": "",
@@ -230,7 +230,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "person_1_age": {
               "header": "",
@@ -779,7 +779,7 @@
         },
         "household_situation": {
           "label": "Household situation",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "previous_housing_situation": {
               "header": "",
@@ -907,7 +907,7 @@
         },
         "household_needs": {
           "label": "Household needs",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -1051,7 +1051,7 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1165,7 +1165,7 @@
         },
         "property_information": {
           "label": "Property information",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "property_postcode": {
               "header": "",
@@ -1831,7 +1831,7 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income, benefits and outgoings",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "net_income_known": {
               "header": "Household’s combined income",
@@ -2710,7 +2710,7 @@
       "subsections": {
         "local_authority": {
           "label": "Local authority",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -3280,7 +3280,7 @@
         "declaration": {
           "label": "Declaration",
           "depends_on": [{
-            "about_this_log": "completed",
+            "setup": "completed",
             "household_characteristics": "completed",
             "household_situation": "completed",
             "household_needs": "completed",

@@ -1,11 +1,11 @@
 {
     "form_type": "lettings",
     "sections": {
-      "about_this_log": {
-        "label": "About this log",
+      "setup": {
+        "label": "Before you start",
         "subsections": {
-          "about_this_log": {
-            "label": "About this log",
+          "setup": {
+            "label": "Set up your lettings log",
             "pages": {
               "gdpr_acceptance": {
                 "header": "",
