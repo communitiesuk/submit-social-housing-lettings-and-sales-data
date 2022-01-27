@@ -1961,7 +1961,7 @@
               "description": "",
               "questions": {
                 "benefits": {
-                  "check_answer_label": "Household income from Universal credit, state pension or benefits",
+                  "check_answer_label": "Household income from Universal Credit, state pension or benefits",
                   "header": "How much of the household’s income is from Universal Credit, state pensions or benefits?",
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
@@ -2214,8 +2214,8 @@
               "description": "",
               "questions": {
                 "brent": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent every week?",
+                  "check_answer_label": "Basic rent",
+                  "header": "What is the basic rent?",
                   "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
                   "type": "numeric",
                   "min": 0,
@@ -2228,7 +2228,7 @@
                   "hidden_in_check_answers": true
                 },
                 "scharge": {
-                  "check_answer_label": "Service Charge",
+                  "check_answer_label": "Service charge",
                   "header": "What is the service charge?",
                   "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
                   "type": "numeric",
@@ -2242,9 +2242,9 @@
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
-                  "check_answer_label": "Personal Service Charge",
+                  "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2256,9 +2256,9 @@
                   "hidden_in_check_answers": true
                 },
                 "supcharg": {
-                  "check_answer_label": "Support Charge",
+                  "check_answer_label": "Support charge",
                   "header": "What is the support charge?",
-                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "hint_text": "Any charges made to fund support services included in tenancy agreement.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2388,8 +2388,8 @@
               "description": "",
               "questions": {
                 "brent": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent every 2 weeks?",
+                  "check_answer_label": "Basic rent",
+                  "header": "What is the basic rent?",
                   "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
                   "type": "numeric",
                   "min": 0,
@@ -2402,7 +2402,7 @@
                   "hidden_in_check_answers": true
                 },
                 "scharge": {
-                  "check_answer_label": "Service Charge",
+                  "check_answer_label": "Service charge",
                   "header": "What is the service charge?",
                   "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
                   "type": "numeric",
@@ -2416,7 +2416,7 @@
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
-                  "check_answer_label": "Personal Service Charge",
+                  "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
                   "type": "numeric",
@@ -2430,9 +2430,9 @@
                   "hidden_in_check_answers": true
                 },
                 "supcharg": {
-                  "check_answer_label": "Support Charge",
+                  "check_answer_label": "Support charge",
                   "header": "What is the support charge?",
-                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "hint_text": "Any charges made to fund support services included in tenancy agreement.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2481,8 +2481,8 @@
               "description": "",
               "questions": {
                 "brent": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent every 4 weeks?",
+                  "check_answer_label": "Basic rent",
+                  "header": "What is the basic rent?",
                   "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
                   "type": "numeric",
                   "min": 0,
@@ -2495,7 +2495,7 @@
                   "hidden_in_check_answers": true
                 },
                 "scharge": {
-                  "check_answer_label": "Service Charge",
+                  "check_answer_label": "Service charge",
                   "header": "What is the service charge?",
                   "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
                   "type": "numeric",
@@ -2509,9 +2509,9 @@
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
-                  "check_answer_label": "Personal Service Charge",
+                  "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2523,9 +2523,9 @@
                   "hidden_in_check_answers": true
                 },
                 "supcharg": {
-                  "check_answer_label": "Support Charge",
+                  "check_answer_label": "Support charge",
                   "header": "What is the support charge?",
-                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "hint_text": "Any charges made to fund support services included in tenancy agreement.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2574,8 +2574,8 @@
               "description": "",
               "questions": {
                 "brent": {
-                  "check_answer_label": "Basic Rent",
-                  "header": "What is the basic rent every month?",
+                  "check_answer_label": "Basic rent",
+                  "header": "What is the basic rent?",
                   "hint_text": "This is the amount paid before any charges are added for services (for example, hot water or cleaning). Households may receive housing benefit or Universal Credit towards basic rent.",
                   "type": "numeric",
                   "min": 0,
@@ -2588,7 +2588,7 @@
                   "hidden_in_check_answers": true
                 },
                 "scharge": {
-                  "check_answer_label": "Service Charge",
+                  "check_answer_label": "Service charge",
                   "header": "What is the service charge?",
                   "hint_text": "For example, for cleaning. Households may receive housing benefit or Universal Credit towards the service charge.",
                   "type": "numeric",
@@ -2602,7 +2602,7 @@
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
-                  "check_answer_label": "Personal Service Charge",
+                  "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
                   "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
                   "type": "numeric",
@@ -2616,9 +2616,9 @@
                   "hidden_in_check_answers": true
                 },
                 "supcharg": {
-                  "check_answer_label": "Support Charge",
+                  "check_answer_label": "Support charge",
                   "header": "What is the support charge?",
-                  "hint_text": "This is any charge made to fund housing-related support services included in the tenancy agreement.",
+                  "hint_text": "Any charges made to fund support services included in tenancy agreement.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -2669,8 +2669,8 @@
               "questions": {
                 "hbrentshortfall": {
                 "check_answer_label": "Outstanding amount for basic rent and charges",
-                "header": "After the household has received any housing-related benefits, will there be an outstanding amount for basic rent and eligible charges?",
-                "hint_text": "",
+                "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+                "hint_text": "Also known as the ‘outstanding amount’.",
                 "type": "radio",
                 "answer_options": {
                   "0": "Yes",
