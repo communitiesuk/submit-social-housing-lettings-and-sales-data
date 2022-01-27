@@ -16,7 +16,7 @@
                 "gdpr_acceptance": {
                   "check_answer_label": "Privacy notice seen",
                   "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
-                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service",
+                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
                   "type": "radio",
                   "answer_options": {
                     "0": "Yes",
@@ -104,7 +104,7 @@
                 "startdate": {
                   "check_answer_label": "Tenancy start date",
                   "header": "What is the tenancy start date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -195,7 +195,7 @@
                 "sale_completion_date": {
                   "check_answer_label": "Sale completion date",
                   "header": "What is the sale completion date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -372,7 +372,7 @@
                 "other_hhmemb": {
                   "check_answer_label": "Number of other household members",
                   "header": "How many other people are there in the household?",
-                  "hint_text": "The maximum number of others is 7",
+                  "hint_text": "The maximum number of others is 7.",
                   "type": "numeric",
                   "min": 0,
                   "max": 7,
@@ -915,7 +915,7 @@
               "questions": {
                 "armedforces": {
                   "header": "Is anyone in the household...",
-                  "hint_text": "This excludes national service",
+                  "hint_text": "This excludes national service.",
                   "type": "radio",
                   "check_answer_label": "Armed Forces",
                   "answer_options": {
@@ -1002,7 +1002,7 @@
               "questions": {
                 "accessibility_requirements": {
                   "header": "Are any of these affected by their condition or illness?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
@@ -1024,7 +1024,7 @@
               "questions": {
                 "condition_effects": {
                   "header": "Are any of these affected by their condition or illness?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
@@ -1765,7 +1765,7 @@
                 "property_void_date": {
                   "check_answer_label": "Void or renewal date",
                   "header": "What is the void or renewal date?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -1813,7 +1813,7 @@
                 "mrcdate": {
                   "check_answer_label": "Completion date of repairs",
                   "header": "When were the repairs completed?",
-                  "hint_text": "For example, 27 3 2021",
+                  "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
               },
@@ -2765,7 +2765,7 @@
                 "prevloc": {
                   "check_answer_label": "The LA in which household lived immediately before this letting\t",
                   "header": "Which local authority area did the household live in immediately before this letting?",
-                  "hint_text": "Includes temporary accommodation",
+                  "hint_text": "Includes temporary accommodation.",
                   "type": "select",
                   "answer_options": {
                     "": "Select an option",
@@ -3163,7 +3163,7 @@
                 "previous_postcode": {
                   "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                   "header": "Postcode for the previous accommodation",
-                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed.",
                   "type": "text"
                 }
               }
@@ -3194,7 +3194,7 @@
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why were they given reasonable preference?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": "Homeless or about to lose their home (within 56 days)",
