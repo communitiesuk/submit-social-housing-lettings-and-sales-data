@@ -263,7 +263,7 @@ private
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
-    self.tcharge = brent.to_i + scharge.to_i + pscharge.to_i + supcharg.to_i
+    self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge == "Yes" ? "No" : "Yes"
   end
