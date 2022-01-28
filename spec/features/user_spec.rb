@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe "User Features" do
   let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
