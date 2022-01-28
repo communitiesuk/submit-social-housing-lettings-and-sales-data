@@ -69,8 +69,38 @@ RSpec.describe Form, type: :model do
         expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
       end
 
-      it "returns the declaration section if all sections are complete" do
+      it "returns the declaration section for a completed case log" do
         expect(form.next_incomplete_section_redirect_path(subsection, completed_case_log)).to eq("declaration")
+      end
+
+      it "returns the declaration section if all sections are complete but the case log is in progress" do
+        case_log.armedforces = "No"
+        case_log.illness = "No"
+        case_log.housingneeds_a = "Yes"
+        case_log.la = "York"
+        case_log.illness_type_1 = "Yes"
+        case_log.tenancy_code = "1234"
+        case_log.wchair = "No"
+        case_log.preg_occ = "No"
+        case_log.cbl = "No"
+        case_log.earnings = 30000
+        case_log.incfreq = "Yearly"
+        case_log.benefits = "Some"
+        case_log.hb = "Tenant prefers not to say"
+        case_log.period = "Every 2 weeks"
+        case_log.brent = 650
+        case_log.scharge = 0
+        case_log.pscharge = 0
+        case_log.supcharg = 0
+        case_log.tcharge = 650
+        case_log.layear = "1 to 2 years"
+        case_log.lawaitlist = "Less than 1 year"
+        case_log.property_postcode = "NW1 5TY"
+        case_log.reason = "Permanently decanted from another property owned by this landlord"
+        case_log.previous_postcode = "SE2 6RT"
+        case_log.mrcdate = Time.zone.parse("03/11/2019")
+        
+        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("declaration")
       end
     end
   end
