@@ -67,7 +67,7 @@ class Form
   def first_question_in_last_subsection(subsection_ids)
     next_subsection = get_subsection(subsection_ids[subsection_ids.length - 1])
     first_question_in_subsection = next_subsection.pages.first.id
-    return first_question_in_subsection.to_s.dasherize
+    first_question_in_subsection.to_s.dasherize
   end
 
   def next_subsection(subsection, case_log, subsection_ids)
@@ -78,7 +78,7 @@ class Form
       next_subsection = get_subsection(subsection_ids[0])
     end
 
-    return next_subsection
+    next_subsection
   end
 
   def all_subsections_except_declaration_completed?(case_log)
