@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     get "confirmations/reset", to: "auth/passwords#reset_confirmation"
   end
 
+  get "/health", to: ->(_) { [204, {}, [nil]] }
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
 
