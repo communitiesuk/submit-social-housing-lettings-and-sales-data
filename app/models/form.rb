@@ -51,17 +51,10 @@ class Form
     subsection_ids = subsections.map(&:id)
 
     if case_log.status == "completed" || all_subsections_except_declaration_completed?(case_log)
-      next_subsection = get_subsection(subsection_ids[subsection_ids.length - 1])
-      first_question_in_subsection = next_subsection.pages.first.id
-      return first_question_in_subsection.to_s.dasherize
+      return first_question_in_last_subsection(subsection_ids)
     end
 
-    next_subsection_id_index = subsection_ids.index(subsection.id) + 1
-    next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
-
-    if next_subsection.id == "declaration" && case_log.status != "completed"
-      next_subsection = get_subsection(subsection_ids[0])
-    end
+    next_subsection = next_subsection(subsection, case_log, subsection_ids)
 
     if next_subsection.status(case_log) == :completed
       next_incomplete_section_redirect_path(next_subsection, case_log)
@@ -69,6 +62,23 @@ class Form
       first_question_in_subsection = next_subsection.pages.first.id
       first_question_in_subsection.to_s.dasherize
     end
+  end
+
+  def first_question_in_last_subsection(subsection_ids)
+    next_subsection = get_subsection(subsection_ids[subsection_ids.length - 1])
+    first_question_in_subsection = next_subsection.pages.first.id
+    return first_question_in_subsection.to_s.dasherize
+  end
+
+  def next_subsection(subsection, case_log, subsection_ids)
+    next_subsection_id_index = subsection_ids.index(subsection.id) + 1
+    next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
+
+    if next_subsection.id == "declaration" && case_log.status != "completed"
+      next_subsection = get_subsection(subsection_ids[0])
+    end
+
+    return next_subsection
   end
 
   def all_subsections_except_declaration_completed?(case_log)
