@@ -7,11 +7,11 @@ RSpec.describe "PaasConfigurationService" do
 
     before { allow(logger).to receive(:warn) }
 
-    it "is flagged the configuration as not present" do
+    it "returns the configuration as not present" do
       expect(subject.config_present?).to be(false)
     end
 
-    it "is flagged the S3 configuration as not present" do
+    it "returns the S3 configuration as not present" do
       expect(subject.s3_config_present?).to be(false)
     end
 
@@ -32,11 +32,11 @@ RSpec.describe "PaasConfigurationService" do
       allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
     end
 
-    it "is flagged the configuration as present" do
+    it "returns the configuration as present" do
       expect(subject.config_present?).to be(true)
     end
 
-    it "is flagged the S3 configuration as present" do
+    it "returns the S3 configuration as present" do
       expect(subject.s3_config_present?).to be(true)
     end
 
@@ -57,11 +57,11 @@ RSpec.describe "PaasConfigurationService" do
       allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("{}")
     end
 
-    it "is flagged the configuration as present" do
+    it "returns the configuration as present" do
       expect(subject.config_present?).to be(true)
     end
 
-    it "is flagged the S3 configuration as not present" do
+    it "returns the S3 configuration as not present" do
       expect(subject.s3_config_present?).to be(false)
     end
 
