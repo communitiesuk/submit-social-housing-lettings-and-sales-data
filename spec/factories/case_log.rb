@@ -4,7 +4,6 @@ FactoryBot.define do
     managing_organisation { FactoryBot.create(:organisation) }
     trait :about_completed do
       gdpr_acceptance { "Yes" }
-      sale_or_letting { "Letting" }
       tenant_same_property_renewal { "No" }
       needstype { 1 }
       rent_type { 1 }
@@ -117,7 +116,6 @@ FactoryBot.define do
       gdpr_declined { "No" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
-      sale_or_letting { "Letting" }
       tenant_same_property_renewal { 1 }
       rent_type { 1 }
       intermediate_rent_product_name { 2 }

@@ -3,11 +3,11 @@
   "start_year": 2021,
   "end_year": 2022,
   "sections": {
-    "about_this_log": {
-      "label": "About this log",
+    "setup": {
+      "label": "Before you start",
       "subsections": {
-        "about_this_log": {
-          "label": "About this log",
+        "setup": {
+          "label": "Set up your lettings log",
           "pages": {
             "gdpr_acceptance": {
               "header": "",
@@ -60,23 +60,6 @@
               },
               "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
-            "sale_or_letting": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "sale_or_letting": {
-                  "check_answer_label": "Letting or sale",
-                  "header": "Is this a letting or sale?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "1": "Letting",
-                    "0": "Sale"
-                  }
-                }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
-            },
             "tenant_same_property_renewal": {
               "header": "",
               "description": "",
@@ -93,8 +76,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "startdate": {
@@ -109,8 +91,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "about_this_letting": {
@@ -153,8 +134,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "tenant_code": {
@@ -170,8 +150,7 @@
                 }
               },
               "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Letting"
+                "gdpr_acceptance": "Yes"
               }]
             },
             "property_reference": {
@@ -187,39 +166,6 @@
                 }
               },
               "depends_on": [{ "gdpr_acceptance": "Yes" }]
-            },
-            "sale_completion_date": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "sale_completion_date": {
-                  "check_answer_label": "Sale completion date",
-                  "header": "What is the sale completion date?",
-                  "hint_text": "For example, 27 3 2021.",
-                  "type": "date"
-                }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Sale"
-              }]
-            },
-            "purchaser_code": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "purchaser_code": {
-                  "check_answer_label": "Purchaser code",
-                  "header": "What is the purchaser code?",
-                  "hint_text": "",
-                  "type": "text",
-                  "width": 10
-                }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes",
-                "sale_or_letting": "Sale"
-              }]
             }
           }
         }
@@ -230,7 +176,7 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "person_1_age": {
               "header": "",
@@ -779,7 +725,7 @@
         },
         "household_situation": {
           "label": "Household situation",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "previous_housing_situation": {
               "header": "",
@@ -907,7 +853,7 @@
         },
         "household_needs": {
           "label": "Household needs",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -1051,7 +997,7 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1165,7 +1111,7 @@
         },
         "property_information": {
           "label": "Property information",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "property_postcode": {
               "header": "",
@@ -1831,7 +1777,7 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income, benefits and outgoings",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "net_income_known": {
               "header": "Household’s combined income",
@@ -2710,7 +2656,7 @@
       "subsections": {
         "local_authority": {
           "label": "Local authority",
-          "depends_on": [{ "about_this_log": "completed" }],
+          "depends_on": [{ "setup": "completed" }],
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -3280,7 +3226,7 @@
         "declaration": {
           "label": "Declaration",
           "depends_on": [{
-            "about_this_log": "completed",
+            "setup": "completed",
             "household_characteristics": "completed",
             "household_situation": "completed",
             "household_needs": "completed",
