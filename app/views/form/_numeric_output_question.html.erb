@@ -1,0 +1,23 @@
+<%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
+
+<div class="govuk-form-group">
+  <label class="govuk-label govuk-label--<%= label_size(page_header, conditional) %>" for="case-log-<%= question.id %>-field">
+    <%= question.header.html_safe %>
+  </label>
+  <div class="govuk-hint">
+    <%= question.hint_text %>
+  </div>
+  <div class="govuk-input__wrapper">
+    <span class="govuk-input__prefix"><%= question.prefix %></span>
+    <output id="case-log-<%= question.id %>-field"
+            class="govuk-input govuk-input--width-<%= question.width %> app-input--output"
+            min="<%= question.min %>"
+            step="<%= question.step %>"
+            type="number"
+            style="background-color: #f3f2f1;"
+            name="case_log[tcharge]"
+            for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field"}.join(" ") : "" %>">
+      <%= case_log[question.id] %></output>
+    <span class="govuk-input__suffix"><%= question.suffix %></span>
+  </div>
+</div>
