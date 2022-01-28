@@ -83,7 +83,7 @@ RSpec.describe Form, type: :model do
         case_log.wchair = "No"
         case_log.preg_occ = "No"
         case_log.cbl = "No"
-        case_log.earnings = 30000
+        case_log.earnings = 30_000
         case_log.incfreq = "Yearly"
         case_log.benefits = "Some"
         case_log.hb = "Tenant prefers not to say"
@@ -99,7 +99,7 @@ RSpec.describe Form, type: :model do
         case_log.reason = "Permanently decanted from another property owned by this landlord"
         case_log.previous_postcode = "SE2 6RT"
         case_log.mrcdate = Time.zone.parse("03/11/2019")
-        
+
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("declaration")
       end
     end
