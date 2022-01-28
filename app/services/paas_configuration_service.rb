@@ -12,7 +12,7 @@ class PaasConfigurationService
   end
 
   def s3_config_present?
-    present? && @paas_config.key?(:"aws-s3-bucket")
+    config_present? && @paas_config.key?(:"aws-s3-bucket")
   end
 
 private
