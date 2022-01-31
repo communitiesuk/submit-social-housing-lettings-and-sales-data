@@ -76,7 +76,7 @@ RSpec.describe "Form Check Answers Page" do
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age")
     end
 
-    it "has a change link for answered questions" do
+    it "updates the change/answer link when answers get updated" do
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
       assert_selector "a", text: "Change", count: 0
