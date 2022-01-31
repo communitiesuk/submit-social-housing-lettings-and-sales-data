@@ -16,6 +16,7 @@ RSpec.describe "PaasConfigurationService" do
     end
 
     it "does not retrieve any S3 bucket configuration" do
+      expect(subject.s3_buckets).to be_a(Hash)
       expect(subject.s3_buckets).to be_empty
     end
   end
@@ -66,6 +67,7 @@ RSpec.describe "PaasConfigurationService" do
     end
 
     it "does not retrieve any S3 bucket configuration" do
+      expect(subject.s3_buckets).to be_a(Hash)
       expect(subject.s3_buckets).to be_empty
     end
   end
