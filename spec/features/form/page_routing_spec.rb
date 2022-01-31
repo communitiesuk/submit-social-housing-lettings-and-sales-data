@@ -48,7 +48,7 @@ RSpec.describe "Form Page Routing" do
     expect(page).to have_current_path("/logs/#{id}/conditional-question/check-answers")
   end
 
-  context "inferred answers routing", js: true do
+  context "when the answers are inferred", js: true do
     it "shows question if the answer could not be inferred" do
       visit("/logs/#{id}/property-postcode")
       fill_in("case-log-property-postcode-field", with: "PO5 3TE")
@@ -56,7 +56,7 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
     end
 
-    it "shows question if the answer could not be inferred" do
+    it "shows question if the answer could not be inferred from an empty input" do
       visit("/logs/#{id}/property-postcode")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
