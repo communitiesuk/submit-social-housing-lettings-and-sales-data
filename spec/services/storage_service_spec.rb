@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "S3Service" do
+RSpec.describe StorageService do
   let(:instance_name) { "instance_1" }
   let(:bucket_name) { "bucket_1" }
   let(:vcap_services) do
@@ -20,14 +20,14 @@ RSpec.describe "S3Service" do
   end
 
   context "when we create an S3 Service with no PaaS Configuration present" do
-    subject { StorageService.new(PaasConfigurationService.new, "random_instance") }
+    subject { described_class.new(PaasConfigurationService.new, "random_instance") }
     it "raises an exception" do
       expect { subject }.to raise_error(RuntimeError, /No PaaS configuration present/)
     end
   end
 
   context "when we create an S3 Service with an unknown instance name" do
-    subject { StorageService.new(PaasConfigurationService.new, "random_instance") }
+    subject { described_class.new(PaasConfigurationService.new, "random_instance") }
     before do
       allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("{}")
     end
@@ -38,7 +38,7 @@ RSpec.describe "S3Service" do
   end
 
   context "when we create an storage service with a valid instance name" do
-    subject { StorageService.new(PaasConfigurationService.new, instance_name) }
+    subject { described_class.new(PaasConfigurationService.new, instance_name) }
 
     before do
       allow(ENV).to receive(:[])
@@ -63,7 +63,7 @@ RSpec.describe "S3Service" do
   end
 
   context "when we create an storage service and write a stubbed object" do
-    subject { StorageService.new(PaasConfigurationService.new, instance_name) }
+    subject { described_class.new(PaasConfigurationService.new, instance_name) }
     let(:filename) { "my_file" }
     let(:content) { "content" }
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
