@@ -30,7 +30,7 @@ describe Admin::AdminUsersController, type: :controller do
   end
 
   describe "Update admin users" do
-    context "edit form" do
+    context "when editing the form" do
       before do
         get :edit, session: valid_session, params: { id: AdminUser.first.id }
       end
@@ -42,7 +42,7 @@ describe Admin::AdminUsersController, type: :controller do
       end
     end
 
-    context "update" do
+    context "when updating the form" do
       let(:admin_user) { FactoryBot.create(:admin_user) }
       let(:email) { "new_email@example.com" }
       let(:params) { { id: admin_user.id, admin_user: { email: email } } }
