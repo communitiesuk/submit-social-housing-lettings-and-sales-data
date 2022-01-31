@@ -4,7 +4,7 @@ FactoryBot.define do
     managing_organisation { FactoryBot.create(:organisation) }
     trait :about_completed do
       gdpr_acceptance { "Yes" }
-      tenant_same_property_renewal { "No" }
+      renewal { "No" }
       needstype { 1 }
       rent_type { 1 }
       startdate { Time.zone.local(2022, 5, 1) }
@@ -116,7 +116,7 @@ FactoryBot.define do
       gdpr_declined { "No" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
-      tenant_same_property_renewal { 1 }
+      renewal { 1 }
       rent_type { 1 }
       intermediate_rent_product_name { 2 }
       needstype { 1 }
