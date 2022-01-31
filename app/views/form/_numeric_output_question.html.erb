@@ -14,7 +14,6 @@
             min="<%= question.min %>"
             step="<%= question.step %>"
             type="number"
-            style="background-color: #f3f2f1;"
             name="case_log[tcharge]"
             for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field"}.join(" ") : "" %>">
       <%= case_log[question.id] %></output>
