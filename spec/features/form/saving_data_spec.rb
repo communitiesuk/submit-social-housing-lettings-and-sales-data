@@ -88,11 +88,11 @@ RSpec.describe "Form Saving Data" do
     # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
     expect(page).to have_checked_field(
       "case-log-accessibility-requirements-housingneeds-a-field",
-      visible: false,
+      visible: :all,
     )
     expect(page).to have_unchecked_field(
       "case-log-accessibility-requirements-housingneeds-b-field",
-      visible: false,
+      visible: :all,
     )
   end
 end
