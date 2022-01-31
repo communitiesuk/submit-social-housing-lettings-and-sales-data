@@ -61,9 +61,11 @@ class Form
       next_incomplete_section_redirect_path(next_subsection, case_log)
     when :in_progress
       "#{next_subsection.id}/check_answers".dasherize
-    else
+    when :not_started
       first_question_in_subsection = next_subsection.pages.first.id
       first_question_in_subsection.to_s.dasherize
+    else
+      "error"
     end
   end
 

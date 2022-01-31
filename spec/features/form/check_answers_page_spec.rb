@@ -179,6 +179,8 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
+          tenant_code: nil,
+          age1: nil,
           layear: "1 to 2 years",
           lawaitlist: "Less than 1 year",
           property_postcode: "NW1 5TY",
