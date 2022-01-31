@@ -516,7 +516,7 @@
                     "check_answer_label": "Total Charge",
                     "header": "Total charge?",
                     "hint_text": "This is the total of rent and all charges",
-                    "type": "numeric",
+                    "type": "numeric_output",
                     "min": 0,
                     "step": 1,
                     "width": 4,

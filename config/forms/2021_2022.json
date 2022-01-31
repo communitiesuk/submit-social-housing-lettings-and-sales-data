@@ -2778,14 +2778,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -2952,14 +2953,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -3045,14 +3047,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -3138,14 +3141,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{

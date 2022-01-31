@@ -15,6 +15,7 @@ $govuk-image-url-function: frontend-image-url;
 @import 'task-list';
 @import 'tab-navigation';
 @import 'accessible-autocomplete';
+@import "input";
 
 $govuk-global-styles: true;
 
