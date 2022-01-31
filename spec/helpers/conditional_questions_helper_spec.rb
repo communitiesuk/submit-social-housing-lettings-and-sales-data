@@ -15,6 +15,7 @@ RSpec.describe ConditionalQuestionsHelper do
   describe "find conditional question" do
     let(:question) { page.questions.find { |q| q.id == "armedforces" } }
     let(:answer_value) { "A current or former regular in the UK Armed Forces (excluding National Service)" }
+
     it "returns the conditional question for a given answer option" do
       expect(find_conditional_question(page, question, answer_value))
     end

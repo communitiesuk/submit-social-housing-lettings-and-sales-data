@@ -8,6 +8,7 @@ describe Admin::UsersController, type: :controller do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Users" }
   let(:valid_session) { {} }
+
   login_admin_user
 
   describe "Get users" do

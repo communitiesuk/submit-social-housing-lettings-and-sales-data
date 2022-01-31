@@ -21,6 +21,7 @@ RSpec.describe TabNavHelper do
   describe "#tab_items" do
     context "user is a data_coordinator" do
       let(:user) { FactoryBot.build(:user, :data_coordinator, organisation: organisation) }
+
       it "returns details and user tabs" do
         result = tab_items(user).map { |i| i[:name] }
         expect(result.count).to eq(2)

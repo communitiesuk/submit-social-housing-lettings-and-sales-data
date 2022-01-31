@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Form::Section, type: :model do
+  subject { described_class.new(section_id, section_definition, form) }
+
   let(:case_log) { FactoryBot.build(:case_log) }
   let(:form) { case_log.form }
   let(:section_id) { "household" }
   let(:section_definition) { form.form_definition["sections"][section_id] }
-  subject { Form::Section.new(section_id, section_definition, form) }
 
   it "has an id" do
     expect(subject.id).to eq(section_id)

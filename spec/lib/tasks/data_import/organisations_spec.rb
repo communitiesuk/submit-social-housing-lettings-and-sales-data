@@ -3,6 +3,7 @@ require "rake"
 
 describe "rake data_import:organisations", type: :task do
   subject(:task) { Rake::Task["data_import:organisations"] }
+
   let(:fixture_path) { "spec/fixtures/softwire_imports/organisations" }
 
   before do

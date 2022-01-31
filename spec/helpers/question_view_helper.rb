@@ -25,6 +25,7 @@ RSpec.describe QuestionViewHelper do
 
     context "a conditional question" do
       let(:conditional) { true }
+
       it "returns nil" do
         expect(subject).to be_nil
       end

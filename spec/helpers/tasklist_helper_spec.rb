@@ -5,6 +5,7 @@ RSpec.describe TasklistHelper do
   before do
     RequestHelper.stub_http_requests
   end
+
   let(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 

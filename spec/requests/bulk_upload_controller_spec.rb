@@ -4,6 +4,7 @@ RSpec.describe BulkUploadController, type: :request do
   let(:url) { "/logs/bulk-upload" }
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
+
   before do
     allow(Organisation).to receive(:find).with(107_242).and_return(organisation)
   end

@@ -135,9 +135,15 @@ RSpec.describe FormController, type: :request do
 
         context "valid answers" do
           let(:answer) { 20 }
-
-          it "re-renders the same page with errors if validation fails" do
-            expect(response).to have_http_status(:redirect)
+          let(:params) do
+            {
+              id: case_log.id,
+              case_log: {
+                page: page_id,
+                age1: answer,
+                age2: 2000,
+              },
+            }
           end
 
           let(:params) do
@@ -149,6 +155,10 @@ RSpec.describe FormController, type: :request do
                 age2: 2000,
               },
             }
+          end
+
+          it "re-renders the same page with errors if validation fails" do
+            expect(response).to have_http_status(:redirect)
           end
 
           it "only updates answers that apply to the page being submitted" do

@@ -80,6 +80,7 @@ RSpec.describe "form/page" do
 
     context "with radio type" do
       let(:question_attributes) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for radio questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -87,6 +88,7 @@ RSpec.describe "form/page" do
 
     context "with text type" do
       let(:question_attributes) { { type: "text", answer_options: nil } }
+
       it "renders the guidance partial for text questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -94,6 +96,7 @@ RSpec.describe "form/page" do
 
     context "with numeric type" do
       let(:question_attributes) { { type: "numeric", answer_options: nil } }
+
       it "renders the guidance partial for numeric questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -101,6 +104,7 @@ RSpec.describe "form/page" do
 
     context "with select type" do
       let(:question_attributes) { { type: "select", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for select questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -108,6 +112,7 @@ RSpec.describe "form/page" do
 
     context "with checkbox type" do
       let(:question_attributes) { { type: "checkbox", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for checkbox questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -115,6 +120,7 @@ RSpec.describe "form/page" do
 
     context "with date type" do
       let(:question_attributes) { { type: "date", answer_options: nil } }
+
       it "renders the guidance partial for date questions" do
         expect(rendered).to match(expected_guidance)
       end

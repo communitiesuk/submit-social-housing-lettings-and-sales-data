@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "PaasConfigurationService" do
   context "when the paas configuration is unavailable" do
     subject { PaasConfigurationService.new(logger) }
+
     let(:logger) { double("logger") }
 
     before { allow(logger).to receive(:warn) }
@@ -22,6 +23,7 @@ RSpec.describe "PaasConfigurationService" do
 
   context "when the paas configuration is present with S3 buckets" do
     subject { PaasConfigurationService.new(double("logger")) }
+
     let(:vcap_services) do
       <<-JSON
         {"aws-s3-bucket": [{"instance_name": "bucket_1"},{"instance_name": "bucket_2"}]}
@@ -43,7 +45,7 @@ RSpec.describe "PaasConfigurationService" do
     it "does retrieve the S3 bucket configurations" do
       s3_buckets = subject.s3_buckets
 
-      expect(s3_buckets).to_not be_empty
+      expect(s3_buckets).not_to be_empty
       expect(s3_buckets.count).to be(2)
       expect(s3_buckets).to have_key(:bucket_1)
       expect(s3_buckets).to have_key(:bucket_2)

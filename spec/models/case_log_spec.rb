@@ -4,6 +4,7 @@ require_relative "../request_helper"
 RSpec.describe Form, type: :model do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:managing_organisation) { owning_organisation }
+
   before do
     RequestHelper.stub_http_requests
   end
@@ -12,11 +13,12 @@ RSpec.describe Form, type: :model do
     let(:case_log) { FactoryBot.build(:case_log) }
     let(:case_log_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2022, 1, 1)) }
     let(:case_log_year_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2023, 5, 1)) }
+
     it "has returns the correct form based on the start date" do
       expect(case_log.form_name).to eq("2021_2022")
       expect(case_log_2.form_name).to eq("2021_2022")
       expect(case_log_year_2.form_name).to eq("2023_2024")
-      expect(case_log.form).to be_a(Form)
+      expect(case_log.form).to be_a(described_class)
     end
   end
 
@@ -119,6 +121,7 @@ RSpec.describe Form, type: :model do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
     context "other reason for leaving last settled home validation" do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
@@ -871,7 +874,7 @@ RSpec.describe Form, type: :model do
                           rent_type: "London Affordable rent",
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
-        }.to_not raise_error
+        }.not_to raise_error
 
         expect {
           CaseLog.create!(housingneeds_b: "Yes",
@@ -879,7 +882,7 @@ RSpec.describe Form, type: :model do
                           rent_type: "London Affordable rent",
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
-        }.to_not raise_error
+        }.not_to raise_error
 
         expect {
           CaseLog.create!(housingneeds_c: "Yes",
@@ -887,7 +890,7 @@ RSpec.describe Form, type: :model do
                           rent_type: "London Affordable rent",
                           owning_organisation: owning_organisation,
                           managing_organisation: managing_organisation)
-        }.to_not raise_error
+        }.not_to raise_error
 
         expect {
           CaseLog.create!(housingneeds_g: "Yes",
@@ -1201,12 +1204,13 @@ RSpec.describe Form, type: :model do
       let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
 
       it "clears the answer" do
-        expect { case_log.update!(preg_occ: nil) }.to change { case_log.cbl }.from("Yes").to(nil)
+        expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from("Yes").to(nil)
       end
     end
 
     context "two pages with the same question key, only one's dependency is met" do
       let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+
       it "does not clear the answer" do
         expect(case_log.cbl).to eq("Yes")
       end

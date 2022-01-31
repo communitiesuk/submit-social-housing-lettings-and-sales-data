@@ -6,6 +6,7 @@ RSpec.describe "User Features" do
   let(:reset_password_template_id) { DeviseNotifyMailer::RESET_PASSWORD_TEMPLATE_ID }
   let(:notify_client) { double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+
   before do
     allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
     allow_any_instance_of(DeviseNotifyMailer).to receive(:host).and_return("test.com")
@@ -171,7 +172,7 @@ RSpec.describe "User Features" do
   end
 
   context "Your Account " do
-    before(:each) do
+    before do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -207,7 +208,7 @@ RSpec.describe "User Features" do
   end
 
   context "Adding a new user" do
-    before(:each) do
+    before do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")

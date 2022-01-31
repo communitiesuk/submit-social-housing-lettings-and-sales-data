@@ -12,7 +12,7 @@ RSpec.describe CaseLog do
   describe "#new" do
     it "raises an error when offered is present and invalid" do
       expect {
-        CaseLog.create!(
+        described_class.create!(
           offered: "random",
           owning_organisation: owning_organisation,
           managing_organisation: managing_organisation,
@@ -50,11 +50,11 @@ RSpec.describe Validations::PropertyValidations do
     it "does add an error when offered is invalid" do
       record.offered = "invalid"
       subject.validate_property_number_of_times_relet(record)
-      expect(record.errors).to_not be_empty
+      expect(record.errors).not_to be_empty
       expect(record.errors["offered"]).to include(match(expected_error))
       record.offered = 21
       subject.validate_property_number_of_times_relet(record)
-      expect(record.errors).to_not be_empty
+      expect(record.errors).not_to be_empty
       expect(record.errors["offered"]).to include(match(expected_error))
     end
   end

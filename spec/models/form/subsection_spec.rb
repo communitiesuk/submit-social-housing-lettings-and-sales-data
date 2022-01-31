@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Subsection, type: :model do
+  subject { described_class.new(subsection_id, subsection_definition, section) }
+
   let(:case_log) { FactoryBot.build(:case_log) }
   let(:form) { case_log.form }
   let(:section_id) { "household" }
@@ -8,7 +10,6 @@ RSpec.describe Form::Subsection, type: :model do
   let(:section) { Form::Section.new(section_id, section_definition, form) }
   let(:subsection_id) { "household_characteristics" }
   let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-  subject { Form::Subsection.new(subsection_id, subsection_definition, section) }
 
   it "has an id" do
     expect(subject.id).to eq(subsection_id)
@@ -37,7 +38,7 @@ RSpec.describe Form::Subsection, type: :model do
 
     it "has a completed status for completed subsection" do
       subsection_definition = section_definition["subsections"]["household_needs"]
-      subject = Form::Subsection.new("household_needs", subsection_definition, section)
+      subject = described_class.new("household_needs", subsection_definition, section)
       case_log.armedforces = "No"
       case_log.illness = "No"
       case_log.housingneeds_a = "Yes"
@@ -59,7 +60,7 @@ RSpec.describe Form::Subsection, type: :model do
 
     it "has question helpers for the number of answered questions" do
       subsection_definition = section_definition["subsections"]["household_needs"]
-      subject = Form::Subsection.new("household_needs", subsection_definition, section)
+      subject = described_class.new("household_needs", subsection_definition, section)
       expected_questions = %w[armedforces illness accessibility_requirements la condition_effects]
       case_log.armedforces = "No"
       case_log.illness = "No"

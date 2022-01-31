@@ -139,7 +139,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "#edit" do
+      describe "#edit" do
         context "organisation that the user belongs to" do
           before do
             sign_in user
@@ -165,7 +165,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "#update" do
+      describe "#update" do
         context "organisation that the user belongs to" do
           before do
             sign_in user
@@ -250,12 +250,12 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/#{organisation.id}/users", headers: headers, params: {}
         end
 
-        it "should return unauthorized 401" do
+        it "returns unauthorized 401" do
           expect(response).to have_http_status(:unauthorized)
         end
       end
 
-      context "#edit" do
+      describe "#edit" do
         before do
           sign_in user
           get "/organisations/#{organisation.id}/edit", headers: headers, params: {}
@@ -266,7 +266,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "#update" do
+      describe "#update" do
         before do
           sign_in user
           patch "/organisations/#{organisation.id}", headers: headers, params: params

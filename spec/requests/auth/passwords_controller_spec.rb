@@ -25,7 +25,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
   context "when a password reset is requested with an email that doesn't exist in the system" do
     before do
-      allow_any_instance_of(Auth::PasswordsController).to receive(:is_navigational_format?).and_return(false)
+      allow_any_instance_of(described_class).to receive(:is_navigational_format?).and_return(false)
     end
 
     let(:email) { "madeup_email@test.com" }
@@ -38,7 +38,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
     end
   end
 
-  context "#Update - reset password" do
+  describe "#Update - reset password" do
     let(:user) { FactoryBot.create(:user) }
     let(:token) { user.send(:set_reset_password_token) }
     let(:updated_password) { "updated_password_280" }

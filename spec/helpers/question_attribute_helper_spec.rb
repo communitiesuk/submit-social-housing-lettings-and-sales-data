@@ -46,6 +46,7 @@ RSpec.describe QuestionAttributeHelper do
           "data-info": question.conditional_for.to_json,
         }
       end
+
       it "correctly merges html attributes" do
         expect(stimulus_html_attributes(question)).to eq(expected_attribs)
       end

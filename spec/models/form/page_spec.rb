@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Page, type: :model do
+  subject { described_class.new(page_id, page_definition, subsection) }
+
   let(:case_log) { FactoryBot.build(:case_log) }
   let(:form) { case_log.form }
   let(:section_id) { "rent_and_charges" }
@@ -11,7 +13,6 @@ RSpec.describe Form::Page, type: :model do
   let(:subsection) { Form::Subsection.new(subsection_id, subsection_definition, section) }
   let(:page_id) { "net_income" }
   let(:page_definition) { subsection_definition["pages"][page_id] }
-  subject { Form::Page.new(page_id, page_definition, subsection) }
 
   it "has an id" do
     expect(subject.id).to eq(page_id)

@@ -7,6 +7,7 @@ describe Admin::OrganisationsController, type: :controller do
   let(:resource_title) { "Organisations" }
   let(:valid_session) { {} }
   let!(:organisation) { FactoryBot.create(:organisation) }
+
   login_admin_user
 
   describe "Organisations" do
