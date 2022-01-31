@@ -140,6 +140,21 @@ RSpec.describe "Form Check Answers Page" do
         )
       end
 
+      let(:next_section_in_progress_case_log) do
+        FactoryBot.create(
+          :case_log,
+          :in_progress,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          tenant_code: "123",
+          age1: 35,
+          sex1: "Male",
+          other_hhmemb: 0,
+          armedforces: "No",
+          illness: "No",
+        )
+      end
+
       let(:skip_section_case_log) do
         FactoryBot.create(
           :case_log,
@@ -173,10 +188,16 @@ RSpec.describe "Form Check Answers Page" do
         )
       end
 
-      it "they can click a button to move onto the next section" do
+      it "they can click a button to move onto the first page of the next (not started) incomplete section" do
         visit("/logs/#{section_completed_case_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{section_completed_case_log.id}/armed-forces")
+      end
+
+      it "they can click a button to move onto the check answers page of the next (in progress) incomplete section" do
+        visit("/logs/#{next_section_in_progress_case_log.id}/household-characteristics/check-answers")
+        click_link("Save and go to next incomplete section")
+        expect(page).to have_current_path("/logs/#{next_section_in_progress_case_log.id}/household-needs/check-answers")
       end
 
       it "they can click a button to skip sections until the next incomplete section" do

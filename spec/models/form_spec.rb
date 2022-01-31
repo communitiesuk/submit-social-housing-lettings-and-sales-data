@@ -92,8 +92,14 @@ RSpec.describe Form, type: :model do
         case_log.other_hhmemb = 0
       end
 
-      it "returns the first page of the next incomplete subsection" do
+      it "returns the first page of the next incomplete subsection if the subsection is not in progress" do
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("armed-forces")
+      end
+
+      it "returns the check answers page of the next incomplete subsection if the subsection is already in progress" do
+        case_log.armedforces = "No"
+        case_log.illness = "No"
+        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("household-needs/check-answers")
       end
 
       it "returns the first page of the next incomplete subsection (skipping completed subsections)" do

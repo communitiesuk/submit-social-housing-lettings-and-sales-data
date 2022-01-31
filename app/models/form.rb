@@ -56,8 +56,11 @@ class Form
 
     next_subsection = next_subsection(subsection, case_log, subsection_ids)
 
-    if next_subsection.status(case_log) == :completed
+    case next_subsection.status(case_log)
+    when :completed
       next_incomplete_section_redirect_path(next_subsection, case_log)
+    when :in_progress
+      "#{next_subsection.id}/check_answers".dasherize
     else
       first_question_in_subsection = next_subsection.pages.first.id
       first_question_in_subsection.to_s.dasherize
