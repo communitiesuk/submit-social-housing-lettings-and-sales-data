@@ -9,7 +9,7 @@ RSpec.describe OrganisationsController, type: :request do
   let(:new_value) { "Test Name 35" }
   let(:params) { { id: organisation.id, organisation: { name: new_value } } }
 
-  context "a not signed in user" do
+  context "when user is not signed in" do
     describe "#show" do
       it "does not let you see organisation details from org route" do
         get "/organisations/#{organisation.id}", headers: headers, params: {}
@@ -28,9 +28,9 @@ RSpec.describe OrganisationsController, type: :request do
     end
   end
 
-  context "a signed in user" do
+  context "when user is signed in" do
     describe "#show" do
-      context "organisation that the user belongs to" do
+      context "with an organisation that the user belongs to" do
         before do
           sign_in user
           get "/organisations/#{organisation.id}", headers: headers, params: {}
@@ -41,7 +41,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "organisation that are not in scope for the user, i.e. that they do not belong to" do
+      context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
         before do
           sign_in user
           get "/organisations/#{unauthorised_organisation.id}", headers: headers, params: {}
@@ -57,9 +57,9 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
-    context "As a data coordinator user" do
-      context "details tab" do
-        context "organisation that the user belongs to" do
+    context "with a data coordinator user" do
+      context "when we access the details tab" do
+        context "with an organisation that the user belongs to" do
           before do
             sign_in user
             get "/organisations/#{organisation.id}/details", headers: headers, params: {}
@@ -87,7 +87,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "organisation that are not in scope for the user, i.e. that they do not belong to" do
+        context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
             get "/organisations/#{unauthorised_organisation.id}/details", headers: headers, params: {}
@@ -99,8 +99,8 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "users tab" do
-        context "organisation that the user belongs to" do
+      context "when accessing the users tab" do
+        context "with an organisation that the user belongs to" do
           before do
             sign_in user
             get "/organisations/#{organisation.id}/users", headers: headers, params: {}
@@ -127,7 +127,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "organisation that are not in scope for the user, i.e. that they do not belong to" do
+        context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
             get "/organisations/#{unauthorised_organisation.id}/users", headers: headers, params: {}
@@ -140,7 +140,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#edit" do
-        context "organisation that the user belongs to" do
+        context "with an organisation that the user belongs to" do
           before do
             sign_in user
             get "/organisations/#{organisation.id}/edit", headers: headers, params: {}
@@ -153,7 +153,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "organisation that the user does not belong to" do
+        context "with an organisation that the user does not belong to" do
           before do
             sign_in user
             get "/organisations/#{unauthorised_organisation.id}/edit", headers: headers, params: {}
@@ -166,7 +166,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#update" do
-        context "organisation that the user belongs to" do
+        context "with an organisation that the user belongs to" do
           before do
             sign_in user
             patch "/organisations/#{organisation.id}", headers: headers, params: params
@@ -187,7 +187,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "organisation that the user does not belong to" do
+        context "with an organisation that the user does not belong to" do
           before do
             sign_in user
             patch "/organisations/#{unauthorised_organisation.id}", headers: headers, params: {}
@@ -200,11 +200,11 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
-    context "As a data provider user" do
+    context "with a data provider user" do
       let(:user) { FactoryBot.create(:user) }
 
-      context "details tab" do
-        context "organisation that the user belongs to" do
+      context "when accessing the details tab" do
+        context "with an organisation that the user belongs to" do
           before do
             sign_in user
             get "/organisations/#{organisation.id}/details", headers: headers, params: {}
@@ -232,7 +232,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
-        context "organisation that are not in scope for the user, i.e. that they do not belong to" do
+        context "with an organisation that is not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
             get "/organisations/#{unauthorised_organisation.id}/details", headers: headers, params: {}
@@ -244,7 +244,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "users tab" do
+      context "when accessing the users tab" do
         before do
           sign_in user
           get "/organisations/#{organisation.id}/users", headers: headers, params: {}
