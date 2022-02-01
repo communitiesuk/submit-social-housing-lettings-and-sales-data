@@ -6,7 +6,7 @@ RSpec.describe "User Features" do
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
   let(:set_password_template_id) { DeviseNotifyMailer::SET_PASSWORD_TEMPLATE_ID }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
 
   before do

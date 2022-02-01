@@ -14,7 +14,7 @@ RSpec.describe "User Features" do
     allow_any_instance_of(User).to receive(:set_reset_password_token).and_return(reset_password_token)
   end
 
-  context "A user navigating to case logs" do
+  context "when the user navigates to case logs" do
     it " is required to log in" do
       visit("/logs")
       expect(page).to have_current_path("/users/sign-in")
@@ -54,7 +54,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "A user who has forgotten their password" do
+  context "when the user has forgotten their password" do
     it " is redirected to the reset password page when they click the reset password link" do
       visit("/logs")
       click_link("reset your password")
@@ -118,7 +118,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "If user not logged in" do
+  context "when the user is not logged in" do
     it "'Your account' link does not display" do
       visit("/logs")
       expect(page).to have_no_link("Your account")
@@ -140,7 +140,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Trying to log in with incorrect credentials" do
+  context "when the user is trying to log in with incorrect credentials" do
     it "shows a gov uk error summary and no flash message" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
@@ -171,7 +171,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Your Account " do
+  context "when viewing your account" do
     before do
       visit("/logs")
       fill_in("user[email]", with: user.email)
@@ -207,7 +207,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Adding a new user" do
+  context "when adding a new user" do
     before do
       visit("/logs")
       fill_in("user[email]", with: user.email)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe FormPageErrorHelper do
   describe "#remove_other_page_errors" do
-    context "removes non base other questions" do
+    context "when non base other questions are removed" do
       let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
       let!(:form) { case_log.form }
 

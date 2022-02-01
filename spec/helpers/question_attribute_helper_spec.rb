@@ -21,7 +21,7 @@ RSpec.describe QuestionAttributeHelper do
       })
     end
 
-    context "a question that requires multiple controllers" do
+    context "when a question that requires multiple controllers" do
       let(:question) do
         Form::Question.new("brent", {
           "check_answer_label" => "Basic Rent",
