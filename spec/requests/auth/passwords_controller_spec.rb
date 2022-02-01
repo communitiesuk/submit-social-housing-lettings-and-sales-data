@@ -4,7 +4,7 @@ require_relative "../../support/devise"
 RSpec.describe Auth::PasswordsController, type: :request do
   let(:params) { { user: { email: email } } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
 
   before do
     allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
