@@ -1,11 +1,13 @@
 require:
   - rubocop-performance
   - rubocop-rails
+#  - rubocop-rspec
 
 inherit_gem:
   rubocop-govuk:
     - config/default.yml
     - config/rails.yml
+#    - config/rspec.yml
 
 AllCops:
   Exclude:

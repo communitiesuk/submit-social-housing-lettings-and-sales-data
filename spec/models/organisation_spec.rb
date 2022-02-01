@@ -5,6 +5,7 @@ RSpec.describe Organisation, type: :model do
   before do
     RequestHelper.stub_http_requests
   end
+
   describe "#new" do
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
@@ -17,7 +18,7 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.users.first).to eq(user)
     end
 
-    context "case logs" do
+    context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do
         FactoryBot.create(

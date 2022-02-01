@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Form::Question, type: :model do
+  subject(:question) { described_class.new(question_id, question_definition, page) }
+
   let(:case_log) { FactoryBot.build(:case_log) }
   let(:form) { case_log.form }
   let(:section_id) { "rent_and_charges" }
@@ -14,43 +16,42 @@ RSpec.describe Form::Question, type: :model do
   let(:page) { Form::Page.new(page_id, page_definition, subsection) }
   let(:question_id) { "earnings" }
   let(:question_definition) { page_definition["questions"][question_id] }
-  subject { Form::Question.new(question_id, question_definition, page) }
 
   it "has an id" do
-    expect(subject.id).to eq(question_id)
+    expect(question.id).to eq(question_id)
   end
 
   it "has a header" do
-    expect(subject.header).to eq("What is the tenant’s /and partner’s combined income after tax?")
+    expect(question.header).to eq("What is the tenant’s /and partner’s combined income after tax?")
   end
 
   it "has a check answers label" do
-    expect(subject.check_answer_label).to eq("Income")
+    expect(question.check_answer_label).to eq("Income")
   end
 
   it "has a question type" do
-    expect(subject.type).to eq("numeric")
+    expect(question.type).to eq("numeric")
   end
 
   it "belongs to a page" do
-    expect(subject.page).to eq(page)
+    expect(question.page).to eq(page)
   end
 
   it "belongs to a subsection" do
-    expect(subject.subsection).to eq(subsection)
+    expect(question.subsection).to eq(subsection)
   end
 
   it "has a read only helper" do
-    expect(subject.read_only?).to be false
+    expect(question.read_only?).to be false
   end
 
   context "when type is numeric" do
     it "has a min value" do
-      expect(subject.min).to eq(0)
+      expect(question.min).to eq(0)
     end
 
     it "has a step value" do
-      expect(subject.step).to eq(1)
+      expect(question.step).to eq(1)
     end
   end
 
@@ -59,7 +60,7 @@ RSpec.describe Form::Question, type: :model do
 
     it "has answer options" do
       expected_answer_options = { "0" => "Weekly", "1" => "Monthly", "2" => "Yearly" }
-      expect(subject.answer_options).to eq(expected_answer_options)
+      expect(question.answer_options).to eq(expected_answer_options)
     end
   end
 
@@ -69,7 +70,7 @@ RSpec.describe Form::Question, type: :model do
 
     it "has answer options" do
       expected_answer_options = { "0" => "Option A", "1" => "Option B" }
-      expect(subject.answer_options).to eq(expected_answer_options)
+      expect(question.answer_options).to eq(expected_answer_options)
     end
   end
 
@@ -79,35 +80,35 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "tcharge" }
 
     it "has a read only helper" do
-      expect(subject.read_only?).to be true
+      expect(question.read_only?).to be true
     end
 
     context "when the answer is part of a sum" do
       let(:question_id) { "pscharge" }
 
       it "has a result_field" do
-        expect(subject.result_field).to eq("tcharge")
+        expect(question.result_field).to eq("tcharge")
       end
 
       it "has fields to sum" do
         expected_fields_to_sum = %w[brent scharge pscharge supcharg]
-        expect(subject.fields_to_add).to eq(expected_fields_to_sum)
+        expect(question.fields_to_add).to eq(expected_fields_to_sum)
       end
     end
   end
 
-  context "for a given case log" do
+  context "with a case log" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
 
     it "has an answer label" do
       case_log.earnings = 100
-      expect(subject.answer_label(case_log)).to eq("100")
+      expect(question.answer_label(case_log)).to eq("100")
     end
 
     it "has an update answer link text helper" do
-      expect(subject.update_answer_link_name(case_log)).to eq("Answer<span class=\"govuk-visually-hidden\"> income</span>")
+      expect(question.update_answer_link_name(case_log)).to eq("Answer<span class=\"govuk-visually-hidden\"> income</span>")
       case_log[question_id] = 5
-      expect(subject.update_answer_link_name(case_log)).to eq("Change<span class=\"govuk-visually-hidden\"> income</span>")
+      expect(question.update_answer_link_name(case_log)).to eq("Change<span class=\"govuk-visually-hidden\"> income</span>")
     end
 
     context "when type is date" do
@@ -118,12 +119,12 @@ RSpec.describe Form::Question, type: :model do
 
       it "displays a formatted answer label" do
         case_log.mrcdate = Time.zone.local(2021, 10, 11)
-        expect(subject.answer_label(case_log)).to eq("11 October 2021")
+        expect(question.answer_label(case_log)).to eq("11 October 2021")
       end
 
       it "can handle nils" do
         case_log.mrcdate = nil
-        expect(subject.answer_label(case_log)).to eq("")
+        expect(question.answer_label(case_log)).to eq("")
       end
     end
 
@@ -137,7 +138,7 @@ RSpec.describe Form::Question, type: :model do
         case_log.housingneeds_a = 1
         case_log.housingneeds_c = 1
         expected_answer_label = "Fully wheelchair accessible housing, Level access housing"
-        expect(subject.answer_label(case_log)).to eq(expected_answer_label)
+        expect(question.answer_label(case_log)).to eq(expected_answer_label)
       end
     end
 
@@ -146,12 +147,12 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "conditional_question" }
 
       it "knows whether it is enabled or not for unmet conditions" do
-        expect(subject.enabled?(case_log)).to be false
+        expect(question.enabled?(case_log)).to be false
       end
 
       it "knows whether it is enabled or not for met conditions" do
         case_log.hb = "Housing benefit"
-        expect(subject.enabled?(case_log)).to be true
+        expect(question.enabled?(case_log)).to be true
       end
     end
   end

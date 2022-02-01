@@ -20,7 +20,7 @@ RSpec.describe "Form Conditional Questions" do
     sign_in user
   end
 
-  context "given a page where some questions are only conditionally shown, depending on how you answer the first question" do
+  context "with a page where some questions are only conditionally shown, depending on how you answer the first question" do
     it "initially hides conditional questions" do
       visit("/logs/#{id}/armed-forces")
       expect(page).not_to have_selector("#armed_forces_injured_div")

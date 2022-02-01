@@ -5,7 +5,7 @@ RSpec.describe "Start Page Features" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
 
-  context "a signed in user" do
+  context "when the user is signed in" do
     before do
       sign_in user
     end
@@ -16,7 +16,7 @@ RSpec.describe "Start Page Features" do
     end
   end
 
-  context "a not signed in user" do
+  context "when the user is not signed in" do
     it "takes you to sign in and then to your logs" do
       visit("/")
       click_link("Start now")

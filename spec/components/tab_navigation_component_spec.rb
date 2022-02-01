@@ -7,16 +7,16 @@ RSpec.describe TabNavigationComponent, type: :component do
      { name: "Timeline", url: "#" }]
   end
 
-  context "nav tabs appearing as selected" do
-    it "when the item is 'current' then that tab is selected" do
+  context "when the item is 'current' in nav tabs" do
+    it "then that tab appears as selected" do
       result = render_inline(described_class.new(items: items))
 
       expect(result.css('.app-tab-navigation__link[aria-current="page"]').text).to include("Application")
     end
   end
 
-  context "rendering tabs" do
-    it "renders all of the nav tabs specified in the items hash passed to it" do
+  context "when rendering tabs" do
+    it "all of the nav tabs specified in the items hash are passed to it" do
       result = render_inline(described_class.new(items: items))
 
       expect(result.text).to include("Application")

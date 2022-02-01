@@ -6,17 +6,18 @@ describe Admin::DashboardController, type: :controller do
   before do
     RequestHelper.stub_http_requests
   end
+
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Dashboard" }
-  let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let!(:case_log_2) { FactoryBot.create(:case_log, :in_progress) }
-  let!(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
   let(:valid_session) { {} }
+
   login_admin_user
 
   describe "Get case logs" do
     before do
+      2.times { |_| FactoryBot.create(:case_log, :in_progress) }
+      FactoryBot.create(:case_log, :completed)
       get :index, session: valid_session
     end
 

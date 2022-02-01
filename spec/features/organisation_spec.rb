@@ -6,7 +6,7 @@ RSpec.describe "User Features" do
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
   let(:set_password_template_id) { DeviseNotifyMailer::SET_PASSWORD_TEMPLATE_ID }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
 
   before do
@@ -17,10 +17,10 @@ RSpec.describe "User Features" do
     sign_in user
   end
 
-  context "User is a data coordinator" do
+  context "when user is a data coordinator" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator) }
 
-    context "Organisation page" do
+    context "when viewing organisation page" do
       it "defaults to organisation details" do
         visit("/logs")
         click_link("Your organisation")
@@ -36,7 +36,7 @@ RSpec.describe "User Features" do
       end
     end
 
-    context "Organisation users" do
+    context "when users are part of organisation" do
       it "users can be added" do
         visit("/organisations/#{org_id}")
         click_link("Users")
@@ -65,10 +65,10 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "User is a data provider" do
-    let!(:user) { FactoryBot.create(:user) }
+  context "when the user is a data provider" do
+    let(:user) { FactoryBot.create(:user) }
 
-    context "Organisation page" do
+    context "when viewing organisation page" do
       it "can only see the details tab" do
         visit("/logs")
         click_link("Your organisation")

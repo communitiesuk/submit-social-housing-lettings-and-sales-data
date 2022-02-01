@@ -6,14 +6,17 @@ describe Admin::CaseLogsController, type: :controller do
   before do
     RequestHelper.stub_http_requests
   end
+
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Logs" }
   let(:valid_session) { {} }
+
   login_admin_user
 
   describe "Get case logs" do
     let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+
     before do
       get :index, session: valid_session
     end
@@ -37,6 +40,7 @@ describe Admin::CaseLogsController, type: :controller do
         },
       }
     end
+
     it "creates a new case log" do
       expect { post :create, session: valid_session, params: params }.to change(CaseLog, :count).by(1)
     end

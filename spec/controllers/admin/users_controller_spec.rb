@@ -8,6 +8,7 @@ describe Admin::UsersController, type: :controller do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Users" }
   let(:valid_session) { {} }
+
   login_admin_user
 
   describe "Get users" do
@@ -41,7 +42,7 @@ describe Admin::UsersController, type: :controller do
   end
 
   describe "Update users" do
-    context "update form" do
+    context "when updating the form" do
       before do
         get :edit, session: valid_session, params: { id: user.id }
       end
@@ -56,7 +57,7 @@ describe Admin::UsersController, type: :controller do
       end
     end
 
-    context "update" do
+    context "when updating the user" do
       let(:name) { "Pete" }
       let(:params) { { id: user.id, user: { name: name } } }
 

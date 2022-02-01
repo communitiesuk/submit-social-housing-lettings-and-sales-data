@@ -61,16 +61,16 @@ RSpec.describe "Form Saving Data" do
     visit("/logs/#{id}/rent")
 
     fill_in("case-log-brent-field", with: 3.02)
-    expect(page).to have_field("case-log-tcharge-field", with: "3.02")
+    expect(page.find("#case-log-tcharge-field")).to have_content("3.02")
 
     fill_in("case-log-scharge-field", with: 2.8)
-    expect(page).to have_field("case-log-tcharge-field", with: "5.82")
+    expect(page.find("#case-log-tcharge-field")).to have_content("5.82")
 
     fill_in("case-log-pscharge-field", with: 1)
-    expect(page).to have_field("case-log-tcharge-field", with: "6.82")
+    expect(page.find("#case-log-tcharge-field")).to have_content("6.82")
 
     fill_in("case-log-supcharg-field", with: 4.11)
-    expect(page).to have_field("case-log-tcharge-field", with: "10.93")
+    expect(page.find("#case-log-tcharge-field")).to have_content("10.93")
   end
 
   it "displays number answers in inputs if they are already saved" do
@@ -85,14 +85,13 @@ RSpec.describe "Form Saving Data" do
 
   it "displays checkbox answers in inputs if they are already saved" do
     visit("/logs/#{case_log_with_checkbox_questions_answered.id.to_s.dasherize}/accessibility-requirements")
-    # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
     expect(page).to have_checked_field(
       "case-log-accessibility-requirements-housingneeds-a-field",
-      visible: false,
+      visible: :all,
     )
     expect(page).to have_unchecked_field(
       "case-log-accessibility-requirements-housingneeds-b-field",
-      visible: false,
+      visible: :all,
     )
   end
 end

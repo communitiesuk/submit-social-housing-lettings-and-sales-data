@@ -7,14 +7,14 @@ RSpec.describe UsersController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:new_value) { "new test name" }
   let(:params) { { id: user.id, user: { name: new_value } } }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
 
   before do
     allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
   end
 
-  context "a not signed in user" do
+  context "when user is not signed in" do
     describe "#show" do
       it "does not let you see user details" do
         get "/users/#{user.id}", headers: headers, params: {}
@@ -50,8 +50,8 @@ RSpec.describe UsersController, type: :request do
         expect(page).to have_css("h1", class: "govuk-heading-l", text: "Reset your password")
       end
 
-      context "update password" do
-        context "valid reset token" do
+      context "when updating a user password" do
+        context "when the reset token is valid" do
           let(:params) do
             {
               id: user.id, user: { password: new_value, password_confirmation: "something_else" }
@@ -70,7 +70,7 @@ RSpec.describe UsersController, type: :request do
           end
         end
 
-        context "reset token more than 3 hours old" do
+        context "when a reset token is more than 3 hours old" do
           let(:raw) { user.send_reset_password_instructions }
           let(:params) do
             {
@@ -107,7 +107,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#show" do
-    context "current user is user" do
+    context "when the current user matches the user ID" do
       before do
         sign_in user
         get "/users/#{user.id}", headers: headers, params: {}
@@ -118,7 +118,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "current user is another user" do
+    context "when the current user does not matches the user ID" do
       before do
         sign_in user
         get "/users/#{unauthorised_user.id}", headers: headers, params: {}
@@ -135,7 +135,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#edit" do
-    context "current user is user" do
+    context "when the current user matches the user ID" do
       before do
         sign_in user
         get "/users/#{user.id}/edit", headers: headers, params: {}
@@ -146,7 +146,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "current user is another user" do
+    context "when the current user does not matches the user ID" do
       before do
         sign_in user
         get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
@@ -159,7 +159,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#edit_password" do
-    context "current user is user" do
+    context "when the current user matches the user ID" do
       before do
         sign_in user
         get "/users/#{user.id}/password/edit", headers: headers, params: {}
@@ -170,7 +170,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "current user is another user" do
+    context "when the current user does not matches the user ID" do
       before do
         sign_in user
         get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
@@ -183,7 +183,7 @@ RSpec.describe UsersController, type: :request do
   end
 
   describe "#update" do
-    context "current user is user" do
+    context "when the current user matches the user ID" do
       before do
         sign_in user
         patch "/users/#{user.id}", headers: headers, params: params
@@ -195,7 +195,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "update fails to persist" do
+    context "when the update fails to persist" do
       before do
         allow_any_instance_of(User).to receive(:update).and_return(false)
         sign_in user
@@ -207,7 +207,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "current user is another user" do
+    context "when the current user does not matches the user ID" do
       let(:params) { { id: unauthorised_user.id, user: { name: new_value } } }
 
       before do
@@ -220,7 +220,7 @@ RSpec.describe UsersController, type: :request do
       end
     end
 
-    context "update password" do
+    context "when we update the user password" do
       let(:params) do
         {
           id: user.id, user: { password: new_value, password_confirmation: "something_else" }

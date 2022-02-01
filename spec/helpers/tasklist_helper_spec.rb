@@ -5,6 +5,7 @@ RSpec.describe TasklistHelper do
   before do
     RequestHelper.stub_http_requests
   end
+
   let(:empty_case_log) { FactoryBot.create(:case_log) }
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 
@@ -56,13 +57,13 @@ RSpec.describe TasklistHelper do
   describe "subsection link" do
     let(:subsection) { case_log.form.get_subsection("household_characteristics") }
 
-    context "for a subsection that's enabled" do
+    context "with a subsection that's enabled" do
       it "returns the subsection link url" do
         expect(subsection_link(subsection, case_log)).to match(/household-characteristics/)
       end
     end
 
-    context "for a subsection that cannot be started yet" do
+    context "with a subsection that cannot be started yet" do
       before do
         allow(subsection).to receive(:status).with(case_log).and_return(:cannot_start_yet)
       end

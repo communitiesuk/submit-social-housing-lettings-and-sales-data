@@ -31,11 +31,11 @@
                 },
                 "depends_on": [{ "gdpr_acceptance": "No" }]
               },
-              "tenant_same_property_renewal": {
+              "renewal": {
                 "header": "",
                 "description": "",
                 "questions": {
-                  "tenant_same_property_renewal": {
+                  "renewal": {
                     "check_answer_label": "Property renewal",
                     "header": "Is this a renewal to the same tenant in the same property?",
                     "hint_text": "",

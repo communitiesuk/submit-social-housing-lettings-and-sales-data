@@ -60,11 +60,11 @@
               },
               "depends_on": [{ "gdpr_acceptance": "Yes" }]
             },
-            "tenant_same_property_renewal": {
+            "renewal": {
               "header": "",
               "description": "",
               "questions": {
-                "tenant_same_property_renewal": {
+                "renewal": {
                   "check_answer_label": "Property renewal",
                   "header": "Is this letting a renewal?",
                   "hint_text": "A renewal is a letting to the same tenant in the same property.",
@@ -2076,7 +2076,7 @@
                   }
                 }
               },
-              "depends_on": [{ "tenant_same_property_renewal": "No" }]
+              "depends_on": [{ "renewal": "No" }]
             },
             "unitletas": {
               "header": "",
@@ -2098,7 +2098,7 @@
               },
               "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "property_vacancy_reason_not_first_let": {
@@ -2127,7 +2127,7 @@
               },
               "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "property_vacancy_reason_first_let": {
@@ -2148,7 +2148,7 @@
               },
               "depends_on": [{
                 "first_time_property_let_as_social_housing": "Yes",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "property_number_of_times_relet_not_social_let": {
@@ -2168,7 +2168,7 @@
               },
               "depends_on": [{
                 "first_time_property_let_as_social_housing": "No",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "property_number_of_times_relet_social_let": {
@@ -2188,7 +2188,7 @@
               },
               "depends_on": [{
                 "first_time_property_let_as_social_housing": "Yes",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "property_unit_type": {
@@ -2275,7 +2275,7 @@
               },
               "depends_on": [{
                 "rsnvac": "First let of new-build property",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             },
             "new_build_handover_date": {
@@ -2290,7 +2290,7 @@
                 }
               },
               "depends_on": [{
-                "tenant_same_property_renewal": "No",
+                "renewal": "No",
                 "rsnvac": [
                   "First let of conversion, rehabilitation or acquired property?",
                   "First let of leased property"
@@ -2323,7 +2323,7 @@
               },
               "depends_on": [{
                 "rsnvac": "First let of new-build property",
-                "tenant_same_property_renewal": "No"
+                "renewal": "No"
               }]
             }
           }
@@ -2778,14 +2778,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -2952,14 +2953,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -3045,14 +3047,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{
@@ -3138,14 +3141,15 @@
                   "check_answer_label": "Household rent and charges",
                   "header": "Total charge",
                   "hint_text": "This is the total for rent and all charges.",
-                  "type": "numeric",
+                  "type": "numeric_output",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
                   "readonly": true,
-                  "requires_js": true
+                  "requires_js": true,
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on" : [{

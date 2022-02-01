@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe SoftValidationsController, type: :request do
   let(:params) { { case_log_id: case_log.id } }
@@ -9,7 +10,7 @@ RSpec.describe SoftValidationsController, type: :request do
     RequestHelper.stub_http_requests
   end
 
-  context "a not signed in user" do
+  context "when a user is not signed in" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 
     describe "GET #show" do
@@ -20,14 +21,14 @@ RSpec.describe SoftValidationsController, type: :request do
     end
   end
 
-  context "a signed in user" do
+  context "when a user is signed in" do
     before do
       sign_in user
       get url, params: {}
     end
 
     describe "GET #show" do
-      context "Soft validation overide required" do
+      context "when a soft validation is triggered" do
         let(:case_log) { FactoryBot.create(:case_log, :soft_validations_triggered) }
 
         it "returns a success response" do
@@ -41,14 +42,14 @@ RSpec.describe SoftValidationsController, type: :request do
         end
       end
 
-      context "Soft validation overide not required" do
+      context "when no soft validation is triggered" do
         let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 
         it "returns a success response" do
           expect(response).to be_successful
         end
 
-        it "returns a json with the soft validation fields" do
+        it "returns a json without the soft validation fields" do
           json_response = JSON.parse(response.body)
           expect(json_response["show"]).to eq(false)
         end
