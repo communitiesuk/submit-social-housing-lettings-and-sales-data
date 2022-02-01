@@ -4,8 +4,9 @@ require_relative "../request_helper"
 RSpec.describe "User Features" do
   let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
   let(:reset_password_template_id) { DeviseNotifyMailer::RESET_PASSWORD_TEMPLATE_ID }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+
   before do
     allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
     allow_any_instance_of(DeviseNotifyMailer).to receive(:host).and_return("test.com")
@@ -13,7 +14,7 @@ RSpec.describe "User Features" do
     allow_any_instance_of(User).to receive(:set_reset_password_token).and_return(reset_password_token)
   end
 
-  context "A user navigating to case logs" do
+  context "when the user navigates to case logs" do
     it " is required to log in" do
       visit("/logs")
       expect(page).to have_current_path("/users/sign-in")
@@ -53,7 +54,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "A user who has forgotten their password" do
+  context "when the user has forgotten their password" do
     it " is redirected to the reset password page when they click the reset password link" do
       visit("/logs")
       click_link("reset your password")
@@ -117,7 +118,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "If user not logged in" do
+  context "when the user is not logged in" do
     it "'Your account' link does not display" do
       visit("/logs")
       expect(page).to have_no_link("Your account")
@@ -139,7 +140,7 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Trying to log in with incorrect credentials" do
+  context "when the user is trying to log in with incorrect credentials" do
     it "shows a gov uk error summary and no flash message" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
@@ -170,8 +171,8 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Your Account " do
-    before(:each) do
+  context "when viewing your account" do
+    before do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -206,8 +207,8 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "Adding a new user" do
-    before(:each) do
+  context "when adding a new user" do
+    before do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")

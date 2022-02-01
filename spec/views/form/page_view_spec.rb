@@ -2,10 +2,6 @@ require "rails_helper"
 require_relative "../../request_helper"
 
 RSpec.describe "form/page" do
-  before do
-    RequestHelper.stub_http_requests
-  end
-
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
   let(:form) { case_log.form }
   let(:subsection) { form.get_subsection("income_and_benefits") }
@@ -23,6 +19,7 @@ RSpec.describe "form/page" do
   end
 
   before do
+    RequestHelper.stub_http_requests
     assign(:case_log, case_log)
     assign(:page, page)
     assign(:subsection, subsection)
@@ -38,7 +35,7 @@ RSpec.describe "form/page" do
     assign_attributes(question, initial_question_attributes)
   end
 
-  context "given a page with a description" do
+  context "with a page containing a description" do
     let(:description) { "Test description <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">with link</a>." }
     let(:page_attributes) { { description: description } }
     let(:expected_html) { '<p class="govuk-body govuk-body-m">Test description <a class="govuk-link" href="/files/privacy-notice.pdf">with link</a>.</p>' }
@@ -48,14 +45,14 @@ RSpec.describe "form/page" do
     end
   end
 
-  context "given a page with a header" do
+  context "with a page containing a header" do
     it "renders the header and the subsection label" do
       expect(rendered).to match(page.header)
       expect(rendered).to match(subsection.label)
     end
   end
 
-  context "given a page with a header and hide_subsection_label true" do
+  context "with a page containing a header and hide_subsection_label true" do
     let(:page_attributes) { { hide_subsection_label: true } }
 
     it "renders the header but not the subsection label" do
@@ -64,7 +61,7 @@ RSpec.describe "form/page" do
     end
   end
 
-  context "given a numeric question with prefix and suffix" do
+  context "when rendering a numeric question with prefix and suffix" do
     let(:question_attributes) { { type: "numeric", prefix: "£", suffix: "every week" } }
 
     it "renders prefix and suffix text" do
@@ -75,11 +72,12 @@ RSpec.describe "form/page" do
     end
   end
 
-  context "given a question with extra guidance" do
+  context "with a question containing extra guidance" do
     let(:expected_guidance) { /What counts as income?/ }
 
     context "with radio type" do
       let(:question_attributes) { { type: "radio", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for radio questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -87,6 +85,7 @@ RSpec.describe "form/page" do
 
     context "with text type" do
       let(:question_attributes) { { type: "text", answer_options: nil } }
+
       it "renders the guidance partial for text questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -94,6 +93,7 @@ RSpec.describe "form/page" do
 
     context "with numeric type" do
       let(:question_attributes) { { type: "numeric", answer_options: nil } }
+
       it "renders the guidance partial for numeric questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -101,6 +101,7 @@ RSpec.describe "form/page" do
 
     context "with select type" do
       let(:question_attributes) { { type: "select", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for select questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -108,6 +109,7 @@ RSpec.describe "form/page" do
 
     context "with checkbox type" do
       let(:question_attributes) { { type: "checkbox", answer_options: { "1": "A", "2": "B" } } }
+
       it "renders the guidance partial for checkbox questions" do
         expect(rendered).to match(expected_guidance)
       end
@@ -115,6 +117,7 @@ RSpec.describe "form/page" do
 
     context "with date type" do
       let(:question_attributes) { { type: "date", answer_options: nil } }
+
       it "renders the guidance partial for date questions" do
         expect(rendered).to match(expected_guidance)
       end

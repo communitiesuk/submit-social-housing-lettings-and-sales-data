@@ -28,8 +28,8 @@ RSpec.describe "validations" do
   let(:id) { case_log.id }
 
   describe "Question validation" do
-    context "given an invalid tenant age" do
-      it " of less than 0 it shows validation" do
+    context "when the tenant age is invalid" do
+      it "shows validation for under 0" do
         visit("/logs/#{id}/person-1-age")
         fill_in_number_question(empty_case_log.id, "age1", -5, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
@@ -38,7 +38,7 @@ RSpec.describe "validations" do
         expect(page).to have_title("Error")
       end
 
-      it " of greater than 120 it shows validation" do
+      it "shows validation for over 120" do
         visit("/logs/#{id}/person-1-age")
         fill_in_number_question(empty_case_log.id, "age1", 121, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
@@ -103,7 +103,7 @@ RSpec.describe "validations" do
   end
 
   describe "Soft Validation" do
-    context "given a weekly net income that is above the expected amount for the given economic status but below the hard max" do
+    context "when a weekly net income is above the expected amount for the given economic status but below the hard max" do
       let(:case_log) do
         FactoryBot.create(
           :case_log,

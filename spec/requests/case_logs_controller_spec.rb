@@ -64,7 +64,7 @@ RSpec.describe CaseLogsController, type: :request do
       expect(json_response["property_postcode"]).to eq(property_postcode)
     end
 
-    context "invalid json params" do
+    context "with invalid json parameters" do
       let(:age1) { 2000 }
       let(:offered) { 21 }
 
@@ -75,14 +75,14 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "partial case log submission" do
+    context "with a partial case log submission" do
       it "marks the record as in_progress" do
         json_response = JSON.parse(response.body)
         expect(json_response["status"]).to eq(in_progress)
       end
     end
 
-    context "complete case log submission" do
+    context "with a complete case log submission" do
       let(:org_params) do
         {
           "case_log" => {
@@ -104,7 +104,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "request with invalid credentials" do
+    context "with a request containing invalid credentials" do
       let(:basic_credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
       end
@@ -134,7 +134,7 @@ RSpec.describe CaseLogsController, type: :request do
       )
     end
 
-    context "collection" do
+    context "when displaying a collection of logs" do
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
@@ -151,7 +151,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "member" do
+    context "when requesting a specific case log" do
       let(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
       let(:id) { completed_case_log.id }
 
@@ -168,7 +168,7 @@ RSpec.describe CaseLogsController, type: :request do
         expect(json_response["status"]).to eq(completed_case_log.status)
       end
 
-      context "invalid case log id" do
+      context "when requesting an invalid case log id" do
         let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
 
         it "returns 404" do
@@ -176,18 +176,18 @@ RSpec.describe CaseLogsController, type: :request do
         end
       end
 
-      context "edit log" do
+      context "when editing a case log" do
         let(:headers) { { "Accept" => "text/html" } }
 
-        context "a user that is not signed in" do
+        context "with a user that is not signed in" do
           it "does not let the user get case log tasklist pages they don't have access to" do
             get "/logs/#{case_log.id}", headers: headers, params: {}
             expect(response).to redirect_to("/users/sign-in")
           end
         end
 
-        context "a signed in user" do
-          context "case logs that are owned or managed by your organisation" do
+        context "with a signed in user" do
+          context "with case logs that are owned or managed by your organisation" do
             before do
               sign_in user
               get "/logs/#{case_log.id}", headers: headers, params: {}
@@ -205,7 +205,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "case log with a single section complete" do
+          context "with a case log with a single section complete" do
             let(:section_completed_case_log) do
               FactoryBot.create(
                 :case_log,
@@ -227,7 +227,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "case logs that are not owned or managed by your organisation" do
+          context "with case logs that are not owned or managed by your organisation" do
             before do
               sign_in user
               get "/logs/#{unauthorized_case_log.id}", headers: headers, params: {}
@@ -241,7 +241,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "Check answers" do
+    context "when accessing the check answers page" do
       let(:postcode_case_log) do
         FactoryBot.create(:case_log,
                           owning_organisation: organisation,
@@ -308,7 +308,7 @@ RSpec.describe CaseLogsController, type: :request do
       expect(case_log.property_postcode).to eq("M1 1AE")
     end
 
-    context "invalid case log id" do
+    context "with an invalid case log id" do
       let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
 
       it "returns 404" do
@@ -316,7 +316,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "invalid case log params" do
+    context "with an invalid case log params" do
       let(:params) { { age1: 200 } }
 
       it "returns 422" do
@@ -329,7 +329,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "request with invalid credentials" do
+    context "with a request containing invalid credentials" do
       let(:basic_credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
       end
@@ -366,7 +366,7 @@ RSpec.describe CaseLogsController, type: :request do
       expect(case_log.property_postcode).to eq("SW1A 2AA")
     end
 
-    context "invalid case log id" do
+    context "with an invalid case log id" do
       let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
 
       it "returns 404" do
@@ -374,7 +374,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "request with invalid credentials" do
+    context "with a request containing invalid credentials" do
       let(:basic_credentials) do
         ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
       end
@@ -391,7 +391,7 @@ RSpec.describe CaseLogsController, type: :request do
     end
     let(:id) { case_log.id }
 
-    context "expected deletion" do
+    context "when deleting a case log" do
       before do
         delete "/logs/#{id}", headers: headers
       end
@@ -405,7 +405,7 @@ RSpec.describe CaseLogsController, type: :request do
         expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
       end
 
-      context "invalid case log id" do
+      context "with an invalid case log id" do
         let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
 
         it "returns 404" do
@@ -413,7 +413,7 @@ RSpec.describe CaseLogsController, type: :request do
         end
       end
 
-      context "request with invalid credentials" do
+      context "with a request containing invalid credentials" do
         let(:basic_credentials) do
           ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
         end
@@ -424,7 +424,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "deletion fails" do
+    context "when a case log deletion fails" do
       before do
         allow_any_instance_of(CaseLog).to receive(:discard).and_return(false)
         delete "/logs/#{id}", headers: headers

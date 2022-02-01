@@ -85,14 +85,13 @@ RSpec.describe "Form Saving Data" do
 
   it "displays checkbox answers in inputs if they are already saved" do
     visit("/logs/#{case_log_with_checkbox_questions_answered.id.to_s.dasherize}/accessibility-requirements")
-    # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we pass false here
     expect(page).to have_checked_field(
       "case-log-accessibility-requirements-housingneeds-a-field",
-      visible: false,
+      visible: :all,
     )
     expect(page).to have_unchecked_field(
       "case-log-accessibility-requirements-housingneeds-b-field",
-      visible: false,
+      visible: :all,
     )
   end
 end

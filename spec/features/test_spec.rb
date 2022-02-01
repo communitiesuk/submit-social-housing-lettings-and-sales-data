@@ -7,6 +7,6 @@ RSpec.describe "Test Features" do
 
   it "Responds to a health check" do
     visit("/health")
-    expect(page).to have_http_status(204)
+    expect(page).to have_http_status(:no_content)
   end
 end
