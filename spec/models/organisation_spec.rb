@@ -18,7 +18,7 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.users.first).to eq(user)
     end
 
-    context "case logs" do
+    context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do
         FactoryBot.create(

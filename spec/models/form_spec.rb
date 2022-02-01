@@ -34,7 +34,7 @@ RSpec.describe Form, type: :model do
   end
 
   describe "invalidated_page_questions" do
-    context "dependencies not met" do
+    context "when dependencies are not met" do
       let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question declaration] }
 
       it "returns an array of question keys whose pages conditions are not met" do
@@ -42,7 +42,7 @@ RSpec.describe Form, type: :model do
       end
     end
 
-    context "two pages with the same question, only one has dependencies met" do
+    context "with two pages having the same question and only one has dependencies met" do
       let(:expected_invalid) { %w[la_known conditional_question_no_second_question dependent_question declaration] }
 
       it "returns an array of question keys whose pages conditions are not met" do
