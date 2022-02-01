@@ -33,6 +33,16 @@ RSpec.describe CaseLog do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    it "raises an error when previous_postcode is present and invalid" do
+      expect {
+        described_class.create!(
+          previous_postcode: "invalid_postcode",
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      }.to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+    end
+
     it "validates age is a number" do
       expect {
         described_class.create!(
