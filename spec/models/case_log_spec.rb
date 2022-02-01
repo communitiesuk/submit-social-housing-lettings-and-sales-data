@@ -94,7 +94,7 @@ RSpec.describe CaseLog do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    context "reasonable preference is yes" do
+    context "when a reasonable preference is set to yes" do
       it "validates that previously homeless should be selected" do
         expect {
           described_class.create!(
@@ -107,7 +107,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "reasonable preference is no" do
+    context "when a reasonable preference is set to no" do
       it "validates no reason is needed" do
         expect {
           described_class.create!(
@@ -131,8 +131,8 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "reason for leaving last settled home validation" do
-      it "Reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
+    context "with a reason for leaving last settled home validation" do
+      it "checks the reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
         expect {
           described_class.create!(reason: "Don’t know",
                                   underoccupation_benefitcap: "Yes - benefit cap",
@@ -142,7 +142,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "other reason for leaving last settled home validation" do
+    context "with reason for leaving last settled home validation set to other" do
       it "must be provided if main reason for leaving last settled home was given as other" do
         expect {
           described_class.create!(reason: "Other",
@@ -162,7 +162,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "armed forces injured validation" do
+    context "with armed forces injured validation" do
       it "must not be answered if tenant was not a regular or reserve in armed forces" do
         expect {
           described_class.create!(armedforces: "No",
@@ -173,7 +173,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Validate pregnancy questions" do
+    context "when validating pregnancy questions" do
       it "Cannot answer yes if no female tenants" do
         expect {
           described_class.create!(preg_occ: "Yes",
@@ -226,7 +226,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Property vacancy and let as validations" do
+    context "when validating property vacancy and let as" do
       it "cannot have a previously let as type, if it hasn't been let before" do
         expect {
           described_class.create!(
@@ -306,8 +306,8 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Shared accomodation bedrooms validation" do
-      it "you must have more than zero bedrooms" do
+    context "when validating shared accommodation bedrooms" do
+      it "checks you must have more than zero bedrooms" do
         expect {
           described_class.create!(unittype_gn: "Shared house",
                                   beds: 0,
@@ -316,7 +316,7 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "you must answer less than 8 bedrooms" do
+      it "checks you must answer less than 8 bedrooms" do
         expect {
           described_class.create!(unittype_gn: "Shared bungalow",
                                   beds: 8,
@@ -326,7 +326,7 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "you must answer less than 8 bedrooms" do
+      it "checks you must answer less than 4 bedrooms" do
         expect {
           described_class.create!(unittype_gn: "Shared bungalow",
                                   beds: 4,
@@ -336,7 +336,7 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "A bedsit must only have one room" do
+      it "checks a bedsit cannot have more than one room" do
         expect {
           described_class.create!(unittype_gn: "Bedsit",
                                   beds: 2,
@@ -345,7 +345,7 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "A bedsit must only have one room" do
+      it "checks a bedsit cannot be less than one room" do
         expect {
           described_class.create!(unittype_gn: "Bedsit",
                                   beds: 0,
@@ -355,7 +355,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "outstanding rent or charges validation" do
+    context "when validating outstanding rent or charges" do
       it "must be not be anwered if answered no to outstanding rent or charges" do
         expect {
           described_class.create!(hbrentshortfall: "No",
@@ -366,7 +366,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "tenant’s income is from Universal Credit, state pensions or benefits" do
+    context "with tenant’s income from Universal Credit, state pensions or benefits" do
       it "Cannot be All if person 1 works full time" do
         expect {
           described_class.create!(
@@ -402,7 +402,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "fixed term tenancy length" do
+    context "when validaiting fixed term tenancy" do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
           described_class.create!(tenancy: "Other",
@@ -466,7 +466,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "armed forces active validation" do
+    context "when validating armed forces is active" do
       it "must not be answered if not ever served as a regular" do
         expect {
           described_class.create!(armedforces: "No",
@@ -478,17 +478,17 @@ RSpec.describe CaseLog do
 
       # Crossover over tests here as injured must be answered as well for no error
       it "must be answered if ever served in the forces as a regular" do
-        expect do
+        expect {
           described_class.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
                                   leftreg: "Yes",
                                   reservist: "Yes",
                                   owning_organisation: owning_organisation,
                                   managing_organisation: managing_organisation)
-        end
+        }.not_to raise_error
       end
     end
 
-    context "household_member_validations" do
+    context "when validating household members" do
       it "validate that persons aged under 16 must have relationship Child" do
         expect {
           described_class.create!(
@@ -581,7 +581,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "other tenancy type validation" do
+    context "when validating other tenancy type" do
       it "must be provided if tenancy type was given as other" do
         expect {
           described_class.create!(tenancy: "Other",
@@ -615,7 +615,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "income ranges" do
+    context "when saving income ranges" do
       it "validates net income maximum" do
         expect {
           described_class.create!(
@@ -640,7 +640,7 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      context "given an income in upper soft validation range" do
+      context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
                             ecstat1: "Full-time - 30 hours or more",
@@ -655,7 +655,7 @@ RSpec.describe CaseLog do
         end
       end
 
-      context "given an income in lower soft validation range" do
+      context "with an income in lower soft validation range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
                             ecstat1: "Full-time - 30 hours or more",
@@ -671,7 +671,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "major repairs date" do
+    context "when validating major repairs date" do
       it "cannot be later than the tenancy start date" do
         expect {
           described_class.create!(
@@ -733,7 +733,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "void date" do
+    context "when saving void date" do
       it "must have less than 10 years between the tenancy start date and void" do
         expect {
           described_class.create!(
@@ -787,60 +787,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Validate pregnancy questions" do
-      it "Cannot answer yes if no female tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer yes if no female tenants within age range" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 51,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer prefer not to say if no valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Prefer not to say",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Can answer yes if valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-      end
-
-      it "Can answer yes if valid second tenant" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male", age1: 99,
-                                  sex2: "Female",
-                                  age2: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-      end
-    end
-
-    context "Validate type of unit" do
+    context "when validating type of unit" do
       it "Cannot be bedsit if no of bedrooms is greater than 1" do
         expect {
           described_class.create!(unittype_gn: "Bedsit",
@@ -858,7 +805,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Validate local authority" do
+    context "when validating local authority" do
       it "Has to be london if rent type london affordable rent" do
         expect {
           described_class.create!(la: "Ashford",
@@ -876,7 +823,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "For accessibility requirements" do
+    context "with accessibility requirements" do
       it "validates that only one option can be selected" do
         expect {
           described_class.create!(housingneeds_a: "Yes",
@@ -931,7 +878,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "Validate reason for vacancy" do
+    context "when validating reason for vacancy" do
       def check_rsnvac_validation(prevten)
         expect {
           described_class.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
@@ -1087,7 +1034,7 @@ RSpec.describe CaseLog do
       expect(record_from_db["year"]).to eq(2021)
     end
 
-    context "addresses" do
+    context "when saving addresses" do
       before do
         stub_request(:get, /api.postcodes.io/)
           .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
@@ -1145,7 +1092,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "net_income" do
+    context "when saving net_income" do
       it "infers the income frequency" do
         case_log.update!(net_income_known: "Weekly")
         expect(case_log.reload.incfreq).to eq("Weekly")
@@ -1156,7 +1103,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "rent and charges" do
+    context "when saving rent and charges" do
       let!(:case_log) do
         described_class.create({
           managing_organisation: organisation,
@@ -1174,7 +1121,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "household members derived vars" do
+    context "when validating household members derived vars" do
       let!(:household_case_log) do
         described_class.create({
           managing_organisation: organisation,
@@ -1228,7 +1175,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "two pages with the same question key, only one's dependency is met" do
+    context "with two pages having the same question key, only one's dependency is met" do
       let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
 
       it "does not clear the answer" do
