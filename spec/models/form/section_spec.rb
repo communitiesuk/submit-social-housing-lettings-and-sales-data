@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form::Section, type: :model do
-  subject { described_class.new(section_id, section_definition, form) }
+  subject(:section) { described_class.new(section_id, section_definition, form) }
 
   let(:case_log) { FactoryBot.build(:case_log) }
   let(:form) { case_log.form }
@@ -9,15 +9,15 @@ RSpec.describe Form::Section, type: :model do
   let(:section_definition) { form.form_definition["sections"][section_id] }
 
   it "has an id" do
-    expect(subject.id).to eq(section_id)
+    expect(section.id).to eq(section_id)
   end
 
   it "has a label" do
-    expect(subject.label).to eq("About the household")
+    expect(section.label).to eq("About the household")
   end
 
   it "has subsections" do
     expected_subsections = %w[household_characteristics household_needs]
-    expect(subject.subsections.map(&:id)).to eq(expected_subsections)
+    expect(section.subsections.map(&:id)).to eq(expected_subsections)
   end
 end
