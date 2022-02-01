@@ -1071,11 +1071,10 @@ module Constants::CaseLog
   }.freeze
 
   NET_INCOME_KNOWN = {
-    "Weekly" => 0,
-    "Monthly" => 1,
-    "Annually" => 2,
-    "Tenant prefers not to say" => 3,
-    "Don’t know" => 4,
+    "Yes" => 0,
+    "No" => 1,
+    "Tenant prefers not to say" => 2,
+    "Don’t know" => 3,
   }.freeze
 
   HAS_BENEFITS_OPTIONS = ["Housing benefit",
