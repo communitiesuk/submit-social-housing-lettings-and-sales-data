@@ -20,7 +20,7 @@ RSpec.describe FormController, type: :request do
   end
   let(:headers) { { "Accept" => "text/html" } }
 
-  context "a not signed in user" do
+  context "when a user is not signed in" do
     describe "GET" do
       it "does not let you get case logs pages you don't have access to" do
         get "/logs/#{case_log.id}/person-1-age", headers: headers, params: {}
@@ -41,14 +41,14 @@ RSpec.describe FormController, type: :request do
     end
   end
 
-  context "a signed in user" do
+  context "when a user is signed in" do
     before do
       sign_in user
     end
 
     describe "GET" do
-      context "form pages" do
-        context "forms exist for multiple years" do
+      context "with form pages" do
+        context "when forms exist for multiple years" do
           let(:case_log_year_1) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation) }
           let(:case_log_year_2) { FactoryBot.create(:case_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation) }
 
@@ -60,14 +60,14 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "case logs that are not owned or managed by your organisation" do
+        context "when case logs are not owned or managed by your organisation" do
           it "does not show form pages for case logs you don't have access to" do
             get "/logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
           end
         end
 
-        context "a form page that has custom guidance" do
+        context "with a form page that has custom guidance" do
           it "displays the correct partial" do
             get "/logs/#{case_log.id}/net-income", headers: headers, params: {}
             expect(response.body).to match("What counts as income?")
@@ -75,8 +75,8 @@ RSpec.describe FormController, type: :request do
         end
       end
 
-      context "check answers pages" do
-        context "case logs that are not owned or managed by your organisation" do
+      context "when displaying check answers pages" do
+        context "when case logs are not owned or managed by your organisation" do
           it "does not show a check answers for case logs you don't have access to" do
             get "/logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
@@ -84,14 +84,14 @@ RSpec.describe FormController, type: :request do
         end
       end
 
-      context "a question that in a section that isn't enabled yet" do
+      context "with a question in a section that isn't enabled yet" do
         it "routes back to the tasklist page" do
           get "/logs/#{case_log.id}/declaration", headers: headers, params: {}
           expect(response).to redirect_to("/logs/#{case_log.id}")
         end
       end
 
-      context "a question that isn't enabled yet" do
+      context "with a question that isn't enabled yet" do
         it "routes back to the tasklist page" do
           get "/logs/#{case_log.id}/conditional-question-no-second-page", headers: headers, params: {}
           expect(response).to redirect_to("/logs/#{case_log.id}")
@@ -100,7 +100,7 @@ RSpec.describe FormController, type: :request do
     end
 
     describe "Submit Form" do
-      context "a form page" do
+      context "with a form page" do
         let(:user) { FactoryBot.create(:user) }
         let(:organisation) { user.organisation }
         let(:case_log) do
@@ -125,7 +125,7 @@ RSpec.describe FormController, type: :request do
           post "/logs/#{case_log.id}/form", params: params
         end
 
-        context "invalid answers" do
+        context "with invalid answers" do
           let(:answer) { 2000 }
 
           it "re-renders the same page with errors if validation fails" do
@@ -133,19 +133,8 @@ RSpec.describe FormController, type: :request do
           end
         end
 
-        context "valid answers" do
+        context "with valid answers" do
           let(:answer) { 20 }
-          let(:params) do
-            {
-              id: case_log.id,
-              case_log: {
-                page: page_id,
-                age1: answer,
-                age2: 2000,
-              },
-            }
-          end
-
           let(:params) do
             {
               id: case_log.id,
@@ -169,7 +158,7 @@ RSpec.describe FormController, type: :request do
         end
       end
 
-      context "checkbox questions" do
+      context "with checkbox questions" do
         let(:case_log_form_params) do
           {
             id: case_log.id,
@@ -206,7 +195,7 @@ RSpec.describe FormController, type: :request do
           expect(case_log.housingneeds_c).to eq("Yes")
         end
 
-        context "given a page with checkbox and non-checkbox questions" do
+        context "with a page having checkbox and non-checkbox questions" do
           let(:tenant_code) { "BZ355" }
           let(:case_log_form_params) do
             {
@@ -254,7 +243,7 @@ RSpec.describe FormController, type: :request do
         end
       end
 
-      context "conditional routing" do
+      context "with conditional routing" do
         before do
           allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
         end
@@ -304,7 +293,7 @@ RSpec.describe FormController, type: :request do
         end
       end
 
-      context "case logs that are not owned or managed by your organisation" do
+      context "with case logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
         let(:other_organisation) { FactoryBot.create(:organisation) }
         let(:unauthorized_case_log) do
