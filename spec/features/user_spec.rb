@@ -4,7 +4,7 @@ require_relative "../request_helper"
 RSpec.describe "User Features" do
   let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
   let(:reset_password_template_id) { DeviseNotifyMailer::RESET_PASSWORD_TEMPLATE_ID }
-  let(:notify_client) { double(Notifications::Client) }
+  let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
 
   before do
