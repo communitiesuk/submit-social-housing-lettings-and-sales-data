@@ -31,7 +31,7 @@ private
   end
 
   def read_s3_buckets
-    return [] unless s3_config_present?
+    return {} unless s3_config_present?
 
     s3_buckets = {}
     @paas_config[:"aws-s3-bucket"].each do |bucket_config|

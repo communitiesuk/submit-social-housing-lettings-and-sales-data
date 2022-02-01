@@ -43,6 +43,8 @@ gem "uk_postcode"
 gem "postcodes_io"
 # Use Ruby objects to build reusable markup. A React inspired evolution of the presenter pattern
 gem "view_component"
+# Use the AWS S3 SDK as storage mechanism
+gem "aws-sdk-s3"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
