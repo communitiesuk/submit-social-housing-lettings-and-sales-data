@@ -29,7 +29,7 @@ RSpec.describe "validations" do
 
   describe "Question validation" do
     context "when the tenant age is invalid" do
-      it "it shows validation for under 0" do
+      it "shows validation for under 0" do
         visit("/logs/#{id}/person-1-age")
         fill_in_number_question(empty_case_log.id, "age1", -5, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
@@ -38,7 +38,7 @@ RSpec.describe "validations" do
         expect(page).to have_title("Error")
       end
 
-      it "it shows validation for over 120" do
+      it "shows validation for over 120" do
         visit("/logs/#{id}/person-1-age")
         fill_in_number_question(empty_case_log.id, "age1", 121, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
