@@ -243,22 +243,6 @@ private
       self.month = startdate.month
       self.year = startdate.year
     end
-    case net_income_known
-    when "Weekly"
-      self.incfreq = "Weekly"
-      self.incref = nil
-    when "Monthly"
-      self.incfreq = "Monthly"
-      self.incref = nil
-    when "Annually"
-      self.incfreq = "Yearly"
-      self.incref = nil
-    when "Tenant prefers not to say"
-      self.incref = 1
-      self.incfreq = nil
-    when "Don’t know"
-      self.incfreq = nil
-    end
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation[:provider_type]}" if renttype.present? && needstype.present? && owning_organisation[:provider_type].present?
