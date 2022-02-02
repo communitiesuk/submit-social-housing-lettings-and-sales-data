@@ -5,9 +5,11 @@ RSpec.describe Auth::PasswordsController, type: :request do
   let(:params) { { user: { email: email } } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
+  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
   before do
-    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
   end
 
