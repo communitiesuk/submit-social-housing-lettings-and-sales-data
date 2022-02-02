@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../request_helper"
 
 RSpec.describe CaseLogsController, type: :request do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
@@ -426,7 +427,8 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "when a case log deletion fails" do
       before do
-        allow_any_instance_of(CaseLog).to receive(:discard).and_return(false)
+        allow(CaseLog).to receive(:find_by).and_return(case_log)
+        allow(case_log).to receive(:discard).and_return(false)
         delete "/logs/#{id}", headers: headers
       end
 
