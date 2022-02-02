@@ -245,10 +245,7 @@ RSpec.describe FormController, type: :request do
       end
 
       context "with conditional routing" do
-        before do
-          allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
-        end
-
+        let(:validator) { case_log._validators[nil].first }
         let(:case_log_form_conditional_question_yes_params) do
           {
             id: case_log.id,
@@ -258,7 +255,6 @@ RSpec.describe FormController, type: :request do
             },
           }
         end
-
         let(:case_log_form_conditional_question_no_params) do
           {
             id: case_log.id,
@@ -268,7 +264,6 @@ RSpec.describe FormController, type: :request do
             },
           }
         end
-
         let(:case_log_form_conditional_question_wchair_yes_params) do
           {
             id: case_log.id,
@@ -277,6 +272,10 @@ RSpec.describe FormController, type: :request do
               wchair: "Yes",
             },
           }
+        end
+
+        before do
+          allow(validator).to receive(:validate_pregnancy).and_return(true)
         end
 
         it "routes to the appropriate conditional page based on the question answer of the current page" do

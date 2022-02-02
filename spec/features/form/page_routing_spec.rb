@@ -14,10 +14,11 @@ RSpec.describe "Form Page Routing" do
     )
   end
   let(:id) { case_log.id }
+  let(:validator) { case_log._validators[nil].first }
 
   before do
     RequestHelper.stub_http_requests
-    allow_any_instance_of(CaseLogValidator).to receive(:validate_pregnancy).and_return(true)
+    allow(validator).to receive(:validate_pregnancy).and_return(true)
     sign_in user
   end
 
