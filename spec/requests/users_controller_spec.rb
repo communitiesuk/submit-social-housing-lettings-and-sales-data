@@ -86,7 +86,8 @@ RSpec.describe UsersController, type: :request do
           end
 
           before do
-            allow_any_instance_of(User).to receive(:reset_password_sent_at).and_return(4.hours.ago)
+            allow(User).to receive(:find_or_initialize_with_error_by).and_return(user)
+            allow(user).to receive(:reset_password_sent_at).and_return(4.hours.ago)
             put "/users/password", headers: headers, params: params
           end
 
@@ -199,8 +200,9 @@ RSpec.describe UsersController, type: :request do
 
     context "when the update fails to persist" do
       before do
-        allow_any_instance_of(User).to receive(:update).and_return(false)
         sign_in user
+        allow(User).to receive(:find_by).and_return(user)
+        allow(user).to receive(:update).and_return(false)
         patch "/users/#{user.id}", headers: headers, params: params
       end
 

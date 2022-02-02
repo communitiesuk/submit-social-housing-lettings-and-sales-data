@@ -70,7 +70,7 @@ private
   end
 
   def find_resource
-    @user = User.find(params[:id])
+    @user = User.find_by(id: params[:id])
   end
 
   def authenticate_scope!
