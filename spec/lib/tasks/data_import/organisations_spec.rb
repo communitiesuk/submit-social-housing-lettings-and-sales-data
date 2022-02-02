@@ -10,6 +10,10 @@ describe "rake data_import:organisations", type: :task do
     Rake.application.rake_require("tasks/data_import/organisations")
     Rake::Task.define_task(:environment)
     task.reenable
+
+    allow(ENV).to receive(:[]).with("VCAP_SERVICE").and_return(vcap_service)
+    allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return("my_instance")
+
   end
 
   it "creates an organisation from the given XML file" do
