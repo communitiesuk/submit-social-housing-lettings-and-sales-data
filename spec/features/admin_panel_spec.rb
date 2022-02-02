@@ -52,4 +52,24 @@ RSpec.describe "Admin Panel" do
       expect(page).to have_content("Check your phone")
     end
   end
+
+  context "when the 2FA code needs to be resent" do
+    before do
+      visit("/admin")
+      fill_in("admin_user[email]", with: admin.email)
+      fill_in("admin_user[password]", with: admin.password)
+      click_button("Login")
+    end
+
+    it "displays the resend view" do
+      click_link("Not received a text message?")
+      expect(page).to have_button("Resend security code")
+    end
+
+    it "send a new OTP code and redirects back to the 2FA view" do
+      click_link("Not received a text message?")
+      expect { click_button("Resend security code") }.to(change { admin.reload.direct_otp })
+      expect(page).to have_current_path("/admin/two-factor-authentication")
+    end
+  end
 end

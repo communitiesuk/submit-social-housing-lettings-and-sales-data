@@ -1,6 +1,6 @@
 <% content_for :title, "Check your phone" %>
 
-<%= form_with(url: "/admin/two_factor_authentication", html: { method: :put }) do |f| %>
+<%= form_with(url: "/admin/two-factor-authentication", html: { method: :put }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -22,5 +22,5 @@
 <% end %>
 
 <p class="govuk-body">
-  <%= govuk_link_to "Not received a text message?", "#" %>
+  <%= govuk_link_to "Not received a text message?", admin_two_factor_authentication_resend_path %>
 </p>
