@@ -20,25 +20,27 @@ RSpec.describe StorageService do
   end
 
   context "when we create an S3 Service with no PaaS Configuration present" do
-    subject { described_class.new(PaasConfigurationService.new, "random_instance") }
+    subject(:storage_service) { described_class.new(PaasConfigurationService.new, "random_instance") }
+
     it "raises an exception" do
-      expect { subject }.to raise_error(RuntimeError, /No PaaS configuration present/)
+      expect { storage_service }.to raise_error(RuntimeError, /No PaaS configuration present/)
     end
   end
 
   context "when we create an S3 Service with an unknown instance name" do
-    subject { described_class.new(PaasConfigurationService.new, "random_instance") }
+    subject(:storage_service) { described_class.new(PaasConfigurationService.new, "random_instance") }
+
     before do
       allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return("{}")
     end
 
     it "raises an exception" do
-      expect { subject }.to raise_error(RuntimeError, /instance name could not be found/)
+      expect { storage_service }.to raise_error(RuntimeError, /instance name could not be found/)
     end
   end
 
   context "when we create an storage service with a valid instance name" do
-    subject { described_class.new(PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(PaasConfigurationService.new, instance_name) }
 
     before do
       allow(ENV).to receive(:[])
@@ -46,7 +48,7 @@ RSpec.describe StorageService do
     end
 
     it "creates a Storage Configuration" do
-      expect(subject.configuration).to be_an(StorageConfiguration)
+      expect(storage_service.configuration).to be_an(StorageConfiguration)
     end
 
     it "sets the expected parameters in the configuration" do
@@ -58,12 +60,13 @@ RSpec.describe StorageService do
           bucket_name: bucket_name,
         },
       )
-      expect(subject.configuration).to eq(expected_configuration)
+      expect(storage_service.configuration).to eq(expected_configuration)
     end
   end
 
   context "when we create an storage service and write a stubbed object" do
-    subject { described_class.new(PaasConfigurationService.new, instance_name) }
+    subject(:storage_service) { described_class.new(PaasConfigurationService.new, instance_name) }
+
     let(:filename) { "my_file" }
     let(:content) { "content" }
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
@@ -77,14 +80,14 @@ RSpec.describe StorageService do
     it "retrieves the previously written object successfully if it exists" do
       s3_client_stub.stub_responses(:get_object, { body: content })
 
-      data = subject.get_file_io(filename)
+      data = storage_service.get_file_io(filename)
       expect(data.string).to eq(content)
     end
 
     it "fails when the object does not exist" do
       s3_client_stub.stub_responses(:get_object, "NoSuchKey")
 
-      expect { subject.get_file_io("fake_filename") }
+      expect { storage_service.get_file_io("fake_filename") }
         .to raise_error(Aws::S3::Errors::NoSuchKey)
     end
 
@@ -92,7 +95,7 @@ RSpec.describe StorageService do
       expect(s3_client_stub).to receive(:put_object).with(body: content,
                                                           bucket: bucket_name,
                                                           key: filename)
-      subject.write_file(filename, content)
+      storage_service.write_file(filename, content)
     end
   end
 end
