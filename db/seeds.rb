@@ -30,4 +30,4 @@ User.create!(
   role: "data_coordinator",
 )
 
-AdminUser.create!(email: "admin@example.com", password: "password")
+AdminUser.create!(email: "admin@example.com", password: "password", phone: "000000000")
