@@ -15,7 +15,7 @@ private
 
   def create_organisation(file_io)
     doc = Nokogiri::XML(file_io)
-    Organisation.create!(
+    Organisation.upsert({
       name: field_value(doc, "name"),
       providertype: field_value(doc, "institution-type"),
       phone: field_value(doc, "telephone-number"),
@@ -36,7 +36,7 @@ private
       unspecified_units: field_value(doc, "unspecified-units"),
       old_org_id: field_value(doc, "id"),
       old_visible_id: field_value(doc, "visible-id"),
-    )
+    }, unique_by: "old_visible_id")
   end
 
   def field_value(doc, field)
