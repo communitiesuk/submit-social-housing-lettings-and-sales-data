@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_03_104800) do
+ActiveRecord::Schema.define(version: 2022_02_03_145845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,7 +93,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_104800) do
     t.integer "beds"
     t.integer "offered"
     t.integer "wchair"
-    t.integer "earnings"
     t.integer "incfreq"
     t.integer "benefits"
     t.integer "period"
@@ -162,7 +161,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_104800) do
     t.datetime "startdate"
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
-    t.string "why_dont_you_know_la"
     t.integer "unitletas"
     t.integer "builtype"
     t.datetime "property_void_date"
@@ -186,6 +184,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_104800) do
     t.integer "is_carehome"
     t.integer "letting_in_sheltered_accomodation"
     t.integer "household_charge"
+    t.integer "earnings"
     t.integer "referral"
     t.decimal "brent", precision: 10, scale: 2
     t.decimal "scharge", precision: 10, scale: 2
