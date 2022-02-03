@@ -173,6 +173,7 @@
     },
     "household": {
       "label": "About the household",
+      "description": "Make sure the tenant has seen <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice</a> before completing this section.",
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",

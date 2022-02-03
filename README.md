@@ -107,6 +107,7 @@ The JSON should follow the structure:
   "sections": {
     "[snake_case_section_name_string]": {
       "label": String,
+      "description": String,
       "subsections": {
         "[snake_case_subsection_name_string]": {
           "label": String,

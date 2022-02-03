@@ -16,6 +16,10 @@ RSpec.describe Form::Section, type: :model do
     expect(section.label).to eq("About the household")
   end
 
+  it "has a description" do
+    expect(section.description).to eq("Make sure the tenant has seen the privacy notice.")
+  end
+
   it "has subsections" do
     expected_subsections = %w[household_characteristics household_needs]
     expect(section.subsections.map(&:id)).to eq(expected_subsections)

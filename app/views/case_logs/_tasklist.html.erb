@@ -6,6 +6,9 @@
           <%= section.label %>
         </span>
       </h2>
+      <% if section.description %>
+        <p class="govuk-body"><%= section.description.html_safe %></p>
+      <% end %>
       <ul class="app-task-list__items">
         <% section.subsections.map do |subsection| %>
           <% subsection_status = subsection.status(@case_log) %>
