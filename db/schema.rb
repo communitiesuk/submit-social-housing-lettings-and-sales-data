@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_31_123638) do
+ActiveRecord::Schema.define(version: 2022_02_03_104800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_123638) do
     t.integer "unspecified_units"
     t.string "old_org_id"
     t.integer "old_visible_id"
+    t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|

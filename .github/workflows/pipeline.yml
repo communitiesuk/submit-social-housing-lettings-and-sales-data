@@ -122,6 +122,7 @@ jobs:
         GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
         APP_HOST: ${{ secrets.APP_HOST }}
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
       run: |
         cf7 api $CF_API_ENDPOINT
         cf7 auth
@@ -131,4 +132,5 @@ jobs:
         cf7 set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
         cf7 set-env $APP_NAME APP_HOST $APP_HOST
         cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+        cf7 set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
         cf7 push $APP_NAME --strategy rolling

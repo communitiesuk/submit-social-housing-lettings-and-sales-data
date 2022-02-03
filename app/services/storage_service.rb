@@ -8,10 +8,14 @@ class StorageService
     @client = create_client
   end
 
+  def list_files(folder)
+    @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder)
+           .flat_map { |response| response.contents.map(&:key) }
+  end
+
   def get_file_io(file_name)
-    file_response =
-      @client.get_object(bucket: @configuration.bucket_name, key: file_name)
-    file_response.body
+    @client.get_object(bucket: @configuration.bucket_name, key: file_name)
+           .body
   end
 
   def write_file(file_name, data)
