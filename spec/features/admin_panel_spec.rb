@@ -72,4 +72,24 @@ RSpec.describe "Admin Panel" do
       expect(page).to have_current_path("/admin/two-factor-authentication")
     end
   end
+
+  context "when logging out and in again" do
+    before do
+      allow(SecureRandom).to receive(:random_number).and_return(otp)
+    end
+
+    it "requires the 2FA code on each login" do
+      visit("/admin")
+      fill_in("admin_user[email]", with: admin.email)
+      fill_in("admin_user[password]", with: admin.password)
+      click_button("Login")
+      fill_in("code", with: otp)
+      click_button("Submit")
+      click_link("Logout")
+      fill_in("admin_user[email]", with: admin.email)
+      fill_in("admin_user[password]", with: admin.password)
+      click_button("Login")
+      expect(page).to have_content("Check your phone")
+    end
+  end
 end

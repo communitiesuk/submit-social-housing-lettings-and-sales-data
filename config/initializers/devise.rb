@@ -320,5 +320,5 @@ Devise.setup do |config|
   config.remember_otp_session_for_seconds = 1.day # Time before browser has to perform 2fA again. Default is 0.
   config.otp_secret_encryption_key = ENV["OTP_SECRET_ENCRYPTION_KEY"]
   config.second_factor_resource_id = "id" # Field or method name used to set value for 2fA remember cookie
-  config.delete_cookie_on_logout = false # Delete cookie when user signs out, to force 2fA again on login
+  config.delete_cookie_on_logout = true # Delete cookie when user signs out, to force 2fA again on login
 end
