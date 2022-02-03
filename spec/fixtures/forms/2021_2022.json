@@ -3,6 +3,7 @@
     "sections": {
       "household": {
         "label": "About the household",
+        "description": "Make sure the tenant has seen the privacy notice.",
         "subsections": {
           "household_characteristics": {
             "label": "Household characteristics",
