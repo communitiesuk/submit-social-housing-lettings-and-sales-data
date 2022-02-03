@@ -38,6 +38,8 @@ RSpec.describe "Admin Panel" do
         click_button("Submit")
         expect(page).to have_content("Check your phone")
         expect(page).to have_http_status(:unprocessable_entity)
+        expect(page).to have_title("Error")
+        expect(page).to have_selector("#error-summary-title")
       end
     end
   end
@@ -52,6 +54,8 @@ RSpec.describe "Admin Panel" do
       click_button("Submit")
       expect(page).to have_content("Check your phone")
       expect(page).to have_http_status(:unprocessable_entity)
+      expect(page).to have_title("Error")
+      expect(page).to have_selector("#error-summary-title")
     end
   end
 

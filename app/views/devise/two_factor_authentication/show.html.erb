@@ -1,8 +1,9 @@
 <% content_for :title, "Check your phone" %>
 
-<%= form_with(url: "/admin/two-factor-authentication", html: { method: :put }) do |f| %>
+<%= form_with(model: resource, url: "/admin/two-factor-authentication", html: { method: :put }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l">
         <%= content_for(:title) %>
