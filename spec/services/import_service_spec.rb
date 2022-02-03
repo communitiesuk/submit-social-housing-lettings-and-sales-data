@@ -58,7 +58,7 @@ RSpec.describe ImportService do
       expect { import_service.update_organisations(folder_name) }.to change(Organisation, :count).by(0)
 
       organisation = Organisation.find_by(old_visible_id: 1)
-      expect(organisation).to_not be_nil
+      expect(organisation).not_to be_nil
       expect(organisation.name).to eq("my_new_organisation")
     end
   end
