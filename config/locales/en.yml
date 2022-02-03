@@ -122,3 +122,10 @@ en:
         message: "Net income is lower than expected based on the main tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the main tenant’s working situation. Are you sure this is correct?"
+  devise:
+    two_factor_authentication:
+      success: "Two factor authentication successful."
+      attempt_failed: "Attempt failed."
+      max_login_attempts_reached: "Access completely denied as you have reached your attempts limit"
+      contact_administrator: "Please contact your system administrator."
+      code_has_been_sent: "Your security code has been sent."

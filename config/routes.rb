@@ -1,5 +1,22 @@
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :admin_users, {
+    path: :admin,
+    controllers: {
+      sessions: "active_admin/devise/sessions",
+      passwords: "active_admin/devise/passwords",
+      unlocks: "active_admin/devise/unlocks",
+      registrations: "active_admin/devise/registrations",
+      confirmations: "active_admin/devise/confirmations",
+      two_factor_authentication: "auth/two_factor_authentication",
+    },
+    path_names: { sign_in: "login", sign_out: "logout", two_factor_authentication: "two-factor-authentication" },
+    sign_out_via: %i[delete get],
+  }
+
+  devise_scope :admin_user do
+    get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
+  end
+
   devise_for :users, controllers: {
     passwords: "auth/passwords",
     sessions: "auth/sessions",

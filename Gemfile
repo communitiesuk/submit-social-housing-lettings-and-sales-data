@@ -37,6 +37,9 @@ gem "json-schema"
 # Authentication
 # Point at branch until devise is compatible with Turbo, see https://github.com/heartcombo/devise/pull/5340
 gem "devise", github: "baarkerlounger/devise", branch: "dluhc-fixes"
+# Two-factor Authentication for devise models. Pointing at fork until this is merged for Rails 6 compatibility
+# https://github.com/Houdini/two_factor_authentication/pull/204
+gem "two_factor_authentication", github: "baarkerlounger/two_factor_authentication"
 # UK postcode parsing and validation
 gem "uk_postcode"
 # Get rich data from postcode lookups. Wraps postcodes.io
