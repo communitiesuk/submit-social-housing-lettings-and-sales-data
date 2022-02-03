@@ -1,10 +1,8 @@
-<ol class="app-task-list app-task-list--no-numbers">
+<ol class="app-task-list govuk-!-margin-top-8">
   <% @case_log.form.sections.map do |section| %>
     <li>
-      <h2 class="app-task-list__section">
-        <span class="app-task-list__section-number">
-          <%= section.label %>
-        </span>
+      <h2 class="app-task-list__section-heading">
+        <%= section.label %>
       </h2>
       <% if section.description %>
         <p class="govuk-body"><%= section.description.html_safe %></p>
