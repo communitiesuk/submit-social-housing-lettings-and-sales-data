@@ -8,11 +8,13 @@ RSpec.describe "User Features" do
   let(:set_password_template_id) { DeviseNotifyMailer::SET_PASSWORD_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
   before do
-    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
-    allow_any_instance_of(DeviseNotifyMailer).to receive(:host).and_return("test.com")
-    allow_any_instance_of(User).to receive(:set_reset_password_token).and_return(reset_password_token)
+    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+    allow(devise_notify_mailer).to receive(:host).and_return("test.com")
+    allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
     allow(notify_client).to receive(:send_email).and_return(true)
     sign_in user
   end

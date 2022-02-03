@@ -8,9 +8,11 @@ RSpec.describe UsersController, type: :request do
   let(:new_value) { "new test name" }
   let(:params) { { id: user.id, user: { name: new_value } } }
   let(:notify_client) { instance_double(Notifications::Client) }
+  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
   before do
-    allow_any_instance_of(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
   end
 
@@ -84,7 +86,8 @@ RSpec.describe UsersController, type: :request do
           end
 
           before do
-            allow_any_instance_of(User).to receive(:reset_password_sent_at).and_return(4.hours.ago)
+            allow(User).to receive(:find_or_initialize_with_error_by).and_return(user)
+            allow(user).to receive(:reset_password_sent_at).and_return(4.hours.ago)
             put "/users/password", headers: headers, params: params
           end
 
@@ -197,8 +200,9 @@ RSpec.describe UsersController, type: :request do
 
     context "when the update fails to persist" do
       before do
-        allow_any_instance_of(User).to receive(:update).and_return(false)
         sign_in user
+        allow(User).to receive(:find_by).and_return(user)
+        allow(user).to receive(:update).and_return(false)
         patch "/users/#{user.id}", headers: headers, params: params
       end
 
