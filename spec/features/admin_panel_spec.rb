@@ -37,6 +37,7 @@ RSpec.describe "Admin Panel" do
         fill_in("code", with: otp)
         click_button("Submit")
         expect(page).to have_content("Check your phone")
+        expect(page).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -50,6 +51,7 @@ RSpec.describe "Admin Panel" do
       fill_in("code", with: otp)
       click_button("Submit")
       expect(page).to have_content("Check your phone")
+      expect(page).to have_http_status(:unprocessable_entity)
     end
   end
 

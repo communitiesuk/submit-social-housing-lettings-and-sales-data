@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/two_factor_authentication.git
-  revision: a7522becd7222f1aa4ddf73d7caf19f05bdb4dac
+  revision: 025d0a39ae971798402a7cefbd677cb15aa4983c
   specs:
     two_factor_authentication (2.2.0)
       devise
@@ -117,7 +117,7 @@ GEM
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.551.0)
-    aws-sdk-core (3.125.5)
+    aws-sdk-core (3.125.6)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
