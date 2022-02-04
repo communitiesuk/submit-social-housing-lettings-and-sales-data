@@ -30,13 +30,16 @@ RSpec.describe "Admin Panel" do
       expect(page).to have_content("Two factor authentication successful.")
     end
 
-    context "but it is more than 5 minutes old" do
+    context "but it is more than 15 minutes old" do
       it "does not authenticate successfully" do
         click_button("Login")
-        admin.update!(direct_otp_sent_at: 10.minutes.ago)
+        admin.update!(direct_otp_sent_at: 16.minutes.ago)
         fill_in("code", with: otp)
         click_button("Submit")
         expect(page).to have_content("Check your phone")
+        expect(page).to have_http_status(:unprocessable_entity)
+        expect(page).to have_title("Error")
+        expect(page).to have_selector("#error-summary-title")
       end
     end
   end
@@ -50,6 +53,9 @@ RSpec.describe "Admin Panel" do
       fill_in("code", with: otp)
       click_button("Submit")
       expect(page).to have_content("Check your phone")
+      expect(page).to have_http_status(:unprocessable_entity)
+      expect(page).to have_title("Error")
+      expect(page).to have_selector("#error-summary-title")
     end
   end
 
@@ -70,6 +76,26 @@ RSpec.describe "Admin Panel" do
       click_link("Not received a text message?")
       expect { click_button("Resend security code") }.to(change { admin.reload.direct_otp })
       expect(page).to have_current_path("/admin/two-factor-authentication")
+    end
+  end
+
+  context "when logging out and in again" do
+    before do
+      allow(SecureRandom).to receive(:random_number).and_return(otp)
+    end
+
+    it "requires the 2FA code on each login" do
+      visit("/admin")
+      fill_in("admin_user[email]", with: admin.email)
+      fill_in("admin_user[password]", with: admin.password)
+      click_button("Login")
+      fill_in("code", with: otp)
+      click_button("Submit")
+      click_link("Logout")
+      fill_in("admin_user[email]", with: admin.email)
+      fill_in("admin_user[password]", with: admin.password)
+      click_button("Login")
+      expect(page).to have_content("Check your phone")
     end
   end
 end

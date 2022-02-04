@@ -20,7 +20,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/two_factor_authentication.git
-  revision: a7522becd7222f1aa4ddf73d7caf19f05bdb4dac
+  revision: 1fa214d18d311e019a343f836f2c591c0fa3d308
   specs:
     two_factor_authentication (2.2.0)
       devise
@@ -116,17 +116,17 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.551.0)
-    aws-sdk-core (3.125.5)
+    aws-partitions (1.552.0)
+    aws-sdk-core (3.126.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.53.0)
-      aws-sdk-core (~> 3, >= 3.125.0)
+    aws-sdk-kms (1.54.0)
+      aws-sdk-core (~> 3, >= 3.126.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.111.3)
-      aws-sdk-core (~> 3, >= 3.125.0)
+    aws-sdk-s3 (1.112.0)
+      aws-sdk-core (~> 3, >= 3.126.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -170,7 +170,7 @@ GEM
       railties (>= 3.2)
     encryptor (3.0.0)
     erubi (1.10.0)
-    excon (0.90.0)
+    excon (0.91.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
