@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/devise.git
-  revision: ac956cc2a58daa57e071202967a212a1dac08053
+  revision: 6d0b6b52a9d0e87ae6d9f9acb562169751623078
   branch: dluhc-fixes
   specs:
     devise (4.8.1)
@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: d1492c54e76871d95f3a7ff20e445b48f455d4cb
+  revision: 920f14393bcf56cea9dc155276d20bcd10f4fa85
   branch: feature/railties-7
   specs:
     activeadmin (2.9.0)
