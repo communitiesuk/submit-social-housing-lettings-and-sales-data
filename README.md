@@ -29,10 +29,13 @@ Pre-requisites:
 4. Run the database migrations:\
   `rake db:migrate`
 
-5. Install the frontend depenencies:\
+5. Seed the database if required:\
+`rake db:seed`
+
+6. Install the frontend depenencies:\
   `yarn install`
 
-6. Start the Rails server:\
+7. Start the Rails server:\
   `bundle exec rails s`
 
 The Rails server will start on <http://localhost:3000>.
@@ -42,10 +45,13 @@ The Rails server will start on <http://localhost:3000>.
 1. Build the image:\
 `docker-compose build`
 
-2. Seed the database if required:\
+2. Run the database migrations:\
+`docker-compose run --rm app /bin/bash -c 'rake db:migrate'`
+
+3. Seed the database if required:\
 `docker-compose run --rm app /bin/bash -c 'rake db:seed'`
 
-3. To be able to debug with Pry run the app using:\
+4. To be able to debug with Pry run the app using:\
 `docker-compose run --service-ports app`
 
 If this is not needed you can run `docker-compose up` as normal
