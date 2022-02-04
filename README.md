@@ -41,13 +41,18 @@ The Rails server will start on <http://localhost:3000>.
 
 ```sh
 docker-compose build
-docker-compose run --rm app rails db:create
-docker-compose up
 ```
+To be able to debug with Pry run the app using
+```sh
+docker-compose run --service-ports app
+```
+
+If this is not needed you can run `docker-compose up` as normal
+
 
 The Rails server will start on <http://localhost:8080>.
 
-Note `docker-compose` runs the production docker image (`RAILS_ENV=production`) as the Dockerfile doesn’t include development gems to keep the image size down.
+
 
 ## Infrastructure
 
