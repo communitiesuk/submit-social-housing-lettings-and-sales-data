@@ -1,4 +1,8 @@
 class ImportService
+  PROVIDER_TYPE = {
+    "HOUSING-ASSOCIATION" => "PRP",
+  }.freeze
+
   def initialize(storage_service, logger = Rails.logger)
     @storage_service = storage_service
     @logger = logger
@@ -8,37 +12,39 @@ class ImportService
     filenames = @storage_service.list_files(folder)
     filenames.each do |filename|
       file_io = @storage_service.get_file_io(filename)
-      create_organisation(file_io)
+      xml_document = Nokogiri::XML(file_io)
+      create_organisation(xml_document)
     end
   end
 
 private
 
-  def create_organisation(file_io)
-    doc = Nokogiri::XML(file_io)
-    name = field_value(doc, "name")
-    old_visible_id = field_value(doc, "visible-id")
+  def create_organisation(xml_document)
+    namespace = "institution"
+    name = field_value(xml_document, namespace, "name")
+    old_visible_id = field_value(xml_document, namespace, "visible-id")
+
     begin
       Organisation.create!(
         name: name,
-        providertype: field_value(doc, "institution-type"),
-        phone: field_value(doc, "telephone-number"),
-        holds_own_stock: to_boolean(field_value(doc, "holds-stock")),
-        active: to_boolean(field_value(doc, "active")),
-        old_association_type: field_value(doc, "old-association-type"),
-        software_supplier_id: field_value(doc, "software-supplier-id"),
-        housing_management_system: field_value(doc, "housing-management-system"),
-        choice_based_lettings: to_boolean(field_value(doc, "choice-based-lettings")),
-        common_housing_register: to_boolean(field_value(doc, "common-housing-register")),
-        choice_allocation_policy: to_boolean(field_value(doc, "choice-allocation-policy")),
-        cbl_proportion_percentage: field_value(doc, "cbl-proportion-percentage"),
-        enter_affordable_logs: to_boolean(field_value(doc, "enter-affordable-logs")),
-        owns_affordable_logs: to_boolean(field_value(doc, "owns-affordable-rent")),
-        housing_registration_no: field_value(doc, "housing-registration-no"),
-        general_needs_units: field_value(doc, "general-needs-units"),
-        supported_housing_units: field_value(doc, "supported-housing-units"),
-        unspecified_units: field_value(doc, "unspecified-units"),
-        old_org_id: field_value(doc, "id"),
+        providertype: map_provider_type(field_value(xml_document, namespace, "institution-type")),
+        phone: field_value(xml_document, namespace, "telephone-number"),
+        holds_own_stock: to_boolean(field_value(xml_document, namespace, "holds-stock")),
+        active: to_boolean(field_value(xml_document, namespace, "active")),
+        old_association_type: field_value(xml_document, namespace, "old-association-type"),
+        software_supplier_id: field_value(xml_document, namespace, "software-supplier-id"),
+        housing_management_system: field_value(xml_document, namespace, "housing-management-system"),
+        choice_based_lettings: to_boolean(field_value(xml_document, namespace, "choice-based-lettings")),
+        common_housing_register: to_boolean(field_value(xml_document, namespace, "common-housing-register")),
+        choice_allocation_policy: to_boolean(field_value(xml_document, namespace, "choice-allocation-policy")),
+        cbl_proportion_percentage: field_value(xml_document, namespace, "cbl-proportion-percentage"),
+        enter_affordable_logs: to_boolean(field_value(xml_document, namespace, "enter-affordable-logs")),
+        owns_affordable_logs: to_boolean(field_value(xml_document, namespace, "owns-affordable-rent")),
+        housing_registration_no: field_value(xml_document, namespace, "housing-registration-no"),
+        general_needs_units: field_value(xml_document, namespace, "general-needs-units"),
+        supported_housing_units: field_value(xml_document, namespace, "supported-housing-units"),
+        unspecified_units: field_value(xml_document, namespace, "unspecified-units"),
+        old_org_id: field_value(xml_document, namespace, "id"),
         old_visible_id: old_visible_id,
       )
     rescue ActiveRecord::RecordNotUnique
@@ -46,8 +52,16 @@ private
     end
   end
 
-  def field_value(doc, field)
-    doc.at_xpath("//institution:#{field}")&.text
+  def map_provider_type(institution_type)
+    if PROVIDER_TYPE.key?(institution_type)
+      PROVIDER_TYPE[institution_type]
+    else
+      institution_type
+    end
+  end
+
+  def field_value(xml_document, namespace, field)
+    xml_document.at_xpath("//#{namespace}:#{field}")&.text
   end
 
   def to_boolean(input_string)
