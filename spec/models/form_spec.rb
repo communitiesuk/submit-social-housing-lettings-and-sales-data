@@ -112,9 +112,7 @@ RSpec.describe Form, type: :model do
       end
 
       it "returns the next incomplete section by cycling back around if next subsections are completed" do
-        # answer_local_authority(case_log)
         answer_local_gdpr_acceptance(case_log)
-
         expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
       end
 
