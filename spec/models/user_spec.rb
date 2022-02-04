@@ -52,4 +52,17 @@ RSpec.describe User, type: :model do
       expect(user.data_coordinator?).to be false
     end
   end
+
+  describe "paper trail" do
+    let(:user) { FactoryBot.create(:user) }
+
+    it "creates a record of changes to a log" do
+      expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)
+    end
+
+    it "allows case logs to be restored to a previous version" do
+      user.update!(name: "new test name")
+      expect(user.paper_trail.previous_version.name).to eq("Danny Rojas")
+    end
+  end
 end

@@ -401,9 +401,8 @@ RSpec.describe CaseLogsController, type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "soft deletes the case log" do
+      it "deletes the case log" do
         expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
-        expect(CaseLog.with_discarded.find(id)).to be_a(CaseLog)
       end
 
       context "with an invalid case log id" do
@@ -428,7 +427,7 @@ RSpec.describe CaseLogsController, type: :request do
     context "when a case log deletion fails" do
       before do
         allow(CaseLog).to receive(:find_by).and_return(case_log)
-        allow(case_log).to receive(:discard).and_return(false)
+        allow(case_log).to receive(:delete).and_return(false)
         delete "/logs/#{id}", headers: headers
       end
 

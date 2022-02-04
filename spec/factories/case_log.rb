@@ -108,7 +108,6 @@ FactoryBot.define do
       rp_medwel { "No" }
       rp_hardship { "No" }
       rp_dontknow { "No" }
-      discarded_at { nil }
       tenancyother { nil }
       override_net_income_validation { nil }
       net_income_known { "Yes" }

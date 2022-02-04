@@ -23,8 +23,6 @@ gem "govuk_design_system_formbuilder"
 gem "notifications-ruby-client"
 # Turbo and Stimulus
 gem "hotwire-rails"
-# Soft delete ActiveRecords objects
-gem "discard"
 # Administration framework
 gem "activeadmin", git: "https://github.com/tagliala/activeadmin.git", branch: "feature/railties-7"
 # Admin charts
@@ -47,6 +45,8 @@ gem "postcodes_io"
 gem "view_component"
 # Use the AWS S3 SDK as storage mechanism
 gem "aws-sdk-s3"
+# Track changes to models for auditing or versioning.
+gem "paper_trail"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
