@@ -243,6 +243,7 @@ private
       self.month = startdate.month
       self.year = startdate.year
     end
+    self.incref = 1 if net_income_known == "Tenant prefers not to say"
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = "#{renttype} #{needstype} #{owning_organisation[:provider_type]}" if renttype.present? && needstype.present? && owning_organisation[:provider_type].present?

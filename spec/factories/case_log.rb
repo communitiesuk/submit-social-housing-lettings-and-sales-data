@@ -69,6 +69,7 @@ FactoryBot.define do
       offered { 2 }
       wchair { "Yes" }
       earnings { 68 }
+      incfreq { "Weekly" }
       benefits { "Some" }
       period { "Every 2 weeks" }
       brent { 200 }
