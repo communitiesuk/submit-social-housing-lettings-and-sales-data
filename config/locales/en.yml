@@ -129,3 +129,5 @@ en:
       max_login_attempts_reached: "Access completely denied as you have reached your attempts limit"
       contact_administrator: "Please contact your system administrator."
       code_has_been_sent: "Your security code has been sent."
+      code_required: "Security code is required"
+      code_incorrect: "Security code is incorrect"
