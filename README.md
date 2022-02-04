@@ -39,13 +39,14 @@ The Rails server will start on <http://localhost:3000>.
 
 ### Using Docker
 
-```sh
-docker-compose build
-```
-To be able to debug with Pry run the app using
-```sh
-docker-compose run --service-ports app
-```
+1. Build the image:\
+`docker-compose build`
+
+2. Seed the database if required:\
+`docker-compose run --rm app /bin/bash -c 'rake db:seed'`
+
+3. To be able to debug with Pry run the app using:\
+`docker-compose run --service-ports app`
 
 If this is not needed you can run `docker-compose up` as normal
 
