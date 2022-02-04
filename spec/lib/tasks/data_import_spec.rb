@@ -10,7 +10,7 @@ describe "rake core:data_import", type: :task do
 
   let(:storage_service) { instance_double(StorageService) }
   let(:paas_config_service) { instance_double(PaasConfigurationService) }
-  let(:import_service) { instance_double(ImportService) }
+  let(:import_service) { instance_double(Imports::OrganisationImportService) }
 
   before do
     Rake.application.rake_require("tasks/data_import")
@@ -19,7 +19,7 @@ describe "rake core:data_import", type: :task do
 
     allow(StorageService).to receive(:new).and_return(storage_service)
     allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
-    allow(ImportService).to receive(:new).and_return(import_service)
+    allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
@@ -27,8 +27,8 @@ describe "rake core:data_import", type: :task do
   context "when importing organisation data" do
     it "creates an organisation from the given XML file" do
       expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
-      expect(ImportService).to receive(:new).with(storage_service)
-      expect(import_service).to receive(:update_organisations).with(fixture_path)
+      expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_organisations).with(fixture_path)
 
       task.invoke(organisation_type, fixture_path)
     end

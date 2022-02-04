@@ -11,7 +11,7 @@ RSpec.describe Organisation, type: :model do
     let(:organisation) { user.organisation }
 
     it "has expected fields" do
-      expect(organisation.attribute_names).to include("name", "phone", "Org type")
+      expect(organisation.attribute_names).to include("name", "phone", "org_type")
     end
 
     it "has users" do
