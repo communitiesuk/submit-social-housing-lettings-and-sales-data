@@ -28,8 +28,8 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV['DB_DATABASE'] || data_collector_development %>
-  host: <%= ENV['DB_HOST'] || localhost %>
+  database: <%= ENV['DB_DATABASE'] || 'data_collector_development' %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
 
 staging:
   <<: *default
