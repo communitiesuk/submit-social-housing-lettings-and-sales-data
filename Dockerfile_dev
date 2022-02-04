@@ -1,0 +1,33 @@
+# Build compilation image
+FROM ruby:3.0.3-alpine3.14 as builder
+
+# The application runs from /app
+WORKDIR /app
+
+# Add the timezone as it's not configured by default in Alpine
+RUN apk add --update --no-cache tzdata && cp /usr/share/zoneinfo/Europe/London /etc/localtime && echo "Europe/London" > /etc/timezone
+
+RUN apk add --no-cache build-base yarn postgresql-dev git bash
+
+# Install bundler to run bundle exec
+# This should be the same version as the Gemfile.lock
+RUN gem install bundler:2.3.4 --no-document
+
+# Install gems defined in Gemfile
+COPY .ruby-version Gemfile Gemfile.lock /app/
+
+ARG BUNDLE_FLAGS="--jobs=4 --no-binstubs --no-cache"
+RUN bundle install ${BUNDLE_FLAGS}
+
+# Install node packages defined in package.json, including webpack
+COPY package.json yarn.lock /app/
+RUN yarn install --frozen-lockfile
+
+# Copy all files to /app (except what is defined in .dockerignore)
+COPY . /app/
+
+ENV PORT=8080
+
+EXPOSE ${PORT}
+
+CMD RAILS_ENV=${RAILS_ENV} bundle exec rake db:migrate && bundle exec rails s -e ${RAILS_ENV} -p ${PORT} --binding=0.0.0.0
