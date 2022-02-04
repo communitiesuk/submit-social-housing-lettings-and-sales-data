@@ -24,6 +24,10 @@ class Form
     pages.find { |p| p.id == id.to_s.underscore }
   end
 
+  def get_question(id)
+    questions.find { |q| q.id == id.to_s.underscore }
+  end
+
   def subsection_for_page(page)
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end

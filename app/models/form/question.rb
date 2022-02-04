@@ -75,6 +75,9 @@ class Form::Question
                 else
                   case_log[id].blank? ? "Answer" : "Change"
                 end
+    if id == "earnings"
+      link_type = case_log[id].blank? || case_log["incfreq"].blank? ? "Answer" : "Change"
+    end
     "#{link_type}<span class=\"govuk-visually-hidden\"> #{check_answer_label.to_s.downcase}</span>".html_safe
   end
 
