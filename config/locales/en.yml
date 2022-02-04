@@ -128,7 +128,7 @@ en:
       attempt_failed: "Attempt failed."
       max_login_attempts_reached: "Too many incorrect login attempts"
       account_locked: "Your account has been locked for security reasons."
-      contact_administrator: "Contact another helpdesk administrator."
+      contact_administrator: "Contact another helpdesk administrator for access."
       code_has_been_sent: "Your security code has been sent."
       code_required: "Security code is required"
       code_incorrect: "Security code is incorrect"
