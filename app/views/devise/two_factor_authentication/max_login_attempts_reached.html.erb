@@ -1,0 +1,11 @@
+<% content_for :title, I18n.t("devise.two_factor_authentication.max_login_attempts_reached") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= content_for(:title) %>
+    </h1>
+
+    <p><%= I18n.t("devise.two_factor_authentication.contact_administrator") %></p>
+  </div>
+</div>
