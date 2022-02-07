@@ -34,21 +34,19 @@ RSpec.describe Imports::OrganisationImportService do
 
       organisation = Organisation.find_by(old_visible_id: 1)
       expect(organisation.name).to eq("HA Ltd")
-      expect(organisation.providertype).to eq(2)
+      expect(organisation.provider_type).to eq("PRP")
       expect(organisation.phone).to eq("xxxxxxxx")
       expect(organisation.holds_own_stock).to be_truthy
       expect(organisation.active).to be_truthy
-      # expect(organisation.old_association_type).to eq()
-      # string VS integer
-      # expect(organisation.software_supplier_id).to eq()
-      # boolean VS string
+      # expect(organisation.old_association_type).to eq() string VS integer
+      # expect(organisation.software_supplier_id).to eq() boolean VS string
       expect(organisation.housing_management_system).to eq("") # Need examples
       expect(organisation.choice_based_lettings).to be_falsey
       expect(organisation.common_housing_register).to be_falsey
       expect(organisation.choice_allocation_policy).to be_falsey
       expect(organisation.cbl_proportion_percentage).to be_nil # Need example
       expect(organisation.enter_affordable_logs).to be_truthy
-      expect(organisation.owns_affordable_logs).to be_truthy # owns_affordable_rent (difference rents and logs)
+      expect(organisation.owns_affordable_logs).to be_truthy # owns_affordable_rent
       expect(organisation.housing_registration_no).to eq("LH9999")
       expect(organisation.general_needs_units).to eq(1104)
       expect(organisation.supported_housing_units).to eq(217)

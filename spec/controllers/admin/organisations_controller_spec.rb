@@ -37,7 +37,7 @@ describe Admin::OrganisationsController, type: :controller do
 
     it "creates a new admin users" do
       expect(page).to have_field("organisation_name")
-      expect(page).to have_field("organisation_providertype")
+      expect(page).to have_field("organisation_provider_type")
       expect(page).to have_field("organisation_phone")
     end
   end

@@ -7,13 +7,13 @@ module Imports
   private
 
     PROVIDER_TYPE = {
-      "HOUSING-ASSOCIATION" => Organisation.org_types[:PRP],
+      "HOUSING-ASSOCIATION" => Organisation.provider_types[:PRP],
     }.freeze
 
     def create_organisation(xml_document)
       Organisation.create!(
         name: organisation_field_value(xml_document, "name"),
-        providertype: map_provider_type(organisation_field_value(xml_document, "institution-type")),
+        provider_type: PROVIDER_TYPE[organisation_field_value(xml_document, "institution-type")],
         phone: organisation_field_value(xml_document, "telephone-number"),
         holds_own_stock: to_boolean(organisation_field_value(xml_document, "holds-stock")),
         active: to_boolean(organisation_field_value(xml_document, "active")),
@@ -37,14 +37,6 @@ module Imports
       name = organisation_field_value(xml_document, "name")
       old_visible_id = organisation_field_value(xml_document, "visible-id")
       @logger.warn("Organisation #{name} is already present with old visible ID #{old_visible_id}, skipping.")
-    end
-
-    def map_provider_type(institution_type)
-      if PROVIDER_TYPE.key?(institution_type)
-        PROVIDER_TYPE[institution_type]
-      else
-        institution_type
-      end
     end
 
     def organisation_field_value(xml_document, field)

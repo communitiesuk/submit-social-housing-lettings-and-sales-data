@@ -27,7 +27,7 @@
         value: @resource.email
       %>
 
-      <%= roles = User::ROLES.map { |key, value| OpenStruct.new(id:key, name: key.humanize) }
+      <%= roles = User::ROLES.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
         f.govuk_collection_radio_buttons :role, roles, :id, :name, legend: { text: "Role", size: "m" }
       %>
 
