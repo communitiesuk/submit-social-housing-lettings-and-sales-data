@@ -12,25 +12,10 @@ module CheckAnswersHelper
   end
 
   def get_answer_label(question, case_log)
-    if question.id == "earnings"
-      linked_question = case_log.form.get_question("incfreq")
-      if question.answer_label(case_log).present? && linked_question.answer_label(case_log).present?
-        suffixes = {
-          "Weekly" => " every week",
-          "Monthly" => " every month",
-          "Yearly" => " every year",
-        }
-        [question.prefix, question.answer_label(case_log), suffixes[linked_question.answer_label(case_log)]].join("")
-      else
-        "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
-      end
+    if question.answer_label.present?
+      question.answer_label
     else
-      answer = question.prefix == "£" ? ActionController::Base.helpers.number_to_currency(question.answer_label(case_log), delimiter: ",", format: "%n") : question.answer_label(case_log)
-      if answer.present?
-        [question.prefix, answer, question.suffix].join("")
-      else
-        "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
-      end
+      "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
     end
   end
 end

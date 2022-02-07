@@ -38,7 +38,10 @@ class Form::Question
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    return case_log[id].to_s if case_log[id].present?
+    answer = case_log[id].to_s if case_log[id].present?
+    answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("")
+
+    return answer_label if answer_label
 
     has_inferred_check_answers_value?(case_log) ? inferred_check_answers_value["value"] : ""
   end
@@ -99,6 +102,28 @@ private
     answer.join(", ")
   end
 
+  def format_value(answer_label)
+    prefix == "£" ? ActionController::Base.helpers.number_to_currency(answer_label, delimiter: ",", format: "%n") : answer_label
+  end
+
+  def suffix_label(case_log)
+    return "" unless suffix
+    return suffix if suffix.is_a?(String)
+
+    label = ""
+
+    suffix.each do |s| 
+      condition = s["depends_on"]
+      next unless condition
+
+      answer = case_log.send(condition.keys.first)
+      if answer == condition.values.first
+        label = ANSWER_SUFFIX_LABELS.has_key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
+      end
+    end
+    label
+  end
+
   def conditional_on
     @conditional_on ||= form.conditional_question_conditions.select do |condition|
       condition[:to] == id
@@ -121,4 +146,10 @@ private
   def enabled_inferred_answers(inferred_answers, case_log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
   end
+
+  ANSWER_SUFFIX_LABELS = {
+    "Weekly" => " every week",
+    "Monthly" => " every month",
+    "Yearly" => " every year"
+  }.freeze
 end
