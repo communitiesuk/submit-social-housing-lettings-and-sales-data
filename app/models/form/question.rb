@@ -78,9 +78,6 @@ class Form::Question
                 else
                   case_log[id].blank? ? "Answer" : "Change"
                 end
-    if id == "earnings"
-      link_type = case_log[id].blank? || case_log["incfreq"].blank? ? "Answer" : "Change"
-    end
     "#{link_type}<span class=\"govuk-visually-hidden\"> #{check_answer_label.to_s.downcase}</span>".html_safe
   end
 
@@ -118,7 +115,7 @@ private
 
       answer = case_log.send(condition.keys.first)
       if answer == condition.values.first
-        label = ANSWER_SUFFIX_LABELS.key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
+        label = ANSWER_SUFFIX_LABELS.key?(answer.to_sym) ? ANSWER_SUFFIX_LABELS[answer.to_sym] : answer
       end
     end
     label
