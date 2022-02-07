@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/devise.git
-  revision: ac956cc2a58daa57e071202967a212a1dac08053
+  revision: 6d0b6b52a9d0e87ae6d9f9acb562169751623078
   branch: dluhc-fixes
   specs:
     devise (4.8.1)
@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: d1492c54e76871d95f3a7ff20e445b48f455d4cb
+  revision: 5d6dfbe086331ce0538cc726abfe2eebe0260f02
   branch: feature/railties-7
   specs:
     activeadmin (2.9.0)
@@ -116,7 +116,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.552.0)
+    aws-partitions (1.553.0)
     aws-sdk-core (3.126.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -327,7 +327,7 @@ GEM
       activerecord (>= 5.2.4)
       activesupport (>= 5.2.4)
       i18n
-    rb-fsevent (0.11.0)
+    rb-fsevent (0.11.1)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (2.2.0)

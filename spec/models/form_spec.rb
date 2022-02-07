@@ -36,7 +36,7 @@ RSpec.describe Form, type: :model do
   describe "next_incomplete_section_redirect_path" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
     let(:subsection) { form.get_subsection("household_characteristics") }
-    let(:later_subsection) { form.get_subsection("local_authority") }
+    let(:later_subsection) { form.get_subsection("setup") }
 
     context "when a user is on the check answers page for a subsection" do
       def answer_household_needs(case_log)
@@ -85,6 +85,10 @@ RSpec.describe Form, type: :model do
         case_log.mrcdate = Time.zone.parse("03/11/2019")
       end
 
+      def answer_local_gdpr_acceptance(case_log)
+        case_log.gdpr_acceptance = "Yes"
+      end
+
       before do
         case_log.tenant_code = "123"
         case_log.age1 = 35
@@ -108,7 +112,7 @@ RSpec.describe Form, type: :model do
       end
 
       it "returns the next incomplete section by cycling back around if next subsections are completed" do
-        answer_local_authority(case_log)
+        answer_local_gdpr_acceptance(case_log)
         expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
       end
 
@@ -124,6 +128,7 @@ RSpec.describe Form, type: :model do
         answer_income_and_benefits(case_log)
         answer_rent_and_charges(case_log)
         answer_local_authority(case_log)
+        answer_local_gdpr_acceptance(case_log)
 
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("declaration")
       end

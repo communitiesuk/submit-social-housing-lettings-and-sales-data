@@ -83,10 +83,14 @@ class Form::Question
     return false if id == "gdpr_acceptance" && case_log[id] == "No"
     return answer_options.keys.any? { |key| case_log[key] == "Yes" } if type == "checkbox"
 
-    case_log[id].present? || !case_log.respond_to?(id.to_sym)
+    case_log[id].present? || !case_log.respond_to?(id.to_sym) || has_inferred_display_value?(case_log)
   end
 
 private
+
+  def has_inferred_display_value?(case_log)
+    inferred_check_answers_value.present? && case_log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first
+  end
 
   def checkbox_answer_label(case_log)
     answer = []
