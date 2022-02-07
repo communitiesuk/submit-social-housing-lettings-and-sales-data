@@ -2292,13 +2292,12 @@
           "depends_on": [{ "setup": "completed" }],
           "pages": {
             "net_income_known": {
-              "header": "Do you know the household’s combined income?",
+              "header": "",
               "description": "",
               "questions": {
                 "net_income_known": {
                   "check_answer_label": "Do you know the household’s combined income?",
                   "header": "Do you know the household’s combined income?",
-                  "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2313,12 +2312,12 @@
             },
             "net_income": {
               "depends_on": [{ "net_income_known": "Yes" }],
-              "header": "",
+              "header": "Household’s combined income after tax",
               "description": "",
               "questions": {
                 "earnings": {
                   "check_answer_label": "Total household income",
-                  "header": "How much income does the household have in total",
+                  "header": "How much income does the household have in total?",
                   "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "numeric",
