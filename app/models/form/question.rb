@@ -112,13 +112,13 @@ private
 
     label = ""
 
-    suffix.each do |s| 
+    suffix.each do |s|
       condition = s["depends_on"]
       next unless condition
 
       answer = case_log.send(condition.keys.first)
       if answer == condition.values.first
-        label = ANSWER_SUFFIX_LABELS.has_key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
+        label = ANSWER_SUFFIX_LABELS.key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
       end
     end
     label
@@ -150,6 +150,6 @@ private
   ANSWER_SUFFIX_LABELS = {
     "Weekly" => " every week",
     "Monthly" => " every month",
-    "Yearly" => " every year"
+    "Yearly" => " every year",
   }.freeze
 end

@@ -13,7 +13,7 @@ module CheckAnswersHelper
 
   def get_answer_label(question, case_log)
     if question.answer_label.present?
-      question.answer_label
+      question.answer_label(case_log)
     else
       "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
     end
