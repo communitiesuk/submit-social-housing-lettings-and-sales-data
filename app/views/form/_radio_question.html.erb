@@ -5,15 +5,15 @@
     legend: legend(question, page_header, conditional),
     hint: { text: question.hint_text&.html_safe } do %>
 
-    <% question.answer_options.map do |key, val| %>
+    <% question.answer_options.map do |key, options| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>
       <% else %>
-        <% conditional_question = find_conditional_question(@page, question, val) %>
+        <% conditional_question = find_conditional_question(@page, question, options['value']) %>
         <% if conditional_question.nil? %>
-          <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) %>
+          <%= f.govuk_radio_button question.id, options['value'], label: { text: options['value'] }, hint: { text: options['hint'] }, **stimulus_html_attributes(question) %>
         <% else %>
-          <%= f.govuk_radio_button question.id, val, label: { text: val }, **stimulus_html_attributes(question) do %>
+          <%= f.govuk_radio_button question.id, options['value'], label: { text: options['value'] }, hint: { text: options['hint'] }, **stimulus_html_attributes(question) do %>
             <%= render partial: "#{conditional_question.type}_question", locals: {
               question: conditional_question,
               caption_text: caption_text,

@@ -40,7 +40,6 @@ class Form::Question
 
     answer = case_log[id].to_s if case_log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
-
     return answer_label if answer_label
 
     has_inferred_check_answers_value?(case_log) ? inferred_check_answers_value["value"] : ""
@@ -95,7 +94,7 @@ private
 
   def checkbox_answer_label(case_log)
     answer = []
-    answer_options.each { |key, value| case_log[key] == "Yes" ? answer << value : nil }
+    answer_options.each { |key, options| case_log[key] == "Yes" ? answer << options["value"] : nil }
     answer.join(", ")
   end
 

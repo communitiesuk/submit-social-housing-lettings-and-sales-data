@@ -19,8 +19,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "A",
-                    "1": "B"
+                    "0": {
+                      "value": "A"
+                    },
+                    "1": {
+                      "value": "B"
+                    }
                   }
                 },
                 "property_manager_organisation": {
@@ -29,8 +33,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "A",
-                    "1": "B"
+                    "0": {
+                      "value": "A"
+                    },
+                    "1": {
+                      "value": "B"
+                    }
                   }
                 }
               }
@@ -45,8 +53,12 @@
                   "hint_text": "A renewal is a letting to the same tenant in the same property.",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   }
                 }
               }
@@ -73,12 +85,24 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Affordable rent",
-                    "2": "London affordable rent",
-                    "4": "London living rent",
-                    "3": "Rent to buy",
-                    "0": "Social rent",
-                    "5": "Other intermediate rent product"
+                    "0": {
+                      "value": "Social rent"
+                    },
+                    "1": {
+                      "value": "Affordable rent"
+                    },
+                    "2": {
+                      "value": "London affordable rent"
+                    },
+                    "3": {
+                      "value": "Rent to buy"
+                    },
+                    "4": {
+                      "value": "London living rent"
+                    },
+                    "5": {
+                      "value": "Other intermediate rent product"
+                    }
                   },
                   "conditional_for": {
                     "intermediate_rent_product_name": [
@@ -97,8 +121,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "General needs",
-                    "0": "Supported housing"
+                    "0": {
+                      "value": "Supported housing"
+                    },
+                    "1": {
+                      "value": "General needs"
+                    }
                   }
                 }
               }
@@ -139,7 +167,11 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "person_1_age": {
               "header": "",
@@ -167,10 +199,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               }
@@ -185,25 +225,63 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "White: English, Welsh, Scottish, Northern Irish or British",
-                    "1": "White: Irish",
-                    "2": "White: Gypsy or Irish Traveller",
-                    "3": "White: Other",
-                    "4": "Mixed: White and Black Caribbean",
-                    "5": "Mixed: White and Black African",
-                    "6": "Mixed: White and Asian",
-                    "7": "Mixed: Other",
-                    "8": "Asian or Asian British: Indian",
-                    "9": "Asian or Asian British: Pakistani",
-                    "10": "Asian or Asian British: Bangladeshi",
-                    "11": "Asian or Asian British: Chinese",
-                    "12": "Asian or Asian British: Other",
-                    "13": "Black: Caribbean",
-                    "14": "Black: African",
-                    "15": "Black: Other",
-                    "16": "Other Ethnic Group: Arab",
-                    "17": "Other Ethnic Group: Other",
-                    "18": "Prefer not to say"
+                    "0": {
+                      "value": "White: English, Welsh, Scottish, Northern Irish or British"
+                    },
+                    "1": {
+                      "value": "White: Irish"
+                    },
+                    "2": {
+                      "value": "White: Gypsy or Irish Traveller"
+                    },
+                    "3": {
+                      "value": "White: Other"
+                    },
+                    "4": {
+                      "value": "Mixed: White and Black Caribbean"
+                    },
+                    "5": {
+                      "value": "Mixed: White and Black African"
+                    },
+                    "6": {
+                      "value": "Mixed: White and Asian"
+                    },
+                    "7": {
+                      "value": "Mixed: Other"
+                    },
+                    "8": {
+                      "value": "Asian or Asian British: Indian"
+                    },
+                    "9": {
+                      "value": "Asian or Asian British: Pakistani"
+                    },
+                    "10": {
+                      "value": "Asian or Asian British: Bangladeshi"
+                    },
+                    "11": {
+                      "value": "Asian or Asian British: Chinese"
+                    },
+                    "12": {
+                      "value": "Asian or Asian British: Other"
+                    },
+                    "13": {
+                      "value": "Black: Caribbean"
+                    },
+                    "14": {
+                      "value": "Black: African"
+                    },
+                    "15": {
+                      "value": "Black: Other"
+                    },
+                    "16": {
+                      "value": "Other Ethnic Group: Arab"
+                    },
+                    "17": {
+                      "value": "Other Ethnic Group: Other"
+                    },
+                    "18": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               }
@@ -218,24 +296,60 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "UK national resident in UK",
-                    "1": "UK national returning from residence overseas",
-                    "2": "Czech Republic",
-                    "3": "Estonia",
-                    "4": "Hungary",
-                    "5": "Latvia",
-                    "6": "Lithuania",
-                    "7": "Poland",
-                    "8": "Slovakia",
-                    "9": "Bulgaria",
-                    "10": "Romania",
-                    "11": "Ireland",
-                    "12": "Slovakia",
-                    "13": "Slovenia",
-                    "14": "Croatia",
-                    "15": "Other EU Economic Area (EEA country)",
-                    "16": "Any other country",
-                    "17": "Prefer not to say"
+                    "0": {
+                      "value": "UK national resident in UK"
+                    },
+                    "1": {
+                      "value": "UK national returning from residence overseas"
+                    },
+                    "2": {
+                      "value": "Czech Republic"
+                    },
+                    "3": {
+                      "value": "Estonia"
+                    },
+                    "4": {
+                      "value": "Hungary"
+                    },
+                    "5": {
+                      "value": "Latvia"
+                    },
+                    "6": {
+                      "value": "Lithuania"
+                    },
+                    "7": {
+                      "value": "Poland"
+                    },
+                    "8": {
+                      "value": "Slovakia"
+                    },
+                    "9": {
+                      "value": "Bulgaria"
+                    },
+                    "10": {
+                      "value": "Romania"
+                    },
+                    "11": {
+                      "value": "Ireland"
+                    },
+                    "12": {
+                      "value": "Slovakia"
+                    },
+                    "13": {
+                      "value": "Slovenia"
+                    },
+                    "14": {
+                      "value": "Croatia"
+                    },
+                    "15": {
+                      "value": "Other EU Economic Area (EEA country)"
+                    },
+                    "16": {
+                      "value": "Any other country"
+                    },
+                    "17": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               }
@@ -250,17 +364,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               },
@@ -324,10 +460,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age2": {
@@ -345,10 +490,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat2": {
@@ -357,17 +510,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat3": {
@@ -376,10 +551,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age3": {
@@ -397,10 +581,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat3": {
@@ -409,17 +601,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat4": {
@@ -428,10 +642,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age4": {
@@ -449,10 +672,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat4": {
@@ -461,17 +692,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat5": {
@@ -480,10 +733,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age5": {
@@ -501,10 +763,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat5": {
@@ -513,17 +783,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat6": {
@@ -532,10 +824,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age6": {
@@ -553,10 +854,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat6": {
@@ -565,17 +874,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat7": {
@@ -584,10 +915,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child - includes young adult and grown-up"
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age7": {
@@ -605,10 +944,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat7": {
@@ -617,17 +964,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "relat8": {
@@ -636,10 +1005,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Partner",
-                    "1": "Child - includes young adult and grown-up",
-                    "2": "Other",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Partner"
+                    },
+                    "1": {
+                      "value": "Child - includes young adult and grown-up"
+                    },
+                    "2": {
+                      "value": "Other"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "age8": {
@@ -657,10 +1034,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Female",
-                    "1": "Male",
-                    "2": "Non-binary",
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Female"
+                    },
+                    "1": {
+                      "value": "Male"
+                    },
+                    "2": {
+                      "value": "Non-binary"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 },
                 "ecstat8": {
@@ -669,17 +1054,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Part-time - Less than 30 hours",
-                    "1": "Full-time - 30 hours or more",
-                    "2": "In government training into work, such as New Deal",
-                    "3": "Jobseeker",
-                    "4": "Retired",
-                    "5": "Not seeking work",
-                    "6": "Full-time student",
-                    "7": "Unable to work because of long term sick or disability",
-                    "8": "Child under 16",
-                    "9": "Other",
-                    "10": "Prefer not to say"
+                    "0": {
+                      "value": "Part-time - Less than 30 hours"
+                    },
+                    "1": {
+                      "value": "Full-time - 30 hours or more"
+                    },
+                    "2": {
+                      "value": "In government training into work, such as New Deal"
+                    },
+                    "3": {
+                      "value": "Jobseeker"
+                    },
+                    "4": {
+                      "value": "Retired"
+                    },
+                    "5": {
+                      "value": "Not seeking work"
+                    },
+                    "6": {
+                      "value": "Full-time student"
+                    },
+                    "7": {
+                      "value": "Unable to work because of long term sick or disability"
+                    },
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
+                      "value": "Other"
+                    },
+                    "10": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               }
@@ -688,7 +1095,11 @@
         },
         "household_situation": {
           "label": "Household situation",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "time_lived_in_la": {
               "header": "",
@@ -700,15 +1111,33 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Just moved to local authority area",
-                    "1": "Less than 1 year",
-                    "2": "1 to 2 years",
-                    "3": "2 to 3 years",
-                    "4": "3 to 4 years",
-                    "5": "4 to 5 years",
-                    "6": "5 years or more",
-                    "divider": true,
-                    "7": "Don’t know"
+                    "0": {
+                      "value": "Just moved to local authority area"
+                    },
+                    "1": {
+                      "value": "Less than 1 year"
+                    },
+                    "2": {
+                      "value": "1 to 2 years"
+                    },
+                    "3": {
+                      "value": "2 to 3 years"
+                    },
+                    "4": {
+                      "value": "3 to 4 years"
+                    },
+                    "5": {
+                      "value": "4 to 5 years"
+                    },
+                    "6": {
+                      "value": "5 years or more"
+                    },
+                    "7": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -723,15 +1152,33 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Just moved to local authority area",
-                    "1": "Less than 1 year",
-                    "2": "1 to 2 years",
-                    "3": "2 to 3 years",
-                    "4": "3 to 4 years",
-                    "5": "4 to 5 years",
-                    "6": "5 years or more",
-                    "divider": true,
-                    "7": "Don’t know"
+                    "0": {
+                      "value": "Just moved to local authority area"
+                    },
+                    "1": {
+                      "value": "Less than 1 year"
+                    },
+                    "2": {
+                      "value": "1 to 2 years"
+                    },
+                    "3": {
+                      "value": "2 to 3 years"
+                    },
+                    "4": {
+                      "value": "3 to 4 years"
+                    },
+                    "5": {
+                      "value": "4 to 5 years"
+                    },
+                    "6": {
+                      "value": "5 years or more"
+                    },
+                    "7": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -745,44 +1192,116 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Permanently decanted from another property owned by this landlord",
-                    "1": "Left home country as a refugee",
-                    "2": "Loss of tied accommodation",
-                    "3": "Domestic abuse",
-                    "4": "(Non violent) relationship breakdown with partner",
-                    "5": "Asked to leave by family or friends",
-                    "6": "Racial harassment",
-                    "7": "Other problems with neighbours",
-                    "8": "Property unsuitable because of overcrowding",
-                    "9": "End of assured shorthold tenancy - no fault",
-                    "10": "End of assured shorthold tenancy - tenant’s fault",
-                    "11": "End of fixed term tenancy - no fault",
-                    "12": "End of fixed term tenancy - tenant’s fault",
-                    "13": "Repossession",
-                    "14": "Under occupation - offered incentive to downsize",
-                    "15": "Under occupation - no incentive",
-                    "16": "Property unsuitable because of ill health / disability",
-                    "17": "Property unsuitable because of poor condition",
-                    "18": "Couldn’t afford fees attached to renewing the tenancy",
-                    "19": "Couldn’t afford increase in rent",
-                    "20": "Couldn’t afford rent or mortgage - welfare reforms",
-                    "21": "Couldn’t afford rent or mortgage - employment",
-                    "22": "Couldn’t afford rent or mortgage - other",
-                    "23": "To move nearer to family / friends / school",
-                    "24": "To move nearer to work",
-                    "25": "To move to accomodation with support",
-                    "26": "To move to independent accomodation",
-                    "27": "Hate crime",
-                    "28": "Death of household member in last settled accomodation",
-                    "29": "Discharged from prison",
-                    "30": "Discharged from long stay hospital or similar institution",
-                    "31": "Other",
-                    "divider": true,
-                    "32": "Don’t know",
-                    "33": "Prefer not to say"
+                    "0": {
+                      "value": "Permanently decanted from another property owned by this landlord"
+                    },
+                    "1": {
+                      "value": "Left home country as a refugee"
+                    },
+                    "2": {
+                      "value": "Loss of tied accommodation"
+                    },
+                    "3": {
+                      "value": "Domestic abuse"
+                    },
+                    "4": {
+                      "value": "(Non violent) relationship breakdown with partner"
+                    },
+                    "5": {
+                      "value": "Asked to leave by family or friends"
+                    },
+                    "6": {
+                      "value": "Racial harassment"
+                    },
+                    "7": {
+                      "value": "Other problems with neighbours"
+                    },
+                    "8": {
+                      "value": "Property unsuitable because of overcrowding"
+                    },
+                    "9": {
+                      "value": "End of assured shorthold tenancy - no fault"
+                    },
+                    "10": {
+                      "value": "End of assured shorthold tenancy - tenant’s fault"
+                    },
+                    "11": {
+                      "value": "End of fixed term tenancy - no fault"
+                    },
+                    "12": {
+                      "value": "End of fixed term tenancy - tenant’s fault"
+                    },
+                    "13": {
+                      "value": "Repossession"
+                    },
+                    "14": {
+                      "value": "Under occupation - offered incentive to downsize"
+                    },
+                    "15": {
+                      "value": "Under occupation - no incentive"
+                    },
+                    "16": {
+                      "value": "Property unsuitable because of ill health / disability"
+                    },
+                    "17": {
+                      "value": "Property unsuitable because of poor condition"
+                    },
+                    "18": {
+                      "value": "Couldn’t afford fees attached to renewing the tenancy"
+                    },
+                    "19": {
+                      "value": "Couldn’t afford increase in rent"
+                    },
+                    "20": {
+                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
+                    },
+                    "21": {
+                      "value": "Couldn’t afford rent or mortgage - employment"
+                    },
+                    "22": {
+                      "value": "Couldn’t afford rent or mortgage - other"
+                    },
+                    "23": {
+                      "value": "To move nearer to family / friends / school"
+                    },
+                    "24": {
+                      "value": "To move nearer to work"
+                    },
+                    "25": {
+                      "value": "To move to accomodation with support"
+                    },
+                    "26": {
+                      "value": "To move to independent accomodation"
+                    },
+                    "27": {
+                      "value": "Hate crime"
+                    },
+                    "28": {
+                      "value": "Death of household member in last settled accomodation"
+                    },
+                    "29": {
+                      "value": "Discharged from prison"
+                    },
+                    "30": {
+                      "value": "Discharged from long stay hospital or similar institution"
+                    },
+                    "31": {
+                      "value": "Other"
+                    },
+                    "32": {
+                      "value": "Don’t know"
+                    },
+                    "33": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": ["Other"]
+                    "other_reason_for_leaving_last_settled_home": [
+                      "Other"
+                    ]
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
@@ -795,13 +1314,27 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes - benefit cap",
-                    "1": "Yes - removal of the spare room subsidy",
-                    "2": "Yes - both the benefit cap and the removal of the spare room subsidy",
-                    "3": "No",
-                    "divider": true,
-                    "4": "Don’t know",
-                    "5": "Prefer not to say"
+                    "0": {
+                      "value": "Yes - benefit cap"
+                    },
+                    "1": {
+                      "value": "Yes - removal of the spare room subsidy"
+                    },
+                    "2": {
+                      "value": "Yes - both the benefit cap and the removal of the spare room subsidy"
+                    },
+                    "3": {
+                      "value": "No"
+                    },
+                    "4": {
+                      "value": "Don’t know"
+                    },
+                    "5": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -815,29 +1348,75 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Owner occupation (private)",
-                    "1": "Owner occupation (low cost home ownership)",
-                    "2": "Private sector tenancy",
-                    "3": "Tied housing or rented with job",
-                    "4": "Supported housing",
-                    "5": "Sheltered accommodation",
-                    "6": "Residential care home",
-                    "7": "Living with friends or family",
-                    "8": "Refuge",
-                    "9": "Hospital",
-                    "10": "Prison or approved probation hostel",
-                    "11": "Direct access hostel",
-                    "12": "Bed and breakfast",
-                    "13": "Mobile home or caravan",
-                    "14": "Any other temporary accommodation",
-                    "15": "Home Office Asylum Support",
-                    "16": "Children’s home or foster care",
-                    "17": "Rough sleeping",
-                    "18": "Other",
-                    "19": "Fixed term Local Authority General Needs tenancy",
-                    "20": "Lifetime Local Authority General Needs tenancy",
-                    "21": "Fixed term PRP General Needs tenancy",
-                    "22": "Lifetime PRP General Needs tenancy"
+                    "0": {
+                      "value": "Owner occupation (private)"
+                    },
+                    "1": {
+                      "value": "Owner occupation (low cost home ownership)"
+                    },
+                    "2": {
+                      "value": "Private sector tenancy"
+                    },
+                    "3": {
+                      "value": "Tied housing or rented with job"
+                    },
+                    "4": {
+                      "value": "Supported housing"
+                    },
+                    "5": {
+                      "value": "Sheltered accommodation"
+                    },
+                    "6": {
+                      "value": "Residential care home"
+                    },
+                    "7": {
+                      "value": "Living with friends or family"
+                    },
+                    "8": {
+                      "value": "Refuge"
+                    },
+                    "9": {
+                      "value": "Hospital"
+                    },
+                    "10": {
+                      "value": "Prison or approved probation hostel"
+                    },
+                    "11": {
+                      "value": "Direct access hostel"
+                    },
+                    "12": {
+                      "value": "Bed and breakfast"
+                    },
+                    "13": {
+                      "value": "Mobile home or caravan"
+                    },
+                    "14": {
+                      "value": "Any other temporary accommodation"
+                    },
+                    "15": {
+                      "value": "Home Office Asylum Support"
+                    },
+                    "16": {
+                      "value": "Children’s home or foster care"
+                    },
+                    "17": {
+                      "value": "Rough sleeping"
+                    },
+                    "18": {
+                      "value": "Other"
+                    },
+                    "19": {
+                      "value": "Fixed term Local Authority General Needs tenancy"
+                    },
+                    "20": {
+                      "value": "Lifetime Local Authority General Needs tenancy"
+                    },
+                    "21": {
+                      "value": "Fixed term PRP General Needs tenancy"
+                    },
+                    "22": {
+                      "value": "Lifetime PRP General Needs tenancy"
+                    }
                   }
                 }
               }
@@ -851,9 +1430,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days",
-                    "1": "Yes - other homelessness",
-                    "2": "No"
+                    "0": {
+                      "value": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days"
+                    },
+                    "1": {
+                      "value": "Yes - other homelessness"
+                    },
+                    "2": {
+                      "value": "No"
+                    }
                   }
                 }
               }
@@ -1278,10 +1863,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider": true,
-                    "2": "Don’t know"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -1289,7 +1882,11 @@
             "reasonable_preference_reason": {
               "header": "Reason for reasonable preference being given",
               "description": "",
-              "depends_on": [{ "reasonpref": "Yes" }],
+              "depends_on": [
+                {
+                  "reasonpref": "Yes"
+                }
+              ],
               "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
@@ -1297,12 +1894,24 @@
                   "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
-                    "rp_homeless": "Homeless or about to lose their home (within 56 days)",
-                    "rp_insan_unsat": "Living in insanitary or overcrowded or unsatisfactory housing",
-                    "rp_medwel": "A need to move on medical and welfare grounds (including a disability)",
-                    "rp_hardship": "A need to move to avoid hardship to themselves or others",
-                    "divider": true,
-                    "rp_dontknow": "Don’t know"
+                    "rp_homeless": {
+                      "value": "Homeless or about to lose their home (within 56 days)"
+                    },
+                    "rp_insan_unsat": {
+                      "value": "Living in insanitary or overcrowded or unsatisfactory housing"
+                    },
+                    "rp_medwel": {
+                      "value": "A need to move on medical and welfare grounds (including a disability)"
+                    },
+                    "rp_hardship": {
+                      "value": "A need to move to avoid hardship to themselves or others"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "rp_dontknow": {
+                      "value": "Don’t know"
+                    }
                   }
                 }
               }
@@ -1317,8 +1926,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 },
                 "chr": {
@@ -1327,8 +1940,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 },
                 "cap": {
@@ -1337,8 +1954,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 }
               }
@@ -1353,19 +1974,45 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Internal transfer",
-                    "1": "Tenant applied directly (no referral or nomination)",
-                    "2": "Private registered provider (PRP) lettings only - nominated by a local housing authority",
-                    "3": "Private registered provider (PRP) supported lettings only - referred by local authority housing department",
-                    "4": "Re-located through official housing mobility scheme",
-                    "5": "Other social landlord",
-                    "6": "Community learning disability team",
-                    "7": "Police, probation or prison",
-                    "8": "Youth offending team",
-                    "9": "Community mental health team",
-                    "10": "Health service",
-                    "11": "Voluntary agency",
-                    "12": "Other"
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
+                    },
+                    "3": {
+                      "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
+                    },
+                    "4": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "5": {
+                      "value": "Other social landlord"
+                    },
+                    "6": {
+                      "value": "Community learning disability team"
+                    },
+                    "7": {
+                      "value": "Police, probation or prison"
+                    },
+                    "8": {
+                      "value": "Youth offending team"
+                    },
+                    "9": {
+                      "value": "Community mental health team"
+                    },
+                    "10": {
+                      "value": "Health service"
+                    },
+                    "11": {
+                      "value": "Voluntary agency"
+                    },
+                    "12": {
+                      "value": "Other"
+                    }
                   }
                 }
               }
@@ -1374,7 +2021,11 @@
         },
         "household_needs": {
           "label": "Household needs",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "armed_forces": {
               "header": "Experience of the UK Armed Forces",
@@ -1386,11 +2037,21 @@
                   "type": "radio",
                   "check_answer_label": "Armed Forces",
                   "answer_options": {
-                    "0": "A current or former regular in the UK Armed Forces (excluding National Service)",
-                    "1": "A current or former reserve in the UK Armed Forces (excluding National Service)",
-                    "2": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years",
-                    "3": "No",
-                    "4": "Tenant prefers not to say"
+                    "0": {
+                      "value": "A current or former regular in the UK Armed Forces (excluding National Service)"
+                    },
+                    "1": {
+                      "value": "A current or former reserve in the UK Armed Forces (excluding National Service)"
+                    },
+                    "2": {
+                      "value": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+                    },
+                    "3": {
+                      "value": "No"
+                    },
+                    "4": {
+                      "value": "Tenant prefers not to say"
+                    }
                   }
                 }
               }
@@ -1398,7 +2059,11 @@
             "armed_forces_member": {
               "header": "Experience of the UK Armed Forces",
               "description": "",
-              "depends_on": [{ "armedforces": "A current or former regular in the UK Armed Forces (excluding National Service)" }],
+              "depends_on": [
+                {
+                  "armedforces": "A current or former regular in the UK Armed Forces (excluding National Service)"
+                }
+              ],
               "questions": {
                 "leftreg": {
                   "header": "Are they still serving?",
@@ -1406,11 +2071,21 @@
                   "type": "radio",
                   "check_answer_label": "When did they leave the Armed Forces?",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No - they left up to 5 years ago",
-                    "2": "No - they left more than 5 years ago",
-                    "divider": true,
-                    "3": "Prefer not to say"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No - they left up to 5 years ago"
+                    },
+                    "2": {
+                      "value": "No - they left more than 5 years ago"
+                    },
+                    "3": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 },
                 "reservist": {
@@ -1419,10 +2094,18 @@
                   "type": "radio",
                   "check_answer_label": "Has anyone in the household been seriously injured or ill as a result of their service in the armed forces?",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider": true,
-                    "2": "Prefer not to say"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -1437,10 +2120,18 @@
                   "type": "radio",
                   "check_answer_label": "Physical, mental health or illness in the household",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider": true,
-                    "2": "Prefer not to say"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -1455,10 +2146,18 @@
                   "type": "radio",
                   "check_answer_label": "Pregnancy in the household",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider": true,
-                    "2": "Prefer not to say"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Prefer not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -1473,14 +2172,30 @@
                   "type": "checkbox",
                   "check_answer_label": "Disability requirements",
                   "answer_options": {
-                    "housingneeds_a": "Fully wheelchair accessible housing",
-                    "housingneeds_b": "Wheelchair access to essential rooms",
-                    "housingneeds_c": "Level access housing",
-                    "housingneeds_f": "Other disability requirements",
-                    "housingneeds_g": "No disability requirements",
-                    "divider": true,
-                    "housingneeds_h": "Don’t know",
-                    "accessibility_requirements_prefer_not_to_say": "Prefer not to say"
+                    "housingneeds_a": {
+                      "value": "Fully wheelchair accessible housing"
+                    },
+                    "housingneeds_b": {
+                      "value": "Wheelchair access to essential rooms"
+                    },
+                    "housingneeds_c": {
+                      "value": "Level access housing"
+                    },
+                    "housingneeds_f": {
+                      "value": "Other disability requirements"
+                    },
+                    "housingneeds_g": {
+                      "value": "No disability requirements"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "housingneeds_h": {
+                      "value": "Don’t know"
+                    },
+                    "accessibility_requirements_prefer_not_to_say": {
+                      "value": "Prefer not to say"
+                    }
                   }
                 }
               }
@@ -1495,16 +2210,42 @@
                   "type": "checkbox",
                   "check_answer_label": "Conditions or illnesses",
                   "answer_options": {
-                    "illness_type_1": "Vision - such as blindness or partial sight",
-                    "illness_type_2": "Hearing - such as deafness or partial hearing",
-                    "illness_type_3": "Mobility - such as walking short distances or climbing stairs",
-                    "illness_type_4": "Dexterity - such as lifting and carrying objects or using a keyboard",
-                    "illness_type_8": "Stamina or breathing or fatigue",
-                    "illness_type_5": "Learning or understanding or concentrating",
-                    "illness_type_6": "Memory",
-                    "illness_type_7": "Mental health - such as depression, anxiety, schizophrenia or bipolar",
-                    "illness_type_9": "Socially or behaviourally - such as those associated with autism spectral disorder (ASD) including Aspergers’ or attention deficit hyperactivity disorder (ADHD))",
-                    "illness_type_10": "Other"
+                    "illness_type_1": {
+                      "value": "Vision",
+                      "hint": "For example, blindness or partial sight."
+                    },
+                    "illness_type_2": {
+                      "value": "Hearing",
+                      "hint": "For example, deafness or partial hearing."
+                    },
+                    "illness_type_3": {
+                      "value": "Mobility",
+                      "hint": "For example, walking short distances or climbing stairs."
+                    },
+                    "illness_type_4": {
+                      "value": "Dexterity",
+                      "hint": "For example, lifting and carrying objects or using a keyboard."
+                    },
+                    "illness_type_8": {
+                      "value": "Stamina or breathing or fatigue"
+                    },
+                    "illness_type_5": {
+                      "value": "Learning or understanding or concentrating"
+                    },
+                    "illness_type_6": {
+                      "value": "Memory"
+                    },
+                    "illness_type_7": {
+                      "value": "Mental health",
+                      "hint": "For example, depression, anxiety, schizophrenia or bipolar."
+                    },
+                    "illness_type_9": {
+                      "value": "Socially or behaviourally",
+                      "hint": "For example, associated with autism spectrum disorder (ASD) which includes Asperger’s or attention deficit hyperactivity disorder (ADHD)."
+                    },
+                    "illness_type_10": {
+                      "value": "Other"
+                    }
                   }
                 }
               }
@@ -1518,7 +2259,11 @@
       "subsections": {
         "tenancy_information": {
           "label": "Tenancy information",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "starter_tenancy": {
               "header": "",
@@ -1530,8 +2275,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 }
               }
@@ -1546,14 +2295,26 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Assured",
-                    "1": "Assured Shorthold",
-                    "2": "Licence agreement (almshouses only)",
-                    "3": "Secure (including flexible)",
-                    "4": "Other"
+                    "0": {
+                      "value": "Assured"
+                    },
+                    "1": {
+                      "value": "Assured Shorthold"
+                    },
+                    "2": {
+                      "value": "Licence agreement (almshouses only)"
+                    },
+                    "3": {
+                      "value": "Secure (including flexible)"
+                    },
+                    "4": {
+                      "value": "Other"
+                    }
                   },
                   "conditional_for": {
-                    "tenancyother": ["Other"]
+                    "tenancyother": [
+                      "Other"
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1562,7 +2323,11 @@
                   "type": "text"
                 }
               },
-              "depends_on": [{ "startertenancy": "No" }]
+              "depends_on": [
+                {
+                  "startertenancy": "No"
+                }
+              ]
             },
             "tenancy_type_starter_text": {
               "header": "",
@@ -1574,14 +2339,26 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Assured",
-                    "1": "Assured Shorthold",
-                    "2": "Licence agreement (almshouses only)",
-                    "3": "Secure (including flexible)",
-                    "4": "Other"
+                    "0": {
+                      "value": "Assured"
+                    },
+                    "1": {
+                      "value": "Assured Shorthold"
+                    },
+                    "2": {
+                      "value": "Licence agreement (almshouses only)"
+                    },
+                    "3": {
+                      "value": "Secure (including flexible)"
+                    },
+                    "4": {
+                      "value": "Other"
+                    }
                   },
                   "conditional_for": {
-                    "tenancyother": ["Other"]
+                    "tenancyother": [
+                      "Other"
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1590,7 +2367,11 @@
                   "type": "text"
                 }
               },
-              "depends_on": [{ "startertenancy": "Yes" }]
+              "depends_on": [
+                {
+                  "startertenancy": "Yes"
+                }
+              ]
             },
             "fixed_term_tenancy": {
               "header": "",
@@ -1606,7 +2387,14 @@
                   "step": 1
                 }
               },
-              "depends_on": [{ "tenancy": "Secure (including flexible)" }, {"tenancy": "Assured Shorthold" }]
+              "depends_on": [
+                {
+                  "tenancy": "Secure (including flexible)"
+                },
+                {
+                  "tenancy": "Assured Shorthold"
+                }
+              ]
             },
             "letting_in_sheltered_accomodation": {
               "header": "",
@@ -1618,21 +2406,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes - sheltered housing",
-                    "1": "Yes - extra care housing",
-                    "2": "No",
-                    "divider": true,
-                    "3": "Don’t know"
+                    "0": {
+                      "value": "Yes - sheltered housing"
+                    },
+                    "1": {
+                      "value": "Yes - extra care housing"
+                    },
+                    "2": {
+                      "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               },
-              "depends_on": [{ "needstype": "Supported housing" }]
+              "depends_on": [
+                {
+                  "needstype": "Supported housing"
+                }
+              ]
             }
           }
         },
         "property_information": {
           "label": "Property information",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "property_postcode": {
               "header": "",
@@ -1644,11 +2450,17 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "property_postcode": ["Yes"]
+                    "property_postcode": [
+                      "Yes"
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -1658,9 +2470,15 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "inferred_answers": { "la": { "is_la_inferred": true } },
+                  "inferred_answers": {
+                    "la": {
+                      "is_la_inferred": true
+                    }
+                  },
                   "inferred_check_answers_value": {
-                    "condition": { "postcode_known": "No" },
+                    "condition": {
+                      "postcode_known": "No"
+                    },
                     "value": "Not known"
                   }
                 }
@@ -1676,12 +2494,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   }
                 }
               },
-              "depends_on": [{ "is_la_inferred": false }]
+              "depends_on": [
+                {
+                  "is_la_inferred": false
+                }
+              ]
             },
             "select_local_authority": {
               "header": "",
@@ -2013,7 +2839,12 @@
                   }
                 }
               },
-              "depends_on": [{ "la_known": "Yes", "is_la_inferred": false }]
+              "depends_on": [
+                {
+                  "la_known": "Yes",
+                  "is_la_inferred": false
+                }
+              ]
             },
             "first_time_property_let_as_social_housing": {
               "header": "",
@@ -2025,12 +2856,22 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No",
+                      "hint": "This is a re-let of existing social housing."
+                    },
+                    "1": {
+                      "value": "Yes",
+                      "hint": "This is a new let."
+                    }
                   }
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [
+                {
+                  "renewal": "No"
+                }
+              ]
             },
             "unitletas": {
               "header": "",
@@ -2042,18 +2883,30 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Affordable rent basis",
-                    "2": "Intermediate rent basis",
-                    "0": "Social rent basis",
-                    "divider": true,
-                    "3": "Don’t know"
+                    "0": {
+                      "value": "Social rent basis"
+                    },
+                    "1": {
+                      "value": "Affordable rent basis"
+                    },
+                    "2": {
+                      "value": "Intermediate rent basis"
+                    },
+                    "3": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               },
-              "depends_on": [{
-                "first_time_property_let_as_social_housing": "No",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "first_time_property_let_as_social_housing": "No",
+                  "renewal": "No"
+                }
+              ]
             },
             "property_vacancy_reason_not_first_let": {
               "header": "",
@@ -2065,24 +2918,49 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Renewal of fixed-term tenancy",
-                    "1": "Internal transfer (excluding renewals of a fixed-term tenancy)",
-                    "2": "Relet to tenant who occupied same property as temporary accommodation",
-                    "3": "Tenant involved in a succession downsize",
-                    "4": "Tenant moved to private sector or other accommodation",
-                    "5": "Tenant moved to other social housing provider",
-                    "6": "Tenant moved to care home",
-                    "7": "Tenant abandoned property",
-                    "8": "Tenant evicted due to arrears",
-                    "9": "Tenant evicted due to ASB or other reason",
-                    "10": "Previous tenant passed away (no succession)"
+                    "0": {
+                      "value": "Renewal of fixed-term tenancy"
+                    },
+                    "1": {
+                      "value": "Internal transfer",
+                      "hint": "Excluding renewals of a fixed-term tenancy"
+                    },
+                    "2": {
+                      "value": "Relet to tenant who occupied same property as temporary accommodation"
+                    },
+                    "3": {
+                      "value": "Tenant involved in a succession downsize"
+                    },
+                    "4": {
+                      "value": "Tenant moved to private sector or other accommodation"
+                    },
+                    "5": {
+                      "value": "Tenant moved to other social housing provider"
+                    },
+                    "6": {
+                      "value": "Tenant moved to care home"
+                    },
+                    "7": {
+                      "value": "Tenant abandoned property"
+                    },
+                    "8": {
+                      "value": "Tenant evicted due to arrears"
+                    },
+                    "9": {
+                      "value": "Tenant evicted due to ASB or other reason"
+                    },
+                    "10": {
+                      "value": "Previous tenant passed away (no succession)"
+                    }
                   }
                 }
               },
-              "depends_on": [{
-                "first_time_property_let_as_social_housing": "No",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "first_time_property_let_as_social_housing": "No",
+                  "renewal": "No"
+                }
+              ]
             },
             "property_vacancy_reason_first_let": {
               "header": "",
@@ -2094,16 +2972,24 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "11": "First let of new-build property",
-                    "12": "First let of conversion, rehabilitation or acquired property",
-                    "13": "First let of leased property"
+                    "11": {
+                      "value": "First let of new-build property"
+                    },
+                    "12": {
+                      "value": "First let of conversion, rehabilitation or acquired property"
+                    },
+                    "13": {
+                      "value": "First let of leased property"
+                    }
                   }
                 }
               },
-              "depends_on": [{
-                "first_time_property_let_as_social_housing": "Yes",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "first_time_property_let_as_social_housing": "Yes",
+                  "renewal": "No"
+                }
+              ]
             },
             "property_number_of_times_relet_not_social_let": {
               "header": "",
@@ -2120,10 +3006,12 @@
                   "width": 2
                 }
               },
-              "depends_on": [{
-                "first_time_property_let_as_social_housing": "No",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "first_time_property_let_as_social_housing": "No",
+                  "renewal": "No"
+                }
+              ]
             },
             "property_number_of_times_relet_social_let": {
               "header": "",
@@ -2140,10 +3028,12 @@
                   "width": 2
                 }
               },
-              "depends_on": [{
-                "first_time_property_let_as_social_housing": "Yes",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "first_time_property_let_as_social_housing": "Yes",
+                  "renewal": "No"
+                }
+              ]
             },
             "property_unit_type": {
               "header": "",
@@ -2155,14 +3045,30 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Bedsit",
-                    "3": "Bungalow",
-                    "0": "Flat or maisonette",
-                    "2": "House",
-                    "4": "Shared flat or maisonette",
-                    "5": "Shared house",
-                    "6": "Shared bungalow",
-                    "7": "Other"
+                    "0": {
+                      "value": "Flat or maisonette"
+                    },
+                    "1": {
+                      "value": "Bedsit"
+                    },
+                    "2": {
+                      "value": "House"
+                    },
+                    "3": {
+                      "value": "Bungalow"
+                    },
+                    "4": {
+                      "value": "Shared flat or maisonette"
+                    },
+                    "5": {
+                      "value": "Shared house"
+                    },
+                    "6": {
+                      "value": "Shared bungalow"
+                    },
+                    "7": {
+                      "value": "Other"
+                    }
                   }
                 }
               }
@@ -2177,8 +3083,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Converted from previous residential or non-residential property",
-                    "0": "Purpose built"
+                    "0": {
+                      "value": "Purpose built"
+                    },
+                    "1": {
+                      "value": "Converted from previous residential or non-residential property"
+                    }
                   }
                 }
               }
@@ -2193,8 +3103,12 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 }
               }
@@ -2214,7 +3128,11 @@
                   "width": 2
                 }
               },
-              "depends_on": [{ "needstype": "General needs" }]
+              "depends_on": [
+                {
+                  "needstype": "General needs"
+                }
+              ]
             },
             "void_or_renewal_date": {
               "header": "",
@@ -2227,10 +3145,12 @@
                   "type": "date"
                 }
               },
-              "depends_on": [{
-                "rsnvac": "First let of new-build property",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "rsnvac": "First let of new-build property",
+                  "renewal": "No"
+                }
+              ]
             },
             "new_build_handover_date": {
               "header": "",
@@ -2243,13 +3163,15 @@
                   "type": "date"
                 }
               },
-              "depends_on": [{
-                "renewal": "No",
-                "rsnvac": [
-                  "First let of conversion, rehabilitation or acquired property?",
-                  "First let of leased property"
-                ]
-              }]
+              "depends_on": [
+                {
+                  "renewal": "No",
+                  "rsnvac": [
+                    "First let of conversion, rehabilitation or acquired property?",
+                    "First let of leased property"
+                  ]
+                }
+              ]
             },
             "property_major_repairs": {
               "header": "",
@@ -2261,11 +3183,17 @@
                   "hint_text": "Major repairs are works that could not be reasonably carried out with a tenant living at the property. For example, structural repairs.",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "mrcdate": ["Yes"]
+                    "mrcdate": [
+                      "Yes"
+                    ]
                   }
                 },
                 "mrcdate": {
@@ -2275,10 +3203,12 @@
                   "type": "date"
                 }
               },
-              "depends_on": [{
-                "rsnvac": "First let of new-build property",
-                "renewal": "No"
-              }]
+              "depends_on": [
+                {
+                  "rsnvac": "First let of new-build property",
+                  "renewal": "No"
+                }
+              ]
             }
           }
         }
@@ -2289,7 +3219,11 @@
       "subsections": {
         "income_and_benefits": {
           "label": "Income, benefits and outgoings",
-          "depends_on": [{ "setup": "completed" }],
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
           "pages": {
             "net_income_known": {
               "header": "",
@@ -2301,11 +3235,21 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No",
-                    "divider_a": true,
-                    "2": "Don’t know",
-                    "3": "Tenant prefers not to say"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "divider_a": {
+                      "value": true
+                    },
+                    "2": {
+                      "value": "Don’t know"
+                    },
+                    "3": {
+                      "value": "Tenant prefers not to say"
+                    }
                   }
                 }
               }
@@ -2337,9 +3281,15 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Weekly",
-                    "1": "Monthly",
-                    "2": "Yearly"
+                    "0": {
+                      "value": "Weekly"
+                    },
+                    "1": {
+                      "value": "Monthly"
+                    },
+                    "2": {
+                      "value": "Yearly"
+                    }
                   },
                   "hidden_in_check_answers": true
                 }
@@ -2364,14 +3314,30 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Housing benefit",
-                    "2": "Housing benefit and Universal Credit (without housing element)",
-                    "1": "Universal Credit with housing element (excluding housing benefit)",
-                    "3": "Universal Credit (without housing element)",
-                    "4": "None",
-                    "divider": true,
-                    "5": "Don’t know",
-                    "6": "Tenant prefers not to say"
+                    "0": {
+                      "value": "Housing benefit"
+                    },
+                    "1": {
+                      "value": "Universal Credit with housing element (excluding housing benefit)"
+                    },
+                    "2": {
+                      "value": "Housing benefit and Universal Credit (without housing element)"
+                    },
+                    "3": {
+                      "value": "Universal Credit (without housing element)"
+                    },
+                    "4": {
+                      "value": "None"
+                    },
+                    "5": {
+                      "value": "Don’t know"
+                    },
+                    "6": {
+                      "value": "Tenant prefers not to say"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -2386,11 +3352,21 @@
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
-                    "0": "All",
-                    "1": "Some",
-                    "2": "None",
-                    "divider": true,
-                    "3": "Don’t know"
+                    "0": {
+                      "value": "All"
+                    },
+                    "1": {
+                      "value": "Some"
+                    },
+                    "2": {
+                      "value": "None"
+                    },
+                    "3": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
                   }
                 }
               }
@@ -2405,12 +3381,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
                   }
                 }
               },
-              "depends_on": [{ "needstype": "Supported housing" }]
+              "depends_on": [
+                {
+                  "needstype": "Supported housing"
+                }
+              ]
             },
             "rent_period": {
               "header": "",
@@ -2422,23 +3406,44 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": "Every 2 weeks",
-                    "1": "Every 4 weeks",
-                    "2": "Every calendar month",
-                    "3": "Weekly for 50 weeks",
-                    "4": "Weekly for 49 weeks",
-                    "5": "Weekly for 48 weeks",
-                    "6": "Weekly for 47 weeks",
-                    "7": "Weekly for 46 weeks",
-                    "8": "Weekly for 52 weeks"
+                    "0": {
+                      "value": "Every 2 weeks"
+                    },
+                    "1": {
+                      "value": "Every 4 weeks"
+                    },
+                    "2": {
+                      "value": "Every calendar month"
+                    },
+                    "3": {
+                      "value": "Weekly for 50 weeks"
+                    },
+                    "4": {
+                      "value": "Weekly for 49 weeks"
+                    },
+                    "5": {
+                      "value": "Weekly for 48 weeks"
+                    },
+                    "6": {
+                      "value": "Weekly for 47 weeks"
+                    },
+                    "7": {
+                      "value": "Weekly for 46 weeks"
+                    },
+                    "8": {
+                      "value": "Weekly for 52 weeks"
+                    }
                   }
                 }
               },
-              "depends_on" : [{
-                "household_charge": "Yes"
-              },{
-                "household_charge": null
-              }]
+              "depends_on": [
+                {
+                  "household_charge": "Yes"
+                },
+                {
+                  "household_charge": null
+                }
+              ]
             },
             "care_home_weekly": {
               "header": "",
@@ -2450,11 +3455,17 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [
+                      "Yes"
+                    ]
                   }
                 },
                 "chcharge": {
@@ -2467,55 +3478,67 @@
                   "suffix": " every week"
                 }
               },
-              "depends_on" : [{
-                "period": "Weekly for 52 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 52 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              },{
-                "period": "Weekly for 50 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 50 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              },{
-                "period": "Weekly for 49 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 49 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              },{
-                "period": "Weekly for 48 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 48 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              },{
-                "period": "Weekly for 47 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 47 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              },{
-                "period": "Weekly for 46 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Weekly for 46 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              }
+              "depends_on": [
+                {
+                  "period": "Weekly for 52 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 52 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                }
               ]
             },
             "care_home_bi_weekly": {
@@ -2528,11 +3551,17 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [
+                      "Yes"
+                    ]
                   }
                 },
                 "chcharge": {
@@ -2545,15 +3574,18 @@
                   "suffix": " every 2 weeks"
                 }
               },
-              "depends_on" : [{
-                "period": "Every 2 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Every 2 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              }]
+              "depends_on": [
+                {
+                  "period": "Every 2 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Every 2 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                }
+              ]
             },
             "care_home_4_weekly": {
               "header": "",
@@ -2565,11 +3597,17 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [
+                      "Yes"
+                    ]
                   }
                 },
                 "chcharge": {
@@ -2582,15 +3620,18 @@
                   "suffix": " every 4 weeks"
                 }
               },
-              "depends_on" : [{
-                "period": "Every 4 weeks",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period": "Every 4 weeks",
-                "needstype": "Supported housing",
-                "household_charge": null
-              }]
+              "depends_on": [
+                {
+                  "period": "Every 4 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Every 4 weeks",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                }
+              ]
             },
             "care_home_monthly": {
               "header": "",
@@ -2602,11 +3643,17 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "0": {
+                      "value": "No"
+                    },
+                    "1": {
+                      "value": "Yes"
+                    }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [
+                      "Yes"
+                    ]
                   }
                 },
                 "chcharge": {
@@ -2619,15 +3666,18 @@
                   "suffix": " every month"
                 }
               },
-              "depends_on" : [{
-                "period":  "Every calendar month",
-                "needstype": "Supported housing",
-                "household_charge": "Yes"
-              },{
-                "period":  "Every calendar month",
-                "needstype": "Supported housing",
-                "household_charge": null
-              }]
+              "depends_on": [
+                {
+                  "period": "Every calendar month",
+                  "needstype": "Supported housing",
+                  "household_charge": "Yes"
+                },
+                {
+                  "period": "Every calendar month",
+                  "needstype": "Supported housing",
+                  "household_charge": null
+                }
+              ]
             },
             "rent_weekly": {
               "header": "Household rent and charges",
@@ -2643,7 +3693,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2657,7 +3712,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2671,7 +3731,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2685,7 +3750,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2701,107 +3771,135 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
-              "depends_on" : [{
-                "period": "Weekly for 52 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 52 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 50 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 50 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 49 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 49 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 48 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 48 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 47 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 47 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 46 weeks",
-                "household_charge": "Yes",
-                "is_carehome": "No"
-              },{
-                "period": "Weekly for 46 weeks",
-                "household_charge": null,
-                "is_carehome": "No"
-              },
-              {
-                "period": "Weekly for 52 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 52 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              },{
-                "period": "Weekly for 50 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 50 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              },{
-                "period": "Weekly for 49 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 49 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              },{
-                "period": "Weekly for 48 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 48 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              },{
-                "period": "Weekly for 47 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 47 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              },{
-                "period": "Weekly for 46 weeks",
-                "household_charge": "Yes",
-                "is_carehome": null
-              },{
-                "period": "Weekly for 46 weeks",
-                "household_charge": null,
-                "is_carehome": null
-              }
+              "depends_on": [
+                {
+                  "period": "Weekly for 52 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 52 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "household_charge": null,
+                  "is_carehome": "No"
+                },
+                {
+                  "period": "Weekly for 52 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 52 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 50 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 49 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 48 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 47 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "household_charge": "Yes",
+                  "is_carehome": null
+                },
+                {
+                  "period": "Weekly for 46 weeks",
+                  "household_charge": null,
+                  "is_carehome": null
+                }
               ]
             },
             "rent_bi_weekly": {
@@ -2818,7 +3916,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2832,7 +3935,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2846,7 +3954,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2860,7 +3973,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2876,27 +3994,36 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
-              "depends_on" : [{
-                "household_charge": "Yes",
-                "period": "Every 2 weeks",
-                "is_carehome": "No"
-              },{
-                "household_charge": null,
-                "period": "Every 2 weeks",
-                "is_carehome": "No"
-              },
-              {
-                "household_charge": "Yes",
-                "period": "Every 2 weeks",
-                "is_carehome": null
-              },{
-                "household_charge": null,
-                "period": "Every 2 weeks",
-                "is_carehome": null
-              }]
+              "depends_on": [
+                {
+                  "household_charge": "Yes",
+                  "period": "Every 2 weeks",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every 2 weeks",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": "Yes",
+                  "period": "Every 2 weeks",
+                  "is_carehome": null
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every 2 weeks",
+                  "is_carehome": null
+                }
+              ]
             },
             "rent_4_weekly": {
               "header": "Household rent and charges",
@@ -2912,7 +4039,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2926,7 +4058,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2940,7 +4077,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2954,7 +4096,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -2970,27 +4117,36 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
-              "depends_on" : [{
-                "household_charge": "Yes",
-                "period": "Every 4 weeks",
-                "is_carehome": "No"
-              },{
-                "household_charge": null,
-                "period": "Every 4 weeks",
-                "is_carehome": "No"
-              },
-              {
-                "household_charge": "Yes",
-                "period": "Every 4 weeks",
-                "is_carehome": null
-              },{
-                "household_charge": null,
-                "period": "Every 4 weeks",
-                "is_carehome": null
-              }]
+              "depends_on": [
+                {
+                  "household_charge": "Yes",
+                  "period": "Every 4 weeks",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every 4 weeks",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": "Yes",
+                  "period": "Every 4 weeks",
+                  "is_carehome": null
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every 4 weeks",
+                  "is_carehome": null
+                }
+              ]
             },
             "rent_monthly": {
               "header": "Household rent and charges",
@@ -3006,7 +4162,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3020,7 +4181,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3034,7 +4200,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3048,7 +4219,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3064,47 +4240,68 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
-              "depends_on" : [{
-                "household_charge": "Yes",
-                "period":  "Every calendar month",
-                "is_carehome": "No"
-              },{
-                "household_charge": null,
-                "period":  "Every calendar month",
-                "is_carehome": "No"
-              },
-              {
-                "household_charge": "Yes",
-                "period":  "Every calendar month",
-                "is_carehome": null
-              },{
-                "household_charge": null,
-                "period":  "Every calendar month",
-                "is_carehome": null
-              }
+              "depends_on": [
+                {
+                  "household_charge": "Yes",
+                  "period": "Every calendar month",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every calendar month",
+                  "is_carehome": "No"
+                },
+                {
+                  "household_charge": "Yes",
+                  "period": "Every calendar month",
+                  "is_carehome": null
+                },
+                {
+                  "household_charge": null,
+                  "period": "Every calendar month",
+                  "is_carehome": null
+                }
               ]
             },
-            "rent_shortfall":{
+            "rent_shortfall": {
               "header": "",
               "description": "",
               "questions": {
                 "hbrentshortfall": {
-                "check_answer_label": "Outstanding amount for basic rent and charges",
-                "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
-                "hint_text": "Also known as the ‘outstanding amount’.",
-                "type": "radio",
-                "answer_options": {
-                  "0": "Yes",
-                  "1": "No"
+                  "check_answer_label": "Outstanding amount for basic rent and charges",
+                  "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
+                  "hint_text": "Also known as the ‘outstanding amount’.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
                 }
-              }
               },
-              "depends_on": [{ "has_benefits": "Yes", "household_charge": "Yes" },{ "has_benefits": "Yes", "household_charge": null }]
+              "depends_on": [
+                {
+                  "has_benefits": "Yes",
+                  "household_charge": "Yes"
+                },
+                {
+                  "has_benefits": "Yes",
+                  "household_charge": null
+                }
+              ]
             },
-            "rent_shortfall_amount":{
+            "rent_shortfall_amount": {
               "header": "",
               "description": "",
               "questions": {
@@ -3120,9 +4317,12 @@
                   "suffix": " every month"
                 }
               },
-              "depends_on": [{"has_benefits": "Yes",
-                "hbrentshortfall": "Yes"
-              }]
+              "depends_on": [
+                {
+                  "has_benefits": "Yes",
+                  "hbrentshortfall": "Yes"
+                }
+              ]
             }
           }
         }
@@ -3133,15 +4333,17 @@
       "subsections": {
         "declaration": {
           "label": "Declaration",
-          "depends_on": [{
-            "setup": "completed",
-            "household_characteristics": "completed",
-            "household_situation": "completed",
-            "household_needs": "completed",
-            "tenancy_information": "completed",
-            "property_information": "completed",
-            "income_and_benefits": "completed"
-          }],
+          "depends_on": [
+            {
+              "setup": "completed",
+              "household_characteristics": "completed",
+              "household_situation": "completed",
+              "household_needs": "completed",
+              "tenancy_information": "completed",
+              "property_information": "completed",
+              "income_and_benefits": "completed"
+            }
+          ],
           "pages": {
             "declaration": {
               "header": "",

@@ -59,7 +59,7 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "incfreq" }
 
     it "has answer options" do
-      expected_answer_options = { "0" => "Weekly", "1" => "Monthly", "2" => "Yearly" }
+      expected_answer_options = { "0" => { "value" => "Weekly" }, "1" => { "value" => "Monthly" }, "2" => { "value" => "Yearly" } }
       expect(question.answer_options).to eq(expected_answer_options)
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "dependent_question" }
 
     it "has answer options" do
-      expected_answer_options = { "0" => "Option A", "1" => "Option B" }
+      expected_answer_options = { "0" => { "value" => "Option A" }, "1" => { "value" => "Option B" } }
       expect(question.answer_options).to eq(expected_answer_options)
     end
   end
