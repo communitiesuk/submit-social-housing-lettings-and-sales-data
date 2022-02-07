@@ -661,19 +661,18 @@
               "household_characteristics": "completed",
               "household_needs": "completed",
               "tenancy_information": "completed",
-              "property_information": "completed",
-              "income_and_benefits": "completed",
-              "rent_and_charges": "completed",
-              "local_authority": "completed"
+              "property_information": "completed"
             }],
             "pages": {
               "declaration": {
                 "questions": {
                   "declaration": {
                     "check_answer_label": "",
-                    "header": "What is the tenant code?",
-                    "type": "text",
-                    "width": 10
+                    "header": "Submit your lettings log ",
+                    "type": "checkbox",
+                    "answer_options": {
+                      "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                    }
                   }
                 }
               }

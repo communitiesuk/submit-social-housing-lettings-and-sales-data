@@ -3226,9 +3226,12 @@
               "questions": {
                 "declaration": {
                   "check_answer_label": "",
-                  "header": "What is the tenant code?",
+                  "header": "Submit your lettings log ",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "checkbox",
+                  "answer_options": {
+                    "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                  }
                 }
               }
             }

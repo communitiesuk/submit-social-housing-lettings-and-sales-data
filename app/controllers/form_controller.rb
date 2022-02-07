@@ -8,8 +8,12 @@ class FormController < ApplicationController
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
       if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
-        redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
-        redirect_to(send(redirect_path, @case_log))
+        if @page.id == "declaration"
+          redirect_to(case_logs_path)
+        else
+          redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
+          redirect_to(send(redirect_path, @case_log))
+        end
       else
         @subsection = @case_log.form.subsection_for_page(@page)
         render "form/page", status: :unprocessable_entity

@@ -47,8 +47,12 @@
         <% end %>
 
         <%= f.hidden_field :page, value: @page.id %>
-        <%= f.govuk_submit "Save and continue"  %>
-      </div>
+        <% if @page.id == "declaration" %>
+          <%= f.govuk_submit "Submit lettings log"  %>
+        <%else %>
+          <%= f.govuk_submit "Save and continue"  %>
+        <%end %>
+      <% end %>
     </div>
   <% end %>
 <% end %>
