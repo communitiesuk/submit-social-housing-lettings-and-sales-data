@@ -259,7 +259,7 @@ private
     end
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
-    self.lettype = "#{renttype} #{needstype} #{owning_organisation['Org type']}" if renttype.present? && needstype.present? && owning_organisation["Org type"].present?
+    self.lettype = "#{renttype} #{needstype} #{owning_organisation[:provider_type]}" if renttype.present? && needstype.present? && owning_organisation[:provider_type].present?
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult

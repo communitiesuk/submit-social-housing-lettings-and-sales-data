@@ -962,7 +962,7 @@ RSpec.describe CaseLog do
 
   describe "derived variables" do
     require "date"
-    let(:organisation) { FactoryBot.create(:organisation, "Org type": "PRP") }
+    let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
     let!(:case_log) do
       described_class.create({
         managing_organisation: organisation,

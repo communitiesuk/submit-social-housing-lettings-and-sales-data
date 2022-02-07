@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_03_145845) do
-
+ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -201,7 +200,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_145845) do
   create_table "organisations", force: :cascade do |t|
     t.string "name"
     t.string "phone"
-    t.integer "providertype"
+    t.integer "provider_type"
     t.string "address_line1"
     t.string "address_line2"
     t.string "postcode"
@@ -246,6 +245,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_145845) do
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
     t.integer "role"
+    t.string "old_user_id"
+    t.string "phone"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

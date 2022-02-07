@@ -3,7 +3,7 @@ class StorageService
 
   def initialize(paas_config_service, paas_instance_name)
     @paas_config_service = paas_config_service
-    @paas_instance_name = paas_instance_name.to_sym
+    @paas_instance_name = (paas_instance_name || "").to_sym
     @configuration = create_configuration
     @client = create_client
   end
