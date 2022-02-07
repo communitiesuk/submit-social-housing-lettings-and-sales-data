@@ -39,7 +39,7 @@ class Form::Question
     return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
     answer = case_log[id].to_s if case_log[id].present?
-    answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("")
+    answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
 
     return answer_label if answer_label
 
