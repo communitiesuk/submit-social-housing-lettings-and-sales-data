@@ -2336,7 +2336,8 @@
                     "0": "Weekly",
                     "1": "Monthly",
                     "2": "Yearly"
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 }
               },
               "soft_validations": {

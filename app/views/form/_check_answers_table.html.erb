@@ -1,5 +1,3 @@
-
-<% unless question.id == "incfreq" %>
 <div class="govuk-summary-list__row">
   <dt class="govuk-summary-list__key">
     <%= question.check_answer_label.to_s.present? ? question.check_answer_label.to_s : question.header.to_s %>
@@ -14,4 +12,3 @@
     <%= govuk_link_to(question.update_answer_link_name(@case_log), "/logs/#{@case_log.id}/#{question.page.id.to_s.dasherize}").html_safe %>
   </dd>
 </div>
-<% end %>
