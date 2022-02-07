@@ -148,8 +148,8 @@ private
   end
 
   ANSWER_SUFFIX_LABELS = {
-    "Weekly" => " every week",
-    "Monthly" => " every month",
-    "Yearly" => " every year",
+    "Weekly": " every week",
+    "Monthly": " every month",
+    "Yearly": " every year",
   }.freeze
 end
