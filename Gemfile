@@ -27,7 +27,6 @@ gem "hotwire-rails"
 gem "discard"
 # Administration framework
 gem "activeadmin", git: "https://github.com/tagliala/activeadmin.git", branch: "feature/railties-7"
-gem "arbre", github: "activeadmin/arbre"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
