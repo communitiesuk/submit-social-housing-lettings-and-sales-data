@@ -104,6 +104,15 @@
                     }
                   }
                 }
+              },
+              "propcode": {
+                "questions": {
+                  "propcode": {
+                    "check_answer_label": "",
+                    "header": "property reference?",
+                    "type": "text"
+                  }
+                }
               }
             }
           },
