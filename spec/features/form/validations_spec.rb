@@ -177,7 +177,6 @@ RSpec.describe "validations" do
         visit("/logs/#{completed_without_declaration.id}/declaration")
         expect(page).to have_current_path("/logs/#{completed_without_declaration.id}/declaration")
         click_button("Submit lettings log")
-        # expect(page).to have_current_path("/logs/#{completed_case_log.id}/declaration")
         expect(page).to have_content("You must show the DLUHC privacy notice to the tenant")
       end
     end
