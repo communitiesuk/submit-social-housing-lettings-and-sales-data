@@ -38,7 +38,7 @@ RSpec.describe "Form Check Answers Page" do
   end
 
   context "when the user needs to check their answers for a subsection" do
-    let(:last_question_for_subsection) { "household-number-of-other-members" }
+    let(:last_question_for_subsection) { "propcode" }
 
     it "can be visited by URL" do
       visit("/logs/#{id}/#{subsection}/check-answers")
@@ -46,7 +46,7 @@ RSpec.describe "Form Check Answers Page" do
     end
 
     it "redirects to the check answers page when answering the last question and clicking save and continue" do
-      fill_in_number_question(id, "other_hhmemb", 0, last_question_for_subsection)
+      fill_in_number_question(id, "propcode", 0, last_question_for_subsection)
       expect(page).to have_current_path("/logs/#{id}/#{subsection}/check-answers")
     end
 
