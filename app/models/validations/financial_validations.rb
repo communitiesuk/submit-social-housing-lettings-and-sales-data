@@ -21,14 +21,22 @@ module Validations::FinancialValidations
   end
 
   def validate_net_income(record)
-    return unless record.ecstat1 && record.weekly_net_income
+    if record.ecstat1 && record.weekly_net_income
+      if record.weekly_net_income > record.applicable_income_range.hard_max
+        record.errors.add :earnings, I18n.t("validations.financial.earnings.under_hard_max", hard_max: record.applicable_income_range.hard_max)
+      end
 
-    if record.weekly_net_income > record.applicable_income_range.hard_max
-      record.errors.add :earnings, I18n.t("validations.financial.earnings.under_hard_max", hard_max: record.applicable_income_range.hard_max)
+      if record.weekly_net_income < record.applicable_income_range.hard_min
+        record.errors.add :earnings, I18n.t("validations.financial.earnings.over_hard_min", hard_min: record.applicable_income_range.hard_min)
+      end
     end
 
-    if record.weekly_net_income < record.applicable_income_range.hard_min
-      record.errors.add :earnings, I18n.t("validations.financial.earnings.over_hard_min", hard_min: record.applicable_income_range.hard_min)
+    if record.earnings.present? && record.incfreq.blank?
+      record.errors.add :incfreq, I18n.t("validations.financial.earnings.freq_missing")
+    end
+
+    if record.incfreq.present? && record.earnings.blank?
+      record.errors.add :earnings, I18n.t("validations.financial.earnings.earnings_missing")
     end
   end
 

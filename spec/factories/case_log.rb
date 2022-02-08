@@ -69,6 +69,7 @@ FactoryBot.define do
       offered { 2 }
       wchair { "Yes" }
       earnings { 68 }
+      incfreq { "Weekly" }
       benefits { "Some" }
       period { "Every 2 weeks" }
       brent { 200 }
@@ -110,7 +111,7 @@ FactoryBot.define do
       discarded_at { nil }
       tenancyother { nil }
       override_net_income_validation { nil }
-      net_income_known { "Weekly" }
+      net_income_known { "Yes" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
       renewal { 1 }

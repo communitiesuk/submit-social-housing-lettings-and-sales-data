@@ -1092,17 +1092,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when saving net_income" do
-      it "infers the income frequency" do
-        case_log.update!(net_income_known: "Weekly")
-        expect(case_log.reload.incfreq).to eq("Weekly")
-        case_log.update!(net_income_known: "Monthly")
-        expect(case_log.reload.incfreq).to eq("Monthly")
-        case_log.update!(net_income_known: "Annually")
-        expect(case_log.reload.incfreq).to eq("Yearly")
-      end
-    end
-
     context "when saving rent and charges" do
       let!(:case_log) do
         described_class.create({
