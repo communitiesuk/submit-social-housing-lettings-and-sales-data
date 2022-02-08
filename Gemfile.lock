@@ -267,6 +267,9 @@ GEM
     paper_trail (12.2.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
+    paper_trail-globalid (0.2.0)
+      globalid
+      paper_trail (>= 3.0.0)
     parallel (1.21.0)
     parser (3.1.0.0)
       ast (~> 2.4.1)
@@ -469,6 +472,7 @@ DEPENDENCIES
   notifications-ruby-client
   overcommit (>= 0.37.0)
   paper_trail
+  paper_trail-globalid
   pg (~> 1.1)
   postcodes_io
   pry-byebug

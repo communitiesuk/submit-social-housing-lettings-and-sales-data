@@ -34,84 +34,104 @@ RSpec.describe CaseLogsController, type: :request do
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
 
-    let(:params) do
-      {
-        "owning_organisation_id": owning_organisation.id,
-        "managing_organisation_id": managing_organisation.id,
-        "tenant_code": tenant_code,
-        "age1": age1,
-        "property_postcode": property_postcode,
-        "offered": offered,
-      }
-    end
-
-    before do
-      post "/logs", headers: headers, params: params.to_json
-    end
-
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
-
-    it "returns a serialized Case Log" do
-      json_response = JSON.parse(response.body)
-      expect(json_response.keys).to match_array(CaseLog.new.attributes.keys)
-    end
-
-    it "creates a case log with the values passed" do
-      json_response = JSON.parse(response.body)
-      expect(json_response["tenant_code"]).to eq(tenant_code)
-      expect(json_response["age1"]).to eq(age1)
-      expect(json_response["property_postcode"]).to eq(property_postcode)
-    end
-
-    context "with invalid json parameters" do
-      let(:age1) { 2000 }
-      let(:offered) { 21 }
-
-      it "validates case log parameters" do
-        json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.household.age.must_be_valid", lower_bound: 16)]]])
-      end
-    end
-
-    context "with a partial case log submission" do
-      it "marks the record as in_progress" do
-        json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(in_progress)
-      end
-    end
-
-    context "with a complete case log submission" do
-      let(:org_params) do
+    context "when API" do
+      let(:params) do
         {
-          "case_log" => {
-            "owning_organisation_id" => owning_organisation.id,
-            "managing_organisation_id" => managing_organisation.id,
-          },
+          "owning_organisation_id": owning_organisation.id,
+          "managing_organisation_id": managing_organisation.id,
+          "tenant_code": tenant_code,
+          "age1": age1,
+          "property_postcode": property_postcode,
+          "offered": offered,
         }
       end
-      let(:case_log_params) { JSON.parse(File.open("spec/fixtures/complete_case_log.json").read) }
-      let(:params) do
-        case_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
+
+      before do
+        post "/logs", headers: headers, params: params.to_json
       end
 
-      it "marks the record as completed" do
-        json_response = JSON.parse(response.body)
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
 
-        expect(json_response).not_to have_key("errors")
-        expect(json_response["status"]).to eq(completed)
+      it "returns a serialized Case Log" do
+        json_response = JSON.parse(response.body)
+        expect(json_response.keys).to match_array(CaseLog.new.attributes.keys)
+      end
+
+      it "creates a case log with the values passed" do
+        json_response = JSON.parse(response.body)
+        expect(json_response["tenant_code"]).to eq(tenant_code)
+        expect(json_response["age1"]).to eq(age1)
+        expect(json_response["property_postcode"]).to eq(property_postcode)
+      end
+
+      context "with invalid json parameters" do
+        let(:age1) { 2000 }
+        let(:offered) { 21 }
+
+        it "validates case log parameters" do
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.household.age.must_be_valid", lower_bound: 16)]]])
+        end
+      end
+
+      context "with a partial case log submission" do
+        it "marks the record as in_progress" do
+          json_response = JSON.parse(response.body)
+          expect(json_response["status"]).to eq(in_progress)
+        end
+      end
+
+      context "with a complete case log submission" do
+        let(:org_params) do
+          {
+            "case_log" => {
+              "owning_organisation_id" => owning_organisation.id,
+              "managing_organisation_id" => managing_organisation.id,
+            },
+          }
+        end
+        let(:case_log_params) { JSON.parse(File.open("spec/fixtures/complete_case_log.json").read) }
+        let(:params) do
+          case_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
+        end
+
+        it "marks the record as completed" do
+          json_response = JSON.parse(response.body)
+
+          expect(json_response).not_to have_key("errors")
+          expect(json_response["status"]).to eq(completed)
+        end
+      end
+
+      context "with a request containing invalid credentials" do
+        let(:basic_credentials) do
+          ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+        end
+
+        it "returns 401" do
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
-    context "with a request containing invalid credentials" do
-      let(:basic_credentials) do
-        ActionController::HttpAuthentication::Basic.encode_credentials(api_username, "Oops")
+    context "when UI" do
+      let(:user) { FactoryBot.create(:user) }
+      let(:headers) { { "Accept" => "text/html" } }
+
+      before do
+        RequestHelper.stub_http_requests
+        sign_in user
+        post "/logs", headers: headers
       end
 
-      it "returns 401" do
-        expect(response).to have_http_status(:unauthorized)
+      it "tracks who created the record" do
+        created_id = response.location.match(/[1-9]+/)[0]
+        whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
+        expect(whodunnit_actor).to be_a(User)
+        expect(whodunnit_actor.id).to eq(user.id)
       end
     end
   end

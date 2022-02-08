@@ -47,6 +47,8 @@ gem "view_component"
 gem "aws-sdk-s3"
 # Track changes to models for auditing or versioning.
 gem "paper_trail"
+# Store active record objects in version whodunnits
+gem "paper_trail-globalid"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

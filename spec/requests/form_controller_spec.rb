@@ -155,6 +155,13 @@ RSpec.describe FormController, type: :request do
             expect(case_log.age1).to eq(answer)
             expect(case_log.age2).to be nil
           end
+
+          it "tracks who updated the record" do
+            case_log.reload
+            whodunnit_actor = case_log.versions.last.actor
+            expect(whodunnit_actor).to be_a(User)
+            expect(whodunnit_actor.id).to eq(user.id)
+          end
         end
       end
 

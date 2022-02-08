@@ -185,6 +185,13 @@ RSpec.describe OrganisationsController, type: :request do
             follow_redirect!
             expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
           end
+
+          it "tracks who updated the record" do
+            organisation.reload
+            whodunnit_actor = organisation.versions.last.actor
+            expect(whodunnit_actor).to be_a(User)
+            expect(whodunnit_actor.id).to eq(user.id)
+          end
         end
 
         context "with an organisation that the user does not belong to" do
