@@ -5,14 +5,14 @@ require_relative "../../request_helper"
 describe Admin::DashboardController, type: :controller do
   before do
     RequestHelper.stub_http_requests
+    sign_in admin_user
   end
 
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Dashboard" }
   let(:valid_session) { {} }
-
-  login_admin_user
+  let(:admin_user) { FactoryBot.create(:admin_user) }
 
   describe "Get case logs" do
     before do

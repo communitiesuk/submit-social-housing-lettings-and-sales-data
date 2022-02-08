@@ -128,7 +128,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       it "tracks who created the record" do
-        created_id = response.location.match(/[1-9]+/)[0]
+        created_id = response.location.match(/[0-9]+/)[0]
         whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
         expect(whodunnit_actor).to be_a(User)
         expect(whodunnit_actor.id).to eq(user.id)
