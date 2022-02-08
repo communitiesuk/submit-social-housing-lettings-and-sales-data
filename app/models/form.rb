@@ -79,7 +79,7 @@ class Form
     next_subsection_id_index = subsection_ids.index(subsection.id) + 1
     next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
 
-    if next_subsection.id == "declaration" && case_log.status != "completed"
+    if subsection.id == "declaration" && case_log.status != "completed"
       next_subsection = get_subsection(subsection_ids[0])
     end
 

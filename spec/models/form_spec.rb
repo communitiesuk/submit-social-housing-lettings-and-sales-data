@@ -36,7 +36,7 @@ RSpec.describe Form, type: :model do
   describe "next_incomplete_section_redirect_path" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
     let(:subsection) { form.get_subsection("household_characteristics") }
-    let(:later_subsection) { form.get_subsection("setup") }
+    let(:later_subsection) { form.get_subsection("declaration") }
 
     context "when a user is on the check answers page for a subsection" do
       def answer_household_needs(case_log)
@@ -109,6 +109,10 @@ RSpec.describe Form, type: :model do
 
       it "returns the declaration section for a completed case log" do
         expect(form.next_incomplete_section_redirect_path(subsection, completed_case_log)).to eq("declaration")
+      end
+
+      it "returns the next incomplete section by cycling back around if next subsections are completed" do
+        expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
       end
 
       it "returns the declaration section if all sections are complete but the case log is in progress" do
