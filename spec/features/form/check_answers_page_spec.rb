@@ -209,7 +209,7 @@ RSpec.describe "Form Check Answers Page" do
       end
 
       it "they can click a button to cycle around to the next incomplete section" do
-        visit("/logs/#{cycle_sections_case_log.id}/setup/check-answers")
+        visit("/logs/#{cycle_sections_case_log.id}/declaration/check-answers")
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code")
       end

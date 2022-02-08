@@ -77,16 +77,6 @@ RSpec.describe Form::Subsection, type: :model do
     end
   end
 
-  context "when the privacy notice has not been shown" do
-    let(:section_id) { "setup" }
-    let(:subsection_id) { "setup" }
-    let(:case_log) { FactoryBot.build(:case_log, :about_completed, gdpr_acceptance: "No") }
-
-    it "does not mark the section as completed" do
-      expect(sub_section.status(case_log)).to eq(:in_progress)
-    end
-  end
-
   context "with a completed case log" do
     let(:case_log) { FactoryBot.build(:case_log, :completed) }
 

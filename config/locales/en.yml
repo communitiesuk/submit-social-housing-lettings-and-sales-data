@@ -115,6 +115,9 @@ en:
       referral:
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
 
+    declaration:
+      missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
+
   soft_validations:
     net_income:
       hint_text: "This is based on the tenant’s work situation: %{ecstat1}"
