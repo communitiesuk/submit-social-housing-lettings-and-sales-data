@@ -68,8 +68,8 @@ en:
       earnings:
         under_hard_max: "Net income cannot be greater than %{hard_max} given the tenant’s working situation"
         over_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
-        freq_missing: "How often the household receives this amount must be provided"
-        earnings_missing: "How much income the household has in total must be provided"
+        freq_missing: "Select how often the household receives income"
+        earnings_missing: "Enter how much income the household has in total"
 
     household:
       reasonpref:
