@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/activeadmin/arbre.git
-  revision: dcea09da31322f2bc9bdfc32eb14ec0aaf34ae92
-  specs:
-    arbre (1.4.0)
-      activesupport (>= 3.0.0, < 7.1)
-      ruby2_keywords (>= 0.0.2, < 1.0)
-
-GIT
   remote: https://github.com/baarkerlounger/devise.git
   revision: 6d0b6b52a9d0e87ae6d9f9acb562169751623078
   branch: dluhc-fixes
@@ -31,7 +23,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: 5d6dfbe086331ce0538cc726abfe2eebe0260f02
+  revision: 1515a40a1d407dafd34b104fabd8401e84baca94
   branch: feature/railties-7
   specs:
     activeadmin (2.9.0)
@@ -114,6 +106,9 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    arbre (1.5.0)
+      activesupport (>= 3.0.0, < 7.1)
+      ruby2_keywords (>= 0.0.2, < 1.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.553.0)
@@ -454,7 +449,6 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
-  arbre!
   aws-sdk-s3
   bootsnap (>= 1.4.4)
   byebug
