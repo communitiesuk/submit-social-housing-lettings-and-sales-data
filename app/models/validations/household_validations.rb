@@ -65,7 +65,7 @@ module Validations::HouseholdValidations
     if all_options.count("Yes") > 1
       mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
       unless all_options.count("Yes") == 2 && record.housingneeds_f == "Yes" && mobility_accessibility_options.any? { |x| x == "Yes" }
-        record.errors.add :housingneeds_a, I18n.t("validations.household.housingneeds_a.one_or_two_choices")
+        record.errors.add :accessibility_requirements, I18n.t("validations.household.housingneeds_a.one_or_two_choices")
       end
     end
   end
