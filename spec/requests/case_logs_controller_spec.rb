@@ -200,7 +200,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "displays a section status for a case log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 9
+              assert_select ".govuk-tag", text: /Not started/, count: 8
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
@@ -222,7 +222,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "displays a section status for a case log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 8
+              assert_select ".govuk-tag", text: /Not started/, count: 7
               assert_select ".govuk-tag", text: /Completed/, count: 1
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end

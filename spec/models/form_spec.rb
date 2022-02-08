@@ -85,10 +85,6 @@ RSpec.describe Form, type: :model do
         case_log.mrcdate = Time.zone.parse("03/11/2019")
       end
 
-      def answer_local_gdpr_acceptance(case_log)
-        case_log.gdpr_acceptance = "Yes"
-      end
-
       before do
         case_log.tenant_code = "123"
         case_log.age1 = 35
@@ -111,11 +107,6 @@ RSpec.describe Form, type: :model do
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("tenancy-code")
       end
 
-      it "returns the next incomplete section by cycling back around if next subsections are completed" do
-        answer_local_gdpr_acceptance(case_log)
-        expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
-      end
-
       it "returns the declaration section for a completed case log" do
         expect(form.next_incomplete_section_redirect_path(subsection, completed_case_log)).to eq("declaration")
       end
@@ -128,7 +119,6 @@ RSpec.describe Form, type: :model do
         answer_income_and_benefits(case_log)
         answer_rent_and_charges(case_log)
         answer_local_authority(case_log)
-        answer_local_gdpr_acceptance(case_log)
 
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("declaration")
       end

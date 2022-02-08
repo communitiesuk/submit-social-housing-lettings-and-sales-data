@@ -130,8 +130,6 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.datetime "discarded_at"
     t.string "tenancyother"
     t.integer "override_net_income_validation"
-    t.string "gdpr_acceptance"
-    t.string "gdpr_declined"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"

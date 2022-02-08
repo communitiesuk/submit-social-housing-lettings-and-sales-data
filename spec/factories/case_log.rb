@@ -3,7 +3,6 @@ FactoryBot.define do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
     trait :about_completed do
-      gdpr_acceptance { "Yes" }
       renewal { "No" }
       needstype { 1 }
       rent_type { 1 }
@@ -112,8 +111,6 @@ FactoryBot.define do
       tenancyother { nil }
       override_net_income_validation { nil }
       net_income_known { "Weekly" }
-      gdpr_acceptance { "Yes" }
-      gdpr_declined { "No" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
       renewal { 1 }

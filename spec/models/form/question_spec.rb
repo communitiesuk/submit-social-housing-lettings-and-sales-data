@@ -169,17 +169,5 @@ RSpec.describe Form::Question, type: :model do
         expect(question.completed?(case_log)).to be(true)
       end
     end
-
-    context "when the gdpr acceptance is No" do
-      let(:section_id) { "setup" }
-      let(:subsection_id) { "setup" }
-      let(:page_id) { "gdpr_acceptance" }
-      let(:question_id) { "gdpr_acceptance" }
-
-      it "returns false" do
-        case_log["gdpr_acceptance"] = "No"
-        expect(question.completed?(case_log)).to be(false)
-      end
-    end
   end
 end

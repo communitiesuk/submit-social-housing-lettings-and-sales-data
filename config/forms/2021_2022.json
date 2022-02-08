@@ -9,30 +9,6 @@
         "setup": {
           "label": "Set up your lettings log",
           "pages": {
-            "gdpr_acceptance": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "gdpr_acceptance": {
-                  "check_answer_label": "Privacy notice seen",
-                  "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
-                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
-                  }
-                }
-              }
-            },
-            "gdpr_declined": {
-              "hide_subsection_label": true,
-              "header": "You cannot use this service",
-              "hint_text": "",
-              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">DLUHC privacy notice</a>.<br /><br /><a class=\"govuk-link\" href=\"/logs\">Go to your logs</a>",
-              "questions": {},
-              "depends_on": [{ "gdpr_acceptance": "No" }]
-            },
             "organisation_details": {
               "header": "Organisation details",
               "description": "",
@@ -57,8 +33,7 @@
                     "1": "B"
                   }
                 }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
+              }
             },
             "renewal": {
               "header": "",
@@ -74,10 +49,7 @@
                     "0": "No"
                   }
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "startdate": {
               "header": "",
@@ -89,10 +61,7 @@
                   "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "about_this_letting": {
               "header": "Tell us about this letting",
@@ -132,10 +101,7 @@
                     "0": "Supported housing"
                   }
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "tenant_code": {
               "header": "",
@@ -148,10 +114,7 @@
                   "type": "text",
                   "width": 10
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "property_reference": {
               "header": "",
@@ -164,8 +127,7 @@
                   "type": "text",
                   "width": 10
                 }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
+              }
             }
           }
         }
