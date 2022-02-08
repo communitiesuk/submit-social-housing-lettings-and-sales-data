@@ -28,9 +28,11 @@ RSpec.describe "validations" do
   let(:completed_without_declaration) do
     FactoryBot.create(
       :case_log,
-      :completed_without_declaration,
+      :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      status: 1,
+      declaration: nil,
     )
   end
   let(:id) { case_log.id }

@@ -47,7 +47,7 @@
         <% end %>
 
         <%= f.hidden_field :page, value: @page.id %>
-        <% if @page.id == "declaration" %>
+        <% if @case_log.form.is_last_question?(@page, @subsection, @case_log) %>
           <%= f.govuk_submit "Submit lettings log"  %>
         <%else %>
           <%= f.govuk_submit "Save and continue"  %>
