@@ -1123,4 +1123,6 @@ module Constants::CaseLog
                             "Sheltered accomodation",
                             "Home Office Asylum Support",
                             "Other"].freeze
+
+  OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
 end
