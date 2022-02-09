@@ -1153,6 +1153,35 @@ RSpec.describe CaseLog do
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["has_benefits"]).to eq("Yes")
     end
+
+    context "when it is a renewal" do
+      let!(:case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          renewal: "Yes",
+          year: 2021,
+        })
+      end
+
+      it "correctly derives and saves layear" do
+        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["layear"]).to eq(2)
+        expect(case_log["layear"]).to eq("Less than 1 year")
+      end
+
+      it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
+        record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
+        expect(case_log["underoccupation_benefitcap"]).to eq("No")
+      end
+
+      it "correctly derives and saves homeless" do
+        record_from_db = ActiveRecord::Base.connection.execute("select homeless from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["homeless"]).to eq(1)
+        expect(case_log["homeless"]).to eq("No")
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
