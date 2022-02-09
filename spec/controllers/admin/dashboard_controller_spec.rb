@@ -1,10 +1,8 @@
 require "rails_helper"
 require_relative "../../support/devise"
-require_relative "../../request_helper"
 
 describe Admin::DashboardController, type: :controller do
   before do
-    RequestHelper.stub_http_requests
     sign_in admin_user
   end
 

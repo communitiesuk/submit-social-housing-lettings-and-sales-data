@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../../request_helper"
 
 RSpec.describe "form/page" do
   let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
@@ -19,7 +18,6 @@ RSpec.describe "form/page" do
   end
 
   before do
-    RequestHelper.stub_http_requests
     assign(:case_log, case_log)
     assign(:page, page)
     assign(:subsection, subsection)

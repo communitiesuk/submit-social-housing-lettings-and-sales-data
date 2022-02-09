@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+  <form>
+    <id>{id_1}</id>
+    <status>completed</status>
+    <created_at>2022-02-08 16:52:15 +0000</created_at>
+    <updated_at>2022-02-08 16:52:15 +0000</updated_at>
+    <tenant_code>BZ737</tenant_code>
+    <age1>35</age1>
+    <sex1>Female</sex1>
+    <ethnic>White: Irish</ethnic>
+    <national>Estonia</national>
+    <prevten>Private sector tenancy</prevten>
+    <ecstat1>Part-time - Less than 30 hours</ecstat1>
+    <hhmemb>2</hhmemb>
+    <relat2>Partner</relat2>
+    <age2>32</age2>
+    <sex2>Male</sex2>
+    <ecstat2>Not seeking work</ecstat2>
+    <relat3/>
+    <age3/>
+    <sex3/>
+    <ecstat3/>
+    <relat4/>
+    <age4/>
+    <sex4/>
+    <ecstat4/>
+    <relat5/>
+    <age5/>
+    <sex5/>
+    <ecstat5/>
+    <relat6/>
+    <age6/>
+    <sex6/>
+    <ecstat6/>
+    <relat7/>
+    <age7/>
+    <sex7/>
+    <ecstat7/>
+    <relat8/>
+    <age8/>
+    <sex8/>
+    <ecstat8/>
+    <homeless>Yes - other homelessness</homeless>
+    <underoccupation_benefitcap>No</underoccupation_benefitcap>
+    <leftreg>No - they left up to 5 years ago</leftreg>
+    <reservist>No</reservist>
+    <illness>Yes</illness>
+    <preg_occ>Yes</preg_occ>
+    <accessibility_requirements>No</accessibility_requirements>
+    <condition_effects>dummy</condition_effects>
+    <tenancy_code>BZ757</tenancy_code>
+    <startertenancy>No</startertenancy>
+    <tenancylength>5</tenancylength>
+    <tenancy>Secure (including flexible)</tenancy>
+    <landlord>This landlord</landlord>
+    <previous_postcode>SE2 6RT</previous_postcode>
+    <rsnvac>Tenant abandoned property</rsnvac>
+    <unittype_gn>House</unittype_gn>
+    <beds>3</beds>
+    <offered>2</offered>
+    <wchair>Yes</wchair>
+    <earnings>68</earnings>
+    <incfreq>Weekly</incfreq>
+    <benefits>Some</benefits>
+    <period>Every 2 weeks</period>
+    <layear>1 to 2 years</layear>
+    <lawaitlist>Less than 1 year</lawaitlist>
+    <property_postcode>NW1 5TY</property_postcode>
+    <reasonpref>Yes</reasonpref>
+    <reasonable_preference_reason>dummy</reasonable_preference_reason>
+    <cbl>Yes</cbl>
+    <chr>Yes</chr>
+    <cap>No</cap>
+    <other_reason_for_leaving_last_settled_home/>
+    <housingneeds_a>Yes</housingneeds_a>
+    <housingneeds_b>No</housingneeds_b>
+    <housingneeds_c>No</housingneeds_c>
+    <housingneeds_f>No</housingneeds_f>
+    <housingneeds_g>No</housingneeds_g>
+    <housingneeds_h>No</housingneeds_h>
+    <accessibility_requirements_prefer_not_to_say>No</accessibility_requirements_prefer_not_to_say>
+    <illness_type_1>No</illness_type_1>
+    <illness_type_2>Yes</illness_type_2>
+    <illness_type_3>No</illness_type_3>
+    <illness_type_4>No</illness_type_4>
+    <illness_type_8>No</illness_type_8>
+    <illness_type_5>No</illness_type_5>
+    <illness_type_6>No</illness_type_6>
+    <illness_type_7>No</illness_type_7>
+    <illness_type_9>No</illness_type_9>
+    <illness_type_10>No</illness_type_10>
+    <rp_homeless>Yes</rp_homeless>
+    <rp_insan_unsat>No</rp_insan_unsat>
+    <rp_medwel>No</rp_medwel>
+    <rp_hardship>No</rp_hardship>
+    <rp_dontknow>No</rp_dontknow>
+    <tenancyother/>
+    <override_net_income_validation/>
+    <property_owner_organisation>Test</property_owner_organisation>
+    <property_manager_organisation>Test</property_manager_organisation>
+    <sale_or_letting/>
+    <renewal>1</renewal>
+    <rent_type>1</rent_type>
+    <intermediate_rent_product_name>2</intermediate_rent_product_name>
+    <purchaser_code>798794</purchaser_code>
+    <reason>Permanently decanted from another property owned by this landlord</reason>
+    <propcode>123</propcode>
+    <majorrepairs>Yes</majorrepairs>
+    <la>Barnet</la>
+    <prevloc>Ashford</prevloc>
+    <hb>Housing benefit</hb>
+    <hbrentshortfall>Yes</hbrentshortfall>
+    <postcode>NW1</postcode>
+    <postcod2>5TY</postcod2>
+    <ppostc1>SE2</ppostc1>
+    <ppostc2>6RT</ppostc2>
+    <property_relet>No</property_relet>
+    <mrcdate>2022-02-08 16:52:15 +0000</mrcdate>
+    <mrcday>8</mrcday>
+    <mrcmonth>2</mrcmonth>
+    <mrcyear>2022</mrcyear>
+    <other_hhmemb>1</other_hhmemb>
+    <incref>No</incref>
+    <sale_completion_date/>
+    <startdate>2022-02-08 16:52:15 +0000</startdate>
+    <armedforces>A current or former regular in the UK Armed Forces (excluding National Service)</armedforces>
+    <first_time_property_let_as_social_housing/>
+    <unitletas>Affordable rent basis</unitletas>
+    <builtype>Purpose built</builtype>
+    <property_void_date>2019-11-03 00:00:00 +0000</property_void_date>
+    <owning_organisation_id>{owning_org_id_1}</owning_organisation_id>
+    <managing_organisation_id>{managing_org_id_1}</managing_organisation_id>
+    <renttype/>
+    <needstype>General needs</needstype>
+    <lettype>Affordable Rent General needs LA</lettype>
+    <postcode_known>Yes</postcode_known>
+    <la_known>Yes</la_known>
+    <is_la_inferred>false</is_la_inferred>
+    <day>8</day>
+    <month>2</month>
+    <year>2022</year>
+    <totchild>0</totchild>
+    <totelder>0</totelder>
+    <totadult>2</totadult>
+    <net_income_known>Yes</net_income_known>
+    <has_benefits>Yes</has_benefits>
+    <nocharge>No</nocharge>
+    <is_carehome>No</is_carehome>
+    <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
+    <household_charge>Yes</household_charge>
+    <referral/>
+    <brent>200.0</brent>
+    <scharge>50.0</scharge>
+    <pscharge>40.0</pscharge>
+    <supcharg>35.0</supcharg>
+    <tcharge>325.0</tcharge>
+    <tshortfall>12.0</tshortfall>
+    <chcharge>7.0</chcharge>
+    <declaration>Yes</declaration>
+  </form>
+  <form>
+    <id>{id_2}</id>
+    <status>completed</status>
+    <created_at>2022-02-08 16:52:15 +0000</created_at>
+    <updated_at>2022-02-08 16:52:15 +0000</updated_at>
+    <tenant_code>BZ737</tenant_code>
+    <age1>35</age1>
+    <sex1>Female</sex1>
+    <ethnic>White: Irish</ethnic>
+    <national>Estonia</national>
+    <prevten>Private sector tenancy</prevten>
+    <ecstat1>Part-time - Less than 30 hours</ecstat1>
+    <hhmemb>2</hhmemb>
+    <relat2>Partner</relat2>
+    <age2>32</age2>
+    <sex2>Male</sex2>
+    <ecstat2>Not seeking work</ecstat2>
+    <relat3/>
+    <age3/>
+    <sex3/>
+    <ecstat3/>
+    <relat4/>
+    <age4/>
+    <sex4/>
+    <ecstat4/>
+    <relat5/>
+    <age5/>
+    <sex5/>
+    <ecstat5/>
+    <relat6/>
+    <age6/>
+    <sex6/>
+    <ecstat6/>
+    <relat7/>
+    <age7/>
+    <sex7/>
+    <ecstat7/>
+    <relat8/>
+    <age8/>
+    <sex8/>
+    <ecstat8/>
+    <homeless>Yes - other homelessness</homeless>
+    <underoccupation_benefitcap>No</underoccupation_benefitcap>
+    <leftreg>No - they left up to 5 years ago</leftreg>
+    <reservist>No</reservist>
+    <illness>Yes</illness>
+    <preg_occ>Yes</preg_occ>
+    <accessibility_requirements>No</accessibility_requirements>
+    <condition_effects>dummy</condition_effects>
+    <tenancy_code>BZ757</tenancy_code>
+    <startertenancy>No</startertenancy>
+    <tenancylength>5</tenancylength>
+    <tenancy>Secure (including flexible)</tenancy>
+    <landlord>This landlord</landlord>
+    <previous_postcode>SE2 6RT</previous_postcode>
+    <rsnvac>Tenant abandoned property</rsnvac>
+    <unittype_gn>House</unittype_gn>
+    <beds>3</beds>
+    <offered>2</offered>
+    <wchair>Yes</wchair>
+    <earnings>68</earnings>
+    <incfreq>Weekly</incfreq>
+    <benefits>Some</benefits>
+    <period>Every 2 weeks</period>
+    <layear>1 to 2 years</layear>
+    <lawaitlist>Less than 1 year</lawaitlist>
+    <property_postcode>NW1 5TY</property_postcode>
+    <reasonpref>Yes</reasonpref>
+    <reasonable_preference_reason>dummy</reasonable_preference_reason>
+    <cbl>Yes</cbl>
+    <chr>Yes</chr>
+    <cap>No</cap>
+    <other_reason_for_leaving_last_settled_home/>
+    <housingneeds_a>Yes</housingneeds_a>
+    <housingneeds_b>No</housingneeds_b>
+    <housingneeds_c>No</housingneeds_c>
+    <housingneeds_f>No</housingneeds_f>
+    <housingneeds_g>No</housingneeds_g>
+    <housingneeds_h>No</housingneeds_h>
+    <accessibility_requirements_prefer_not_to_say>No</accessibility_requirements_prefer_not_to_say>
+    <illness_type_1>No</illness_type_1>
+    <illness_type_2>Yes</illness_type_2>
+    <illness_type_3>No</illness_type_3>
+    <illness_type_4>No</illness_type_4>
+    <illness_type_8>No</illness_type_8>
+    <illness_type_5>No</illness_type_5>
+    <illness_type_6>No</illness_type_6>
+    <illness_type_7>No</illness_type_7>
+    <illness_type_9>No</illness_type_9>
+    <illness_type_10>No</illness_type_10>
+    <rp_homeless>Yes</rp_homeless>
+    <rp_insan_unsat>No</rp_insan_unsat>
+    <rp_medwel>No</rp_medwel>
+    <rp_hardship>No</rp_hardship>
+    <rp_dontknow>No</rp_dontknow>
+    <tenancyother/>
+    <override_net_income_validation/>
+    <property_owner_organisation>Test</property_owner_organisation>
+    <property_manager_organisation>Test</property_manager_organisation>
+    <sale_or_letting/>
+    <renewal>1</renewal>
+    <rent_type>1</rent_type>
+    <intermediate_rent_product_name>2</intermediate_rent_product_name>
+    <purchaser_code>798794</purchaser_code>
+    <reason>Permanently decanted from another property owned by this landlord</reason>
+    <propcode>123</propcode>
+    <majorrepairs>Yes</majorrepairs>
+    <la>Barnet</la>
+    <prevloc>Ashford</prevloc>
+    <hb>Housing benefit</hb>
+    <hbrentshortfall>Yes</hbrentshortfall>
+    <postcode>NW1</postcode>
+    <postcod2>5TY</postcod2>
+    <ppostc1>SE2</ppostc1>
+    <ppostc2>6RT</ppostc2>
+    <property_relet>No</property_relet>
+    <mrcdate>2022-02-08 16:52:15 +0000</mrcdate>
+    <mrcday>8</mrcday>
+    <mrcmonth>2</mrcmonth>
+    <mrcyear>2022</mrcyear>
+    <other_hhmemb>1</other_hhmemb>
+    <incref>No</incref>
+    <sale_completion_date/>
+    <startdate>2022-02-08 16:52:15 +0000</startdate>
+    <armedforces>A current or former regular in the UK Armed Forces (excluding National Service)</armedforces>
+    <first_time_property_let_as_social_housing/>
+    <unitletas>Affordable rent basis</unitletas>
+    <builtype>Purpose built</builtype>
+    <property_void_date>2019-11-03 00:00:00 +0000</property_void_date>
+    <owning_organisation_id>{owning_org_id_2}</owning_organisation_id>
+    <managing_organisation_id>{managing_org_id_2}</managing_organisation_id>
+    <renttype/>
+    <needstype>General needs</needstype>
+    <lettype>Affordable Rent General needs LA</lettype>
+    <postcode_known>Yes</postcode_known>
+    <la_known>Yes</la_known>
+    <is_la_inferred>false</is_la_inferred>
+    <day>8</day>
+    <month>2</month>
+    <year>2022</year>
+    <totchild>0</totchild>
+    <totelder>0</totelder>
+    <totadult>2</totadult>
+    <net_income_known>Yes</net_income_known>
+    <has_benefits>Yes</has_benefits>
+    <nocharge>No</nocharge>
+    <is_carehome>No</is_carehome>
+    <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
+    <household_charge>Yes</household_charge>
+    <referral/>
+    <brent>200.0</brent>
+    <scharge>50.0</scharge>
+    <pscharge>40.0</pscharge>
+    <supcharg>35.0</supcharg>
+    <tcharge>325.0</tcharge>
+    <tshortfall>12.0</tshortfall>
+    <chcharge>7.0</chcharge>
+    <declaration>Yes</declaration>
+  </form>
+</forms>

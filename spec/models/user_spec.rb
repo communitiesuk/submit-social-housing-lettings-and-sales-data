@@ -1,11 +1,6 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe User, type: :model do
-  before do
-    RequestHelper.stub_http_requests
-  end
-
   describe "#new" do
     let(:user) { FactoryBot.create(:user) }
     let(:other_organisation) { FactoryBot.create(:organisation) }

@@ -1,5 +1,3 @@
-require "nokogiri"
-
 namespace :core do
   desc "Import data XMLs from Softwire system"
   task :data_import, %i[type path] => :environment do |_task, args|

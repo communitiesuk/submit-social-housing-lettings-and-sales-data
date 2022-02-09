@@ -16,6 +16,7 @@
 
 require "factory_bot"
 require "simplecov"
+require "request_helper"
 
 SimpleCov.start "rails" do
   add_filter "/bin/"
@@ -108,4 +109,7 @@ RSpec.configure do |config|
   #   Kernel.srand config.seed
 
   config.include FactoryBot::Syntax::Methods
+
+  config.before { RequestHelper.stub_http_requests }
+  config.after { RequestHelper.real_http_requests }
 end

@@ -1,6 +1,5 @@
 require "rails_helper"
 require_relative "helpers"
-require_relative "../../request_helper"
 
 RSpec.describe "Accessible Automcomplete" do
   include Helpers
@@ -15,7 +14,6 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   before do
-    RequestHelper.stub_http_requests
     sign_in user
   end
 

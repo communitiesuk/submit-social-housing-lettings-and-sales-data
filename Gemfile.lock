@@ -412,6 +412,7 @@ GEM
       railties (>= 6.0.0)
     strscan (3.0.1)
     thor (1.2.1)
+    timecop (0.9.4)
     timeout (0.2.0)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
@@ -487,6 +488,7 @@ DEPENDENCIES
   scss_lint-govuk
   selenium-webdriver
   simplecov
+  timecop (~> 0.9.4)
   two_factor_authentication!
   tzinfo-data
   uk_postcode
