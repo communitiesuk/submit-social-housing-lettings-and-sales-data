@@ -38,8 +38,10 @@ class CaseLog < ApplicationRecord
 
   validates_with CaseLogValidator
   before_validation :process_postcode_changes!, if: :property_postcode_changed?
+  before_validation :process_previous_postcode_changes!, if: :previous_postcode_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
+  before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
   before_save :update_status!
 
@@ -135,6 +137,7 @@ class CaseLog < ApplicationRecord
   enum needstype: NEEDS_TYPE, _suffix: true
   enum lettype: LET_TYPE, _suffix: true
   enum postcode_known: POLAR, _suffix: true
+  enum previous_postcode_known: POLAR, _suffix: true
   enum la_known: POLAR, _suffix: true
   enum net_income_known: NET_INCOME_KNOWN, _suffix: true
   enum household_charge: POLAR, _suffix: true
@@ -178,6 +181,10 @@ class CaseLog < ApplicationRecord
 
   def postcode_known?
     postcode_known == "Yes"
+  end
+
+  def previous_postcode_known?
+    previous_postcode_known == "Yes"
   end
 
   def weekly_net_income
@@ -258,24 +265,40 @@ private
   end
 
   def process_postcode_changes!
-    return if property_postcode.blank?
+    process_postcode(property_postcode, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
+  end
 
-    self.postcode_known = "Yes"
-    inferred_la = get_inferred_la(property_postcode)
-    self.is_la_inferred = inferred_la.present?
-    self.la = inferred_la if inferred_la.present?
-    self.postcode = UKPostcode.parse(property_postcode).outcode
-    self.postcod2 = UKPostcode.parse(property_postcode).incode
+  def process_previous_postcode_changes!
+    process_postcode(previous_postcode, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
+  end
+
+  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key, outcode_key, incode_key)
+    return if postcode.blank?
+
+    self[postcode_known_key] = "Yes"
+    inferred_la = get_inferred_la(postcode)
+    self[la_inferred_key] = inferred_la.present?
+    self[la_key] = inferred_la if inferred_la.present?
+    self[outcode_key] = UKPostcode.parse(postcode).outcode
+    self[incode_key] = UKPostcode.parse(postcode).incode
   end
 
   def reset_location_fields!
-    if is_la_inferred == true
-      self.la = nil
+    reset_location(is_la_inferred, "la", "is_la_inferred", "property_postcode", "postcode", "postcod2")
+  end
+
+  def reset_previous_location_fields!
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "previous_postcode", "ppostc1", "ppostc2")
+  end
+
+  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key)
+    if is_inferred
+      self[la_key] = nil
     end
-    self.is_la_inferred = false
-    self.property_postcode = nil
-    self.postcode = nil
-    self.postcod2 = nil
+    self[is_inferred_key] = false
+    self[postcode_key] = nil
+    self[incode_key] = nil
+    self[outcode_key] = nil
   end
 
   def get_totelder

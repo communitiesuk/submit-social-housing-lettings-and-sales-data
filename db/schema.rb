@@ -187,6 +187,9 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.decimal "tshortfall", precision: 10, scale: 2
     t.decimal "chcharge", precision: 10, scale: 2
     t.integer "declaration"
+    t.integer "previous_postcode_known"
+    t.integer "previous_la_known"
+    t.boolean "is_previous_la_inferred"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
