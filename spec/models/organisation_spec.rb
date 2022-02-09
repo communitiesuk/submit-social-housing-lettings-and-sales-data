@@ -54,4 +54,17 @@ RSpec.describe Organisation, type: :model do
       end
     end
   end
+
+  describe "paper trail" do
+    let(:organisation) { FactoryBot.create(:organisation) }
+
+    it "creates a record of changes to a log" do
+      expect { organisation.update!(name: "new test name") }.to change(organisation.versions, :count).by(1)
+    end
+
+    it "allows case logs to be restored to a previous version" do
+      organisation.update!(name: "new test name")
+      expect(organisation.paper_trail.previous_version.name).to eq("DLUHC")
+    end
+  end
 end

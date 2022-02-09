@@ -30,11 +30,11 @@ private
 end
 
 class CaseLog < ApplicationRecord
-  include Discard::Model
   include Validations::SoftValidations
   include Constants::CaseLog
   include Constants::IncomeRanges
-  default_scope -> { kept }
+
+  has_paper_trail
 
   validates_with CaseLogValidator
   before_validation :process_postcode_changes!, if: :property_postcode_changed?

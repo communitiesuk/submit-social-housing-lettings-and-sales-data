@@ -1172,4 +1172,17 @@ RSpec.describe CaseLog do
       end
     end
   end
+
+  describe "paper trail" do
+    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+
+    it "creates a record of changes to a log" do
+      expect { case_log.update!(age1: 64) }.to change(case_log.versions, :count).by(1)
+    end
+
+    it "allows case logs to be restored to a previous version" do
+      case_log.update!(age1: 63)
+      expect(case_log.paper_trail.previous_version.age1).to eq(17)
+    end
+  end
 end

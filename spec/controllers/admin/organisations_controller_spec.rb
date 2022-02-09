@@ -7,8 +7,11 @@ describe Admin::OrganisationsController, type: :controller do
   let(:resource_title) { "Organisations" }
   let(:valid_session) { {} }
   let!(:organisation) { FactoryBot.create(:organisation) }
+  let!(:admin_user) { FactoryBot.create(:admin_user) }
 
-  login_admin_user
+  before do
+    sign_in admin_user
+  end
 
   describe "Organisations" do
     before do
@@ -22,23 +25,54 @@ describe Admin::OrganisationsController, type: :controller do
     end
   end
 
-  describe "Create admin users" do
+  describe "Create organisation" do
     let(:params) { { organisation: { name: "DLUHC" } } }
 
     it "creates a organisation" do
       expect { post :create, session: valid_session, params: params }.to change(Organisation, :count).by(1)
     end
+
+    it "tracks who created the record" do
+      post :create, session: valid_session, params: params
+      created_id = response.location.match(/[0-9]+/)[0]
+      whodunnit_actor = Organisation.find_by(id: created_id).versions.last.actor
+      expect(whodunnit_actor).to be_a(AdminUser)
+      expect(whodunnit_actor.id).to eq(admin_user.id)
+    end
   end
 
   describe "Update organisation" do
-    before do
-      get :edit, session: valid_session, params: { id: organisation.id }
+    context "when viewing the edit form" do
+      before do
+        get :edit, session: valid_session, params: { id: organisation.id }
+      end
+
+      it "has the correct fields" do
+        expect(page).to have_field("organisation_name")
+        expect(page).to have_field("organisation_provider_type")
+        expect(page).to have_field("organisation_phone")
+      end
     end
 
-    it "creates a new admin users" do
-      expect(page).to have_field("organisation_name")
-      expect(page).to have_field("organisation_provider_type")
-      expect(page).to have_field("organisation_phone")
+    context "when updating the organisation" do
+      let(:name) { "New Org Name by Admin" }
+      let(:params) { { id: organisation.id, organisation: { name: name } } }
+
+      before do
+        patch :update, session: valid_session, params: params
+      end
+
+      it "updates the organisation" do
+        organisation.reload
+        expect(organisation.name).to eq(name)
+      end
+
+      it "tracks who updated the record" do
+        organisation.reload
+        whodunnit_actor = organisation.versions.last.actor
+        expect(whodunnit_actor).to be_a(AdminUser)
+        expect(whodunnit_actor.id).to eq(admin_user.id)
+      end
     end
   end
 end

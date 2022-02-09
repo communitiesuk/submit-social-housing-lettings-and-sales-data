@@ -5,14 +5,14 @@ require_relative "../../request_helper"
 describe Admin::CaseLogsController, type: :controller do
   before do
     RequestHelper.stub_http_requests
+    sign_in admin_user
   end
 
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Logs" }
   let(:valid_session) { {} }
-
-  login_admin_user
+  let(:admin_user) { FactoryBot.create(:admin_user) }
 
   describe "Get case logs" do
     let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
@@ -43,6 +43,50 @@ describe Admin::CaseLogsController, type: :controller do
 
     it "creates a new case log" do
       expect { post :create, session: valid_session, params: params }.to change(CaseLog, :count).by(1)
+    end
+
+    it "tracks who created the record" do
+      post :create, session: valid_session, params: params
+      created_id = response.location.match(/[0-9]+/)[0]
+      whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
+      expect(whodunnit_actor).to be_a(AdminUser)
+      expect(whodunnit_actor.id).to eq(admin_user.id)
+    end
+  end
+
+  describe "Update case log" do
+    let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+
+    context "when viewing the edit form" do
+      before do
+        get :edit, session: valid_session, params: { id: case_log.id }
+      end
+
+      it "has the correct fields" do
+        expect(page).to have_field("case_log_age1")
+        expect(page).to have_field("case_log_tenant_code")
+      end
+    end
+
+    context "when updating the case_log" do
+      let(:tenant_code) { "New tenant code by Admin" }
+      let(:params) { { id: case_log.id, case_log: { tenant_code: tenant_code } } }
+
+      before do
+        patch :update, session: valid_session, params: params
+      end
+
+      it "updates the case log" do
+        case_log.reload
+        expect(case_log.tenant_code).to eq(tenant_code)
+      end
+
+      it "tracks who updated the record" do
+        case_log.reload
+        whodunnit_actor = case_log.versions.last.actor
+        expect(whodunnit_actor).to be_a(AdminUser)
+        expect(whodunnit_actor.id).to eq(admin_user.id)
+      end
     end
   end
 end
