@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe CaseLogsController, type: :request do
   let(:owning_organisation) { FactoryBot.create(:organisation) }

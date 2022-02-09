@@ -1,6 +1,5 @@
 require "rails_helper"
 require_relative "../../support/devise"
-require_relative "../../request_helper"
 
 describe Admin::CaseLogsController, type: :controller do
   render_views

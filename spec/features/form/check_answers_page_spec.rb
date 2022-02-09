@@ -1,6 +1,5 @@
 require "rails_helper"
 require_relative "helpers"
-require_relative "../../request_helper"
 
 RSpec.describe "Form Check Answers Page" do
   include Helpers

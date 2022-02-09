@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe Organisation, type: :model do
   describe "#new" do

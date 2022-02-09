@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../../request_helper"
 
 RSpec.describe Validations::PropertyValidations do
   subject(:property_validator) { property_validator_class.new }

@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe SoftValidationsController, type: :request do
   let(:params) { { case_log_id: case_log.id } }

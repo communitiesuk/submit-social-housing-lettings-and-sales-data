@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe TasklistHelper do
   let(:empty_case_log) { FactoryBot.create(:case_log) }

@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../request_helper"
 
 RSpec.describe FormPageErrorHelper do
   describe "#remove_other_page_errors" do
