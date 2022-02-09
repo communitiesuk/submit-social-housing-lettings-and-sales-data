@@ -1148,7 +1148,7 @@
               "questions": {
                 "lawaitlist": {
                   "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
-                  "header": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1181,109 +1181,113 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
             },
             "reason_for_leaving_last_settled_home": {
               "header": "Leaving their last settled home",
               "description": "",
               "questions": {
                 "reason": {
-                  "header": "What is the tenant’s main reason for leaving?",
-                  "hint_text": "",
+                  "header": "What is the tenant’s main reason for the household leaving their last settled home?",
+                  "hint_text": "The tenant's 'last settled home' is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Permanently decanted from another property owned by this landlord"
-                    },
-                    "1": {
-                      "value": "Left home country as a refugee"
-                    },
-                    "2": {
-                      "value": "Loss of tied accommodation"
-                    },
-                    "3": {
-                      "value": "Domestic abuse"
-                    },
-                    "4": {
-                      "value": "(Non violent) relationship breakdown with partner"
-                    },
-                    "5": {
-                      "value": "Asked to leave by family or friends"
-                    },
-                    "6": {
-                      "value": "Racial harassment"
-                    },
-                    "7": {
-                      "value": "Other problems with neighbours"
-                    },
-                    "8": {
-                      "value": "Property unsuitable because of overcrowding"
-                    },
-                    "9": {
                       "value": "End of assured shorthold tenancy - no fault"
                     },
-                    "10": {
-                      "value": "End of assured shorthold tenancy - tenant’s fault"
+                    "1": {
+                      "value": "End of assured shorthold tenancy - eviction or tenant at fault"
                     },
-                    "11": {
+                    "2": {
                       "value": "End of fixed term tenancy - no fault"
                     },
-                    "12": {
-                      "value": "End of fixed term tenancy - tenant’s fault"
+                    "3": {
+                      "value": "End of fixed term tenancy - eviction or tenant at fault"
                     },
-                    "13": {
-                      "value": "Repossession"
+                    "4": {
+                      "value": "Permanently decanted from another property owned by this landlord"
                     },
-                    "14": {
-                      "value": "Under occupation - offered incentive to downsize"
+                    "5": {
+                      "value": "Left home country as a refugee"
                     },
-                    "15": {
-                      "value": "Under occupation - no incentive"
-                    },
-                    "16": {
-                      "value": "Property unsuitable because of ill health / disability"
-                    },
-                    "17": {
-                      "value": "Property unsuitable because of poor condition"
-                    },
-                    "18": {
-                      "value": "Couldn’t afford fees attached to renewing the tenancy"
-                    },
-                    "19": {
-                      "value": "Couldn’t afford increase in rent"
-                    },
-                    "20": {
-                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
-                    },
-                    "21": {
-                      "value": "Couldn’t afford rent or mortgage - employment"
-                    },
-                    "22": {
-                      "value": "Couldn’t afford rent or mortgage - other"
-                    },
-                    "23": {
-                      "value": "To move nearer to family / friends / school"
-                    },
-                    "24": {
-                      "value": "To move nearer to work"
-                    },
-                    "25": {
-                      "value": "To move to accomodation with support"
-                    },
-                    "26": {
-                      "value": "To move to independent accomodation"
-                    },
-                    "27": {
-                      "value": "Hate crime"
-                    },
-                    "28": {
-                      "value": "Death of household member in last settled accomodation"
-                    },
-                    "29": {
+                    "6": {
                       "value": "Discharged from prison"
                     },
-                    "30": {
+                    "7": {
                       "value": "Discharged from long stay hospital or similar institution"
+                    },
+                    "8": {
+                      "value": "Loss of tied accommodation"
+                    },
+                    "9": {
+                      "value": "Asked to leave by family or friends"
+                    },
+                    "10": {
+                      "value": "Relationship breakdown (non-violent) with partner"
+                    },
+                    "11": {
+                      "value": "Death of household member in last settled accomodation"
+                    },
+                    "12": {
+                      "value": "To move nearer to family, friends or school"
+                    },
+                    "13": {
+                      "value": "To move nearer to work"
+                    },
+                    "14": {
+                      "value": "Domestic abuse"
+                    },
+                    "15": {
+                      "value": "Racial harassment"
+                    },
+                    "16": {
+                      "value": "Hate crime"
+                    },
+                    "17": {
+                      "value": "Other problems with neighbours"
+                    },
+                    "18": {
+                      "value": "Repossession"
+                    },
+                    "19": {
+                      "value": "Couldn’t afford fees attached to renewing the tenancy"
+                    },
+                    "20": {
+                      "value": "Couldn’t afford increase in rent"
+                    },
+                    "21": {
+                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
+                    },
+                    "22": {
+                      "value": "Couldn’t afford rent or mortgage - employment"
+                    },
+                    "23": {
+                      "value": "Couldn’t afford rent or mortgage - other"
+                    },
+                    "24": {
+                      "value": "Property unsuitable because of overcrowding"
+                    },
+                    "25": {
+                      "value": "Property unsuitable because of ill health or disability"
+                    },
+                    "26": {
+                      "value": "Property unsuitable because of poor condition"
+                    },
+                    "27": {
+                      "value": "Under occupation - no incentive"
+                    },
+                    "28": {
+                      "value": "Under occupation - offered incentive to downsize"
+                    },
+                    "29": {
+                      "value": "To move to accomodation with support"
+                    },
+                    "30": {
+                      "value": "To move to independent accomodation"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "31": {
                       "value": "Other"
@@ -1292,10 +1296,7 @@
                       "value": "Don’t know"
                     },
                     "33": {
-                      "value": "Prefer not to say"
-                    },
-                    "divider": {
-                      "value": true
+                      "value": "Tenant prefers not to say"
                     }
                   },
                   "conditional_for": {
