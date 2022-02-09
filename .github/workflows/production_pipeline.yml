@@ -1,12 +1,5 @@
 name: 'Production CI/CD Pipeline'
 
-on:
-  push:
-    branches:
-    - main
-  pull_request:
-  workflow_dispatch:
-
 concurrency: 'production'
 
 defaults:
