@@ -14,6 +14,82 @@ defaults:
     shell: bash
 
 jobs:
+    test:
+      name: Test
+      runs-on: ubuntu-latest
+
+      services:
+        postgres:
+          image: postgres:13.3
+          env:
+            POSTGRES_PASSWORD: password
+            POSTGRES_USER: postgres
+            POSTGRES_DB: data_collector
+          ports:
+            - 5432:5432
+          # needed because the postgres container does not provide a healthcheck
+          # tmpfs makes DB faster by using RAM
+          options: >-
+            --mount type=tmpfs,destination=/var/lib/postgresql/data
+            --health-cmd pg_isready
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+      env:
+        RAILS_ENV: test
+        GEMFILE_RUBY_VERSION: 3.0.0
+        DB_HOST: localhost
+        DB_DATABASE: data_collector
+        DB_USERNAME: postgres
+        DB_PASSWORD: password
+
+        # Rails verifies the time zone in DB is the same as the time zone of the Rails app
+        TZ: "Europe/London"
+
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@v1
+          with:
+            # runs 'bundle install' and caches installed gems automatically
+            bundler-cache: true
+        - name: Set up node
+          uses: actions/setup-node@v2
+          with:
+            node-version: '14'
+
+        - name: Create DB
+          run: |
+            bundle exec rake db:prepare
+
+        - name: Compile Assets
+          run: |
+            bundle exec rake assets:precompile
+
+        - name: Run tests
+          run: |
+            bundle exec rspec
+
+    lint:
+      name: Lint
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Set up Ruby
+          uses: ruby/setup-ruby@v1
+          with:
+            # runs 'bundle install' and caches installed gems automatically
+            bundler-cache: true
+
+        - name: Rubocop
+          run: |
+            bundle exec rubocop
+
   deploy:
     name: Deploy
 
