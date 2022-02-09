@@ -5,10 +5,6 @@ RSpec.describe CaseLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:managing_organisation) { owning_organisation }
 
-  before do
-    RequestHelper.stub_http_requests
-  end
-
   describe "#form" do
     let(:case_log) { FactoryBot.build(:case_log) }
     let(:case_log_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2022, 1, 1)) }

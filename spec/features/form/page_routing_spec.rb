@@ -17,7 +17,6 @@ RSpec.describe "Form Page Routing" do
   let(:validator) { case_log._validators[nil].first }
 
   before do
-    RequestHelper.stub_http_requests
     allow(validator).to receive(:validate_pregnancy).and_return(true)
     sign_in user
   end

@@ -6,10 +6,6 @@ RSpec.describe SoftValidationsController, type: :request do
   let(:url) { "/logs/#{case_log.id}/net-income/soft-validations" }
   let(:user) { FactoryBot.create(:user) }
 
-  before do
-    RequestHelper.stub_http_requests
-  end
-
   context "when a user is not signed in" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 

@@ -32,7 +32,6 @@ RSpec.describe "Form Saving Data" do
   end
 
   before do
-    RequestHelper.stub_http_requests
     sign_in user
   end
 

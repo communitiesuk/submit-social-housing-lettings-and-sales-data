@@ -20,7 +20,6 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   before do
-    RequestHelper.stub_http_requests
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
     allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
@@ -139,7 +138,6 @@ RSpec.describe CaseLogsController, type: :request do
       let(:headers) { { "Accept" => "text/html" } }
 
       before do
-        RequestHelper.stub_http_requests
         sign_in user
         get "/logs", headers: headers, params: {}
       end

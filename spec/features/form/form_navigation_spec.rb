@@ -24,7 +24,6 @@ RSpec.describe "Form Navigation" do
   end
 
   before do
-    RequestHelper.stub_http_requests
     sign_in user
   end
 

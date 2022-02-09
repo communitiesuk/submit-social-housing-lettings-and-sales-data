@@ -4,7 +4,6 @@ require_relative "../../request_helper"
 
 RSpec.describe "validations" do
   before do
-    RequestHelper.stub_http_requests
     sign_in user
   end
 

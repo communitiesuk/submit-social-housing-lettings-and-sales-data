@@ -16,7 +16,6 @@ RSpec.describe "Form Conditional Questions" do
   let(:id) { case_log.id }
 
   before do
-    RequestHelper.stub_http_requests
     sign_in user
   end
 
