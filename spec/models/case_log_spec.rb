@@ -1160,6 +1160,7 @@ RSpec.describe CaseLog do
           managing_organisation: organisation,
           owning_organisation: organisation,
           renewal: "Yes",
+          year: 2021,
         })
       end
 
@@ -1167,6 +1168,12 @@ RSpec.describe CaseLog do
         record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
         expect(record_from_db["layear"]).to eq(2)
         expect(case_log["layear"]).to eq("Less than 1 year")
+      end
+
+      it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
+        record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
+        expect(case_log["underoccupation_benefitcap"]).to eq("No")
       end
     end
   end
