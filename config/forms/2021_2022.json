@@ -1286,11 +1286,11 @@
                     "30": {
                       "value": "To move to independent accomodation"
                     },
-                    "divider": {
-                      "value": true
-                    },
                     "31": {
                       "value": "Other"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "32": {
                       "value": "Don’t know"
@@ -1300,9 +1300,7 @@
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": [
-                      "Other"
-                    ]
+                    "other_reason_for_leaving_last_settled_home": ["Other"]
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
@@ -2313,9 +2311,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      "Other"
-                    ]
+                    "tenancyother": ["Other"]
                   }
                 },
                 "tenancyother": {
@@ -2357,9 +2353,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      "Other"
-                    ]
+                    "tenancyother": ["Other"]
                   }
                 },
                 "tenancyother": {
@@ -2397,11 +2391,11 @@
                 }
               ]
             },
-            "letting_in_sheltered_accomodation": {
+            "letting_in_sheltered_accommodation": {
               "header": "",
               "description": "",
               "questions": {
-                "letting_in_sheltered_accomodation": {
+                "letting_in_sheltered_accommodation": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
@@ -2459,9 +2453,7 @@
                     }
                   },
                   "conditional_for": {
-                    "property_postcode": [
-                      "Yes"
-                    ]
+                    "property_postcode": ["Yes"]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -3192,9 +3184,7 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [
-                      "Yes"
-                    ]
+                    "mrcdate": ["Yes"]
                   }
                 },
                 "mrcdate": {
@@ -3271,9 +3261,18 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": [
-                    { "label": "every week", "depends_on" : { "incfreq": "Weekly" } },
-                    { "label": "every month", "depends_on" : { "incfreq": "Monthly" } },
-                    { "label": "every month", "depends_on" : { "incfreq": "Yearly" } }
+                    {
+                      "label": "every week",
+                      "depends_on": { "incfreq": "Weekly" }
+                    },
+                    {
+                      "label": "every month",
+                      "depends_on": { "incfreq": "Monthly" }
+                    },
+                    {
+                      "label": "every month",
+                      "depends_on": { "incfreq": "Yearly" }
+                    }
                   ]
                 },
                 "incfreq": {
@@ -3464,9 +3463,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3560,9 +3557,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3606,9 +3601,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3652,9 +3645,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3694,12 +3685,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3713,12 +3699,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3732,12 +3713,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3751,12 +3727,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3772,12 +3743,7 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -3917,12 +3883,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3936,12 +3897,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3955,12 +3911,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3974,12 +3925,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3995,12 +3941,7 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -4040,12 +3981,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4059,12 +3995,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4078,12 +4009,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4097,12 +4023,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4118,12 +4039,7 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -4163,12 +4079,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4182,12 +4093,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4201,12 +4107,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4220,12 +4121,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4241,12 +4137,7 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [

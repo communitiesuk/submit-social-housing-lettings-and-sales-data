@@ -892,15 +892,15 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "cannot be temp accomodation if previous tenancy was non temp" do
+      it "cannot be temp accommodation if previous tenancy was non temp" do
         check_rsnvac_validation("Tied housing or rented with job")
         check_rsnvac_validation("Supported housing")
-        check_rsnvac_validation("Sheltered accomodation")
+        check_rsnvac_validation("Sheltered accommodation")
         check_rsnvac_validation("Home Office Asylum Support")
         check_rsnvac_validation("Other")
       end
 
-      it "cannot be temp accomodation if source of letting referral " do
+      it "cannot be temp accommodation if source of letting referral " do
         check_rsnvac_referral_validation("Re-located through official housing mobility scheme")
         check_rsnvac_referral_validation("Other social landlord")
         check_rsnvac_referral_validation("Police, probation or prison")

@@ -753,7 +753,7 @@
               "property_postcode": {
                 "questions": {
                   "property_postcode": {
-                    "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
+                    "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                     "type": "text",
@@ -761,7 +761,7 @@
                     "conditional_for": { "fake_key": "fake_condition" }
                   },
                   "previous_postcode": {
-                    "check_answer_label": "Postcode of previous accomodation if the household has moved from settled accommodation",
+                    "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
                     "type": "text",

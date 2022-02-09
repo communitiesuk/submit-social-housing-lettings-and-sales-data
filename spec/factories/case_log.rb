@@ -144,7 +144,7 @@ FactoryBot.define do
       has_benefits { "Yes" }
       is_carehome { "No" }
       chcharge { 7 }
-      letting_in_sheltered_accomodation { "No" }
+      letting_in_sheltered_accommodation { "No" }
       la_known { "Yes" }
       declaration { "Yes" }
     end

@@ -108,7 +108,7 @@ module Constants::CaseLog
     "Private sector tenancy" => 3,
     "Tied housing or rented with job" => 4,
     "Supported housing" => 6,
-    "Sheltered accomodation" => 8,
+    "Sheltered accommodation" => 8,
     "Residential care home" => 9,
     "Living with friends or family" => 28,
     "Refuge" => 21,
@@ -263,10 +263,10 @@ module Constants::CaseLog
     "Couldn't afford rent or mortgage - other" => 39,
     "To move nearer to family, friends or school" => 16,
     "To move nearer to work" => 17,
-    "To move to accomodation with support" => 18,
-    "To move to independent accomodation" => 19,
+    "To move to accommodation with support" => 18,
+    "To move to independent accommodation" => 19,
     "Hate crime" => 31,
-    "Death of household member in last settled accomodation" => 46,
+    "Death of household member in last settled accommodation" => 46,
     "Discharged from prison" => 44,
     "Discharged from long stay hospital or similar institution" => 45,
     "Other" => 20,
@@ -1088,7 +1088,7 @@ module Constants::CaseLog
     "completed" => 2,
   }.freeze
 
-  SHELTERED_ACCOMODATION = {
+  SHELTERED_ACCOMMODATION = {
     "Yes - sheltered housing" => 1,
     "Yes - extra care housing" => 2,
     "No" => 3,
@@ -1120,7 +1120,7 @@ module Constants::CaseLog
 
   NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
                             "Supported housing",
-                            "Sheltered accomodation",
+                            "Sheltered accommodation",
                             "Home Office Asylum Support",
                             "Other"].freeze
 

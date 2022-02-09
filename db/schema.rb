@@ -176,7 +176,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "has_benefits"
     t.integer "nocharge"
     t.integer "is_carehome"
-    t.integer "letting_in_sheltered_accomodation"
+    t.integer "letting_in_sheltered_accommodation"
     t.integer "household_charge"
     t.integer "referral"
     t.decimal "brent", precision: 10, scale: 2
