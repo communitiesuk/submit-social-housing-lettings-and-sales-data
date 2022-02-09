@@ -14,24 +14,25 @@
 <div data-controller="govukfrontend"></div>
 
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <% if @page.header.present? %>
-        <h1 class="govuk-heading-l">
-          <% if !@page.hide_subsection_label %>
-            <span class="govuk-caption-l"><%= @subsection.label %></span>
-          <% end %>
-          <%= @page.header %>
-        </h1>
-      <% end %>
-
-      <% if @page.description.present? %>
-        <p class="govuk-body govuk-body-m"><%= @page.description.html_safe %></p>
-      <% end %>
-
-      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+  <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
         <% remove_other_page_errors(@case_log, @page) %>
         <%= f.govuk_error_summary %>
+
+        <% if @page.header.present? %>
+          <h1 class="govuk-heading-l">
+            <% if !@page.hide_subsection_label %>
+              <span class="govuk-caption-l"><%= @subsection.label %></span>
+            <% end %>
+            <%= @page.header %>
+          </h1>
+        <% end %>
+
+        <% if @page.description.present? %>
+          <p class="govuk-body govuk-body-m"><%= @page.description.html_safe %></p>
+        <% end %>
+
         <% @page.non_conditional_questions.map do |question| %>
           <div id=<%= question.id + "_div " %><%= display_question_key_div(@page, question) %> >
             <% if question.read_only? %>
@@ -46,8 +47,12 @@
         <% end %>
 
         <%= f.hidden_field :page, value: @page.id %>
-        <%= f.govuk_submit "Save and continue"  %>
-      <% end %>
+        <% if @case_log.form.is_last_question?(@page, @subsection, @case_log) %>
+          <%= f.govuk_submit "Submit lettings log"  %>
+        <%else %>
+          <%= f.govuk_submit "Save and continue"  %>
+        <%end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 <% end %>

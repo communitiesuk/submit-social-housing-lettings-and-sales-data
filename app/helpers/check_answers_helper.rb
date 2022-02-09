@@ -12,12 +12,6 @@ module CheckAnswersHelper
   end
 
   def get_answer_label(question, case_log)
-    answer = question.prefix == "£" ? ActionController::Base.helpers.number_to_currency(question.answer_label(case_log), delimiter: ",", format: "%n") : question.answer_label(case_log)
-
-    if answer.present?
-      [question.prefix, answer, question.suffix].join("")
-    else
-      "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
-    end
+    question.answer_label(case_log).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
   end
 end

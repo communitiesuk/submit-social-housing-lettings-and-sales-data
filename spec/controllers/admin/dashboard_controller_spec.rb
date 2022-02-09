@@ -6,8 +6,7 @@ describe Admin::DashboardController, type: :controller do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Dashboard" }
   let(:valid_session) { {} }
-
-  login_admin_user
+  let(:admin_user) { FactoryBot.create(:admin_user) }
 
   describe "Get case logs" do
     before do

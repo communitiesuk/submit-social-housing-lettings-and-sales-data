@@ -340,3 +340,7 @@ end
 Rails.application.config.after_initialize do
   ActiveAdmin.application.stylesheets.delete("active_admin/print.css")
 end
+
+Rails.application.config.after_initialize do
+  ActiveAdmin::BaseController.include Admin::PaperTrail
+end

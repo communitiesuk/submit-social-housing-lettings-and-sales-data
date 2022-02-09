@@ -3,7 +3,10 @@ class Organisation < ApplicationRecord
   has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
 
+  has_paper_trail
+
   include Constants::Organisation
+
   enum provider_type: PROVIDER_TYPE
 
   def case_logs

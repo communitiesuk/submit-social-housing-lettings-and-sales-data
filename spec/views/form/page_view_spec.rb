@@ -68,6 +68,27 @@ RSpec.describe "form/page" do
       expect(rendered).to match(/govuk-input__suffix/)
       expect(rendered).to match("every week")
     end
+
+    context "when the suffix is conditional and not a string" do
+      let(:question_attributes) do
+        {
+          type: "numeric",
+          prefix: "£",
+          suffix: [
+            { "label": "every week", "depends_on": { "incfreq": "Weekly" } },
+            { "label": "every month", "depends_on": { "incfreq": "Monthly" } },
+            { "label": "every month", "depends_on": { "incfreq": "Yearly" } },
+          ],
+        }
+      end
+
+      it "does not render the suffix" do
+        expect(rendered).not_to match(/govuk-input__suffix/)
+        expect(rendered).not_to match("every week")
+        expect(rendered).not_to match("every month")
+        expect(rendered).not_to match("every year")
+      end
+    end
   end
 
   context "with a question containing extra guidance" do

@@ -99,16 +99,17 @@ RSpec.describe Form::Question, type: :model do
 
   context "with a case log" do
     let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+    let(:question_id) { "incfreq" }
 
     it "has an answer label" do
-      case_log.earnings = 100
-      expect(question.answer_label(case_log)).to eq("100")
+      case_log.incfreq = "Weekly"
+      expect(question.answer_label(case_log)).to eq("Weekly")
     end
 
     it "has an update answer link text helper" do
-      expect(question.update_answer_link_name(case_log)).to eq("Answer<span class=\"govuk-visually-hidden\"> income</span>")
-      case_log[question_id] = 5
-      expect(question.update_answer_link_name(case_log)).to eq("Change<span class=\"govuk-visually-hidden\"> income</span>")
+      expect(question.update_answer_link_name(case_log)).to match(/Answer/)
+      case_log["incfreq"] = "Weekly"
+      expect(question.update_answer_link_name(case_log)).to match(/Change/)
     end
 
     context "when type is date" do
@@ -155,6 +156,23 @@ RSpec.describe Form::Question, type: :model do
         expect(question.enabled?(case_log)).to be true
       end
     end
+
+    context "when answers have a suffix dependent on another answer" do
+      let(:section_id) { "rent_and_charges" }
+      let(:subsection_id) { "income_and_benefits" }
+      let(:page_id) { "net_income" }
+      let(:question_id) { "earnings" }
+
+      it "displays the correct label for given suffix and answer the suffix depends on" do
+        case_log.incfreq = "Weekly"
+        case_log.earnings = 500
+        expect(question.answer_label(case_log)).to eq("£500.00 every week")
+        case_log.incfreq = "Monthly"
+        expect(question.answer_label(case_log)).to eq("£500.00 every month")
+        case_log.incfreq = "Yearly"
+        expect(question.answer_label(case_log)).to eq("£500.00 every year")
+      end
+    end
   end
 
   describe ".completed?" do
@@ -167,18 +185,6 @@ RSpec.describe Form::Question, type: :model do
       it "returns true" do
         case_log["postcode_known"] = "No"
         expect(question.completed?(case_log)).to be(true)
-      end
-    end
-
-    context "when the gdpr acceptance is No" do
-      let(:section_id) { "setup" }
-      let(:subsection_id) { "setup" }
-      let(:page_id) { "gdpr_acceptance" }
-      let(:question_id) { "gdpr_acceptance" }
-
-      it "returns false" do
-        case_log["gdpr_acceptance"] = "No"
-        expect(question.completed?(case_log)).to be(false)
       end
     end
   end

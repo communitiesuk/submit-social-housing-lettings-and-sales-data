@@ -196,6 +196,13 @@ RSpec.describe UsersController, type: :request do
         user.reload
         expect(user.name).to eq(new_value)
       end
+
+      it "tracks who updated the record" do
+        user.reload
+        whodunnit_actor = user.versions.last.actor
+        expect(whodunnit_actor).to be_a(User)
+        expect(whodunnit_actor.id).to eq(user.id)
+      end
     end
 
     context "when the update fails to persist" do

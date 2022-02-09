@@ -21,12 +21,14 @@
         <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
       </p>
       <p>
-        <a class="app-section-skip-link" href="#<%= next_incomplete_section.id %>"
-           data-controller="tasklist"
-           data-action="tasklist#addHighlight"
-           data-info=<%= next_incomplete_section.id %>>
-          Skip to next incomplete section: <%= next_incomplete_section.label %>
-        </a>
+        <% if next_incomplete_section.present? %>
+          <a class="app-section-skip-link" href="#<%= next_incomplete_section.id %>"
+            data-controller="tasklist"
+            data-action="tasklist#addHighlight"
+            data-info=<%= next_incomplete_section.id %>>
+            Skip to next incomplete section: <%= next_incomplete_section.label %>
+          </a>
+        <% end %>
       </p>
       <%= render "tasklist" %>
     </div>

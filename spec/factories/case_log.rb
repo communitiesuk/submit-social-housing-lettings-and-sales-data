@@ -3,7 +3,6 @@ FactoryBot.define do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
     trait :about_completed do
-      gdpr_acceptance { "Yes" }
       renewal { "No" }
       needstype { 1 }
       rent_type { 1 }
@@ -70,6 +69,7 @@ FactoryBot.define do
       offered { 2 }
       wchair { "Yes" }
       earnings { 68 }
+      incfreq { "Weekly" }
       benefits { "Some" }
       period { "Every 2 weeks" }
       brent { 200 }
@@ -108,12 +108,9 @@ FactoryBot.define do
       rp_medwel { "No" }
       rp_hardship { "No" }
       rp_dontknow { "No" }
-      discarded_at { nil }
       tenancyother { nil }
       override_net_income_validation { nil }
-      net_income_known { "Weekly" }
-      gdpr_acceptance { "Yes" }
-      gdpr_declined { "No" }
+      net_income_known { "Yes" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
       renewal { 1 }
@@ -152,6 +149,7 @@ FactoryBot.define do
       chcharge { 7 }
       letting_in_sheltered_accomodation { "No" }
       la_known { "Yes" }
+      declaration { "Yes" }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

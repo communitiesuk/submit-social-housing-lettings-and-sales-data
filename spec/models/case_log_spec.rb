@@ -1087,17 +1087,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when saving net_income" do
-      it "infers the income frequency" do
-        case_log.update!(net_income_known: "Weekly")
-        expect(case_log.reload.incfreq).to eq("Weekly")
-        case_log.update!(net_income_known: "Monthly")
-        expect(case_log.reload.incfreq).to eq("Monthly")
-        case_log.update!(net_income_known: "Annually")
-        expect(case_log.reload.incfreq).to eq("Yearly")
-      end
-    end
-
     context "when saving rent and charges" do
       let!(:case_log) do
         described_class.create({
@@ -1159,6 +1148,35 @@ RSpec.describe CaseLog do
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["has_benefits"]).to eq("Yes")
     end
+
+    context "when it is a renewal" do
+      let!(:case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          renewal: "Yes",
+          year: 2021,
+        })
+      end
+
+      it "correctly derives and saves layear" do
+        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["layear"]).to eq(2)
+        expect(case_log["layear"]).to eq("Less than 1 year")
+      end
+
+      it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
+        record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
+        expect(case_log["underoccupation_benefitcap"]).to eq("No")
+      end
+
+      it "correctly derives and saves homeless" do
+        record_from_db = ActiveRecord::Base.connection.execute("select homeless from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["homeless"]).to eq(1)
+        expect(case_log["homeless"]).to eq("No")
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
@@ -1176,6 +1194,19 @@ RSpec.describe CaseLog do
       it "does not clear the answer" do
         expect(case_log.cbl).to eq("Yes")
       end
+    end
+  end
+
+  describe "paper trail" do
+    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+
+    it "creates a record of changes to a log" do
+      expect { case_log.update!(age1: 64) }.to change(case_log.versions, :count).by(1)
+    end
+
+    it "allows case logs to be restored to a previous version" do
+      case_log.update!(age1: 63)
+      expect(case_log.paper_trail.previous_version.age1).to eq(17)
     end
   end
 end

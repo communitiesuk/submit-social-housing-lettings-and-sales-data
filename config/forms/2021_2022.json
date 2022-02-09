@@ -9,30 +9,6 @@
         "setup": {
           "label": "Set up your lettings log",
           "pages": {
-            "gdpr_acceptance": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "gdpr_acceptance": {
-                  "check_answer_label": "Privacy notice seen",
-                  "header": "Has the tenant or buyer seen the Department for Levelling Up, Housing and Communities (DLUHC) privacy notice?",
-                  "hint_text": "You must <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">show the privacy notice</a> to the tenant or buyer before you can use this service.",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": "Yes",
-                    "1": "No"
-                  }
-                }
-              }
-            },
-            "gdpr_declined": {
-              "hide_subsection_label": true,
-              "header": "You cannot use this service",
-              "hint_text": "",
-              "description": "We cannot accept data about a tenant or buyer unless they’ve seen the <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">DLUHC privacy notice</a>.<br /><br /><a class=\"govuk-link\" href=\"/logs\">Go to your logs</a>",
-              "questions": {},
-              "depends_on": [{ "gdpr_acceptance": "No" }]
-            },
             "organisation_details": {
               "header": "Organisation details",
               "description": "",
@@ -57,8 +33,7 @@
                     "1": "B"
                   }
                 }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
+              }
             },
             "renewal": {
               "header": "",
@@ -74,10 +49,7 @@
                     "0": "No"
                   }
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "startdate": {
               "header": "",
@@ -89,10 +61,7 @@
                   "hint_text": "For example, 27 3 2021.",
                   "type": "date"
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "about_this_letting": {
               "header": "Tell us about this letting",
@@ -132,10 +101,7 @@
                     "0": "Supported housing"
                   }
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "tenant_code": {
               "header": "",
@@ -148,10 +114,7 @@
                   "type": "text",
                   "width": 10
                 }
-              },
-              "depends_on": [{
-                "gdpr_acceptance": "Yes"
-              }]
+              }
             },
             "property_reference": {
               "header": "",
@@ -164,8 +127,7 @@
                   "type": "text",
                   "width": 10
                 }
-              },
-              "depends_on": [{ "gdpr_acceptance": "Yes" }]
+              }
             }
           }
         }
@@ -2330,95 +2292,56 @@
           "depends_on": [{ "setup": "completed" }],
           "pages": {
             "net_income_known": {
-              "header": "Household’s combined income",
+              "header": "",
               "description": "",
               "questions": {
                 "net_income_known": {
-                  "check_answer_label": "How often household receives income",
-                  "header": "How often does the household receive income?",
+                  "check_answer_label": "Do you know the household’s combined income?",
+                  "header": "Do you know the household’s combined income?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": "Yes",
+                    "1": "No",
+                    "divider_a": true,
+                    "2": "Don’t know",
+                    "3": "Tenant prefers not to say"
+                  }
+                }
+              }
+            },
+            "net_income": {
+              "depends_on": [{ "net_income_known": "Yes" }],
+              "header": "Household’s combined income after tax",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Total household income",
+                  "header": "How much income does the household have in total?",
                   "guidance_partial": "what_counts_as_income",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": [
+                    { "label": "every week", "depends_on" : { "incfreq": "Weekly" } },
+                    { "label": "every month", "depends_on" : { "incfreq": "Monthly" } },
+                    { "label": "every month", "depends_on" : { "incfreq": "Yearly" } }
+                  ]
+                },
+                "incfreq": {
+                  "check_answer_label": "How often does the household receive this amount?",
+                  "header": "How often does the household receive this amount?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "0": "Weekly",
                     "1": "Monthly",
-                    "2": "Annually",
-                    "divider_a": true,
-                    "3": "Don’t know",
-                    "4": "Tenant prefers not to say"
-                  }
-                }
-              }
-            },
-            "weekly_net_income": {
-              "depends_on": [{ "net_income_known": "Weekly" }],
-              "header": "",
-              "description": "",
-              "questions": {
-                "earnings": {
-                  "check_answer_label": "Total household income",
-                  "header": "How much income does the household have in total every week?",
-                  "hint_text": "",
-                  "type": "numeric",
-                  "min": 0,
-                  "step": "1",
-                  "width": 5,
-                  "prefix": "£",
-                  "suffix": " every week"
-                }
-              },
-              "soft_validations": {
-                "override_net_income_validation": {
-                  "check_answer_label": "Net income confirmed?",
-                  "type": "validation_override",
-                  "answer_options": {
-                    "override_net_income_validation": "Yes"
-                  }
-                }
-              }
-            },
-            "monthly_net_income": {
-              "depends_on": [{ "net_income_known": "Monthly" }],
-              "header": "",
-              "description": "",
-              "questions": {
-                "earnings": {
-                  "check_answer_label": "Total household income",
-                  "header": "How much income does the household have in total every month?",
-                  "hint_text": "",
-                  "type": "numeric",
-                  "min": 0,
-                  "step": "1",
-                  "width": 5,
-                  "prefix": "£",
-                  "suffix": " every month"
-                }
-              },
-              "soft_validations": {
-                "override_net_income_validation": {
-                  "check_answer_label": "Net income confirmed?",
-                  "type": "validation_override",
-                  "answer_options": {
-                    "override_net_income_validation": "Yes"
-                  }
-                }
-              }
-            },
-            "yearly_net_income": {
-              "depends_on": [{ "net_income_known": "Annually" }],
-              "header": "",
-              "description": "",
-              "questions": {
-                "earnings": {
-                  "check_answer_label": "Total household income",
-                  "header": "How much income does the household have in total every year?",
-                  "hint_text": "",
-                  "type": "numeric",
-                  "min": 0,
-                  "step": "1",
-                  "width": 5,
-                  "prefix": "£",
-                  "suffix": " every year"
+                    "2": "Yearly"
+                  },
+                  "hidden_in_check_answers": true
                 }
               },
               "soft_validations": {
@@ -3226,9 +3149,12 @@
               "questions": {
                 "declaration": {
                   "check_answer_label": "",
-                  "header": "What is the tenant code?",
+                  "header": "Submit your lettings log ",
                   "hint_text": "",
-                  "type": "text"
+                  "type": "checkbox",
+                  "answer_options": {
+                    "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                  }
                 }
               }
             }

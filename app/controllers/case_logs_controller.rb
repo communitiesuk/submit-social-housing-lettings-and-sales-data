@@ -60,7 +60,7 @@ class CaseLogsController < ApplicationController
 
   def destroy
     if @case_log
-      if @case_log.discard
+      if @case_log.delete
         head :no_content
       else
         render json: { errors: @case_log.errors.messages }, status: :unprocessable_entity

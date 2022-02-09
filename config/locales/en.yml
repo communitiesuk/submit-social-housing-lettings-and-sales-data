@@ -68,6 +68,8 @@ en:
       earnings:
         under_hard_max: "Net income cannot be greater than %{hard_max} given the tenant’s working situation"
         over_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
+        freq_missing: "Select how often the household receives income"
+        earnings_missing: "Enter how much income the household has in total"
 
     household:
       reasonpref:
@@ -114,6 +116,9 @@ en:
     local_authority:
       referral:
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
+
+    declaration:
+      missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
   soft_validations:
     net_income:

@@ -23,6 +23,16 @@ RSpec.describe "validations" do
       managing_organisation: user.organisation,
     )
   end
+  let(:completed_without_declaration) do
+    FactoryBot.create(
+      :case_log,
+      :completed,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+      status: 1,
+      declaration: nil,
+    )
+  end
   let(:id) { case_log.id }
 
   describe "Question validation" do
@@ -157,6 +167,27 @@ RSpec.describe "validations" do
         click_button("Save and continue")
         click_link(text: "Back")
         expect(page).to have_content("Are you sure this is correct?")
+      end
+    end
+  end
+
+  describe "Submission validation" do
+    context "when tenant has not seen the privacy notice" do
+      it "shows a warning" do
+        visit("/logs/#{completed_without_declaration.id}/declaration")
+        expect(page).to have_current_path("/logs/#{completed_without_declaration.id}/declaration")
+        click_button("Submit lettings log")
+        expect(page).to have_content("You must show the DLUHC privacy notice to the tenant")
+      end
+    end
+
+    context "when tenant has seen the privacy notice" do
+      it "lets submit the log" do
+        completed_without_declaration.update!({ declaration: "Yes" })
+        visit("/logs/#{completed_without_declaration.id}/declaration")
+        expect(page).to have_current_path("/logs/#{completed_without_declaration.id}/declaration")
+        click_button("Submit lettings log")
+        expect(page).to have_current_path("/logs")
       end
     end
   end

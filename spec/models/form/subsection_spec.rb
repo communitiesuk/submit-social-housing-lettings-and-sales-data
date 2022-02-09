@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../../request_helper"
 
 RSpec.describe Form::Subsection, type: :model do
   subject(:sub_section) { described_class.new(subsection_id, subsection_definition, section) }
@@ -11,6 +12,10 @@ RSpec.describe Form::Subsection, type: :model do
   let(:subsection_id) { "household_characteristics" }
   let(:subsection_definition) { section_definition["subsections"][subsection_id] }
 
+  before do
+    RequestHelper.stub_http_requests
+  end
+
   it "has an id" do
     expect(sub_section.id).to eq(subsection_id)
   end
@@ -20,12 +25,12 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   it "has pages" do
-    expected_pages = %w[tenant_code person_1_age person_1_gender household_number_of_other_members]
+    expected_pages = %w[tenant_code person_1_age person_1_gender household_number_of_other_members propcode]
     expect(sub_section.pages.map(&:id)).to eq(expected_pages)
   end
 
   it "has questions" do
-    expected_questions = %w[tenant_code age1 sex1 other_hhmemb relat2 age2 sex2 ecstat2]
+    expected_questions = %w[tenant_code age1 sex1 other_hhmemb relat2 age2 sex2 ecstat2 propcode]
     expect(sub_section.questions.map(&:id)).to eq(expected_questions)
   end
 
@@ -53,9 +58,9 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has question helpers for the number of applicable questions" do
-      expected_questions = %w[tenant_code age1 sex1 other_hhmemb]
+      expected_questions = %w[tenant_code age1 sex1 other_hhmemb propcode]
       expect(sub_section.applicable_questions(case_log).map(&:id)).to eq(expected_questions)
-      expect(sub_section.applicable_questions_count(case_log)).to eq(4)
+      expect(sub_section.applicable_questions_count(case_log)).to eq(5)
     end
 
     it "has question helpers for the number of answered questions" do
@@ -72,25 +77,22 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has a question helpers for the unanswered questions" do
-      expected_questions = %w[sex1 other_hhmemb]
+      expected_questions = %w[sex1 other_hhmemb propcode]
       expect(sub_section.unanswered_questions(case_log).map(&:id)).to eq(expected_questions)
-    end
-  end
-
-  context "when the privacy notice has not been shown" do
-    let(:section_id) { "setup" }
-    let(:subsection_id) { "setup" }
-    let(:case_log) { FactoryBot.build(:case_log, :about_completed, gdpr_acceptance: "No") }
-
-    it "does not mark the section as completed" do
-      expect(sub_section.status(case_log)).to eq(:in_progress)
     end
   end
 
   context "with a completed case log" do
     let(:case_log) { FactoryBot.build(:case_log, :completed) }
+    let(:case_log_too) { FactoryBot.build(:case_log, :in_progress) }
 
     it "has a status" do
+      expect(sub_section.status(case_log)).to eq(:completed)
+    end
+
+    it "has a status when optional fields are not filled" do
+      case_log.update!({ propcode: nil })
+      case_log.reload
       expect(sub_section.status(case_log)).to eq(:completed)
     end
 

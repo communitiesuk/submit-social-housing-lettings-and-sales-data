@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
+ActiveRecord::Schema.define(version: 202202071123100) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -92,6 +93,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
     t.integer "beds"
     t.integer "offered"
     t.integer "wchair"
+    t.integer "earnings"
     t.integer "incfreq"
     t.integer "benefits"
     t.integer "period"
@@ -126,11 +128,8 @@ ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
     t.integer "rp_medwel"
     t.integer "rp_hardship"
     t.integer "rp_dontknow"
-    t.datetime "discarded_at"
     t.string "tenancyother"
     t.integer "override_net_income_validation"
-    t.string "gdpr_acceptance"
-    t.string "gdpr_declined"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"
@@ -183,7 +182,6 @@ ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
     t.integer "is_carehome"
     t.integer "letting_in_sheltered_accomodation"
     t.integer "household_charge"
-    t.integer "earnings"
     t.integer "referral"
     t.decimal "brent", precision: 10, scale: 2
     t.decimal "scharge", precision: 10, scale: 2
@@ -192,7 +190,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
     t.decimal "tcharge", precision: 10, scale: 2
     t.decimal "tshortfall", precision: 10, scale: 2
     t.decimal "chcharge", precision: 10, scale: 2
-    t.index ["discarded_at"], name: "index_case_logs_on_discarded_at"
+    t.integer "declaration"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
@@ -250,6 +248,16 @@ ActiveRecord::Schema.define(version: 2022_02_07_1123100) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", limit: 191, null: false
+    t.bigint "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at", precision: 6
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
 end

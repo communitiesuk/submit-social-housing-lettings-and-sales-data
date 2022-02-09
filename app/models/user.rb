@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :owned_case_logs, through: :organisation
   has_many :managed_case_logs, through: :organisation
 
+  has_paper_trail
+
   enum role: ROLES
 
   def case_logs

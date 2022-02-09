@@ -1071,11 +1071,10 @@ module Constants::CaseLog
   }.freeze
 
   NET_INCOME_KNOWN = {
-    "Weekly" => 0,
-    "Monthly" => 1,
-    "Annually" => 2,
-    "Tenant prefers not to say" => 3,
-    "Don’t know" => 4,
+    "Yes" => 0,
+    "No" => 1,
+    "Tenant prefers not to say" => 2,
+    "Don’t know" => 3,
   }.freeze
 
   HAS_BENEFITS_OPTIONS = ["Housing benefit",
@@ -1124,4 +1123,6 @@ module Constants::CaseLog
                             "Sheltered accomodation",
                             "Home Office Asylum Support",
                             "Other"].freeze
+
+  OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
 end

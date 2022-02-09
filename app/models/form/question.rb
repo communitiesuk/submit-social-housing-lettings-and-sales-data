@@ -38,7 +38,10 @@ class Form::Question
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    return case_log[id].to_s if case_log[id].present?
+    answer = case_log[id].to_s if case_log[id].present?
+    answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
+
+    return answer_label if answer_label
 
     has_inferred_check_answers_value?(case_log) ? inferred_check_answers_value["value"] : ""
   end
@@ -79,8 +82,6 @@ class Form::Question
   end
 
   def completed?(case_log)
-    # Special case as No is a valid answer but doesn't let you progress and use the service
-    return false if id == "gdpr_acceptance" && case_log[id] == "No"
     return answer_options.keys.any? { |key| case_log[key] == "Yes" } if type == "checkbox"
 
     case_log[id].present? || !case_log.respond_to?(id.to_sym) || has_inferred_display_value?(case_log)
@@ -96,6 +97,28 @@ private
     answer = []
     answer_options.each { |key, value| case_log[key] == "Yes" ? answer << value : nil }
     answer.join(", ")
+  end
+
+  def format_value(answer_label)
+    prefix == "£" ? ActionController::Base.helpers.number_to_currency(answer_label, delimiter: ",", format: "%n") : answer_label
+  end
+
+  def suffix_label(case_log)
+    return "" unless suffix
+    return suffix if suffix.is_a?(String)
+
+    label = ""
+
+    suffix.each do |s|
+      condition = s["depends_on"]
+      next unless condition
+
+      answer = case_log.send(condition.keys.first)
+      if answer == condition.values.first
+        label = ANSWER_SUFFIX_LABELS.key?(answer.to_sym) ? ANSWER_SUFFIX_LABELS[answer.to_sym] : answer
+      end
+    end
+    label
   end
 
   def conditional_on
@@ -120,4 +143,10 @@ private
   def enabled_inferred_answers(inferred_answers, case_log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
   end
+
+  ANSWER_SUFFIX_LABELS = {
+    "Weekly": " every week",
+    "Monthly": " every month",
+    "Yearly": " every year",
+  }.freeze
 end
