@@ -2,6 +2,10 @@ require "rails_helper"
 require_relative "../../support/devise"
 
 describe Admin::CaseLogsController, type: :controller do
+  before do
+    sign_in admin_user
+  end
+
   render_views
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:resource_title) { "Logs" }

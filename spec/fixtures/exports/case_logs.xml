@@ -60,6 +60,7 @@
     <beds>3</beds>
     <offered>2</offered>
     <wchair>Yes</wchair>
+    <earnings>68</earnings>
     <incfreq>Weekly</incfreq>
     <benefits>Some</benefits>
     <period>Every 2 weeks</period>
@@ -94,11 +95,8 @@
     <rp_medwel>No</rp_medwel>
     <rp_hardship>No</rp_hardship>
     <rp_dontknow>No</rp_dontknow>
-    <discarded_at/>
     <tenancyother/>
     <override_net_income_validation/>
-    <gdpr_acceptance>Yes</gdpr_acceptance>
-    <gdpr_declined>No</gdpr_declined>
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>
@@ -123,7 +121,7 @@
     <mrcmonth>2</mrcmonth>
     <mrcyear>2022</mrcyear>
     <other_hhmemb>1</other_hhmemb>
-    <incref/>
+    <incref>No</incref>
     <sale_completion_date/>
     <startdate>2022-02-08 16:52:15 +0000</startdate>
     <armedforces>A current or former regular in the UK Armed Forces (excluding National Service)</armedforces>
@@ -145,13 +143,12 @@
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
-    <net_income_known>Weekly</net_income_known>
+    <net_income_known>Yes</net_income_known>
     <has_benefits>Yes</has_benefits>
     <nocharge>No</nocharge>
     <is_carehome>No</is_carehome>
     <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
     <household_charge>Yes</household_charge>
-    <earnings>68</earnings>
     <referral/>
     <brent>200.0</brent>
     <scharge>50.0</scharge>
@@ -160,6 +157,7 @@
     <tcharge>325.0</tcharge>
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
+    <declaration>Yes</declaration>
   </form>
   <form>
     <id>{id_2}</id>
@@ -221,6 +219,7 @@
     <beds>3</beds>
     <offered>2</offered>
     <wchair>Yes</wchair>
+    <earnings>68</earnings>
     <incfreq>Weekly</incfreq>
     <benefits>Some</benefits>
     <period>Every 2 weeks</period>
@@ -255,11 +254,8 @@
     <rp_medwel>No</rp_medwel>
     <rp_hardship>No</rp_hardship>
     <rp_dontknow>No</rp_dontknow>
-    <discarded_at/>
     <tenancyother/>
     <override_net_income_validation/>
-    <gdpr_acceptance>Yes</gdpr_acceptance>
-    <gdpr_declined>No</gdpr_declined>
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>
@@ -284,7 +280,7 @@
     <mrcmonth>2</mrcmonth>
     <mrcyear>2022</mrcyear>
     <other_hhmemb>1</other_hhmemb>
-    <incref/>
+    <incref>No</incref>
     <sale_completion_date/>
     <startdate>2022-02-08 16:52:15 +0000</startdate>
     <armedforces>A current or former regular in the UK Armed Forces (excluding National Service)</armedforces>
@@ -306,13 +302,12 @@
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
-    <net_income_known>Weekly</net_income_known>
+    <net_income_known>Yes</net_income_known>
     <has_benefits>Yes</has_benefits>
     <nocharge>No</nocharge>
     <is_carehome>No</is_carehome>
     <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
     <household_charge>Yes</household_charge>
-    <earnings>68</earnings>
     <referral/>
     <brent>200.0</brent>
     <scharge>50.0</scharge>
@@ -321,5 +316,6 @@
     <tcharge>325.0</tcharge>
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
+    <declaration>Yes</declaration>
   </form>
 </forms>
