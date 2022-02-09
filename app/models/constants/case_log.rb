@@ -2,7 +2,7 @@ module Constants::CaseLog
   BENEFITCAP = {
     "Yes - benefit cap" => 5,
     "Yes - removal of the spare room subsidy" => 4,
-    "Yes - both the benefit cap and the removal of the spare room subsidy" => 6,
+    "Yes - both" => 6,
     "No" => 2,
     "Don’t know" => 3,
     "Prefer not to say" => 100,
@@ -57,8 +57,8 @@ module Constants::CaseLog
   }.freeze
 
   HOMELESS = {
-    "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days" => 11,
-    "Yes - other homelessness" => 7,
+    "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty" => 11,
+    "Other homeless - not found statutorily homeless but considered homeless by landlord" => 7,
     "No" => 1,
   }.freeze
 

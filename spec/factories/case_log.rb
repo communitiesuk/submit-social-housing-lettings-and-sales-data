@@ -47,7 +47,7 @@ FactoryBot.define do
       age2 { 32 }
       sex2 { "Male" }
       ecstat2 { "Not seeking work" }
-      homeless { "Yes - other homelessness" }
+      homeless { "Other homeless - not found statutorily homeless but considered homeless by landlord" }
       underoccupation_benefitcap { "No" }
       leftreg { "No - they left up to 5 years ago" }
       reservist { "No" }

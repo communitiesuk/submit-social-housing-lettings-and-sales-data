@@ -1304,37 +1304,9 @@
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
-                  "header": "Please state the reason for leaving last settled home",
+                  "header": "What is the reason?",
                   "hint_text": "",
                   "type": "text"
-                },
-                "underoccupation_benefitcap": {
-                  "header": "Was the reason for leaving because of the benefit cap or removal of the spare room subsidy?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes - benefit cap"
-                    },
-                    "1": {
-                      "value": "Yes - removal of the spare room subsidy"
-                    },
-                    "2": {
-                      "value": "Yes - both the benefit cap and the removal of the spare room subsidy"
-                    },
-                    "3": {
-                      "value": "No"
-                    },
-                    "4": {
-                      "value": "Don’t know"
-                    },
-                    "5": {
-                      "value": "Prefer not to say"
-                    },
-                    "divider": {
-                      "value": true
-                    }
-                  }
                 }
               }
             },
@@ -1420,20 +1392,51 @@
                 }
               }
             },
+            "underoccupation_benefitcap": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "underoccupation_benefitcap": {
+                  "header": "Was the reason for leaving a direct result of the removal of the spare room subsidy or benefit cap introduced from 2013?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes - removal of the spare room subsidy"
+                    },
+                    "1": {
+                      "value": "Yes - benefit cap"
+                    },
+                    "2": {
+                      "value": "Yes - both"
+                    },
+                    "3": {
+                      "value": "No"
+                    },
+                    "4": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
+                  }
+                }
+              }
+            },
             "homelessness": {
               "header": "",
               "description": "",
               "questions": {
                 "homeless": {
-                  "header": "Did the tenant experience homelessness immediately before this letting?",
+                  "header": "Did the household experience homelessness immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days"
+                      "value": "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
                     },
                     "1": {
-                      "value": "Yes - other homelessness"
+                      "value": "Other homeless - not found statutorily homeless but considered homeless by landlord"
                     },
                     "2": {
                       "value": "No"
