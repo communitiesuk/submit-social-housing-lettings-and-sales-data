@@ -495,8 +495,8 @@ DEPENDENCIES
   rubocop-rails
   scss_lint-govuk
   selenium-webdriver
-  sentry-rails (~> 5.0, >= 5.0.2)
-  sentry-ruby (~> 5.0, >= 5.0.2)
+  sentry-rails
+  sentry-ruby
   simplecov
   timecop (~> 0.9.4)
   two_factor_authentication!
