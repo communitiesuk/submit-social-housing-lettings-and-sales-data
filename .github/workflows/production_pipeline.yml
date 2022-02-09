@@ -7,122 +7,122 @@ defaults:
     shell: bash
 
 jobs:
-    test:
-      name: Test
-      runs-on: ubuntu-latest
-
-      services:
-        postgres:
-          image: postgres:13.5
-          env:
-            POSTGRES_PASSWORD: password
-            POSTGRES_USER: postgres
-            POSTGRES_DB: data_collector
-          ports:
-            - 5432:5432
-          # needed because the postgres container does not provide a healthcheck
-          # tmpfs makes DB faster by using RAM
-          options: >-
-            --mount type=tmpfs,destination=/var/lib/postgresql/data
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
-      env:
-        RAILS_ENV: test
-        GEMFILE_RUBY_VERSION: 3.0.0
-        DB_HOST: localhost
-        DB_DATABASE: data_collector
-        DB_USERNAME: postgres
-        DB_PASSWORD: password
-
-        # Rails verifies the time zone in DB is the same as the time zone of the Rails app
-        TZ: "Europe/London"
-
-
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-
-        - name: Set up Ruby
-          uses: ruby/setup-ruby@v1
-          with:
-            # runs 'bundle install' and caches installed gems automatically
-            bundler-cache: true
-        - name: Set up node
-          uses: actions/setup-node@v2
-          with:
-            node-version: '14'
-
-        - name: Create DB
-          run: |
-            bundle exec rake db:prepare
-
-        - name: Compile Assets
-          run: |
-            bundle exec rake assets:precompile
-
-        - name: Run tests
-          run: |
-            bundle exec rspec
-
-    lint:
-      name: Lint
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-
-        - name: Set up Ruby
-          uses: ruby/setup-ruby@v1
-          with:
-            # runs 'bundle install' and caches installed gems automatically
-            bundler-cache: true
-
-        - name: Rubocop
-          run: |
-            bundle exec rubocop
-
-  deploy:
-    name: Deploy
-
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    environment: 'production'
-    if: github.ref == 'refs/heads/main'
-    needs: [lint, test]
+
+    services:
+      postgres:
+        image: postgres:13.5
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: data_collector
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        # tmpfs makes DB faster by using RAM
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.0.0
+      DB_HOST: localhost
+      DB_DATABASE: data_collector
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+
+      # Rails verifies the time zone in DB is the same as the time zone of the Rails app
+      TZ: "Europe/London"
+
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Install cf client
-      env:
-        CF_CLI_VERSION: 7.0.0-beta.30
-      run: |
-        curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
-        sudo cp /tmp/cf7 /usr/local/bin/cf7
-    - name: Deploy
-      env:
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-        CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        API_USER: ${{ secrets.API_USER }}
-        API_KEY: ${{ secrets.API_KEY }}
-        APP_NAME: dluhc-core-staging
-        GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
-        APP_HOST: ${{ secrets.APP_HOST }}
-        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
-      run: |
-        cf7 api $CF_API_ENDPOINT
-        cf7 auth
-        cf7 target -o $CF_ORG -s $CF_SPACE
-        cf7 set-env $APP_NAME API_USER $API_USER
-        cf7 set-env $APP_NAME API_KEY $API_KEY
-        cf7 set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
-        cf7 set-env $APP_NAME APP_HOST $APP_HOST
-        cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-        cf7 set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
-        cf7 push $APP_NAME --strategy rolling
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+      - name: Set up node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Create DB
+        run: |
+          bundle exec rake db:prepare
+
+      - name: Compile Assets
+        run: |
+          bundle exec rake assets:precompile
+
+      - name: Run tests
+        run: |
+          bundle exec rspec
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+
+      - name: Rubocop
+        run: |
+          bundle exec rubocop
+
+    deploy:
+      name: Deploy
+
+      runs-on: ubuntu-latest
+      environment: 'production'
+      if: github.ref == 'refs/heads/main'
+      needs: [lint, test]
+
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install cf client
+        env:
+          CF_CLI_VERSION: 7.0.0-beta.30
+        run: |
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
+          sudo cp /tmp/cf7 /usr/local/bin/cf7
+      - name: Deploy
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          API_USER: ${{ secrets.API_USER }}
+          API_KEY: ${{ secrets.API_KEY }}
+          APP_NAME: dluhc-core-staging
+          GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
+          APP_HOST: ${{ secrets.APP_HOST }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
+        run: |
+          cf7 api $CF_API_ENDPOINT
+          cf7 auth
+          cf7 target -o $CF_ORG -s $CF_SPACE
+          cf7 set-env $APP_NAME API_USER $API_USER
+          cf7 set-env $APP_NAME API_KEY $API_KEY
+          cf7 set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
+          cf7 set-env $APP_NAME APP_HOST $APP_HOST
+          cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+          cf7 set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
+          cf7 push $APP_NAME --strategy rolling

@@ -14,7 +14,6 @@ defaults:
     shell: bash
 
 jobs:
-
   test:
     name: Test
     runs-on: ubuntu-latest
