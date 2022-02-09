@@ -50,7 +50,7 @@
 
   `cf bind-service dluhc-core-production dluhc-core-production-export-bucket -c '{"permissions": "read-write"}'`
 
-  6. Create a service keys for accessing the S3 bucket from outside Gov PaaS:\
-    `cf create-service-key dluhc-core-production-import-bucket data-import -c '{"allow_external_access": true}'`
+6. Create a service keys for accessing the S3 bucket from outside Gov PaaS:\
+  `cf create-service-key dluhc-core-production-import-bucket data-import -c '{"allow_external_access": true}'`
 
-    `cf create-service-key dluhc-core-production-export-bucket data-export -c '{"allow_external_access": true, "permissions": "read-only"}'`
+  `cf create-service-key dluhc-core-production-export-bucket data-export -c '{"allow_external_access": true, "permissions": "read-only"}'`
