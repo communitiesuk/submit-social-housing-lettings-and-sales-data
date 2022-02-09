@@ -1175,6 +1175,12 @@ RSpec.describe CaseLog do
         expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
         expect(case_log["underoccupation_benefitcap"]).to eq("No")
       end
+
+      it "correctly derives and saves homeless" do
+        record_from_db = ActiveRecord::Base.connection.execute("select homeless from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["homeless"]).to eq(1)
+        expect(case_log["homeless"]).to eq("No")
+      end
     end
   end
 

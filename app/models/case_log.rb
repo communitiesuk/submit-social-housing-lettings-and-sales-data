@@ -254,6 +254,7 @@ private
     self.nocharge = household_charge == "Yes" ? "No" : "Yes"
     self.layear = "Less than 1 year" if renewal == "Yes"
     self.underoccupation_benefitcap = "No" if renewal == "Yes" && year == 2021
+    self.homeless = "No" if renewal == "Yes"
   end
 
   def process_postcode_changes!
