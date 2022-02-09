@@ -49,6 +49,9 @@ gem "aws-sdk-s3"
 gem "paper_trail"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
+# Receive exceptions and configure alerts
+gem "sentry-rails", "~> 5.0", ">= 5.0.2"
+gem "sentry-ruby", "~> 5.0", ">= 5.0.2"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
