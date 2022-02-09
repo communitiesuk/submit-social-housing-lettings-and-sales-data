@@ -77,6 +77,7 @@ group :test do
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false
+  gem "timecop", "~> 0.9.4"
   gem "webmock", require: false
 end
 

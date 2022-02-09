@@ -5,7 +5,7 @@ describe "rake core:data_import", type: :task do
   subject(:task) { Rake::Task["core:data_import"] }
 
   let(:fixture_path) { "spec/fixtures/softwire_imports/organisations" }
-  let(:instance_name) { "my_instance" }
+  let(:instance_name) { "paas_import_instance" }
   let(:organisation_type) { "organisation" }
 
   let(:storage_service) { instance_double(StorageService) }
