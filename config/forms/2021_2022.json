@@ -1898,9 +1898,9 @@
               "description": "",
               "questions": {
                 "reasonpref": {
-                  "check_answer_label": "Was the household given Reasonable Preference (i.e. priority) for housing by the Local Authority?",
-                  "header": "Was the household given reasonable preference by the local authority?",
-                  "hint_text": "",
+                  "check_answer_label": "Was the household given 'reasonable preference' by the local authority?",
+                  "header": "Was the household given 'reasonable preference' by the local authority?",
+                  "hint_text": "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
@@ -1922,29 +1922,24 @@
             "reasonable_preference_reason": {
               "header": "Reason for reasonable preference being given",
               "description": "",
-              "depends_on": [
-                {
-                  "reasonpref": "Yes"
-                }
-              ],
               "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
-                  "header": "Why were they given reasonable preference?",
+                  "header": "Why was the household given 'reasonable preference'?",
                   "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": {
-                      "value": "Homeless or about to lose their home (within 56 days)"
+                      "value": "They were homeless or about to lose their home (within 56 days)"
                     },
                     "rp_insan_unsat": {
-                      "value": "Living in insanitary or overcrowded or unsatisfactory housing"
+                      "value": "They were living in unsanitary, overcrowded or unsatisfactory housing"
                     },
                     "rp_medwel": {
-                      "value": "A need to move on medical and welfare grounds (including a disability)"
+                      "value": "They needed to move due to medical and welfare reasons (including disability)"
                     },
                     "rp_hardship": {
-                      "value": "A need to move to avoid hardship to themselves or others"
+                      "value": "They needed to move to avoid hardship to themselves or others"
                     },
                     "divider": {
                       "value": true
@@ -1954,57 +1949,191 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{
+                "reasonpref": "Yes"
+              }]
             },
             "lettings_policy": {
               "header": "",
               "description": "",
               "questions": {
-                "cbl": {
-                  "check_answer_label": "Choice-based letting?",
-                  "header": "Was the letting made under choice-based lettings (CBL)? ",
-                  "hint_text": "",
-                  "type": "radio",
+                "letting_allocation": {
+                  "check_answer_label": "How was this letting allocated?",
+                  "header": "How was this letting allocated?",
+                  "hint_text": "Select all that apply.",
+                  "type": "checkbox",
                   "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "cbl": {
+                      "value": "Choice-based lettings (CBL)"
                     },
-                    "1": {
-                      "value": "No"
-                    }
-                  }
-                },
-                "chr": {
-                  "check_answer_label": "Common housing register letting?",
-                  "header": "Was the letting made under common housing register (CHR)? ",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "chr": {
+                      "value": "Common housing register (CHR)"
                     },
-                    "1": {
-                      "value": "No"
-                    }
-                  }
-                },
-                "cap": {
-                  "check_answer_label": "Common allocation policy letting?",
-                  "header": "Was the letting made under common allocation policy (CAP)? ",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "cap": {
+                      "value": "Common Allocation Policy (CAP)"
                     },
-                    "1": {
-                      "value": "No"
+                    "divider": {
+                      "value": true
+                    },
+                    "letting_allocation_unknown": {
+                      "value": "None of these allocation systems"
                     }
                   }
                 }
               }
             },
             "referral": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "3": {
+                      "value": "Other social landlord"
+                    },
+                    "4": {
+                      "value": "Community learning disability team"
+                    },
+                    "5": {
+                      "value": "Community mental health team"
+                    },
+                    "6": {
+                      "value": "Health service"
+                    },
+                    "7": {
+                      "value": "Police, probation or prison"
+                    },
+                    "8": {
+                      "value": "Youth offending team"
+                    },
+                    "9": {
+                      "value": "Voluntary agency"
+                    },
+                    "10": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{"providertype":  "LA", "needstype": "General needs"}]
+            },
+            "referral_prp": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
+                    },
+                    "3": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "4": {
+                      "value": "Other social landlord"
+                    },
+                    "5": {
+                      "value": "Community learning disability team"
+                    },
+                    "6": {
+                      "value": "Community mental health team"
+                    },
+                    "7": {
+                      "value": "Health service"
+                    },
+                    "8": {
+                      "value": "Police, probation or prison"
+                    },
+                    "9": {
+                      "value": "Youth offending team"
+                    },
+                    "10": {
+                      "value": "Voluntary agency"
+                    },
+                    "11": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{"providertype":  "PRP", "needstype": "General needs"}]
+            },
+            "referral_supported_housing": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
+                    },
+                    "3": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "4": {
+                      "value": "Other social landlord"
+                    },
+                    "5": {
+                      "value": "Community learning disability team"
+                    },
+                    "6": {
+                      "value": "Community mental health team"
+                    },
+                    "7": {
+                      "value": "Health service"
+                    },
+                    "8": {
+                      "value": "Police, probation or prison"
+                    },
+                    "9": {
+                      "value": "Youth offending team"
+                    },
+                    "10": {
+                      "value": "Voluntary agency"
+                    },
+                    "11": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{"providertype":  "LA", "needstype": "Supported housing"}]
+            },
+            "referral_supported_housing_prp": {
               "header": "",
               "description": "",
               "questions": {
@@ -2036,16 +2165,16 @@
                       "value": "Community learning disability team"
                     },
                     "7": {
-                      "value": "Police, probation or prison"
-                    },
-                    "8": {
-                      "value": "Youth offending team"
-                    },
-                    "9": {
                       "value": "Community mental health team"
                     },
-                    "10": {
+                    "8": {
                       "value": "Health service"
+                    },
+                    "9": {
+                      "value": "Police, probation or prison"
+                    },
+                    "10": {
+                      "value": "Youth offending team"
                     },
                     "11": {
                       "value": "Voluntary agency"
@@ -2055,7 +2184,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{"providertype":  "PRP", "needstype": "Supported housing"}]
             }
           }
         },
