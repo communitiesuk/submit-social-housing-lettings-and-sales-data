@@ -104,7 +104,7 @@ module Constants::CaseLog
 
   PREVIOUS_TENANCY = {
     "Owner occupation (private)" => 26,
-    "Owner occupation (low cost home ownership)" => 27,
+    "Owner occupation (low-cost home ownership)" => 27,
     "Private sector tenancy" => 3,
     "Tied housing or rented with job" => 4,
     "Supported housing" => 6,
@@ -121,11 +121,11 @@ module Constants::CaseLog
     "Home Office Asylum Support" => 24,
     "Children’s home or foster care" => 13,
     "Rough sleeping" => 19,
-    "Other" => 25,
-    "Fixed term Local Authority General Needs tenancy" => 30,
-    "Lifetime Local Authority General Needs tenancy" => 31,
-    "Fixed term PRP General Needs tenancy" => 32,
-    "Lifetime PRP General Needs tenancy" => 33,
+    "Any other accommodation" => 25,
+    "Fixed-term local authority general needs tenancy" => 30,
+    "Lifetime local authority general needs tenancy" => 31,
+    "Fixed-term private registered provider (PRP) general needs tenancy" => 32,
+    "Lifetime private registered provider (PRP) general needs tenancy" => 33,
   }.freeze
 
   RESERVIST = {
@@ -1122,7 +1122,7 @@ module Constants::CaseLog
                             "Supported housing",
                             "Sheltered accommodation",
                             "Home Office Asylum Support",
-                            "Other"].freeze
+                            "Any other accommodation"].freeze
 
   OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
 end

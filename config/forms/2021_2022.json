@@ -1343,21 +1343,21 @@
               "description": "",
               "questions": {
                 "prevten": {
-                  "header": "What was the tenant’s housing situation immediately before this letting?",
-                  "hint_text": "",
+                  "header": "Where was the household immediately before this letting?",
+                  "hint_text": "This is where the household was the night before they moved.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Owner occupation (private)"
+                      "value": "Fixed-term local authority general needs tenancy"
                     },
                     "1": {
-                      "value": "Owner occupation (low cost home ownership)"
+                      "value": "Lifetime local authority general needs tenancy"
                     },
                     "2": {
-                      "value": "Private sector tenancy"
+                      "value": "Fixed-term private registered provider (PRP) general needs tenancy"
                     },
                     "3": {
-                      "value": "Tied housing or rented with job"
+                      "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
                     "4": {
                       "value": "Supported housing"
@@ -1366,55 +1366,55 @@
                       "value": "Sheltered accommodation"
                     },
                     "6": {
-                      "value": "Residential care home"
+                      "value": "Private sector tenancy"
                     },
                     "7": {
-                      "value": "Living with friends or family"
+                      "value": "Owner occupation (private)"
                     },
                     "8": {
-                      "value": "Refuge"
+                      "value": "Owner occupation (low-cost home ownership)"
                     },
                     "9": {
-                      "value": "Hospital"
+                      "value": "Living with friends or family"
                     },
                     "10": {
-                      "value": "Prison or approved probation hostel"
-                    },
-                    "11": {
                       "value": "Direct access hostel"
                     },
-                    "12": {
+                    "11": {
                       "value": "Bed and breakfast"
                     },
+                    "12": {
+                      "value": "Prison or approved probation hostel"
+                    },
                     "13": {
-                      "value": "Mobile home or caravan"
+                      "value": "Hospital"
                     },
                     "14": {
                       "value": "Any other temporary accommodation"
                     },
                     "15": {
-                      "value": "Home Office Asylum Support"
-                    },
-                    "16": {
-                      "value": "Children’s home or foster care"
-                    },
-                    "17": {
                       "value": "Rough sleeping"
                     },
+                    "16": {
+                      "value": "Tied housing or rented with job"
+                    },
+                    "17": {
+                      "value": "Mobile home or caravan"
+                    },
                     "18": {
-                      "value": "Other"
+                      "value": "Refuge"
                     },
                     "19": {
-                      "value": "Fixed term Local Authority General Needs tenancy"
+                      "value": "Children’s home or foster care"
                     },
                     "20": {
-                      "value": "Lifetime Local Authority General Needs tenancy"
+                      "value": "Residential care home"
                     },
                     "21": {
-                      "value": "Fixed term PRP General Needs tenancy"
+                      "value": "Home Office Asylum Support"
                     },
                     "22": {
-                      "value": "Lifetime PRP General Needs tenancy"
+                      "value": "Any other accommodation"
                     }
                   }
                 }
@@ -2383,12 +2383,8 @@
                 }
               },
               "depends_on": [
-                {
-                  "tenancy": "Secure (including flexible)"
-                },
-                {
-                  "tenancy": "Assured Shorthold"
-                }
+                { "tenancy": "Secure (including flexible)" },
+                { "tenancy": "Assured Shorthold" }
               ]
             },
             "letting_in_sheltered_accommodation": {

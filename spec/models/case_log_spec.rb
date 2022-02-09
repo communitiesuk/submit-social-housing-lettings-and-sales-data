@@ -897,7 +897,7 @@ RSpec.describe CaseLog do
         check_rsnvac_validation("Supported housing")
         check_rsnvac_validation("Sheltered accommodation")
         check_rsnvac_validation("Home Office Asylum Support")
-        check_rsnvac_validation("Other")
+        check_rsnvac_validation("Any other accommodation")
       end
 
       it "cannot be temp accommodation if source of letting referral " do
