@@ -43,10 +43,6 @@ jobs:
       DB_USERNAME: postgres
       DB_PASSWORD: password
 
-      # Rails verifies the time zone in DB is the same as the time zone of the Rails app
-      TZ: "Europe/London"
-
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
