@@ -44,9 +44,19 @@ RSpec.describe Validations::TenancyValidations do
         end
 
         context "when tenancy length is between 2-99" do
-          it "adds an error" do
+          it "does not add an error" do
             record.tenancy = "Assured Shorthold"
             record.tenancylength = 3
+            subject.validate_fixed_term_tenancy(record)
+            expect(record.errors["tenancylength"]).to be_empty
+            expect(record.errors["tenancy"]).to be_empty
+          end
+        end
+
+        context "when tenancy length has not been answered" do
+          it "does not add an error" do
+            record.tenancy = "Assured Shorthold"
+            record.tenancylength = nil
             subject.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
             expect(record.errors["tenancy"]).to be_empty
@@ -78,9 +88,19 @@ RSpec.describe Validations::TenancyValidations do
         end
 
         context "when tenancy length is between 2-99" do
-          it "adds an error" do
+          it "does not add an error" do
             record.tenancy = "Secure (including flexible)"
             record.tenancylength = 3
+            subject.validate_fixed_term_tenancy(record)
+            expect(record.errors["tenancylength"]).to be_empty
+            expect(record.errors["tenancy"]).to be_empty
+          end
+        end
+
+        context "when tenancy length has not been answered" do
+          it "does not add an error" do
+            record.tenancy = "Secure (including flexible)"
+            record.tenancylength = nil
             subject.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
             expect(record.errors["tenancy"]).to be_empty
