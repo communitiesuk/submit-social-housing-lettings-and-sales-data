@@ -98,7 +98,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "lawaitlist"
     t.string "property_postcode"
     t.integer "reasonpref"
-    t.string "reasonable_preference_reason"
     t.integer "cbl"
     t.integer "chr"
     t.integer "cap"
