@@ -33,6 +33,7 @@ class CaseLog < ApplicationRecord
   include Validations::SoftValidations
   include Constants::CaseLog
   include Constants::IncomeRanges
+  include Constants::Organisation
 
   has_paper_trail
 
