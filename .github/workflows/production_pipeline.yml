@@ -116,6 +116,8 @@ jobs:
           APP_HOST: ${{ secrets.APP_HOST }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
+          EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           cf7 api $CF_API_ENDPOINT
           cf7 auth
@@ -126,4 +128,6 @@ jobs:
           cf7 set-env $APP_NAME APP_HOST $APP_HOST
           cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
           cf7 set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
+          cf7 set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
+          cf7 set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf7 push $APP_NAME --strategy rolling
