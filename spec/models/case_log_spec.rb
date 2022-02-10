@@ -1177,6 +1177,14 @@ RSpec.describe CaseLog do
         expect(case_log["homeless"]).to eq("No")
       end
     end
+
+    it "correctly derives and saves providertype from organisation" do
+      case_log.reload
+
+      record_from_db = ActiveRecord::Base.connection.execute("select providertype from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["providertype"]).to eq(2)
+      expect(case_log.providertype).to eq("PRP")
+    end
   end
 
   describe "resetting invalidated fields" do

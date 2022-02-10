@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 202202071123100) do
-
+ActiveRecord::Schema[7.0].define(version: 202202071123100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,8 +20,8 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "second_factor_attempts_count", default: 0
     t.string "encrypted_otp_secret_key"
     t.string "encrypted_otp_secret_key_iv"
@@ -36,8 +35,8 @@ ActiveRecord::Schema.define(version: 202202071123100) do
 
   create_table "case_logs", force: :cascade do |t|
     t.integer "status", default: 0
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "tenant_code"
     t.integer "age1"
     t.string "sex1"
@@ -191,6 +190,7 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.decimal "tshortfall", precision: 10, scale: 2
     t.decimal "chcharge", precision: 10, scale: 2
     t.integer "declaration"
+    t.integer "providertype"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
@@ -206,8 +206,8 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.boolean "holds_own_stock"
     t.string "other_stock_owners"
     t.string "managing_agents"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "active"
     t.integer "old_association_type"
     t.string "software_supplier_id"
@@ -233,8 +233,8 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "name"
     t.bigint "organisation_id"
     t.integer "sign_in_count", default: 0, null: false
@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 202202071123100) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"
-    t.datetime "created_at", precision: 6
+    t.datetime "created_at"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

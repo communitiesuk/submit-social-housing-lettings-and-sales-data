@@ -1125,4 +1125,9 @@ module Constants::CaseLog
                             "Other"].freeze
 
   OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
+
+  PROVIDER_TYPE = {
+    "LA" => 1,
+    "PRP" => 2,
+  }.freeze
 end

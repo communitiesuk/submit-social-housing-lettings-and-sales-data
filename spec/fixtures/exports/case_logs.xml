@@ -158,6 +158,7 @@
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
     <declaration>Yes</declaration>
+    <providertype/>
   </form>
   <form>
     <id>{id_2}</id>
@@ -317,5 +318,6 @@
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
     <declaration>Yes</declaration>
+    <providertype/>
   </form>
 </forms>
