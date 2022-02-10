@@ -49,7 +49,7 @@ private
 
     depends_on.any? do |conditions_set|
       conditions_set.all? do |question, value|
-        value.nil? ? case_log[question] == value : !case_log[question].nil? && case_log[question] == value
+        value.nil? ? eval("case_log.#{question}") == value : !eval("case_log.#{question}").nil? && eval("case_log.#{question}") == value
       end
     end
   end

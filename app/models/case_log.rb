@@ -111,9 +111,9 @@ class CaseLog < ApplicationRecord
   enum rp_medwel: POLAR, _suffix: true
   enum rp_hardship: POLAR, _suffix: true
   enum rp_dontknow: POLAR, _suffix: true
-  enum cbl: POLAR2, _suffix: true
-  enum chr: POLAR2, _suffix: true
-  enum cap: POLAR2, _suffix: true
+  enum cbl: POLAR, _suffix: true
+  enum chr: POLAR, _suffix: true
+  enum cap: POLAR, _suffix: true
   enum wchair: POLAR2, _suffix: true
   enum incfreq: INCFREQ, _suffix: true
   enum benefits: BENEFITS, _suffix: true

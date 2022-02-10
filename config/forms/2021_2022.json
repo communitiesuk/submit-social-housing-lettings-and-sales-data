@@ -1449,7 +1449,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "previuos_postcode_known": {
+                "previous_postcode_known": {
                   "check_answer_label": "Do you know the postcode of the household's last settled accommodation?",
                   "header": "Do you know the property’s postcode?",
                   "hint_text": "This is also known as the household's 'last settled home'.",
@@ -1469,7 +1469,7 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "inferred_answers": { "la": { "is_la_inferred": true } },
+                  "inferred_answers": { "la": { "is_previous_la_inferred": true } },
                   "inferred_check_answers_value": {
                     "condition": { "postcode_known": "No" },
                     "value": "Not known"
@@ -1483,16 +1483,16 @@
               "questions": {
                 "previous_la_known": {
                   "check_answer_label": "Do you know the local authority of the household’s last settled accommodation?",
-                  "header": "This is also known as the household's 'last settled home'.",
-                  "hint_text": "",
+                  "header": "Do you know the local authority of the household’s last settled accommodation?",
+                  "hint_text": "This is also known as the household's 'last settled home'.",
                   "type": "radio",
                   "answer_options": {
                     "1": "Yes",
                     "0": "No"
-                  },
-                  "depends_on": [{ "is_previous_la_inferred": false }]
+                  }
                 }
-              }
+              },
+              "depends_on": [{ "is_previous_la_inferred": false }]
             },
             "previous_la": {
               "header": "",
@@ -1888,18 +1888,18 @@
                     "S92000003": "Scotland",
                     "W92000004": "Wales",
                     "9300000XX": "Outside UK"
-                  },
-                  "depends_on": [{"previous_la_known":  "Yes", "is_previous_la_inferred": false }]
+                  }
                 }
-              }
+              },
+              "depends_on": [{"previous_la_known":  "Yes", "is_previous_la_inferred": false }]
             },
             "reasonable_preference": {
               "header": "",
               "description": "",
               "questions": {
                 "reasonpref": {
-                  "check_answer_label": "Was the household given 'reasonable preference' by the local authority?",
-                  "header": "Was the household given 'reasonable preference' by the local authority?",
+                  "check_answer_label": "Was the household given ‘reasonable preference’ by the local authority?",
+                  "header": "Was the household given ‘reasonable preference’ by the local authority?",
                   "hint_text": "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority.",
                   "type": "radio",
                   "answer_options": {
@@ -1925,7 +1925,7 @@
               "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
-                  "header": "Why was the household given 'reasonable preference'?",
+                  "header": "Why was the household given ‘reasonable preference’?",
                   "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
@@ -2029,7 +2029,7 @@
                   }
                 }
               },
-              "depends_on": [{"providertype":  "LA", "needstype": "General needs"}]
+              "depends_on": [{"managing_organisation.provider_type":  "LA", "needstype": "General needs"}]
             },
             "referral_prp": {
               "header": "",
@@ -2080,7 +2080,7 @@
                   }
                 }
               },
-              "depends_on": [{"providertype":  "PRP", "needstype": "General needs"}]
+              "depends_on": [{"managing_organisation.provider_type":  "PRP", "needstype": "General needs"}]
             },
             "referral_supported_housing": {
               "header": "",
@@ -2131,7 +2131,7 @@
                   }
                 }
               },
-              "depends_on": [{"providertype":  "LA", "needstype": "Supported housing"}]
+              "depends_on": [{"managing_organisation.provider_type":  "LA", "needstype": "Supported housing"}]
             },
             "referral_supported_housing_prp": {
               "header": "",
@@ -2185,7 +2185,7 @@
                   }
                 }
               },
-              "depends_on": [{"providertype":  "PRP", "needstype": "Supported housing"}]
+              "depends_on": [{"managing_organisation.provider_type":  "PRP", "needstype": "Supported housing"}]
             }
           }
         },
