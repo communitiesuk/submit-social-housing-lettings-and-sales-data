@@ -8,7 +8,7 @@ module Validations::TenancyValidations
     is_ast = record.tenancy == "Assured Shorthold"
     conditions = [
       { condition: !(is_secure || is_ast) && is_present, error: I18n.t("validations.tenancy.length.fixed_term_not_required") },
-      { condition: (is_ast && !is_in_range) && is_present,  error: I18n.t("validations.tenancy.length.shorthold") },
+      { condition: (is_ast && !is_in_range) && is_present, error: I18n.t("validations.tenancy.length.shorthold") },
       { condition: is_secure && (!is_in_range && is_present), error: I18n.t("validations.tenancy.length.secure") },
     ]
 
