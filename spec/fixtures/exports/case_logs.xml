@@ -203,8 +203,6 @@
     <reservist>No</reservist>
     <illness>Yes</illness>
     <preg_occ>Yes</preg_occ>
-    <accessibility_requirements>No</accessibility_requirements>
-    <condition_effects>dummy</condition_effects>
     <tenancy_code>BZ757</tenancy_code>
     <startertenancy>No</startertenancy>
     <tenancylength>5</tenancylength>
@@ -224,7 +222,6 @@
     <lawaitlist>Less than 1 year</lawaitlist>
     <property_postcode>NW1 5TY</property_postcode>
     <reasonpref>Yes</reasonpref>
-    <reasonable_preference_reason>dummy</reasonable_preference_reason>
     <cbl>Yes</cbl>
     <chr>Yes</chr>
     <cap>No</cap>
