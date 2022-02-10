@@ -12,7 +12,12 @@ module Validations::TenancyValidations
       { condition: is_secure && (!is_in_range && is_present), error: I18n.t("validations.tenancy.length.secure") },
     ]
 
-    conditions.each { |condition| condition[:condition] ? (record.errors.add :tenancylength, condition[:error]) : nil }
+    conditions.each do |condition|
+      next unless condition[:condition]
+
+      record.errors.add :tenancylength, condition[:error]
+      record.errors.add :tenancy, condition[:error]
+    end
   end
 
   def validate_other_tenancy_type(record)

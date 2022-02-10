@@ -397,7 +397,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validaiting fixed term tenancy" do
+    context "when validating fixed term tenancy" do
       it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
         expect {
           described_class.create!(tenancy: "Other",
@@ -405,59 +405,6 @@ RSpec.describe CaseLog do
                                   owning_organisation: owning_organisation,
                                   managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Must be completed and between 2 and 99 if type of tenancy is Assured shorthold" do
-        expect {
-          described_class.create!(tenancy: "Assured Shorthold",
-                                  tenancylength: 1,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Assured Shorthold",
-                                  tenancylength: nil,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Assured Shorthold",
-                                  tenancylength: 2,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-      end
-
-      it "Must be empty or between 2 and 99 if type of tenancy is Secure" do
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancylength: 1,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancylength: 100,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancylength: nil,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancylength: 2,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
       end
     end
 
