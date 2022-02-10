@@ -43,6 +43,26 @@
                 }
               }
             },
+            "needs_type": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "needstype": {
+                  "check_answer_label": "Needs type",
+                  "header": "What is the needs type?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": {
+                      "value": "General needs"
+                    },
+                    "0": {
+                      "value": "Supported housing"
+                    }
+                  }
+                }
+              }
+            },
             "renewal": {
               "header": "",
               "description": "",
@@ -75,8 +95,8 @@
                 }
               }
             },
-            "about_this_letting": {
-              "header": "Tell us about this letting",
+            "rent_type": {
+              "header": "",
               "description": "",
               "questions": {
                 "rent_type": {
@@ -85,20 +105,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Social rent"
-                    },
                     "1": {
                       "value": "Affordable rent"
                     },
                     "2": {
-                      "value": "London affordable rent"
-                    },
-                    "3": {
-                      "value": "Rent to buy"
+                      "value": "London Affordable Rent"
                     },
                     "4": {
-                      "value": "London living rent"
+                      "value": "London Living Rent"
+                    },
+                    "3": {
+                      "value": "Rent to Buy"
+                    },
+                    "0": {
+                      "value": "Social Rent"
                     },
                     "5": {
                       "value": "Other intermediate rent product"
@@ -114,20 +134,6 @@
                   "check_answer_label": "Product name",
                   "header": "What is intermediate rent product name?",
                   "type": "text"
-                },
-                "needstype": {
-                  "check_answer_label": "Needs type",
-                  "header": "What is the needs type?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Supported housing"
-                    },
-                    "1": {
-                      "value": "General needs"
-                    }
-                  }
                 }
               }
             },
