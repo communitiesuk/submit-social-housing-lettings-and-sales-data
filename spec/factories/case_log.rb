@@ -53,8 +53,6 @@ FactoryBot.define do
       reservist { "No" }
       illness { "Yes" }
       preg_occ { "Yes" }
-      accessibility_requirements { "No" }
-      condition_effects { "dummy" }
       tenancy_code { "BZ757" }
       startertenancy { "No" }
       tenancylength { 5 }
@@ -81,7 +79,6 @@ FactoryBot.define do
       lawaitlist { "Less than 1 year" }
       property_postcode { "NW1 5TY" }
       reasonpref { "Yes" }
-      reasonable_preference_reason { "dummy" }
       cbl { "Yes" }
       chr { "Yes" }
       cap { "No" }
