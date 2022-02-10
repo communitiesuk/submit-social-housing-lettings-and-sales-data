@@ -39,10 +39,18 @@
                     "header": "Which of these best describes the tenant’s gender identity?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Female",
-                      "1": "Male",
-                      "2": "Non-binary",
-                      "3": "Prefer not to say"
+                      "0": {
+                        "value": "Female"
+                      },
+                      "1": {
+                        "value": "Male"
+                      },
+                      "2": {
+                        "value": "Non-binary"
+                      },
+                      "3": {
+                        "value": "Prefer not to say"
+                      }
                     }
                   }
                 }
@@ -70,8 +78,12 @@
                     "header": "What’s person 2’s relationship to lead tenant",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Other",
-                      "1": "Prefer not to say"
+                      "0": {
+                        "value":  "Other"
+                      },
+                      "1": {
+                        "value":  "Prefer not to say"
+                      }
                     }
                   },
                   "age2": {
@@ -88,10 +100,18 @@
                     "header": "Which of these best describes person 2’s gender identity?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Female",
-                      "1": "Male",
-                      "2": "Non-binary",
-                      "3": "Prefer not to say"
+                      "0": {
+                        "value": "Female"
+                      },
+                      "1": {
+                        "value": "Male"
+                      },
+                      "2": {
+                        "value": "Non-binary"
+                      },
+                      "3": {
+                        "value": "Prefer not to say"
+                      }
                     }
                   },
                   "ecstat2": {
@@ -99,8 +119,12 @@
                     "header": "Which of these best describes person 2’s working situation?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Other",
-                      "1": "Prefer not to say"
+                      "0": {
+                        "value": "Other"
+                      },
+                      "1": {
+                        "value": "Prefer not to say"
+                      }
                     }
                   }
                 }
@@ -128,11 +152,21 @@
                     "type": "radio",
                     "check_answer_label": "Armed Forces",
                     "answer_options": {
-                      "0":"A current or former regular in the UK Armed Forces (excluding National Service)",
-                      "1":"A current or former reserve in the UK Armed Forces (excluding National Service)",
-                      "2": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years",
-                      "3": "No",
-                      "4": "Tenant prefers not to say"
+                      "0":{
+                        "value": "A current or former regular in the UK Armed Forces (excluding National Service)"
+                      },
+                      "1": {
+                        "value": "A current or former reserve in the UK Armed Forces (excluding National Service)"
+                      },
+                      "2": {
+                        "value": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+                      },
+                      "3": {
+                        "value": "No"
+                      },
+                      "4": {
+                        "value": "Tenant prefers not to say"
+                      }
                     },
                     "conditional_for": {
                       "leftreg": ["A current or former regular in the UK Armed Forces (excluding National Service)"]
@@ -153,11 +187,21 @@
                     "type": "radio",
                     "check_answer_label": "Physical, mental health or illness in the household",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No",
-                      "divider": true,
-                      "2": "Don’t know",
-                      "3": "Prefer not to say"
+                      "0": {
+                        "value":  "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      },
+                      "divider": {
+                        "value": true
+                      },
+                      "2": {
+                        "value": "Don’t know"
+                      },
+                      "3": {
+                        "value": "Prefer not to say"
+                      }
                     }
                   }
                 }
@@ -170,11 +214,21 @@
                     "type": "checkbox",
                     "check_answer_label": "Disability requirements",
                     "answer_options": {
-                      "housingneeds_a": "Fully wheelchair accessible housing",
-                      "housingneeds_b": "Wheelchair access to essential rooms",
-                      "housingneeds_c": "Level access housing",
-                      "divider": true,
-                      "housingneeds_h": "Don’t know"
+                      "housingneeds_a": {
+                        "value": "Fully wheelchair accessible housing"
+                      },
+                      "housingneeds_b": {
+                        "value": "Wheelchair access to essential rooms"
+                      },
+                      "housingneeds_c": {
+                        "value": "Level access housing"
+                      },
+                      "divider": {
+                        "value": true
+                      },
+                      "housingneeds_h": {
+                        "value": "Don’t know"
+                      }
                     }
                   }
                 }
@@ -205,8 +259,12 @@
                     "type": "checkbox",
                     "check_answer_label": "Conditions or illnesses",
                     "answer_options": {
-                      "illness_type_1": "Vision - such as blindness or partial sight",
-                      "illness_type_2": "Hearing - such as deafness or partial hearing"
+                      "illness_type_1": {
+                        "value": "Vision - such as blindness or partial sight"
+                      },
+                      "illness_type_2": {
+                        "value": "Hearing - such as deafness or partial hearing"
+                      }
                     }
                   }
                 }
@@ -264,8 +322,12 @@
                     "hint_text": "",
                     "type": "radio",
                     "answer_options": {
-                      "0": "No",
-                      "1": "Yes"
+                      "0": {
+                        "value": "No"
+                      },
+                      "1": {
+                        "value": "Yes"
+                      }
                     }
                   }
                 },
@@ -278,8 +340,12 @@
                     "header": "Is the property built or adapted to wheelchair-user standards?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No"
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
                     }
                   }
                 }
@@ -296,8 +362,12 @@
                     "header": "Has the condition been met?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No"
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
                     }
                   }
                 }
@@ -309,8 +379,12 @@
                     "header": "Has the next condition been met?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No"
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
                     }
                   }
                 },
@@ -323,8 +397,12 @@
                     "header": "Has the next condition not been met?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No"
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
                     }
                   }
                 },
@@ -337,8 +415,12 @@
                     "header": "Has the next condition not been met again?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Yes",
-                      "1": "No"
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
                     }
                   }
                 },
@@ -378,9 +460,15 @@
                     "header": "How often do they receive this income?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Weekly",
-                      "1": "Monthly",
-                      "2": "Yearly"
+                      "0": {
+                        "value": "Weekly"
+                      },
+                      "1": {
+                        "value": "Monthly"
+                      },
+                      "2": {
+                        "value": "Yearly"
+                      }
                     }
                   }
                 },
@@ -401,8 +489,12 @@
                     "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "All",
-                      "1": "Some"
+                      "0": {
+                        "value":"All"
+                      },
+                      "1": {
+                        "value":"Some"
+                      }
                     }
                   }
                 }
@@ -414,8 +506,12 @@
                     "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Housing benefit",
-                      "1": "Tenant prefers not to say"
+                      "0": {
+                        "value": "Housing benefit"
+                      },
+                      "1": {
+                        "value": "Tenant prefers not to say"
+                      }
                     },
                     "conditional_for": {
                       "conditional_question": ["Housing benefit"]
@@ -426,8 +522,12 @@
                     "header": "Question to test page conditions",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Option A",
-                      "1": "Option B"
+                      "0": {
+                        "value": "Option A"
+                      },
+                      "1": {
+                        "value": "Option B"
+                      }
                     }
                   }
                 }
@@ -440,8 +540,12 @@
                     "header": "Question to test page routing",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Option A",
-                      "1": "Option B"
+                      "0": {
+                        "value": "Option A"
+                      },
+                      "1": {
+                        "value": "Option B"
+                      }
                     }
                   }
                 }
@@ -458,8 +562,12 @@
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Weekly for 52 weeks",
-                      "1": "Every 2 weeks"
+                      "0": {
+                        "value": "Weekly for 52 weeks"
+                      },
+                      "1": {
+                        "value": "Every 2 weeks"
+                      }
                     }
                   },
                   "brent": {
@@ -573,15 +681,33 @@
                     "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Just moved to local authority area",
-                      "1": "Less than 1 year",
-                      "2": "1 to 2 years",
-                      "3": "2 to 3 years",
-                      "4": "3 to 4 years",
-                      "5": "4 to 5 years",
-                      "6": "5 years or more",
-                      "divider": true,
-                      "7": "Don’t know"
+                      "0": {
+                        "value": "Just moved to local authority area"
+                      },
+                      "1": {
+                        "value": "Less than 1 year"
+                      },
+                      "2": {
+                        "value": "1 to 2 years"
+                      },
+                      "3": {
+                        "value": "2 to 3 years"
+                      },
+                      "4": {
+                        "value": "3 to 4 years"
+                      },
+                      "5": {
+                        "value": "4 to 5 years"
+                      },
+                      "6": {
+                        "value": "5 years or more"
+                      },
+                      "divider": {
+                        "value": true
+                      },
+                      "7": {
+                        "value": "Don’t know"
+                      }
                     }
                   }
                 }
@@ -593,15 +719,33 @@
                     "header": "How long has the household been on the local authority waiting list where the new letting is located?",
                     "type": "radio",
                     "answer_options": {
-                      "0": "Just moved to local authority area",
-                      "1": "Less than 1 year",
-                      "2": "1 to 2 years",
-                      "3": "2 to 3 years",
-                      "4": "3 to 4 years",
-                      "5": "4 to 5 years",
-                      "6": "5 years or more",
-                      "divider": true,
-                      "7": "Don’t know"
+                      "0": {
+                        "value": "Just moved to local authority area"
+                      },
+                      "1": {
+                        "value": "Less than 1 year"
+                      },
+                      "2": {
+                        "value": "1 to 2 years"
+                      },
+                      "3": {
+                        "value": "2 to 3 years"
+                      },
+                      "4": {
+                        "value": "3 to 4 years"
+                      },
+                      "5": {
+                        "value": "4 to 5 years"
+                      },
+                      "6": {
+                        "value": "5 years or more"
+                      },
+                      "divider": {
+                        "value": true
+                      },
+                      "7": {
+                        "value": "Don’t know"
+                      }
                     }
                   }
                 }
@@ -658,7 +802,9 @@
                     "header": "Submit your lettings log ",
                     "type": "checkbox",
                     "answer_options": {
-                      "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                      "declaration": {
+                        "value": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                      }
                     }
                   }
                 }
