@@ -89,6 +89,15 @@ RSpec.describe CaseLog do
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
+    it "validates bedroom number" do
+      expect {
+        described_class.create!(unittype_gn: "Shared house",
+                                beds: 0,
+                                owning_organisation: owning_organisation,
+                                managing_organisation: managing_organisation)
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
     context "when a reasonable preference is set to yes" do
       it "validates that previously homeless should be selected" do
         expect {
@@ -297,55 +306,6 @@ RSpec.describe CaseLog do
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating shared accommodation bedrooms" do
-      it "checks you must have more than zero bedrooms" do
-        expect {
-          described_class.create!(unittype_gn: "Shared house",
-                                  beds: 0,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "checks you must answer less than 8 bedrooms" do
-        expect {
-          described_class.create!(unittype_gn: "Shared bungalow",
-                                  beds: 8,
-                                  other_hhmemb: 1,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "checks you must answer less than 4 bedrooms" do
-        expect {
-          described_class.create!(unittype_gn: "Shared bungalow",
-                                  beds: 4,
-                                  other_hhmemb: 0,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "checks a bedsit cannot have more than one room" do
-        expect {
-          described_class.create!(unittype_gn: "Bedsit",
-                                  beds: 2,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "checks a bedsit cannot be less than one room" do
-        expect {
-          described_class.create!(unittype_gn: "Bedsit",
-                                  beds: 0,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -779,24 +739,6 @@ RSpec.describe CaseLog do
             managing_organisation: managing_organisation,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating type of unit" do
-      it "Cannot be bedsit if no of bedrooms is greater than 1" do
-        expect {
-          described_class.create!(unittype_gn: "Bedsit",
-                                  beds: 2,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(unittype_gn: "Bedsit",
-                                  beds: 1,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
       end
     end
 

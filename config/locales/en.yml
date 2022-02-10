@@ -57,6 +57,10 @@ en:
         previous_let_social: "Property cannot have a previous let type if it is being let as social housing for the first time"
         non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us this accommodation is not temporary"
         referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us a different source of referral for this letting"
+      unittype_gn:
+        one_bedroom_bedsit: "A bedsit can only have one bedroom"
+        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
+        one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
 
     financial:
       tshortfall:
@@ -100,10 +104,6 @@ en:
         one_partner: "Number of partners cannot be greater than 1"
       housingneeds_a:
         one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
-      unittype_gn:
-        one_bedroom_bedsit: "A bedsit can only have one bedroom"
-        one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
-        one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
 
