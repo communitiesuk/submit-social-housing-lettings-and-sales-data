@@ -7,8 +7,8 @@ class Form
 
     @form_definition = JSON.parse(File.open(form_path).read)
     @name = name
-    @start_date = form_definition["start_date"]
-    @end_date = form_definition["end_date"]
+    @start_date = Time.iso8601(form_definition["start_date"])
+    @end_date = Time.iso8601(form_definition["end_date"])
     @type = form_definition["form_type"]
     @sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
     @subsections = sections.flat_map(&:subsections)

@@ -10,10 +10,21 @@ RSpec.describe CaseLog do
     let(:case_log_year_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2023, 5, 1)) }
 
     it "has returns the correct form based on the start date" do
-      expect(case_log.form_name).to eq("2021_2022")
-      expect(case_log_2.form_name).to eq("2021_2022")
-      expect(case_log_year_2.form_name).to eq("2023_2024")
+      expect(case_log.form_name).to be_nil
       expect(case_log.form).to be_a(Form)
+      expect(case_log_2.form_name).to eq("2021_2022")
+      expect(case_log_2.form).to be_a(Form)
+      expect(case_log_year_2.form_name).to eq("2023_2024")
+      expect(case_log_year_2.form).to be_a(Form)
+    end
+
+    context "when a date outside the collection window is passed" do
+      let(:case_log) { FactoryBot.build(:case_log, startdate: Time.zone.local(2015, 1, 1)) }
+
+      it "returns the first form" do
+        expect(case_log.form).to be_a(Form)
+        expect(case_log.form.start_date.year).to eq(2021)
+      end
     end
   end
 
