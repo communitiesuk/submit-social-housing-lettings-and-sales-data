@@ -70,22 +70,6 @@ module Validations::HouseholdValidations
     end
   end
 
-  def validate_shared_housing_rooms(record)
-    unless record.unittype_gn.nil?
-      if record.unittype_gn == "Bedsit" && record.beds != 1 && record.beds.present?
-        record.errors.add :unittype_gn, I18n.t("validations.household.unittype_gn.one_bedroom_bedsit")
-      end
-
-      if !record.other_hhmemb.nil? && record.other_hhmemb.positive? && (record.unittype_gn.include?("Shared") && !record.beds.to_i.between?(1, 7))
-        record.errors.add :unittype_gn, I18n.t("validations.household.unittype_gn.one_seven_bedroom_shared")
-      end
-
-      if record.unittype_gn.include?("Shared") && !record.beds.to_i.between?(1, 3) && record.beds.present?
-        record.errors.add :unittype_gn, I18n.t("validations.household.unittype_gn.one_three_bedroom_single_tenant_shared")
-      end
-    end
-  end
-
   def validate_previous_housing_situation(record)
     if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
