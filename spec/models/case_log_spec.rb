@@ -956,7 +956,6 @@ RSpec.describe CaseLog do
   end
 
   describe "derived variables" do
-    require "date"
     let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
     let!(:case_log) do
       described_class.create({
@@ -1027,6 +1026,18 @@ RSpec.describe CaseLog do
       expect(record_from_db["day"]).to eq(10)
       expect(record_from_db["month"]).to eq(10)
       expect(record_from_db["year"]).to eq(2021)
+    end
+
+    context "when any charge field is set" do
+      before do
+        case_log.update!(pscharge: 10)
+      end
+
+      it "derives that any blank ones are 0" do
+        record_from_db = ActiveRecord::Base.connection.execute("select supcharg, scharge from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["supcharg"].to_f).to eq(0.0)
+        expect(record_from_db["scharge"].to_f).to eq(0.0)
+      end
     end
 
     context "when saving addresses" do

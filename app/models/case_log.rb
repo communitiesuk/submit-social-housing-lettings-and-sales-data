@@ -249,7 +249,13 @@ private
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
-    self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
+    if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
+      self.brent ||= 0
+      self.scharge ||= 0
+      self.pscharge ||= 0
+      self.supcharg ||= 0
+      self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
+    end
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge == "Yes" ? "No" : "Yes"
     self.layear = "Less than 1 year" if renewal == "Yes"
