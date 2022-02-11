@@ -27,7 +27,7 @@ class FormController < ApplicationController
     if @case_log
       current_url = request.env["PATH_INFO"]
       subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
-      render "form/check_answers", locals: { subsection: subsection }
+      render "form/check_answers", locals: { subsection: }
     else
       render_not_found
     end

@@ -18,7 +18,7 @@ module Imports
         password: Devise.friendly_token,
         phone: user_field_value(xml_document, "telephone-no"),
         old_user_id: user_field_value(xml_document, "id"),
-        organisation: organisation,
+        organisation:,
         role: PROVIDER_TYPE[user_field_value(xml_document, "user-type")],
       )
     rescue ActiveRecord::RecordNotUnique

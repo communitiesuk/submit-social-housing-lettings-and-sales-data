@@ -212,7 +212,7 @@ RSpec.describe FormController, type: :request do
                 accessibility_requirements:
                                        %w[ housingneeds_a
                                            housingneeds_f],
-                tenant_code: tenant_code,
+                tenant_code:,
               },
             }
           end

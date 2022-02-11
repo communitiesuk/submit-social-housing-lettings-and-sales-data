@@ -21,8 +21,8 @@ RSpec.describe CaseLog do
     context "when creating a record" do
       let(:case_log) do
         described_class.create(
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
+          owning_organisation:,
+          managing_organisation:,
         )
       end
 
@@ -38,8 +38,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(reason: "Don’t know",
                                   underoccupation_benefitcap: "Yes - benefit cap",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -49,8 +49,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(reason: "Other",
                                   other_reason_for_leaving_last_settled_home: nil,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -58,8 +58,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(reason: "Repossession",
                                   other_reason_for_leaving_last_settled_home: "the other reason provided",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -69,8 +69,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(armedforces: "No",
                                   reservist: "Yes",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -82,8 +82,8 @@ RSpec.describe CaseLog do
                                   sex1: "Male", age1: 99,
                                   sex2: "Female",
                                   age2: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
       end
     end
@@ -94,40 +94,40 @@ RSpec.describe CaseLog do
           described_class.create!(
             first_time_property_let_as_social_housing: "No",
             unitletas: "Social rent basis",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             unitletas: "Social rent basis",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             unitletas: "Affordable rent basis",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             unitletas: "Intermediate rent basis",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             unitletas: "Don’t know",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -137,32 +137,32 @@ RSpec.describe CaseLog do
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             rsnvac: "First let of new-build property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             rsnvac: "First let of leased property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
         expect {
           described_class.create!(
             first_time_property_let_as_social_housing: "Yes",
             rsnvac: "Tenant moved to care home",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -173,8 +173,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(hbrentshortfall: "No",
                                   tshortfall: 99,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -185,8 +185,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             benefits: "All",
             ecstat1: "Full-time - 30 hours or more",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -196,8 +196,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             benefits: "All",
             ecstat1: "Part-time - Less than 30 hours",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -208,8 +208,8 @@ RSpec.describe CaseLog do
             benefits: "All",
             relat2: "Partner",
             ecstat2: "Part-time - Less than 30 hours",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -220,8 +220,8 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(armedforces: "No",
                                   leftreg: "Yes",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -231,8 +231,8 @@ RSpec.describe CaseLog do
           described_class.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
                                   leftreg: "Yes",
                                   reservist: "Yes",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
       end
     end
@@ -243,8 +243,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             age2: 14,
             relat2: "Partner",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -254,8 +254,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             age2: 71,
             ecstat2: "Full-time - 30 hours or more",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -266,8 +266,8 @@ RSpec.describe CaseLog do
             age2: 64,
             sex2: "Male",
             ecstat2: "Retired",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -278,8 +278,8 @@ RSpec.describe CaseLog do
             age2: 59,
             sex2: "Female",
             ecstat2: "Retired",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -289,8 +289,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             age2: 15,
             ecstat2: "Full-time - 30 hours or more",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -301,8 +301,8 @@ RSpec.describe CaseLog do
             age2: 17,
             relat2: "Child - includes young adult and grown-up",
             ecstat2: "Full-time - 30 hours or more",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -312,8 +312,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             age2: 15,
             relat2: "Partner",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -323,8 +323,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             relat2: "Partner",
             relat3: "Partner",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -335,15 +335,15 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(tenancy: "Other",
                                   tenancyother: nil,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           described_class.create!(tenancy: "Other",
                                   tenancyother: "type",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
       end
 
@@ -351,15 +351,15 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(tenancy: "Secure (including flexible)",
                                   tenancyother: "the other reason provided",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           described_class.create!(tenancy: "Secure (including flexible)",
                                   tenancyother: nil,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
       end
     end
@@ -371,8 +371,8 @@ RSpec.describe CaseLog do
             ecstat1: "Full-time - 30 hours or more",
             earnings: 5000,
             incfreq: "Weekly",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -383,8 +383,8 @@ RSpec.describe CaseLog do
             ecstat1: "Full-time - 30 hours or more",
             earnings: 1,
             incfreq: "Weekly",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -426,8 +426,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             mrcdate: Date.new(2021, 10, 10),
             startdate: Date.new(2021, 10, 9),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -435,8 +435,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             mrcdate: Date.new(2021, 10, 9),
             startdate: Date.new(2021, 10, 10),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
       end
@@ -446,8 +446,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of new-build property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -455,8 +455,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -464,8 +464,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             mrcdate: Date.new(2020, 10, 10),
             rsnvac: "First let of leased property",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -475,8 +475,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             startdate: Date.new(2021, 10, 10),
             mrcdate: Date.new(2017, 10, 10),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -488,8 +488,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2009, 10, 10),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -497,8 +497,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2015, 10, 10),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
       end
@@ -508,8 +508,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2021, 10, 11),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
 
@@ -517,8 +517,8 @@ RSpec.describe CaseLog do
           described_class.create!(
             startdate: Date.new(2021, 10, 10),
             property_void_date: Date.new(2019, 10, 10),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.not_to raise_error
       end
@@ -529,8 +529,8 @@ RSpec.describe CaseLog do
             startdate: Date.new(2021, 10, 10),
             mrcdate: Date.new(2019, 10, 10),
             property_void_date: Date.new(2019, 11, 11),
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
+            owning_organisation:,
+            managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -541,15 +541,15 @@ RSpec.describe CaseLog do
         expect {
           described_class.create!(la: "Ashford",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
           described_class.create!(la: "Westminster",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
       end
     end
@@ -560,8 +560,8 @@ RSpec.describe CaseLog do
           described_class.create!(housingneeds_a: "Yes",
                                   housingneeds_b: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
@@ -570,32 +570,32 @@ RSpec.describe CaseLog do
           described_class.create!(housingneeds_a: "Yes",
                                   housingneeds_f: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
 
         expect {
           described_class.create!(housingneeds_b: "Yes",
                                   housingneeds_f: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
 
         expect {
           described_class.create!(housingneeds_c: "Yes",
                                   housingneeds_f: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.not_to raise_error
 
         expect {
           described_class.create!(housingneeds_g: "Yes",
                                   housingneeds_f: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
 
         expect {
@@ -603,8 +603,8 @@ RSpec.describe CaseLog do
                                   housingneeds_b: "Yes",
                                   housingneeds_f: "Yes",
                                   rent_type: "London Affordable rent",
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -613,18 +613,18 @@ RSpec.describe CaseLog do
       def check_rsnvac_validation(prevten)
         expect {
           described_class.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
-                                  prevten: prevten,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  prevten:,
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       def check_rsnvac_referral_validation(referral)
         expect {
           described_class.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
-                                  referral: referral,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
+                                  referral:,
+                                  owning_organisation:,
+                                  managing_organisation:)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 

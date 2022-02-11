@@ -2,7 +2,7 @@ require "rails_helper"
 require_relative "../../support/devise"
 
 RSpec.describe Auth::PasswordsController, type: :request do
-  let(:params) { { user: { email: email } } }
+  let(:params) { { user: { email: } } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }

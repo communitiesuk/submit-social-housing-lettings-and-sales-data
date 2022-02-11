@@ -48,7 +48,7 @@ private
       )
     Aws::S3::Client.new(
       region: @configuration.region,
-      credentials: credentials,
+      credentials:,
     )
   end
 end

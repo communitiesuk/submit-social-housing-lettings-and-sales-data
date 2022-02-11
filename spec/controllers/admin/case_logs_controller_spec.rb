@@ -44,7 +44,7 @@ describe Admin::CaseLogsController, type: :controller do
     end
 
     it "tracks who created the record" do
-      post :create, session: valid_session, params: params
+      post(:create, session: valid_session, params:)
       created_id = response.location.match(/[0-9]+/)[0]
       whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
       expect(whodunnit_actor).to be_a(AdminUser)
@@ -68,7 +68,7 @@ describe Admin::CaseLogsController, type: :controller do
 
     context "when updating the case_log" do
       let(:tenant_code) { "New tenant code by Admin" }
-      let(:params) { { id: case_log.id, case_log: { tenant_code: tenant_code } } }
+      let(:params) { { id: case_log.id, case_log: { tenant_code: } } }
 
       before do
         patch :update, session: valid_session, params: params

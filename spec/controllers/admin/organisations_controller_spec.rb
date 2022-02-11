@@ -33,7 +33,7 @@ describe Admin::OrganisationsController, type: :controller do
     end
 
     it "tracks who created the record" do
-      post :create, session: valid_session, params: params
+      post(:create, session: valid_session, params:)
       created_id = response.location.match(/[0-9]+/)[0]
       whodunnit_actor = Organisation.find_by(id: created_id).versions.last.actor
       expect(whodunnit_actor).to be_a(AdminUser)
@@ -56,7 +56,7 @@ describe Admin::OrganisationsController, type: :controller do
 
     context "when updating the organisation" do
       let(:name) { "New Org Name by Admin" }
-      let(:params) { { id: organisation.id, organisation: { name: name } } }
+      let(:params) { { id: organisation.id, organisation: { name: } } }
 
       before do
         patch :update, session: valid_session, params: params

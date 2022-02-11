@@ -15,8 +15,8 @@ class DeviseNotifyMailer < Devise::Mailer
   def send_email(email, template_id, personalisation)
     notify_client.send_email(
       email_address: email,
-      template_id: template_id,
-      personalisation: personalisation,
+      template_id:,
+      personalisation:,
     )
   end
 

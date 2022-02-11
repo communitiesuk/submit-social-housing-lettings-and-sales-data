@@ -94,11 +94,11 @@ private
     begin
       Integer(record.public_send("age#{person_num}_before_type_cast"))
     rescue ArgumentError
-      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound: lower_bound)
+      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound:)
     end
 
     if age < lower_bound || age > 120
-      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound: lower_bound)
+      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound:)
     end
   end
 
@@ -108,10 +108,10 @@ private
     return unless age && economic_status
 
     if age > 70 && economic_status != "Retired"
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num: person_num)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num:)
     end
     if age < 16 && economic_status != "Child under 16"
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num: person_num)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
     end
   end
 
@@ -121,7 +121,7 @@ private
     return unless age && relationship
 
     if age < 16 && relationship != "Child - includes young adult and grown-up"
-      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16", person_num: person_num)
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16", person_num:)
     end
   end
 
@@ -132,7 +132,7 @@ private
     return unless age && economic_status && relationship
 
     if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num: person_num)
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
     end
   end
 

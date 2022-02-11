@@ -7,8 +7,8 @@ class Sms
 
   def self.send(phone_number, template_id, args)
     notify_client.send_sms(
-      phone_number: phone_number,
-      template_id: template_id,
+      phone_number:,
+      template_id:,
       personalisation: args,
     )
   end

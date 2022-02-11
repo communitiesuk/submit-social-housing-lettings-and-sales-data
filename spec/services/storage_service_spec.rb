@@ -57,7 +57,7 @@ RSpec.describe StorageService do
           aws_access_key_id: "key_id",
           aws_region: "eu-west-2",
           aws_secret_access_key: "secret",
-          bucket_name: bucket_name,
+          bucket_name:,
         },
       )
       expect(storage_service.configuration).to eq(expected_configuration)

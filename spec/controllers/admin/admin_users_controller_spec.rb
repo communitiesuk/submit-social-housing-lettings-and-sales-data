@@ -32,7 +32,7 @@ describe Admin::AdminUsersController, type: :controller do
     end
 
     it "tracks who created the record" do
-      post :create, session: valid_session, params: params
+      post(:create, session: valid_session, params:)
       created_id = response.location.match(/[0-9]+/)[0]
       whodunnit_actor = AdminUser.find_by(id: created_id).versions.last.actor
       expect(whodunnit_actor).to be_a(AdminUser)
@@ -56,7 +56,7 @@ describe Admin::AdminUsersController, type: :controller do
     context "when updating an admin user" do
       let(:admin_user) { FactoryBot.create(:admin_user) }
       let(:email) { "new_email@example.com" }
-      let(:params) { { id: admin_user.id, admin_user: { email: email } } }
+      let(:params) { { id: admin_user.id, admin_user: { email: } } }
 
       before do
         patch :update, session: valid_session, params: params

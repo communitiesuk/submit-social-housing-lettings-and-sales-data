@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TabNavHelper do
   let(:organisation) { FactoryBot.create(:organisation) }
-  let(:user) { FactoryBot.build(:user, organisation: organisation) }
+  let(:user) { FactoryBot.build(:user, organisation:) }
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
@@ -20,7 +20,7 @@ RSpec.describe TabNavHelper do
 
   describe "#tab_items" do
     context "when user is a data_coordinator" do
-      let(:user) { FactoryBot.build(:user, :data_coordinator, organisation: organisation) }
+      let(:user) { FactoryBot.build(:user, :data_coordinator, organisation:) }
 
       it "returns details and user tabs" do
         result = tab_items(user).map { |i| i[:name] }
