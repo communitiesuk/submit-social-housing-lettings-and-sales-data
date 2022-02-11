@@ -41,7 +41,7 @@
     <age8/>
     <sex8/>
     <ecstat8/>
-    <homeless>Yes - other homelessness</homeless>
+    <homeless>Other homeless - not found statutorily homeless but considered homeless by landlord</homeless>
     <underoccupation_benefitcap>No</underoccupation_benefitcap>
     <leftreg>No - they left up to 5 years ago</leftreg>
     <reservist>No</reservist>
@@ -155,6 +155,10 @@
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
     <declaration>Yes</declaration>
+    <previous_postcode_known>Yes</previous_postcode_known>
+    <previous_la_known/>
+    <is_previous_la_inferred>false</is_previous_la_inferred>
+    <letting_allocation_unknown/>
   </form>
   <form>
     <id>{id_2}</id>
@@ -197,7 +201,7 @@
     <age8/>
     <sex8/>
     <ecstat8/>
-    <homeless>Yes - other homelessness</homeless>
+    <homeless>Other homeless - not found statutorily homeless but considered homeless by landlord</homeless>
     <underoccupation_benefitcap>No</underoccupation_benefitcap>
     <leftreg>No - they left up to 5 years ago</leftreg>
     <reservist>No</reservist>
@@ -311,5 +315,9 @@
     <tshortfall>12.0</tshortfall>
     <chcharge>7.0</chcharge>
     <declaration>Yes</declaration>
+    <previous_postcode_known>Yes</previous_postcode_known>
+    <previous_la_known/>
+    <is_previous_la_inferred>false</is_previous_la_inferred>
+    <letting_allocation_unknown/>
   </form>
 </forms>
