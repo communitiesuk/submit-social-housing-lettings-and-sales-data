@@ -77,7 +77,7 @@ RSpec.describe Form, type: :model do
       end
 
       def answer_local_authority(case_log)
-        case_log.layear = "1 to 2 years"
+        case_log.layear = "1 year but under 2 years"
         case_log.lawaitlist = "Less than 1 year"
         case_log.property_postcode = "NW1 5TY"
         case_log.reason = "Permanently decanted from another property owned by this landlord"

@@ -688,16 +688,16 @@
                         "value": "Less than 1 year"
                       },
                       "2": {
-                        "value": "1 to 2 years"
+                        "value": "1 year but under 2 years"
                       },
                       "3": {
-                        "value": "2 to 3 years"
+                        "value": "2 years but under 3 years"
                       },
                       "4": {
-                        "value": "3 to 4 years"
+                        "value": "3 years but under 4 years"
                       },
                       "5": {
-                        "value": "4 to 5 years"
+                        "value": "4 years but under 5 years"
                       },
                       "6": {
                         "value": "5 years or more"
@@ -726,16 +726,16 @@
                         "value": "Less than 1 year"
                       },
                       "2": {
-                        "value": "1 to 2 years"
+                        "value": "1 year but under 2 years"
                       },
                       "3": {
-                        "value": "2 to 3 years"
+                        "value": "2 years but under 3 years"
                       },
                       "4": {
-                        "value": "3 to 4 years"
+                        "value": "3 years but under 4 years"
                       },
                       "5": {
-                        "value": "4 to 5 years"
+                        "value": "4 years but under 5 years"
                       },
                       "6": {
                         "value": "5 years or more"

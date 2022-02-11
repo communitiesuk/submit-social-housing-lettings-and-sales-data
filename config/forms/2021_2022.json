@@ -1107,7 +1107,7 @@
               "questions": {
                 "layear": {
                   "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
-                  "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "header": "How long has the household continuously lived in the local authority area of the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1118,25 +1118,25 @@
                       "value": "Less than 1 year"
                     },
                     "2": {
-                      "value": "1 to 2 years"
+                      "value": "1 year but under 2 years"
                     },
                     "3": {
-                      "value": "2 to 3 years"
+                      "value": "2 years but under 3 years"
                     },
                     "4": {
-                      "value": "3 to 4 years"
+                      "value": "3 years but under 4 years"
                     },
                     "5": {
-                      "value": "4 to 5 years"
+                      "value": "4 years but under 5 years"
                     },
                     "6": {
                       "value": "5 years or more"
                     },
-                    "7": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1159,25 +1159,25 @@
                       "value": "Less than 1 year"
                     },
                     "2": {
-                      "value": "1 to 2 years"
+                      "value": "1 year but under 2 years"
                     },
                     "3": {
-                      "value": "2 to 3 years"
+                      "value": "2 years but under 3 years"
                     },
                     "4": {
-                      "value": "3 to 4 years"
+                      "value": "3 years but under 4 years"
                     },
                     "5": {
-                      "value": "4 to 5 years"
+                      "value": "4 years but under 5 years"
                     },
                     "6": {
                       "value": "5 years or more"
                     },
-                    "7": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1190,7 +1190,7 @@
               "questions": {
                 "reason": {
                   "header": "What is the tenant’s main reason for the household leaving their last settled home?",
-                  "hint_text": "The tenant's 'last settled home' is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
+                  "hint_text": "The tenant’s ’last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
@@ -1227,7 +1227,7 @@
                       "value": "Relationship breakdown (non-violent) with partner"
                     },
                     "11": {
-                      "value": "Death of household member in last settled accomodation"
+                      "value": "Death of household member in last settled accommodation"
                     },
                     "12": {
                       "value": "To move nearer to family, friends or school"
@@ -1281,10 +1281,10 @@
                       "value": "Under occupation - offered incentive to downsize"
                     },
                     "29": {
-                      "value": "To move to accomodation with support"
+                      "value": "To move to accommodation with support"
                     },
                     "30": {
-                      "value": "To move to independent accomodation"
+                      "value": "To move to independent accommodation"
                     },
                     "31": {
                       "value": "Other"
@@ -1413,11 +1413,11 @@
                     "3": {
                       "value": "No"
                     },
-                    "4": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "4": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1450,13 +1450,13 @@
               "description": "",
               "questions": {
                 "previous_postcode_known": {
-                  "check_answer_label": "Do you know the postcode of the household's last settled accommodation?",
+                  "check_answer_label": "Do you know the postcode of the household’s last settled accommodation?",
                   "header": "Do you know the property’s postcode?",
-                  "hint_text": "This is also known as the household's 'last settled home'.",
+                  "hint_text": "This is also known as the household’s ’last settled home’.",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "1": { "value": "Yes" },
+                    "0": { "value": "No" }
                   },
                   "conditional_for": {
                     "previous_postcode": ["Yes"]
@@ -1469,7 +1469,9 @@
                   "hint_text": "",
                   "type": "text",
                   "width": 5,
-                  "inferred_answers": { "la": { "is_previous_la_inferred": true } },
+                  "inferred_answers": {
+                    "la": { "is_previous_la_inferred": true }
+                  },
                   "inferred_check_answers_value": {
                     "condition": { "postcode_known": "No" },
                     "value": "Not known"
@@ -1484,11 +1486,11 @@
                 "previous_la_known": {
                   "check_answer_label": "Do you know the local authority of the household’s last settled accommodation?",
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
-                  "hint_text": "This is also known as the household's 'last settled home'.",
+                  "hint_text": "This is also known as the household’s ’last settled home’.",
                   "type": "radio",
                   "answer_options": {
-                    "1": "Yes",
-                    "0": "No"
+                    "1": { "value": "Yes" },
+                    "0": { "value": "No" }
                   }
                 }
               },
@@ -1891,7 +1893,9 @@
                   }
                 }
               },
-              "depends_on": [{"previous_la_known":  "Yes", "is_previous_la_inferred": false }]
+              "depends_on": [
+                { "previous_la_known": "Yes", "is_previous_la_inferred": false }
+              ]
             },
             "reasonable_preference": {
               "header": "",
@@ -1909,11 +1913,11 @@
                     "1": {
                       "value": "No"
                     },
-                    "2": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "2": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1926,7 +1930,7 @@
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why was the household given ‘reasonable preference’?",
-                  "hint_text": "Select all that apply.",
+                  "hint_text": "",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": {
@@ -1950,9 +1954,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "reasonpref": "Yes"
-              }]
+              "depends_on": [
+                {
+                  "reasonpref": "Yes"
+                }
+              ]
             },
             "lettings_policy": {
               "header": "",
@@ -2029,7 +2035,12 @@
                   }
                 }
               },
-              "depends_on": [{"managing_organisation.provider_type":  "LA", "needstype": "General needs"}]
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "LA",
+                  "needstype": "General needs"
+                }
+              ]
             },
             "referral_prp": {
               "header": "",
@@ -2080,7 +2091,12 @@
                   }
                 }
               },
-              "depends_on": [{"managing_organisation.provider_type":  "PRP", "needstype": "General needs"}]
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "PRP",
+                  "needstype": "General needs"
+                }
+              ]
             },
             "referral_supported_housing": {
               "header": "",
@@ -2131,7 +2147,12 @@
                   }
                 }
               },
-              "depends_on": [{"managing_organisation.provider_type":  "LA", "needstype": "Supported housing"}]
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "LA",
+                  "needstype": "Supported housing"
+                }
+              ]
             },
             "referral_supported_housing_prp": {
               "header": "",
@@ -2185,7 +2206,12 @@
                   }
                 }
               },
-              "depends_on": [{"managing_organisation.provider_type":  "PRP", "needstype": "Supported housing"}]
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "PRP",
+                  "needstype": "Supported housing"
+                }
+              ]
             }
           }
         },
@@ -4071,7 +4097,7 @@
                 "pscharge": {
                   "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
@@ -4267,7 +4293,7 @@
                 "pscharge": {
                   "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,

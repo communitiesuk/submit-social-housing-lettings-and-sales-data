@@ -139,6 +139,7 @@ class CaseLog < ApplicationRecord
   enum postcode_known: POLAR, _suffix: true
   enum previous_postcode_known: POLAR, _suffix: true
   enum la_known: POLAR, _suffix: true
+  enum previous_la_known: POLAR, _suffix: true
   enum net_income_known: NET_INCOME_KNOWN, _suffix: true
   enum household_charge: POLAR, _suffix: true
   enum is_carehome: POLAR, _suffix: true

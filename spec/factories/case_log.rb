@@ -75,7 +75,7 @@ FactoryBot.define do
       pscharge { 40 }
       supcharg { 35 }
       tcharge { 325 }
-      layear { "1 to 2 years" }
+      layear { "1 year but under 2 years" }
       lawaitlist { "Less than 1 year" }
       property_postcode { "NW1 5TY" }
       reasonpref { "Yes" }

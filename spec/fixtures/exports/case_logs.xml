@@ -62,7 +62,7 @@
     <incfreq>Weekly</incfreq>
     <benefits>Some</benefits>
     <period>Every 2 weeks</period>
-    <layear>1 to 2 years</layear>
+    <layear>1 year but under 2 years</layear>
     <lawaitlist>Less than 1 year</lawaitlist>
     <property_postcode>NW1 5TY</property_postcode>
     <reasonpref>Yes</reasonpref>
@@ -144,7 +144,7 @@
     <has_benefits>Yes</has_benefits>
     <nocharge>No</nocharge>
     <is_carehome>No</is_carehome>
-    <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
+    <letting_in_sheltered_accommodation>No</letting_in_sheltered_accommodation>
     <household_charge>Yes</household_charge>
     <referral/>
     <brent>200.0</brent>
@@ -218,7 +218,7 @@
     <incfreq>Weekly</incfreq>
     <benefits>Some</benefits>
     <period>Every 2 weeks</period>
-    <layear>1 to 2 years</layear>
+    <layear>1 year but under 2 years</layear>
     <lawaitlist>Less than 1 year</lawaitlist>
     <property_postcode>NW1 5TY</property_postcode>
     <reasonpref>Yes</reasonpref>
@@ -300,7 +300,7 @@
     <has_benefits>Yes</has_benefits>
     <nocharge>No</nocharge>
     <is_carehome>No</is_carehome>
-    <letting_in_sheltered_accomodation>No</letting_in_sheltered_accomodation>
+    <letting_in_sheltered_accommodation>No</letting_in_sheltered_accommodation>
     <household_charge>Yes</household_charge>
     <referral/>
     <brent>200.0</brent>
