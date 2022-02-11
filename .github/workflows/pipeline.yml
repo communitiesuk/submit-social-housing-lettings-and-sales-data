@@ -21,7 +21,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.3
+        image: postgres:13.5
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: postgres
@@ -38,7 +38,7 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
-      GEMFILE_RUBY_VERSION: 3.0.0
+      GEMFILE_RUBY_VERSION: 3.1.0
       DB_HOST: localhost
       DB_DATABASE: data_collector
       DB_USERNAME: postgres
@@ -60,7 +60,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Create DB
         run: |

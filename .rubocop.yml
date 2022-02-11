@@ -20,3 +20,6 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
