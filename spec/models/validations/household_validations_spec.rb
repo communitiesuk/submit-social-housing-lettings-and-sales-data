@@ -48,5 +48,66 @@ RSpec.describe Validations::HouseholdValidations do
       expect(record.errors["age4"])
         .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 1))
     end
+
+    it "validates that person 1's age is between 16 and 120" do
+      record.age1 = 63
+      household_validator.validate_person_1_age(record)
+      expect(record.errors["age1"]).to be_empty
+    end
+
+    it "validates that other household member ages are between 1 and 120" do
+      record.age6 = 45
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["age6"]).to be_empty
+    end
+  end
+
+  describe "reasonable preference validations" do
+    context "when reasonable preference is given" do
+      context "when the tenant was not previously homeless" do
+        it "adds an error" do
+          record.homeless = "No"
+          record.reasonpref = "Yes"
+          household_validator.validate_reasonable_preference(record)
+          expect(record.errors["reasonpref"])
+            .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
+          expect(record.errors["homeless"])
+            .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
+        end
+      end
+
+      context "when reasonable preference is given" do
+        context "when the tenant was previously homeless" do
+          it "does not add an error" do
+            record.homeless = "Yes - other homelessness"
+            record.reasonpref = "Yes"
+            household_validator.validate_reasonable_preference(record)
+            expect(record.errors["reasonpref"]).to be_empty
+            expect(record.errors["homeless"]).to be_empty
+            record.homeless = "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days"
+            household_validator.validate_reasonable_preference(record)
+            expect(record.errors["reasonpref"]).to be_empty
+            expect(record.errors["homeless"]).to be_empty
+          end
+        end
+      end
+    end
+
+    context "when reasonable preference is not given" do
+      it "validates that no reason is needed" do
+        record.reasonpref = "No"
+        record.rp_homeless = "No"
+        household_validator.validate_reasonable_preference(record)
+        expect(record.errors["reasonpref"]).to be_empty
+      end
+
+      it "validates that no reason is given" do
+        record.reasonpref = "No"
+        record.rp_medwel = "Yes"
+        household_validator.validate_reasonable_preference(record)
+        expect(record.errors["reasonable_preference_reason"])
+          .to include(match I18n.t("validations.household.reasonable_preference_reason.reason_not_required"))
+      end
+    end
   end
 end

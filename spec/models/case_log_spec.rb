@@ -33,43 +33,6 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "when a reasonable preference is set to yes" do
-      it "validates that previously homeless should be selected" do
-        expect {
-          described_class.create!(
-            homeless: "No",
-            reasonpref: "Yes",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when a reasonable preference is set to no" do
-      it "validates no reason is needed" do
-        expect {
-          described_class.create!(
-            reasonpref: "No",
-            rp_homeless: "No",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.not_to raise_error
-      end
-
-      it "validates that no reason has been provided" do
-        expect {
-          described_class.create!(
-            reasonpref: "No",
-            rp_medwel: "Yes",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "with a reason for leaving last settled home validation" do
       it "checks the reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
         expect {
@@ -756,6 +719,10 @@ RSpec.describe CaseLog do
 
     it "validates the net income" do
       expect(validator).to receive(:validate_net_income)
+    end
+
+    it "validates reasonable preference" do
+      expect(validator).to receive(:validate_reasonable_preference)
     end
   end
 
