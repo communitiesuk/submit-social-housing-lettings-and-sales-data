@@ -36,6 +36,12 @@ module Exports
       @storage_service.write_file(file_path, string_io)
     end
 
+    def is_omitted_field?(field_name)
+      omitted_attrs = %w[ethnic_group]
+      pattern_age = /age\d_known/
+      field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
+    end
+
   private
 
     def retrieve_case_logs
@@ -50,8 +56,12 @@ module Exports
         form = doc.create_element("form")
         doc.at("forms") << form
         case_log.attributes.each do |key, _|
-          value = case_log.read_attribute_before_type_cast(key)
-          form << doc.create_element(key, value)
+          if is_omitted_field?(key)
+            next
+          else
+            value = case_log.read_attribute_before_type_cast(key)
+            form << doc.create_element(key, value)
+          end
         end
       end
       doc.write_xml_to(StringIO.new, encoding: "UTF-8")
