@@ -110,4 +110,59 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "pregnancy validations" do
+    context "when there are no female tenants" do
+      it "validates that pregnancy cannot be yes" do
+        record.preg_occ = "Yes"
+        record.sex1 = "Male"
+        household_validator.validate_pregnancy(record)
+        expect(record.errors["preg_occ"])
+          .to include(match I18n.t("validations.household.preg_occ.no_female"))
+      end
+
+      it "validates that pregnancy cannot be prefer not to say" do
+        record.preg_occ = "Prefer not to say"
+        record.sex1 = "Male"
+        household_validator.validate_pregnancy(record)
+        expect(record.errors["preg_occ"])
+          .to include(match I18n.t("validations.household.preg_occ.no_female"))
+      end
+    end
+
+    context "when there are female tenants" do
+      context "but they are older than 50" do
+        it "validates that pregnancy cannot be yes" do
+          record.preg_occ = "Yes"
+          record.sex1 = "Female"
+          record.age1 = "51"
+          household_validator.validate_pregnancy(record)
+          expect(record.errors["preg_occ"])
+            .to include(match I18n.t("validations.household.preg_occ.no_female"))
+        end
+      end
+
+      context "and they are the main tenant and under 51" do
+        it "pregnancy can be yes" do
+          record.preg_occ = "Yes"
+          record.sex1 = "Female"
+          record.age1 = "32"
+          household_validator.validate_pregnancy(record)
+          expect(record.errors["preg_occ"]).to be_empty
+        end
+      end
+
+      context "and they are another household member and under 51" do
+        it "pregnancy can be yes" do
+          record.preg_occ = "Yes"
+          record.sex1 = "Male"
+          record.age1 = 25
+          record.sex3 = "Female"
+          record.age3 = "32"
+          household_validator.validate_pregnancy(record)
+          expect(record.errors["preg_occ"]).to be_empty
+        end
+      end
+    end
+  end
 end

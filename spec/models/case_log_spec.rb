@@ -76,46 +76,6 @@ RSpec.describe CaseLog do
     end
 
     context "when validating pregnancy questions" do
-      it "Cannot answer yes if no female tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer yes if no female tenants within age range" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 51,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer prefer not to say if no valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Prefer not to say",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Can answer yes if valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-      end
-
       it "Can answer yes if valid second tenant" do
         expect {
           described_class.create!(preg_occ: "Yes",
