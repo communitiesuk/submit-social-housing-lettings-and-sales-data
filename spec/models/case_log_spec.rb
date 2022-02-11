@@ -18,6 +18,20 @@ RSpec.describe CaseLog do
   end
 
   describe "#new" do
+    context "when creating a record" do
+      let(:case_log) do
+        described_class.create(
+          owning_organisation: owning_organisation,
+          managing_organisation: managing_organisation,
+        )
+      end
+
+      it "attaches the correct custom validator" do
+        expect(case_log._validators.values.flatten.map(&:class))
+          .to include(CaseLogValidator)
+      end
+    end
+
     # TODO: replace these with validator specs and checks for method call here
     context "when a reasonable preference is set to yes" do
       it "validates that previously homeless should be selected" do
