@@ -44,12 +44,19 @@ private
     }.compact
   end
 
+  def send_chain(arr, case_log)
+    Array(arr).inject(case_log) { |o, a| o.public_send(*a) }
+  end
+
   def depends_on_met(case_log)
     return true unless depends_on
 
     depends_on.any? do |conditions_set|
       conditions_set.all? do |question, value|
-        value.nil? ? eval("case_log.#{question}") == value : !eval("case_log.#{question}").nil? && eval("case_log.#{question}") == value
+        parts = question.split(".")
+        case_log_value = send_chain(parts, case_log)
+
+        value.nil? ? case_log_value == value : !case_log_value.nil? && case_log_value == value
       end
     end
   end
