@@ -18,123 +18,21 @@ RSpec.describe CaseLog do
   end
 
   describe "#new" do
-    it "raises an error when offered is present and invalid" do
-      expect {
-        described_class.create!(
-          offered: "random",
+    context "when creating a record" do
+      let(:case_log) do
+        described_class.create(
           owning_organisation: owning_organisation,
           managing_organisation: managing_organisation,
         )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
+      end
 
-    it "raises an error when previous_postcode is present and invalid" do
-      expect {
-        described_class.create!(
-          previous_postcode: "invalid_postcode",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
-    end
-
-    it "validates age is a number" do
-      expect {
-        described_class.create!(
-          age1: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates age is under 120" do
-      expect {
-        described_class.create!(
-          age1: 121,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: 121,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates age is over 0" do
-      expect {
-        described_class.create!(
-          age1: 0,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: 0,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates bedroom number" do
-      expect {
-        described_class.create!(unittype_gn: "Shared house",
-                                beds: 0,
-                                owning_organisation: owning_organisation,
-                                managing_organisation: managing_organisation)
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    context "when a reasonable preference is set to yes" do
-      it "validates that previously homeless should be selected" do
-        expect {
-          described_class.create!(
-            homeless: "No",
-            reasonpref: "Yes",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
+      it "attaches the correct custom validator" do
+        expect(case_log._validators.values.flatten.map(&:class))
+          .to include(CaseLogValidator)
       end
     end
 
-    context "when a reasonable preference is set to no" do
-      it "validates no reason is needed" do
-        expect {
-          described_class.create!(
-            reasonpref: "No",
-            rp_homeless: "No",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.not_to raise_error
-      end
-
-      it "validates that no reason has been provided" do
-        expect {
-          described_class.create!(
-            reasonpref: "No",
-            rp_medwel: "Yes",
-            owning_organisation: owning_organisation,
-            managing_organisation: managing_organisation,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
+    # TODO: replace these with validator specs and checks for method call here
     context "with a reason for leaving last settled home validation" do
       it "checks the reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
         expect {
@@ -178,46 +76,6 @@ RSpec.describe CaseLog do
     end
 
     context "when validating pregnancy questions" do
-      it "Cannot answer yes if no female tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer yes if no female tenants within age range" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 51,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot answer prefer not to say if no valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Prefer not to say",
-                                  sex1: "Male",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Can answer yes if valid tenants" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Female",
-                                  age1: 20,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
-        }.not_to raise_error
-      end
-
       it "Can answer yes if valid second tenant" do
         expect {
           described_class.create!(preg_occ: "Yes",
@@ -353,17 +211,6 @@ RSpec.describe CaseLog do
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating fixed term tenancy" do
-      it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancylength: 10,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -797,6 +644,45 @@ RSpec.describe CaseLog do
         check_rsnvac_referral_validation("Community mental health team")
         check_rsnvac_referral_validation("Health service")
       end
+    end
+    # END TODO
+  end
+
+  describe "#update" do
+    let(:case_log) { FactoryBot.create(:case_log) }
+    let(:validator) { case_log._validators[nil].first }
+
+    after do
+      case_log.update(age1: 25)
+    end
+
+    it "validates ages" do
+      expect(validator).to receive(:validate_person_1_age)
+      expect(validator).to receive(:validate_household_number_of_other_members)
+    end
+
+    it "validates bedroom number" do
+      expect(validator).to receive(:validate_shared_housing_rooms)
+    end
+
+    it "validates number of times the property has been relet" do
+      expect(validator).to receive(:validate_property_number_of_times_relet)
+    end
+
+    it "validates tenancy length for tenancy type" do
+      expect(validator).to receive(:validate_fixed_term_tenancy)
+    end
+
+    it "validates the previous postcode" do
+      expect(validator).to receive(:validate_previous_accommodation_postcode)
+    end
+
+    it "validates the net income" do
+      expect(validator).to receive(:validate_net_income)
+    end
+
+    it "validates reasonable preference" do
+      expect(validator).to receive(:validate_reasonable_preference)
     end
   end
 
