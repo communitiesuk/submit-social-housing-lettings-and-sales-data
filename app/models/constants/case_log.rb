@@ -2,7 +2,7 @@ module Constants::CaseLog
   BENEFITCAP = {
     "Yes - benefit cap" => 5,
     "Yes - removal of the spare room subsidy" => 4,
-    "Yes - both the benefit cap and the removal of the spare room subsidy" => 6,
+    "Yes - both" => 6,
     "No" => 2,
     "Don’t know" => 3,
     "Prefer not to say" => 100,
@@ -57,8 +57,8 @@ module Constants::CaseLog
   }.freeze
 
   HOMELESS = {
-    "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days" => 11,
-    "Yes - other homelessness" => 7,
+    "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty" => 11,
+    "Other homeless - not found statutorily homeless but considered homeless by landlord" => 7,
     "No" => 1,
   }.freeze
 
@@ -104,11 +104,11 @@ module Constants::CaseLog
 
   PREVIOUS_TENANCY = {
     "Owner occupation (private)" => 26,
-    "Owner occupation (low cost home ownership)" => 27,
+    "Owner occupation (low-cost home ownership)" => 27,
     "Private sector tenancy" => 3,
     "Tied housing or rented with job" => 4,
     "Supported housing" => 6,
-    "Sheltered accomodation" => 8,
+    "Sheltered accommodation" => 8,
     "Residential care home" => 9,
     "Living with friends or family" => 28,
     "Refuge" => 21,
@@ -121,11 +121,11 @@ module Constants::CaseLog
     "Home Office Asylum Support" => 24,
     "Children’s home or foster care" => 13,
     "Rough sleeping" => 19,
-    "Other" => 25,
-    "Fixed term Local Authority General Needs tenancy" => 30,
-    "Lifetime Local Authority General Needs tenancy" => 31,
-    "Fixed term PRP General Needs tenancy" => 32,
-    "Lifetime PRP General Needs tenancy" => 33,
+    "Any other accommodation" => 25,
+    "Fixed-term local authority general needs tenancy" => 30,
+    "Lifetime local authority general needs tenancy" => 31,
+    "Fixed-term private registered provider (PRP) general needs tenancy" => 32,
+    "Lifetime private registered provider (PRP) general needs tenancy" => 33,
   }.freeze
 
   RESERVIST = {
@@ -219,10 +219,10 @@ module Constants::CaseLog
   LATIME = {
     "Just moved to local authority area" => 1,
     "Less than 1 year" => 2,
-    "1 to 2 years" => 7,
-    "2 to 3 years" => 8,
-    "3 to 4 years" => 9,
-    "4 to 5 years" => 10,
+    "1 year but under 2 years" => 7,
+    "2 years but under 3 years" => 8,
+    "3 years but under 4 years" => 9,
+    "4 years but under 5 years" => 10,
     "5 years or more" => 5,
     "Don’t know" => 6,
   }.freeze
@@ -242,36 +242,36 @@ module Constants::CaseLog
     "Left home country as a refugee" => 2,
     "Loss of tied accommodation" => 4,
     "Domestic abuse" => 7,
-    "(Non violent) relationship breakdown with partner" => 8,
+    "Relationship breakdown (non-violent) with partner" => 8,
     "Asked to leave by family or friends" => 9,
     "Racial harassment" => 10,
     "Other problems with neighbours" => 11,
     "Property unsuitable because of overcrowding" => 12,
     "End of assured shorthold tenancy - no fault" => 40,
-    "End of assured shorthold tenancy - tenant’s fault" => 41,
+    "End of assured shorthold tenancy - eviction or tenant at fault" => 41,
     "End of fixed term tenancy - no fault" => 42,
-    "End of fixed term tenancy - tenant’s fault" => 43,
+    "End of fixed term tenancy - eviction or tenant at fault" => 43,
     "Repossession" => 34,
     "Under occupation - offered incentive to downsize" => 29,
     "Under occupation - no incentive" => 30,
-    "Property unsuitable because of ill health / disability" => 13,
+    "Property unsuitable because of ill health or disability" => 13,
     "Property unsuitable because of poor condition" => 14,
-    "Couldn't afford fees attached to renewing the tenancy" => 35,
-    "Couldn't afford increase in rent" => 36,
-    "Couldn't afford rent or mortgage - welfare reforms" => 37,
-    "Couldn't afford rent or mortgage - employment" => 38,
-    "Couldn't afford rent or mortgage - other" => 39,
-    "To move nearer to family / friends / school" => 16,
+    "Couldn’t afford fees attached to renewing the tenancy" => 35,
+    "Couldn’t afford increase in rent" => 36,
+    "Couldn’t afford rent or mortgage - welfare reforms" => 37,
+    "Couldn’t afford rent or mortgage - employment" => 38,
+    "Couldn’t afford rent or mortgage - other" => 39,
+    "To move nearer to family, friends or school" => 16,
     "To move nearer to work" => 17,
-    "To move to accomodation with support" => 18,
-    "To move to independent accomodation" => 19,
+    "To move to accommodation with support" => 18,
+    "To move to independent accommodation" => 19,
     "Hate crime" => 31,
-    "Death of household member in last settled accomodation" => 46,
+    "Death of household member in last settled accommodation" => 46,
     "Discharged from prison" => 44,
     "Discharged from long stay hospital or similar institution" => 45,
     "Other" => 20,
     "Don’t know" => 28,
-    "Prefer not to say" => 100,
+    "Tenant prefers not to say" => 100,
   }.freeze
 
   ENGLISH_LA = {
@@ -1087,7 +1087,7 @@ module Constants::CaseLog
     "completed" => 2,
   }.freeze
 
-  SHELTERED_ACCOMODATION = {
+  SHELTERED_ACCOMMODATION = {
     "Yes - sheltered housing" => 1,
     "Yes - extra care housing" => 2,
     "No" => 3,
@@ -1119,9 +1119,9 @@ module Constants::CaseLog
 
   NON_TEMP_ACCOMMODATION = ["Tied housing or rented with job",
                             "Supported housing",
-                            "Sheltered accomodation",
+                            "Sheltered accommodation",
                             "Home Office Asylum Support",
-                            "Other"].freeze
+                            "Any other accommodation"].freeze
 
   OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
 end

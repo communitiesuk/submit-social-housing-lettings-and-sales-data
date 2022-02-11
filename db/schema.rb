@@ -176,7 +176,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "has_benefits"
     t.integer "nocharge"
     t.integer "is_carehome"
-    t.integer "letting_in_sheltered_accomodation"
+    t.integer "letting_in_sheltered_accommodation"
     t.integer "household_charge"
     t.integer "referral"
     t.decimal "brent", precision: 10, scale: 2
@@ -187,6 +187,10 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.decimal "tshortfall", precision: 10, scale: 2
     t.decimal "chcharge", precision: 10, scale: 2
     t.integer "declaration"
+    t.integer "previous_postcode_known"
+    t.integer "previous_la_known"
+    t.boolean "is_previous_la_inferred"
+    t.boolean "letting_allocation_unknown"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end

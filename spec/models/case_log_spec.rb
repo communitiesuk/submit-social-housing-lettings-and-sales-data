@@ -781,15 +781,15 @@ RSpec.describe CaseLog do
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
-      it "cannot be temp accomodation if previous tenancy was non temp" do
+      it "cannot be temp accommodation if previous tenancy was non temp" do
         check_rsnvac_validation("Tied housing or rented with job")
         check_rsnvac_validation("Supported housing")
-        check_rsnvac_validation("Sheltered accomodation")
+        check_rsnvac_validation("Sheltered accommodation")
         check_rsnvac_validation("Home Office Asylum Support")
-        check_rsnvac_validation("Other")
+        check_rsnvac_validation("Any other accommodation")
       end
 
-      it "cannot be temp accomodation if source of letting referral " do
+      it "cannot be temp accommodation if source of letting referral " do
         check_rsnvac_referral_validation("Re-located through official housing mobility scheme")
         check_rsnvac_referral_validation("Other social landlord")
         check_rsnvac_referral_validation("Police, probation or prison")
@@ -984,6 +984,64 @@ RSpec.describe CaseLog do
         expect(record_from_db["property_postcode"]).to eq("M1 1AD")
         expect(address_case_log.la).to eq("Manchester")
         expect(record_from_db["la"]).to eq("E08000003")
+      end
+    end
+
+    context "when saving previous address" do
+      before do
+        stub_request(:get, /api.postcodes.io/)
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+      end
+
+      let!(:address_case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          previous_postcode_known: "Yes",
+          previous_postcode: "M1 1AE",
+        })
+      end
+
+      it "correctly infers prevloc" do
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(address_case_log.prevloc).to eq("Manchester")
+        expect(record_from_db["prevloc"]).to eq("E08000003")
+      end
+
+      it "errors if the previous postcode is emptied" do
+        expect { address_case_log.update!({ previous_postcode: "" }) }
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+      end
+
+      it "errors if the previous postcode is not valid" do
+        expect { address_case_log.update!({ previous_postcode: "invalid_postcode" }) }
+          .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
+      end
+
+      it "correctly resets all fields if previous postcode not known" do
+        address_case_log.update!({ previous_postcode_known: "No" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["previous_postcode"]).to eq(nil)
+        expect(address_case_log.prevloc).to eq(nil)
+        expect(record_from_db["prevloc"]).to eq(nil)
+      end
+
+      it "changes the prevloc if previous postcode changes from not known to known and provided" do
+        address_case_log.update!({ previous_postcode_known: "No" })
+        address_case_log.update!({ prevloc: "Westminster" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["previous_postcode"]).to eq(nil)
+        expect(address_case_log.prevloc).to eq("Westminster")
+        expect(record_from_db["prevloc"]).to eq("E09000033")
+
+        address_case_log.update!({ previous_postcode_known: "Yes", previous_postcode: "M1 1AD" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["previous_postcode"]).to eq("M1 1AD")
+        expect(address_case_log.prevloc).to eq("Manchester")
+        expect(record_from_db["prevloc"]).to eq("E08000003")
       end
     end
 

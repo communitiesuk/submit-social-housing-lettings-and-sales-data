@@ -47,7 +47,7 @@ FactoryBot.define do
       age2 { 32 }
       sex2 { "Male" }
       ecstat2 { "Not seeking work" }
-      homeless { "Yes - other homelessness" }
+      homeless { "Other homeless - not found statutorily homeless but considered homeless by landlord" }
       underoccupation_benefitcap { "No" }
       leftreg { "No - they left up to 5 years ago" }
       reservist { "No" }
@@ -75,7 +75,7 @@ FactoryBot.define do
       pscharge { 40 }
       supcharg { 35 }
       tcharge { 325 }
-      layear { "1 to 2 years" }
+      layear { "1 year but under 2 years" }
       lawaitlist { "Less than 1 year" }
       property_postcode { "NW1 5TY" }
       reasonpref { "Yes" }
@@ -144,7 +144,7 @@ FactoryBot.define do
       has_benefits { "Yes" }
       is_carehome { "No" }
       chcharge { 7 }
-      letting_in_sheltered_accomodation { "No" }
+      letting_in_sheltered_accommodation { "No" }
       la_known { "Yes" }
       declaration { "Yes" }
     end

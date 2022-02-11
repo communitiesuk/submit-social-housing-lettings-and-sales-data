@@ -1113,7 +1113,7 @@
               "questions": {
                 "layear": {
                   "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
-                  "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "header": "How long has the household continuously lived in the local authority area of the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1124,25 +1124,25 @@
                       "value": "Less than 1 year"
                     },
                     "2": {
-                      "value": "1 to 2 years"
+                      "value": "1 year but under 2 years"
                     },
                     "3": {
-                      "value": "2 to 3 years"
+                      "value": "2 years but under 3 years"
                     },
                     "4": {
-                      "value": "3 to 4 years"
+                      "value": "3 years but under 4 years"
                     },
                     "5": {
-                      "value": "4 to 5 years"
+                      "value": "4 years but under 5 years"
                     },
                     "6": {
                       "value": "5 years or more"
                     },
-                    "7": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1154,7 +1154,7 @@
               "questions": {
                 "lawaitlist": {
                   "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
-                  "header": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1165,183 +1165,154 @@
                       "value": "Less than 1 year"
                     },
                     "2": {
-                      "value": "1 to 2 years"
+                      "value": "1 year but under 2 years"
                     },
                     "3": {
-                      "value": "2 to 3 years"
+                      "value": "2 years but under 3 years"
                     },
                     "4": {
-                      "value": "3 to 4 years"
+                      "value": "3 years but under 4 years"
                     },
                     "5": {
-                      "value": "4 to 5 years"
+                      "value": "4 years but under 5 years"
                     },
                     "6": {
                       "value": "5 years or more"
                     },
-                    "7": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
             },
             "reason_for_leaving_last_settled_home": {
               "header": "Leaving their last settled home",
               "description": "",
               "questions": {
                 "reason": {
-                  "header": "What is the tenant’s main reason for leaving?",
-                  "hint_text": "",
+                  "header": "What is the tenant’s main reason for the household leaving their last settled home?",
+                  "hint_text": "The tenant’s ’last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Permanently decanted from another property owned by this landlord"
-                    },
-                    "1": {
-                      "value": "Left home country as a refugee"
-                    },
-                    "2": {
-                      "value": "Loss of tied accommodation"
-                    },
-                    "3": {
-                      "value": "Domestic abuse"
-                    },
-                    "4": {
-                      "value": "(Non violent) relationship breakdown with partner"
-                    },
-                    "5": {
-                      "value": "Asked to leave by family or friends"
-                    },
-                    "6": {
-                      "value": "Racial harassment"
-                    },
-                    "7": {
-                      "value": "Other problems with neighbours"
-                    },
-                    "8": {
-                      "value": "Property unsuitable because of overcrowding"
-                    },
-                    "9": {
                       "value": "End of assured shorthold tenancy - no fault"
                     },
-                    "10": {
-                      "value": "End of assured shorthold tenancy - tenant’s fault"
+                    "1": {
+                      "value": "End of assured shorthold tenancy - eviction or tenant at fault"
                     },
-                    "11": {
+                    "2": {
                       "value": "End of fixed term tenancy - no fault"
                     },
-                    "12": {
-                      "value": "End of fixed term tenancy - tenant’s fault"
+                    "3": {
+                      "value": "End of fixed term tenancy - eviction or tenant at fault"
                     },
-                    "13": {
-                      "value": "Repossession"
+                    "4": {
+                      "value": "Permanently decanted from another property owned by this landlord"
                     },
-                    "14": {
-                      "value": "Under occupation - offered incentive to downsize"
+                    "5": {
+                      "value": "Left home country as a refugee"
                     },
-                    "15": {
-                      "value": "Under occupation - no incentive"
-                    },
-                    "16": {
-                      "value": "Property unsuitable because of ill health / disability"
-                    },
-                    "17": {
-                      "value": "Property unsuitable because of poor condition"
-                    },
-                    "18": {
-                      "value": "Couldn’t afford fees attached to renewing the tenancy"
-                    },
-                    "19": {
-                      "value": "Couldn’t afford increase in rent"
-                    },
-                    "20": {
-                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
-                    },
-                    "21": {
-                      "value": "Couldn’t afford rent or mortgage - employment"
-                    },
-                    "22": {
-                      "value": "Couldn’t afford rent or mortgage - other"
-                    },
-                    "23": {
-                      "value": "To move nearer to family / friends / school"
-                    },
-                    "24": {
-                      "value": "To move nearer to work"
-                    },
-                    "25": {
-                      "value": "To move to accomodation with support"
-                    },
-                    "26": {
-                      "value": "To move to independent accomodation"
-                    },
-                    "27": {
-                      "value": "Hate crime"
-                    },
-                    "28": {
-                      "value": "Death of household member in last settled accomodation"
-                    },
-                    "29": {
+                    "6": {
                       "value": "Discharged from prison"
                     },
-                    "30": {
+                    "7": {
                       "value": "Discharged from long stay hospital or similar institution"
+                    },
+                    "8": {
+                      "value": "Loss of tied accommodation"
+                    },
+                    "9": {
+                      "value": "Asked to leave by family or friends"
+                    },
+                    "10": {
+                      "value": "Relationship breakdown (non-violent) with partner"
+                    },
+                    "11": {
+                      "value": "Death of household member in last settled accommodation"
+                    },
+                    "12": {
+                      "value": "To move nearer to family, friends or school"
+                    },
+                    "13": {
+                      "value": "To move nearer to work"
+                    },
+                    "14": {
+                      "value": "Domestic abuse"
+                    },
+                    "15": {
+                      "value": "Racial harassment"
+                    },
+                    "16": {
+                      "value": "Hate crime"
+                    },
+                    "17": {
+                      "value": "Other problems with neighbours"
+                    },
+                    "18": {
+                      "value": "Repossession"
+                    },
+                    "19": {
+                      "value": "Couldn’t afford fees attached to renewing the tenancy"
+                    },
+                    "20": {
+                      "value": "Couldn’t afford increase in rent"
+                    },
+                    "21": {
+                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
+                    },
+                    "22": {
+                      "value": "Couldn’t afford rent or mortgage - employment"
+                    },
+                    "23": {
+                      "value": "Couldn’t afford rent or mortgage - other"
+                    },
+                    "24": {
+                      "value": "Property unsuitable because of overcrowding"
+                    },
+                    "25": {
+                      "value": "Property unsuitable because of ill health or disability"
+                    },
+                    "26": {
+                      "value": "Property unsuitable because of poor condition"
+                    },
+                    "27": {
+                      "value": "Under occupation - no incentive"
+                    },
+                    "28": {
+                      "value": "Under occupation - offered incentive to downsize"
+                    },
+                    "29": {
+                      "value": "To move to accommodation with support"
+                    },
+                    "30": {
+                      "value": "To move to independent accommodation"
                     },
                     "31": {
                       "value": "Other"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "32": {
                       "value": "Don’t know"
                     },
                     "33": {
-                      "value": "Prefer not to say"
-                    },
-                    "divider": {
-                      "value": true
+                      "value": "Tenant prefers not to say"
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": [
-                      "Other"
-                    ]
+                    "other_reason_for_leaving_last_settled_home": ["Other"]
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
-                  "header": "Please state the reason for leaving last settled home",
+                  "header": "What is the reason?",
                   "hint_text": "",
                   "type": "text"
-                },
-                "underoccupation_benefitcap": {
-                  "header": "Was the reason for leaving because of the benefit cap or removal of the spare room subsidy?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes - benefit cap"
-                    },
-                    "1": {
-                      "value": "Yes - removal of the spare room subsidy"
-                    },
-                    "2": {
-                      "value": "Yes - both the benefit cap and the removal of the spare room subsidy"
-                    },
-                    "3": {
-                      "value": "No"
-                    },
-                    "4": {
-                      "value": "Don’t know"
-                    },
-                    "5": {
-                      "value": "Prefer not to say"
-                    },
-                    "divider": {
-                      "value": true
-                    }
-                  }
                 }
               }
             },
@@ -1350,21 +1321,21 @@
               "description": "",
               "questions": {
                 "prevten": {
-                  "header": "What was the tenant’s housing situation immediately before this letting?",
-                  "hint_text": "",
+                  "header": "Where was the household immediately before this letting?",
+                  "hint_text": "This is where the household was the night before they moved.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Owner occupation (private)"
+                      "value": "Fixed-term local authority general needs tenancy"
                     },
                     "1": {
-                      "value": "Owner occupation (low cost home ownership)"
+                      "value": "Lifetime local authority general needs tenancy"
                     },
                     "2": {
-                      "value": "Private sector tenancy"
+                      "value": "Fixed-term private registered provider (PRP) general needs tenancy"
                     },
                     "3": {
-                      "value": "Tied housing or rented with job"
+                      "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
                     "4": {
                       "value": "Supported housing"
@@ -1373,55 +1344,86 @@
                       "value": "Sheltered accommodation"
                     },
                     "6": {
-                      "value": "Residential care home"
+                      "value": "Private sector tenancy"
                     },
                     "7": {
-                      "value": "Living with friends or family"
+                      "value": "Owner occupation (private)"
                     },
                     "8": {
-                      "value": "Refuge"
+                      "value": "Owner occupation (low-cost home ownership)"
                     },
                     "9": {
-                      "value": "Hospital"
+                      "value": "Living with friends or family"
                     },
                     "10": {
-                      "value": "Prison or approved probation hostel"
-                    },
-                    "11": {
                       "value": "Direct access hostel"
                     },
-                    "12": {
+                    "11": {
                       "value": "Bed and breakfast"
                     },
+                    "12": {
+                      "value": "Prison or approved probation hostel"
+                    },
                     "13": {
-                      "value": "Mobile home or caravan"
+                      "value": "Hospital"
                     },
                     "14": {
                       "value": "Any other temporary accommodation"
                     },
                     "15": {
-                      "value": "Home Office Asylum Support"
-                    },
-                    "16": {
-                      "value": "Children’s home or foster care"
-                    },
-                    "17": {
                       "value": "Rough sleeping"
                     },
+                    "16": {
+                      "value": "Tied housing or rented with job"
+                    },
+                    "17": {
+                      "value": "Mobile home or caravan"
+                    },
                     "18": {
-                      "value": "Other"
+                      "value": "Refuge"
                     },
                     "19": {
-                      "value": "Fixed term Local Authority General Needs tenancy"
+                      "value": "Children’s home or foster care"
                     },
                     "20": {
-                      "value": "Lifetime Local Authority General Needs tenancy"
+                      "value": "Residential care home"
                     },
                     "21": {
-                      "value": "Fixed term PRP General Needs tenancy"
+                      "value": "Home Office Asylum Support"
                     },
                     "22": {
-                      "value": "Lifetime PRP General Needs tenancy"
+                      "value": "Any other accommodation"
+                    }
+                  }
+                }
+              }
+            },
+            "underoccupation_benefitcap": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "underoccupation_benefitcap": {
+                  "header": "Was the reason for leaving a direct result of the removal of the spare room subsidy or benefit cap introduced from 2013?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes - removal of the spare room subsidy"
+                    },
+                    "1": {
+                      "value": "Yes - benefit cap"
+                    },
+                    "2": {
+                      "value": "Yes - both"
+                    },
+                    "3": {
+                      "value": "No"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "4": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1432,15 +1434,15 @@
               "description": "",
               "questions": {
                 "homeless": {
-                  "header": "Did the tenant experience homelessness immediately before this letting?",
+                  "header": "Did the household experience homelessness immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days"
+                      "value": "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
                     },
                     "1": {
-                      "value": "Yes - other homelessness"
+                      "value": "Other homeless - not found statutorily homeless but considered homeless by landlord"
                     },
                     "2": {
                       "value": "No"
@@ -1448,6 +1450,57 @@
                   }
                 }
               }
+            },
+            "previous_postcode": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "previous_postcode_known": {
+                  "check_answer_label": "Do you know the postcode of the household’s last settled accommodation?",
+                  "header": "Do you know the property’s postcode?",
+                  "hint_text": "This is also known as the household’s ’last settled home’.",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": { "value": "Yes" },
+                    "0": { "value": "No" }
+                  },
+                  "conditional_for": {
+                    "previous_postcode": ["Yes"]
+                  },
+                  "hidden_in_check_answers": true
+                },
+                "previous_postcode": {
+                  "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "",
+                  "type": "text",
+                  "width": 5,
+                  "inferred_answers": {
+                    "prevloc": { "is_previous_la_inferred": true }
+                  },
+                  "inferred_check_answers_value": {
+                    "condition": { "previous_postcode_known": "No" },
+                    "value": "Not known"
+                  }
+                }
+              }
+            },
+            "previous_la_known": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "previous_la_known": {
+                  "check_answer_label": "Do you know the local authority of the household’s last settled accommodation?",
+                  "header": "Do you know the local authority of the household’s last settled accommodation?",
+                  "hint_text": "This is also known as the household’s ’last settled home’.",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": { "value": "Yes" },
+                    "0": { "value": "No" }
+                  }
+                }
+              },
+              "depends_on": [{ "is_previous_la_inferred": false }]
             },
             "previous_la": {
               "header": "",
@@ -1845,28 +1898,19 @@
                     "9300000XX": "Outside UK"
                   }
                 }
-              }
-            },
-            "previous_postcode": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "previous_postcode": {
-                  "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
-                  "header": "Postcode for the previous accommodation",
-                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed.",
-                  "type": "text"
-                }
-              }
+              },
+              "depends_on": [
+                { "previous_la_known": "Yes", "is_previous_la_inferred": false }
+              ]
             },
             "reasonable_preference": {
               "header": "",
               "description": "",
               "questions": {
                 "reasonpref": {
-                  "check_answer_label": "Was the household given Reasonable Preference (i.e. priority) for housing by the Local Authority?",
-                  "header": "Was the household given reasonable preference by the local authority?",
-                  "hint_text": "",
+                  "check_answer_label": "Was the household given ‘reasonable preference’ by the local authority?",
+                  "header": "Was the household given ‘reasonable preference’ by the local authority?",
+                  "hint_text": "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
@@ -1875,11 +1919,11 @@
                     "1": {
                       "value": "No"
                     },
-                    "2": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "2": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -1888,29 +1932,24 @@
             "reasonable_preference_reason": {
               "header": "Reason for reasonable preference being given",
               "description": "",
-              "depends_on": [
-                {
-                  "reasonpref": "Yes"
-                }
-              ],
               "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
-                  "header": "Why were they given reasonable preference?",
-                  "hint_text": "Select all that apply.",
+                  "header": "Why was the household given ‘reasonable preference’?",
+                  "hint_text": "",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": {
-                      "value": "Homeless or about to lose their home (within 56 days)"
+                      "value": "They were homeless or about to lose their home (within 56 days)"
                     },
                     "rp_insan_unsat": {
-                      "value": "Living in insanitary or overcrowded or unsatisfactory housing"
+                      "value": "They were living in unsanitary, overcrowded or unsatisfactory housing"
                     },
                     "rp_medwel": {
-                      "value": "A need to move on medical and welfare grounds (including a disability)"
+                      "value": "They needed to move due to medical and welfare reasons (including disability)"
                     },
                     "rp_hardship": {
-                      "value": "A need to move to avoid hardship to themselves or others"
+                      "value": "They needed to move to avoid hardship to themselves or others"
                     },
                     "divider": {
                       "value": true
@@ -1920,57 +1959,208 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "reasonpref": "Yes"
+                }
+              ]
             },
             "lettings_policy": {
               "header": "",
               "description": "",
               "questions": {
-                "cbl": {
-                  "check_answer_label": "Choice-based letting?",
-                  "header": "Was the letting made under choice-based lettings (CBL)? ",
-                  "hint_text": "",
-                  "type": "radio",
+                "letting_allocation": {
+                  "check_answer_label": "How was this letting allocated?",
+                  "header": "How was this letting allocated?",
+                  "hint_text": "Select all that apply.",
+                  "type": "checkbox",
                   "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "cbl": {
+                      "value": "Choice-based lettings (CBL)"
                     },
-                    "1": {
-                      "value": "No"
-                    }
-                  }
-                },
-                "chr": {
-                  "check_answer_label": "Common housing register letting?",
-                  "header": "Was the letting made under common housing register (CHR)? ",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "chr": {
+                      "value": "Common housing register (CHR)"
                     },
-                    "1": {
-                      "value": "No"
-                    }
-                  }
-                },
-                "cap": {
-                  "check_answer_label": "Common allocation policy letting?",
-                  "header": "Was the letting made under common allocation policy (CAP)? ",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
+                    "cap": {
+                      "value": "Common Allocation Policy (CAP)"
                     },
-                    "1": {
-                      "value": "No"
+                    "divider": {
+                      "value": true
+                    },
+                    "letting_allocation_unknown": {
+                      "value": "None of these allocation systems"
                     }
                   }
                 }
               }
             },
             "referral": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "3": {
+                      "value": "Other social landlord"
+                    },
+                    "4": {
+                      "value": "Community learning disability team"
+                    },
+                    "5": {
+                      "value": "Community mental health team"
+                    },
+                    "6": {
+                      "value": "Health service"
+                    },
+                    "7": {
+                      "value": "Police, probation or prison"
+                    },
+                    "8": {
+                      "value": "Youth offending team"
+                    },
+                    "9": {
+                      "value": "Voluntary agency"
+                    },
+                    "10": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "LA",
+                  "needstype": "General needs"
+                }
+              ]
+            },
+            "referral_prp": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
+                    },
+                    "3": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "4": {
+                      "value": "Other social landlord"
+                    },
+                    "5": {
+                      "value": "Community learning disability team"
+                    },
+                    "6": {
+                      "value": "Community mental health team"
+                    },
+                    "7": {
+                      "value": "Health service"
+                    },
+                    "8": {
+                      "value": "Police, probation or prison"
+                    },
+                    "9": {
+                      "value": "Youth offending team"
+                    },
+                    "10": {
+                      "value": "Voluntary agency"
+                    },
+                    "11": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "PRP",
+                  "needstype": "General needs"
+                }
+              ]
+            },
+            "referral_supported_housing": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "referral": {
+                  "check_answer_label": "Source of referral for letting",
+                  "header": "What was the source of referral for this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Internal transfer"
+                    },
+                    "1": {
+                      "value": "Tenant applied directly (no referral or nomination)"
+                    },
+                    "2": {
+                      "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
+                    },
+                    "3": {
+                      "value": "Re-located through official housing mobility scheme"
+                    },
+                    "4": {
+                      "value": "Other social landlord"
+                    },
+                    "5": {
+                      "value": "Community learning disability team"
+                    },
+                    "6": {
+                      "value": "Community mental health team"
+                    },
+                    "7": {
+                      "value": "Health service"
+                    },
+                    "8": {
+                      "value": "Police, probation or prison"
+                    },
+                    "9": {
+                      "value": "Youth offending team"
+                    },
+                    "10": {
+                      "value": "Voluntary agency"
+                    },
+                    "11": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "LA",
+                  "needstype": "Supported housing"
+                }
+              ]
+            },
+            "referral_supported_housing_prp": {
               "header": "",
               "description": "",
               "questions": {
@@ -2002,16 +2192,16 @@
                       "value": "Community learning disability team"
                     },
                     "7": {
-                      "value": "Police, probation or prison"
-                    },
-                    "8": {
-                      "value": "Youth offending team"
-                    },
-                    "9": {
                       "value": "Community mental health team"
                     },
-                    "10": {
+                    "8": {
                       "value": "Health service"
+                    },
+                    "9": {
+                      "value": "Police, probation or prison"
+                    },
+                    "10": {
+                      "value": "Youth offending team"
                     },
                     "11": {
                       "value": "Voluntary agency"
@@ -2021,7 +2211,13 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "managing_organisation.provider_type": "PRP",
+                  "needstype": "Supported housing"
+                }
+              ]
             }
           }
         },
@@ -2318,9 +2514,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      "Other"
-                    ]
+                    "tenancyother": ["Other"]
                   }
                 },
                 "tenancyother": {
@@ -2362,9 +2556,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      "Other"
-                    ]
+                    "tenancyother": ["Other"]
                   }
                 },
                 "tenancyother": {
@@ -2394,19 +2586,15 @@
                 }
               },
               "depends_on": [
-                {
-                  "tenancy": "Secure (including flexible)"
-                },
-                {
-                  "tenancy": "Assured Shorthold"
-                }
+                { "tenancy": "Secure (including flexible)" },
+                { "tenancy": "Assured Shorthold" }
               ]
             },
-            "letting_in_sheltered_accomodation": {
+            "letting_in_sheltered_accommodation": {
               "header": "",
               "description": "",
               "questions": {
-                "letting_in_sheltered_accomodation": {
+                "letting_in_sheltered_accommodation": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
@@ -2464,9 +2652,7 @@
                     }
                   },
                   "conditional_for": {
-                    "property_postcode": [
-                      "Yes"
-                    ]
+                    "property_postcode": ["Yes"]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -3197,9 +3383,7 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [
-                      "Yes"
-                    ]
+                    "mrcdate": ["Yes"]
                   }
                 },
                 "mrcdate": {
@@ -3273,9 +3457,18 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": [
-                    { "label": "every week", "depends_on" : { "incfreq": "Weekly" } },
-                    { "label": "every month", "depends_on" : { "incfreq": "Monthly" } },
-                    { "label": "every month", "depends_on" : { "incfreq": "Yearly" } }
+                    {
+                      "label": "every week",
+                      "depends_on": { "incfreq": "Weekly" }
+                    },
+                    {
+                      "label": "every month",
+                      "depends_on": { "incfreq": "Monthly" }
+                    },
+                    {
+                      "label": "every month",
+                      "depends_on": { "incfreq": "Yearly" }
+                    }
                   ]
                 },
                 "incfreq": {
@@ -3466,9 +3659,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3562,9 +3753,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3608,9 +3797,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3654,9 +3841,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      "Yes"
-                    ]
+                    "chcharge": ["Yes"]
                   }
                 },
                 "chcharge": {
@@ -3696,12 +3881,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3715,12 +3895,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3734,12 +3909,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3753,12 +3923,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3774,12 +3939,7 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -3919,12 +4079,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3938,31 +4093,21 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3976,12 +4121,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -3997,12 +4137,7 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -4042,12 +4177,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4061,12 +4191,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4080,12 +4205,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4099,12 +4219,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4120,12 +4235,7 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -4165,12 +4275,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4184,31 +4289,21 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
                 "pscharge": {
                   "check_answer_label": "Personal service charge",
                   "header": "What is the personal service charge?",
-                  "hint_text": "For example, for heating or hot water. This doesn't include housing benefit or Universal Credit.",
+                  "hint_text": "For example, for heating or hot water. This doesn’t include housing benefit or Universal Credit.",
                   "type": "numeric",
                   "min": 0,
                   "step": 1,
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4222,12 +4317,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4243,12 +4333,7 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
