@@ -84,7 +84,7 @@ RSpec.describe Validations::HouseholdValidations do
             household_validator.validate_reasonable_preference(record)
             expect(record.errors["reasonpref"]).to be_empty
             expect(record.errors["homeless"]).to be_empty
-            record.homeless = "Yes - assessed as homeless by a local authority and owed a homelessness duty. Including if threatened with homelessness within 56 days"
+            record.homeless = "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
             household_validator.validate_reasonable_preference(record)
             expect(record.errors["reasonpref"]).to be_empty
             expect(record.errors["homeless"]).to be_empty
