@@ -18,6 +18,7 @@ RSpec.describe CaseLog do
   end
 
   describe "#new" do
+    # TODO: replace these with validator specs and checks for method call here
     context "when a reasonable preference is set to yes" do
       it "validates that previously homeless should be selected" do
         expect {
@@ -707,6 +708,7 @@ RSpec.describe CaseLog do
         check_rsnvac_referral_validation("Health service")
       end
     end
+    # END TODO
   end
 
   describe "#update" do
