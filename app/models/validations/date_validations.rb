@@ -29,7 +29,11 @@ module Validations::DateValidations
   end
 
   def validate_startdate(record)
-    date_valid?("startdate", record)
+    return unless record.startdate && date_valid?("startdate", record)
+
+    if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
+      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
+    end
   end
 
   def validate_sale_completion_date(record)
@@ -38,9 +42,20 @@ module Validations::DateValidations
 
 private
 
+  def first_collection_start_date
+    @first_collection_start_date ||= FormHandler.instance.forms.map { |form| form.second.start_date }.compact.min
+  end
+
+  def second_collection_end_date
+    @second_collection_end_date ||= FormHandler.instance.forms.map { |form| form.second.end_date }.compact.max
+  end
+
   def date_valid?(question, record)
     if record[question].is_a?(ActiveSupport::TimeWithZone) && record[question].year.zero?
-      record.errors.add question, I18n.t("validations.date")
+      record.errors.add question, I18n.t("validations.date.invalid_date")
+      false
+    else
+      true
     end
   end
 

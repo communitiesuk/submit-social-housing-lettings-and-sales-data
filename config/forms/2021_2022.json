@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
-  "start_year": 2021,
-  "end_year": 2022,
+  "start_date": "2021-04-01T00:00:00.000+01:00",
+  "end_date": "2022-07-01T00:00:00.000+01:00",
   "sections": {
     "setup": {
       "label": "Before you start",

@@ -35,7 +35,9 @@ en:
     updated: "Organisation details updated"
 
   validations:
-    date: "Please enter a valid date"
+    date:
+      invalid_date: "Please enter a valid date"
+      outside_collection_window: "Date must be within the current collection windows"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
 
     property:
