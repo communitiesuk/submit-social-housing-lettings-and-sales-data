@@ -226,6 +226,8 @@ private
   end
 
   def reset_invalidated_dependent_fields!
+    return unless form
+
     form.invalidated_page_questions(self).each do |question|
       public_send("#{question.id}=", nil) if respond_to?(question.id.to_s)
     end

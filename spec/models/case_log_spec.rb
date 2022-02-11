@@ -656,6 +656,10 @@ RSpec.describe CaseLog do
       case_log.update(age1: 25)
     end
 
+    it "validates start date" do
+      expect(validator).to receive(:validate_startdate)
+    end
+
     it "validates ages" do
       expect(validator).to receive(:validate_person_1_age)
       expect(validator).to receive(:validate_household_number_of_other_members)
@@ -1037,6 +1041,14 @@ RSpec.describe CaseLog do
 
       it "does not clear the answer" do
         expect(case_log.cbl).to eq("Yes")
+      end
+    end
+
+    context "when the case log does not have a valid form set yet" do
+      let(:case_log) { FactoryBot.create(:case_log) }
+
+      it "does not throw an error" do
+        expect { case_log.update(startdate: Time.zone.local(2015, 1, 1)) }.not_to raise_error
       end
     end
   end
