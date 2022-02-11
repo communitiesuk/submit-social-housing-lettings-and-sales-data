@@ -79,7 +79,7 @@ RSpec.describe Validations::HouseholdValidations do
       context "when reasonable preference is given" do
         context "when the tenant was previously homeless" do
           it "does not add an error" do
-            record.homeless = "Yes - other homelessness"
+            record.homeless = "Other homeless - not found statutorily homeless but considered homeless by landlord"
             record.reasonpref = "Yes"
             household_validator.validate_reasonable_preference(record)
             expect(record.errors["reasonpref"]).to be_empty
