@@ -18,57 +18,6 @@ RSpec.describe CaseLog do
   end
 
   describe "#new" do
-    it "validates age is a number" do
-      expect {
-        described_class.create!(
-          age1: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates age is under 120" do
-      expect {
-        described_class.create!(
-          age1: 121,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: 121,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates age is over 0" do
-      expect {
-        described_class.create!(
-          age1: 0,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-      expect {
-        described_class.create!(
-          age3: 0,
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
     context "when a reasonable preference is set to yes" do
       it "validates that previously homeless should be selected" do
         expect {
@@ -766,6 +715,11 @@ RSpec.describe CaseLog do
 
     after do
       case_log.update(age1: 25)
+    end
+
+    it "validates ages" do
+      expect(validator).to receive(:validate_person_1_age)
+      expect(validator).to receive(:validate_household_number_of_other_members)
     end
 
     it "validates bedroom number" do
