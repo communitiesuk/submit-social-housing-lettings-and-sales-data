@@ -2304,8 +2304,7 @@
                     "0": "Yes",
                     "1": "No",
                     "divider_a": true,
-                    "2": "Don’t know",
-                    "3": "Tenant prefers not to say"
+                    "2": "Tenant prefers not to say"
                   }
                 }
               }
