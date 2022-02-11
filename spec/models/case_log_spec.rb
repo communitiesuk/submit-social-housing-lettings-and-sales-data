@@ -18,26 +18,6 @@ RSpec.describe CaseLog do
   end
 
   describe "#new" do
-    it "raises an error when offered is present and invalid" do
-      expect {
-        described_class.create!(
-          offered: "random",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "raises an error when previous_postcode is present and invalid" do
-      expect {
-        described_class.create!(
-          previous_postcode: "invalid_postcode",
-          owning_organisation: owning_organisation,
-          managing_organisation: managing_organisation,
-        )
-      }.to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
-    end
-
     it "validates age is a number" do
       expect {
         described_class.create!(
@@ -86,15 +66,6 @@ RSpec.describe CaseLog do
           owning_organisation: owning_organisation,
           managing_organisation: managing_organisation,
         )
-      }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-
-    it "validates bedroom number" do
-      expect {
-        described_class.create!(unittype_gn: "Shared house",
-                                beds: 0,
-                                owning_organisation: owning_organisation,
-                                managing_organisation: managing_organisation)
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
@@ -353,17 +324,6 @@ RSpec.describe CaseLog do
             owning_organisation: owning_organisation,
             managing_organisation: managing_organisation,
           )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating fixed term tenancy" do
-      it "Must not be completed if Type of main tenancy is not responded with either Secure or Assured shorthold " do
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancylength: 10,
-                                  owning_organisation: owning_organisation,
-                                  managing_organisation: managing_organisation)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
@@ -797,6 +757,35 @@ RSpec.describe CaseLog do
         check_rsnvac_referral_validation("Community mental health team")
         check_rsnvac_referral_validation("Health service")
       end
+    end
+  end
+
+  describe "#update" do
+    let(:case_log) { FactoryBot.create(:case_log) }
+    let(:validator) { case_log._validators[nil].first }
+
+    after do
+      case_log.update(age1: 25)
+    end
+
+    it "validates bedroom number" do
+      expect(validator).to receive(:validate_shared_housing_rooms)
+    end
+
+    it "validates number of times the property has been relet" do
+      expect(validator).to receive(:validate_property_number_of_times_relet)
+    end
+
+    it "validates tenancy length for tenancy type" do
+      expect(validator).to receive(:validate_fixed_term_tenancy)
+    end
+
+    it "validates the previous postcode" do
+      expect(validator).to receive(:validate_previous_accommodation_postcode)
+    end
+
+    it "validates the net income" do
+      expect(validator).to receive(:validate_net_income)
     end
   end
 
