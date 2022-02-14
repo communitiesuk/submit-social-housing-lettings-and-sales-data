@@ -35,6 +35,8 @@ en:
     updated: "Organisation details updated"
 
   validations:
+    other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
+    other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
     date:
       invalid_date: "Please enter a valid date"
       outside_collection_window: "Date must be within the current collection windows"

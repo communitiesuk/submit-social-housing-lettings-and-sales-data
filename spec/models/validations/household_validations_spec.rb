@@ -165,4 +165,144 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "reason for leaving last settled home validations" do
+    let(:field) { "validations.other_field_not_required" }
+    let(:main_field_label) { "reason" }
+    let(:other_field_label) { "other reason for leaving last settled home" }
+    let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
+
+    context "when reason is other" do
+      let(:field) { "validations.other_field_missing" }
+
+      it "validates that a reason is provided" do
+        record.reason = "Other"
+        record.other_reason_for_leaving_last_settled_home = nil
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+          .to include(match(expected_error))
+      end
+
+      it "expects that a reason is provided" do
+        record.reason = "Other"
+        record.other_reason_for_leaving_last_settled_home = "Some unusual reason"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+      end
+    end
+
+    context "when reason is not other" do
+      it "validates that other reason is not provided" do
+        record.reason = "Repossession"
+        record.other_reason_for_leaving_last_settled_home = "Some other reason"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+          .to include(match(expected_error))
+      end
+
+      it "expects that other reason is not provided" do
+        record.reason = "Repossession"
+        record.other_reason_for_leaving_last_settled_home = nil
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+      end
+    end
+
+    context "when reason is don't know" do
+      let(:expected_error) { I18n.t("validations.household.underoccupation_benefitcap.dont_know_required") }
+
+      it "validates that under occupation benefit cap is also not known" do
+        record.reason = "Don’t know"
+        record.underoccupation_benefitcap = "Yes - benefit cap"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["underoccupation_benefitcap"])
+          .to include(match(expected_error))
+        expect(record.errors["reason"])
+          .to include(match(expected_error))
+      end
+
+      it "expects that under occupation benefit cap is also not known" do
+        record.reason = "Don’t know"
+        record.underoccupation_benefitcap = "Don’t know"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["underoccupation_benefitcap"]).to be_empty
+        expect(record.errors["reason"]).to be_empty
+      end
+    end
+  end
+
+  describe "armed forces validations" do
+    context "when the tenant or partner was and is not a member of the armed forces" do
+      it "validates that injured in the armed forces is not yes" do
+        record.armedforces = "No"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["reservist"])
+          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+      end
+    end
+
+    context "when the tenant prefers not to say if they were or are in the armed forces" do
+      it "validates that injured in the armed forces is not yes" do
+        record.armedforces = "Tenant prefers not to say"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["reservist"])
+          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+      end
+    end
+
+    context "when the tenant was or is a regular member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+
+    context "when the tenant was or is a reserve member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A current or former reserve in the UK Armed Forces (excluding National Service)"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+
+    context "when the tenant's partner was or is a member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+
+    context "when the tenant or partner has left the armed forces" do
+      it "validates that they served in the armed forces" do
+        record.armedforces = "No"
+        record.leftreg = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["leftreg"])
+          .to include(match I18n.t("validations.household.leftreg.question_not_required"))
+      end
+
+      it "expects that they served in the armed forces" do
+        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.leftreg = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["leftreg"]).to be_empty
+      end
+
+      it "expects that they served in the armed forces and may have been injured" do
+        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.leftreg = "Yes"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces(record)
+        expect(record.errors["leftreg"]).to be_empty
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+  end
 end

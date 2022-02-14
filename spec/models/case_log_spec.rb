@@ -44,61 +44,6 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "with a reason for leaving last settled home validation" do
-      it "checks the reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
-        expect {
-          described_class.create!(reason: "Don’t know",
-                                  underoccupation_benefitcap: "Yes - benefit cap",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "with reason for leaving last settled home validation set to other" do
-      it "must be provided if main reason for leaving last settled home was given as other" do
-        expect {
-          described_class.create!(reason: "Other",
-                                  other_reason_for_leaving_last_settled_home: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must not be provided if the main reason for leaving settled home is not other" do
-        expect {
-          described_class.create!(reason: "Repossession",
-                                  other_reason_for_leaving_last_settled_home: "the other reason provided",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "with armed forces injured validation" do
-      it "must not be answered if tenant was not a regular or reserve in armed forces" do
-        expect {
-          described_class.create!(armedforces: "No",
-                                  reservist: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating pregnancy questions" do
-      it "Can answer yes if valid second tenant" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male", age1: 99,
-                                  sex2: "Female",
-                                  age2: 20,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "when validating property vacancy and let as" do
       it "cannot have a previously let as type, if it hasn't been let before" do
         expect {
@@ -223,28 +168,6 @@ RSpec.describe CaseLog do
             managing_organisation:,
           )
         }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating armed forces is active" do
-      it "must not be answered if not ever served as a regular" do
-        expect {
-          described_class.create!(armedforces: "No",
-                                  leftreg: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      # Crossover over tests here as injured must be answered as well for no error
-      it "must be answered if ever served in the forces as a regular" do
-        expect {
-          described_class.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
-                                  leftreg: "Yes",
-                                  reservist: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
       end
     end
 
@@ -431,122 +354,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating major repairs date" do
-      it "cannot be later than the tenancy start date" do
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2021, 10, 10),
-            startdate: Date.new(2021, 10, 9),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2021, 10, 9),
-            startdate: Date.new(2021, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must not be completed if reason for vacancy is first let" do
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of new-build property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of leased property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must have less than two years between the tenancy start date and major repairs date" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            mrcdate: Date.new(2017, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when saving void date" do
-      it "must have less than 10 years between the tenancy start date and void" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2009, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2015, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must be before the tenancy start date" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2021, 10, 11),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2019, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must be before major repairs date if major repairs date provided" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            mrcdate: Date.new(2019, 10, 10),
-            property_void_date: Date.new(2019, 11, 11),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when validating local authority" do
       it "Has to be london if rent type london affordable rent" do
         expect {
@@ -698,6 +505,22 @@ RSpec.describe CaseLog do
 
     it "validates reasonable preference" do
       expect(validator).to receive(:validate_reasonable_preference)
+    end
+
+    it "validates reason for leaving last settled home" do
+      expect(validator).to receive(:validate_reason_for_leaving_last_settled_home)
+    end
+
+    it "validates armed forces" do
+      expect(validator).to receive(:validate_armed_forces)
+    end
+
+    it "validates property major repairs date" do
+      expect(validator).to receive(:validate_property_major_repairs)
+    end
+
+    it "validates property void date" do
+      expect(validator).to receive(:validate_property_void_date)
     end
   end
 
