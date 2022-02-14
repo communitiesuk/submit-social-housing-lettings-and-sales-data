@@ -127,7 +127,7 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" || economic_status != "Prefer not to say")
+    if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" && economic_status != "Prefer not to say")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
     end
   end

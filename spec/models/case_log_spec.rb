@@ -172,17 +172,6 @@ RSpec.describe CaseLog do
     end
 
     context "when validating household members" do
-      it "validate that persons aged under 16 must have relationship Child" do
-        expect {
-          described_class.create!(
-            age2: 14,
-            relat2: "Partner",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       it "validate that persons aged over 70 must be retired" do
         expect {
           described_class.create!(
