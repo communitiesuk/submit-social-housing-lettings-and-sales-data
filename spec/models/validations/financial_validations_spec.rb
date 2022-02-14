@@ -120,4 +120,36 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
   end
+
+  describe "Net income validations" do
+    it "validates that the net income is within the expected range for the tenant's employment status" do
+      record.earnings = 200
+      record.incfreq = "Weekly"
+      record.ecstat1 = "Full-time - 30 hours or more"
+      financial_validator.validate_net_income(record)
+      expect(record.errors["earnings"]).to be_empty
+    end
+
+    context "when the net income is higher than the hard max for their employment status" do
+      it "adds an error" do
+        record.earnings = 5000
+        record.incfreq = "Weekly"
+        record.ecstat1 = "Full-time - 30 hours or more"
+        financial_validator.validate_net_income(record)
+        expect(record.errors["earnings"])
+          .to include(match I18n.t("validations.financial.earnings.over_hard_max", hard_max: 1230))
+      end
+    end
+
+    context "when the net income is lower than the hard min for their employment status" do
+      it "adds an error" do
+        record.earnings = 50
+        record.incfreq = "Weekly"
+        record.ecstat1 = "Full-time - 30 hours or more"
+        financial_validator.validate_net_income(record)
+        expect(record.errors["earnings"])
+          .to include(match I18n.t("validations.financial.earnings.under_hard_min", hard_min: 90))
+      end
+    end
+  end
 end

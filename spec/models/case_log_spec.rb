@@ -125,30 +125,6 @@ RSpec.describe CaseLog do
     end
 
     context "when saving income ranges" do
-      it "validates net income maximum" do
-        expect {
-          described_class.create!(
-            ecstat1: "Full-time - 30 hours or more",
-            earnings: 5000,
-            incfreq: "Weekly",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validates net income minimum" do
-        expect {
-          described_class.create!(
-            ecstat1: "Full-time - 30 hours or more",
-            earnings: 1,
-            incfreq: "Weekly",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
