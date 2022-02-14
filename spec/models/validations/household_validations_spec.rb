@@ -174,6 +174,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when reason is other" do
       let(:field) { "validations.other_field_missing" }
+
       it "validates that a reason is provided" do
         record.reason = "Other"
         record.other_reason_for_leaving_last_settled_home = nil
@@ -207,25 +208,9 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when reason is not other" do
-      it "validates that other reason is not provided" do
-        record.reason = "Repossession"
-        record.other_reason_for_leaving_last_settled_home = "Some other reason"
-        household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
-          .to include(match(expected_error))
-      end
-
-      it "expects that other reason is not provided" do
-        record.reason = "Repossession"
-        record.other_reason_for_leaving_last_settled_home = nil
-        household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
-      end
-    end
-
     context "when reason is don't know" do
       let(:expected_error) { I18n.t("validations.household.underoccupation_benefitcap.dont_know_required") }
+
       it "validates that under occupation benefit cap is also not known" do
         record.reason = "Don’t know"
         record.underoccupation_benefitcap = "Yes - benefit cap"
