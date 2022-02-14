@@ -44,86 +44,6 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "when validating property vacancy and let as" do
-      it "cannot have a previously let as type, if it hasn't been let before" do
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "No",
-            unitletas: "Social rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Social rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Affordable rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Intermediate rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Don’t know",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must have a first let reason for vacancy if it's being let as social housing for the first time" do
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of new-build property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of leased property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "Tenant moved to care home",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when saving income ranges" do
       context "with an income in upper soft range" do
         let(:case_log) do
@@ -322,6 +242,14 @@ RSpec.describe CaseLog do
 
     it "validates housing benefit rent shortfall" do
       expect(validator).to receive(:validate_tshortfall)
+    end
+
+    it "validates let type" do
+      expect(validator).to receive(:validate_unitletas)
+    end
+
+    it "validates reason for vacancy" do
+      expect(validator).to receive(:validate_rsnvac)
     end
   end
 
