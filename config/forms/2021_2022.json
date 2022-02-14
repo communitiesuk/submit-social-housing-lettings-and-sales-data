@@ -1146,7 +1146,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on":  [{ "renewal": "No" }]
             },
             "time_on_la_waiting_list": {
               "header": "",
@@ -1314,7 +1315,28 @@
                   "hint_text": "",
                   "type": "text"
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
+            },
+            "reason_for_leaving_last_settled_home_renewal": {
+              "header": "Leaving their last settled home",
+              "description": "",
+              "questions": {
+                "reason": {
+                  "header": "What is the tenant’s main reason for the household leaving their last settled home?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "End of fixed term tenancy - no fault"
+                    },
+                    "1": {
+                      "value": "End of assured shorthold tenancy - no fault"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{ "renewal": "Yes" }]
             },
             "previous_housing_situation": {
               "header": "",
@@ -1396,7 +1418,28 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
+            },
+            "previous_housing_situation_renewal": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "prevten": {
+                  "header": "Where was the household immediately before this letting?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Supported housing"
+                    },
+                    "1": {
+                      "value": "Sheltered accommodation"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{ "renewal": "Yes", "needstype": "Supported housing" }]
             },
             "underoccupation_benefitcap": {
               "header": "",
@@ -1427,7 +1470,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
             },
             "homelessness": {
               "header": "",
@@ -1449,7 +1493,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "renewal": "No" }]
             },
             "previous_postcode": {
               "header": "",
@@ -2044,7 +2089,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": "General needs"
+                  "needstype": "General needs",
+                  "referral": "No"
                 }
               ]
             },
@@ -2100,7 +2146,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": "General needs"
+                  "needstype": "General needs",
+                  "referral": "No"
                 }
               ]
             },
@@ -2156,7 +2203,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": "Supported housing"
+                  "needstype": "Supported housing",
+                  "referral": "No"
                 }
               ]
             },
@@ -2215,7 +2263,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": "Supported housing"
+                  "needstype": "Supported housing",
+                  "referral": "No"
                 }
               ]
             }
