@@ -44,28 +44,6 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "with a reason for leaving last settled home validation" do
-      it "checks the reason for leaving must be don’t know if reason for leaving settled home (Q9a) is don’t know." do
-        expect {
-          described_class.create!(reason: "Don’t know",
-                                  underoccupation_benefitcap: "Yes - benefit cap",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "with reason for leaving last settled home validation set to other" do
-      it "must not be provided if the main reason for leaving settled home is not other" do
-        expect {
-          described_class.create!(reason: "Repossession",
-                                  other_reason_for_leaving_last_settled_home: "the other reason provided",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "with armed forces injured validation" do
       it "must not be answered if tenant was not a regular or reserve in armed forces" do
         expect {
@@ -689,6 +667,10 @@ RSpec.describe CaseLog do
 
     it "validates reasonable preference" do
       expect(validator).to receive(:validate_reasonable_preference)
+    end
+
+    it "validates reason for leaving last settled home" do
+      expect(validator).to receive(:validate_reason_for_leaving_last_settled_home)
     end
   end
 
