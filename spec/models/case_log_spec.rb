@@ -135,42 +135,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "with tenant’s income from Universal Credit, state pensions or benefits" do
-      it "Cannot be All if person 1 works full time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            ecstat1: "Full-time - 30 hours or more",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot be All if person 1 works part time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            ecstat1: "Part-time - Less than 30 hours",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            relat2: "Partner",
-            ecstat2: "Part-time - Less than 30 hours",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when saving income ranges" do
       it "validates net income maximum" do
         expect {
@@ -381,6 +345,10 @@ RSpec.describe CaseLog do
 
     it "validates local authority" do
       expect(validator).to receive(:validate_la)
+    end
+
+    it "validates benefits as proportion of income" do
+      expect(validator).to receive(:validate_net_income_uc_proportion)
     end
   end
 
