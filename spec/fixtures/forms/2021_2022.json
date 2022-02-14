@@ -251,7 +251,13 @@
                       "E06000014": "York"
                     }
                   }
-                }
+                },
+                "depends_on": [
+                  {
+                    "la_known": "Yes",
+                    "is_la_inferred": false
+                  }
+                ]
               },
               "condition_effects": {
                 "questions": {

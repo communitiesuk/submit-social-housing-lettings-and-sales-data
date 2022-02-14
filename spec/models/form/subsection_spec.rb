@@ -70,6 +70,8 @@ RSpec.describe Form::Subsection, type: :model do
       case_log.armedforces = "No"
       case_log.illness = "No"
       case_log.housingneeds_a = "Yes"
+      case_log.la_known = "Yes"
+      case_log.is_la_inferred = false
       case_log.la = "York"
       case_log.illness_type_1 = "Yes"
       expect(sub_section.answered_questions(case_log).map(&:id)).to eq(expected_questions)

@@ -278,6 +278,8 @@ RSpec.describe CaseLogsController, type: :request do
         case_log = FactoryBot.create(:case_log,
                                      owning_organisation: organisation,
                                      managing_organisation: organisation,
+                                     la_known: "Yes",
+                                     is_la_inferred: true,
                                      postcode_known: "Yes",
                                      property_postcode: "PO5 3TE")
         id = case_log.id

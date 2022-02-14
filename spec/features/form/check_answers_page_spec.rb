@@ -17,6 +17,8 @@ RSpec.describe "Form Check Answers Page" do
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
+      la_known: "Yes",
+      is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )
