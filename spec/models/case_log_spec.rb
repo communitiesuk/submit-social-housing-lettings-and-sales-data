@@ -582,10 +582,25 @@ RSpec.describe CaseLog do
         expect(case_log["underoccupation_benefitcap"]).to eq("No")
       end
 
-      it "correctly derives and saves homeless" do
-        record_from_db = ActiveRecord::Base.connection.execute("select homeless from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["homeless"]).to eq(1)
-        expect(case_log["homeless"]).to eq("No")
+      it "correctly derives and saves prevten" do
+        case_log.update!({ needstype: "General needs" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["prevten"]).to eq(32)
+        expect(case_log["prevten"]).to eq("Fixed-term private registered provider (PRP) general needs tenancy")
+
+        case_log.managing_organisation.update!({ provider_type: "LA" })
+        case_log.update!({ needstype: "General needs" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["prevten"]).to eq(30)
+        expect(case_log["prevten"]).to eq("Fixed-term local authority general needs tenancy")
+      end
+
+      it "correctly derives and saves referral" do
+        record_from_db = ActiveRecord::Base.connection.execute("select referral from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["referral"]).to eq(1)
+        expect(case_log["referral"]).to eq("Internal transfer")
       end
     end
   end
