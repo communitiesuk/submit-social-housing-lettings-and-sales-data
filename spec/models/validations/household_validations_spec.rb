@@ -181,15 +181,12 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["other_reason_for_leaving_last_settled_home"])
           .to include(match(expected_error))
       end
-    end
 
-    context "when reason is not other" do
-      it "validates that other reason is not provided" do
-        record.reason = "Repossession"
-        record.other_reason_for_leaving_last_settled_home = "Some other reason"
+      it "expects that a reason is provided" do
+        record.reason = "Other"
+        record.other_reason_for_leaving_last_settled_home = "Some unusual reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
-          .to include(match(expected_error))
+        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
       end
     end
 
@@ -200,6 +197,30 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["other_reason_for_leaving_last_settled_home"])
           .to include(match(expected_error))
+      end
+
+      it "expects that other reason is not provided" do
+        record.reason = "Repossession"
+        record.other_reason_for_leaving_last_settled_home = nil
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+      end
+    end
+
+    context "when reason is not other" do
+      it "validates that other reason is not provided" do
+        record.reason = "Repossession"
+        record.other_reason_for_leaving_last_settled_home = "Some other reason"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+          .to include(match(expected_error))
+      end
+
+      it "expects that other reason is not provided" do
+        record.reason = "Repossession"
+        record.other_reason_for_leaving_last_settled_home = nil
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
       end
     end
 
@@ -211,6 +232,16 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["underoccupation_benefitcap"])
           .to include(match(expected_error))
+        expect(record.errors["reason"])
+          .to include(match(expected_error))
+      end
+
+      it "expects that under occupation benefit cap is also not known" do
+        record.reason = "Don’t know"
+        record.underoccupation_benefitcap = "Don’t know"
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["underoccupation_benefitcap"]).to be_empty
+        expect(record.errors["reason"]).to be_empty
       end
     end
   end
