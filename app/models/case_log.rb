@@ -13,20 +13,6 @@ class CaseLogValidator < ActiveModel::Validator
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
     validation_methods.each { |meth| public_send(meth, record) }
   end
-
-private
-
-  def validate_other_field(record, main_field, other_field)
-    main_field_label = main_field.humanize(capitalize: false)
-    other_field_label = other_field.humanize(capitalize: false)
-    if record[main_field] == "Other" && record[other_field].blank?
-      record.errors.add other_field.to_sym, "If #{main_field_label} is other then #{other_field_label} must be provided"
-    end
-
-    if record[main_field] != "Other" && record[other_field].present?
-      record.errors.add other_field.to_sym, "#{other_field_label} must not be provided if #{main_field_label} was not other"
-    end
-  end
 end
 
 class CaseLog < ApplicationRecord

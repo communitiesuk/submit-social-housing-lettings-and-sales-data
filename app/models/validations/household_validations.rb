@@ -1,4 +1,5 @@
 module Validations::HouseholdValidations
+  include Validations::SharedValidations
   include Constants::CaseLog
 
   # Validations methods need to be called 'validate_<page_name>' to run on model save
@@ -14,14 +15,11 @@ module Validations::HouseholdValidations
     end
   end
 
-  def validate_other_reason_for_leaving_last_settled_home(record)
-    validate_other_field(record, "reason", "other_reason_for_leaving_last_settled_home")
-  end
-
   def validate_reason_for_leaving_last_settled_home(record)
     if record.reason == "Don’t know" && record.underoccupation_benefitcap != "Don’t know"
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
+    validate_other_field(record, :reason, :other_reason_for_leaving_last_settled_home)
   end
 
   def validate_armed_forces_injured(record)

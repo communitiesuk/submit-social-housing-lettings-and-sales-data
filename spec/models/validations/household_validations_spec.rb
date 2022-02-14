@@ -165,4 +165,20 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "reason for leaving last settled home validations" do
+    context "when reason is other" do
+      it "validates that a reason is provided" do
+        record.reason = "Other"
+        record.other_reason_for_leaving_last_settled_home = nil
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+          .to include(match I18n.t(
+            "validations.other_field_missing",
+            main_field_label: "reason",
+            other_field_label: "other reason for leaving last settled home",
+          ))
+      end
+    end
+  end
 end

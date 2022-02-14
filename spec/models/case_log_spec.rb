@@ -56,15 +56,6 @@ RSpec.describe CaseLog do
     end
 
     context "with reason for leaving last settled home validation set to other" do
-      it "must be provided if main reason for leaving last settled home was given as other" do
-        expect {
-          described_class.create!(reason: "Other",
-                                  other_reason_for_leaving_last_settled_home: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       it "must not be provided if the main reason for leaving settled home is not other" do
         expect {
           described_class.create!(reason: "Repossession",

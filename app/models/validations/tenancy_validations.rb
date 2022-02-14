@@ -1,6 +1,8 @@
 module Validations::TenancyValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
+  include Validations::SharedValidations
+
   def validate_fixed_term_tenancy(record)
     is_present = record.tenancylength.present?
     is_in_range = record.tenancylength.to_i.between?(2, 99)
@@ -21,6 +23,6 @@ module Validations::TenancyValidations
   end
 
   def validate_other_tenancy_type(record)
-    validate_other_field(record, "tenancy", "tenancyother")
+    validate_other_field(record, :tenancy, :tenancyother)
   end
 end
