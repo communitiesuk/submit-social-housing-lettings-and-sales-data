@@ -125,4 +125,24 @@ RSpec.describe Validations::PropertyValidations do
       end
     end
   end
+
+  describe "#validate_la" do
+    context "when the rent type is London affordable" do
+      let(:expected_error) { I18n.t("validations.property.la.london_rent") }
+
+      it "validates that the local authority is in London" do
+        record.la = "Ashford"
+        record.rent_type = "London Affordable rent"
+        property_validator.validate_la(record)
+        expect(record.errors["la"]).to include(match(expected_error))
+      end
+
+      it "expects that the local authority is in London" do
+        record.la = "Westminster"
+        record.rent_type = "London Affordable rent"
+        property_validator.validate_la(record)
+        expect(record.errors["la"]).to be_empty
+      end
+    end
+  end
 end

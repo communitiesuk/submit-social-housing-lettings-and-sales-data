@@ -227,24 +227,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating local authority" do
-      it "Has to be london if rent type london affordable rent" do
-        expect {
-          described_class.create!(la: "Ashford",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(la: "Westminster",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "with accessibility requirements" do
       it "validates that only one option can be selected" do
         expect {
@@ -395,6 +377,10 @@ RSpec.describe CaseLog do
 
     it "validates property void date" do
       expect(validator).to receive(:validate_property_void_date)
+    end
+
+    it "validates local authority" do
+      expect(validator).to receive(:validate_la)
     end
   end
 
