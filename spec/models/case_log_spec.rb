@@ -345,7 +345,7 @@ RSpec.describe CaseLog do
     end
 
     it "validates housing benefit rent shortfall" do
-      expect(validator).to receive(:tshortfall)
+      expect(validator).to receive(:validate_tshortfall)
     end
   end
 
