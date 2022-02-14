@@ -171,28 +171,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating armed forces is active" do
-      it "must not be answered if not ever served as a regular" do
-        expect {
-          described_class.create!(armedforces: "No",
-                                  leftreg: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      # Crossover over tests here as injured must be answered as well for no error
-      it "must be answered if ever served in the forces as a regular" do
-        expect {
-          described_class.create!(armedforces: "A current or former regular in the UK Armed Forces (excluding National Service)",
-                                  leftreg: "Yes",
-                                  reservist: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "when validating household members" do
       it "validate that persons aged under 16 must have relationship Child" do
         expect {
@@ -647,6 +625,10 @@ RSpec.describe CaseLog do
 
     it "validates reason for leaving last settled home" do
       expect(validator).to receive(:validate_reason_for_leaving_last_settled_home)
+    end
+
+    it "validates armed forces" do
+      expect(validator).to receive(:validate_armed_forces)
     end
   end
 

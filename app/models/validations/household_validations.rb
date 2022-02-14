@@ -23,13 +23,10 @@ module Validations::HouseholdValidations
     validate_other_field(record, :reason, :other_reason_for_leaving_last_settled_home)
   end
 
-  def validate_armed_forces_injured(record)
+  def validate_armed_forces(record)
     if (record.armedforces == "No" || record.armedforces == "Tenant prefers not to say") && record.reservist.present?
       record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
-  end
-
-  def validate_armed_forces_active_response(record)
     if record.armedforces != "A current or former regular in the UK Armed Forces (excluding National Service)" && record.leftreg.present?
       record.errors.add :leftreg, I18n.t("validations.household.leftreg.question_not_required")
     end
