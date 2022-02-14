@@ -230,4 +230,53 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "armed forces validations" do
+    context "when the tenant or partner was and is not a member of the armed forces" do
+      it "validates that injured in the armed forces is not yes" do
+        record.armedforces = "No"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces_injured(record)
+        expect(record.errors["reservist"])
+          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+      end
+    end
+
+    context "when the tenant prefers not to say if they were or are in the armed forces" do
+      it "validates that injured in the armed forces is not yes" do
+        record.armedforces = "Tenant prefers not to say"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces_injured(record)
+        expect(record.errors["reservist"])
+          .to include(match I18n.t("validations.household.reservist.injury_not_required"))
+      end
+    end
+
+    context "when the tenant was or is a regular member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces_injured(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+
+    context "when the tenant was or is a reserve member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A current or former reserve in the UK Armed Forces (excluding National Service)"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces_injured(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+
+    context "when the tenant's partner was or is a member of the armed forces" do
+      it "expects that injured in the armed forces can be yes" do
+        record.armedforces = "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+        record.reservist = "Yes"
+        household_validator.validate_armed_forces_injured(record)
+        expect(record.errors["reservist"]).to be_empty
+      end
+    end
+  end
 end

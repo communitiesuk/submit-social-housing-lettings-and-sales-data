@@ -24,7 +24,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_armed_forces_injured(record)
-    if (record.armedforces == "No" || record.armedforces == "Prefer not to say") && record.reservist.present?
+    if (record.armedforces == "No" || record.armedforces == "Tenant prefers not to say") && record.reservist.present?
       record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
   end

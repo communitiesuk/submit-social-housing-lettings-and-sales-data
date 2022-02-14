@@ -44,17 +44,6 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "with armed forces injured validation" do
-      it "must not be answered if tenant was not a regular or reserve in armed forces" do
-        expect {
-          described_class.create!(armedforces: "No",
-                                  reservist: "Yes",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when validating property vacancy and let as" do
       it "cannot have a previously let as type, if it hasn't been let before" do
         expect {
