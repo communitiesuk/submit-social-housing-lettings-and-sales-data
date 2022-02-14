@@ -98,4 +98,53 @@ RSpec.describe Validations::DateValidations do
       end
     end
   end
+
+  describe "property void date" do
+    it "cannot be after the tenancy start date" do
+      record.startdate = Time.zone.local(2022, 1, 1)
+      record.property_void_date = Time.zone.local(2022, 2, 1)
+      date_validator.validate_property_void_date(record)
+      expect(record.errors["property_void_date"])
+        .to include(match I18n.t("validations.property.void_date.before_tenancy_start"))
+    end
+
+    it "must be before the tenancy start date" do
+      record.startdate = Time.zone.local(2022, 2, 1)
+      record.property_void_date = Time.zone.local(2022, 1, 1)
+      date_validator.validate_property_void_date(record)
+      expect(record.errors["property_void_date"]).to be_empty
+    end
+
+    it "cannot be more than 10 years before the tenancy start date" do
+      record.startdate = Time.zone.local(2022, 2, 1)
+      record.property_void_date = Time.zone.local(2012, 1, 1)
+      date_validator.validate_property_void_date(record)
+      expect(record.errors["property_void_date"])
+        .to include(match I18n.t("validations.property.void_date.ten_years_before_tenancy_start"))
+    end
+
+    it "must be within 10 years of the tenancy start date" do
+      record.startdate = Time.zone.local(2022, 2, 1)
+      record.property_void_date = Time.zone.local(2012, 3, 1)
+      date_validator.validate_property_void_date(record)
+      expect(record.errors["property_void_date"]).to be_empty
+    end
+
+    context "when major repairs have been carried out" do
+      it "cannot be after major repairs date" do
+        record.mrcdate = Time.zone.local(2022, 1, 1)
+        record.property_void_date = Time.zone.local(2022, 2, 1)
+        date_validator.validate_property_void_date(record)
+        expect(record.errors["property_void_date"])
+          .to include(match I18n.t("validations.property.void_date.after_mrcdate"))
+      end
+
+      it "must be before major repairs date" do
+        record.mrcdate = Time.zone.local(2022, 2, 1)
+        record.property_void_date = Time.zone.local(2022, 1, 1)
+        date_validator.validate_property_void_date(record)
+        expect(record.errors["property_void_date"]).to be_empty
+      end
+    end
+  end
 end

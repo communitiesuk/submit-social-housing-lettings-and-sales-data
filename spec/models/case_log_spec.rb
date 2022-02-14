@@ -354,60 +354,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when saving void date" do
-      it "must have less than 10 years between the tenancy start date and void" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2009, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2015, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must be before the tenancy start date" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2021, 10, 11),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            property_void_date: Date.new(2019, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must be before major repairs date if major repairs date provided" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            mrcdate: Date.new(2019, 10, 10),
-            property_void_date: Date.new(2019, 11, 11),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when validating local authority" do
       it "Has to be london if rent type london affordable rent" do
         expect {
@@ -571,6 +517,10 @@ RSpec.describe CaseLog do
 
     it "validates property major repairs date" do
       expect(validator).to receive(:validate_property_major_repairs)
+    end
+
+    it "validates property void date" do
+      expect(validator).to receive(:validate_property_void_date)
     end
   end
 
