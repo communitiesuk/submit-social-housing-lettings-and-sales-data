@@ -354,68 +354,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating major repairs date" do
-      it "cannot be later than the tenancy start date" do
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2021, 10, 10),
-            startdate: Date.new(2021, 10, 9),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2021, 10, 9),
-            startdate: Date.new(2021, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-      end
-
-      it "must not be completed if reason for vacancy is first let" do
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of new-build property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(
-            mrcdate: Date.new(2020, 10, 10),
-            rsnvac: "First let of leased property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must have less than two years between the tenancy start date and major repairs date" do
-        expect {
-          described_class.create!(
-            startdate: Date.new(2021, 10, 10),
-            mrcdate: Date.new(2017, 10, 10),
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when saving void date" do
       it "must have less than 10 years between the tenancy start date and void" do
         expect {
@@ -629,6 +567,10 @@ RSpec.describe CaseLog do
 
     it "validates armed forces" do
       expect(validator).to receive(:validate_armed_forces)
+    end
+
+    it "validates property major repairs date" do
+      expect(validator).to receive(:validate_property_major_repairs)
     end
   end
 
