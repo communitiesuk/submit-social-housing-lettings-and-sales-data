@@ -124,17 +124,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating outstanding rent or charges" do
-      it "must be not be anwered if answered no to outstanding rent or charges" do
-        expect {
-          described_class.create!(hbrentshortfall: "No",
-                                  tshortfall: 99,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
     context "when saving income ranges" do
       it "validates net income maximum" do
         expect {
@@ -349,6 +338,14 @@ RSpec.describe CaseLog do
 
     it "validates benefits as proportion of income" do
       expect(validator).to receive(:validate_net_income_uc_proportion)
+    end
+
+    it "validates outstanding rent amount" do
+      expect(validator).to receive(:validate_outstanding_rent_amount)
+    end
+
+    it "validates housing benefit rent shortfall" do
+      expect(validator).to receive(:tshortfall)
     end
   end
 

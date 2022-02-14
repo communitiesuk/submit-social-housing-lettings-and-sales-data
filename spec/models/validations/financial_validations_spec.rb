@@ -11,14 +11,16 @@ RSpec.describe Validations::FinancialValidations do
       record.earnings = 500
       record.incfreq = nil
       financial_validator.validate_net_income(record)
-      expect(record.errors["incfreq"]).to include(match I18n.t("validations.financial.earnings.freq_missing"))
+      expect(record.errors["incfreq"])
+        .to include(match I18n.t("validations.financial.earnings.freq_missing"))
     end
 
     it "when income frequency is provided it validates that earnings must be provided" do
       record.earnings = nil
       record.incfreq = "Weekly"
       financial_validator.validate_net_income(record)
-      expect(record.errors["earnings"]).to include(match I18n.t("validations.financial.earnings.earnings_missing"))
+      expect(record.errors["earnings"])
+        .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
     end
   end
 
@@ -59,6 +61,62 @@ RSpec.describe Validations::FinancialValidations do
         record.relat2 = "Partner"
         financial_validator.validate_net_income_uc_proportion(record)
         expect(record.errors["benefits"]).to be_empty
+      end
+    end
+  end
+
+  describe "outstanding rent amount validations" do
+    context "when outstanding rent or charges is no" do
+      it "validates that no shortfall is provided" do
+        record.hbrentshortfall = "No"
+        record.tshortfall = 99
+        financial_validator.validate_outstanding_rent_amount(record)
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.tshortfall.outstanding_amount_not_required"))
+      end
+    end
+
+    context "when outstanding rent or charges is yes" do
+      it "expects that a shortfall is provided" do
+        record.hbrentshortfall = "Yes"
+        record.tshortfall = 99
+        financial_validator.validate_outstanding_rent_amount(record)
+        expect(record.errors["tshortfall"]).to be_empty
+      end
+    end
+  end
+
+  describe "housing benefit rent shortfall validations" do
+    context "when shortfall is yes" do
+      it "validates that housing benefit is not none" do
+        record.hbrentshortfall = "Yes"
+        record.hb = "None"
+        financial_validator.validate_tshortfall(record)
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
+      end
+
+      it "validates that housing benefit is not don't know" do
+        record.hbrentshortfall = "Yes"
+        record.hb = "Don’t know"
+        financial_validator.validate_tshortfall(record)
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
+      end
+
+      it "validates that housing benefit is not Universal Credit without housing benefit" do
+        record.hbrentshortfall = "Yes"
+        record.hb = "Universal Credit (without housing element)"
+        financial_validator.validate_tshortfall(record)
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
+      end
+
+      it "validates that housing benefit is provided" do
+        record.hbrentshortfall = "Yes"
+        record.hb = "Housing benefit"
+        financial_validator.validate_tshortfall(record)
+        expect(record.errors["tshortfall"]).to be_empty
       end
     end
   end
