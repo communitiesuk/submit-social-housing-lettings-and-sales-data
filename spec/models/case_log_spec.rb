@@ -171,40 +171,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating other tenancy type" do
-      it "must be provided if tenancy type was given as other" do
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancyother: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancyother: "type",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-
-      it "must not be provided if tenancy type is not other" do
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancyother: "the other reason provided",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancyother: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "when saving income ranges" do
       it "validates net income maximum" do
         expect {
@@ -398,8 +364,9 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_property_number_of_times_relet)
     end
 
-    it "validates tenancy length for tenancy type" do
+    it "validates tenancy type" do
       expect(validator).to receive(:validate_fixed_term_tenancy)
+      expect(validator).to receive(:validate_other_tenancy_type)
     end
 
     it "validates the previous postcode" do
