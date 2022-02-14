@@ -55,19 +55,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when validating pregnancy questions" do
-      it "Can answer yes if valid second tenant" do
-        expect {
-          described_class.create!(preg_occ: "Yes",
-                                  sex1: "Male", age1: 99,
-                                  sex2: "Female",
-                                  age2: 20,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "when validating property vacancy and let as" do
       it "cannot have a previously let as type, if it hasn't been let before" do
         expect {
