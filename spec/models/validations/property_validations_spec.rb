@@ -233,5 +233,61 @@ RSpec.describe Validations::PropertyValidations do
         expect(record.errors["rsnvac"]).to be_empty
       end
     end
+
+    context "when the property has been let before" do
+      let(:non_temporary_previous_tenancies) do
+        [
+          "Tied housing or rented with job", "Supported housing", "Sheltered accommodation",
+          "Home Office Asylum Support", "Any other accommodation"
+        ]
+      end
+
+      context "when the previous tenancy was not temporary" do
+        it "validates that the property is not being relet to tenant who occupied as temporary" do
+          non_temporary_previous_tenancies.each do |rsn|
+            record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+            record.prevten = rsn
+            property_validator.validate_rsnvac(record)
+            expect(record.errors["rsnvac"])
+              .to include(match I18n.t("validations.property.rsnvac.non_temp_accommodation"))
+          end
+        end
+
+        let(:referral_sources) do
+          [
+            "Re-located through official housing mobility scheme",
+            "Other social landlord", "Police, probation or prison",
+            "Youth offending team", "Community mental health team",
+            "Health service"
+          ]
+        end
+
+        it "validates that the letting source is not a referral" do
+          referral_sources.each do |src|
+            record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+            record.referral = src
+            property_validator.validate_rsnvac(record)
+            expect(record.errors["rsnvac"])
+              .to include(match I18n.t("validations.property.rsnvac.referral_invalid"))
+          end
+        end
+      end
+
+      context "when the previous tenancy was temporary" do
+        it "expects that the property can be relet to a tenant who previously occupied it as temporary" do
+          record.prevten = "Fixed-term local authority general needs tenancy"
+          record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+          property_validator.validate_rsnvac(record)
+          expect(record.errors["rsnvac"]).to be_empty
+        end
+
+        it "expects that the letting source can be a referral" do
+          record.prevten = "Fixed-term local authority general needs tenancy"
+          record.referral = "Re-located through official housing mobility scheme"
+          property_validator.validate_rsnvac(record)
+          expect(record.errors["rsnvac"]).to be_empty
+        end
+      end
+    end
   end
 end
