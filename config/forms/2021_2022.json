@@ -1112,7 +1112,7 @@
               "description": "",
               "questions": {
                 "layear": {
-                  "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "check_answer_label": "Length of time in local authority area",
                   "header": "How long has the household continuously lived in the local authority area of the new letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -1154,7 +1154,7 @@
               "description": "",
               "questions": {
                 "lawaitlist": {
-                  "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "check_answer_label": "Length of time on local authority waiting list",
                   "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -1196,6 +1196,7 @@
               "description": "",
               "questions": {
                 "reason": {
+                  "check_answer_label": "Reason for leaving last settled home",
                   "header": "What is the tenant’s main reason for the household leaving their last settled home?",
                   "hint_text": "The tenant’s ’last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
@@ -1323,6 +1324,7 @@
               "description": "",
               "questions": {
                 "reason": {
+                  "check_answer_label": "Reason for leaving last settled home",
                   "header": "What is the tenant’s main reason for the household leaving their last settled home?",
                   "hint_text": "",
                   "type": "radio",
@@ -1343,6 +1345,7 @@
               "description": "",
               "questions": {
                 "prevten": {
+                  "check_answer_label": "Where was the household immediately before this letting?",
                   "header": "Where was the household immediately before this letting?",
                   "hint_text": "This is where the household was the night before they moved.",
                   "type": "radio",
@@ -1426,6 +1429,7 @@
               "description": "",
               "questions": {
                 "prevten": {
+                  "check_answer_label": "Where was the household immediately before this letting?",
                   "header": "Where was the household immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -1446,6 +1450,7 @@
               "description": "",
               "questions": {
                 "underoccupation_benefitcap": {
+                  "check_answer_label": "Removal of spare room subsidy or benefit cap",
                   "header": "Was the reason for leaving a direct result of the removal of the spare room subsidy or benefit cap introduced from 2013?",
                   "hint_text": "",
                   "type": "radio",
@@ -1478,6 +1483,7 @@
               "description": "",
               "questions": {
                 "homeless": {
+                  "check_answer_label": "Household homeless immediately before letting",
                   "header": "Did the household experience homelessness immediately before this letting?",
                   "hint_text": "",
                   "type": "radio",
@@ -1501,7 +1507,6 @@
               "description": "",
               "questions": {
                 "previous_postcode_known": {
-                  "check_answer_label": "Do you know the postcode of the household’s last settled accommodation?",
                   "header": "Do you know the property’s postcode?",
                   "hint_text": "This is also known as the household’s ’last settled home’.",
                   "type": "radio",
@@ -1515,7 +1520,7 @@
                   "hidden_in_check_answers": true
                 },
                 "previous_postcode": {
-                  "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
+                  "check_answer_label": "Postcode of household’s last settled accommodation",
                   "header": "Postcode for the previous accommodation",
                   "hint_text": "",
                   "type": "text",
@@ -1552,7 +1557,7 @@
               "description": "",
               "questions": {
                 "prevloc": {
-                  "check_answer_label": "The LA in which household lived immediately before this letting\t",
+                  "check_answer_label": "Location of household’s last settled accommodation",
                   "header": "Which local authority area did the household live in immediately before this letting?",
                   "hint_text": "Includes temporary accommodation.",
                   "type": "select",
@@ -1953,7 +1958,7 @@
               "description": "",
               "questions": {
                 "reasonpref": {
-                  "check_answer_label": "Was the household given ‘reasonable preference’ by the local authority?",
+                  "check_answer_label": "Household given reasonable preference",
                   "header": "Was the household given ‘reasonable preference’ by the local authority?",
                   "hint_text": "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority.",
                   "type": "radio",
@@ -2016,7 +2021,7 @@
               "description": "",
               "questions": {
                 "letting_allocation": {
-                  "check_answer_label": "How was this letting allocated?",
+                  "check_answer_label": "Allocation system",
                   "header": "How was this letting allocated?",
                   "hint_text": "Select all that apply.",
                   "type": "checkbox",
