@@ -6,7 +6,7 @@ RSpec.describe Validations::TenancyValidations do
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
   let(:record) { FactoryBot.create(:case_log) }
 
-  describe "#validate_fixed_term_tenancy" do
+  describe "fixed term tenancy validations" do
     context "when fixed term tenancy" do
       context "when type of tenancy is not assured or assured shorthold" do
         let(:expected_error) { I18n.t("validations.tenancy.length.fixed_term_not_required") }
@@ -106,6 +106,47 @@ RSpec.describe Validations::TenancyValidations do
             expect(record.errors["tenancy"]).to be_empty
           end
         end
+      end
+    end
+  end
+
+  describe "tenancy type validations" do
+    let(:field) { "validations.other_field_missing" }
+    let(:main_field_label) { "tenancy" }
+    let(:other_field_label) { "tenancyother" }
+    let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
+
+    context "when tenancy type is other" do
+      it "validates that other tenancy type is provided" do
+        record.tenancy = "Other"
+        record.tenancyother = nil
+        tenancy_validator.validate_other_tenancy_type(record)
+        expect(record.errors[other_field_label]).to include(match(expected_error))
+      end
+
+      it "expects that other tenancy type is provided" do
+        record.tenancy = "Other"
+        record.tenancyother = "Some other tenancy type"
+        tenancy_validator.validate_other_tenancy_type(record)
+        expect(record.errors[other_field_label]).to be_empty
+      end
+    end
+
+    context "when tenancy type is not other" do
+      let(:field) { "validations.other_field_not_required" }
+
+      it "validates that other tenancy type is not provided" do
+        record.tenancy = "Assured"
+        record.tenancyother = "Some other tenancy type"
+        tenancy_validator.validate_other_tenancy_type(record)
+        expect(record.errors[other_field_label]).to include(match(expected_error))
+      end
+
+      it "expects that other tenancy type is not provided" do
+        record.tenancy = "Secure (including flexible)"
+        record.tenancyother = nil
+        tenancy_validator.validate_other_tenancy_type(record)
+        expect(record.errors[other_field_label]).to be_empty
       end
     end
   end

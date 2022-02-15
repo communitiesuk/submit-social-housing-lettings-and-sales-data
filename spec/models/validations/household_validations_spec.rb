@@ -305,4 +305,136 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "household member validations" do
+    it "validates that only 1 partner exists" do
+      record.relat2 = "Partner"
+      record.relat3 = "Partner"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["base"])
+        .to include(match I18n.t("validations.household.relat.one_partner"))
+    end
+
+    it "expects that a tenant can have a partner" do
+      record.relat3 = "Partner"
+      household_validator.validate_household_number_of_other_members(record)
+      expect(record.errors["base"]).to be_empty
+    end
+
+    context "when the household contains a person under 16" do
+      it "validates that person must be a child of the tenant" do
+        record.age2 = "14"
+        record.relat2 = "Partner"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["relat2"])
+          .to include(match I18n.t("validations.household.relat.child_under_16", person_num: 2))
+      end
+
+      it "expects that person is a child of the tenant" do
+        record.age2 = "14"
+        record.relat2 = "Child - includes young adult and grown-up"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["relat2"]).to be_empty
+      end
+
+      it "validates that person's economic status must be Child" do
+        record.age2 = "14"
+        record.ecstat2 = "Full-time - 30 hours or more"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+      end
+
+      it "expects that person's economic status is Child" do
+        record.age2 = "14"
+        record.ecstat2 = "Child under 16"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+
+    context "when the household contains a tenant's child between the ages of 16 and 19" do
+      it "validates that person's economic status must be full time student or refused" do
+        record.age2 = "17"
+        record.relat2 = "Child - includes young adult and grown-up"
+        record.ecstat2 = "Full-time - 30 hours or more"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.student_16_19", person_num: 2))
+      end
+
+      it "expects that person can be a full time student" do
+        record.age2 = "17"
+        record.relat2 = "Child - includes young adult and grown-up"
+        record.ecstat2 = "Full-time student"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+
+      it "expects that person can refuse to share their work status" do
+        record.age2 = "17"
+        record.relat2 = "Child - includes young adult and grown-up"
+        record.ecstat2 = "Prefer not to say"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+
+    context "when the household contains a person over 70" do
+      it "validates that person must be retired" do
+        record.age2 = "71"
+        record.ecstat2 = "Full-time - 30 hours or more"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.retired_over_70", person_num: 2))
+      end
+
+      it "expects that person is retired" do
+        record.age2 = "50"
+        record.ecstat2 = "Full-time - 30 hours or more"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+
+    context "when the household contains a retired male" do
+      it "validates that person must be over 65" do
+        record.age2 = "64"
+        record.sex2 = "Male"
+        record.ecstat2 = "Retired"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.retired_male"))
+      end
+
+      it "expects that person is over 65" do
+        record.age2 = "66"
+        record.sex2 = "Male"
+        record.ecstat2 = "Retired"
+        household_validator.validate_household_number_of_other_members(record)
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+
+    context "when the household contains a retired female" do
+      it "validates that person must be over 60" do
+        record.age2 = "59"
+        record.sex2 = "Female"
+        record.ecstat2 = "Retired"
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.retired_female"))
+      end
+
+      it "expects that person is over 60" do
+        record.age2 = "61"
+        record.sex2 = "Female"
+        record.ecstat2 = "Retired"
+        household_validator.validate_household_number_of_other_members(record)
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"]).to be_empty
+      end
+    end
+  end
 end

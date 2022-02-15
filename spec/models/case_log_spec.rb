@@ -44,285 +44,7 @@ RSpec.describe CaseLog do
     end
 
     # TODO: replace these with validator specs and checks for method call here
-    context "when validating property vacancy and let as" do
-      it "cannot have a previously let as type, if it hasn't been let before" do
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "No",
-            unitletas: "Social rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Social rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Affordable rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Intermediate rent basis",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            unitletas: "Don’t know",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "must have a first let reason for vacancy if it's being let as social housing for the first time" do
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of new-build property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of conversion, rehabilitation or acquired property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "First let of leased property",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.not_to raise_error
-        expect {
-          described_class.create!(
-            first_time_property_let_as_social_housing: "Yes",
-            rsnvac: "Tenant moved to care home",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating outstanding rent or charges" do
-      it "must be not be anwered if answered no to outstanding rent or charges" do
-        expect {
-          described_class.create!(hbrentshortfall: "No",
-                                  tshortfall: 99,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "with tenant’s income from Universal Credit, state pensions or benefits" do
-      it "Cannot be All if person 1 works full time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            ecstat1: "Full-time - 30 hours or more",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot be All if person 1 works part time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            ecstat1: "Part-time - Less than 30 hours",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "Cannot be 1 All if any of persons 2-4 are person 1's partner and work part or full time" do
-        expect {
-          described_class.create!(
-            benefits: "All",
-            relat2: "Partner",
-            ecstat2: "Part-time - Less than 30 hours",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating household members" do
-      it "validate that persons aged under 16 must have relationship Child" do
-        expect {
-          described_class.create!(
-            age2: 14,
-            relat2: "Partner",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that persons aged over 70 must be retired" do
-        expect {
-          described_class.create!(
-            age2: 71,
-            ecstat2: "Full-time - 30 hours or more",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that a male, retired persons must be over 65" do
-        expect {
-          described_class.create!(
-            age2: 64,
-            sex2: "Male",
-            ecstat2: "Retired",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that a female, retired persons must be over 60" do
-        expect {
-          described_class.create!(
-            age2: 59,
-            sex2: "Female",
-            ecstat2: "Retired",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that persons aged under 16 must be a child (economically speaking)" do
-        expect {
-          described_class.create!(
-            age2: 15,
-            ecstat2: "Full-time - 30 hours or more",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that persons aged between 16 and 19 that are a child must be a full time student or economic status refused" do
-        expect {
-          described_class.create!(
-            age2: 17,
-            relat2: "Child - includes young adult and grown-up",
-            ecstat2: "Full-time - 30 hours or more",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that persons aged under 16 must be a child relationship" do
-        expect {
-          described_class.create!(
-            age2: 15,
-            relat2: "Partner",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validate that no more than 1 partner relationship exists" do
-        expect {
-          described_class.create!(
-            relat2: "Partner",
-            relat3: "Partner",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating other tenancy type" do
-      it "must be provided if tenancy type was given as other" do
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancyother: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Other",
-                                  tenancyother: "type",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-
-      it "must not be provided if tenancy type is not other" do
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancyother: "the other reason provided",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(tenancy: "Secure (including flexible)",
-                                  tenancyother: nil,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-      end
-    end
-
     context "when saving income ranges" do
-      it "validates net income maximum" do
-        expect {
-          described_class.create!(
-            ecstat1: "Full-time - 30 hours or more",
-            earnings: 5000,
-            incfreq: "Weekly",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validates net income minimum" do
-        expect {
-          described_class.create!(
-            ecstat1: "Full-time - 30 hours or more",
-            earnings: 1,
-            incfreq: "Weekly",
-            owning_organisation:,
-            managing_organisation:,
-          )
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
       context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
@@ -351,24 +73,6 @@ RSpec.describe CaseLog do
           expect(case_log.soft_errors["override_net_income_validation"].message)
             .to match(I18n.t("soft_validations.net_income.in_soft_min_range.message"))
         end
-      end
-    end
-
-    context "when validating local authority" do
-      it "Has to be london if rent type london affordable rent" do
-        expect {
-          described_class.create!(la: "Ashford",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(la: "Westminster",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
       end
     end
 
@@ -491,8 +195,9 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_property_number_of_times_relet)
     end
 
-    it "validates tenancy length for tenancy type" do
+    it "validates tenancy type" do
       expect(validator).to receive(:validate_fixed_term_tenancy)
+      expect(validator).to receive(:validate_other_tenancy_type)
     end
 
     it "validates the previous postcode" do
@@ -521,6 +226,30 @@ RSpec.describe CaseLog do
 
     it "validates property void date" do
       expect(validator).to receive(:validate_property_void_date)
+    end
+
+    it "validates local authority" do
+      expect(validator).to receive(:validate_la)
+    end
+
+    it "validates benefits as proportion of income" do
+      expect(validator).to receive(:validate_net_income_uc_proportion)
+    end
+
+    it "validates outstanding rent amount" do
+      expect(validator).to receive(:validate_outstanding_rent_amount)
+    end
+
+    it "validates housing benefit rent shortfall" do
+      expect(validator).to receive(:validate_tshortfall)
+    end
+
+    it "validates let type" do
+      expect(validator).to receive(:validate_unitletas)
+    end
+
+    it "validates reason for vacancy" do
+      expect(validator).to receive(:validate_rsnvac)
     end
   end
 

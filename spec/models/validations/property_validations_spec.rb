@@ -125,4 +125,113 @@ RSpec.describe Validations::PropertyValidations do
       end
     end
   end
+
+  describe "#validate_la" do
+    context "when the rent type is London affordable" do
+      let(:expected_error) { I18n.t("validations.property.la.london_rent") }
+
+      it "validates that the local authority is in London" do
+        record.la = "Ashford"
+        record.rent_type = "London Affordable rent"
+        property_validator.validate_la(record)
+        expect(record.errors["la"]).to include(match(expected_error))
+      end
+
+      it "expects that the local authority is in London" do
+        record.la = "Westminster"
+        record.rent_type = "London Affordable rent"
+        property_validator.validate_la(record)
+        expect(record.errors["la"]).to be_empty
+      end
+    end
+  end
+
+  describe "#validate_unitletas" do
+    context "when the property has not been let before" do
+      it "validates that no previous let type is provided" do
+        record.first_time_property_let_as_social_housing = "Yes"
+        record.unitletas = "Social rent basis"
+        property_validator.validate_unitletas(record)
+        expect(record.errors["unitletas"])
+          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+        record.unitletas = "Affordable rent basis"
+        property_validator.validate_unitletas(record)
+        expect(record.errors["unitletas"])
+          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+        record.unitletas = "Intermediate rent basis"
+        property_validator.validate_unitletas(record)
+        expect(record.errors["unitletas"])
+          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+        record.unitletas = "Don’t know"
+        property_validator.validate_unitletas(record)
+        expect(record.errors["unitletas"])
+          .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
+      end
+    end
+
+    context "when the property has been let previously" do
+      it "expects to have a previous let type" do
+        record.first_time_property_let_as_social_housing = "No"
+        record.unitletas = "Social rent basis"
+        property_validator.validate_unitletas(record)
+        expect(record.errors["unitletas"]).to be_empty
+      end
+    end
+  end
+
+  describe "validate_rsnvac" do
+    context "when the property has not been let before" do
+      it "validates that it has a first let reason for vacancy" do
+        record.first_time_property_let_as_social_housing = "Yes"
+        record.rsnvac = "Tenant moved to care home"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"])
+          .to include(match I18n.t("validations.property.rsnvac.first_let_social"))
+      end
+
+      it "expects to have a first let reason for vacancy" do
+        record.first_time_property_let_as_social_housing = "Yes"
+        record.rsnvac = "First let of new-build property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+        record.rsnvac = "First let of leased property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+      end
+    end
+
+    context "when the property has been let as social housing before" do
+      it "validates that the reason for vacancy is not a first let as social housing reason" do
+        record.first_time_property_let_as_social_housing = "No"
+        record.rsnvac = "First let of new-build property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"])
+          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"])
+          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+        record.rsnvac = "First let of leased property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"])
+          .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
+      end
+
+      it "expects the reason for vacancy to be a first let as social housing reason" do
+        record.first_time_property_let_as_social_housing = "Yes"
+        record.rsnvac = "First let of new-build property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+        record.rsnvac = "First let of leased property"
+        property_validator.validate_rsnvac(record)
+        expect(record.errors["rsnvac"]).to be_empty
+      end
+    end
+  end
 end
