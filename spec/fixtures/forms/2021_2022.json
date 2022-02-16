@@ -19,8 +19,15 @@
                     "type": "text",
                     "width": 10
                   }
-                }
-              },
+                },
+                "depends_on": [
+                  {
+                    "housingneeds_a": "Yes"
+                  },
+                  {
+                    "housingneeds_a": null
+                  }
+                ]              },
               "person_1_age": {
                 "questions": {
                   "age1": {

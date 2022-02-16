@@ -25,7 +25,7 @@ module TasklistHelper
     case_log.form.subsections.count { |subsection| subsection.status(case_log) == status }
   end
 
-  def first_page_or_check_answers(subsection, case_log)
+  def next_page_or_check_answers(subsection, case_log)
     path = if subsection.is_started?(case_log)
              "case_log_#{subsection.id}_check_answers_path"
            else
@@ -37,7 +37,7 @@ module TasklistHelper
 
   def subsection_link(subsection, case_log)
     if subsection.status(case_log) != :cannot_start_yet
-      next_page_path = first_page_or_check_answers(subsection, case_log).to_s
+      next_page_path = next_page_or_check_answers(subsection, case_log).to_s
       govuk_link_to(subsection.label, next_page_path.dasherize, aria: { describedby: subsection.id.dasherize })
     else
       subsection.label
