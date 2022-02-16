@@ -437,4 +437,45 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "accessibility requirement validations" do
+    it "validates that mutually exclusive options can't be selected together" do
+      record.housingneeds_a = "Yes"
+      record.housingneeds_b = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"])
+        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
+      record.housingneeds_a = "No"
+      record.housingneeds_b = "No"
+      record.housingneeds_g = "Yes"
+      record.housingneeds_f = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"])
+        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
+      record.housingneeds_a = "Yes"
+      record.housingneeds_g = "Yes"
+      record.housingneeds_f = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"])
+        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
+    end
+
+    it "validates that non-mutually exclusive options can be selected together" do
+      record.housingneeds_a = "Yes"
+      record.housingneeds_f = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"]).to be_empty
+      record.housingneeds_a = "No"
+      record.housingneeds_b = "Yes"
+      record.housingneeds_f = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"]).to be_empty
+      record.housingneeds_b = "No"
+      record.housingneeds_c = "Yes"
+      record.housingneeds_f = "Yes"
+      household_validator.validate_accessibility_requirements(record)
+      expect(record.errors["accessibility_requirements"]).to be_empty
+
+    end
+  end
 end

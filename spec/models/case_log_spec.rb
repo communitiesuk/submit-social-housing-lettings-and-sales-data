@@ -75,61 +75,6 @@ RSpec.describe CaseLog do
         end
       end
     end
-
-    context "with accessibility requirements" do
-      it "validates that only one option can be selected" do
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_b: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validates that only one option a, b, or c can be selected in conjunction with f" do
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_b: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_c: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_g: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_b: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
     # END TODO
   end
 
