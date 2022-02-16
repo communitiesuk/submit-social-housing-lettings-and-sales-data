@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "User Features" do
   let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
-  let(:reset_password_template_id) { DeviseNotifyMailer::RESET_PASSWORD_TEMPLATE_ID }
+  let(:reset_password_template_id) { User::RESET_PASSWORD_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
@@ -10,7 +10,6 @@ RSpec.describe "User Features" do
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
-    allow(devise_notify_mailer).to receive(:host).and_return("test.com")
     allow(notify_client).to receive(:send_email).and_return(true)
     allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
   end
@@ -109,7 +108,7 @@ RSpec.describe "User Features" do
             name: user.name,
             email: user.email,
             organisation: user.organisation.name,
-            link: "https://test.com/users/password/edit?reset_password_token=#{reset_password_token}",
+            link: "http://localhost:3000/users/password/edit?reset_password_token=#{reset_password_token}",
           },
         },
       )

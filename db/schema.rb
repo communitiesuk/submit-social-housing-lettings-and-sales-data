@@ -30,6 +30,12 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.datetime "direct_otp_sent_at", precision: nil
     t.datetime "totp_timestamp", precision: nil
     t.string "phone"
+    t.string "name"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["encrypted_otp_secret_key"], name: "index_admin_users_on_encrypted_otp_secret_key", unique: true
   end
 
