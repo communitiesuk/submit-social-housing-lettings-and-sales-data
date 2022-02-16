@@ -237,12 +237,26 @@ RSpec.describe Validations::PropertyValidations do
     context "when the property has been let before" do
       let(:non_temporary_previous_tenancies) do
         [
-          "Tied housing or rented with job", "Supported housing", "Sheltered accommodation",
-          "Home Office Asylum Support", "Any other accommodation"
+          "Tied housing or rented with job",
+          "Supported housing",
+          "Sheltered accommodation",
+          "Home Office Asylum Support",
+          "Any other accommodation",
         ]
       end
 
       context "when the previous tenancy was not temporary" do
+        let(:referral_sources) do
+          [
+            "Re-located through official housing mobility scheme",
+            "Other social landlord",
+            "Police, probation or prison",
+            "Youth offending team",
+            "Community mental health team",
+            "Health service",
+          ]
+        end
+
         it "validates that the property is not being relet to tenant who occupied as temporary" do
           non_temporary_previous_tenancies.each do |rsn|
             record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
@@ -251,15 +265,6 @@ RSpec.describe Validations::PropertyValidations do
             expect(record.errors["rsnvac"])
               .to include(match I18n.t("validations.property.rsnvac.non_temp_accommodation"))
           end
-        end
-
-        let(:referral_sources) do
-          [
-            "Re-located through official housing mobility scheme",
-            "Other social landlord", "Police, probation or prison",
-            "Youth offending team", "Community mental health team",
-            "Health service"
-          ]
         end
 
         it "validates that the letting source is not a referral" do

@@ -214,6 +214,10 @@ RSpec.describe CaseLog do
     it "validates reason for vacancy" do
       expect(validator).to receive(:validate_rsnvac)
     end
+
+    it "validates accessibility requirements" do
+      expect(validator).to receive(:validate_accessibility_requirements)
+    end
   end
 
   describe "status" do
