@@ -55,6 +55,7 @@ class CaseLog < ApplicationRecord
   enum relat6: RELAT, _suffix: true
   enum relat7: RELAT, _suffix: true
   enum relat8: RELAT, _suffix: true
+  enum sex1: GENDER, _suffix: true
   enum sex2: GENDER, _suffix: true
   enum sex3: GENDER, _suffix: true
   enum sex4: GENDER, _suffix: true

@@ -49,7 +49,8 @@ module Exports
       case_logs.each do |case_log|
         form = doc.create_element("form")
         doc.at("forms") << form
-        case_log.attributes.each do |key, value|
+        case_log.attributes.each do |key, _|
+          value = case_log.read_attribute_before_type_cast(key)
           form << doc.create_element(key, value)
         end
       end
