@@ -8,6 +8,8 @@ RSpec.describe "Accessible Automcomplete" do
     FactoryBot.create(
       :case_log,
       :in_progress,
+      la_known: "Yes",
+      is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )

@@ -37,15 +37,20 @@ RSpec.describe TasklistHelper do
     end
   end
 
-  describe "get_first_page_or_check_answers" do
+  describe "get_next_page_or_check_answers" do
     let(:subsection) { case_log.form.get_subsection("household_characteristics") }
 
     it "returns the check answers page path if the section has been started already" do
-      expect(first_page_or_check_answers(subsection, case_log)).to match(/check-answers/)
+      expect(next_page_or_check_answers(subsection, case_log)).to match(/check-answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(first_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code/)
+      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code/)
+    end
+
+    it "when first question being not routed to returns the second question link" do
+      empty_case_log.housingneeds_a = "No"
+      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-age/)
     end
   end
 

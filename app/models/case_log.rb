@@ -100,6 +100,7 @@ class CaseLog < ApplicationRecord
   enum cbl: POLAR, _suffix: true
   enum chr: POLAR, _suffix: true
   enum cap: POLAR, _suffix: true
+  enum letting_allocation_unknown: POLAR, _suffix: true
   enum wchair: POLAR2, _suffix: true
   enum incfreq: INCFREQ, _suffix: true
   enum benefits: BENEFITS, _suffix: true
@@ -256,7 +257,14 @@ private
     self.nocharge = household_charge == "Yes" ? "No" : "Yes"
     self.layear = "Less than 1 year" if renewal == "Yes"
     self.underoccupation_benefitcap = "No" if renewal == "Yes" && year == 2021
-    self.homeless = "No" if renewal == "Yes"
+    if renewal == "Yes"
+      self.homeless = "No"
+      self.referral = "Internal transfer"
+    end
+    if needstype == "General needs"
+      self.prevten = "Fixed-term private registered provider (PRP) general needs tenancy" if managing_organisation.provider_type == "PRP"
+      self.prevten = "Fixed-term local authority general needs tenancy" if managing_organisation.provider_type == "LA"
+    end
   end
 
   def process_postcode_changes!
