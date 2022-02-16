@@ -477,4 +477,16 @@ RSpec.describe Validations::HouseholdValidations do
       expect(record.errors["accessibility_requirements"]).to be_empty
     end
   end
+
+  describe "referral validations" do
+    context "when type of tenancy is secure" do
+      it "must be internal transfer" do
+        record.tenancy = "Secure (including flexible)"
+        record.referral = "Internal transfer"
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match I18n.t("validations.household.referral.secure_tenancy"))
+      end
+    end
+  end
 end

@@ -73,6 +73,12 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_referral(record)
+    if record.tenancy == "Secure (including flexible)" && record.referral == "Internal transfer"
+      record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
+    end
+  end
+
 private
 
   def women_of_child_bearing_age_in_household(record)
