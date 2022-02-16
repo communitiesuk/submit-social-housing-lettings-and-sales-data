@@ -156,25 +156,25 @@
                 "header": "Experience of the UK Armed Forces",
                 "questions": {
                   "armedforces": {
-                    "header": "Is anyone in the household...",
-                    "hint_text": "This excludes national service",
+                    "header": "Does anybody in the household have any links to the UK armed forces?",
+                    "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
                     "type": "radio",
-                    "check_answer_label": "Armed Forces",
+                    "check_answer_label": "Household links to UK armed forces",
                     "answer_options": {
-                      "0":{
-                        "value": "A current or former regular in the UK Armed Forces (excluding National Service)"
+                      "0": {
+                        "value": "Yes, the tenant is a current or former regular"
                       },
                       "1": {
-                        "value": "A current or former reserve in the UK Armed Forces (excluding National Service)"
+                        "value": "Yes, the tenant is a current or former reserve"
                       },
                       "2": {
-                        "value": "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+                        "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                       },
                       "3": {
                         "value": "No"
                       },
                       "4": {
-                        "value": "Tenant prefers not to say"
+                        "value": "Person prefers not to say"
                       }
                     },
                     "conditional_for": {

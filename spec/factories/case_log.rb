@@ -49,7 +49,7 @@ FactoryBot.define do
       ecstat2 { "Not seeking work" }
       homeless { "Other homeless - not found statutorily homeless but considered homeless by landlord" }
       underoccupation_benefitcap { "No" }
-      leftreg { "No - they left up to 5 years ago" }
+      leftreg { "No, they left up to and including 5 years ago" }
       reservist { "No" }
       illness { "Yes" }
       preg_occ { "Yes" }

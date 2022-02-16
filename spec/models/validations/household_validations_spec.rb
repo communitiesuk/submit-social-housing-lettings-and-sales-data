@@ -244,7 +244,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant prefers not to say if they were or are in the armed forces" do
       it "validates that injured in the armed forces is not yes" do
-        record.armedforces = "Tenant prefers not to say"
+        record.armedforces = "Person prefers not to say"
         record.reservist = "Yes"
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
@@ -263,7 +263,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant was or is a reserve member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
-        record.armedforces = "A current or former reserve in the UK Armed Forces (excluding National Service)"
+        record.armedforces = "Yes, the tenant is a current or former reserve"
         record.reservist = "Yes"
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"]).to be_empty
@@ -272,7 +272,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant's partner was or is a member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
-        record.armedforces = "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years"
+        record.armedforces = "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
         record.reservist = "Yes"
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"]).to be_empty
