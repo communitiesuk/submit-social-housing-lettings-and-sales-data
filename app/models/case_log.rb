@@ -100,6 +100,7 @@ class CaseLog < ApplicationRecord
   enum cbl: POLAR, _suffix: true
   enum chr: POLAR, _suffix: true
   enum cap: POLAR, _suffix: true
+  enum letting_allocation_unknown: POLAR, _suffix: true
   enum wchair: POLAR2, _suffix: true
   enum incfreq: INCFREQ, _suffix: true
   enum benefits: BENEFITS, _suffix: true

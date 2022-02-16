@@ -2095,7 +2095,7 @@
                 {
                   "managing_organisation.provider_type": "LA",
                   "needstype": "General needs",
-                  "referral": "No"
+                  "renewal": "No"
                 }
               ]
             },
@@ -2152,7 +2152,7 @@
                 {
                   "managing_organisation.provider_type": "PRP",
                   "needstype": "General needs",
-                  "referral": "No"
+                  "renewal": "No"
                 }
               ]
             },
@@ -2209,7 +2209,7 @@
                 {
                   "managing_organisation.provider_type": "LA",
                   "needstype": "Supported housing",
-                  "referral": "No"
+                  "renewal": "No"
                 }
               ]
             },
@@ -2269,7 +2269,7 @@
                 {
                   "managing_organisation.provider_type": "PRP",
                   "needstype": "Supported housing",
-                  "referral": "No"
+                  "renewal": "No"
                 }
               ]
             }

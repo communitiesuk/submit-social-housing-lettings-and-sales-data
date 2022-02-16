@@ -11,7 +11,7 @@ class RemoveCheckboxParentFields < ActiveRecord::Migration[7.0]
     change_table :case_logs, bulk: true do |t|
       t.column :accessibility_requirements, :string
       t.column :condition_effects, :string
-      t.remove :reasonable_preference_reason, :string
+      t.column :reasonable_preference_reason, :string
     end
   end
 end
