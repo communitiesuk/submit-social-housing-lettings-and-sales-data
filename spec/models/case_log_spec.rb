@@ -43,8 +43,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    # TODO: replace these with validator specs and checks for method call here
-    context "when saving income ranges" do
+    context "when soft validations exist" do
       context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
@@ -75,7 +74,6 @@ RSpec.describe CaseLog do
         end
       end
     end
-    # END TODO
   end
 
   describe "#update" do

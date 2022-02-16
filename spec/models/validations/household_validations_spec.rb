@@ -475,7 +475,6 @@ RSpec.describe Validations::HouseholdValidations do
       record.housingneeds_f = "Yes"
       household_validator.validate_accessibility_requirements(record)
       expect(record.errors["accessibility_requirements"]).to be_empty
-
     end
   end
 end
