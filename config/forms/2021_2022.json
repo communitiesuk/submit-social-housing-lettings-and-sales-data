@@ -470,7 +470,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child",
+                      "value": "Child - includes young adult and grown-up",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -561,7 +561,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child",
+                      "value": "Child - includes young adult and grown-up",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -652,7 +652,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child",
+                      "value": "Child - includes young adult and grown-up",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -743,7 +743,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child",
+                      "value": "Child - includes young adult and grown-up",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -834,7 +834,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child",
+                      "value": "Child - includes young adult and grown-up",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
