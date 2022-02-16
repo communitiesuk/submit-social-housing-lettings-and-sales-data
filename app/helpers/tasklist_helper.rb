@@ -29,7 +29,8 @@ module TasklistHelper
     path = if subsection.is_started?(case_log)
              "case_log_#{subsection.id}_check_answers_path"
            else
-             "case_log_#{subsection.pages.first.id}_path"
+             next_page = subsection.pages.first.routed_to?(case_log) ? subsection.pages.first.id : case_log.form.next_page(subsection.pages.first, case_log)
+             "case_log_#{next_page}_path"
            end
     send(path, case_log)
   end
