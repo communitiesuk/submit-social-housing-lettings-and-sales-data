@@ -111,7 +111,7 @@ RSpec.describe Validations::TenancyValidations do
           it "adds an error" do
             record.tenancy = "Assured"
             record.referral = "Internal transfer"
-            tenancy_validator.validate_tenancy(record)
+            tenancy_validator.validate_tenancy_type(record)
             expect(record.errors["tenancy"])
               .to include(match I18n.t("validations.tenancy.internal_transfer"))
           end
@@ -121,7 +121,7 @@ RSpec.describe Validations::TenancyValidations do
           it "does not add an error" do
             record.tenancy = "Secure (including flexible)"
             record.referral = "Internal transfer"
-            tenancy_validator.validate_tenancy(record)
+            tenancy_validator.validate_tenancy_type(record)
             expect(record.errors["tenancy"]).to be_empty
           end
         end
