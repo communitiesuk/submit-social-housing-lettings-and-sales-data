@@ -164,20 +164,20 @@ module Constants::CaseLog
   }.freeze
 
   RSNVAC = {
+    "Internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
+    "Previous tenant died with no succession" => 5,
+    "Re-let to tenant who occupied same property as temporary accommodation" => 9,
+    "Renewal of fixed-term tenancy" => 14,
+    "Tenant involved in a succession downsize" => 19,
+    "Tenant abandoned property" => 6,
+    "Tenant moved to care home" => 18,
+    "Tenant moved to other social housing provider" => 12,
+    "Tenant moved to private sector or other accommodation" => 8,
+    "Tenant was evicted due to anti-social behaviour" => 11,
+    "Tenant was evicted due to rent arrears" => 10,
     "First let of new-build property" => 15,
     "First let of conversion, rehabilitation or acquired property" => 16,
     "First let of leased property" => 17,
-    "Tenant evicted due to arrears" => 10,
-    "Tenant evicted due to ASB or other reason" => 11,
-    "Previous tenant passed away (no succession)" => 5,
-    "Tenant moved to other social housing provider" => 12,
-    "Tenant abandoned property" => 6,
-    "Tenant moved to private sector or other accommodation" => 8,
-    "Relet to tenant who occupied same property as temporary accommodation" => 9,
-    "Internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
-    "Renewal of fixed-term tenancy" => 14,
-    "Tenant moved to care home" => 18,
-    "Tenant involved in a succession downsize" => 19,
   }.freeze
 
   UNITTYPE_GN = {

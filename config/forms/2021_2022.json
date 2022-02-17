@@ -667,26 +667,26 @@
                     "0": {
                       "value": "Renewal of fixed-term tenancy"
                     },
+                    "7": {
+                      "value": "Tenant abandoned property"
+                    },
                     "3": {
                       "value": "Tenant involved in a succession downsize"
-                    },
-                    "4": {
-                      "value": "Tenant moved to private sector or other accommodation"
-                    },
-                    "5": {
-                      "value": "Tenant moved to other social housing provider"
                     },
                     "6": {
                       "value": "Tenant moved to care home"
                     },
-                    "7": {
-                      "value": "Tenant abandoned property"
+                    "5": {
+                      "value": "Tenant moved to other social housing provider"
                     },
-                    "8": {
-                      "value": "Tenant was evicted due to rent arrears"
+                    "4": {
+                      "value": "Tenant moved to private sector or other accommodation"
                     },
                     "9": {
                       "value": "Tenant was evicted due to anti-social behaviour"
+                    },
+                    "8": {
+                      "value": "Tenant was evicted due to rent arrears"
                     }
                   }
                 }

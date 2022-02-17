@@ -259,7 +259,7 @@ RSpec.describe Validations::PropertyValidations do
 
         it "validates that the property is not being relet to tenant who occupied as temporary" do
           non_temporary_previous_tenancies.each do |rsn|
-            record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+            record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
             record.prevten = rsn
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])
@@ -269,7 +269,7 @@ RSpec.describe Validations::PropertyValidations do
 
         it "validates that the letting source is not a referral" do
           referral_sources.each do |src|
-            record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+            record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
             record.referral = src
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])
@@ -281,7 +281,7 @@ RSpec.describe Validations::PropertyValidations do
       context "when the previous tenancy was temporary" do
         it "expects that the property can be relet to a tenant who previously occupied it as temporary" do
           record.prevten = "Fixed-term local authority general needs tenancy"
-          record.rsnvac = "Relet to tenant who occupied same property as temporary accommodation"
+          record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
           property_validator.validate_rsnvac(record)
           expect(record.errors["rsnvac"]).to be_empty
         end
