@@ -188,11 +188,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "No"
-                    },
                     "1": {
                       "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
                     }
                   },
                   "conditional_for": {
@@ -230,11 +230,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "No"
-                    },
                     "1": {
                       "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
                     }
                   }
                 }
@@ -592,13 +592,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "No",
-                      "hint": "This is a re-let of existing social housing."
-                    },
                     "1": {
                       "value": "Yes",
                       "hint": "This is a new let."
+                    },
+                    "0": {
+                      "value": "No",
+                      "hint": "This is a re-let of existing social housing."
                     }
                   }
                 }
@@ -619,20 +619,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Social rent basis"
-                    },
                     "1": {
                       "value": "Affordable rent basis"
                     },
                     "2": {
                       "value": "Intermediate rent basis"
                     },
-                    "3": {
-                      "value": "Don’t know"
+                    "0": {
+                      "value": "Social rent basis"
                     },
                     "divider": {
                       "value": true
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -654,15 +654,18 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Renewal of fixed-term tenancy"
-                    },
                     "1": {
                       "value": "Internal transfer",
                       "hint": "Excluding renewals of a fixed-term tenancy"
                     },
+                    "10": {
+                      "value": "Previous tenant died with no succession"
+                    },
                     "2": {
-                      "value": "Relet to tenant who occupied same property as temporary accommodation"
+                      "value": "Re-let to tenant who occupied same property as temporary accommodation"
+                    },
+                    "0": {
+                      "value": "Renewal of fixed-term tenancy"
                     },
                     "3": {
                       "value": "Tenant involved in a succession downsize"
@@ -680,13 +683,10 @@
                       "value": "Tenant abandoned property"
                     },
                     "8": {
-                      "value": "Tenant evicted due to arrears"
+                      "value": "Tenant was evicted due to rent arrears"
                     },
                     "9": {
-                      "value": "Tenant evicted due to ASB or other reason"
-                    },
-                    "10": {
-                      "value": "Previous tenant passed away (no succession)"
+                      "value": "Tenant was evicted due to anti-social behaviour"
                     }
                   }
                 }
@@ -708,14 +708,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "11": {
-                      "value": "First let of new-build property"
-                    },
                     "12": {
                       "value": "First let of conversion, rehabilitation or acquired property"
                     },
                     "13": {
                       "value": "First let of leased property"
+                    },
+                    "11": {
+                      "value": "First let of new-build property"
                     }
                   }
                 }
@@ -781,26 +781,26 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Flat or maisonette"
-                    },
                     "1": {
                       "value": "Bedsit"
+                    },
+                    "3": {
+                      "value": "Bungalow"
+                    },
+                    "0": {
+                      "value": "Flat or maisonette"
                     },
                     "2": {
                       "value": "House"
                     },
-                    "3": {
-                      "value": "Bungalow"
+                    "6": {
+                      "value": "Shared bungalow"
                     },
                     "4": {
                       "value": "Shared flat or maisonette"
                     },
                     "5": {
                       "value": "Shared house"
-                    },
-                    "6": {
-                      "value": "Shared bungalow"
                     },
                     "7": {
                       "value": "Other"
@@ -819,11 +819,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Purpose built"
-                    },
                     "1": {
                       "value": "Converted from previous residential or non-residential property"
+                    },
+                    "0": {
+                      "value": "Purpose built"
                     }
                   }
                 }
