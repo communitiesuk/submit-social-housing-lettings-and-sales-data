@@ -40,6 +40,7 @@ class UsersController < ApplicationController
   end
 
   def edit_password
+    @minimum_password_length = User.password_length.min
     render "devise/passwords/edit"
   end
 

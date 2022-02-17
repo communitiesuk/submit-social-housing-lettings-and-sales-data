@@ -168,8 +168,12 @@ RSpec.describe UsersController, type: :request do
         get "/users/#{user.id}/password/edit", headers: headers, params: {}
       end
 
-      it "show the edit password page" do
+      it "shows the edit password page" do
         expect(page).to have_content("Change your password")
+      end
+
+      it "shows the password requirements hint" do
+        expect(page).to have_css("#user-password-hint")
       end
     end
 
