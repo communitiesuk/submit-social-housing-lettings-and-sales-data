@@ -74,7 +74,10 @@ module Validations::HouseholdValidations
   end
 
   def validate_referral(record)
-    if record.tenancy == "Secure (including flexible)" && record.referral == "Internal transfer"
+    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
+      record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
+    end
+    if record.tenancy == "Secure (including flexible)" && record.referral.present? && record.referral != "Internal transfer"
       record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
     end
   end

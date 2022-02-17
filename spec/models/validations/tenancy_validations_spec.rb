@@ -107,13 +107,22 @@ RSpec.describe Validations::TenancyValidations do
           end
         end
 
-        context "when referral is internal transfer" do
+        context "when referral is not internal transfer" do
           it "adds an error" do
-            record.tenancy = "Secure (including flexible)"
+            record.tenancy = "Assured"
             record.referral = "Internal transfer"
             tenancy_validator.validate_tenancy(record)
             expect(record.errors["tenancy"])
               .to include(match I18n.t("validations.tenancy.internal_referral"))
+          end
+        end
+
+        context "when referral is internal transfer" do
+          it "does not add an error" do
+            record.tenancy = "Secure (including flexible)"
+            record.referral = "Internal transfer"
+            tenancy_validator.validate_tenancy(record)
+            expect(record.errors["tenancy"]).to be_empty
           end
         end
       end

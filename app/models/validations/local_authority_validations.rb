@@ -9,10 +9,4 @@ module Validations::LocalAuthorityValidations
       record.errors.add :previous_postcode, error_message
     end
   end
-
-  def validate_referral(record)
-    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
-      record.errors.add :referral, I18n.t("validations.local_authority.referral.rsnvac_non_temp")
-    end
-  end
 end

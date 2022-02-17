@@ -112,6 +112,7 @@ en:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
       referral:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
+        rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
 
     tenancy:
       length:
@@ -119,10 +120,6 @@ en:
         shorthold: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years"
         secure: "Secure (including flexible) should be between 2 and 99 years or not specified"
       internal_referral: "Answer must be secure tenancy as you already told us this tenancy is an internal transfer"
-
-    local_authority:
-      referral:
-        rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."

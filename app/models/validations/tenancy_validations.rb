@@ -27,7 +27,7 @@ module Validations::TenancyValidations
   end
 
   def validate_tenancy(record)
-    if record.tenancy == "Secure (including flexible)" && record.referral == "Internal transfer"
+    if record.tenancy.present? && record.tenancy != "Secure (including flexible)" && record.referral == "Internal transfer"
       record.errors.add :tenancy, I18n.t("validations.tenancy.internal_referral")
     end
   end
