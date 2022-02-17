@@ -41,11 +41,11 @@ module Validations::PropertyValidations
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_social")
     end
 
-    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
     end
 
-    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
+    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
     end
   end

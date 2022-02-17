@@ -68,7 +68,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_previous_housing_situation(record)
-    if record.rsnvac == "Relet to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
     end
   end
