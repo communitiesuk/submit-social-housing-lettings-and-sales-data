@@ -14,7 +14,7 @@ RSpec.describe "Admin Panel" do
   it "shows the admin sign in page" do
     visit("/admin")
     expect(page).to have_current_path("/admin/sign-in")
-    expect(page).to have_content("CORE Admin Sign in")
+    expect(page).to have_content("Sign in to your CORE administration account")
   end
 
   context "with a valid 2FA code" do

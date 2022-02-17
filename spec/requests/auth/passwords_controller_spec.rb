@@ -78,6 +78,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
     describe "reset password" do
       let(:new_value) { "new-password" }
+
       before do
         allow(Sms).to receive(:notify_client).and_return(notify_client)
         allow(notify_client).to receive(:send_sms).and_return(true)
