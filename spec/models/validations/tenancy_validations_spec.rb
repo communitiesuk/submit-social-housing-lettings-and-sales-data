@@ -113,7 +113,7 @@ RSpec.describe Validations::TenancyValidations do
             record.referral = "Internal transfer"
             tenancy_validator.validate_tenancy(record)
             expect(record.errors["tenancy"])
-              .to include(match I18n.t("validations.tenancy.internal_referral"))
+              .to include(match I18n.t("validations.tenancy.internal_transfer"))
           end
         end
 

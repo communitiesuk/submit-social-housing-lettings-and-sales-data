@@ -164,7 +164,7 @@ module Constants::CaseLog
   }.freeze
 
   RSNVAC = {
-    "Internal transfer (excluding renewals of a fixed-term tenancy)" => 13,
+    "Internal transfer" => 13,
     "Previous tenant died with no succession" => 5,
     "Re-let to tenant who occupied same property as temporary accommodation" => 9,
     "Renewal of fixed-term tenancy" => 14,
