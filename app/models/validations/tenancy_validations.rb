@@ -28,8 +28,8 @@ module Validations::TenancyValidations
 
   def validate_tenancy_type(record)
     if record.tenancy.present? && record.tenancy != "Secure (including flexible)" && record.referral == "Internal transfer"
-        record.errors.add :tenancy, I18n.t("validations.tenancy.internal_transfer")
-        record.errors.add :referral,  I18n.t("validations.household.referral.cannot_be_secure_tenancy")
+      record.errors.add :tenancy, I18n.t("validations.tenancy.internal_transfer")
+      record.errors.add :referral, I18n.t("validations.household.referral.cannot_be_secure_tenancy")
     end
   end
 end
