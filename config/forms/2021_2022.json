@@ -73,11 +73,11 @@
                   "hint_text": "A renewal is a letting to the same tenant in the same property.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "No"
-                    },
                     "1": {
                       "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
                     }
                   }
                 }
@@ -883,8 +883,11 @@
               },
               "depends_on": [
                 {
-                  "rsnvac": "First let of new-build property",
-                  "renewal": "No"
+                  "renewal": "No",
+                  "rsnvac": [
+                    "First let of conversion, rehabilitation or acquired property",
+                    "First let of leased property"
+                  ]
                 }
               ]
             },
@@ -902,10 +905,7 @@
               "depends_on": [
                 {
                   "renewal": "No",
-                  "rsnvac": [
-                    "First let of conversion, rehabilitation or acquired property?",
-                    "First let of leased property"
-                  ]
+                  "rsnvac": "First let of new-build property"
                 }
               ]
             },
@@ -919,11 +919,11 @@
                   "hint_text": "Major repairs are works that could not be reasonably carried out with a tenant living at the property. For example, structural repairs.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "No"
-                    },
                     "1": {
                       "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
                     }
                   },
                   "conditional_for": {
@@ -939,8 +939,11 @@
               },
               "depends_on": [
                 {
-                  "rsnvac": "First let of new-build property",
-                  "renewal": "No"
+                  "renewal": "No",
+                  "rsnvac": [
+                    "First let of conversion, rehabilitation or acquired property",
+                    "First let of leased property"
+                  ]
                 }
               ]
             }
