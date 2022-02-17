@@ -47,6 +47,7 @@ module Validations::PropertyValidations
 
     if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && REFERRAL_INVALID_TMP.include?(record.referral)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
+      record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
     end
   end
 
