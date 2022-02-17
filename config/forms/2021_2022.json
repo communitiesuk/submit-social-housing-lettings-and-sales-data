@@ -2511,175 +2511,8 @@
       }
     },
     "tenancy_and_property": {
-      "label": "Tenancy and property information",
+      "label": "Property and tenancy information",
       "subsections": {
-        "tenancy_information": {
-          "label": "Tenancy information",
-          "depends_on": [
-            {
-              "setup": "completed"
-            }
-          ],
-          "pages": {
-            "starter_tenancy": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "startertenancy": {
-                  "check_answer_label": "Is this a starter or introductory tenancy?",
-                  "header": "Is this a starter tenancy?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
-                    },
-                    "1": {
-                      "value": "No"
-                    }
-                  }
-                }
-              }
-            },
-            "tenancy_type": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancy": {
-                  "check_answer_label": "Type of main tenancy",
-                  "header": "What is the type of tenancy?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Assured"
-                    },
-                    "1": {
-                      "value": "Assured Shorthold"
-                    },
-                    "2": {
-                      "value": "Licence agreement (almshouses only)"
-                    },
-                    "3": {
-                      "value": "Secure (including flexible)"
-                    },
-                    "4": {
-                      "value": "Other"
-                    }
-                  },
-                  "conditional_for": {
-                    "tenancyother": ["Other"]
-                  }
-                },
-                "tenancyother": {
-                  "header": "Please state the tenancy type",
-                  "hint_text": "",
-                  "type": "text"
-                }
-              },
-              "depends_on": [
-                {
-                  "startertenancy": "No"
-                }
-              ]
-            },
-            "tenancy_type_starter_text": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancy": {
-                  "check_answer_label": "Type of main tenancy after the starter period has ended?",
-                  "header": "What is the type of tenancy after the starter period has ended?",
-                  "hint_text": "This is also known as an ‘introductory period’.",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Assured"
-                    },
-                    "1": {
-                      "value": "Assured Shorthold"
-                    },
-                    "2": {
-                      "value": "Licence agreement (almshouses only)"
-                    },
-                    "3": {
-                      "value": "Secure (including flexible)"
-                    },
-                    "4": {
-                      "value": "Other"
-                    }
-                  },
-                  "conditional_for": {
-                    "tenancyother": ["Other"]
-                  }
-                },
-                "tenancyother": {
-                  "header": "Please state the tenancy type",
-                  "hint_text": "",
-                  "type": "text"
-                }
-              },
-              "depends_on": [
-                {
-                  "startertenancy": "Yes"
-                }
-              ]
-            },
-            "fixed_term_tenancy": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "tenancylength": {
-                  "check_answer_label": "Length of fixed-term tenancy",
-                  "header": "What is the length of the fixed-term tenancy to the nearest year?",
-                  "hint_text": "",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 150,
-                  "step": 1
-                }
-              },
-              "depends_on": [
-                { "tenancy": "Secure (including flexible)" },
-                { "tenancy": "Assured Shorthold" }
-              ]
-            },
-            "letting_in_sheltered_accommodation": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "letting_in_sheltered_accommodation": {
-                  "check_answer_label": "Is this letting in sheltered accommodation?",
-                  "header": "Is this letting in sheltered accommodation?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes - sheltered housing"
-                    },
-                    "1": {
-                      "value": "Yes - extra care housing"
-                    },
-                    "2": {
-                      "value": "No"
-                    },
-                    "3": {
-                      "value": "Don’t know"
-                    },
-                    "divider": {
-                      "value": true
-                    }
-                  }
-                }
-              },
-              "depends_on": [
-                {
-                  "needstype": "Supported housing"
-                }
-              ]
-            }
-          }
-        },
         "property_information": {
           "label": "Property information",
           "depends_on": [
@@ -3451,6 +3284,173 @@
                 {
                   "rsnvac": "First let of new-build property",
                   "renewal": "No"
+                }
+              ]
+            }
+          }
+        },
+        "tenancy_information": {
+          "label": "Tenancy information",
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
+          "pages": {
+            "starter_tenancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "startertenancy": {
+                  "check_answer_label": "Is this a starter or introductory tenancy?",
+                  "header": "Is this a starter tenancy?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "tenancy_type": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenancy": {
+                  "check_answer_label": "Type of main tenancy",
+                  "header": "What is the type of tenancy?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Assured"
+                    },
+                    "1": {
+                      "value": "Assured Shorthold"
+                    },
+                    "2": {
+                      "value": "Licence agreement (almshouses only)"
+                    },
+                    "3": {
+                      "value": "Secure (including flexible)"
+                    },
+                    "4": {
+                      "value": "Other"
+                    }
+                  },
+                  "conditional_for": {
+                    "tenancyother": ["Other"]
+                  }
+                },
+                "tenancyother": {
+                  "header": "Please state the tenancy type",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "startertenancy": "No"
+                }
+              ]
+            },
+            "tenancy_type_starter_text": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenancy": {
+                  "check_answer_label": "Type of main tenancy after the starter period has ended?",
+                  "header": "What is the type of tenancy after the starter period has ended?",
+                  "hint_text": "This is also known as an ‘introductory period’.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Assured"
+                    },
+                    "1": {
+                      "value": "Assured Shorthold"
+                    },
+                    "2": {
+                      "value": "Licence agreement (almshouses only)"
+                    },
+                    "3": {
+                      "value": "Secure (including flexible)"
+                    },
+                    "4": {
+                      "value": "Other"
+                    }
+                  },
+                  "conditional_for": {
+                    "tenancyother": ["Other"]
+                  }
+                },
+                "tenancyother": {
+                  "header": "Please state the tenancy type",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "startertenancy": "Yes"
+                }
+              ]
+            },
+            "fixed_term_tenancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tenancylength": {
+                  "check_answer_label": "Length of fixed-term tenancy",
+                  "header": "What is the length of the fixed-term tenancy to the nearest year?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 150,
+                  "step": 1
+                }
+              },
+              "depends_on": [
+                { "tenancy": "Secure (including flexible)" },
+                { "tenancy": "Assured Shorthold" }
+              ]
+            },
+            "letting_in_sheltered_accommodation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "letting_in_sheltered_accommodation": {
+                  "check_answer_label": "Is this letting in sheltered accommodation?",
+                  "header": "Is this letting in sheltered accommodation?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes - sheltered housing"
+                    },
+                    "1": {
+                      "value": "Yes - extra care housing"
+                    },
+                    "2": {
+                      "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
+                    },
+                    "divider": {
+                      "value": true
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "needstype": "Supported housing"
                 }
               ]
             }
