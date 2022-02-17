@@ -24,12 +24,24 @@ class Auth::PasswordsController < Devise::PasswordsController
 
   def edit
     super
-    render "users/reset_password"
+    render "devise/passwords/reset_password"
   end
 
 protected
 
+  def resource_class_name
+    resource_class.name.underscore
+  end
+
   def after_sending_reset_password_instructions_path_for(_resource)
-    confirmations_reset_path(email: params.dig("user", "email"))
+    confirmations_reset_path(email: params.dig(resource_class_name, "email"))
+  end
+
+  def after_resetting_password_path_for(resource)
+    if Devise.sign_in_after_reset_password
+      resource_class == AdminUser ? admin_user_two_factor_authentication_path : after_sign_in_path_for(resource)
+    else
+      new_session_path(resource_name)
+    end
   end
 end

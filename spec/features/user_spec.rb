@@ -18,6 +18,7 @@ RSpec.describe "User Features" do
     it " is required to log in" do
       visit("/logs")
       expect(page).to have_current_path("/users/sign-in")
+      expect(page).to have_content("Sign in to your account to submit CORE data")
     end
 
     it "does not see the default devise error message" do

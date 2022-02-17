@@ -12,7 +12,8 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     elsif user_params.key?("password")
       format_error_messages
-      render "devise/passwords/edit", status: :unprocessable_entity
+      @minimum_password_length = User.password_length.min
+      render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }, status: :unprocessable_entity
     else
       format_error_messages
       render :edit, status: :unprocessable_entity
@@ -41,7 +42,7 @@ class UsersController < ApplicationController
 
   def edit_password
     @minimum_password_length = User.password_length.min
-    render "devise/passwords/edit"
+    render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }
   end
 
 private

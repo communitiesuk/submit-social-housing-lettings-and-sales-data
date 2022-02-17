@@ -1,4 +1,10 @@
-<% content_for :title, "Sign in to your account to submit CORE data" %>
+<% if resource_name == :admin_user %>
+  <% title = "CORE Admin Sign in" %>
+<% else %>
+  <% title = "Sign in to your account to submit CORE data" %>
+<% end %>
+
+<% content_for :title, title %>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="govuk-grid-row">
