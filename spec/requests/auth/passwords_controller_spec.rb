@@ -78,6 +78,10 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
     describe "reset password" do
       let(:new_value) { "new-password" }
+      before do
+        allow(Sms).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_sms).and_return(true)
+      end
 
       it "renders the user edit password view" do
         _raw, enc = Devise.token_generator.generate(AdminUser, :reset_password_token)
@@ -128,6 +132,11 @@ RSpec.describe Auth::PasswordsController, type: :request do
         it "sends you to the 2FA page" do
           put "/admin/password", headers: headers, params: params
           expect(response).to redirect_to("/admin/two-factor-authentication")
+        end
+
+        it "triggers an SMS" do
+          expect(notify_client).to receive(:send_sms)
+          put "/admin/password", headers: headers, params: params
         end
       end
     end

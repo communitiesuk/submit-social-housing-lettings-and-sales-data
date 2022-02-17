@@ -39,7 +39,12 @@ protected
 
   def after_resetting_password_path_for(resource)
     if Devise.sign_in_after_reset_password
-      resource_class == AdminUser ? admin_user_two_factor_authentication_path : after_sign_in_path_for(resource)
+      if resource_class == AdminUser
+        resource.send_new_otp
+        admin_user_two_factor_authentication_path
+      else
+        after_sign_in_path_for(resource)
+      end
     else
       new_session_path(resource_name)
     end
