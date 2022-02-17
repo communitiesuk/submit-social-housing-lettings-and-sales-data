@@ -43,8 +43,7 @@ RSpec.describe CaseLog do
       end
     end
 
-    # TODO: replace these with validator specs and checks for method call here
-    context "when saving income ranges" do
+    context "when soft validations exist" do
       context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
@@ -75,99 +74,6 @@ RSpec.describe CaseLog do
         end
       end
     end
-
-    context "with accessibility requirements" do
-      it "validates that only one option can be selected" do
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_b: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "validates that only one option a, b, or c can be selected in conjunction with f" do
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_b: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_c: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.not_to raise_error
-
-        expect {
-          described_class.create!(housingneeds_g: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-
-        expect {
-          described_class.create!(housingneeds_a: "Yes",
-                                  housingneeds_b: "Yes",
-                                  housingneeds_f: "Yes",
-                                  rent_type: "London Affordable rent",
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
-
-    context "when validating reason for vacancy" do
-      def check_rsnvac_validation(prevten)
-        expect {
-          described_class.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
-                                  prevten:,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      def check_rsnvac_referral_validation(referral)
-        expect {
-          described_class.create!(rsnvac: "Relet to tenant who occupied same property as temporary accommodation",
-                                  referral:,
-                                  owning_organisation:,
-                                  managing_organisation:)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-
-      it "cannot be temp accommodation if previous tenancy was non temp" do
-        check_rsnvac_validation("Tied housing or rented with job")
-        check_rsnvac_validation("Supported housing")
-        check_rsnvac_validation("Sheltered accommodation")
-        check_rsnvac_validation("Home Office Asylum Support")
-        check_rsnvac_validation("Any other accommodation")
-      end
-
-      it "cannot be temp accommodation if source of letting referral " do
-        check_rsnvac_referral_validation("Re-located through official housing mobility scheme")
-        check_rsnvac_referral_validation("Other social landlord")
-        check_rsnvac_referral_validation("Police, probation or prison")
-        check_rsnvac_referral_validation("Youth offending team")
-        check_rsnvac_referral_validation("Community mental health team")
-        check_rsnvac_referral_validation("Health service")
-      end
-    end
-    # END TODO
   end
 
   describe "#update" do
@@ -250,6 +156,10 @@ RSpec.describe CaseLog do
 
     it "validates reason for vacancy" do
       expect(validator).to receive(:validate_rsnvac)
+    end
+
+    it "validates accessibility requirements" do
+      expect(validator).to receive(:validate_accessibility_requirements)
     end
   end
 
