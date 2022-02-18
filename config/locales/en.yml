@@ -114,6 +114,14 @@ en:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
         cannot_be_secure_tenancy: "Answer cannot be secure tenancy as you already told us this is not an internal transfer"
+        assessed_homeless: "Answer cannot be internal transfer as you already told us the tenant was assessed as homeless"
+        other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
+      homeless:
+        assessed:
+          internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
+        other:
+          internal_transfer: "Answer cannot be other homelessness as you already told us this tenancy was an internal transfer"
+
 
     tenancy:
       length:

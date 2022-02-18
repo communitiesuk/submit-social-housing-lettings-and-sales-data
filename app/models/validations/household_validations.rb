@@ -78,6 +78,16 @@ module Validations::HouseholdValidations
       record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
       record.errors.add :tenancy, I18n.t("validations.tenancy.cannot_be_internal_transfer")
     end
+
+    if record.referral == "Internal transfer" && record.homeless == "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
+      record.errors.add :referral, I18n.t("validations.household.referral.assessed_homeless")
+      record.errors.add :homeless, I18n.t("validations.household.homeless.assessed.internal_transfer")
+    end
+
+    if record.referral == "Internal transfer" && record.homeless == "Other homeless - not found statutorily homeless but considered homeless by landlord"
+      record.errors.add :referral, I18n.t("validations.household.referral.other_homeless")
+      record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
+    end
   end
 
 private

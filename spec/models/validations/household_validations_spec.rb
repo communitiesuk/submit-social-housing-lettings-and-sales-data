@@ -495,5 +495,45 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["referral"]).to be_empty
       end
     end
+
+    context "when homelessness is assessed" do
+      it "cannot be internal transfer" do
+        record.homeless = "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
+        record.referral = "Internal transfer"
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match I18n.t("validations.household.referral.assessed_homeless"))
+        expect(record.errors["homeless"])
+          .to include(match I18n.t("validations.household.homeless.assessed.internal_transfer"))
+      end
+
+      it "can be non internal transfer" do
+        record.homeless = "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
+        record.referral = "Other social landlord"
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"]).to be_empty
+        expect(record.errors["homeless"]).to be_empty
+      end
+    end
+
+    context "when homelessness is other" do
+      it "cannot be internal transfer" do
+        record.referral = "Internal transfer"
+        record.homeless = "Other homeless - not found statutorily homeless but considered homeless by landlord"
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match I18n.t("validations.household.referral.other_homeless"))
+        expect(record.errors["homeless"])
+          .to include(match I18n.t("validations.household.homeless.other.internal_transfer"))
+      end
+
+      it "can be non internal transfer" do
+        record.referral = "Other social landlord"
+        record.homeless = "Other homeless - not found statutorily homeless but considered homeless by landlord"
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"]).to be_empty
+        expect(record.errors["homeless"]).to be_empty
+      end
+    end
   end
 end
