@@ -2042,6 +2042,246 @@
             }
           }
         },
+        "household_needs": {
+          "label": "Household needs",
+          "depends_on": [
+            {
+              "setup": "completed"
+            }
+          ],
+          "pages": {
+            "armed_forces": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "armedforces": {
+                  "header": "Does anybody in the household have any links to the UK armed forces?",
+                  "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
+                  "type": "radio",
+                  "check_answer_label": "Household links to UK armed forces",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes, the tenant is a current or former regular"
+                    },
+                    "1": {
+                      "value": "Yes, the tenant is a current or former reserve"
+                    },
+                    "2": {
+                      "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
+                    },
+                    "3": {
+                      "value": "No"
+                    },
+                    "4": {
+                      "value": "Person prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "armed_forces_member": {
+              "header": "",
+              "description": "",
+              "depends_on": [
+                {
+                  "armedforces": "Yes, the tenant is a current or former regular"
+                }
+              ],
+              "questions": {
+                "leftreg": {
+                  "header": "Is the person still serving in the UK armed forces?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Person still serving in UK armed forces",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No, they left up to and including 5 years ago"
+                    },
+                    "2": {
+                      "value": "No, they left more than 5 years ago"
+                    },
+                    "3": {
+                      "value": "Person prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "armed_forces_reservist": {
+              "header": "Experience of the UK Armed Forces",
+              "description": "",
+              "depends_on": [
+                {
+                  "armedforces": "Yes, the tenant is a current or former regular"
+                },
+                {
+                  "armedforces": "Yes, the tenant is a current or former reserve"
+                }
+              ],
+              "questions": {
+                "reservist": {
+                  "header": "Was the person seriously injured or ill as a result of serving in the UK armed forces?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Person seriously injured or ill as result of serving in UK armed forces",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Person prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "pregnancy": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "preg_occ": {
+                  "header": "Is anybody in the household pregnant?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Anybody in household pregnant",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "2": {
+                      "value": "Prefer not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "accessibility_requirements": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "accessibility_requirements": {
+                  "header": "Does anybody in the household have any disabled access needs?",
+                  "hint_text": "Select all that apply.",
+                  "type": "checkbox",
+                  "check_answer_label": "Anybody in household with disabled access needs",
+                  "answer_options": {
+                    "housingneeds_a": {
+                      "value": "Fully wheelchair accessible housing"
+                    },
+                    "housingneeds_b": {
+                      "value": "Wheelchair access to essential rooms"
+                    },
+                    "housingneeds_c": {
+                      "value": "Level access housing"
+                    },
+                    "housingneeds_f": {
+                      "value": "Other disabled access needs"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "housingneeds_g": {
+                      "value": "No disabled access needs"
+                    },
+                    "housingneeds_h": {
+                      "value": "Don’t know"
+                    }
+                  }
+                }
+              }
+            },
+            "medical_conditions": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "illness": {
+                  "header": "Does anybody in the household have a physical or mental health condition (or other illness) expected to last 12 months or more?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Anybody in household with physical or mental health condition",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    },
+                    "2": {
+                      "value": "Tenant prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "condition_effects": {
+              "header": "",
+              "description": "",
+              "depends_on": [
+                {
+                  "illness": "Yes"
+                }
+              ],
+              "questions": {
+                "condition_effects": {
+                  "header": "How is the person affected by their condition or illness?",
+                  "hint_text": "Select all that apply.",
+                  "type": "checkbox",
+                  "check_answer_label": "How is person affected by condition or illness",
+                  "answer_options": {
+                    "illness_type_1": {
+                      "value": "Vision",
+                      "hint": "For example, blindness or partial sight."
+                    },
+                    "illness_type_2": {
+                      "value": "Hearing",
+                      "hint": "For example, deafness or partial hearing."
+                    },
+                    "illness_type_3": {
+                      "value": "Mobility",
+                      "hint": "For example, walking short distances or climbing stairs."
+                    },
+                    "illness_type_4": {
+                      "value": "Dexterity",
+                      "hint": "For example, lifting and carrying objects or using a keyboard."
+                    },
+                    "illness_type_5": {
+                      "value": "Learning or understanding or concentrating"
+                    },
+                    "illness_type_6": {
+                      "value": "Memory"
+                    },
+                    "illness_type_7": {
+                      "value": "Mental health",
+                      "hint": "For example, depression or anxiety."
+                    },
+                    "illness_type_8": {
+                      "value": "Stamina or breathing or fatigue"
+                    },
+                    "illness_type_9": {
+                      "value": "Socially or behaviourally",
+                      "hint": "For example, associated with autism spectrum disorder (ASD) which includes Asperger’s or attention deficit hyperactivity disorder (ADHD)."
+                    },
+                    "illness_type_10": {
+                      "value": "Other"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "household_situation": {
           "label": "Household situation",
           "depends_on": [
@@ -3214,246 +3454,6 @@
                   "renewal": "No"
                 }
               ]
-            }
-          }
-        },
-        "household_needs": {
-          "label": "Household needs",
-          "depends_on": [
-            {
-              "setup": "completed"
-            }
-          ],
-          "pages": {
-            "armed_forces": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "armedforces": {
-                  "header": "Does anybody in the household have any links to the UK armed forces?",
-                  "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
-                  "type": "radio",
-                  "check_answer_label": "Household links to UK armed forces",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes, the tenant is a current or former regular"
-                    },
-                    "1": {
-                      "value": "Yes, the tenant is a current or former reserve"
-                    },
-                    "2": {
-                      "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
-                    },
-                    "3": {
-                      "value": "No"
-                    },
-                    "4": {
-                      "value": "Person prefers not to say"
-                    }
-                  }
-                }
-              }
-            },
-            "armed_forces_member": {
-              "header": "",
-              "description": "",
-              "depends_on": [
-                {
-                  "armedforces": "Yes, the tenant is a current or former regular"
-                }
-              ],
-              "questions": {
-                "leftreg": {
-                  "header": "Is the person still serving in the UK armed forces?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "check_answer_label": "Person still serving in UK armed forces",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
-                    },
-                    "1": {
-                      "value": "No, they left up to and including 5 years ago"
-                    },
-                    "2": {
-                      "value": "No, they left more than 5 years ago"
-                    },
-                    "3": {
-                      "value": "Person prefers not to say"
-                    }
-                  }
-                }
-              }
-            },
-            "armed_forces_reservist": {
-              "header": "Experience of the UK Armed Forces",
-              "description": "",
-              "depends_on": [
-                {
-                  "armedforces": "Yes, the tenant is a current or former regular"
-                },
-                {
-                  "armedforces": "Yes, the tenant is a current or former reserve"
-                }
-              ],
-              "questions": {
-                "reservist": {
-                  "header": "Was the person seriously injured or ill as a result of serving in the UK armed forces?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "check_answer_label": "Person seriously injured or ill as result of serving in UK armed forces",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
-                    },
-                    "1": {
-                      "value": "No"
-                    },
-                    "2": {
-                      "value": "Person prefers not to say"
-                    }
-                  }
-                }
-              }
-            },
-            "pregnancy": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "preg_occ": {
-                  "header": "Is anybody in the household pregnant?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "check_answer_label": "Anybody in household pregnant",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
-                    },
-                    "1": {
-                      "value": "No"
-                    },
-                    "divider": {
-                      "value": true
-                    },
-                    "2": {
-                      "value": "Prefer not to say"
-                    }
-                  }
-                }
-              }
-            },
-            "accessibility_requirements": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "accessibility_requirements": {
-                  "header": "Does anybody in the household have any disabled access needs?",
-                  "hint_text": "Select all that apply.",
-                  "type": "checkbox",
-                  "check_answer_label": "Anybody in household with disabled access needs",
-                  "answer_options": {
-                    "housingneeds_a": {
-                      "value": "Fully wheelchair accessible housing"
-                    },
-                    "housingneeds_b": {
-                      "value": "Wheelchair access to essential rooms"
-                    },
-                    "housingneeds_c": {
-                      "value": "Level access housing"
-                    },
-                    "housingneeds_f": {
-                      "value": "Other disabled access needs"
-                    },
-                    "divider": {
-                      "value": true
-                    },
-                    "housingneeds_g": {
-                      "value": "No disabled access needs"
-                    },
-                    "housingneeds_h": {
-                      "value": "Don’t know"
-                    }
-                  }
-                }
-              }
-            },
-            "medical_conditions": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "illness": {
-                  "header": "Does anybody in the household have a physical or mental health condition (or other illness) expected to last 12 months or more?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "check_answer_label": "Anybody in household with physical or mental health condition",
-                  "answer_options": {
-                    "0": {
-                      "value": "Yes"
-                    },
-                    "1": {
-                      "value": "No"
-                    },
-                    "2": {
-                      "value": "Tenant prefers not to say"
-                    }
-                  }
-                }
-              }
-            },
-            "condition_effects": {
-              "header": "",
-              "description": "",
-              "depends_on": [
-                {
-                  "illness": "Yes"
-                }
-              ],
-              "questions": {
-                "condition_effects": {
-                  "header": "How is the person affected by their condition or illness?",
-                  "hint_text": "Select all that apply.",
-                  "type": "checkbox",
-                  "check_answer_label": "How is person affected by condition or illness",
-                  "answer_options": {
-                    "illness_type_1": {
-                      "value": "Vision",
-                      "hint": "For example, blindness or partial sight."
-                    },
-                    "illness_type_2": {
-                      "value": "Hearing",
-                      "hint": "For example, deafness or partial hearing."
-                    },
-                    "illness_type_3": {
-                      "value": "Mobility",
-                      "hint": "For example, walking short distances or climbing stairs."
-                    },
-                    "illness_type_4": {
-                      "value": "Dexterity",
-                      "hint": "For example, lifting and carrying objects or using a keyboard."
-                    },
-                    "illness_type_5": {
-                      "value": "Learning or understanding or concentrating"
-                    },
-                    "illness_type_6": {
-                      "value": "Memory"
-                    },
-                    "illness_type_7": {
-                      "value": "Mental health",
-                      "hint": "For example, depression or anxiety."
-                    },
-                    "illness_type_8": {
-                      "value": "Stamina or breathing or fatigue"
-                    },
-                    "illness_type_9": {
-                      "value": "Socially or behaviourally",
-                      "hint": "For example, associated with autism spectrum disorder (ASD) which includes Asperger’s or attention deficit hyperactivity disorder (ADHD)."
-                    },
-                    "illness_type_10": {
-                      "value": "Other"
-                    }
-                  }
-                }
-              }
             }
           }
         }

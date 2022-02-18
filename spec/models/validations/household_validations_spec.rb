@@ -254,7 +254,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant was or is a regular member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
-        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.armedforces = "Yes, the tenant is a current or former regular"
         record.reservist = "Yes"
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"]).to be_empty
@@ -289,14 +289,14 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "expects that they served in the armed forces" do
-        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.armedforces = "Yes, the tenant is a current or former regular"
         record.leftreg = "Yes"
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"]).to be_empty
       end
 
       it "expects that they served in the armed forces and may have been injured" do
-        record.armedforces = "A current or former regular in the UK Armed Forces (excluding National Service)"
+        record.armedforces = "Yes, the tenant is a current or former regular"
         record.leftreg = "Yes"
         record.reservist = "Yes"
         household_validator.validate_armed_forces(record)

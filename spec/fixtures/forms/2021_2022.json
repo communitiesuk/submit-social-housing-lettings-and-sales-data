@@ -178,7 +178,7 @@
                       }
                     },
                     "conditional_for": {
-                      "leftreg": ["A current or former regular in the UK Armed Forces (excluding National Service)"]
+                      "leftreg": ["Yes, the tenant is a current or former regular"]
                     }
                   },
                   "leftreg": {
