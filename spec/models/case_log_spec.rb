@@ -104,6 +104,7 @@ RSpec.describe CaseLog do
     it "validates tenancy type" do
       expect(validator).to receive(:validate_fixed_term_tenancy)
       expect(validator).to receive(:validate_other_tenancy_type)
+      expect(validator).to receive(:validate_tenancy_type)
     end
 
     it "validates the previous postcode" do
@@ -160,6 +161,10 @@ RSpec.describe CaseLog do
 
     it "validates accessibility requirements" do
       expect(validator).to receive(:validate_accessibility_requirements)
+    end
+
+    it "validates referral" do
+      expect(validator).to receive(:validate_referral)
     end
   end
 
