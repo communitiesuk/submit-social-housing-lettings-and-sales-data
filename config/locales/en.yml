@@ -52,7 +52,7 @@ en:
         before_tenancy_start: "Void date must be before the tenancy start date"
         after_mrcdate: "Void date must be after the major repair date if a major repair date has been provided"
       offered:
-        relet_number: "Property number of times relet must be between 0 and 20"
+        relet_number: "Property number of times relet must be between 0 and 20 test"
       la:
         london_rent: "Local authority has to be in London"
       rsnvac:
