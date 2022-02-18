@@ -162,10 +162,10 @@
                     "check_answer_label": "Household links to UK armed forces",
                     "answer_options": {
                       "0": {
-                        "value": "Yes, the tenant is a current or former regular"
+                        "value": "Yes, the person is a current or former regular"
                       },
                       "1": {
-                        "value": "Yes, the tenant is a current or former reserve"
+                        "value": "Yes, the person is a current or former reserve"
                       },
                       "2": {
                         "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
@@ -178,7 +178,7 @@
                       }
                     },
                     "conditional_for": {
-                      "leftreg": ["Yes, the tenant is a current or former regular"]
+                      "leftreg": ["Yes, the person is a current or former regular"]
                     }
                   },
                   "leftreg": {

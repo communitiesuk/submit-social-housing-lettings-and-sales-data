@@ -27,13 +27,13 @@ module Validations::HouseholdValidations
     if (record.armedforces == "No" || record.armedforces == "Person prefers not to say") && record.reservist.present?
       record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
-    if record.armedforces != "Yes, the tenant is a current or former regular" && record.leftreg.present?
+    if record.armedforces != "Yes, the person is a current or former regular" && record.leftreg.present?
       record.errors.add :leftreg, I18n.t("validations.household.leftreg.question_not_required")
     end
   end
 
   def validate_pregnancy(record)
-    if (record.preg_occ == "Yes" || record.preg_occ == "Prefer not to say") && !women_of_child_bearing_age_in_household(record)
+    if (record.preg_occ == "Yes" || record.preg_occ == "Tenant prefers not to say") && !women_of_child_bearing_age_in_household(record)
       record.errors.add :preg_occ, I18n.t("validations.household.preg_occ.no_female")
     end
   end

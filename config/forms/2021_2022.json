@@ -2056,18 +2056,18 @@
               "questions": {
                 "armedforces": {
                   "header": "Does anybody in the household have any links to the UK armed forces?",
-                  "hint_text": "This excludes national service. If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
+                  "hint_text": "This excludes national service.<br> If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
                   "type": "radio",
                   "check_answer_label": "Household links to UK armed forces",
                   "answer_options": {
                     "0": {
-                      "value": "Yes, the tenant is a current or former regular"
+                      "value": "Yes, the person is a current or former regular"
                     },
                     "1": {
-                      "value": "Yes, the tenant is a current or former reserve"
+                      "value": "Yes, the person is a current or former reserve"
                     },
                     "2": {
-                      "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
+                      "value": "Yes, the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                     },
                     "3": {
                       "value": "No"
@@ -2084,7 +2084,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": "Yes, the tenant is a current or former regular"
+                  "armedforces": "Yes, the person is a current or former regular"
                 }
               ],
               "questions": {
@@ -2111,14 +2111,14 @@
               }
             },
             "armed_forces_reservist": {
-              "header": "Experience of the UK Armed Forces",
+              "header": "",
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": "Yes, the tenant is a current or former regular"
+                  "armedforces": "Yes, the person is a current or former regular"
                 },
                 {
-                  "armedforces": "Yes, the tenant is a current or former reserve"
+                  "armedforces": "Yes, the person is a current or former reserve"
                 }
               ],
               "questions": {
@@ -2157,11 +2157,8 @@
                     "1": {
                       "value": "No"
                     },
-                    "divider": {
-                      "value": true
-                    },
                     "2": {
-                      "value": "Prefer not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }

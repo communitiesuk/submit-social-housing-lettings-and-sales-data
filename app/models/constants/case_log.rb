@@ -99,7 +99,7 @@ module Constants::CaseLog
   PREGNANCY = {
     "Yes" => 1,
     "No" => 2,
-    "Prefer not to say" => 3,
+    "Tenant prefers not to say" => 3,
   }.freeze
 
   PREVIOUS_TENANCY = {
@@ -980,10 +980,10 @@ module Constants::CaseLog
   }.freeze
 
   ARMED_FORCES = {
-    "Yes, the tenant is a current or former regular" => 1,
+    "Yes, the person is a current or former regular" => 1,
     "No" => 2,
     "Person prefers not to say" => 3,
-    "Yes, the tenant is a current or former reserve" => 4,
+    "Yes, the person is a current or former reserve" => 4,
     "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years" => 5,
   }.freeze
 
