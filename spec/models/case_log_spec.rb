@@ -161,6 +161,14 @@ RSpec.describe CaseLog do
     it "validates accessibility requirements" do
       expect(validator).to receive(:validate_accessibility_requirements)
     end
+
+    it "validates tenancy type" do
+      expect(validator).to receive(:validate_tenancy_type)
+    end
+
+    it "validates referral" do
+      expect(validator).to receive(:validate_referral)
+    end
   end
 
   describe "status" do
