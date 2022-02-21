@@ -3,7 +3,7 @@ module Validations::SubmissionValidations
   # or 'validate_' to run on submit as well
 
   def validate_declaration(record)
-    if record.declaration == "No"
+    if record.declaration&.zero?
       record.errors.add :declaration, I18n.t("validations.declaration.missing")
     end
   end

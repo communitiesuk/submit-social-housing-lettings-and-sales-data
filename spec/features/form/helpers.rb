@@ -8,11 +8,11 @@ module Helpers
   def answer_all_questions_in_income_subsection(case_log)
     visit("/logs/#{case_log.id}/net-income")
     fill_in("case-log-earnings-field", with: 18_000)
-    choose("case-log-incfreq-yearly-field")
+    choose("case-log-incfreq-2-field")
     click_button("Save and continue")
-    choose("case-log-benefits-all-field")
+    choose("case-log-benefits-0-field")
     click_button("Save and continue")
-    choose("case-log-hb-tenant-prefers-not-to-say-field")
+    choose("case-log-hb-1-field")
     click_button("Save and continue")
   end
 

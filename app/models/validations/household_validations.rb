@@ -1,39 +1,38 @@
 module Validations::HouseholdValidations
   include Validations::SharedValidations
-  include Constants::CaseLog
 
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_reasonable_preference(record)
-    if record.homeless == "No" && record.reasonpref == "Yes"
+    if record.homeless == 2 && record.reasonpref && record.reasonpref.zero?
       record.errors.add :reasonpref, I18n.t("validations.household.reasonpref.not_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.reasonpref.not_homeless")
-    elsif record.reasonpref == "No"
-      if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].any? { |a| a == "Yes" }
+    elsif record.reasonpref == 1
+      if [record.rp_homeless, record.rp_insan_unsat, record.rp_medwel, record.rp_hardship, record.rp_dontknow].any? { |a| a == 1 }
         record.errors.add :reasonable_preference_reason, I18n.t("validations.household.reasonable_preference_reason.reason_not_required")
       end
     end
   end
 
   def validate_reason_for_leaving_last_settled_home(record)
-    if record.reason == "Don’t know" && record.underoccupation_benefitcap != "Don’t know"
+    if record.reason == 32 && record.underoccupation_benefitcap != 4
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
       record.errors.add :reason, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
-    validate_other_field(record, :reason, :other_reason_for_leaving_last_settled_home)
+    validate_other_field(record, 31, :reason, :other_reason_for_leaving_last_settled_home)
   end
 
   def validate_armed_forces(record)
-    if (record.armedforces == "No" || record.armedforces == "Person prefers not to say") && record.reservist.present?
+    if (record.armedforces == 3 || record.armedforces == 4) && record.reservist.present?
       record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
-    if record.armedforces != "Yes, the person is a current or former regular" && record.leftreg.present?
+    if record.armedforces != 0 && record.leftreg.present?
       record.errors.add :leftreg, I18n.t("validations.household.leftreg.question_not_required")
     end
   end
 
   def validate_pregnancy(record)
-    if (record.preg_occ == "Yes" || record.preg_occ == "Tenant prefers not to say") && !women_of_child_bearing_age_in_household(record)
+    if ((record.preg_occ && record.preg_occ.zero?) || record.preg_occ == 2) && !women_of_child_bearing_age_in_household(record)
       record.errors.add :preg_occ, I18n.t("validations.household.preg_occ.no_female")
     end
   end
@@ -59,39 +58,39 @@ module Validations::HouseholdValidations
 
   def validate_accessibility_requirements(record)
     all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h, record.accessibility_requirements_prefer_not_to_say]
-    if all_options.count("Yes") > 1
+    if all_options.count(1) > 1
       mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
-      unless all_options.count("Yes") == 2 && record.housingneeds_f == "Yes" && mobility_accessibility_options.any? { |x| x == "Yes" }
+      unless all_options.count(1) == 2 && record.housingneeds_f == 1 && mobility_accessibility_options.any? { |x| x == 1 }
         record.errors.add :accessibility_requirements, I18n.t("validations.household.housingneeds_a.one_or_two_choices")
       end
     end
   end
 
   def validate_previous_housing_situation(record)
-    if record.rsnvac == "Re-let to tenant who occupied same property as temporary accommodation" && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+    if record.rsnvac == 2 && NON_TEMP_ACCOMMODATION.include?(record.prevten)
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
     end
   end
 
   def validate_referral(record)
-    if record.referral.present? && record.tenancy.present? && record.referral != "Internal transfer" && record.tenancy == "Secure (including flexible)"
+    if record.referral.present? && record.tenancy.present? && record.referral != 0 && record.tenancy == 3
       record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
       record.errors.add :tenancy, I18n.t("validations.tenancy.cannot_be_internal_transfer")
     end
 
-    if record.referral == "Internal transfer" && record.homeless == "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
+    if record.referral && record.referral.zero? && record.homeless && record.homeless.zero?
       record.errors.add :referral, I18n.t("validations.household.referral.assessed_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.assessed.internal_transfer")
     end
 
-    if record.referral == "Internal transfer" && record.homeless == "Other homeless - not found statutorily homeless but considered homeless by landlord"
+    if record.referral && record.referral.zero? && record.homeless == 1
       record.errors.add :referral, I18n.t("validations.household.referral.other_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
     end
   end
 
   def validate_prevloc(record)
-    if record.previous_la_known == "Yes" && record.prevloc.blank?
+    if record.previous_la_known == 1 && record.prevloc.blank?
       record.errors.add :prevloc, I18n.t("validations.household.previous_la_known")
     end
   end
@@ -102,7 +101,7 @@ private
     (1..8).any? do |n|
       next if record["sex#{n}"].nil? || record["age#{n}"].nil?
 
-      record["sex#{n}"] == "Female" && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
+      (record["sex#{n}"])&.zero? && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
     end
   end
 
@@ -126,10 +125,10 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age > 70 && economic_status != "Retired"
+    if age > 70 && economic_status != 4
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num:)
     end
-    if age < 16 && economic_status != "Child under 16"
+    if age < 16 && economic_status != 8
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
     end
   end
@@ -139,7 +138,7 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && relationship
 
-    if age < 16 && relationship != "Child - includes young adult and grown-up"
+    if age < 16 && relationship != 1
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16", person_num:)
     end
   end
@@ -150,7 +149,7 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && relationship == "Child - includes young adult and grown-up" && (economic_status != "Full-time student" && economic_status != "Prefer not to say")
+    if age >= 16 && age <= 19 && relationship == 1 && (economic_status != 6 && economic_status != 10)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
     end
   end
@@ -161,17 +160,16 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status && gender
 
-    if gender == "Male" && economic_status == "Retired" && age < 65
+    if gender == 1 && economic_status == 4 && age < 65
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_male")
     end
-    if gender == "Female" && economic_status == "Retired" && age < 60
+    if gender && gender.zero? && economic_status == 4 && age < 60
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_female")
     end
   end
 
   def validate_partner_count(record)
-    # TODO: probably need to keep track of which specific field is wrong so we can highlight it in the UI
-    partner_count = (2..8).count { |n| record.public_send("relat#{n}") == "Partner" }
+    partner_count = (2..8).count { |n| record.public_send("relat#{n}")&.zero? }
     if partner_count > 1
       record.errors.add :base, I18n.t("validations.household.relat.one_partner")
     end

@@ -38,7 +38,7 @@ class Form::Question
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    answer = case_log[id].to_s if case_log[id].present?
+    answer = value_label_from_value(case_log[id]) if case_log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
     return answer_label if answer_label
 
@@ -46,9 +46,11 @@ class Form::Question
   end
 
   def get_inferred_answers(case_log)
-    return enabled_inferred_answers(inferred_answers, case_log).keys.map { |x| case_log[x].to_s } if inferred_answers
+    return [] unless inferred_answers
 
-    []
+    enabled_inferred_answers(inferred_answers, case_log).keys.map do |x|
+      form.get_question(x).value_label_from_value(case_log[x])
+    end
   end
 
   def read_only?
@@ -73,7 +75,7 @@ class Form::Question
 
   def update_answer_link_name(case_log)
     link_type = if type == "checkbox"
-                  answer_options.keys.any? { |key| case_log[key] == "Yes" } ? "Change" : "Answer"
+                  answer_options.keys.any? { |key| case_log[key] == 1 } ? "Change" : "Answer"
                 else
                   case_log[id].blank? ? "Answer" : "Change"
                 end
@@ -81,9 +83,35 @@ class Form::Question
   end
 
   def completed?(case_log)
-    return answer_options.keys.any? { |key| case_log[key] == "Yes" } if type == "checkbox"
+    return answer_options.keys.any? { |key| case_log[key] == 1 } if type == "checkbox"
 
     case_log[id].present? || !case_log.respond_to?(id.to_sym) || has_inferred_display_value?(case_log)
+  end
+
+  def value_from_label(label)
+    return unless label
+
+    case type
+    when "radio"
+      answer_options.find { |opt| opt.second["value"] == label.to_s }.first
+    when "select"
+      answer_options.find { |opt| opt.second == label.to_s }.first
+    else
+      label
+    end
+  end
+
+  def value_label_from_value(value)
+    return unless value
+
+    case type
+    when "radio"
+      answer_options[value.to_s]["value"]
+    when "select"
+      answer_options[value.to_s]
+    else
+      value.to_s
+    end
   end
 
 private
@@ -94,7 +122,7 @@ private
 
   def checkbox_answer_label(case_log)
     answer = []
-    answer_options.each { |key, options| case_log[key] == "Yes" ? answer << options["value"] : nil }
+    answer_options.each { |key, options| case_log[key] == 1 ? answer << options["value"] : nil }
     answer.join(", ")
   end
 
@@ -114,7 +142,7 @@ private
 
       answer = case_log.send(condition.keys.first)
       if answer == condition.values.first
-        label = ANSWER_SUFFIX_LABELS.key?(answer.to_sym) ? ANSWER_SUFFIX_LABELS[answer.to_sym] : answer
+        label = ANSWER_SUFFIX_LABELS.key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
       end
     end
     label
@@ -144,8 +172,8 @@ private
   end
 
   ANSWER_SUFFIX_LABELS = {
-    "Weekly": " every week",
-    "Monthly": " every month",
-    "Yearly": " every year",
+    0 => " every week",
+    1 => " every month",
+    2 => " every year",
   }.freeze
 end

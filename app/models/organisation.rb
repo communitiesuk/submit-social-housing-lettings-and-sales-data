@@ -5,7 +5,10 @@ class Organisation < ApplicationRecord
 
   has_paper_trail
 
-  include Constants::Organisation
+  PROVIDER_TYPE = {
+    LA: 1,
+    PRP: 2,
+  }.freeze
 
   enum provider_type: PROVIDER_TYPE
 

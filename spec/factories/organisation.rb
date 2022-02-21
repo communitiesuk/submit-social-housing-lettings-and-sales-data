@@ -3,6 +3,7 @@ FactoryBot.define do
     name { "DLUHC" }
     address_line1 { "2 Marsham Street" }
     address_line2 { "London" }
+    provider_type { 2 }
     postcode { "SW1P 4DF" }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

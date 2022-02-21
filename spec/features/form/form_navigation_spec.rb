@@ -70,7 +70,7 @@ RSpec.describe "Form Navigation" do
         visit("/logs")
         visit("/logs/#{id}/net-income")
         fill_in("case-log-earnings-field", with: 740)
-        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         click_link(text: "Back")
         click_link(text: "Back")

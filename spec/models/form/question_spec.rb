@@ -53,6 +53,10 @@ RSpec.describe Form::Question, type: :model do
     it "has a step value" do
       expect(question.step).to eq(1)
     end
+
+    it "does not map value from label" do
+      expect(question.value_from_label("5")).to eq("5")
+    end
   end
 
   context "when type is radio" do
@@ -61,6 +65,29 @@ RSpec.describe Form::Question, type: :model do
     it "has answer options" do
       expected_answer_options = { "0" => { "value" => "Weekly" }, "1" => { "value" => "Monthly" }, "2" => { "value" => "Yearly" } }
       expect(question.answer_options).to eq(expected_answer_options)
+    end
+
+    it "can map value from label" do
+      expect(question.value_from_label("Monthly")).to eq("1")
+    end
+
+    it "can map label from value" do
+      expect(question.value_label_from_value(2)).to eq("Yearly")
+    end
+  end
+
+  context "when type is select" do
+    let(:section_id) { "household" }
+    let(:subsection_id) { "household_needs" }
+    let(:page_id) { "accessible_select" }
+    let(:question_id) { "la" }
+
+    it "can map value from label" do
+      expect(question.value_from_label("Manchester")).to eq("E08000003")
+    end
+
+    it "can map label from value" do
+      expect(question.value_label_from_value("E06000014")).to eq("York")
     end
   end
 
@@ -102,13 +129,13 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "incfreq" }
 
     it "has an answer label" do
-      case_log.incfreq = "Weekly"
+      case_log.incfreq = 0
       expect(question.answer_label(case_log)).to eq("Weekly")
     end
 
     it "has an update answer link text helper" do
       expect(question.update_answer_link_name(case_log)).to match(/Answer/)
-      case_log["incfreq"] = "Weekly"
+      case_log["incfreq"] = 0
       expect(question.update_answer_link_name(case_log)).to match(/Change/)
     end
 
@@ -164,12 +191,12 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "earnings" }
 
       it "displays the correct label for given suffix and answer the suffix depends on" do
-        case_log.incfreq = "Weekly"
+        case_log.incfreq = 0
         case_log.earnings = 500
         expect(question.answer_label(case_log)).to eq("£500.00 every week")
-        case_log.incfreq = "Monthly"
+        case_log.incfreq = 1
         expect(question.answer_label(case_log)).to eq("£500.00 every month")
-        case_log.incfreq = "Yearly"
+        case_log.incfreq = 2
         expect(question.answer_label(case_log)).to eq("£500.00 every year")
       end
     end
@@ -183,7 +210,7 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "property_postcode" }
 
       it "returns true" do
-        case_log["postcode_known"] = "No"
+        case_log["postcode_known"] = 0
         expect(question.completed?(case_log)).to be(true)
       end
     end

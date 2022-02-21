@@ -43,7 +43,7 @@ RSpec.describe Validations::PropertyValidations do
     context "when number of bedrooms has not been answered" do
       it "does not add an error" do
         record.beds = nil
-        record.unittype_gn = "Bedsit"
+        record.unittype_gn = 1
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors).to be_empty
       end
@@ -52,7 +52,7 @@ RSpec.describe Validations::PropertyValidations do
     context "when unit type is shared and number of bedrooms has not been answered" do
       it "does not add an error" do
         record.beds = nil
-        record.unittype_gn = "Shared bungalow"
+        record.unittype_gn = 6
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors).to be_empty
       end
@@ -72,7 +72,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 2
-        record.unittype_gn = "Bedsit"
+        record.unittype_gn = 1
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
@@ -84,7 +84,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 0
-        record.unittype_gn = "Bedsit"
+        record.unittype_gn = 1
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
@@ -96,7 +96,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 8
-        record.unittype_gn = "Shared house"
+        record.unittype_gn = 5
         record.other_hhmemb = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
@@ -109,7 +109,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 0
-        record.unittype_gn = "Shared house"
+        record.unittype_gn = 5
         record.other_hhmemb = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
@@ -122,7 +122,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 4
-        record.unittype_gn = "Shared house"
+        record.unittype_gn = 5
         record.other_hhmemb = 0
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
@@ -144,15 +144,15 @@ RSpec.describe Validations::PropertyValidations do
       let(:expected_error) { I18n.t("validations.property.la.london_rent") }
 
       it "validates that the local authority is in London" do
-        record.la = "Ashford"
-        record.rent_type = "London Affordable rent"
+        record.la = "E07000105"
+        record.rent_type = 2
         property_validator.validate_la(record)
         expect(record.errors["la"]).to include(match(expected_error))
       end
 
       it "expects that the local authority is in London" do
-        record.la = "Westminster"
-        record.rent_type = "London Affordable rent"
+        record.la = "E09000033"
+        record.rent_type = 2
         property_validator.validate_la(record)
         expect(record.errors["la"]).to be_empty
       end
@@ -160,7 +160,7 @@ RSpec.describe Validations::PropertyValidations do
 
     context "when previous la is known" do
       it "la has to be provided" do
-        record.la_known = "Yes"
+        record.la_known = 1
         property_validator.validate_la(record)
         expect(record.errors["la"])
           .to include(match I18n.t("validations.property.la.la_known"))
@@ -171,20 +171,20 @@ RSpec.describe Validations::PropertyValidations do
   describe "#validate_unitletas" do
     context "when the property has not been let before" do
       it "validates that no previous let type is provided" do
-        record.first_time_property_let_as_social_housing = "Yes"
-        record.unitletas = "Social rent basis"
+        record.first_time_property_let_as_social_housing = 1
+        record.unitletas = 0
         property_validator.validate_unitletas(record)
         expect(record.errors["unitletas"])
           .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
-        record.unitletas = "Affordable rent basis"
+        record.unitletas = 1
         property_validator.validate_unitletas(record)
         expect(record.errors["unitletas"])
           .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
-        record.unitletas = "Intermediate rent basis"
+        record.unitletas = 2
         property_validator.validate_unitletas(record)
         expect(record.errors["unitletas"])
           .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
-        record.unitletas = "Don’t know"
+        record.unitletas = 3
         property_validator.validate_unitletas(record)
         expect(record.errors["unitletas"])
           .to include(match I18n.t("validations.property.rsnvac.previous_let_social"))
@@ -193,8 +193,8 @@ RSpec.describe Validations::PropertyValidations do
 
     context "when the property has been let previously" do
       it "expects to have a previous let type" do
-        record.first_time_property_let_as_social_housing = "No"
-        record.unitletas = "Social rent basis"
+        record.first_time_property_let_as_social_housing = 0
+        record.unitletas = 0
         property_validator.validate_unitletas(record)
         expect(record.errors["unitletas"]).to be_empty
       end
@@ -204,22 +204,22 @@ RSpec.describe Validations::PropertyValidations do
   describe "validate_rsnvac" do
     context "when the property has not been let before" do
       it "validates that it has a first let reason for vacancy" do
-        record.first_time_property_let_as_social_housing = "Yes"
-        record.rsnvac = "Tenant moved to care home"
+        record.first_time_property_let_as_social_housing = 1
+        record.rsnvac = 6
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_social"))
       end
 
       it "expects to have a first let reason for vacancy" do
-        record.first_time_property_let_as_social_housing = "Yes"
-        record.rsnvac = "First let of new-build property"
+        record.first_time_property_let_as_social_housing = 1
+        record.rsnvac = 11
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        record.rsnvac = 12
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = "First let of leased property"
+        record.rsnvac = 13
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
       end
@@ -227,62 +227,45 @@ RSpec.describe Validations::PropertyValidations do
 
     context "when the property has been let as social housing before" do
       it "validates that the reason for vacancy is not a first let as social housing reason" do
-        record.first_time_property_let_as_social_housing = "No"
-        record.rsnvac = "First let of new-build property"
+        record.first_time_property_let_as_social_housing = 0
+        record.rsnvac = 11
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
-        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        record.rsnvac = 12
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
-        record.rsnvac = "First let of leased property"
+        record.rsnvac = 13
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
       end
 
       it "expects the reason for vacancy to be a first let as social housing reason" do
-        record.first_time_property_let_as_social_housing = "Yes"
-        record.rsnvac = "First let of new-build property"
+        record.first_time_property_let_as_social_housing = 1
+        record.rsnvac = 11
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = "First let of conversion, rehabilitation or acquired property"
+        record.rsnvac = 12
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = "First let of leased property"
+        record.rsnvac = 13
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
       end
     end
 
     context "when the property has been let before" do
-      let(:non_temporary_previous_tenancies) do
-        [
-          "Tied housing or rented with job",
-          "Supported housing",
-          "Sheltered accommodation",
-          "Home Office Asylum Support",
-          "Any other accommodation",
-        ]
-      end
+      let(:non_temporary_previous_tenancies) { described_class::NON_TEMP_ACCOMMODATION }
 
       context "when the previous tenancy was not temporary" do
-        let(:referral_sources) do
-          [
-            "Re-located through official housing mobility scheme",
-            "Other social landlord",
-            "Police, probation or prison",
-            "Youth offending team",
-            "Community mental health team",
-            "Health service",
-          ]
-        end
+        let(:referral_sources) { described_class::REFERRAL_INVALID_TMP }
 
         it "validates that the property is not being relet to tenant who occupied as temporary" do
-          non_temporary_previous_tenancies.each do |rsn|
-            record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
-            record.prevten = rsn
+          non_temporary_previous_tenancies.each do |prevten|
+            record.rsnvac = 2
+            record.prevten = prevten
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])
               .to include(match I18n.t("validations.property.rsnvac.non_temp_accommodation"))
@@ -291,7 +274,7 @@ RSpec.describe Validations::PropertyValidations do
 
         it "validates that the letting source is not a referral" do
           referral_sources.each do |src|
-            record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
+            record.rsnvac = 2
             record.referral = src
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])
@@ -302,15 +285,15 @@ RSpec.describe Validations::PropertyValidations do
 
       context "when the previous tenancy was temporary" do
         it "expects that the property can be relet to a tenant who previously occupied it as temporary" do
-          record.prevten = "Fixed-term local authority general needs tenancy"
-          record.rsnvac = "Re-let to tenant who occupied same property as temporary accommodation"
+          record.prevten = 0
+          record.rsnvac = 2
           property_validator.validate_rsnvac(record)
           expect(record.errors["rsnvac"]).to be_empty
         end
 
         it "expects that the letting source can be a referral" do
-          record.prevten = "Fixed-term local authority general needs tenancy"
-          record.referral = "Re-located through official housing mobility scheme"
+          record.prevten = 0
+          record.referral = 2
           property_validator.validate_rsnvac(record)
           expect(record.errors["rsnvac"]).to be_empty
         end

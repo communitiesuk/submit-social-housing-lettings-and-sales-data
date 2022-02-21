@@ -8,8 +8,8 @@ RSpec.describe "Accessible Automcomplete" do
     FactoryBot.create(
       :case_log,
       :in_progress,
-      la_known: "Yes",
-      la: "Westminster",
+      la_known: 1,
+      la: "E09000033",
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -40,7 +40,7 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   it "has the correct option selected if one has been saved" do
-    case_log.update!(postcode_known: "No", la_known: "Yes", la: "Oxford")
+    case_log.update!(postcode_known: 0, la_known: 1, la: "E07000178")
     visit("/logs/#{case_log.id}/accessible-select")
     expect(page).to have_select("case-log-la-field", selected: %w[Oxford])
   end

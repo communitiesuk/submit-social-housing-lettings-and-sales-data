@@ -24,23 +24,23 @@ RSpec.describe "Form Page Routing" do
     visit("/logs/#{id}/conditional-question")
     # using a question name that is already in the db to avoid
     # having to add a new column to the db for this test
-    choose("case-log-preg-occ-yes-field", allow_label_click: true)
+    choose("case-log-preg-occ-0-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-yes-page")
     click_link(text: "Back")
     expect(page).to have_current_path("/logs/#{id}/conditional-question")
-    choose("case-log-preg-occ-no-field", allow_label_click: true)
+    choose("case-log-preg-occ-1-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-no-page")
   end
 
   it "can route based on multiple conditions", js: true do
     visit("/logs/#{id}/person-1-gender")
-    choose("case-log-sex1-female-field", allow_label_click: true)
+    choose("case-log-sex1-0-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/household-number-of-other-members")
     visit("/logs/#{id}/conditional-question")
-    choose("case-log-preg-occ-no-field", allow_label_click: true)
+    choose("case-log-preg-occ-1-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-no-page")
     click_button("Save and continue")
@@ -63,7 +63,7 @@ RSpec.describe "Form Page Routing" do
 
     it "does not show question if the answer could be inferred" do
       stub_request(:get, /api.postcodes.io/)
-        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+        .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       visit("/logs/#{id}/property-postcode")
       fill_in("case-log-property-postcode-field", with: "P0 5ST")

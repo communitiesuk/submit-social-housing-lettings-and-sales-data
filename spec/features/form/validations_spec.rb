@@ -116,7 +116,7 @@ RSpec.describe "validations" do
         FactoryBot.create(
           :case_log,
           :in_progress,
-          ecstat1: "Full-time - 30 hours or more",
+          ecstat1: 1,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
         )
@@ -127,7 +127,7 @@ RSpec.describe "validations" do
       it "prompts the user to confirm the value is correct", js: true do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_content("Are you sure this is correct?")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
@@ -138,7 +138,7 @@ RSpec.describe "validations" do
       it "does not require confirming the value if the value is amended" do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
@@ -150,7 +150,7 @@ RSpec.describe "validations" do
       it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         fill_in("case-log-earnings-field", with: income_under_soft_limit)
         click_button("Save and continue")
@@ -161,7 +161,7 @@ RSpec.describe "validations" do
       it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-weekly-field", allow_label_click: true)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
         click_button("Save and continue")
@@ -175,17 +175,15 @@ RSpec.describe "validations" do
     context "when tenant has not seen the privacy notice" do
       it "shows a warning" do
         visit("/logs/#{completed_without_declaration.id}/declaration")
-        expect(page).to have_current_path("/logs/#{completed_without_declaration.id}/declaration")
         click_button("Submit lettings log")
         expect(page).to have_content("You must show the DLUHC privacy notice to the tenant")
       end
     end
 
     context "when tenant has seen the privacy notice" do
-      it "lets submit the log" do
-        completed_without_declaration.update!({ declaration: "Yes" })
+      it "the log can be submitted" do
+        completed_without_declaration.update!({ declaration: 1 })
         visit("/logs/#{completed_without_declaration.id}/declaration")
-        expect(page).to have_current_path("/logs/#{completed_without_declaration.id}/declaration")
         click_button("Submit lettings log")
         expect(page).to have_current_path("/logs")
       end

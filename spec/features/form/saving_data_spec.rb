@@ -16,7 +16,7 @@ RSpec.describe "Form Saving Data" do
   let(:case_log_with_checkbox_questions_answered) do
     FactoryBot.create(
       :case_log, :in_progress,
-      housingneeds_a: "Yes",
+      housingneeds_a: 1,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation
     )
@@ -25,7 +25,7 @@ RSpec.describe "Form Saving Data" do
     {
       tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
       age1: { type: "numeric", answer: 25, path: "person_1_age" },
-      sex1: { type: "radio", answer: "Female", path: "person_1_gender" },
+      sex1: { type: "radio", answer: { 0 => "Female" }, path: "person_1_gender" },
       other_hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
     }
   end
@@ -37,7 +37,7 @@ RSpec.describe "Form Saving Data" do
   it "updates model attributes correctly for each question" do
     question_answers.each do |question, hsh|
       type = hsh[:type]
-      answer = hsh[:answer]
+      answer = hsh[:answer].respond_to?(:keys) ? hsh[:answer].keys.first : hsh[:answer]
       path = hsh[:path]
       original_value = case_log.send(question)
       visit("/logs/#{id}/#{path.to_s.dasherize}")
@@ -45,7 +45,7 @@ RSpec.describe "Form Saving Data" do
       when "text"
         fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
       when "radio"
-        choose("case-log-#{question.to_s.dasherize}-#{answer.parameterize}-field")
+        choose("case-log-#{question.to_s.dasherize}-#{hsh[:answer].keys.first}-field")
       else
         fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
       end

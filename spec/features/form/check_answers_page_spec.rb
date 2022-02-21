@@ -17,8 +17,8 @@ RSpec.describe "Form Check Answers Page" do
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
-      la_known: "Yes",
-      la: "Westminster",
+      la_known: 1,
+      la: "E09000033",
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -61,7 +61,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays answers given by the user for the question in the subsection" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
-      choose("case-log-sex1-non-binary-field")
+      choose("case-log-sex1-2-field")
       click_button("Save and continue")
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
       expect(page).to have_content("28")
@@ -113,7 +113,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays conditional question that were visited" do
       visit("/logs/#{id}/conditional-question")
-      choose("case-log-preg-occ-no-field", allow_label_click: true)
+      choose("case-log-preg-occ-1-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?", "Has the condition not been met?"]
@@ -136,7 +136,7 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: "Male",
+          sex1: 1,
           other_hhmemb: 0,
         )
       end
@@ -149,10 +149,10 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: "Male",
+          sex1: 1,
           other_hhmemb: 0,
-          armedforces: "No",
-          illness: "No",
+          armedforces: 3,
+          illness: 0,
         )
       end
 
@@ -164,13 +164,13 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: "Male",
+          sex1: 1,
           other_hhmemb: 0,
-          armedforces: "No",
-          illness: "No",
-          housingneeds_h: "Yes",
-          la: "York",
-          illness_type_1: "Yes",
+          armedforces: 3,
+          illness: 0,
+          housingneeds_h: 1,
+          la: "E06000014",
+          illness_type_1: 1,
         )
       end
 
@@ -182,10 +182,10 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: nil,
           age1: nil,
-          layear: "1 year but under 2 years",
-          lawaitlist: "Less than 1 year",
+          layear: 2,
+          lawaitlist: 1,
           property_postcode: "NW1 5TY",
-          reason: "Permanently decanted from another property owned by this landlord",
+          reason: 4,
           previous_postcode: "SE2 6RT",
           mrcdate: Time.zone.parse("03/11/2019"),
         )

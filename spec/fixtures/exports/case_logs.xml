@@ -7,65 +7,50 @@
     <updated_at>2022-02-08 16:52:15 UTC</updated_at>
     <tenant_code>BZ737</tenant_code>
     <age1>35</age1>
-    <sex1>F</sex1>
     <ethnic>2</ethnic>
     <national>4</national>
-    <prevten>3</prevten>
-    <ecstat1>2</ecstat1>
+    <prevten>2</prevten>
+    <ecstat1>0</ecstat1>
     <hhmemb>2</hhmemb>
-    <relat2>P</relat2>
     <age2>32</age2>
-    <sex2>M</sex2>
-    <ecstat2>6</ecstat2>
-    <relat3/>
+    <ecstat2>5</ecstat2>
     <age3/>
-    <sex3/>
     <ecstat3/>
-    <relat4/>
     <age4/>
-    <sex4/>
     <ecstat4/>
-    <relat5/>
     <age5/>
-    <sex5/>
     <ecstat5/>
-    <relat6/>
     <age6/>
-    <sex6/>
     <ecstat6/>
-    <relat7/>
     <age7/>
-    <sex7/>
     <ecstat7/>
-    <relat8/>
     <age8/>
-    <sex8/>
     <ecstat8/>
-    <homeless>7</homeless>
-    <underoccupation_benefitcap>2</underoccupation_benefitcap>
-    <leftreg>4</leftreg>
-    <reservist>2</reservist>
+    <homeless>1</homeless>
+    <underoccupation_benefitcap>0</underoccupation_benefitcap>
+    <leftreg>1</leftreg>
+    <reservist>0</reservist>
     <illness>1</illness>
     <preg_occ>1</preg_occ>
     <tenancy_code>BZ757</tenancy_code>
-    <startertenancy>2</startertenancy>
+    <startertenancy>0</startertenancy>
     <tenancylength>5</tenancylength>
-    <tenancy>1</tenancy>
+    <tenancy>3</tenancy>
     <landlord>1</landlord>
     <previous_postcode>SE2 6RT</previous_postcode>
-    <rsnvac>6</rsnvac>
-    <unittype_gn>7</unittype_gn>
+    <rsnvac>7</rsnvac>
+    <unittype_gn>2</unittype_gn>
     <beds>3</beds>
     <offered>2</offered>
     <wchair>1</wchair>
     <earnings>68</earnings>
-    <incfreq>1</incfreq>
-    <benefits>2</benefits>
-    <period>2</period>
-    <layear>7</layear>
-    <lawaitlist>2</lawaitlist>
+    <incfreq>0</incfreq>
+    <benefits>1</benefits>
+    <period>0</period>
+    <layear>2</layear>
+    <lawaitlist>1</lawaitlist>
     <property_postcode>NW1 5TY</property_postcode>
-    <reasonpref>1</reasonpref>
+    <reasonpref>0</reasonpref>
     <cbl>1</cbl>
     <chr>1</chr>
     <cap>0</cap>
@@ -97,17 +82,15 @@
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>
-    <renewal>No</renewal>
-    <rent_type>1</rent_type>
     <intermediate_rent_product_name>2</intermediate_rent_product_name>
     <purchaser_code>798794</purchaser_code>
-    <reason>1</reason>
+    <reason>4</reason>
     <propcode>123</propcode>
     <majorrepairs>1</majorrepairs>
     <la>E09000003</la>
     <prevloc>E07000105</prevloc>
     <hb>1</hb>
-    <hbrentshortfall>1</hbrentshortfall>
+    <hbrentshortfall>0</hbrentshortfall>
     <postcode>NW1</postcode>
     <postcod2>5TY</postcod2>
     <ppostc1>SE2</ppostc1>
@@ -121,16 +104,15 @@
     <incref>0</incref>
     <sale_completion_date/>
     <startdate>2022-02-08 16:52:15 UTC</startdate>
-    <armedforces>1</armedforces>
+    <armedforces>0</armedforces>
     <first_time_property_let_as_social_housing/>
     <unitletas>2</unitletas>
     <builtype>1</builtype>
     <property_void_date>2019-11-03 00:00:00 UTC</property_void_date>
     <owning_organisation_id>{owning_org_id}</owning_organisation_id>
     <managing_organisation_id>{managing_org_id}</managing_organisation_id>
-    <renttype/>
     <needstype>1</needstype>
-    <lettype>7</lettype>
+    <lettype>5</lettype>
     <postcode_known>1</postcode_known>
     <la_known>1</la_known>
     <is_la_inferred>false</is_la_inferred>
@@ -140,11 +122,10 @@
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
-    <net_income_known>0</net_income_known>
-    <has_benefits>Yes</has_benefits>
+    <net_income_known>1</net_income_known>
     <nocharge>0</nocharge>
     <is_carehome>0</is_carehome>
-    <letting_in_sheltered_accommodation>3</letting_in_sheltered_accommodation>
+    <letting_in_sheltered_accommodation>0</letting_in_sheltered_accommodation>
     <household_charge>1</household_charge>
     <referral/>
     <brent>200.0</brent>
@@ -159,5 +140,24 @@
     <previous_la_known/>
     <is_previous_la_inferred>false</is_previous_la_inferred>
     <letting_allocation_unknown/>
+    <renttype>2</renttype>
+    <sex1>0</sex1>
+    <sex2>1</sex2>
+    <sex3/>
+    <sex4/>
+    <sex5/>
+    <sex6/>
+    <sex7/>
+    <sex8/>
+    <relat2>0</relat2>
+    <relat3/>
+    <relat4/>
+    <relat5/>
+    <relat6/>
+    <relat7/>
+    <relat8/>
+    <rent_type>1</rent_type>
+    <has_benefits>1</has_benefits>
+    <renewal>0</renewal>
   </form>
 </forms>

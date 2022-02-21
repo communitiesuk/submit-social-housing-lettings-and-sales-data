@@ -22,7 +22,7 @@
                 },
                 "depends_on": [
                   {
-                    "housingneeds_a": "Yes"
+                    "housingneeds_a": 1
                   },
                   {
                     "housingneeds_a": null
@@ -178,7 +178,7 @@
                       }
                     },
                     "conditional_for": {
-                      "leftreg": ["Yes, the person is a current or former regular"]
+                      "leftreg": [0]
                     }
                   },
                   "leftreg": {
@@ -253,15 +253,17 @@
                       "" : "Select an option",
                       "E07000223": "Adur",
                       "E09000023": "Lewisham",
+                      "E08000003": "Manchester",
                       "E07000178": "Oxford",
                       "E07000114": "Thanet",
+                      "E09000033": "Westminster",
                       "E06000014": "York"
                     }
                   }
                 },
                 "depends_on": [
                   {
-                    "la_known": "Yes",
+                    "la_known": 1,
                     "is_la_inferred": false
                   }
                 ]
@@ -321,7 +323,7 @@
                     "width": 5,
                     "inferred_answers": { "la": { "is_la_inferred": true } },
                     "inferred_check_answers_value": {
-                      "condition": { "postcode_known": "No" },
+                      "condition": { "postcode_known": 0 },
                       "value": "Not known"
                     }
                   }
@@ -400,7 +402,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": "Yes" }, { "wchair" : "Yes" }]
+                "depends_on": [{ "preg_occ": 0 }, { "wchair" : 1 }]
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -418,7 +420,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": "No" }]
+                "depends_on": [{ "preg_occ": 1 }]
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -436,7 +438,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": "No", "sex1": "Male" }]
+                "depends_on": [{ "preg_occ": 1, "sex1": 1 }]
               }
             }
           }
@@ -462,9 +464,9 @@
                     "width": 5,
                     "prefix": "£",
                     "suffix": [
-                      { "label": "every week", "depends_on" : { "incfreq": "Weekly" } },
-                      { "label": "every month", "depends_on" : { "incfreq": "Monthly" } },
-                      { "label": "every month", "depends_on" : { "incfreq": "Yearly" } }
+                      { "label": "every week", "depends_on" : { "incfreq": 0 } },
+                      { "label": "every month", "depends_on" : { "incfreq": 1 } },
+                      { "label": "every month", "depends_on" : { "incfreq": 2 } }
                     ]
                   },
                   "incfreq": {
@@ -526,7 +528,7 @@
                       }
                     },
                     "conditional_for": {
-                      "conditional_question": ["Housing benefit"]
+                      "conditional_question": [0]
                     }
                   },
                   "conditional_question": {
@@ -545,7 +547,7 @@
                 }
               },
               "dependent_page": {
-                "depends_on": [{ "incfreq": "Weekly" }],
+                "depends_on": [{ "incfreq": 0 }],
                 "questions": {
                   "dependent_question": {
                     "check_answer_label": "Dependent Question",
@@ -723,7 +725,7 @@
                     }
                   }
                 },
-                "depends_on":  [{ "renewal": "No" }]
+                "depends_on":  [{ "renewal": 0 }]
               },
               "time_on_la_waiting_list": {
                 "questions": {

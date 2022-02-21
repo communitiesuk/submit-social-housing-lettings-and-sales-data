@@ -124,11 +124,7 @@
                       "value": "Other intermediate rent product"
                     }
                   },
-                  "conditional_for": {
-                    "intermediate_rent_product_name": [
-                      "Other intermediate rent product"
-                    ]
-                  }
+                  "conditional_for": { "intermediate_rent_product_name": [5] }
                 },
                 "intermediate_rent_product_name": {
                   "check_answer_label": "Product name",
@@ -195,9 +191,7 @@
                       "value": "No"
                     }
                   },
-                  "conditional_for": {
-                    "property_postcode": ["Yes"]
-                  },
+                  "conditional_for": { "property_postcode": [1] },
                   "hidden_in_check_answers": true
                 },
                 "property_postcode": {
@@ -238,7 +232,7 @@
                     }
                   },
                   "conditional_for": {
-                    "la": ["Yes"]
+                    "la": [1]
                   }
                 },
                 "la": {
@@ -596,7 +590,7 @@
               },
               "depends_on": [
                 {
-                  "renewal": "No"
+                  "renewal": 0
                 }
               ]
             },
@@ -630,8 +624,8 @@
               },
               "depends_on": [
                 {
-                  "first_time_property_let_as_social_housing": "No",
-                  "renewal": "No"
+                  "first_time_property_let_as_social_housing": 0,
+                  "renewal": 0
                 }
               ]
             },
@@ -684,8 +678,8 @@
               },
               "depends_on": [
                 {
-                  "first_time_property_let_as_social_housing": "No",
-                  "renewal": "No"
+                  "first_time_property_let_as_social_housing": 0,
+                  "renewal": 0
                 }
               ]
             },
@@ -713,8 +707,8 @@
               },
               "depends_on": [
                 {
-                  "first_time_property_let_as_social_housing": "Yes",
-                  "renewal": "No"
+                  "first_time_property_let_as_social_housing": 1,
+                  "renewal": 0
                 }
               ]
             },
@@ -735,8 +729,8 @@
               },
               "depends_on": [
                 {
-                  "first_time_property_let_as_social_housing": "No",
-                  "renewal": "No"
+                  "first_time_property_let_as_social_housing": 0,
+                  "renewal": 0
                 }
               ]
             },
@@ -757,8 +751,8 @@
               },
               "depends_on": [
                 {
-                  "first_time_property_let_as_social_housing": "Yes",
-                  "renewal": "No"
+                  "first_time_property_let_as_social_housing": 1,
+                  "renewal": 0
                 }
               ]
             },
@@ -857,7 +851,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": "General needs"
+                  "needstype": 1
                 }
               ]
             },
@@ -874,11 +868,8 @@
               },
               "depends_on": [
                 {
-                  "renewal": "No",
-                  "rsnvac": [
-                    "First let of conversion, rehabilitation or acquired property",
-                    "First let of leased property"
-                  ]
+                  "renewal": 0,
+                  "rsnvac": [12, 13]
                 }
               ]
             },
@@ -895,8 +886,8 @@
               },
               "depends_on": [
                 {
-                  "renewal": "No",
-                  "rsnvac": "First let of new-build property"
+                  "renewal": 0,
+                  "rsnvac": 11
                 }
               ]
             },
@@ -918,7 +909,7 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": ["Yes"]
+                    "mrcdate": [1]
                   }
                 },
                 "mrcdate": {
@@ -930,11 +921,8 @@
               },
               "depends_on": [
                 {
-                  "renewal": "No",
-                  "rsnvac": [
-                    "First let of conversion, rehabilitation or acquired property",
-                    "First let of leased property"
-                  ]
+                  "renewal": 0,
+                  "rsnvac": [12, 13]
                 }
               ]
             }
@@ -995,7 +983,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": ["Other"]
+                    "tenancyother": [4]
                   }
                 },
                 "tenancyother": {
@@ -1006,7 +994,7 @@
               },
               "depends_on": [
                 {
-                  "startertenancy": "No"
+                  "startertenancy": 1
                 }
               ]
             },
@@ -1037,7 +1025,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": ["Other"]
+                    "tenancyother": [4]
                   }
                 },
                 "tenancyother": {
@@ -1048,7 +1036,7 @@
               },
               "depends_on": [
                 {
-                  "startertenancy": "Yes"
+                  "startertenancy": 0
                 }
               ]
             },
@@ -1068,8 +1056,8 @@
                 }
               },
               "depends_on": [
-                { "tenancy": "Secure (including flexible)" },
-                { "tenancy": "Assured Shorthold" }
+                { "tenancy": 3 },
+                { "tenancy": 1 }
               ]
             },
             "letting_in_sheltered_accommodation": {
@@ -1102,7 +1090,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": "Supported housing"
+                  "needstype": 0
                 }
               ]
             }
@@ -2327,7 +2315,7 @@
                   }
                 }
               },
-              "depends_on":  [{ "renewal": "No" }]
+              "depends_on":  [{ "renewal": 0 }]
             },
             "time_on_la_waiting_list": {
               "header": "",
@@ -2369,7 +2357,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [{ "renewal": 0 }]
             },
             "reason_for_leaving_last_settled_home": {
               "header": "",
@@ -2488,7 +2476,7 @@
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": ["Other"]
+                    "other_reason_for_leaving_last_settled_home": [31]
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
@@ -2497,7 +2485,7 @@
                   "type": "text"
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [{ "renewal": 0 }]
             },
             "reason_for_leaving_last_settled_home_renewal": {
               "header": "",
@@ -2518,7 +2506,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "Yes" }]
+              "depends_on": [{ "renewal": 1 }]
             },
             "previous_housing_situation": {
               "header": "",
@@ -2602,7 +2590,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [{ "renewal": 0 }]
             },
             "previous_housing_situation_renewal": {
               "header": "",
@@ -2623,7 +2611,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "Yes", "needstype": "Supported housing" }]
+              "depends_on": [{ "renewal": 1, "needstype": 0 }]
             },
             "underoccupation_benefitcap": {
               "header": "",
@@ -2656,7 +2644,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [{ "renewal": 0 }]
             },
             "homelessness": {
               "header": "",
@@ -2680,7 +2668,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": "No" }]
+              "depends_on": [{ "renewal": 0 }]
             },
             "previous_postcode": {
               "header": "",
@@ -2695,7 +2683,7 @@
                     "0": { "value": "No" }
                   },
                   "conditional_for": {
-                    "previous_postcode": ["Yes"]
+                    "previous_postcode": [1]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2730,7 +2718,7 @@
                     "0": { "value": "No" }
                   },
                   "conditional_for": {
-                    "prevloc": ["Yes"]
+                    "prevloc": [1]
                   }
                 },
                 "prevloc": {
@@ -3191,7 +3179,7 @@
               },
               "depends_on": [
                 {
-                  "reasonpref": "Yes"
+                  "reasonpref": 0
                 }
               ]
             },
@@ -3273,8 +3261,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": "General needs",
-                  "renewal": "No"
+                  "needstype": 1,
+                  "renewal": 0
                 }
               ]
             },
@@ -3330,8 +3318,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": "General needs",
-                  "renewal": "No"
+                  "needstype": 1,
+                  "renewal": 0
                 }
               ]
             },
@@ -3387,8 +3375,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": "Supported housing",
-                  "renewal": "No"
+                  "needstype": 0,
+                  "renewal": 0
                 }
               ]
             },
@@ -3447,8 +3435,8 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": "Supported housing",
-                  "renewal": "No"
+                  "needstype": 0,
+                  "renewal": 0
                 }
               ]
             }
@@ -3494,7 +3482,7 @@
               }
             },
             "net_income": {
-              "depends_on": [{ "net_income_known": "Yes" }],
+              "depends_on": [{ "net_income_known": 0 }],
               "header": "Household’s combined income after tax",
               "description": "",
               "questions": {
@@ -3511,15 +3499,15 @@
                   "suffix": [
                     {
                       "label": "every week",
-                      "depends_on": { "incfreq": "Weekly" }
+                      "depends_on": { "incfreq": 0 }
                     },
                     {
                       "label": "every month",
-                      "depends_on": { "incfreq": "Monthly" }
+                      "depends_on": { "incfreq": 1 }
                     },
                     {
                       "label": "every month",
-                      "depends_on": { "incfreq": "Yearly" }
+                      "depends_on": { "incfreq": 2 }
                     }
                   ]
                 },
@@ -3640,7 +3628,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": "Supported housing"
+                  "needstype": 0
                 }
               ]
             },
@@ -3686,7 +3674,7 @@
               },
               "depends_on": [
                 {
-                  "household_charge": "Yes"
+                  "household_charge": 0
                 },
                 {
                   "household_charge": null
@@ -3711,7 +3699,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -3726,63 +3714,63 @@
               },
               "depends_on": [
                 {
-                  "period": "Weekly for 52 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 8,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 52 weeks",
-                  "needstype": "Supported housing",
+                  "period": 8,
+                  "needstype": 0,
                   "household_charge": null
                 },
                 {
-                  "period": "Weekly for 50 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 3,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 50 weeks",
-                  "needstype": "Supported housing",
+                  "period": 3,
+                  "needstype": 0,
                   "household_charge": null
                 },
                 {
-                  "period": "Weekly for 49 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 4,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 49 weeks",
-                  "needstype": "Supported housing",
+                  "period": 4,
+                  "needstype": 0,
                   "household_charge": null
                 },
                 {
-                  "period": "Weekly for 48 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 5,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 48 weeks",
-                  "needstype": "Supported housing",
+                  "period": 5,
+                  "needstype": 0,
                   "household_charge": null
                 },
                 {
-                  "period": "Weekly for 47 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 6,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 47 weeks",
-                  "needstype": "Supported housing",
+                  "period": 6,
+                  "needstype": 0,
                   "household_charge": null
                 },
                 {
-                  "period": "Weekly for 46 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 7,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Weekly for 46 weeks",
-                  "needstype": "Supported housing",
+                  "period": 7,
+                  "needstype": 0,
                   "household_charge": null
                 }
               ]
@@ -3805,7 +3793,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -3820,13 +3808,13 @@
               },
               "depends_on": [
                 {
-                  "period": "Every 2 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 0,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Every 2 weeks",
-                  "needstype": "Supported housing",
+                  "period": 0,
+                  "needstype": 0,
                   "household_charge": null
                 }
               ]
@@ -3849,7 +3837,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -3864,13 +3852,13 @@
               },
               "depends_on": [
                 {
-                  "period": "Every 4 weeks",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 1,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Every 4 weeks",
-                  "needstype": "Supported housing",
+                  "period": 1,
+                  "needstype": 0,
                   "household_charge": null
                 }
               ]
@@ -3893,7 +3881,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": ["Yes"]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -3908,13 +3896,13 @@
               },
               "depends_on": [
                 {
-                  "period": "Every calendar month",
-                  "needstype": "Supported housing",
-                  "household_charge": "Yes"
+                  "period": 2,
+                  "needstype": 0,
+                  "household_charge": 0
                 },
                 {
-                  "period": "Every calendar month",
-                  "needstype": "Supported housing",
+                  "period": 2,
+                  "needstype": 0,
                   "household_charge": null
                 }
               ]
@@ -3996,122 +3984,122 @@
               },
               "depends_on": [
                 {
-                  "period": "Weekly for 52 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 8,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 52 weeks",
+                  "period": 8,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 50 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 3,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 50 weeks",
+                  "period": 3,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 49 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 4,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 49 weeks",
+                  "period": 4,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 48 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 5,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 48 weeks",
+                  "period": 5,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 47 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 6,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 47 weeks",
+                  "period": 6,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 46 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": "No"
+                  "period": 7,
+                  "household_charge": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 46 weeks",
+                  "period": 7,
                   "household_charge": null,
-                  "is_carehome": "No"
+                  "is_carehome": 0
                 },
                 {
-                  "period": "Weekly for 52 weeks",
-                  "household_charge": "Yes",
+                  "period": 8,
+                  "household_charge": 0,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 52 weeks",
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": "Weekly for 50 weeks",
-                  "household_charge": "Yes",
-                  "is_carehome": null
-                },
-                {
-                  "period": "Weekly for 50 weeks",
+                  "period": 8,
                   "household_charge": null,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 49 weeks",
-                  "household_charge": "Yes",
+                  "period": 3,
+                  "household_charge": 0,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 49 weeks",
+                  "period": 3,
                   "household_charge": null,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 48 weeks",
-                  "household_charge": "Yes",
+                  "period": 4,
+                  "household_charge": 0,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 48 weeks",
+                  "period": 4,
                   "household_charge": null,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 47 weeks",
-                  "household_charge": "Yes",
+                  "period": 5,
+                  "household_charge": 0,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 47 weeks",
+                  "period": 5,
                   "household_charge": null,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 46 weeks",
-                  "household_charge": "Yes",
+                  "period": 6,
+                  "household_charge": 0,
                   "is_carehome": null
                 },
                 {
-                  "period": "Weekly for 46 weeks",
+                  "period": 6,
+                  "household_charge": null,
+                  "is_carehome": null
+                },
+                {
+                  "period": 7,
+                  "household_charge": 0,
+                  "is_carehome": null
+                },
+                {
+                  "period": 7,
                   "household_charge": null,
                   "is_carehome": null
                 }
@@ -4194,23 +4182,23 @@
               },
               "depends_on": [
                 {
-                  "household_charge": "Yes",
-                  "period": "Every 2 weeks",
-                  "is_carehome": "No"
+                  "household_charge": 0,
+                  "period": 0,
+                  "is_carehome": 0
                 },
                 {
                   "household_charge": null,
-                  "period": "Every 2 weeks",
-                  "is_carehome": "No"
+                  "period": 0,
+                  "is_carehome": 0
                 },
                 {
-                  "household_charge": "Yes",
-                  "period": "Every 2 weeks",
+                  "household_charge": 0,
+                  "period": 0,
                   "is_carehome": null
                 },
                 {
                   "household_charge": null,
-                  "period": "Every 2 weeks",
+                  "period": 0,
                   "is_carehome": null
                 }
               ]
@@ -4292,23 +4280,23 @@
               },
               "depends_on": [
                 {
-                  "household_charge": "Yes",
-                  "period": "Every 4 weeks",
-                  "is_carehome": "No"
+                  "household_charge": 0,
+                  "period": 1,
+                  "is_carehome": 0
                 },
                 {
                   "household_charge": null,
-                  "period": "Every 4 weeks",
-                  "is_carehome": "No"
+                  "period": 1,
+                  "is_carehome": 0
                 },
                 {
-                  "household_charge": "Yes",
-                  "period": "Every 4 weeks",
+                  "household_charge": 0,
+                  "period": 1,
                   "is_carehome": null
                 },
                 {
                   "household_charge": null,
-                  "period": "Every 4 weeks",
+                  "period": 1,
                   "is_carehome": null
                 }
               ]
@@ -4390,23 +4378,23 @@
               },
               "depends_on": [
                 {
-                  "household_charge": "Yes",
-                  "period": "Every calendar month",
-                  "is_carehome": "No"
+                  "household_charge": 0,
+                  "period": 2,
+                  "is_carehome": 0
                 },
                 {
                   "household_charge": null,
-                  "period": "Every calendar month",
-                  "is_carehome": "No"
+                  "period": 2,
+                  "is_carehome": 0
                 },
                 {
-                  "household_charge": "Yes",
-                  "period": "Every calendar month",
+                  "household_charge": 0,
+                  "period": 2,
                   "is_carehome": null
                 },
                 {
                   "household_charge": null,
-                  "period": "Every calendar month",
+                  "period": 2,
                   "is_carehome": null
                 }
               ]
@@ -4432,11 +4420,11 @@
               },
               "depends_on": [
                 {
-                  "has_benefits": "Yes",
-                  "household_charge": "Yes"
+                  "has_benefits": 1,
+                  "household_charge": 0
                 },
                 {
-                  "has_benefits": "Yes",
+                  "has_benefits": 1,
                   "household_charge": null
                 }
               ]
@@ -4459,8 +4447,8 @@
               },
               "depends_on": [
                 {
-                  "has_benefits": "Yes",
-                  "hbrentshortfall": "Yes"
+                  "has_benefits": 1,
+                  "hbrentshortfall": 0
                 }
               ]
             }
