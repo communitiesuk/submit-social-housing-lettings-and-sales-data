@@ -27,11 +27,11 @@ RSpec.describe "Form Conditional Questions" do
     it "shows conditional questions if the required answer is selected and hides it again when a different answer option is selected", js: true do
       visit("/logs/#{id}/armed-forces")
       # Something about our styling makes the selenium webdriver think the actual radio buttons are not visible so we allow label click here
-      choose("case-log-armedforces-yes-the-tenant-is-a-current-or-former-regular-field", allow_label_click: true)
+      choose("case-log-armedforces-yes-the-person-is-a-current-or-former-regular-field", allow_label_click: true)
       fill_in("case-log-leftreg-field", with: "text")
       choose("case-log-armedforces-no-field", allow_label_click: true)
       expect(page).not_to have_field("case-log-leftreg-field")
-      choose("case-log-armedforces-yes-the-tenant-is-a-current-or-former-regular-field", allow_label_click: true)
+      choose("case-log-armedforces-yes-the-person-is-a-current-or-former-regular-field", allow_label_click: true)
       expect(page).to have_field("case-log-leftreg-field", with: "")
     end
   end
