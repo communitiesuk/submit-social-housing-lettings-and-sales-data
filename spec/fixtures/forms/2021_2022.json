@@ -725,7 +725,8 @@
                       }
                     }
                   }
-                }
+                },
+                "depends_on":  [{ "renewal": "No" }]
               },
               "time_on_la_waiting_list": {
                 "questions": {

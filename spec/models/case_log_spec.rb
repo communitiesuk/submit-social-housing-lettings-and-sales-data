@@ -544,6 +544,35 @@ RSpec.describe CaseLog do
         expect { case_log.update(startdate: Time.zone.local(2015, 1, 1)) }.not_to raise_error
       end
     end
+
+    context "when it changes from a renewal to not a renewal" do
+      let(:case_log) { FactoryBot.create(:case_log) }
+
+      it "resets inferred layear value" do
+        case_log.update!({ renewal: "Yes" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["layear"]).to eq(2)
+        expect(case_log["layear"]).to eq("Less than 1 year")
+
+        case_log.update!({ renewal: "No" })
+        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["layear"]).to eq(nil)
+        expect(case_log["layear"]).to eq(nil)
+      end
+    end
+
+    context "when it is not a renewal" do
+      let(:case_log) { FactoryBot.create(:case_log) }
+
+      it "saves layear value" do
+        case_log.update!({ renewal: "No", layear: "1 year but under 2 years" })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["layear"]).to eq(7)
+        expect(case_log["layear"]).to eq("1 year but under 2 years")
+      end
+    end
   end
 
   describe "paper trail" do

@@ -219,6 +219,16 @@ private
     form.invalidated_page_questions(self).each do |question|
       public_send("#{question.id}=", nil) if respond_to?(question.id.to_s)
     end
+
+    dependent_questions = { layear: [{ key: :renewal, value: "No" }] }
+
+    dependent_questions.each do |dependent, conditions|
+      condition_key = conditions.first[:key]
+      condition_value = conditions.first[:value]
+      if public_send("#{condition_key}_changed?") && condition_value == public_send(condition_key) && !public_send("#{dependent}_changed?")
+        self.layear = nil
+      end
+    end
   end
 
   def dynamically_not_required
@@ -256,11 +266,11 @@ private
     end
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge == "Yes" ? "No" : "Yes"
-    self.layear = "Less than 1 year" if renewal == "Yes"
     self.underoccupation_benefitcap = "No" if renewal == "Yes" && year == 2021
     if renewal == "Yes"
       self.homeless = "No"
       self.referral = "Internal transfer"
+      self.layear = "Less than 1 year"
     end
     if needstype == "General needs"
       self.prevten = "Fixed-term private registered provider (PRP) general needs tenancy" if managing_organisation.provider_type == "PRP"
