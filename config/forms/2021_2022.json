@@ -2170,7 +2170,7 @@
               "questions": {
                 "accessibility_requirements": {
                   "header": "Does anybody in the household have any disabled access needs?",
-                  "hint_text": "Select all that apply.",
+                  "hint_text": "",
                   "type": "checkbox",
                   "check_answer_label": "Anybody in household with disabled access needs",
                   "answer_options": {
