@@ -396,6 +396,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets la if la is not known" do
+        address_case_log.update!({ previous_postcode_known: "No" })
         address_case_log.update!({ previous_la_known: "Yes", prevloc: "Scotland" })
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["prevloc"]).to eq("S92000003")
