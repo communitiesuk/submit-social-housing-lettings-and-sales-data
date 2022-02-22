@@ -90,7 +90,7 @@
                 "startdate": {
                   "check_answer_label": "Tenancy start date",
                   "header": "What is the tenancy start date?",
-                  "hint_text": "For example, 27 3 2021.",
+                  "hint_text": "The tenancy must start on or after 1 April 2021 to be within the current collection window.",
                   "type": "date"
                 }
               }
