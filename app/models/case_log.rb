@@ -230,7 +230,7 @@ private
       condition_key = conditions.first[:key]
       condition_value = conditions.first[:value]
       if public_send("#{condition_key}_changed?") && condition_value == public_send(condition_key) && !public_send("#{dependent}_changed?")
-        self.layear = nil
+        self[dependent] = nil
       end
     end
   end

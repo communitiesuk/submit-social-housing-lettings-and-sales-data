@@ -110,7 +110,7 @@ FactoryBot.define do
       net_income_known { "Yes" }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
-      renewal { 1 }
+      renewal { "No" }
       rent_type { 1 }
       intermediate_rent_product_name { 2 }
       needstype { 1 }
