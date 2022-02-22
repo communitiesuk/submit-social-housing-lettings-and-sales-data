@@ -2056,7 +2056,7 @@
               "questions": {
                 "armedforces": {
                   "header": "Does anybody in the household have any links to the UK armed forces?",
-                  "hint_text": "This excludes national service.<br> If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
+                  "hint_text": "This excludes national service.<br><br>If there are several people in the household with links to the UK armed forces, you should answer for the regular. If there’s no regular, answer for the reserve. If there’s no reserve, answer for the spouse or civil partner.",
                   "type": "radio",
                   "check_answer_label": "Household links to UK armed forces",
                   "answer_options": {
