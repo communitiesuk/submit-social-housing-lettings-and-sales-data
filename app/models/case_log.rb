@@ -213,14 +213,18 @@ private
                   end
   end
 
-  def reset_invalidated_dependent_fields!
-    return unless form
-
+  def reset_not_routed_questions
     form.invalidated_page_questions(self).each do |question|
-      public_send("#{question.id}=", nil) if respond_to?(question.id.to_s)
+      enabled = form.enabled_page_questions(self)
+      contains_selected_answer_option = enabled.map(&:id).include?(question.id) && enabled.find { |q| q.id == question.id }.answer_options.values.map { |x| x["value"] }.include?(public_send(question.id))
+      unless contains_selected_answer_option
+        public_send("#{question.id}=", nil) if respond_to?(question.id.to_s)
+      end
     end
+  end
 
-    dependent_questions = { layear: [{ key: :renewal, value: "No" }] }
+  def reset_derived_questions
+    dependent_questions = { layear: [{ key: :renewal, value: "No" }], homeless: [{ key: :renewal, value: "No" }] }
 
     dependent_questions.each do |dependent, conditions|
       condition_key = conditions.first[:key]
@@ -229,6 +233,13 @@ private
         self.layear = nil
       end
     end
+  end
+
+  def reset_invalidated_dependent_fields!
+    return unless form
+
+    reset_not_routed_questions
+    reset_derived_questions
   end
 
   def dynamically_not_required

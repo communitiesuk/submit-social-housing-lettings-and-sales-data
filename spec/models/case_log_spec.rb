@@ -532,8 +532,16 @@ RSpec.describe CaseLog do
     context "with two pages having the same question key, only one's dependency is met" do
       let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
 
-      it "does not clear the answer" do
+      it "does not clear the value for answers that apply to both pages" do
         expect(case_log.cbl).to eq("Yes")
+      end
+
+      it "does clear the value for answers that do not apply for invalidated page" do
+        case_log.update!({ wchair: "Yes", sex2: "Female", age2: 33 })
+        case_log.update!({ cbl: "No"  })
+        case_log.update!({ preg_occ: "Yes" })
+
+        expect(case_log.cbl).to eq(nil)
       end
     end
 
@@ -573,6 +581,7 @@ RSpec.describe CaseLog do
         expect(case_log["layear"]).to eq("1 year but under 2 years")
       end
     end
+
   end
 
   describe "paper trail" do
