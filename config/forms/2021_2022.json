@@ -236,19 +236,11 @@
                     "0": {
                       "value": "No"
                     }
+                  },
+                  "conditional_for": {
+                    "la": ["Yes"]
                   }
-                }
-              },
-              "depends_on": [
-                {
-                  "is_la_inferred": false
-                }
-              ]
-            },
-            "select_local_authority": {
-              "header": "",
-              "description": "",
-              "questions": {
+                },
                 "la": {
                   "check_answer_label": "Local Authority",
                   "header": "Select a local authority",
@@ -577,7 +569,6 @@
               },
               "depends_on": [
                 {
-                  "la_known": "Yes",
                   "is_la_inferred": false
                 }
               ]
@@ -2487,7 +2478,7 @@
                 }
               }
             },
-            "previous_la_known": {
+            "previous_la": {
               "header": "",
               "description": "",
               "questions": {
@@ -2496,22 +2487,19 @@
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ’last settled home’.",
                   "type": "radio",
+                  "hidden_in_check_answers": true,
                   "answer_options": {
                     "1": { "value": "Yes" },
                     "0": { "value": "No" }
+                  },
+                  "conditional_for": {
+                    "prevloc": ["Yes"]
                   }
-                }
-              },
-              "depends_on": [{ "is_previous_la_inferred": false }]
-            },
-            "previous_la": {
-              "header": "",
-              "description": "",
-              "questions": {
+                },
                 "prevloc": {
                   "check_answer_label": "Location of household’s last settled accommodation",
-                  "header": "Which local authority area did the household live in immediately before this letting?",
-                  "hint_text": "Includes temporary accommodation.",
+                  "header": "Select a local authority",
+                  "hint_text": "Select ‘Northern Ireland’, ‘Scotland’, ‘Wales’ or ‘Outside the UK’ if the household’s last settled home was outside England.",
                   "type": "select",
                   "answer_options": {
                     "": "Select an option",
@@ -2898,12 +2886,14 @@
                     "S92000003": "Scotland",
                     "W92000004": "Wales",
                     "9300000XX": "Outside UK"
+                  },
+                  "inferred_check_answers_value": {
+                    "condition": { "previous_la_known": "No" },
+                    "value": "Not known"
                   }
                 }
               },
-              "depends_on": [
-                { "previous_la_known": "Yes", "is_previous_la_inferred": false }
-              ]
+              "depends_on": [{ "is_previous_la_inferred": false }]
             },
             "reasonable_preference": {
               "header": "",
