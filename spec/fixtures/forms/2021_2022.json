@@ -396,9 +396,6 @@
                     "answer_options": {
                       "0": {
                         "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
                       }
                     }
                   }
@@ -725,7 +722,8 @@
                       }
                     }
                   }
-                }
+                },
+                "depends_on":  [{ "renewal": "No" }]
               },
               "time_on_la_waiting_list": {
                 "questions": {

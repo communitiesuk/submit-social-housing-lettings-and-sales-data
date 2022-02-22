@@ -97,7 +97,7 @@
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>
-    <renewal>1</renewal>
+    <renewal>No</renewal>
     <rent_type>1</rent_type>
     <intermediate_rent_product_name>2</intermediate_rent_product_name>
     <purchaser_code>798794</purchaser_code>

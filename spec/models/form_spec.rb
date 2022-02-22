@@ -131,7 +131,7 @@ RSpec.describe Form, type: :model do
 
   describe "invalidated_page_questions" do
     context "when dependencies are not met" do
-      let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question declaration] }
+      let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question layear declaration] }
 
       it "returns an array of question keys whose pages conditions are not met" do
         expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
@@ -139,7 +139,7 @@ RSpec.describe Form, type: :model do
     end
 
     context "with two pages having the same question and only one has dependencies met" do
-      let(:expected_invalid) { %w[la_known conditional_question_no_second_question dependent_question declaration] }
+      let(:expected_invalid) { %w[la_known cbl conditional_question_no_second_question dependent_question layear declaration] }
 
       it "returns an array of question keys whose pages conditions are not met" do
         case_log["preg_occ"] = "No"
