@@ -396,15 +396,15 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets la if la is not known" do
-        address_case_log.update!({ previous_la_known: "Yes", previous_la: "Scotland" })
-        record_from_db = ActiveRecord::Base.connection.execute("select previous_la from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["previous_la"]).to eq(nil)
-        expect(address_case_log.previous_la).to eq("Scotland")
+        address_case_log.update!({ previous_la_known: "Yes", prevloc: "Scotland" })
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["prevloc"]).to eq("S92000003")
+        expect(address_case_log.prevloc).to eq("Scotland")
 
         address_case_log.update!({ previous_la_known: "No" })
-        record_from_db = ActiveRecord::Base.connection.execute("select previous_la from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(address_case_log.previous_la).to eq(nil)
-        expect(record_from_db["previous_la"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(address_case_log.prevloc).to eq(nil)
+        expect(record_from_db["prevloc"]).to eq(nil)
       end
 
       it "changes the prevloc if previous postcode changes from not known to known and provided" do

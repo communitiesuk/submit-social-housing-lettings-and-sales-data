@@ -309,11 +309,11 @@ private
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "property_postcode", "postcode", "postcod2", self.la_known)
+    reset_location(is_la_inferred, "la", "is_la_inferred", "property_postcode", "postcode", "postcod2", la_known)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "previous_postcode", "ppostc1", "ppostc2", self.previous_la_known)
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "previous_postcode", "ppostc1", "ppostc2", previous_la_known)
   end
 
   def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key, is_la_known)
