@@ -1072,7 +1072,8 @@
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               },
               "depends_on": [
