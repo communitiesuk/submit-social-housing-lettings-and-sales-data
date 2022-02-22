@@ -217,8 +217,8 @@ private
     form.invalidated_page_questions(self).each do |question|
       enabled = form.enabled_page_questions(self)
       contains_selected_answer_option = enabled.map(&:id).include?(question.id) && enabled.find { |q| q.id == question.id }.answer_options.values.map { |x| x["value"] }.include?(public_send(question.id))
-      unless contains_selected_answer_option
-        public_send("#{question.id}=", nil) if respond_to?(question.id.to_s)
+      if !contains_selected_answer_option && respond_to?(question.id.to_s)
+        public_send("#{question.id}=", nil)
       end
     end
   end

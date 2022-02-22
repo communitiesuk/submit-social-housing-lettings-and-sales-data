@@ -538,7 +538,7 @@ RSpec.describe CaseLog do
 
       it "does clear the value for answers that do not apply for invalidated page" do
         case_log.update!({ wchair: "Yes", sex2: "Female", age2: 33 })
-        case_log.update!({ cbl: "No"  })
+        case_log.update!({ cbl: "No" })
         case_log.update!({ preg_occ: "Yes" })
 
         expect(case_log.cbl).to eq(nil)
@@ -581,7 +581,6 @@ RSpec.describe CaseLog do
         expect(case_log["layear"]).to eq("1 year but under 2 years")
       end
     end
-
   end
 
   describe "paper trail" do
