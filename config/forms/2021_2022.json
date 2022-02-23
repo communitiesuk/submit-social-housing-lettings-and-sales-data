@@ -1091,11 +1091,11 @@
                     "2": {
                       "value": "No"
                     },
-                    "3": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -3577,14 +3577,14 @@
                     "4": {
                       "value": "None"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "5": {
                       "value": "Don’t know"
                     },
                     "6": {
                       "value": "Tenant prefers not to say"
-                    },
-                    "divider": {
-                      "value": true
                     }
                   }
                 }
@@ -3609,11 +3609,11 @@
                     "2": {
                       "value": "None"
                     },
-                    "3": {
-                      "value": "Don’t know"
-                    },
                     "divider": {
                       "value": true
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
