@@ -78,6 +78,7 @@ en:
         under_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
+      negative_currency: "Enter an amount above 0"
 
     household:
       reasonpref:

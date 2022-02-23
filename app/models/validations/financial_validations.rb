@@ -40,6 +40,15 @@ module Validations::FinancialValidations
     end
   end
 
+  def validate_negative_currency(record)
+    t = %w[earnings brent scharge pscharge supcharg]
+    t.each do |x|
+      if record[x].present? && record[x].negative?
+        record.errors.add x.to_sym, I18n.t("validations.financial.negative_currency")
+      end
+    end
+  end
+
   def validate_tshortfall(record)
     is_yes = record.hbrentshortfall == "Yes"
     hb_donotknow = record.hb == "Don’t know"
