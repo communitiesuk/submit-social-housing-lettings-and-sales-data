@@ -227,7 +227,7 @@ private
   def reset_derived_questions
     dependent_questions = { layear: [{ key: :renewal, value: "No" }],
                             homeless: [{ key: :renewal, value: "No" }],
-                            referral: [{ key: :renewal, value: "No" }]}
+                            referral: [{ key: :renewal, value: "No" }] }
 
     dependent_questions.each do |dependent, conditions|
       condition_key = conditions.first[:key]
