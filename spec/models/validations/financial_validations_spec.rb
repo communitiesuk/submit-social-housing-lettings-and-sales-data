@@ -152,4 +152,28 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
   end
+
+  describe "financial validations" do
+    context "when currency is negative" do
+      it "returns error" do
+        record.earnings = -8
+        record.brent = -2
+        record.scharge = -134
+        record.pscharge = -10_024
+        record.supcharg = -1
+
+        financial_validator.validate_negative_currency(record)
+        expect(record.errors["earnings"])
+          .to include(match I18n.t("validations.financial.negative_currency"))
+        expect(record.errors["brent"])
+          .to include(match I18n.t("validations.financial.negative_currency"))
+        expect(record.errors["scharge"])
+          .to include(match I18n.t("validations.financial.negative_currency"))
+        expect(record.errors["pscharge"])
+          .to include(match I18n.t("validations.financial.negative_currency"))
+        expect(record.errors["supcharg"])
+          .to include(match I18n.t("validations.financial.negative_currency"))
+      end
+    end
+  end
 end
