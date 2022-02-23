@@ -72,7 +72,7 @@ RSpec.describe Validations::HouseholdValidations do
           expect(record.errors["reasonpref"])
             .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
           expect(record.errors["homeless"])
-            .to include(match I18n.t("validations.household.reasonpref.not_homeless"))
+            .to include(match I18n.t("validations.household.homeless.reasonpref.not_homeless"))
         end
       end
 
