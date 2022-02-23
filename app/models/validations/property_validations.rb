@@ -66,16 +66,23 @@ module Validations::PropertyValidations
   end
 
   def validate_shared_housing_rooms(record)
+    if record.beds.present? && record.beds.negative?
+      record.errors.add :beds, I18n.t("validations.property.beds.negative")
+    end
+
     unless record.unittype_gn.nil?
       if record.unittype_gn == "Bedsit" && record.beds != 1 && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
+        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
       end
 
       if record.other_hhmemb&.zero? && record.unittype_gn.include?("Shared") &&
           !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
+        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
       elsif record.unittype_gn.include?("Shared") && record.beds.present? && !record.beds.to_i.between?(1, 7)
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
+        record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
       end
     end
   end

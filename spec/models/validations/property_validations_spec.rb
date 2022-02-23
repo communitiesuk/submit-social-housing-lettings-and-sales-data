@@ -75,6 +75,7 @@ RSpec.describe Validations::PropertyValidations do
         record.unittype_gn = "Bedsit"
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
       end
     end
 
@@ -86,6 +87,7 @@ RSpec.describe Validations::PropertyValidations do
         record.unittype_gn = "Bedsit"
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
       end
     end
 
@@ -98,6 +100,7 @@ RSpec.describe Validations::PropertyValidations do
         record.other_hhmemb = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
       end
     end
 
@@ -110,6 +113,7 @@ RSpec.describe Validations::PropertyValidations do
         record.other_hhmemb = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
       end
     end
 
@@ -122,6 +126,15 @@ RSpec.describe Validations::PropertyValidations do
         record.other_hhmemb = 0
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
+      end
+    end
+
+    context "when a negative number of bedrooms is entered" do
+      it "adds an error" do
+        record.beds = -4
+        property_validator.validate_shared_housing_rooms(record)
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.negative"))
       end
     end
   end

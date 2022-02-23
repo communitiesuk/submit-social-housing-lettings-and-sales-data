@@ -65,6 +65,8 @@ en:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
         one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
+      beds:
+        negative: "Number of bedrooms has to be greater than 0"
 
     financial:
       tshortfall:
