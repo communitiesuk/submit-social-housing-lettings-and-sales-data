@@ -216,7 +216,8 @@ private
   def reset_not_routed_questions
     form.invalidated_page_questions(self).each do |question|
       enabled = form.enabled_page_questions(self)
-      contains_selected_answer_option = enabled.map(&:id).include?(question.id) && enabled.find { |q| q.id == question.id }.answer_options.values.map { |x| x["value"] }.include?(public_send(question.id))
+      answer_options = enabled.map(&:id).include?(question.id) ? enabled.find { |q| q.id == question.id }.answer_options : []
+      contains_selected_answer_option = answer_options.present? ? answer_options.values.map { |x| x["value"] }.include?(public_send(question.id)) : false
       if !contains_selected_answer_option && respond_to?(question.id.to_s)
         public_send("#{question.id}=", nil)
       end
