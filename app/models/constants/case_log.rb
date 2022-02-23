@@ -70,9 +70,9 @@ module Constants::CaseLog
 
   LEFTREG = {
     "Yes" => 6,
-    "No - they left up to 5 years ago" => 4,
-    "No - they left more than 5 years ago" => 5,
-    "Prefer not to say" => 3,
+    "No, they left up to and including 5 years ago" => 4,
+    "No, they left more than 5 years ago" => 5,
+    "Person prefers not to say" => 3,
   }.freeze
 
   NATIONAL = {
@@ -99,7 +99,7 @@ module Constants::CaseLog
   PREGNANCY = {
     "Yes" => 1,
     "No" => 2,
-    "Prefer not to say" => 3,
+    "Tenant prefers not to say" => 3,
   }.freeze
 
   PREVIOUS_TENANCY = {
@@ -980,11 +980,11 @@ module Constants::CaseLog
   }.freeze
 
   ARMED_FORCES = {
-    "A current or former regular in the UK Armed Forces (excluding National Service)" => 1,
+    "Yes, the person is a current or former regular" => 1,
     "No" => 2,
-    "Tenant prefers not to say" => 3,
-    "A current or former reserve in the UK Armed Forces (excluding National Service)" => 4,
-    "A spouse / civil partner of a UK Armed Forces member who has separated or been bereaved within the last 2 years" => 5,
+    "Person prefers not to say" => 3,
+    "Yes, the person is a current or former reserve" => 4,
+    "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years" => 5,
   }.freeze
 
   RENT_TYPE = {
