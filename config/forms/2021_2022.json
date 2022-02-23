@@ -2135,7 +2135,7 @@
               "depends_on": [{ "renewal": "No" }]
             },
             "reason_for_leaving_last_settled_home": {
-              "header": "Leaving their last settled home",
+              "header": "",
               "description": "",
               "questions": {
                 "reason": {
@@ -2263,7 +2263,7 @@
               "depends_on": [{ "renewal": "No" }]
             },
             "reason_for_leaving_last_settled_home_renewal": {
-              "header": "Leaving their last settled home",
+              "header": "",
               "description": "",
               "questions": {
                 "reason": {
@@ -2922,13 +2922,13 @@
               }
             },
             "reasonable_preference_reason": {
-              "header": "Reason for reasonable preference being given",
+              "header": "",
               "description": "",
               "questions": {
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why was the household given ‘reasonable preference’?",
-                  "hint_text": "",
+                  "hint_text": "Select all that apply",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": {

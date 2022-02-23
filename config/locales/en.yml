@@ -121,6 +121,8 @@ en:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
         other:
           internal_transfer: "Answer cannot be other homelessness as you already told us this tenancy was an internal transfer"
+        reasonpref:
+          not_homeless: "Can not be No if household was given reasonable preference"
 
 
     tenancy:
