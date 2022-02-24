@@ -27,6 +27,10 @@ module Validations::PropertyValidations
     if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && (record.rent_type == "London Affordable rent" || record.rent_type == "London living rent")
       record.errors.add :la, I18n.t("validations.property.la.london_rent")
     end
+
+    if record.la_known == "Yes" && record.la.blank?
+      record.errors.add :la, I18n.t("validations.property.la.la_known")
+    end
   end
 
   FIRST_LET_VACANCY_REASONS = ["First let of new-build property",

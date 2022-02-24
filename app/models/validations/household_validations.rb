@@ -90,6 +90,12 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_prevloc(record)
+    if record.previous_la_known == "Yes" && record.prevloc.blank?
+      record.errors.add :prevloc, I18n.t("validations.household.previous_la_known")
+    end
+  end
+
 private
 
   def women_of_child_bearing_age_in_household(record)
