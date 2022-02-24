@@ -25,7 +25,7 @@ FactoryBot.define do
     trait :conditional_section_complete do
       tenant_code { "TH356" }
       age1 { 34 }
-      sex1 { 1 }
+      sex1 { "M" }
       ethnic { 2 }
       national { 4 }
       ecstat1 { 2 }
@@ -36,7 +36,7 @@ FactoryBot.define do
       tenant_code { "BZ737" }
       postcode { "NW1 7TY" }
       age1 { 35 }
-      sex1 { 0 }
+      sex1 { "F" }
       ethnic { 2 }
       national { 4 }
       prevten { 6 }
@@ -45,7 +45,7 @@ FactoryBot.define do
       hhmemb { 2 }
       relat2 { 0 }
       age2 { 32 }
-      sex2 { 1 }
+      sex2 { "M" }
       ecstat2 { 5 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }

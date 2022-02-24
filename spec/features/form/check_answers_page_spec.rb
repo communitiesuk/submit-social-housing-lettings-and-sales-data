@@ -61,7 +61,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays answers given by the user for the question in the subsection" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
-      choose("case-log-sex1-2-field")
+      choose("case-log-sex1-x-field")
       click_button("Save and continue")
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
       expect(page).to have_content("28")
@@ -136,7 +136,7 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: 1,
+          sex1: "M",
           other_hhmemb: 0,
         )
       end
@@ -149,7 +149,7 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: 1,
+          sex1: "M",
           other_hhmemb: 0,
           armedforces: 3,
           illness: 0,
@@ -164,7 +164,7 @@ RSpec.describe "Form Check Answers Page" do
           managing_organisation: user.organisation,
           tenant_code: "123",
           age1: 35,
-          sex1: 1,
+          sex1: "M",
           other_hhmemb: 0,
           armedforces: 3,
           illness: 0,

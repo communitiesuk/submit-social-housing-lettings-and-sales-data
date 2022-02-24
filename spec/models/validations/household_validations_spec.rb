@@ -115,7 +115,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when there are no female tenants" do
       it "validates that pregnancy cannot be yes" do
         record.preg_occ = 0
-        record.sex1 = 1
+        record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
           .to include(match I18n.t("validations.household.preg_occ.no_female"))
@@ -123,7 +123,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "validates that pregnancy cannot be prefer not to say" do
         record.preg_occ = 2
-        record.sex1 = 1
+        record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
           .to include(match I18n.t("validations.household.preg_occ.no_female"))
@@ -134,7 +134,7 @@ RSpec.describe Validations::HouseholdValidations do
       context "but they are older than 50" do
         it "validates that pregnancy cannot be yes" do
           record.preg_occ = 0
-          record.sex1 = 0
+          record.sex1 = "F"
           record.age1 = 51
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"])
@@ -145,7 +145,7 @@ RSpec.describe Validations::HouseholdValidations do
       context "and they are the main tenant and under 51" do
         it "pregnancy can be yes" do
           record.preg_occ = 0
-          record.sex1 = 0
+          record.sex1 = "F"
           record.age1 = 32
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"]).to be_empty
@@ -155,9 +155,9 @@ RSpec.describe Validations::HouseholdValidations do
       context "and they are another household member and under 51" do
         it "pregnancy can be yes" do
           record.preg_occ = 0
-          record.sex1 = 1
+          record.sex1 = "M"
           record.age1 = 25
-          record.sex3 = 0
+          record.sex3 = "F"
           record.age3 = 32
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"]).to be_empty
@@ -400,7 +400,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when the household contains a retired male" do
       it "validates that person must be over 65" do
         record.age2 = 64
-        record.sex2 = 1
+        record.sex2 = "M"
         record.ecstat2 = 4
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["age2"])
@@ -409,7 +409,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "expects that person is over 65" do
         record.age2 = 66
-        record.sex2 = 1
+        record.sex2 = "M"
         record.ecstat2 = 4
         household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)
@@ -420,7 +420,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when the household contains a retired female" do
       it "validates that person must be over 60" do
         record.age2 = 59
-        record.sex2 = 0
+        record.sex2 = "F"
         record.ecstat2 = 4
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["age2"])
@@ -429,7 +429,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "expects that person is over 60" do
         record.age2 = 61
-        record.sex2 = 0
+        record.sex2 = "F"
         record.ecstat2 = 4
         household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)

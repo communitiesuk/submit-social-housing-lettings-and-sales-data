@@ -101,7 +101,7 @@ private
     (1..8).any? do |n|
       next if record["sex#{n}"].nil? || record["age#{n}"].nil?
 
-      (record["sex#{n}"])&.zero? && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
+      (record["sex#{n}"]) == "F" && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
     end
   end
 
@@ -160,10 +160,10 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status && gender
 
-    if gender == 1 && economic_status == 4 && age < 65
+    if gender == "M" && economic_status == 4 && age < 65
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_male")
     end
-    if gender && gender.zero? && economic_status == 4 && age < 60
+    if gender == "F" && economic_status == 4 && age < 60
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_female")
     end
   end

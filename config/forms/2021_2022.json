@@ -1136,16 +1136,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1427,16 +1427,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1518,16 +1518,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1609,16 +1609,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1700,16 +1700,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1791,16 +1791,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1881,16 +1881,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }
@@ -1971,16 +1971,16 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "F": {
                       "value": "Female"
                     },
-                    "1": {
+                    "M": {
                       "value": "Male"
                     },
-                    "2": {
+                    "X": {
                       "value": "Non-binary"
                     },
-                    "3": {
+                    "R": {
                       "value": "Prefer not to say"
                     }
                   }

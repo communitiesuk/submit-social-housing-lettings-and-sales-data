@@ -25,7 +25,7 @@ RSpec.describe "Form Saving Data" do
     {
       tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
       age1: { type: "numeric", answer: 25, path: "person_1_age" },
-      sex1: { type: "radio", answer: { 0 => "Female" }, path: "person_1_gender" },
+      sex1: { type: "radio", answer: { "F" => "Female" }, path: "person_1_gender" },
       other_hhmemb: { type: "numeric", answer: 2, path: "household_number_of_other_members" },
     }
   end
@@ -45,7 +45,7 @@ RSpec.describe "Form Saving Data" do
       when "text"
         fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
       when "radio"
-        choose("case-log-#{question.to_s.dasherize}-#{hsh[:answer].keys.first}-field")
+        choose("case-log-#{question.to_s.dasherize}-#{hsh[:answer].keys.first.downcase}-field")
       else
         fill_in("case-log-#{question.to_s.dasherize}-field", with: answer)
       end

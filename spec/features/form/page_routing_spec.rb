@@ -36,7 +36,7 @@ RSpec.describe "Form Page Routing" do
 
   it "can route based on multiple conditions", js: true do
     visit("/logs/#{id}/person-1-gender")
-    choose("case-log-sex1-0-field", allow_label_click: true)
+    choose("case-log-sex1-f-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/household-number-of-other-members")
     visit("/logs/#{id}/conditional-question")

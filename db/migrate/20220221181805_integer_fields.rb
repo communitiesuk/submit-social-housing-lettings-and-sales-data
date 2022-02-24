@@ -1,22 +1,6 @@
 class IntegerFields < ActiveRecord::Migration[7.0]
   def up
     change_table :case_logs, bulk: true do |t|
-      t.remove :sex1
-      t.column :sex1, :integer
-      t.remove :sex2
-      t.column :sex2, :integer
-      t.remove :sex3
-      t.column :sex3, :integer
-      t.remove :sex4
-      t.column :sex4, :integer
-      t.remove :sex5
-      t.column :sex5, :integer
-      t.remove :sex6
-      t.column :sex6, :integer
-      t.remove :sex7
-      t.column :sex7, :integer
-      t.remove :sex8
-      t.column :sex8, :integer
       t.remove :relat2
       t.column :relat2, :integer
       t.remove :relat3
@@ -42,22 +26,6 @@ class IntegerFields < ActiveRecord::Migration[7.0]
 
   def down
     change_table :case_logs, bulk: true do |t|
-      t.remove :sex1
-      t.column :sex1, :string
-      t.remove :sex2
-      t.column :sex2, :string
-      t.remove :sex3
-      t.column :sex3, :string
-      t.remove :sex4
-      t.column :sex4, :string
-      t.remove :sex5
-      t.column :sex5, :string
-      t.remove :sex6
-      t.column :sex6, :string
-      t.remove :sex7
-      t.column :sex7, :string
-      t.remove :sex8
-      t.column :sex8, :string
       t.remove :relat2
       t.column :relat2, :string
       t.remove :relat3

@@ -48,16 +48,16 @@
                     "header": "Which of these best describes the tenant’s gender identity?",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "F": {
                         "value": "Female"
                       },
-                      "1": {
+                      "M": {
                         "value": "Male"
                       },
-                      "2": {
+                      "X": {
                         "value": "Non-binary"
                       },
-                      "3": {
+                      "R": {
                         "value": "Prefer not to say"
                       }
                     }
@@ -109,16 +109,16 @@
                     "header": "Which of these best describes person 2’s gender identity?",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "F": {
                         "value": "Female"
                       },
-                      "1": {
+                      "M": {
                         "value": "Male"
                       },
-                      "2": {
+                      "X": {
                         "value": "Non-binary"
                       },
-                      "3": {
+                      "R": {
                         "value": "Prefer not to say"
                       }
                     }
@@ -438,7 +438,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 1, "sex1": 1 }]
+                "depends_on": [{ "preg_occ": 1, "sex1": "M" }]
               }
             }
           }
