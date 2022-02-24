@@ -18,6 +18,7 @@ RSpec.describe "Form Check Answers Page" do
     FactoryBot.create(
       :case_log,
       la_known: "Yes",
+      la: "Westminster",
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -86,14 +87,14 @@ RSpec.describe "Form Check Answers Page" do
 
     it "updates the change/answer link when answers get updated" do
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
-      assert_selector "a", text: "Change", count: 0
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
+      assert_selector "a", text: "Change", count: 1
       visit("/logs/#{empty_case_log.id}/accessibility-requirements")
       check("case-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
-      assert_selector "a", text: "Change", count: 1
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
+      assert_selector "a", text: "Change", count: 2
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements")
     end
 
