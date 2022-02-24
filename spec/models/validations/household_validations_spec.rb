@@ -536,4 +536,15 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "la validations" do
+    context "when previous la is known" do
+      it "prevloc has to be provided" do
+        record.previous_la_known = "Yes"
+        household_validator.validate_prevloc(record)
+        expect(record.errors["prevloc"])
+          .to include(match I18n.t("validations.household.previous_la_known"))
+      end
+    end
+  end
 end
