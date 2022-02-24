@@ -4,7 +4,7 @@ module Validations::HouseholdValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_reasonable_preference(record)
-    if record.homeless == 2 && record.reasonpref && record.reasonpref.zero?
+    if record.is_not_homeless? && record.given_reasonable_preference?
       record.errors.add :reasonpref, I18n.t("validations.household.reasonpref.not_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.reasonpref.not_homeless")
     elsif record.reasonpref == 1
@@ -23,16 +23,16 @@ module Validations::HouseholdValidations
   end
 
   def validate_armed_forces(record)
-    if (record.armedforces == 3 || record.armedforces == 4) && record.reservist.present?
+    if (record.armed_forces_no? || record.armed_forces_refused?) && record.reservist.present?
       record.errors.add :reservist, I18n.t("validations.household.reservist.injury_not_required")
     end
-    if record.armedforces != 0 && record.leftreg.present?
+    if !record.armed_forces_regular? && record.leftreg.present?
       record.errors.add :leftreg, I18n.t("validations.household.leftreg.question_not_required")
     end
   end
 
   def validate_pregnancy(record)
-    if ((record.preg_occ && record.preg_occ.zero?) || record.preg_occ == 2) && !women_of_child_bearing_age_in_household(record)
+    if (record.has_pregnancy? || record.pregnancy_refused?) && !women_of_child_bearing_age_in_household(record)
       record.errors.add :preg_occ, I18n.t("validations.household.preg_occ.no_female")
     end
   end
@@ -67,30 +67,30 @@ module Validations::HouseholdValidations
   end
 
   def validate_previous_housing_situation(record)
-    if record.rsnvac == 2 && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+    if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
     end
   end
 
   def validate_referral(record)
-    if record.referral.present? && record.tenancy.present? && record.referral != 0 && record.tenancy == 3
+    if record.referral.present? && record.tenancy.present? && !record.is_internal_transfer? && record.is_secure_tenancy?
       record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
       record.errors.add :tenancy, I18n.t("validations.tenancy.cannot_be_internal_transfer")
     end
 
-    if record.referral && record.referral.zero? && record.homeless && record.homeless.zero?
+    if record.is_internal_transfer? && record.is_assessed_homeless?
       record.errors.add :referral, I18n.t("validations.household.referral.assessed_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.assessed.internal_transfer")
     end
 
-    if record.referral && record.referral.zero? && record.homeless == 1
+    if record.is_internal_transfer? && record.is_other_homeless?
       record.errors.add :referral, I18n.t("validations.household.referral.other_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
     end
   end
 
   def validate_prevloc(record)
-    if record.previous_la_known == 1 && record.prevloc.blank?
+    if record.previous_la_known? && record.prevloc.blank?
       record.errors.add :prevloc, I18n.t("validations.household.previous_la_known")
     end
   end

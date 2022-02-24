@@ -73,23 +73,14 @@ class CaseLog < ApplicationRecord
     status == "in_progress"
   end
 
-  def postcode_known?
-    postcode_known == 1
-  end
-
-  def previous_postcode_known?
-    previous_postcode_known == 1
-  end
-
   def weekly_net_income
     return unless earnings && incfreq
 
-    case incfreq
-    when 0
+    if net_income_is_weekly?
       earnings
-    when 1
+    elsif net_income_is_monthly?
       ((earnings * 12) / 52.0).round(0)
-    when 2
+    elsif net_income_is_yearly?
       (earnings / 12.0).round(0)
     end
   end
@@ -102,6 +93,118 @@ class CaseLog < ApplicationRecord
 
   def first_time_property_let_as_social_housing?
     first_time_property_let_as_social_housing == 1
+  end
+
+  def net_income_refused?
+    net_income_known == 2
+  end
+
+  def net_income_is_weekly?
+    !!(incfreq && incfreq.zero?)
+  end
+
+  def net_income_is_monthly?
+    incfreq == 1
+  end
+
+  def net_income_is_yearly?
+    incfreq == 2
+  end
+
+  def given_reasonable_preference?
+    !!(reasonpref && reasonpref.zero?)
+  end
+
+  def is_renewal?
+    renewal == 1
+  end
+
+  def is_general_needs?
+    needstype == 1
+  end
+
+  def has_hbrentshortfall?
+    !!(hbrentshortfall && hbrentshortfall.zero?)
+  end
+
+  def postcode_known?
+    postcode_known == 1
+  end
+
+  def previous_postcode_known?
+    previous_postcode_known == 1
+  end
+
+  def la_known?
+    la_known == 1
+  end
+
+  def previous_la_known?
+    previous_la_known == 1
+  end
+
+  def is_secure_tenancy?
+    tenancy == 3
+  end
+
+  def is_assured_shorthold_tenancy?
+    tenancy == 1
+  end
+
+  def is_internal_transfer?
+    !!(referral && referral.zero?)
+  end
+
+  def is_relet_to_temp_tenant?
+    rsnvac == 2
+  end
+
+  def is_bedsit?
+    unittype_gn == 1
+  end
+
+  def is_shared_housing?
+    [4, 5, 6].include?(unittype_gn)
+  end
+
+  def has_first_let_vacancy_reason?
+    [11, 12, 13].include?(rsnvac)
+  end
+
+  def previous_tenancy_was_temporary?
+    ![4, 5, 16, 21, 22].include?(prevten)
+  end
+
+  def armed_forces_regular?
+    !!(armedforces && armedforces.zero?)
+  end
+
+  def armed_forces_no?
+    armedforces == 3
+  end
+
+  def armed_forces_refused?
+    armedforces == 4
+  end
+
+  def has_pregnancy?
+    !!(preg_occ && preg_occ.zero?)
+  end
+
+  def pregnancy_refused?
+    preg_occ == 2
+  end
+
+  def is_assessed_homeless?
+    !!(homeless && homeless.zero?)
+  end
+
+  def is_other_homeless?
+    homeless == 1
+  end
+
+  def is_not_homeless?
+    homeless == 2
   end
 
 private
@@ -169,7 +272,7 @@ private
       self.month = startdate.month
       self.year = startdate.year
     end
-    self.incref = 1 if net_income_known == 2
+    self.incref = 1 if net_income_refused?
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
@@ -186,13 +289,13 @@ private
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge&.zero? ? 1 : 0
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
-    if renewal == 1
+    if is_renewal?
       self.homeless = 2
       self.referral = 0
       self.layear = 1
-      self.reasonpref = nil if reasonpref&.zero?
+      self.reasonpref = nil if given_reasonable_preference?
     end
-    if needstype == 1
+    if is_general_needs?
       self.prevten = 2 if managing_organisation.provider_type == "PRP"
       self.prevten = 0 if managing_organisation.provider_type == "LA"
     end

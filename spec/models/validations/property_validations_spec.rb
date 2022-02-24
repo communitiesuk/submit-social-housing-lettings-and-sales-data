@@ -257,7 +257,7 @@ RSpec.describe Validations::PropertyValidations do
     end
 
     context "when the property has been let before" do
-      let(:non_temporary_previous_tenancies) { described_class::NON_TEMP_ACCOMMODATION }
+      let(:non_temporary_previous_tenancies) { [4, 5, 16, 21, 22] }
 
       context "when the previous tenancy was not temporary" do
         let(:referral_sources) { described_class::REFERRAL_INVALID_TMP }

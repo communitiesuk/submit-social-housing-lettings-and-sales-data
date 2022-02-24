@@ -59,28 +59,26 @@ module Validations::PropertyValidations
       record.errors.add :la, I18n.t("validations.property.la.london_rent")
     end
 
-    if record.la_known == 1 && record.la.blank?
+    if record.la_known? && record.la.blank?
       record.errors.add :la, I18n.t("validations.property.la.la_known")
     end
   end
 
-  FIRST_LET_VACANCY_REASONS = [11, 12, 13].freeze
-  NON_TEMP_ACCOMMODATION = [4, 5, 16, 21, 22].freeze
   REFERRAL_INVALID_TMP = [2, 3, 5, 6, 7, 8].freeze
   def validate_rsnvac(record)
-    if !record.first_time_property_let_as_social_housing? && FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)
+    if !record.first_time_property_let_as_social_housing? && record.has_first_let_vacancy_reason?
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_not_social")
     end
 
-    if record.first_time_property_let_as_social_housing? && record.rsnvac.present? && !FIRST_LET_VACANCY_REASONS.include?(record.rsnvac)
+    if record.first_time_property_let_as_social_housing? && record.rsnvac.present? && !record.has_first_let_vacancy_reason?
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_social")
     end
 
-    if record.rsnvac == 2 && NON_TEMP_ACCOMMODATION.include?(record.prevten)
+    if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.non_temp_accommodation")
     end
 
-    if record.rsnvac == 2 && REFERRAL_INVALID_TMP.include?(record.referral)
+    if record.is_relet_to_temp_tenant? && REFERRAL_INVALID_TMP.include?(record.referral)
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.referral_invalid")
       record.errors.add :referral, I18n.t("validations.household.referral.rsnvac_non_temp")
     end
@@ -94,29 +92,28 @@ module Validations::PropertyValidations
 
   def validate_property_postcode(record)
     postcode = record.property_postcode
-    if record.postcode_known == 1 && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
+    if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
       error_message = I18n.t("validations.postcode")
       record.errors.add :property_postcode, error_message
     end
   end
 
-  SHARED_HOUSING = [4, 5, 6].freeze
   def validate_shared_housing_rooms(record)
     if record.beds.present? && record.beds.negative?
       record.errors.add :beds, I18n.t("validations.property.beds.negative")
     end
 
     unless record.unittype_gn.nil?
-      if record.unittype_gn == 1 && record.beds != 1 && record.beds.present?
+      if record.is_bedsit? && record.beds != 1 && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
       end
 
-      if record.other_hhmemb&.zero? && SHARED_HOUSING.include?(record.unittype_gn) &&
+      if record.other_hhmemb&.zero? && record.is_shared_housing? &&
           !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
-      elsif SHARED_HOUSING.include?(record.unittype_gn) && record.beds.present? && !record.beds.to_i.between?(1, 7)
+      elsif record.is_shared_housing? && record.beds.present? && !record.beds.to_i.between?(1, 7)
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
       end
