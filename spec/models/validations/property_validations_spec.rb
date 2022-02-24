@@ -157,6 +157,15 @@ RSpec.describe Validations::PropertyValidations do
         expect(record.errors["la"]).to be_empty
       end
     end
+
+    context "when previous la is known" do
+      it "la has to be provided" do
+        record.la_known = "Yes"
+        property_validator.validate_la(record)
+        expect(record.errors["la"])
+          .to include(match I18n.t("validations.property.la.la_known"))
+      end
+    end
   end
 
   describe "#validate_unitletas" do
