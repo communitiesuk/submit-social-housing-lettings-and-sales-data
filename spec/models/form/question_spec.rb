@@ -45,6 +45,18 @@ RSpec.describe Form::Question, type: :model do
     expect(question.read_only?).to be false
   end
 
+  it "has a yes value helper" do
+    expect(question.value_is_yes?("Yes")).to be_truthy
+    expect(question.value_is_yes?("YES")).to be_truthy
+    expect(question.value_is_yes?("random")).to be_falsey
+  end
+
+  it "has a no value helper" do
+    expect(question.value_is_no?("No")).to be_truthy
+    expect(question.value_is_no?("NO")).to be_truthy
+    expect(question.value_is_no?("random")).to be_falsey
+  end
+
   context "when type is numeric" do
     it "has a min value" do
       expect(question.min).to eq(0)
@@ -74,6 +86,35 @@ RSpec.describe Form::Question, type: :model do
     it "can map label from value" do
       expect(question.value_label_from_value(2)).to eq("Yearly")
     end
+
+    context "when answer options include yes, no, prefer not to say" do
+      let(:section_id) { "household" }
+      let(:subsection_id) { "household_needs" }
+      let(:page_id) { "medical_conditions" }
+      let(:question_id) { "illness" }
+
+      it "maps those options" do
+        expect(question).to be_value_is_yes(0)
+        expect(question).not_to be_value_is_no(0)
+        expect(question).not_to be_value_is_refused(0)
+        expect(question).to be_value_is_no(1)
+        expect(question).to be_value_is_refused(2)
+      end
+    end
+
+    context "when answer options includes don’t know" do
+      let(:section_id) { "local_authority" }
+      let(:subsection_id) { "local_authority" }
+      let(:page_id) { "time_lived_in_la" }
+      let(:question_id) { "layear" }
+
+      it "maps those options" do
+        expect(question).not_to be_value_is_yes(7)
+        expect(question).not_to be_value_is_no(7)
+        expect(question).not_to be_value_is_refused(7)
+        expect(question).to be_value_is_dont_know(7)
+      end
+    end
   end
 
   context "when type is select" do
@@ -92,12 +133,27 @@ RSpec.describe Form::Question, type: :model do
   end
 
   context "when type is checkbox" do
-    let(:page_id) { "dependent_page" }
-    let(:question_id) { "dependent_question" }
+    let(:section_id) { "household" }
+    let(:subsection_id) { "household_needs" }
+    let(:page_id) { "condition_effects" }
+    let(:question_id) { "condition_effects" }
 
     it "has answer options" do
-      expected_answer_options = { "0" => { "value" => "Option A" }, "1" => { "value" => "Option B" } }
+      expected_answer_options = {
+        "illness_type_1" => { "value" => "Vision - such as blindness or partial sight" },
+        "illness_type_2" => { "value" => "Hearing - such as deafness or partial hearing" },
+      }
       expect(question.answer_options).to eq(expected_answer_options)
+    end
+
+    it "can map yes values" do
+      expect(question).to be_value_is_yes(1)
+      expect(question).not_to be_value_is_yes(0)
+    end
+
+    it "can map no values" do
+      expect(question).to be_value_is_no(0)
+      expect(question).not_to be_value_is_no(1)
     end
   end
 

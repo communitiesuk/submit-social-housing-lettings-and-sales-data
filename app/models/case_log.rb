@@ -207,6 +207,10 @@ class CaseLog < ApplicationRecord
     homeless == 2
   end
 
+  def is_london_rent?
+    rent_type == 2 || rent_type == 4
+  end
+
 private
 
   PIO = Postcodes::IO.new

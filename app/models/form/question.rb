@@ -75,7 +75,7 @@ class Form::Question
 
   def update_answer_link_name(case_log)
     link_type = if type == "checkbox"
-                  answer_options.keys.any? { |key| case_log[key] == 1 } ? "Change" : "Answer"
+                  answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } ? "Change" : "Answer"
                 else
                   case_log[id].blank? ? "Answer" : "Change"
                 end
@@ -83,7 +83,7 @@ class Form::Question
   end
 
   def completed?(case_log)
-    return answer_options.keys.any? { |key| case_log[key] == 1 } if type == "checkbox"
+    return answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } if type == "checkbox"
 
     case_log[id].present? || !case_log.respond_to?(id.to_sym) || has_inferred_display_value?(case_log)
   end
@@ -114,6 +114,36 @@ class Form::Question
     end
   end
 
+  def value_is_yes?(value)
+    case type
+    when "checkbox"
+      value == 1
+    when "radio"
+      RADIO_YES_VALUE[id.to_sym]&.include?(value)
+    else
+      value.downcase == "yes"
+    end
+  end
+
+  def value_is_no?(value)
+    case type
+    when "checkbox"
+      value && value.zero?
+    when "radio"
+      RADIO_NO_VALUE[id.to_sym]&.include?(value)
+    else
+      value.downcase == "no"
+    end
+  end
+
+  def value_is_dont_know?(value)
+    type == "radio" && RADIO_DONT_KNOW_VALUE[id.to_sym]&.include?(value)
+  end
+
+  def value_is_refused?(value)
+    type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
+  end
+
 private
 
   def has_inferred_display_value?(case_log)
@@ -122,7 +152,7 @@ private
 
   def checkbox_answer_label(case_log)
     answer = []
-    answer_options.each { |key, options| case_log[key] == 1 ? answer << options["value"] : nil }
+    answer_options.each { |key, options| value_is_yes?(case_log[key]) ? answer << options["value"] : nil }
     answer.join(", ")
   end
 
@@ -175,5 +205,98 @@ private
     0 => " every week",
     1 => " every month",
     2 => " every year",
+  }.freeze
+
+  RADIO_YES_VALUE = {
+    renewal: [1],
+    postcode_known: [1],
+    previous_postcode_known: [1],
+    la_known: [1],
+    previous_la_known: [1],
+    first_time_property_let_as_social_housing: [1],
+    wchair: [1],
+    majorrepairs: [1],
+    startertenancy: [0],
+    letting_in_sheltered_accommodation: [0, 1],
+    armedforces: [0, 1, 2],
+    leftreg: [0],
+    reservist: [0],
+    preg_occ: [0],
+    illness: [0],
+    underoccupation_benefitcap: [0, 1, 2],
+    reasonpref: [0],
+    net_income_known: [0],
+    household_charge: [0],
+    is_carehome: [1],
+    rent_shortfall: [0],
+  }.freeze
+
+  RADIO_NO_VALUE = {
+    renewal: [0],
+    postcode_known: [0],
+    previous_postcode_known: [0],
+    la_known: [0],
+    previous_la_known: [0],
+    first_time_property_let_as_social_housing: [0],
+    wchair: [0],
+    majorrepairs: [0],
+    startertenancy: [1],
+    letting_in_sheltered_accommodation: [2],
+    armedforces: [3],
+    leftreg: [1],
+    reservist: [1],
+    preg_occ: [1],
+    illness: [1],
+    underoccupation_benefitcap: [3],
+    reasonpref: [1],
+    net_income_known: [1],
+    household_charge: [1],
+    is_carehome: [0],
+    rent_shortfall: [1],
+  }.freeze
+
+  RADIO_DONT_KNOW_VALUE = {
+    letting_in_sheltered_accommodation: [3],
+    underoccupation_benefitcap: [4],
+    reasonpref: [2],
+    rent_shortfall: [1],
+    layear: [7],
+    reason_for_leaving_last_settled_home: [32],
+    hb: [5],
+    benefits: [3],
+    unitletas: [3],
+  }.freeze
+
+  RADIO_REFUSED_VALUE = {
+    sex1: %w[R],
+    sex2: %w[R],
+    sex3: %w[R],
+    sex4: %w[R],
+    sex5: %w[R],
+    sex6: %w[R],
+    sex7: %w[R],
+    sex8: %w[R],
+    relat2: [3],
+    relat3: [3],
+    relat4: [3],
+    relat5: [3],
+    relat6: [3],
+    relat7: [3],
+    relat8: [3],
+    ecstat1: [10],
+    ecstat2: [10],
+    ecstat3: [10],
+    ecstat4: [10],
+    ecstat5: [10],
+    ecstat6: [10],
+    ecstat7: [10],
+    ecstat8: [10],
+    letting_in_sheltered_accommodation: [3],
+    armedforces: [4],
+    leftreg: [3],
+    reservist: [2],
+    preg_occ: [2],
+    illness: [2],
+    hb: [6],
   }.freeze
 end
