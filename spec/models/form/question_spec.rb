@@ -238,6 +238,18 @@ RSpec.describe Form::Question, type: :model do
         case_log.hb = "Housing benefit"
         expect(question.enabled?(case_log)).to be true
       end
+
+      context "when the condition type hasn't been implemented yet" do
+        let(:unimplemented_question) { OpenStruct.new(id: "hb", type: "unkown") }
+
+        before do
+          allow(page).to receive(:questions).and_return([unimplemented_question])
+        end
+
+        it "raises an exception" do
+          expect { question.enabled?(case_log) }.to raise_error("Not implemented yet")
+        end
+      end
     end
 
     context "when answers have a suffix dependent on another answer" do

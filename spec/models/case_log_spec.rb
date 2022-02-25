@@ -273,10 +273,120 @@ RSpec.describe CaseLog do
       expect(record_from_db["renttype"]).to eq(3)
     end
 
-    it "correctly derives and saves lettype" do
-      record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
-      expect(case_log.lettype).to eq(9)
-      expect(record_from_db["lettype"]).to eq(9)
+    context "when deriving lettype" do
+      context "when the owning organisation is a PRP" do
+        context "when the rent type is intermediate rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 4, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(10)
+            expect(record_from_db["lettype"]).to eq(10)
+          end
+        end
+
+        context "when the rent type is intermediate rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 4, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(9)
+            expect(record_from_db["lettype"]).to eq(9)
+          end
+        end
+
+        context "when the rent type is affordable rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 2, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(6)
+            expect(record_from_db["lettype"]).to eq(6)
+          end
+        end
+
+        context "when the rent type is affordable rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 2, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(5)
+            expect(record_from_db["lettype"]).to eq(5)
+          end
+        end
+
+        context "when the rent type is social rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 0, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(2)
+            expect(record_from_db["lettype"]).to eq(2)
+          end
+        end
+
+        context "when the rent type is social rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 0, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(1)
+            expect(record_from_db["lettype"]).to eq(1)
+          end
+        end
+      end
+
+      context "when the owning organisation is an LA" do
+        let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+
+        context "when the rent type is intermediate rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 4, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(12)
+            expect(record_from_db["lettype"]).to eq(12)
+          end
+        end
+
+        context "when the rent type is intermediate rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 4, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(11)
+            expect(record_from_db["lettype"]).to eq(11)
+          end
+        end
+
+        context "when the rent type is affordable rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 2, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(8)
+            expect(record_from_db["lettype"]).to eq(8)
+          end
+        end
+
+        context "when the rent type is affordable rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 2, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(7)
+            expect(record_from_db["lettype"]).to eq(7)
+          end
+        end
+
+        context "when the rent type is social rent and supported housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 0, needstype: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(4)
+            expect(record_from_db["lettype"]).to eq(4)
+          end
+        end
+
+        context "when the rent type is social rent and general needs housing" do
+          it "correctly derives and saves lettype" do
+            case_log.update!(rent_type: 0, needstype: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.lettype).to eq(3)
+            expect(record_from_db["lettype"]).to eq(3)
+          end
+        end
+      end
     end
 
     it "correctly derives and saves day, month, year from start date" do

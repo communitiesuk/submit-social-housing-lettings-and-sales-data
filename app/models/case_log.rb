@@ -123,6 +123,10 @@ class CaseLog < ApplicationRecord
     needstype == 1
   end
 
+  def is_supported_housing?
+    !!(needstype && needstype.zero?)
+  end
+
   def has_hbrentshortfall?
     !!(hbrentshortfall && hbrentshortfall.zero?)
   end
@@ -378,24 +382,21 @@ private
 
     case RENT_TYPE_MAPPING_LABELS[renttype]
     when "Social Rent"
-      case needstype
-      when 0
+      if is_supported_housing?
         owning_organisation[:provider_type] == "PRP" ? 2 : 4
-      when 1
+      elsif is_general_needs?
         owning_organisation[:provider_type] == "PRP" ? 1 : 3
       end
     when "Affordable Rent"
-      case needstype
-      when 0
+      if is_supported_housing?
         owning_organisation[:provider_type] == "PRP" ? 6 : 8
-      when 1
+      elsif is_general_needs?
         owning_organisation[:provider_type] == "PRP" ? 5 : 7
       end
     when "Intermediate Rent"
-      case needstype
-      when 0
+      if is_supported_housing?
         owning_organisation[:provider_type] == "PRP" ? 10 : 12
-      when 1
+      elsif is_general_needs?
         owning_organisation[:provider_type] == "PRP" ? 9 : 11
       end
     end
