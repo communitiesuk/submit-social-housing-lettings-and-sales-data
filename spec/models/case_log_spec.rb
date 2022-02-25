@@ -123,6 +123,10 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_reason_for_leaving_last_settled_home)
     end
 
+    it "validates previous housing situation" do
+      expect(validator).to receive(:validate_previous_housing_situation)
+    end
+
     it "validates armed forces" do
       expect(validator).to receive(:validate_armed_forces)
     end

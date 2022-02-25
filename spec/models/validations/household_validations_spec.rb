@@ -547,4 +547,16 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
   end
+
+  describe "previous housing situation validations" do
+    context "when the property is being relet to a previously temporary tenant" do
+      it "validates that previous tenancy was temporary" do
+        record.rsnvac = 2
+        record.prevten = 4
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to include(match I18n.t("validations.household.prevten.non_temp_accommodation"))
+      end
+    end
+  end
 end
