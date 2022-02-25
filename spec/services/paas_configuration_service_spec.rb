@@ -22,6 +22,22 @@ RSpec.describe PaasConfigurationService do
     end
   end
 
+  context "when configuration is present but invalid" do
+    let(:vcap_services) do
+      {"aws-s3-bucket": [{instance_name: "bucket_1"}, {instance_name: "bucket_2"}]}
+    end
+
+    before do
+      allow(ENV).to receive(:[]).with("VCAP_SERVICES").and_return(vcap_services)
+      allow(logger).to receive(:warn)
+    end
+
+    it "logs an error" do
+      expect(logger).to receive(:warn).with("Could not parse VCAP_SERVICES!")
+      config_service.s3_config_present?
+    end
+  end
+
   context "when the paas configuration is present with S3 buckets" do
     let(:vcap_services) do
       <<-JSON
