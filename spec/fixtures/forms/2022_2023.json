@@ -55,7 +55,7 @@
                       "5": "Other intermediate rent product"
                     },
                     "conditional_for": {
-                      "intermediate_rent_product_name": ["Other intermediate rent product"]
+                      "intermediate_rent_product_name": [5]
                     }
                   },
                   "intermediate_rent_product_name": {

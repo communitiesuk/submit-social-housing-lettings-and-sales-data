@@ -270,7 +270,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
         sign_in user
       end
 
@@ -278,9 +278,9 @@ RSpec.describe CaseLogsController, type: :request do
         case_log = FactoryBot.create(:case_log,
                                      owning_organisation: organisation,
                                      managing_organisation: organisation,
-                                     la_known: "Yes",
+                                     la_known: 1,
                                      is_la_inferred: true,
-                                     postcode_known: "Yes",
+                                     postcode_known: 1,
                                      property_postcode: "PO5 3TE")
         id = case_log.id
         get "/logs/#{id}/property-information/check-answers"

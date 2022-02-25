@@ -44,11 +44,11 @@ RSpec.describe Form::Subsection, type: :model do
     it "has a completed status for completed subsection" do
       subsection_definition = section_definition["subsections"]["household_needs"]
       sub_section = described_class.new("household_needs", subsection_definition, section)
-      case_log.armedforces = "No"
-      case_log.illness = "No"
-      case_log.housingneeds_a = "Yes"
-      case_log.la = "York"
-      case_log.illness_type_1 = "Yes"
+      case_log.armedforces = 3
+      case_log.illness = 1
+      case_log.housingneeds_a = 1
+      case_log.la = "E06000014"
+      case_log.illness_type_1 = 1
       expect(sub_section.status(case_log)).to eq(:completed)
     end
 
@@ -67,13 +67,13 @@ RSpec.describe Form::Subsection, type: :model do
       subsection_definition = section_definition["subsections"]["household_needs"]
       sub_section = described_class.new("household_needs", subsection_definition, section)
       expected_questions = %w[armedforces illness accessibility_requirements la condition_effects]
-      case_log.armedforces = "No"
-      case_log.illness = "No"
-      case_log.housingneeds_a = "Yes"
-      case_log.la_known = "Yes"
+      case_log.armedforces = 3
+      case_log.illness = 1
+      case_log.housingneeds_a = 1
+      case_log.la_known = 1
       case_log.is_la_inferred = false
-      case_log.la = "York"
-      case_log.illness_type_1 = "Yes"
+      case_log.la = "E06000014"
+      case_log.illness_type_1 = 1
       expect(sub_section.answered_questions(case_log).map(&:id)).to eq(expected_questions)
       expect(sub_section.answered_questions_count(case_log)).to eq(5)
     end

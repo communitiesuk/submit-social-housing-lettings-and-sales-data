@@ -47,9 +47,9 @@ RSpec.describe CaseLog do
       context "with an income in upper soft range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
-                            ecstat1: "Full-time - 30 hours or more",
+                            ecstat1: 1,
                             earnings: 750,
-                            incfreq: "Weekly")
+                            incfreq: 0)
         end
 
         it "updates soft errors" do
@@ -62,9 +62,9 @@ RSpec.describe CaseLog do
       context "with an income in lower soft validation range" do
         let(:case_log) do
           FactoryBot.create(:case_log,
-                            ecstat1: "Full-time - 30 hours or more",
+                            ecstat1: 1,
                             earnings: 120,
-                            incfreq: "Weekly")
+                            incfreq: 0)
         end
 
         it "updates soft errors" do
@@ -197,17 +197,17 @@ RSpec.describe CaseLog do
     let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
 
     it "returns input income if frequency is already weekly" do
-      case_log.incfreq = "Weekly"
+      case_log.incfreq = 0
       expect(case_log.weekly_net_income).to eq(net_income)
     end
 
     it "calculates the correct weekly income from monthly income" do
-      case_log.incfreq = "Monthly"
+      case_log.incfreq = 1
       expect(case_log.weekly_net_income).to eq(1154)
     end
 
     it "calculates the correct weekly income from yearly income" do
-      case_log.incfreq = "Yearly"
+      case_log.incfreq = 2
       expect(case_log.weekly_net_income).to eq(417)
     end
   end
@@ -222,12 +222,12 @@ RSpec.describe CaseLog do
         previous_postcode: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
-        net_income_known: "Tenant prefers not to say",
+        net_income_known: 2,
         other_hhmemb: 6,
-        rent_type: "London living rent",
-        needstype: "General needs",
-        hb: "Housing benefit",
-        hbrentshortfall: "No",
+        rent_type: 4,
+        needstype: 1,
+        hb: 0,
+        hbrentshortfall: 1,
       })
     end
 
@@ -265,13 +265,13 @@ RSpec.describe CaseLog do
 
     it "correctly derives and saves renttype" do
       record_from_db = ActiveRecord::Base.connection.execute("select renttype from case_logs where id=#{case_log.id}").to_a[0]
-      expect(case_log.renttype).to eq("Intermediate Rent")
+      expect(case_log.renttype).to eq(3)
       expect(record_from_db["renttype"]).to eq(3)
     end
 
     it "correctly derives and saves lettype" do
       record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
-      expect(case_log.lettype).to eq("Intermediate Rent General needs PRP")
+      expect(case_log.lettype).to eq(9)
       expect(record_from_db["lettype"]).to eq(9)
     end
 
@@ -300,21 +300,21 @@ RSpec.describe CaseLog do
     context "when saving addresses" do
       before do
         stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
       let!(:address_case_log) do
         described_class.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          postcode_known: "Yes",
+          postcode_known: 1,
           property_postcode: "M1 1AE",
         })
       end
 
       it "correctly infers la" do
         record_from_db = ActiveRecord::Base.connection.execute("select la from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(address_case_log.la).to eq("Manchester")
+        expect(address_case_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
       end
 
@@ -329,7 +329,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets all fields if property postcode not known" do
-        address_case_log.update!({ postcode_known: "No" })
+        address_case_log.update!({ postcode_known: 0 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq(nil)
@@ -338,19 +338,19 @@ RSpec.describe CaseLog do
       end
 
       it "changes the LA if property postcode changes from not known to known and provided" do
-        address_case_log.update!({ postcode_known: "No" })
-        address_case_log.update!({ la_known: "Yes", la: "Westminster" })
+        address_case_log.update!({ postcode_known: 0 })
+        address_case_log.update!({ la_known: 1, la: "E09000033" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq(nil)
-        expect(address_case_log.la).to eq("Westminster")
+        expect(address_case_log.la).to eq("E09000033")
         expect(record_from_db["la"]).to eq("E09000033")
 
-        address_case_log.update!({ postcode_known: "Yes", property_postcode: "M1 1AD" })
+        address_case_log.update!({ postcode_known: 1, property_postcode: "M1 1AD" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["property_postcode"]).to eq("M1 1AD")
-        expect(address_case_log.la).to eq("Manchester")
+        expect(address_case_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
       end
     end
@@ -358,21 +358,21 @@ RSpec.describe CaseLog do
     context "when saving previous address" do
       before do
         stub_request(:get, /api.postcodes.io/)
-          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\"}}", headers: {})
+          .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
       end
 
       let!(:address_case_log) do
         described_class.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          previous_postcode_known: "Yes",
+          previous_postcode_known: 1,
           previous_postcode: "M1 1AE",
         })
       end
 
       it "correctly infers prevloc" do
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(address_case_log.prevloc).to eq("Manchester")
+        expect(address_case_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
       end
 
@@ -387,7 +387,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets all fields if previous postcode not known" do
-        address_case_log.update!({ previous_postcode_known: "No" })
+        address_case_log.update!({ previous_postcode_known: 0 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["previous_postcode"]).to eq(nil)
@@ -396,32 +396,32 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets la if la is not known" do
-        address_case_log.update!({ previous_postcode_known: "No" })
-        address_case_log.update!({ previous_la_known: "Yes", prevloc: "Scotland" })
+        address_case_log.update!({ previous_postcode_known: 0 })
+        address_case_log.update!({ previous_la_known: 1, prevloc: "S92000003" })
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["prevloc"]).to eq("S92000003")
-        expect(address_case_log.prevloc).to eq("Scotland")
+        expect(address_case_log.prevloc).to eq("S92000003")
 
-        address_case_log.update!({ previous_la_known: "No" })
+        address_case_log.update!({ previous_la_known: 0 })
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(address_case_log.prevloc).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
       end
 
       it "changes the prevloc if previous postcode changes from not known to known and provided" do
-        address_case_log.update!({ previous_postcode_known: "No" })
-        address_case_log.update!({ previous_la_known: "Yes", prevloc: "Westminster" })
+        address_case_log.update!({ previous_postcode_known: 0 })
+        address_case_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["previous_postcode"]).to eq(nil)
-        expect(address_case_log.prevloc).to eq("Westminster")
+        expect(address_case_log.prevloc).to eq("E09000033")
         expect(record_from_db["prevloc"]).to eq("E09000033")
 
-        address_case_log.update!({ previous_postcode_known: "Yes", previous_postcode: "M1 1AD" })
+        address_case_log.update!({ previous_postcode_known: 0, previous_postcode: "M1 1AD" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["previous_postcode"]).to eq("M1 1AD")
-        expect(address_case_log.prevloc).to eq("Manchester")
+        expect(address_case_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
       end
     end
@@ -450,12 +450,12 @@ RSpec.describe CaseLog do
           managing_organisation: organisation,
           owning_organisation: organisation,
           other_hhmemb: 4,
-          relat2: "Child - includes young adult and grown-up",
-          relat3: "Child - includes young adult and grown-up",
-          relat4: "Other",
-          relat5: "Child - includes young adult and grown-up",
-          relat7: "Other",
-          relat8: "Other",
+          relat2: 1,
+          relat3: 1,
+          relat4: 2,
+          relat5: 1,
+          relat7: 2,
+          relat8: 2,
           age1: 22,
           age2: 14,
           age4: 60,
@@ -485,7 +485,7 @@ RSpec.describe CaseLog do
       case_log.reload
 
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["has_benefits"]).to eq("Yes")
+      expect(record_from_db["has_benefits"]).to eq(1)
     end
 
     context "when it is a renewal" do
@@ -493,42 +493,42 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          renewal: "Yes",
+          renewal: 1,
           year: 2021,
         })
       end
 
       it "correctly derives and saves layear" do
         record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(2)
-        expect(case_log["layear"]).to eq("Less than 1 year")
+        expect(record_from_db["layear"]).to eq(1)
+        expect(case_log["layear"]).to eq(1)
       end
 
       it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
         record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
-        expect(case_log["underoccupation_benefitcap"]).to eq("No")
+        expect(record_from_db["underoccupation_benefitcap"]).to eq(3)
+        expect(case_log["underoccupation_benefitcap"]).to eq(3)
       end
 
       it "correctly derives and saves prevten" do
-        case_log.update!({ needstype: "General needs" })
+        case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(32)
-        expect(case_log["prevten"]).to eq("Fixed-term private registered provider (PRP) general needs tenancy")
+        expect(record_from_db["prevten"]).to eq(2)
+        expect(case_log["prevten"]).to eq(2)
 
         case_log.managing_organisation.update!({ provider_type: "LA" })
-        case_log.update!({ needstype: "General needs" })
+        case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(30)
-        expect(case_log["prevten"]).to eq("Fixed-term local authority general needs tenancy")
+        expect(record_from_db["prevten"]).to eq(0)
+        expect(case_log["prevten"]).to eq(0)
       end
 
       it "correctly derives and saves referral" do
         record_from_db = ActiveRecord::Base.connection.execute("select referral from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["referral"]).to eq(1)
-        expect(case_log["referral"]).to eq("Internal transfer")
+        expect(record_from_db["referral"]).to eq(0)
+        expect(case_log["referral"]).to eq(0)
       end
     end
 
@@ -537,18 +537,18 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          renewal: "No",
+          renewal: 0,
           year: 2021,
         })
       end
 
       it "correctly derives and saves reasonpref when changed to renewal" do
-        case_log.update!({ reasonpref: "Yes" })
+        case_log.update!({ reasonpref: 0 })
         record_from_db = ActiveRecord::Base.connection.execute("select reasonpref from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["reasonpref"]).to eq(1)
-        expect(case_log["reasonpref"]).to eq("Yes")
+        expect(record_from_db["reasonpref"]).to eq(0)
+        expect(case_log["reasonpref"]).to eq(0)
 
-        case_log.update!({ renewal: "Yes" })
+        case_log.update!({ renewal: 1 })
         record_from_db = ActiveRecord::Base.connection.execute("select reasonpref from case_logs where id=#{case_log.id}").to_a[0]
         expect(record_from_db["reasonpref"]).to eq(nil)
         expect(case_log["reasonpref"]).to eq(nil)
@@ -558,24 +558,24 @@ RSpec.describe CaseLog do
 
   describe "resetting invalidated fields" do
     context "when a question that has already been answered, no longer has met dependencies" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 1, wchair: 1) }
 
       it "clears the answer" do
-        expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from("Yes").to(nil)
+        expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from(1).to(nil)
       end
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: "Yes", preg_occ: "No") }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 0, preg_occ: 1, wchair: 1) }
 
       it "does not clear the value for answers that apply to both pages" do
-        expect(case_log.cbl).to eq("Yes")
+        expect(case_log.cbl).to eq(0)
       end
 
       it "does clear the value for answers that do not apply for invalidated page" do
-        case_log.update!({ wchair: "Yes", sex2: "Female", age2: 33 })
-        case_log.update!({ cbl: "No" })
-        case_log.update!({ preg_occ: "Yes" })
+        case_log.update!({ wchair: 1, sex2: "F", age2: 33 })
+        case_log.update!({ cbl: 0 })
+        case_log.update!({ preg_occ: 0 })
 
         expect(case_log.cbl).to eq(nil)
       end
@@ -593,13 +593,13 @@ RSpec.describe CaseLog do
       let(:case_log) { FactoryBot.create(:case_log) }
 
       it "resets inferred layear value" do
-        case_log.update!({ renewal: "Yes" })
+        case_log.update!({ renewal: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(2)
-        expect(case_log["layear"]).to eq("Less than 1 year")
+        expect(record_from_db["layear"]).to eq(1)
+        expect(case_log["layear"]).to eq(1)
 
-        case_log.update!({ renewal: "No" })
+        case_log.update!({ renewal: 0 })
         record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
         expect(record_from_db["layear"]).to eq(nil)
         expect(case_log["layear"]).to eq(nil)
@@ -610,11 +610,11 @@ RSpec.describe CaseLog do
       let(:case_log) { FactoryBot.create(:case_log) }
 
       it "saves layear value" do
-        case_log.update!({ renewal: "No", layear: "1 year but under 2 years" })
+        case_log.update!({ renewal: 0, layear: 2 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(7)
-        expect(case_log["layear"]).to eq("1 year but under 2 years")
+        expect(record_from_db["layear"]).to eq(2)
+        expect(case_log["layear"]).to eq(2)
       end
     end
   end

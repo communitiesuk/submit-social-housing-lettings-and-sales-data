@@ -28,7 +28,7 @@ RSpec.describe Form, type: :model do
     end
 
     it "returns a correct page path if there is conditional routing" do
-      case_log["preg_occ"] = "No"
+      case_log["preg_occ"] = 1
       expect(form.next_page_redirect_path(previous_conditional_page, case_log)).to eq("case_log_conditional_question_no_page_path")
     end
   end
@@ -40,11 +40,11 @@ RSpec.describe Form, type: :model do
 
     context "when a user is on the check answers page for a subsection" do
       def answer_household_needs(case_log)
-        case_log.armedforces = "No"
-        case_log.illness = "No"
-        case_log.housingneeds_a = "Yes"
-        case_log.la = "York"
-        case_log.illness_type_1 = "Yes"
+        case_log.armedforces = 3
+        case_log.illness = 0
+        case_log.housingneeds_a = 1
+        case_log.la = "E06000014"
+        case_log.illness_type_1 = 1
       end
 
       def answer_tenancy_information(case_log)

@@ -45,6 +45,18 @@ RSpec.describe Form::Question, type: :model do
     expect(question.read_only?).to be false
   end
 
+  it "has a yes value helper" do
+    expect(question).to be_value_is_yes("Yes")
+    expect(question).to be_value_is_yes("YES")
+    expect(question).not_to be_value_is_yes("random")
+  end
+
+  it "has a no value helper" do
+    expect(question).to be_value_is_no("No")
+    expect(question).to be_value_is_no("NO")
+    expect(question).not_to be_value_is_no("random")
+  end
+
   context "when type is numeric" do
     it "has a min value" do
       expect(question.min).to eq(0)
@@ -52,6 +64,10 @@ RSpec.describe Form::Question, type: :model do
 
     it "has a step value" do
       expect(question.step).to eq(1)
+    end
+
+    it "does not map value from label" do
+      expect(question.value_from_label("5")).to eq("5")
     end
   end
 
@@ -62,15 +78,82 @@ RSpec.describe Form::Question, type: :model do
       expected_answer_options = { "0" => { "value" => "Weekly" }, "1" => { "value" => "Monthly" }, "2" => { "value" => "Yearly" } }
       expect(question.answer_options).to eq(expected_answer_options)
     end
+
+    it "can map value from label" do
+      expect(question.value_from_label("Monthly")).to eq("1")
+    end
+
+    it "can map label from value" do
+      expect(question.label_from_value(2)).to eq("Yearly")
+    end
+
+    context "when answer options include yes, no, prefer not to say" do
+      let(:section_id) { "household" }
+      let(:subsection_id) { "household_needs" }
+      let(:page_id) { "medical_conditions" }
+      let(:question_id) { "illness" }
+
+      it "maps those options" do
+        expect(question).to be_value_is_yes(0)
+        expect(question).not_to be_value_is_no(0)
+        expect(question).not_to be_value_is_refused(0)
+        expect(question).to be_value_is_no(1)
+        expect(question).to be_value_is_refused(2)
+      end
+    end
+
+    context "when answer options includes don’t know" do
+      let(:section_id) { "local_authority" }
+      let(:subsection_id) { "local_authority" }
+      let(:page_id) { "time_lived_in_la" }
+      let(:question_id) { "layear" }
+
+      it "maps those options" do
+        expect(question).not_to be_value_is_yes(7)
+        expect(question).not_to be_value_is_no(7)
+        expect(question).not_to be_value_is_refused(7)
+        expect(question).to be_value_is_dont_know(7)
+      end
+    end
+  end
+
+  context "when type is select" do
+    let(:section_id) { "household" }
+    let(:subsection_id) { "household_needs" }
+    let(:page_id) { "accessible_select" }
+    let(:question_id) { "la" }
+
+    it "can map value from label" do
+      expect(question.value_from_label("Manchester")).to eq("E08000003")
+    end
+
+    it "can map label from value" do
+      expect(question.label_from_value("E06000014")).to eq("York")
+    end
   end
 
   context "when type is checkbox" do
-    let(:page_id) { "dependent_page" }
-    let(:question_id) { "dependent_question" }
+    let(:section_id) { "household" }
+    let(:subsection_id) { "household_needs" }
+    let(:page_id) { "condition_effects" }
+    let(:question_id) { "condition_effects" }
 
     it "has answer options" do
-      expected_answer_options = { "0" => { "value" => "Option A" }, "1" => { "value" => "Option B" } }
+      expected_answer_options = {
+        "illness_type_1" => { "value" => "Vision - such as blindness or partial sight" },
+        "illness_type_2" => { "value" => "Hearing - such as deafness or partial hearing" },
+      }
       expect(question.answer_options).to eq(expected_answer_options)
+    end
+
+    it "can map yes values" do
+      expect(question).to be_value_is_yes(1)
+      expect(question).not_to be_value_is_yes(0)
+    end
+
+    it "can map no values" do
+      expect(question).to be_value_is_no(0)
+      expect(question).not_to be_value_is_no(1)
     end
   end
 
@@ -102,13 +185,13 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "incfreq" }
 
     it "has an answer label" do
-      case_log.incfreq = "Weekly"
+      case_log.incfreq = 0
       expect(question.answer_label(case_log)).to eq("Weekly")
     end
 
     it "has an update answer link text helper" do
       expect(question.update_answer_link_name(case_log)).to match(/Answer/)
-      case_log["incfreq"] = "Weekly"
+      case_log["incfreq"] = 0
       expect(question.update_answer_link_name(case_log)).to match(/Change/)
     end
 
@@ -164,12 +247,12 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "earnings" }
 
       it "displays the correct label for given suffix and answer the suffix depends on" do
-        case_log.incfreq = "Weekly"
+        case_log.incfreq = 0
         case_log.earnings = 500
         expect(question.answer_label(case_log)).to eq("£500.00 every week")
-        case_log.incfreq = "Monthly"
+        case_log.incfreq = 1
         expect(question.answer_label(case_log)).to eq("£500.00 every month")
-        case_log.incfreq = "Yearly"
+        case_log.incfreq = 2
         expect(question.answer_label(case_log)).to eq("£500.00 every year")
       end
     end
@@ -183,7 +266,7 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "property_postcode" }
 
       it "returns true" do
-        case_log["postcode_known"] = "No"
+        case_log["postcode_known"] = 0
         expect(question.completed?(case_log)).to be(true)
       end
     end

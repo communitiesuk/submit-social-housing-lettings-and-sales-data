@@ -1,6 +1,4 @@
 class Form::Subsection
-  include Constants::CaseLog
-
   attr_accessor :id, :label, :section, :pages, :depends_on, :form
 
   def initialize(id, hsh, section)
@@ -32,7 +30,7 @@ class Form::Subsection
       return :cannot_start_yet
     end
 
-    qs = applicable_questions(case_log).reject { |q| OPTIONAL_FIELDS.include?(q.id) }
+    qs = applicable_questions(case_log).reject { |q| CaseLog::OPTIONAL_FIELDS.include?(q.id) }
     return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
     return :completed if qs.all? { |question| question.completed?(case_log) }
 

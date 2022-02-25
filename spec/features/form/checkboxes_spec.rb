@@ -27,15 +27,15 @@ RSpec.describe "Checkboxes" do
       click_button("Save and continue")
 
       case_log.reload
-      expect(case_log["housingneeds_a"]).to eq("Yes")
+      expect(case_log["housingneeds_a"]).to eq(1)
 
       visit("/logs/#{id}/accessibility-requirements")
       page.check("case-log-accessibility-requirements-housingneeds-h-field", allow_label_click: true)
       click_button("Save and continue")
 
       case_log.reload
-      expect(case_log["housingneeds_a"]).to eq("No")
-      expect(case_log["housingneeds_h"]).to eq("Yes")
+      expect(case_log["housingneeds_a"]).to eq(0)
+      expect(case_log["housingneeds_h"]).to eq(1)
     end
   end
 end

@@ -191,15 +191,15 @@ RSpec.describe FormController, type: :request do
           post "/logs/#{case_log.id}/form", params: case_log_form_params
           case_log.reload
 
-          expect(case_log.housingneeds_b).to eq("Yes")
+          expect(case_log.housingneeds_b).to eq(1)
         end
 
         it "sets previously submitted items to false when resubmitted with new values" do
           post "/logs/#{case_log.id}/form", params: new_case_log_form_params
           case_log.reload
 
-          expect(case_log.housingneeds_b).to eq("No")
-          expect(case_log.housingneeds_c).to eq("Yes")
+          expect(case_log.housingneeds_b).to eq(0)
+          expect(case_log.housingneeds_c).to eq(1)
         end
 
         context "with a page having checkbox and non-checkbox questions" do
@@ -244,8 +244,8 @@ RSpec.describe FormController, type: :request do
             post "/logs/#{case_log.id}/form", params: case_log_form_params
             case_log.reload
 
-            expect(case_log.housingneeds_a).to eq("Yes")
-            expect(case_log.housingneeds_f).to eq("Yes")
+            expect(case_log.housingneeds_a).to eq(1)
+            expect(case_log.housingneeds_f).to eq(1)
             expect(case_log.tenant_code).to eq(tenant_code)
           end
         end
@@ -258,7 +258,7 @@ RSpec.describe FormController, type: :request do
             id: case_log.id,
             case_log: {
               page: "conditional_question",
-              preg_occ: "Yes",
+              preg_occ: 0,
             },
           }
         end
@@ -267,7 +267,7 @@ RSpec.describe FormController, type: :request do
             id: case_log.id,
             case_log: {
               page: "conditional_question",
-              preg_occ: "No",
+              preg_occ: 1,
             },
           }
         end
@@ -276,7 +276,7 @@ RSpec.describe FormController, type: :request do
             id: case_log.id,
             case_log: {
               page: "property_wheelchair_accessible",
-              wchair: "Yes",
+              wchair: 1,
             },
           }
         end
