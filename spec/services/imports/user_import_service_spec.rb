@@ -9,6 +9,7 @@ RSpec.describe Imports::UserImportService do
 
   context "when importing users" do
     subject(:import_service) { described_class.new(storage_service) }
+
     before do
       allow(storage_service).to receive(:list_files)
                                   .and_return(["user_directory/#{old_user_id}.xml"])
@@ -18,10 +19,10 @@ RSpec.describe Imports::UserImportService do
     end
 
     it "successfully create a user with the expected data" do
-      FactoryBot.create(:organisation, old_org_id: old_org_id)
+      FactoryBot.create(:organisation, old_org_id:)
       import_service.create_users("user_directory")
 
-      user = User.find_by(old_user_id: old_user_id)
+      user = User.find_by(old_user_id:)
       expect(user.name).to eq("John Doe")
       expect(user.email).to eq("john.doe@gov.uk")
       expect(user.encrypted_password).not_to be_nil
@@ -36,11 +37,9 @@ RSpec.describe Imports::UserImportService do
     end
 
     context "when the user has already been imported previously" do
-      let!(:org) { FactoryBot.create(:organisation, old_org_id: old_org_id) }
-      let!(:user) do
-        FactoryBot.create(
-          :user, old_user_id: old_user_id, organisation: org
-        )
+      before do
+        org = FactoryBot.create(:organisation, old_org_id:)
+        FactoryBot.create(:user, old_user_id:, organisation: org)
       end
 
       it "logs that the user already exists" do
