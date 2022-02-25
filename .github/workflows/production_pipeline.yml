@@ -148,12 +148,12 @@ jobs:
         with:
           ref: ${{ steps.latestrelease.outputs.releasetag }}
 
-      - name: Install cf client
-        env:
-          CF_CLI_VERSION: 7.0.0-beta.30
+      - name: Install Cloud Foundry CLI
         run: |
-          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
-          sudo cp /tmp/cf7 /usr/local/bin/cf7
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
       - name: Deploy
         env:
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
@@ -171,15 +171,15 @@ jobs:
           EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
-          cf7 api $CF_API_ENDPOINT
-          cf7 auth
-          cf7 target -o $CF_ORG -s $CF_SPACE
-          cf7 set-env $APP_NAME API_USER $API_USER
-          cf7 set-env $APP_NAME API_KEY $API_KEY
-          cf7 set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
-          cf7 set-env $APP_NAME APP_HOST $APP_HOST
-          cf7 set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-          cf7 set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
-          cf7 set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
-          cf7 set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-          cf7 push $APP_NAME --strategy rolling
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf set-env $APP_NAME API_USER $API_USER
+          cf set-env $APP_NAME API_KEY $API_KEY
+          cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
+          cf set-env $APP_NAME APP_HOST $APP_HOST
+          cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+          cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
+          cf push $APP_NAME --strategy rolling
