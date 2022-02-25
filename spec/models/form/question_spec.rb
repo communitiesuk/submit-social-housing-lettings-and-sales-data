@@ -84,7 +84,7 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can map label from value" do
-      expect(question.value_label_from_value(2)).to eq("Yearly")
+      expect(question.label_from_value(2)).to eq("Yearly")
     end
 
     context "when answer options include yes, no, prefer not to say" do
@@ -128,7 +128,7 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can map label from value" do
-      expect(question.value_label_from_value("E06000014")).to eq("York")
+      expect(question.label_from_value("E06000014")).to eq("York")
     end
   end
 

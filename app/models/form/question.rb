@@ -38,7 +38,7 @@ class Form::Question
     return checkbox_answer_label(case_log) if type == "checkbox"
     return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    answer = value_label_from_value(case_log[id]) if case_log[id].present?
+    answer = label_from_value(case_log[id]) if case_log[id].present?
     answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
     return answer_label if answer_label
 
@@ -49,7 +49,7 @@ class Form::Question
     return [] unless inferred_answers
 
     enabled_inferred_answers(inferred_answers, case_log).keys.map do |x|
-      form.get_question(x).value_label_from_value(case_log[x])
+      form.get_question(x).label_from_value(case_log[x])
     end
   end
 
@@ -101,7 +101,7 @@ class Form::Question
     end
   end
 
-  def value_label_from_value(value)
+  def label_from_value(value)
     return unless value
 
     case type
