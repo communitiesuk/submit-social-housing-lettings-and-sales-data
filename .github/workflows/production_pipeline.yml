@@ -42,8 +42,17 @@ jobs:
       DB_PASSWORD: password
 
     steps:
-      - name: Checkout
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/weide-zhou/ticket13/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+      - name: Confirm release tag
+        run: |
+          echo ${{ steps.latestrelease.outputs.releasetag }}
+      - name: Checkout tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -71,8 +80,17 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/weide-zhou/ticket13/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+      - name: Confirm release tag
+        run: |
+          echo ${{ steps.latestrelease.outputs.releasetag }}
+      - name: Checkout tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -84,17 +102,51 @@ jobs:
         run: |
           bundle exec rubocop
 
+  audit:
+    name: Audit dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/weide-zhou/ticket13/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+      - name: Confirm release tag
+        run: |
+          echo ${{ steps.latestrelease.outputs.releasetag }}
+      - name: Checkout tag
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.latestrelease.outputs.releasetag }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+
+      - name: Audit
+        run: |
+          bundle exec bundler-audit
+
     deploy:
       name: Deploy
 
       runs-on: ubuntu-latest
       environment: 'production'
-      if: github.ref == 'refs/heads/main'
-      needs: [lint, test]
+      needs: [lint, test, audit]
 
       steps:
-      - name: Checkout code
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/weide-zhou/ticket13/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+      - name: Confirm release tag
+        run: |
+          echo ${{ steps.latestrelease.outputs.releasetag }}
+      - name: Checkout tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Install cf client
         env:
