@@ -7,6 +7,9 @@ on:
 
 concurrency: 'production'
 
+env:
+  REPO_URL: communitiesuk/mhclg-data-collection-beta
+
 defaults:
   run:
     shell: bash
@@ -45,7 +48,7 @@ jobs:
       - name: Get latest release with tag
         id: latestrelease
         run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/weide-zhou/ticket13/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
@@ -83,7 +86,7 @@ jobs:
       - name: Get latest release with tag
         id: latestrelease
         run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/communitiesuk/mhclg-data-collection-beta/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
@@ -109,14 +112,14 @@ jobs:
       - name: Get latest release with tag
         id: latestrelease
         run: |
-          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/communitiesuk/mhclg-data-collection-beta/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
       - name: Checkout tag
         uses: actions/checkout@v2
         with:
-          ref: ${{ steps.latestrelease.outputs.releasetag }}
+          ref: ${{ steps.latestrelease.outputs.releasetag }}SS
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
