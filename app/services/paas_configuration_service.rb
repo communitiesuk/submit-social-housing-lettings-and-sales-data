@@ -27,7 +27,7 @@ private
       JSON.parse(ENV["VCAP_SERVICES"], { symbolize_names: true })
     rescue StandardError
       @logger.warn("Could not parse VCAP_SERVICES!")
-      return {}
+      {}
     end
   end
 

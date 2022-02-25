@@ -24,7 +24,7 @@ RSpec.describe PaasConfigurationService do
 
   context "when configuration is present but invalid" do
     let(:vcap_services) do
-      {"aws-s3-bucket": [{instance_name: "bucket_1"}, {instance_name: "bucket_2"}]}
+      { "aws-s3-bucket": [{ instance_name: "bucket_1" }, { instance_name: "bucket_2" }] }
     end
 
     before do
