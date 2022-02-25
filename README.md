@@ -1,4 +1,6 @@
-[![CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml/badge.svg?branch=main&event=push)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/pipeline.yml)
+[![Production CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml)
+
+[![Staging CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml)
 
 # Submit social housing lettings and sales data (CORE)
 
