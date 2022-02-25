@@ -55,7 +55,7 @@ module Validations::PropertyValidations
                        E09000032
                        E09000033].freeze
   def validate_la(record)
-    if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && (record.is_london_rent?)
+    if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
       record.errors.add :la, I18n.t("validations.property.la.london_rent")
     end
 

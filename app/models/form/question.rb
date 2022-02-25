@@ -121,7 +121,7 @@ class Form::Question
     when "radio"
       RADIO_YES_VALUE[id.to_sym]&.include?(value)
     else
-      value.downcase == "yes"
+      %w[yes].include?(value.downcase)
     end
   end
 
@@ -132,7 +132,7 @@ class Form::Question
     when "radio"
       RADIO_NO_VALUE[id.to_sym]&.include?(value)
     else
-      value.downcase == "no"
+      %w[no].include?(value.downcase)
     end
   end
 

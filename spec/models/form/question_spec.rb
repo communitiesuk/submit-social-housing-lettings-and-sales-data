@@ -46,15 +46,15 @@ RSpec.describe Form::Question, type: :model do
   end
 
   it "has a yes value helper" do
-    expect(question.value_is_yes?("Yes")).to be_truthy
-    expect(question.value_is_yes?("YES")).to be_truthy
-    expect(question.value_is_yes?("random")).to be_falsey
+    expect(question).to be_value_is_yes("Yes")
+    expect(question).to be_value_is_yes("YES")
+    expect(question).not_to be_value_is_yes("random")
   end
 
   it "has a no value helper" do
-    expect(question.value_is_no?("No")).to be_truthy
-    expect(question.value_is_no?("NO")).to be_truthy
-    expect(question.value_is_no?("random")).to be_falsey
+    expect(question).to be_value_is_no("No")
+    expect(question).to be_value_is_no("NO")
+    expect(question).not_to be_value_is_no("random")
   end
 
   context "when type is numeric" do
