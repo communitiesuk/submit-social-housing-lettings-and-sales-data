@@ -166,7 +166,7 @@ jobs:
         CF_ORG: ${{ secrets.CF_ORG }}
         API_USER: ${{ secrets.API_USER }}
         API_KEY: ${{ secrets.API_KEY }}
-        APP_NAME: dluhc-core-staging
+        APP_NAME: dluhc-core-production
         GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
         APP_HOST: ${{ secrets.APP_HOST }}
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
