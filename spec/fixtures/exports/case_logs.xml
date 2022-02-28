@@ -72,8 +72,8 @@
     <illness_type_7>0</illness_type_7>
     <illness_type_9>0</illness_type_9>
     <illness_type_10>0</illness_type_10>
-    <rp_homeless>1</rp_homeless>
-    <rp_insan_unsat>0</rp_insan_unsat>
+    <rp_homeless>0</rp_homeless>
+    <rp_insan_unsat>1</rp_insan_unsat>
     <rp_medwel>0</rp_medwel>
     <rp_hardship>0</rp_hardship>
     <rp_dontknow>0</rp_dontknow>

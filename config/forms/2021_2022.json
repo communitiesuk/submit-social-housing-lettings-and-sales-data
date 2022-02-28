@@ -2656,13 +2656,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "11": {
                       "value": "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
                     },
-                    "1": {
+                    "7": {
                       "value": "Other homeless - not found statutorily homeless but considered homeless by landlord"
                     },
-                    "2": {
+                    "1": {
                       "value": "No"
                     }
                   }
