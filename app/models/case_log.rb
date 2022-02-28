@@ -156,7 +156,7 @@ class CaseLog < ApplicationRecord
   end
 
   def is_internal_transfer?
-    !!(referral && referral == 1)
+    referral == 1
   end
 
   def is_relet_to_temp_tenant?
