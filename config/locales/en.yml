@@ -68,6 +68,7 @@ en:
         one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
       beds:
         negative: "Number of bedrooms has to be greater than 0"
+        over_max: "Number of bedrooms cannot be more than 12"
 
     financial:
       tshortfall:

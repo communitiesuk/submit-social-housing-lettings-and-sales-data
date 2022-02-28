@@ -137,6 +137,14 @@ RSpec.describe Validations::PropertyValidations do
         expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.negative"))
       end
     end
+
+    context "when a room number higher than 12 has been entered" do
+      it "adds an error" do
+        record.beds = 13
+        property_validator.validate_shared_housing_rooms(record)
+        expect(record.errors["beds"]).to include(I18n.t("validations.property.beds.over_max"))
+      end
+    end
   end
 
   describe "#validate_la" do

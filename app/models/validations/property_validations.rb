@@ -118,5 +118,9 @@ module Validations::PropertyValidations
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared")
       end
     end
+
+    if record.beds.present? && record.beds > 12
+      record.errors.add :beds, I18n.t("validations.property.beds.over_max")
+    end
   end
 end
