@@ -490,7 +490,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "can be internal transfer" do
         record.tenancy = 3
-        record.referral = 0
+        record.referral = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"]).to be_empty
       end
@@ -499,7 +499,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when homelessness is assessed" do
       it "cannot be internal transfer" do
         record.homeless = 0
-        record.referral = 0
+        record.referral = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to include(match I18n.t("validations.household.referral.assessed_homeless"))
@@ -518,7 +518,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when homelessness is other" do
       it "cannot be internal transfer" do
-        record.referral = 0
+        record.referral = 1
         record.homeless = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])

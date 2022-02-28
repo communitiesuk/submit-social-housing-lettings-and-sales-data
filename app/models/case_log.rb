@@ -156,7 +156,7 @@ class CaseLog < ApplicationRecord
   end
 
   def is_internal_transfer?
-    !!(referral && referral.zero?)
+    referral == 1
   end
 
   def is_relet_to_temp_tenant?
@@ -233,7 +233,7 @@ private
     form.invalidated_page_questions(self).each do |question|
       enabled = form.enabled_page_questions(self)
       answer_options = enabled.map(&:id).include?(question.id) ? enabled.find { |q| q.id == question.id }.answer_options : []
-      contains_selected_answer_option = answer_options.present? ? answer_options.values.map { |x| x["value"] }.include?(public_send(question.id)) : false
+      contains_selected_answer_option = answer_options.present? ? answer_options.key?(public_send(question.id).to_s) : false
       if !contains_selected_answer_option && respond_to?(question.id.to_s) && (question.type == "radio" || question.type == "checkbox")
         public_send("#{question.id}=", nil)
       end
