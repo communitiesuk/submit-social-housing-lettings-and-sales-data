@@ -200,11 +200,11 @@ class CaseLog < ApplicationRecord
   end
 
   def is_assessed_homeless?
-    !!(homeless && homeless.zero?)
+    homeless == 11
   end
 
   def is_other_homeless?
-    homeless == 1
+    homeless == 7
   end
 
   def is_not_homeless?
