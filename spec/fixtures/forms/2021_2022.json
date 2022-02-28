@@ -485,13 +485,22 @@
                       }
                     }
                   }
-                },
-                "soft_validations": {
-                  "override_net_income_validation": {
-                    "check_answer_label": "Net income confirmed?",
-                    "type": "validation_override",
+                }
+              },
+              "net_income_value_check": {
+                "questions": {
+                  "net_income_value_check": {
+                    "check_answer_label": "Net income soft validation",
+                    "hidden_in_check_answers": true,
+                    "header": "The net income you have provided dalls outside of the expected range, is the value correct?",
+                    "type": "radio",
                     "answer_options": {
-                      "override_net_income_validation": "Yes"
+                      "0": {
+                        "value":"Yes"
+                      },
+                      "1": {
+                        "value":"No"
+                      }
                     }
                   }
                 }
