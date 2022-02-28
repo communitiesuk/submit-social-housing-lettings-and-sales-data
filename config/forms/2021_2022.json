@@ -2590,7 +2590,7 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [{ "renewal": 0, "needstype": 0 }]
             },
             "previous_housing_situation_renewal": {
               "header": "",
