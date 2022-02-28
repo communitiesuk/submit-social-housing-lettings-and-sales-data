@@ -110,7 +110,7 @@ RSpec.describe Validations::TenancyValidations do
         context "when referral is not internal transfer" do
           it "adds an error" do
             record.tenancy = 0
-            record.referral = 0
+            record.referral = 1
             tenancy_validator.validate_tenancy_type(record)
             expect(record.errors["tenancy"])
               .to include(match I18n.t("validations.tenancy.internal_transfer"))
@@ -120,7 +120,7 @@ RSpec.describe Validations::TenancyValidations do
         context "when referral is internal transfer" do
           it "does not add an error" do
             record.tenancy = 3
-            record.referral = 0
+            record.referral = 1
             tenancy_validator.validate_tenancy_type(record)
             expect(record.errors["tenancy"]).to be_empty
           end

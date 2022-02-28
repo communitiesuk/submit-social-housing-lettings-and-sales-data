@@ -688,7 +688,7 @@ RSpec.describe CaseLog do
 
       it "does clear the value for answers that do not apply for invalidated page" do
         case_log.update!({ wchair: 1, sex2: "F", age2: 33 })
-        case_log.update!({ cbl: 0 })
+        case_log.update!({ cbl: 1 })
         case_log.update!({ preg_occ: 0 })
 
         expect(case_log.cbl).to eq(nil)

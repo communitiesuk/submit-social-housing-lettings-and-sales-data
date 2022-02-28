@@ -3222,37 +3222,37 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Internal transfer"
                     },
-                    "1": {
+                    "2": {
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
-                    "2": {
+                    "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
-                    "3": {
+                    "10": {
                       "value": "Other social landlord"
                     },
-                    "4": {
+                    "9": {
                       "value": "Community learning disability team"
                     },
-                    "5": {
+                    "14": {
                       "value": "Community mental health team"
                     },
-                    "6": {
+                    "15": {
                       "value": "Health service"
                     },
-                    "7": {
+                    "12": {
                       "value": "Police, probation or prison"
                     },
-                    "8": {
+                    "13": {
                       "value": "Youth offending team"
                     },
-                    "9": {
+                    "7": {
                       "value": "Voluntary agency"
                     },
-                    "10": {
+                    "16": {
                       "value": "Other"
                     }
                   }
@@ -3276,40 +3276,40 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Internal transfer"
                     },
-                    "1": {
+                    "2": {
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
-                    "2": {
+                    "3": {
                       "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
                     },
-                    "3": {
+                    "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
-                    "4": {
+                    "10": {
                       "value": "Other social landlord"
                     },
-                    "5": {
+                    "9": {
                       "value": "Community learning disability team"
                     },
-                    "6": {
+                    "14": {
                       "value": "Community mental health team"
                     },
-                    "7": {
+                    "15": {
                       "value": "Health service"
                     },
-                    "8": {
+                    "12": {
                       "value": "Police, probation or prison"
                     },
-                    "9": {
+                    "13": {
                       "value": "Youth offending team"
                     },
-                    "10": {
+                    "7": {
                       "value": "Voluntary agency"
                     },
-                    "11": {
+                    "16": {
                       "value": "Other"
                     }
                   }
@@ -3333,40 +3333,40 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Internal transfer"
                     },
-                    "1": {
+                    "2": {
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
-                    "2": {
+                    "3": {
                       "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
                     },
-                    "3": {
+                    "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
-                    "4": {
+                    "10": {
                       "value": "Other social landlord"
                     },
-                    "5": {
+                    "9": {
                       "value": "Community learning disability team"
                     },
-                    "6": {
+                    "14": {
                       "value": "Community mental health team"
                     },
-                    "7": {
+                    "15": {
                       "value": "Health service"
                     },
-                    "8": {
+                    "12": {
                       "value": "Police, probation or prison"
                     },
-                    "9": {
+                    "13": {
                       "value": "Youth offending team"
                     },
-                    "10": {
+                    "7": {
                       "value": "Voluntary agency"
                     },
-                    "11": {
+                    "16": {
                       "value": "Other"
                     }
                   }
@@ -3390,43 +3390,43 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Internal transfer"
                     },
-                    "1": {
+                    "2": {
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
-                    "2": {
+                    "3": {
                       "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
                     },
-                    "3": {
+                    "4": {
                       "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
                     },
-                    "4": {
+                    "8": {
                       "value": "Re-located through official housing mobility scheme"
                     },
-                    "5": {
+                    "10": {
                       "value": "Other social landlord"
                     },
-                    "6": {
+                    "9": {
                       "value": "Community learning disability team"
                     },
-                    "7": {
+                    "14": {
                       "value": "Community mental health team"
                     },
-                    "8": {
+                    "15": {
                       "value": "Health service"
                     },
-                    "9": {
+                    "12": {
                       "value": "Police, probation or prison"
                     },
-                    "10": {
+                    "13": {
                       "value": "Youth offending team"
                     },
-                    "11": {
+                    "7": {
                       "value": "Voluntary agency"
                     },
-                    "12": {
+                    "16": {
                       "value": "Other"
                     }
                   }

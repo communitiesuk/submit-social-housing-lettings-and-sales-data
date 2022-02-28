@@ -64,7 +64,7 @@ module Validations::PropertyValidations
     end
   end
 
-  REFERRAL_INVALID_TMP = [2, 3, 5, 6, 7, 8].freeze
+  REFERRAL_INVALID_TMP = [8, 10, 12, 13, 14, 15].freeze
   def validate_rsnvac(record)
     if !record.first_time_property_let_as_social_housing? && record.has_first_let_vacancy_reason?
       record.errors.add :rsnvac, I18n.t("validations.property.rsnvac.first_let_not_social")
