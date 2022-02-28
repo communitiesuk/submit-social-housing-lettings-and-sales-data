@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/baarkerlounger/devise.git
-  revision: 6d0b6b52a9d0e87ae6d9f9acb562169751623078
+  revision: 9b93eff1be452683b9fed61ec8c350fbc8387e7f
   branch: dluhc-fixes
   specs:
     devise (4.8.1)
