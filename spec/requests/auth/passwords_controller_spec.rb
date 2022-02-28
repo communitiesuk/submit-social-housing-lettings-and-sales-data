@@ -130,8 +130,10 @@ RSpec.describe Auth::PasswordsController, type: :request do
           }.to change(admin_user, :encrypted_password)
         end
 
-        it "sends you to the 2FA page" do
+        it "sends you to the 2FA page and does not allow bypassing 2FA code" do
           put "/admin/password", headers: headers, params: params
+          expect(response).to redirect_to("/admin/two-factor-authentication")
+          get "/admin/case_logs", headers: headers
           expect(response).to redirect_to("/admin/two-factor-authentication")
         end
 
