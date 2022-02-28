@@ -30,17 +30,17 @@ private
   def net_income_validations
     net_income_errors = {}
     if net_income_in_soft_min_range?
-      net_income_errors["override_net_income_validation"] = OpenStruct.new(
+      net_income_errors["net_income_value_check"] = OpenStruct.new(
         message: I18n.t("soft_validations.net_income.in_soft_min_range.message"),
         hint_text: I18n.t("soft_validations.net_income.hint_text", ecstat1:),
       )
     elsif net_income_in_soft_max_range?
-      net_income_errors["override_net_income_validation"] = OpenStruct.new(
+      net_income_errors["net_income_value_check"] = OpenStruct.new(
         message: I18n.t("soft_validations.net_income.in_soft_max_range.message"),
         hint_text: I18n.t("soft_validations.net_income.hint_text", ecstat1:),
       )
     else
-      update_column(:override_net_income_validation, nil)
+      update_column(:net_income_value_check, nil)
     end
     net_income_errors
   end

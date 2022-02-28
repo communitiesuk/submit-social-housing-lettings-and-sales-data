@@ -114,7 +114,7 @@ ActiveAdmin.register CaseLog do
                    reasonable_preference_reason_avoid_hardship
                    reasonable_preference_reason_do_not_know
                    other_tenancy_type
-                   override_net_income_validation
+                   net_income_value_check
                    net_income_known
                    owning_organisation_id
                    managing_organisation_id]

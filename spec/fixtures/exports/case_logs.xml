@@ -86,7 +86,7 @@
     <rp_hardship>0</rp_hardship>
     <rp_dontknow>0</rp_dontknow>
     <tenancyother/>
-    <override_net_income_validation/>
+    <net_income_value_check/>
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>

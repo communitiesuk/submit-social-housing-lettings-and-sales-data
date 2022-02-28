@@ -54,7 +54,7 @@ RSpec.describe CaseLog do
 
         it "updates soft errors" do
           expect(case_log.has_no_unresolved_soft_errors?).to be false
-          expect(case_log.soft_errors["override_net_income_validation"].message)
+          expect(case_log.soft_errors["net_income_value_check"].message)
             .to match(I18n.t("soft_validations.net_income.in_soft_max_range.message"))
         end
       end
@@ -69,7 +69,7 @@ RSpec.describe CaseLog do
 
         it "updates soft errors" do
           expect(case_log.has_no_unresolved_soft_errors?).to be false
-          expect(case_log.soft_errors["override_net_income_validation"].message)
+          expect(case_log.soft_errors["net_income_value_check"].message)
             .to match(I18n.t("soft_validations.net_income.in_soft_min_range.message"))
         end
       end

@@ -32,7 +32,7 @@ RSpec.describe Form::Page, type: :model do
   end
 
   it "has soft validations" do
-    expected_soft_validations = %w[override_net_income_validation]
+    expected_soft_validations = %w[net_income_value_check]
     expect(page.soft_validations.map(&:id)).to eq(expected_soft_validations)
   end
 
@@ -41,7 +41,7 @@ RSpec.describe Form::Page, type: :model do
   end
 
   it "has expected form responses" do
-    expected_responses = %w[earnings incfreq override_net_income_validation]
+    expected_responses = %w[earnings incfreq net_income_value_check]
     expect(page.expected_responses.map(&:id)).to eq(expected_responses)
   end
 
