@@ -99,8 +99,8 @@ FactoryBot.define do
       illness_type_7 { 0 }
       illness_type_9 { 0 }
       illness_type_10 { 0 }
-      rp_homeless { 1 }
-      rp_insan_unsat { 0 }
+      rp_homeless { 0 }
+      rp_insan_unsat { 1 }
       rp_medwel { 0 }
       rp_hardship { 0 }
       rp_dontknow { 0 }

@@ -86,7 +86,7 @@ en:
 
     household:
       reasonpref:
-        not_homeless: "Can not be Yes if Not Homeless immediately prior to this letting has been selected"
+        not_homeless: "Can not be \"They were homeless or about to lose their home\" if Not Homeless immediately prior to this letting has been selected"
       reasonable_preference_reason:
         reason_required: "If reasonable preference is \"Yes\", a reason must be given"
         reason_not_required: "If reasonable preference is \"No\", no reasons should be given"
@@ -127,7 +127,7 @@ en:
         other:
           internal_transfer: "Answer cannot be other homelessness as you already told us this tenancy was an internal transfer"
         reasonpref:
-          not_homeless: "Can not be No if household was given reasonable preference"
+          not_homeless: "Can not be No if \"They were homeless or about to lose their home\" was selected as reasonable preference reason"
       previous_la_known: "Enter a local authority"
 
 

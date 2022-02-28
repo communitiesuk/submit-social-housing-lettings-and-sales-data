@@ -208,7 +208,7 @@ class CaseLog < ApplicationRecord
   end
 
   def is_not_homeless?
-    homeless == 2
+    homeless == 1
   end
 
   def is_london_rent?
