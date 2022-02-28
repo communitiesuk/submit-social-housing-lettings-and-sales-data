@@ -118,7 +118,7 @@
     "rp_hardship": 0,
     "rp_dontknow": 0,
     "discarded_at": "05/05/2020",
-    "override_net_income_validation": "",
+    "net_income_value_check": "",
     "property_owner_organisation": "",
     "property_manager_organisation": "",
     "rent_type": 0,

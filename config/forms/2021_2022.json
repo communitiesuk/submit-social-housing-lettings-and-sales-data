@@ -1575,15 +1575,6 @@
                     }
                   }
                 }
-              },
-              "soft_validations": {
-                "override_net_income_validation": {
-                  "check_answer_label": "Net income confirmed?",
-                  "type": "validation_override",
-                  "answer_options": {
-                    "override_net_income_validation": "Yes"
-                  }
-                }
               }
             },
             "person_2_known": {
@@ -4582,15 +4573,6 @@
                     }
                   },
                   "hidden_in_check_answers": true
-                }
-              },
-              "soft_validations": {
-                "override_net_income_validation": {
-                  "check_answer_label": "Net income confirmed?",
-                  "type": "validation_override",
-                  "answer_options": {
-                    "override_net_income_validation": "Yes"
-                  }
                 }
               }
             },

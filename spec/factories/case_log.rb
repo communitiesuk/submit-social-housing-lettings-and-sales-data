@@ -105,7 +105,7 @@ FactoryBot.define do
       rp_hardship { 0 }
       rp_dontknow { 0 }
       tenancyother { nil }
-      override_net_income_validation { nil }
+      net_income_value_check { nil }
       net_income_known { 1 }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }

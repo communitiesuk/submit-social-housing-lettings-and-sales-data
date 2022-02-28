@@ -229,6 +229,7 @@ private
     household_charge: [0],
     is_carehome: [1],
     rent_shortfall: [0],
+    net_income_value_check: [0],
   }.freeze
 
   RADIO_NO_VALUE = {
@@ -253,6 +254,7 @@ private
     household_charge: [1],
     is_carehome: [0],
     rent_shortfall: [1],
+    net_income_value_check: [1],
   }.freeze
 
   RADIO_DONT_KNOW_VALUE = {
