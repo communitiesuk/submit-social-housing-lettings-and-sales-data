@@ -23,10 +23,10 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: 000dd9425860fbadc72d4e08b893be098f5dff9b
+  revision: 871c6af8dec41f764a9f08bf04b5422971a23e32
   branch: feature/railties-7
   specs:
-    activeadmin (2.10.0)
+    activeadmin (2.10.1)
       arbre (~> 1.2, >= 1.2.1)
       formtastic (>= 3.1, < 5.0)
       formtastic_i18n (~> 0.4)
@@ -111,7 +111,7 @@ GEM
       ruby2_keywords (>= 0.0.2, < 1.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.558.0)
+    aws-partitions (1.559.0)
     aws-sdk-core (3.127.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
