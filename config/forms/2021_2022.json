@@ -207,7 +207,7 @@
                   },
                   "inferred_check_answers_value": {
                     "condition": {
-                      "postcode_known": "No"
+                      "postcode_known": 0
                     },
                     "value": "Not known"
                   }
@@ -223,6 +223,7 @@
                   "header": "Do you know what local authority the property is located in?",
                   "hint_text": "",
                   "type": "radio",
+                  "hidden_in_check_answers": true,
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -558,6 +559,10 @@
                     "E07000128": "Wyre",
                     "E07000239": "Wyre Forest",
                     "E06000014": "York"
+                  },
+                  "inferred_check_answers_value": {
+                    "condition": { "la_known": 0 },
+                    "value": "Not known"
                   }
                 }
               },
@@ -2697,7 +2702,7 @@
                     "prevloc": { "is_previous_la_inferred": true }
                   },
                   "inferred_check_answers_value": {
-                    "condition": { "previous_postcode_known": "No" },
+                    "condition": { "previous_postcode_known": 0 },
                     "value": "Not known"
                   }
                 }
@@ -3113,7 +3118,7 @@
                     "9300000XX": "Outside UK"
                   },
                   "inferred_check_answers_value": {
-                    "condition": { "previous_la_known": "No" },
+                    "condition": { "previous_la_known": 0 },
                     "value": "Not known"
                   }
                 }
