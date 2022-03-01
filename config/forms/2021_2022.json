@@ -2290,31 +2290,31 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Just moved to local authority area"
                     },
-                    "1": {
+                    "2": {
                       "value": "Less than 1 year"
                     },
-                    "2": {
+                    "7": {
                       "value": "1 year but under 2 years"
                     },
-                    "3": {
+                    "8": {
                       "value": "2 years but under 3 years"
                     },
-                    "4": {
+                    "9": {
                       "value": "3 years but under 4 years"
                     },
-                    "5": {
+                    "10": {
                       "value": "4 years but under 5 years"
                     },
-                    "6": {
+                    "5": {
                       "value": "5 years or more"
                     },
                     "divider": {
                       "value": true
                     },
-                    "7": {
+                    "6": {
                       "value": "Don’t know"
                     }
                   }
@@ -2374,109 +2374,109 @@
                   "hint_text": "The tenant’s ’last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "40": {
                       "value": "End of assured shorthold tenancy - no fault"
                     },
-                    "1": {
+                    "41": {
                       "value": "End of assured shorthold tenancy - eviction or tenant at fault"
                     },
-                    "2": {
+                    "42": {
                       "value": "End of fixed term tenancy - no fault"
                     },
-                    "3": {
+                    "43": {
                       "value": "End of fixed term tenancy - eviction or tenant at fault"
                     },
-                    "4": {
+                    "1": {
                       "value": "Permanently decanted from another property owned by this landlord"
                     },
-                    "5": {
+                    "2": {
                       "value": "Left home country as a refugee"
                     },
-                    "6": {
+                    "44": {
                       "value": "Discharged from prison"
                     },
-                    "7": {
+                    "45": {
                       "value": "Discharged from long stay hospital or similar institution"
                     },
-                    "8": {
+                    "4": {
                       "value": "Loss of tied accommodation"
                     },
                     "9": {
                       "value": "Asked to leave by family or friends"
                     },
-                    "10": {
+                    "8": {
                       "value": "Relationship breakdown (non-violent) with partner"
                     },
-                    "11": {
+                    "46": {
                       "value": "Death of household member in last settled accommodation"
                     },
-                    "12": {
+                    "16": {
                       "value": "To move nearer to family, friends or school"
                     },
-                    "13": {
+                    "17": {
                       "value": "To move nearer to work"
                     },
-                    "14": {
+                    "7": {
                       "value": "Domestic abuse"
                     },
-                    "15": {
+                    "10": {
                       "value": "Racial harassment"
                     },
-                    "16": {
+                    "31": {
                       "value": "Hate crime"
                     },
-                    "17": {
+                    "11": {
                       "value": "Other problems with neighbours"
                     },
-                    "18": {
+                    "34": {
                       "value": "Repossession"
                     },
-                    "19": {
+                    "35": {
                       "value": "Couldn’t afford fees attached to renewing the tenancy"
                     },
-                    "20": {
+                    "36": {
                       "value": "Couldn’t afford increase in rent"
                     },
-                    "21": {
+                    "37": {
                       "value": "Couldn’t afford rent or mortgage - welfare reforms"
                     },
-                    "22": {
+                    "38": {
                       "value": "Couldn’t afford rent or mortgage - employment"
                     },
-                    "23": {
+                    "39": {
                       "value": "Couldn’t afford rent or mortgage - other"
                     },
-                    "24": {
+                    "12": {
                       "value": "Property unsuitable because of overcrowding"
                     },
-                    "25": {
+                    "13": {
                       "value": "Property unsuitable because of ill health or disability"
                     },
-                    "26": {
+                    "14": {
                       "value": "Property unsuitable because of poor condition"
                     },
-                    "27": {
+                    "30": {
                       "value": "Under occupation - no incentive"
                     },
-                    "28": {
+                    "29": {
                       "value": "Under occupation - offered incentive to downsize"
                     },
-                    "29": {
+                    "18": {
                       "value": "To move to accommodation with support"
                     },
-                    "30": {
+                    "19": {
                       "value": "To move to independent accommodation"
                     },
-                    "31": {
+                    "20": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "32": {
+                    "28": {
                       "value": "Don’t know"
                     },
-                    "33": {
+                    "10000": {
                       "value": "Tenant prefers not to say"
                     }
                   },
@@ -2502,10 +2502,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "42": {
                       "value": "End of fixed term tenancy - no fault"
                     },
-                    "1": {
+                    "40": {
                       "value": "End of assured shorthold tenancy - no fault"
                     }
                   }
@@ -2523,73 +2523,73 @@
                   "hint_text": "This is where the household was the night before they moved.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "30": {
                       "value": "Fixed-term local authority general needs tenancy"
                     },
-                    "1": {
+                    "31": {
                       "value": "Lifetime local authority general needs tenancy"
                     },
-                    "2": {
+                    "32": {
                       "value": "Fixed-term private registered provider (PRP) general needs tenancy"
                     },
-                    "3": {
+                    "33": {
                       "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
-                    "4": {
+                    "6": {
                       "value": "Supported housing"
                     },
-                    "5": {
+                    "8": {
                       "value": "Sheltered accommodation"
                     },
-                    "6": {
+                    "3": {
                       "value": "Private sector tenancy"
                     },
-                    "7": {
+                    "26": {
                       "value": "Owner occupation (private)"
                     },
-                    "8": {
+                    "27": {
                       "value": "Owner occupation (low-cost home ownership)"
                     },
-                    "9": {
+                    "28": {
                       "value": "Living with friends or family"
                     },
-                    "10": {
+                    "7": {
                       "value": "Direct access hostel"
                     },
-                    "11": {
+                    "14": {
                       "value": "Bed and breakfast"
                     },
-                    "12": {
+                    "29": {
                       "value": "Prison or approved probation hostel"
                     },
-                    "13": {
+                    "10": {
                       "value": "Hospital"
                     },
-                    "14": {
+                    "18": {
                       "value": "Any other temporary accommodation"
                     },
-                    "15": {
+                    "19": {
                       "value": "Rough sleeping"
                     },
-                    "16": {
+                    "4": {
                       "value": "Tied housing or rented with job"
                     },
-                    "17": {
+                    "23": {
                       "value": "Mobile home or caravan"
                     },
-                    "18": {
+                    "21": {
                       "value": "Refuge"
                     },
-                    "19": {
+                    "13": {
                       "value": "Children’s home or foster care"
                     },
-                    "20": {
+                    "9": {
                       "value": "Residential care home"
                     },
-                    "21": {
+                    "24": {
                       "value": "Home Office Asylum Support"
                     },
-                    "22": {
+                    "25": {
                       "value": "Any other accommodation"
                     }
                   }
@@ -2607,10 +2607,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "6": {
                       "value": "Supported housing"
                     },
-                    "1": {
+                    "8": {
                       "value": "Sheltered accommodation"
                     }
                   }
@@ -2628,22 +2628,22 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "4": {
                       "value": "Yes - removal of the spare room subsidy"
                     },
-                    "1": {
+                    "5": {
                       "value": "Yes - benefit cap"
                     },
-                    "2": {
+                    "6": {
                       "value": "Yes - both"
                     },
-                    "3": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "4": {
+                    "3": {
                       "value": "Don’t know"
                     }
                   }
@@ -3135,16 +3135,16 @@
                   "hint_text": "Households may be given ‘reasonable preference’ for social housing, also known as ‘priority need’, by the local authority.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Don’t know"
                     }
                   }
