@@ -1115,14 +1115,44 @@
             }
           ],
           "pages": {
+            "household_number_of_other_members": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "other_hhmemb": {
+                  "check_answer_label": "Number of other household members",
+                  "header": "How many people live in the household for this letting?",
+                  "hint_text": "You can provide details for a maximum of 8 people.",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 8,
+                  "step": 1
+                }
+              }
+            },
             "person_1_age": {
               "header": "",
               "description": "",
               "questions": {
+                "age1_known": {
+                  "header": "Do you know the lead tenant’s age?",
+                  "hint_text": "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age1": [0]
+                  }
+                },
                 "age1": {
-                  "check_answer_label": "Tenant’s age",
-                  "header": "What is the tenant’s age?",
-                  "hint_text": "",
+                  "header": "Do you know the lead tenant’s age?",
+                  "check_answer_label": "Lead tenant’s age",                 
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -1137,8 +1167,8 @@
               "questions": {
                 "sex1": {
                   "check_answer_label": "Tenant’s gender",
-                  "header": "Which of these best describes the tenant’s gender identity?",
-                  "hint_text": "",
+                  "header": "Which of these best describes the lead tenant’s gender identity?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
                     "F": {
@@ -1157,85 +1187,252 @@
                 }
               }
             },
-            "tenant_ethnic_group": {
+            "person_1_ethnic_group": {
               "header": "",
               "description": "",
               "questions": {
-                "ethnic": {
+                "ethnic_group": {
                   "check_answer_label": "Ethnicity",
-                  "header": "What is the tenant’s ethnic group?",
-                  "hint_text": "",
+                  "header": "What is the lead tenant’s ethnic group?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "White: English, Welsh, Scottish, Northern Irish or British"
+                      "value": "White"
                     },
                     "1": {
-                      "value": "White: Irish"
+                      "value": "Mixed or Multiple ethnic groups"
                     },
                     "2": {
-                      "value": "White: Gypsy or Irish Traveller"
+                      "value": "Asian or Asian British"
                     },
                     "3": {
-                      "value": "White: Other"
+                      "value": "Black, African, Caribbean or Black British"
                     },
                     "4": {
-                      "value": "Mixed: White and Black Caribbean"
+                      "value": "Other ethnic group"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "5": {
-                      "value": "Mixed: White and Black African"
-                    },
-                    "6": {
-                      "value": "Mixed: White and Asian"
-                    },
-                    "7": {
-                      "value": "Mixed: Other"
-                    },
-                    "8": {
-                      "value": "Asian or Asian British: Indian"
-                    },
-                    "9": {
-                      "value": "Asian or Asian British: Pakistani"
-                    },
-                    "10": {
-                      "value": "Asian or Asian British: Bangladeshi"
-                    },
-                    "11": {
-                      "value": "Asian or Asian British: Chinese"
-                    },
-                    "12": {
-                      "value": "Asian or Asian British: Other"
-                    },
-                    "13": {
-                      "value": "Black: Caribbean"
-                    },
-                    "14": {
-                      "value": "Black: African"
-                    },
-                    "15": {
-                      "value": "Black: Other"
-                    },
-                    "16": {
-                      "value": "Other Ethnic Group: Arab"
-                    },
-                    "17": {
-                      "value": "Other Ethnic Group: Other"
-                    },
-                    "18": {
-                      "value": "Prefer not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
               }
             },
-            "tenant_nationality": {
+            "person_1_ethnic_group_detail_arab": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ethnic": {
+                  "check_answer_label": "Ethnicity",
+                  "header": "Which of the following best describes the lead tenant’s Arab background?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Arab"
+                    },
+                    "1": {
+                      "value": "Other ethnic group"
+                    }
+                  },
+                  "conditional_for": {
+                    "ethnic_other": [
+                      "Other ethnic group"
+                    ]
+                  }
+                },
+                "ethnic_other": {
+                  "header": "How would the lead tenant describe their background? (optional)",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "ethnic_group": "Other ethnic group"
+                }
+              ]
+            },
+            
+            "person_1_ethnic_group_detail_asian": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ethnic": {
+                  "check_answer_label": "Ethnicity",
+                  "header": "Which of the following best describes the lead tenant’s Asian or Asian British background?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Indian"
+                    },
+                    "1": {
+                      "value": "Pakistani"
+                    },
+                    "2": {
+                      "value": "Bangladeshi"
+                    },
+                    "3": {
+                      "value": "Chinese"
+                    },
+                    "4": {
+                      "value": "Other ethnic group"
+                    }
+                  },
+                  "conditional_for": {
+                    "ethnic_other": [
+                      "Other ethnic group"
+                    ]
+                  }
+                },
+                "ethnic_other": {
+                  "header": "How would the lead tenant describe their background? (optional)",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "ethnic_group": "Asian or Asian British"
+                }
+              ]
+            },
+            "person_1_ethnic_group_detail_black": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ethnic": {
+                  "check_answer_label": "Ethnicity",
+                  "header": "Which of the following best describes the lead tenant’s Black, African, Caribbean or Black British background?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "African"
+                    },
+                    "1": {
+                      "value": "Caribbean"
+                    },
+                    "2": {
+                      "value": "Any other Black, African or Caribbean background"
+                    }
+                  },
+                  "conditional_for": {
+                    "ethnic_other": [
+                      "Any other Black, African or Caribbean background"
+                    ]
+                  }
+                },
+                "ethnic_other": {
+                  "header": "How would the lead tenant describe their background? (optional)",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "ethnic_group": "Black, African, Caribbean or Black British"
+                }
+              ]
+            },
+            "person_1_ethnic_group_detail_mixed": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ethnic": {
+                  "check_answer_label": "Ethnicity",
+                  "header": "Which of the following best describes the lead tenant’s Mixed or Multiple ethnic groups background?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "White and Black Caribbean"
+                    },
+                    "1": {
+                      "value": "White and Black African"
+                    },
+                    "2": {
+                      "value": "Any other Mixed or Multiple ethnic background"
+                    }
+                  },
+                  "conditional_for": {
+                    "tenant_ethnic_group_mixed_other": [
+                      "Any other Mixed or Multiple ethnic background"
+                    ]
+                  }
+                },
+                "tenant_ethnic_group_mixed_other": {
+                  "header": "How would the lead tenant describe their background? (optional)",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "ethnic_group": "Mixed or Multiple ethnic groups"
+                }
+              ]
+            },
+            "person_1_ethnic_group_detail_white": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ethnic": {
+                  "check_answer_label": "Ethnicity",
+                  "header": "Which of the following best describes the lead tenant’s White background?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "English, Welsh, Northern Irish, Scottish or British"
+                    },
+                    "1": {
+                      "value": "Irish"
+                    },
+                    "2": {
+                      "value": "Gypsy or Irish Traveller"
+                    },
+                    "3": {
+                      "value": "Any other White background"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "4": {
+                      "value": "Prefer not to say"
+                    }
+                  },
+                  "conditional_for": {
+                    "tenant_ethnic_group_white_other": [
+                      "Any other White background"
+                    ]
+                  }
+                },
+                "tenant_ethnic_group_white_other": {
+                  "header": "How would the lead tenant describe their background? (optional)",
+                  "hint_text": "",
+                  "type": "text"
+                }
+              },
+              "depends_on": [
+                {
+                  "ethnic": "White"
+                }
+              ]
+            },
+            "person_1_nationality": {
               "header": "",
               "description": "",
               "questions": {
                 "national": {
                   "check_answer_label": "Nationality",
-                  "header": "What is the tenant’s nationality?",
-                  "hint_text": "",
+                  "header": "What is the lead tenant’s nationality?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
@@ -1245,52 +1442,53 @@
                       "value": "UK national returning from residence overseas"
                     },
                     "2": {
-                      "value": "Czech Republic"
+                      "value": "Czech"
                     },
                     "3": {
-                      "value": "Estonia"
+                      "value": "Estonian"
                     },
                     "4": {
-                      "value": "Hungary"
+                      "value": "Hungarian"
                     },
                     "5": {
-                      "value": "Latvia"
+                      "value": "Latvian"
                     },
                     "6": {
-                      "value": "Lithuania"
+                      "value": "Lithuanian"
                     },
                     "7": {
-                      "value": "Poland"
+                      "value": "Polish"
                     },
                     "8": {
-                      "value": "Slovakia"
+                      "value": "Slovakian"
                     },
                     "9": {
-                      "value": "Bulgaria"
+                      "value": "Bulgarian"
                     },
                     "10": {
-                      "value": "Romania"
+                      "value": "Romanian"
                     },
                     "11": {
-                      "value": "Ireland"
+                      "value": "Irish"
                     },
                     "12": {
-                      "value": "Slovakia"
+                      "value": "Slovakian"
                     },
                     "13": {
-                      "value": "Slovenia"
+                      "value": "Slovenian"
                     },
                     "14": {
-                      "value": "Croatia"
+                      "value": "Croatian"
                     },
                     "15": {
-                      "value": "Other EU Economic Area (EEA country)"
+                      "value": "From another European Economic Area (EEA) country"
                     },
+                    "divider": true,
                     "16": {
-                      "value": "Any other country"
+                      "value": "From any other country"
                     },
                     "17": {
-                      "value": "Prefer not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -1302,8 +1500,8 @@
               "questions": {
                 "ecstat1": {
                   "check_answer_label": "Work",
-                  "header": "Which of these best describes the tenant’s working situation?",
-                  "hint_text": "",
+                  "header": "Which of these best describes the lead tenant’s working situation?",
+                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
                     "0": {
@@ -1352,50 +1550,52 @@
                 }
               }
             },
-            "household_number_of_other_members": {
+            "person_2_info": {
+              "header": "You’ve given us the details for 1 person in the household",
+              "description": "",
+              "questions": {
+                "details_known_2": {
+                  "header": "Do you know details for person 2?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 1
+              },
+              {
+                "other_hhmemb": 2
+              },
+              {
+                "other_hhmemb": 3
+              },
+              {
+                "other_hhmemb": 4
+              },
+              {
+                "other_hhmemb": 5
+              },
+              {
+                "other_hhmemb": 6
+              },
+              {
+                "other_hhmemb": 7
+              }
+            ]
+            },
+            
+            "person_2_relationship": {
               "header": "",
               "description": "",
               "questions": {
-                "other_hhmemb": {
-                  "check_answer_label": "Number of other household members",
-                  "header": "How many other people are there in the household?",
-                  "hint_text": "The maximum number of others is 7.",
-                  "type": "numeric",
-                  "min": 0,
-                  "max": 7,
-                  "step": 1,
-                  "width": 2,
-                  "conditional_for": {
-                    "relat2": ">0",
-                    "age2": ">0",
-                    "sex2": ">0",
-                    "ecstat2": ">0",
-                    "relat3": ">1",
-                    "age3": ">1",
-                    "sex3": ">1",
-                    "ecstat3": ">1",
-                    "relat4": ">2",
-                    "age4": ">2",
-                    "sex4": ">2",
-                    "ecstat4": ">2",
-                    "relat5": ">3",
-                    "age5": ">3",
-                    "sex5": ">3",
-                    "ecstat5": ">3",
-                    "relat6": ">4",
-                    "age6": ">4",
-                    "sex6": ">4",
-                    "ecstat6": ">4",
-                    "relat7": ">5",
-                    "age7": ">5",
-                    "sex7": ">5",
-                    "ecstat7": ">5",
-                    "relat8": ">6",
-                    "age8": ">6",
-                    "sex8": ">6",
-                    "ecstat8": ">6"
-                  }
-                },
                 "relat2": {
                   "check_answer_label": "Person 2’s relationship to lead tenant",
                   "header": "What’s person 2’s relationship to lead tenant",
@@ -1416,16 +1616,100 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 1,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 2,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 3,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 4,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 5,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 6,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 7,
+                "details_known_2": 0
+              }]
+            },
+            "person_2_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age2_known": {
+                  "header": "Do you know the person 2’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age2": [0]
+                  }
                 },
                 "age2": {
-                  "check_answer_label": "Person 2’s age",
-                  "header": "What’s person 2’s age",
-                  "hint_text": "",
+                  "header": "Person 2’s age",
+                  "check_answer_label": "Person 2’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 1,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 2,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 3,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 4,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 5,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 6,
+                "details_known_2": 0
+              },
+              {
+                "other_hhmemb": 7,
+                "details_known_2": 0
+              }]
+            },
+            "person_2_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex2": {
                   "check_answer_label": "Person 2’s gender",
                   "header": "Which of these best describes person 2’s gender identity?",
@@ -1445,7 +1729,16 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_2": 0
+              }]
+            },
+            "person_2_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "ecstat2": {
                   "check_answer_label": "Person 2’s Work",
                   "header": "Which of these best describes person 2’s working situation?",
@@ -1486,7 +1779,55 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_2": 0
+              }]
+            },
+            "person_3_info": {
+              "header": "You’ve given us the details for 2 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_3": {
+                  "header": "Do you know details for person 3?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "other_hhmemb": 2
                 },
+                {
+                  "other_hhmemb": 3
+                },
+                {
+                  "other_hhmemb": 4
+                },
+                {
+                  "other_hhmemb": 5
+                },
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }]
+            },
+            
+            "person_3_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "relat3": {
                   "check_answer_label": "Person 3’s relationship to lead tenant",
                   "header": "What’s person 3’s relationship to lead tenant",
@@ -1507,17 +1848,51 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_3": 0
+              }]
+            },
+            "person_3_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age3_known": {
+                  "header": "Do you know the person 3’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age3": [0]
+                  }
                 },
                 "age3": {
-                  "check_answer_label": "Person 3’s age",
-                  "header": "What’s person 3’s age",
-                  "hint_text": "",
+                  "header": "Person 3’s age?",
+                  "check_answer_label": "Person 3’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
-                "sex3": {
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_3": 0
+              }]
+            },
+            "person_3_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "sex2": {
                   "check_answer_label": "Person 3’s gender",
                   "header": "Which of these best describes person 3’s gender identity?",
                   "hint_text": "",
@@ -1536,8 +1911,17 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
-                "ecstat3": {
+                }
+              },
+              "depends_on": [{
+                "details_known_3": 1
+              }]
+            },
+            "person_3_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ecstat2": {
                   "check_answer_label": "Person 3’s Work",
                   "header": "Which of these best describes person 3’s working situation?",
                   "hint_text": "",
@@ -1577,8 +1961,55 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [
+                {
+                  "details_known_3": 0
+                }
+              ]
+            },
+            "person_4_info": {
+              "header": "You’ve given us the details for 3 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_4": {
+                  "header": "Do you know details for person 4?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "other_hhmemb": 3
                 },
-                "relat4": {
+                {
+                  "other_hhmemb": 4
+                },
+                {
+                  "other_hhmemb": 5
+                },
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }]
+            },
+            
+            "person_4_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "relat3": {
                   "check_answer_label": "Person 4’s relationship to lead tenant",
                   "header": "What’s person 4’s relationship to lead tenant",
                   "hint_text": "",
@@ -1598,16 +2029,50 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_4": 0
+              }]
+            },
+            "person_4_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age4_known": {
+                  "header": "Do you know the person 4’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age4": [0]
+                  }
                 },
                 "age4": {
-                  "check_answer_label": "Person 4’s age",
-                  "header": "What’s person 4’s age",
-                  "hint_text": "",
+                  "header": "Person 4’s age?",
+                  "check_answer_label": "Person 4’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_4": 0
+              }]
+            },
+            "person_4_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex4": {
                   "check_answer_label": "Person 4’s gender",
                   "header": "Which of these best describes person 4’s gender identity?",
@@ -1627,8 +2092,17 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
-                "ecstat4": {
+                }
+              },
+              "depends_on": [{
+                "details_known_4": 0
+              }]
+            },
+            "person_4_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "ecstat2": {
                   "check_answer_label": "Person 4’s Work",
                   "header": "Which of these best describes person 4’s working situation?",
                   "hint_text": "",
@@ -1668,7 +2142,48 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_4": 0
+              }]
+            },
+            "person_5_info": {
+              "header": "You’ve given us the details for 4 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_5": {
+                  "header": "Do you know details for person 5?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{
+                  "other_hhmemb": 4
                 },
+                {
+                  "other_hhmemb": 5
+                },
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }]
+            },
+            
+            "person_5_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "relat5": {
                   "check_answer_label": "Person 5’s relationship to lead tenant",
                   "header": "What’s person 5’s relationship to lead tenant",
@@ -1689,16 +2204,50 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_5": 0
+              }]
+            },
+            "person_5_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age5_known": {
+                  "header": "Do you know the person 5’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age5": [0]
+                  }
                 },
                 "age5": {
-                  "check_answer_label": "Person 5’s age",
-                  "header": "What’s person 5’s age",
-                  "hint_text": "",
+                  "header": "Person 5’s age?",
+                  "check_answer_label": "Person 5’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_5": 0
+              }]
+            },
+            "person_5_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex5": {
                   "check_answer_label": "Person 5’s gender",
                   "header": "Which of these best describes person 5’s gender identity?",
@@ -1718,7 +2267,16 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_5": 0
+              }]
+            },
+            "person_5_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "ecstat5": {
                   "check_answer_label": "Person 5’s Work",
                   "header": "Which of these best describes person 5’s working situation?",
@@ -1759,7 +2317,44 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_5": 0
+              }]
+            },
+            "person_6_info": {
+              "header": "You’ve given us the details for 5 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_6": {
+                  "header": "Do you know details for person 6?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 5
+              },
+              {
+                "other_hhmemb": 6
+              },
+              {
+                "other_hhmemb": 7
+              }]
+            },
+            "person_6_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "relat6": {
                   "check_answer_label": "Person 6’s relationship to lead tenant",
                   "header": "What’s person 6’s relationship to lead tenant",
@@ -1780,16 +2375,50 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_6": 1
+              }]
+            },
+            "person_6_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age6_known": {
+                  "header": "Do you know the person 6’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age6": [0]
+                  }
                 },
                 "age6": {
-                  "check_answer_label": "Person 6’s age",
-                  "header": "What’s person 6’s age",
-                  "hint_text": "",
+                  "header": "Do you know the person 6’s age?",
+                  "check_answer_label": "Person 6’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_6": 0
+              }]
+            },
+            "person_6_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex6": {
                   "check_answer_label": "Person 6’s gender",
                   "header": "Which of these best describes person 6’s gender identity?",
@@ -1809,7 +2438,16 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_6": 0
+              }]
+            },
+            "person_6_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "ecstat6": {
                   "check_answer_label": "Person 6’s Work",
                   "header": "Which of these best describes person 6’s working situation?",
@@ -1850,7 +2488,41 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_6": 0
+              }]
+            },
+            "person_7_info": {
+              "header": "You’ve given us the details for 7 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_7": {
+                  "header": "Do you know details for person 7?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 6
+              },
+              {
+                "other_hhmemb": 7
+              }]
+            },
+            "person_7_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "relat7": {
                   "check_answer_label": "Person 7’s relationship to lead tenant",
                   "header": "What’s person 7’s relationship to lead tenant",
@@ -1861,7 +2533,8 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up"
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
                       "value": "Other"
@@ -1870,16 +2543,50 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_6": 0
+              }]
+            },
+            "person_7_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age7_known": {
+                  "header": "Do you know the person 7’s age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age7": [0]
+                  }
                 },
                 "age7": {
-                  "check_answer_label": "Person 7’s age",
-                  "header": "What’s person 7’s age",
-                  "hint_text": "",
+                  "header": "Person 7’s age?",
+                  "check_answer_label": "Person 7’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_7": 0
+              }]
+            },
+            "person_7_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex7": {
                   "check_answer_label": "Person 7’s gender",
                   "header": "Which of these best describes person 7’s gender identity?",
@@ -1899,7 +2606,16 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_7": 0
+              }]
+            },
+            "person_7_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "ecstat7": {
                   "check_answer_label": "Person 7’s Work",
                   "header": "Which of these best describes person 7’s working situation?",
@@ -1940,7 +2656,38 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_7": 0
+              }]
+            },
+            "person_8_info": {
+              "header": "You’ve given us the details for 7 people in the household",
+              "description": "",
+              "questions": {
+                "details_known_8": {
+                  "header": "Do you know details for person 8?",
+                  "hint_text": "You must provide details for everyone in the household if you know them.",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [{
+                "other_hhmemb": 7
+              }]
+            },
+            "person_8_relationship": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "relat8": {
                   "check_answer_label": "Person 8’s relationship to lead tenant",
                   "header": "What’s person 8’s relationship to lead tenant",
@@ -1951,7 +2698,8 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up"
+                      "value": "Child",
+                      "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
                       "value": "Other"
@@ -1960,16 +2708,50 @@
                       "value": "Prefer not to say"
                     }
                   }
+                }
+              },
+              "depends_on": [{
+                "details_known_8": 0
+              }]
+            },
+            "person_8_age": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "age8_known": {
+                  "header": "Do you know the person 8 age?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  },
+                  "conditional_for": {
+                    "age8": [0]
+                  }
                 },
                 "age8": {
-                  "check_answer_label": "Person 8’s age",
-                  "header": "What’s person 8’s age",
-                  "hint_text": "",
+                  "header": "Person 8’s age?",
+                  "check_answer_label": "Person 8’s age",                 
                   "type": "numeric",
                   "min": 0,
-                  "max": 150,
-                  "step": 1
-                },
+                  "max": 120,
+                  "step": 1,
+                  "width": 2
+                }
+              },
+              "depends_on": [{
+                "details_known_8": 0
+              }]
+            },
+            "person_8_sex": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "sex8": {
                   "check_answer_label": "Person 8’s gender",
                   "header": "Which of these best describes person 8’s gender identity?",
@@ -1989,7 +2771,16 @@
                       "value": "Prefer not to say"
                     }
                   }
-                },
+                }
+              },
+              "depends_on": [{
+                "details_known_8": 0
+              }]
+            },
+            "person_8_economic_status": {
+              "header": "",
+              "description": "",
+              "questions": {
                 "ecstat8": {
                   "check_answer_label": "Person 8’s Work",
                   "header": "Which of these best describes person 8’s working situation?",
@@ -2031,7 +2822,10 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{
+                "details_known_8": 0
+              }]
             }
           }
         },

@@ -297,6 +297,7 @@ private
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge&.zero? ? 1 : 0
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
+    self.ethnic = ethnic || ethnic_group
     if is_renewal?
       self.homeless = 2
       self.referral = 0

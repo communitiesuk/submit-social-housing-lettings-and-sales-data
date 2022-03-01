@@ -7,24 +7,32 @@
     <updated_at>2022-02-08 16:52:15 UTC</updated_at>
     <tenant_code>BZ737</tenant_code>
     <age1>35</age1>
+    <sex1>F</sex1>
     <ethnic>2</ethnic>
     <national>4</national>
     <prevten>2</prevten>
     <ecstat1>0</ecstat1>
     <hhmemb>2</hhmemb>
     <age2>32</age2>
+    <sex2>M</sex2>
     <ecstat2>5</ecstat2>
     <age3/>
+    <sex3/>
     <ecstat3/>
     <age4/>
+    <sex4/>
     <ecstat4/>
     <age5/>
+    <sex5/>
     <ecstat5/>
     <age6/>
+    <sex6/>
     <ecstat6/>
     <age7/>
+    <sex7/>
     <ecstat7/>
     <age8/>
+    <sex8/>
     <ecstat8/>
     <homeless>1</homeless>
     <underoccupation_benefitcap>0</underoccupation_benefitcap>
@@ -111,6 +119,7 @@
     <property_void_date>2019-11-03 00:00:00 UTC</property_void_date>
     <owning_organisation_id>{owning_org_id}</owning_organisation_id>
     <managing_organisation_id>{managing_org_id}</managing_organisation_id>
+    <renttype>2</renttype>
     <needstype>1</needstype>
     <lettype>5</lettype>
     <postcode_known>1</postcode_known>
@@ -139,16 +148,8 @@
     <previous_postcode_known>1</previous_postcode_known>
     <previous_la_known/>
     <is_previous_la_inferred>false</is_previous_la_inferred>
+    <ethnic_other/>
     <letting_allocation_unknown/>
-    <renttype>2</renttype>
-    <sex1>F</sex1>
-    <sex2>M</sex2>
-    <sex3/>
-    <sex4/>
-    <sex5/>
-    <sex6/>
-    <sex7/>
-    <sex8/>
     <relat2>0</relat2>
     <relat3/>
     <relat4/>
