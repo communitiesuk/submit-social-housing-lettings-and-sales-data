@@ -1,0 +1,34 @@
+.app-panel--informational {
+  background-color: govuk-colour("blue");
+  color: govuk-colour("white");
+  text-align: left;
+
+  .app-panel__body {
+    @include govuk-font($size: 19);
+    margin: 0;
+  }
+}
+
+.app-panel--interruption {
+  background-color: govuk-colour("blue");
+  color: govuk-colour("white");
+  text-align: left;
+
+  .govuk-body,
+  .govuk-label,
+  .govuk-fieldset__legend,
+  .govuk-hint {
+    color: govuk-colour("white");
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+
+  .govuk-radios__label::before,
+  & ::after {
+    color: govuk-colour("black");
+    border-color: govuk-colour("black");
+    background-color: govuk-colour("white");
+  }
+}

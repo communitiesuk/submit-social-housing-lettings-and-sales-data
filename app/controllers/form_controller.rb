@@ -7,7 +7,7 @@ class FormController < ApplicationController
     if @case_log
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
-      if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+      if @case_log.update(responses_for_page)
         if @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
           redirect_to(case_logs_path)
         else
