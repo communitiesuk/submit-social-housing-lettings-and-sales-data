@@ -112,7 +112,7 @@ class CaseLog < ApplicationRecord
   end
 
   def given_reasonable_preference?
-    !!(reasonpref && reasonpref.zero?)
+    reasonpref == 1
   end
 
   def is_renewal?

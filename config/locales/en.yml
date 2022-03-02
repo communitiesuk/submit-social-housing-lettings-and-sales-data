@@ -74,7 +74,7 @@ en:
       tshortfall:
         outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges."
       hbrentshortfall:
-        outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges can not be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
+        outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges cannot be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
       benefits:
         part_or_full_time: "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
       earnings:
@@ -86,7 +86,7 @@ en:
 
     household:
       reasonpref:
-        not_homeless: "Can not be \"They were homeless or about to lose their home\" if Not Homeless immediately prior to this letting has been selected"
+        not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
         reason_required: "If reasonable preference is \"Yes\", a reason must be given"
         reason_not_required: "If reasonable preference is \"No\", no reasons should be given"
@@ -127,7 +127,7 @@ en:
         other:
           internal_transfer: "Answer cannot be other homelessness as you already told us this tenancy was an internal transfer"
         reasonpref:
-          not_homeless: "Can not be No if \"They were homeless or about to lose their home\" was selected as reasonable preference reason"
+          not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter a local authority"
 
 

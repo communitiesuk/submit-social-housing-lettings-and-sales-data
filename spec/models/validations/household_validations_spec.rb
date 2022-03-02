@@ -80,7 +80,7 @@ RSpec.describe Validations::HouseholdValidations do
         context "when the tenant was previously homeless" do
           it "does not add an error" do
             record.homeless = 1
-            record.reasonpref = 0
+            record.reasonpref = 1
             household_validator.validate_reasonable_preference(record)
             expect(record.errors["reasonpref"]).to be_empty
             expect(record.errors["homeless"]).to be_empty
@@ -102,7 +102,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "validates that no reason is given" do
-        record.reasonpref = 1
+        record.reasonpref = 2
         record.rp_medwel = 1
         household_validator.validate_reasonable_preference(record)
         expect(record.errors["reasonable_preference_reason"])
