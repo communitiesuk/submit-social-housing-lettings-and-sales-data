@@ -16,7 +16,20 @@ class CaseLogValidator < ActiveModel::Validator
 end
 
 class CaseLog < ApplicationRecord
-  include Validations::SoftValidations
+  # include Validations::SoftValidations
+  ALLOWED_INCOME_RANGES = {
+    1 => OpenStruct.new(soft_min: 143, soft_max: 730, hard_min: 90, hard_max: 1230),
+    0 => OpenStruct.new(soft_min: 67, soft_max: 620, hard_min: 50, hard_max: 950),
+    2 => OpenStruct.new(soft_min: 80, soft_max: 480, hard_min: 40, hard_max: 990),
+    3 => OpenStruct.new(soft_min: 50, soft_max: 370, hard_min: 10, hard_max: 450),
+    4 => OpenStruct.new(soft_min: 50, soft_max: 380, hard_min: 10, hard_max: 690),
+    5 => OpenStruct.new(soft_min: 53, soft_max: 540, hard_min: 10, hard_max: 890),
+    6 => OpenStruct.new(soft_min: 47, soft_max: 460, hard_min: 10, hard_max: 1300),
+    7 => OpenStruct.new(soft_min: 54, soft_max: 460, hard_min: 10, hard_max: 820),
+    8 => OpenStruct.new(soft_min: 50, soft_max: 450, hard_min: 10, hard_max: 750),
+    9 => OpenStruct.new(soft_min: 50, soft_max: 580, hard_min: 10, hard_max: 1040),
+    10 => OpenStruct.new(soft_min: 47, soft_max: 730, hard_min: 10, hard_max: 1300),
+  }.freeze
 
   has_paper_trail
 
@@ -109,6 +122,10 @@ class CaseLog < ApplicationRecord
 
   def net_income_is_yearly?
     incfreq == 2
+  end
+
+  def net_income_soft_validation_triggered?
+    true
   end
 
   def given_reasonable_preference?

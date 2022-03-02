@@ -130,8 +130,8 @@ RSpec.describe "validations" do
         choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income-value-check")
-        expect(page).to have_content("Is the value correct?")
-        check("case-log-net-income-value-check-yes-field", allow_label_click: true)
+        expect(page).to have_content("Net income value outside expected range")
+        choose("case-log-net-income-value-check-0-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
       end
