@@ -77,7 +77,7 @@ FactoryBot.define do
       layear { 2 }
       lawaitlist { 1 }
       property_postcode { "NW1 5TY" }
-      reasonpref { 0 }
+      reasonpref { 1 }
       cbl { 1 }
       chr { 1 }
       cap { 0 }
