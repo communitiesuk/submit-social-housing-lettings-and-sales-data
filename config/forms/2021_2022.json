@@ -1606,7 +1606,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up",
+                      "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -1668,7 +1668,7 @@
                   }
                 },
                 "age2": {
-                  "header": "Person 2’s age",
+                  "header": "Age",
                   "check_answer_label": "Person 2’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -1838,7 +1838,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up",
+                      "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -1875,7 +1875,7 @@
                   }
                 },
                 "age3": {
-                  "header": "Person 3’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 3’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -1914,7 +1914,7 @@
                 }
               },
               "depends_on": [{
-                "details_known_3": 1
+                "details_known_3": 0
               }]
             },
             "person_3_economic_status": {
@@ -2009,7 +2009,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "relat3": {
+                "relat4": {
                   "check_answer_label": "Person 4’s relationship to lead tenant",
                   "header": "What’s person 4’s relationship to lead tenant",
                   "hint_text": "",
@@ -2019,7 +2019,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up",
+                      "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -2056,7 +2056,7 @@
                   }
                 },
                 "age4": {
-                  "header": "Person 4’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 4’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -2194,7 +2194,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up",
+                      "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -2231,7 +2231,7 @@
                   }
                 },
                 "age5": {
-                  "header": "Person 5’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 5’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -2365,7 +2365,7 @@
                       "value": "Partner"
                     },
                     "1": {
-                      "value": "Child - includes young adult and grown-up",
+                      "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
                     "2": {
@@ -2402,7 +2402,7 @@
                   }
                 },
                 "age6": {
-                  "header": "Do you know the person 6’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 6’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -2570,7 +2570,7 @@
                   }
                 },
                 "age7": {
-                  "header": "Person 7’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 7’s age",                 
                   "type": "numeric",
                   "min": 0,
@@ -2735,7 +2735,7 @@
                   }
                 },
                 "age8": {
-                  "header": "Person 8’s age?",
+                  "header": "Age",
                   "check_answer_label": "Person 8’s age",                 
                   "type": "numeric",
                   "min": 0,
