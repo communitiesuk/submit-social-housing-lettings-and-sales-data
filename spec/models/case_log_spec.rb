@@ -645,29 +645,6 @@ RSpec.describe CaseLog do
         expect(case_log["referral"]).to eq(0)
       end
     end
-
-    context "when it is not a renewal" do
-      let!(:case_log) do
-        described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
-          renewal: 0,
-          year: 2021,
-        })
-      end
-
-      it "correctly derives and saves reasonpref when changed to renewal" do
-        case_log.update!({ reasonpref: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select reasonpref from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["reasonpref"]).to eq(1)
-        expect(case_log["reasonpref"]).to eq(1)
-
-        case_log.update!({ renewal: 1 })
-        record_from_db = ActiveRecord::Base.connection.execute("select reasonpref from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["reasonpref"]).to eq(nil)
-        expect(case_log["reasonpref"]).to eq(nil)
-      end
-    end
   end
 
   describe "resetting invalidated fields" do
