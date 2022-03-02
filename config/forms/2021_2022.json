@@ -2871,7 +2871,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": "Yes, the person is a current or former regular"
+                  "armedforces": 0
                 }
               ],
               "questions": {
@@ -2902,10 +2902,10 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": "Yes, the person is a current or former regular"
+                  "armedforces": 0
                 },
                 {
-                  "armedforces": "Yes, the person is a current or former reserve"
+                  "armedforces": 1
                 }
               ],
               "questions": {
@@ -3014,7 +3014,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "illness": "Yes"
+                  "illness": 0
                 }
               ],
               "questions": {
