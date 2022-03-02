@@ -302,7 +302,6 @@ private
       self.homeless = 2
       self.referral = 0
       self.layear = 1
-      self.reasonpref = nil if given_reasonable_preference?
     end
     if is_general_needs?
       self.prevten = 2 if managing_organisation.provider_type == "PRP"
