@@ -84,7 +84,7 @@
                   },
                   "relat2": {
                     "check_answer_label": "Person 2’s relationship to lead tenant",
-                    "header": "What’s person 2’s relationship to lead tenant",
+                    "header": "What is person 2’s relationship to lead tenant",
                     "type": "radio",
                     "answer_options": {
                       "0": {
@@ -97,7 +97,7 @@
                   },
                   "age2": {
                     "check_answer_label": "Person 2’s age",
-                    "header": "What’s person 2’s age",
+                    "header": "Do you know person 2’s age?",
                     "type": "numeric",
                     "min": 0,
                     "max": 150,

@@ -1115,7 +1115,7 @@
             }
           ],
           "pages": {
-            "household_number_of_other_members": {
+            "number_of_members": {
               "header": "",
               "description": "",
               "questions": {
@@ -1126,11 +1126,13 @@
                   "type": "numeric",
                   "min": 0,
                   "max": 8,
-                  "step": 1
+                  "step": 1,
+                  "width": 2
                 }
               }
             },
-            "person_1_age": {
+
+            "lead_tenant_age": {
               "header": "",
               "description": "",
               "questions": {
@@ -1148,20 +1150,27 @@
                   },
                   "conditional_for": {
                     "age1": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age1": {
-                  "header": "Do you know the lead tenant’s age?",
+                  "header": "Age",
                   "check_answer_label": "Lead tenant’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age1_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               }
             },
-            "sex1": {
+            "lead_tenant_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -1180,14 +1189,17 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
               }
             },
-            "person_1_ethnic_group": {
+            "lead_tenant_ethnic_group": {
               "header": "",
               "description": "",
               "questions": {
@@ -1222,7 +1234,7 @@
                 }
               }
             },
-            "person_1_ethnic_group_detail_arab": {
+            "lead_tenant_ethnic_background_arab": {
               "header": "",
               "description": "",
               "questions": {
@@ -1257,8 +1269,7 @@
                 }
               ]
             },
-
-            "person_1_ethnic_group_detail_asian": {
+            "lead_tenant_ethnic_background_asian": {
               "header": "",
               "description": "",
               "questions": {
@@ -1269,16 +1280,16 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Indian"
-                    },
-                    "1": {
-                      "value": "Pakistani"
-                    },
-                    "2": {
                       "value": "Bangladeshi"
                     },
-                    "3": {
+                    "1": {
                       "value": "Chinese"
+                    },
+                    "2": {
+                      "value": "Indian"
+                    },
+                    "3": {
+                      "value": "Pakistani"
                     },
                     "4": {
                       "value": "Other ethnic group"
@@ -1302,7 +1313,7 @@
                 }
               ]
             },
-            "person_1_ethnic_group_detail_black": {
+            "lead_tenant_ethnic_background_black": {
               "header": "",
               "description": "",
               "questions": {
@@ -1340,7 +1351,7 @@
                 }
               ]
             },
-            "person_1_ethnic_group_detail_mixed": {
+            "lead_tenant_ethnic_background_mixed": {
               "header": "",
               "description": "",
               "questions": {
@@ -1378,7 +1389,7 @@
                 }
               ]
             },
-            "person_1_ethnic_group_detail_white": {
+            "lead_tenant_ethnic_background_white": {
               "header": "",
               "description": "",
               "questions": {
@@ -1399,12 +1410,6 @@
                     },
                     "3": {
                       "value": "Any other White background"
-                    },
-                    "divider": {
-                      "value": true
-                    },
-                    "4": {
-                      "value": "Prefer not to say"
                     }
                   },
                   "conditional_for": {
@@ -1425,7 +1430,7 @@
                 }
               ]
             },
-            "person_1_nationality": {
+            "lead_tenant_nationality": {
               "header": "",
               "description": "",
               "questions": {
@@ -1491,7 +1496,7 @@
                 }
               }
             },
-            "person_1_economic": {
+            "lead_tenant_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -1508,22 +1513,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -1531,8 +1536,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -1547,7 +1555,8 @@
                 }
               }
             },
-            "person_2_info": {
+
+            "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
               "description": "",
               "questions": {
@@ -1594,7 +1603,7 @@
               "questions": {
                 "relat2": {
                   "check_answer_label": "Person 2’s relationship to lead tenant",
-                  "header": "What’s person 2’s relationship to lead tenant",
+                  "header": "What is person 2’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1608,38 +1617,16 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
               },
               "depends_on": [{
-                "other_hhmemb": 1,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 2,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 3,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 4,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 5,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 6,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 7,
                 "details_known_2": 0
               }]
             },
@@ -1648,7 +1635,7 @@
               "description": "",
               "questions": {
                 "age2_known": {
-                  "header": "Do you know the person 2’s age?",
+                  "header": "Do you know person 2’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1661,7 +1648,8 @@
                   },
                   "conditional_for": {
                     "age2": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age2": {
                   "header": "Age",
@@ -1670,39 +1658,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age2_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
-                "other_hhmemb": 1,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 2,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 3,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 4,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 5,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 6,
-                "details_known_2": 0
-              },
-              {
-                "other_hhmemb": 7,
                 "details_known_2": 0
               }]
             },
-            "person_2_sex": {
+            "person_2_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -1721,8 +1690,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1731,7 +1703,7 @@
                 "details_known_2": 0
               }]
             },
-            "person_2_economic_status": {
+            "person_2_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -1748,22 +1720,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -1771,8 +1743,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1781,7 +1756,8 @@
                 "details_known_2": 0
               }]
             },
-            "person_3_info": {
+
+            "person_3_known": {
               "header": "You’ve given us the details for 2 people in the household",
               "description": "",
               "questions": {
@@ -1819,14 +1795,13 @@
                   "other_hhmemb": 7
                 }]
             },
-
             "person_3_relationship": {
               "header": "",
               "description": "",
               "questions": {
                 "relat3": {
                   "check_answer_label": "Person 3’s relationship to lead tenant",
-                  "header": "What’s person 3’s relationship to lead tenant",
+                  "header": "What is person 3’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1840,8 +1815,11 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1855,7 +1833,7 @@
               "description": "",
               "questions": {
                 "age3_known": {
-                  "header": "Do you know the person 3’s age?",
+                  "header": "Do you know person 3’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1868,7 +1846,8 @@
                   },
                   "conditional_for": {
                     "age3": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age3": {
                   "header": "Age",
@@ -1877,18 +1856,24 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age3_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_3": 0
               }]
             },
-            "person_3_sex": {
+            "person_3_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
-                "sex2": {
+                "sex3": {
                   "check_answer_label": "Person 3’s gender identity",
                   "header": "Which of these best describes person 3’s gender identity?",
                   "hint_text": "",
@@ -1903,8 +1888,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1913,11 +1901,11 @@
                 "details_known_3": 0
               }]
             },
-            "person_3_economic_status": {
+            "person_3_working_situation": {
               "header": "",
               "description": "",
               "questions": {
-                "ecstat2": {
+                "ecstat3": {
                   "check_answer_label": "Person 3’s working situation",
                   "header": "Which of these best describes person 3’s working situation?",
                   "hint_text": "",
@@ -1930,22 +1918,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -1953,8 +1941,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1965,7 +1956,8 @@
                 }
               ]
             },
-            "person_4_info": {
+
+            "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
               "description": "",
               "questions": {
@@ -2000,14 +1992,13 @@
                   "other_hhmemb": 7
                 }]
             },
-
             "person_4_relationship": {
               "header": "",
               "description": "",
               "questions": {
                 "relat4": {
                   "check_answer_label": "Person 4’s relationship to lead tenant",
-                  "header": "What’s person 4’s relationship to lead tenant",
+                  "header": "What is person 4’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2021,8 +2012,11 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2036,7 +2030,7 @@
               "description": "",
               "questions": {
                 "age4_known": {
-                  "header": "Do you know the person 4’s age?",
+                  "header": "Do you know person 4’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2049,7 +2043,8 @@
                   },
                   "conditional_for": {
                     "age4": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age4": {
                   "header": "Age",
@@ -2058,14 +2053,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age4_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_4": 0
               }]
             },
-            "person_4_sex": {
+            "person_4_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -2084,8 +2085,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2094,11 +2098,11 @@
                 "details_known_4": 0
               }]
             },
-            "person_4_economic_status": {
+            "person_4_working_situation": {
               "header": "",
               "description": "",
               "questions": {
-                "ecstat2": {
+                "ecstat4": {
                   "check_answer_label": "Person 4’s working situation",
                   "header": "Which of these best describes person 4’s working situation?",
                   "hint_text": "",
@@ -2111,22 +2115,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -2134,8 +2138,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2144,7 +2151,8 @@
                 "details_known_4": 0
               }]
             },
-            "person_5_info": {
+
+            "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
               "description": "",
               "questions": {
@@ -2175,14 +2183,13 @@
                   "other_hhmemb": 7
                 }]
             },
-
             "person_5_relationship": {
               "header": "",
               "description": "",
               "questions": {
                 "relat5": {
                   "check_answer_label": "Person 5’s relationship to lead tenant",
-                  "header": "What’s person 5’s relationship to lead tenant",
+                  "header": "What is person 5’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2196,8 +2203,11 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2211,7 +2221,7 @@
               "description": "",
               "questions": {
                 "age5_known": {
-                  "header": "Do you know the person 5’s age?",
+                  "header": "Do you know person 5’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2224,7 +2234,8 @@
                   },
                   "conditional_for": {
                     "age5": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age5": {
                   "header": "Age",
@@ -2233,14 +2244,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age5_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_5": 0
               }]
             },
-            "person_5_sex": {
+            "person_5_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -2259,8 +2276,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2269,7 +2289,7 @@
                 "details_known_5": 0
               }]
             },
-            "person_5_economic_status": {
+            "person_5_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -2286,22 +2306,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -2309,8 +2329,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2319,7 +2342,8 @@
                 "details_known_5": 0
               }]
             },
-            "person_6_info": {
+
+            "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
               "description": "",
               "questions": {
@@ -2353,7 +2377,7 @@
               "questions": {
                 "relat6": {
                   "check_answer_label": "Person 6’s relationship to lead tenant",
-                  "header": "What’s person 6’s relationship to lead tenant",
+                  "header": "What is person 6’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2367,14 +2391,17 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
               },
               "depends_on": [{
-                "details_known_6": 1
+                "details_known_6": 0
               }]
             },
             "person_6_age": {
@@ -2382,7 +2409,7 @@
               "description": "",
               "questions": {
                 "age6_known": {
-                  "header": "Do you know the person 6’s age?",
+                  "header": "Do you know person 6’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2395,7 +2422,8 @@
                   },
                   "conditional_for": {
                     "age6": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age6": {
                   "header": "Age",
@@ -2404,14 +2432,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age6_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_6": 0
               }]
             },
-            "person_6_sex": {
+            "person_6_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -2430,8 +2464,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2440,7 +2477,7 @@
                 "details_known_6": 0
               }]
             },
-            "person_6_economic_status": {
+            "person_6_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -2457,22 +2494,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -2480,8 +2517,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2490,7 +2530,8 @@
                 "details_known_6": 0
               }]
             },
-            "person_7_info": {
+
+            "person_7_known": {
               "header": "You’ve given us the details for 7 people in the household",
               "description": "",
               "questions": {
@@ -2521,7 +2562,7 @@
               "questions": {
                 "relat7": {
                   "check_answer_label": "Person 7’s relationship to lead tenant",
-                  "header": "What’s person 7’s relationship to lead tenant",
+                  "header": "What is person 7’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2535,14 +2576,17 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
               },
               "depends_on": [{
-                "details_known_6": 0
+                "details_known_7": 0
               }]
             },
             "person_7_age": {
@@ -2550,7 +2594,7 @@
               "description": "",
               "questions": {
                 "age7_known": {
-                  "header": "Do you know the person 7’s age?",
+                  "header": "Do you know person 7’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2563,7 +2607,8 @@
                   },
                   "conditional_for": {
                     "age7": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age7": {
                   "header": "Age",
@@ -2572,14 +2617,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age7_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_7": 0
               }]
             },
-            "person_7_sex": {
+            "person_7_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -2598,8 +2649,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2608,7 +2662,7 @@
                 "details_known_7": 0
               }]
             },
-            "person_7_economic_status": {
+            "person_7_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -2625,22 +2679,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -2648,8 +2702,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2658,7 +2715,8 @@
                 "details_known_7": 0
               }]
             },
-            "person_8_info": {
+
+            "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
               "description": "",
               "questions": {
@@ -2686,7 +2744,7 @@
               "questions": {
                 "relat8": {
                   "check_answer_label": "Person 8’s relationship to lead tenant",
-                  "header": "What’s person 8’s relationship to lead tenant",
+                  "header": "What is person 8’s relationship to lead tenant",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2700,8 +2758,11 @@
                     "2": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "3": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2715,7 +2776,7 @@
               "description": "",
               "questions": {
                 "age8_known": {
-                  "header": "Do you know the person 8 age?",
+                  "header": "Do you know person 8’s age?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2728,7 +2789,8 @@
                   },
                   "conditional_for": {
                     "age8": [0]
-                  }
+                  },
+                  "hidden_in_check_answers": true
                 },
                 "age8": {
                   "header": "Age",
@@ -2737,14 +2799,20 @@
                   "min": 0,
                   "max": 120,
                   "step": 1,
-                  "width": 2
+                  "width": 2,
+                  "inferred_check_answers_value": {
+                    "condition": {
+                      "age8_known": 1
+                    },
+                    "value": "Not known"
+                  }
                 }
               },
               "depends_on": [{
                 "details_known_8": 0
               }]
             },
-            "person_8_sex": {
+            "person_8_gender_identity": {
               "header": "",
               "description": "",
               "questions": {
@@ -2763,8 +2831,11 @@
                     "X": {
                       "value": "Non-binary"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "R": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2773,7 +2844,7 @@
                 "details_known_8": 0
               }]
             },
-            "person_8_economic_status": {
+            "person_8_working_situation": {
               "header": "",
               "description": "",
               "questions": {
@@ -2790,22 +2861,22 @@
                       "value": "Full-time – 30 hours or more"
                     },
                     "2": {
-                      "value": "In government training into work, such as New Deal"
+                      "value": "Full-time student"
                     },
                     "3": {
-                      "value": "Jobseeker"
+                      "value": "In government training into work, such as New Deal"
                     },
                     "4": {
-                      "value": "Retired"
+                      "value": "Jobseeker"
                     },
                     "5": {
                       "value": "Not seeking work"
                     },
                     "6": {
-                      "value": "Full-time student"
+                      "value": "Unable to work because of long term sick or disability"
                     },
                     "7": {
-                      "value": "Unable to work because of long term sick or disability"
+                      "value": "Retired"
                     },
                     "8": {
                       "value": "Child under 16"
@@ -2813,8 +2884,11 @@
                     "9": {
                       "value": "Other"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "10": {
-                      "value": "Prefer not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
