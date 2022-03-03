@@ -26,10 +26,10 @@ RSpec.describe "Form Navigation" do
     sign_in user
   end
 
-  describe "Create new log" do
+  describe "Create a new lettings log" do
     it "redirects to the task list for the new log" do
       visit("/logs")
-      click_button("Create new log")
+      click_button("Create a new lettings log")
       id = CaseLog.order(created_at: :desc).first.id
       expect(page).to have_content("Log #{id}")
     end
