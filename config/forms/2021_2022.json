@@ -3019,16 +3019,19 @@
                   "check_answer_label": "Household links to UK armed forces",
                   "answer_options": {
                     "0": {
-                      "value": "Yes, the person is a current or former regular"
+                      "value": "Yes – the person is a current or former regular"
                     },
                     "1": {
-                      "value": "Yes, the person is a current or former reserve"
+                      "value": "Yes – the person is a current or former reserve"
                     },
                     "2": {
-                      "value": "Yes, the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
+                      "value": "Yes – the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                     },
                     "3": {
                       "value": "No"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "4": {
                       "value": "Person prefers not to say"
@@ -3056,10 +3059,13 @@
                       "value": "Yes"
                     },
                     "1": {
-                      "value": "No, they left up to and including 5 years ago"
+                      "value": "No – they left up to and including 5 years ago"
                     },
                     "2": {
-                      "value": "No, they left more than 5 years ago"
+                      "value": "No – they left more than 5 years ago"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "3": {
                       "value": "Person prefers not to say"
@@ -3092,6 +3098,9 @@
                     "1": {
                       "value": "No"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "2": {
                       "value": "Person prefers not to say"
                     }
@@ -3115,6 +3124,9 @@
                     "1": {
                       "value": "No"
                     },
+                    "divider": {
+                      "value": true
+                    },
                     "2": {
                       "value": "Tenant prefers not to say"
                     }
@@ -3122,7 +3134,7 @@
                 }
               }
             },
-            "accessibility_requirements": {
+            "access_needs": {
               "header": "",
               "description": "",
               "questions": {
@@ -3157,7 +3169,7 @@
                 }
               }
             },
-            "medical_conditions": {
+            "health_conditions": {
               "header": "",
               "description": "",
               "questions": {
@@ -3172,6 +3184,9 @@
                     },
                     "1": {
                       "value": "No"
+                    },
+                    "divider": {
+                      "value": true
                     },
                     "2": {
                       "value": "Tenant prefers not to say"
@@ -3195,24 +3210,16 @@
                   "type": "checkbox",
                   "check_answer_label": "How is person affected by condition or illness",
                   "answer_options": {
-                    "illness_type_1": {
-                      "value": "Vision",
-                      "hint": "For example, blindness or partial sight."
-                    },
-                    "illness_type_2": {
-                      "value": "Hearing",
-                      "hint": "For example, deafness or partial hearing."
-                    },
-                    "illness_type_3": {
-                      "value": "Mobility",
-                      "hint": "For example, walking short distances or climbing stairs."
-                    },
                     "illness_type_4": {
                       "value": "Dexterity",
                       "hint": "For example, lifting and carrying objects or using a keyboard."
                     },
                     "illness_type_5": {
                       "value": "Learning or understanding or concentrating"
+                    },
+                    "illness_type_2": {
+                      "value": "Hearing",
+                      "hint": "For example, deafness or partial hearing."
                     },
                     "illness_type_6": {
                       "value": "Memory"
@@ -3221,12 +3228,20 @@
                       "value": "Mental health",
                       "hint": "For example, depression or anxiety."
                     },
-                    "illness_type_8": {
-                      "value": "Stamina or breathing or fatigue"
+                    "illness_type_3": {
+                      "value": "Mobility",
+                      "hint": "For example, walking short distances or climbing stairs."
                     },
                     "illness_type_9": {
                       "value": "Socially or behaviourally",
                       "hint": "For example, associated with autism spectrum disorder (ASD) which includes Asperger’s or attention deficit hyperactivity disorder (ADHD)."
+                    },
+                    "illness_type_8": {
+                      "value": "Stamina or breathing or fatigue"
+                    },
+                    "illness_type_1": {
+                      "value": "Vision",
+                      "hint": "For example, blindness or partial sight."
                     },
                     "illness_type_10": {
                       "value": "Other"
