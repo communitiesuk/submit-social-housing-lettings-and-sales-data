@@ -1166,7 +1166,7 @@
               "description": "",
               "questions": {
                 "sex1": {
-                  "check_answer_label": "Tenant’s gender",
+                  "check_answer_label": "Lead tenant’s gender identity",
                   "header": "Which of these best describes the lead tenant’s gender identity?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1192,7 +1192,7 @@
               "description": "",
               "questions": {
                 "ethnic_group": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic group",
                   "header": "What is the lead tenant’s ethnic group?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1227,7 +1227,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Arab background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1263,7 +1263,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Asian or Asian British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1307,7 +1307,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Black, African, Caribbean or Black British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1345,7 +1345,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Mixed or Multiple ethnic groups background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1383,7 +1383,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
-                  "check_answer_label": "Ethnicity",
+                  "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s White background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1430,7 +1430,7 @@
               "description": "",
               "questions": {
                 "national": {
-                  "check_answer_label": "Nationality",
+                  "check_answer_label": "Lead tenant’s nationality",
                   "header": "What is the lead tenant’s nationality?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1496,7 +1496,7 @@
               "description": "",
               "questions": {
                 "ecstat1": {
-                  "check_answer_label": "Work",
+                  "check_answer_label": "Lead tenant’s working situation",
                   "header": "Which of these best describes the lead tenant’s working situation?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1588,7 +1588,6 @@
               }
             ]
             },
-
             "person_2_relationship": {
               "header": "",
               "description": "",
@@ -1708,7 +1707,7 @@
               "description": "",
               "questions": {
                 "sex2": {
-                  "check_answer_label": "Person 2’s gender",
+                  "check_answer_label": "Person 2’s gender identity",
                   "header": "Which of these best describes person 2’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -1737,7 +1736,7 @@
               "description": "",
               "questions": {
                 "ecstat2": {
-                  "check_answer_label": "Person 2’s Work",
+                  "check_answer_label": "Person 2’s working situation",
                   "header": "Which of these best describes person 2’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -1890,7 +1889,7 @@
               "description": "",
               "questions": {
                 "sex2": {
-                  "check_answer_label": "Person 3’s gender",
+                  "check_answer_label": "Person 3’s gender identity",
                   "header": "Which of these best describes person 3’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -1919,7 +1918,7 @@
               "description": "",
               "questions": {
                 "ecstat2": {
-                  "check_answer_label": "Person 3’s Work",
+                  "check_answer_label": "Person 3’s working situation",
                   "header": "Which of these best describes person 3’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2071,7 +2070,7 @@
               "description": "",
               "questions": {
                 "sex4": {
-                  "check_answer_label": "Person 4’s gender",
+                  "check_answer_label": "Person 4’s gender identity",
                   "header": "Which of these best describes person 4’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2100,7 +2099,7 @@
               "description": "",
               "questions": {
                 "ecstat2": {
-                  "check_answer_label": "Person 4’s Work",
+                  "check_answer_label": "Person 4’s working situation",
                   "header": "Which of these best describes person 4’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2246,7 +2245,7 @@
               "description": "",
               "questions": {
                 "sex5": {
-                  "check_answer_label": "Person 5’s gender",
+                  "check_answer_label": "Person 5’s gender identity",
                   "header": "Which of these best describes person 5’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2275,7 +2274,7 @@
               "description": "",
               "questions": {
                 "ecstat5": {
-                  "check_answer_label": "Person 5’s Work",
+                  "check_answer_label": "Person 5’s working situation",
                   "header": "Which of these best describes person 5’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2417,7 +2416,7 @@
               "description": "",
               "questions": {
                 "sex6": {
-                  "check_answer_label": "Person 6’s gender",
+                  "check_answer_label": "Person 6’s gender identity",
                   "header": "Which of these best describes person 6’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2446,7 +2445,7 @@
               "description": "",
               "questions": {
                 "ecstat6": {
-                  "check_answer_label": "Person 6’s Work",
+                  "check_answer_label": "Person 6’s working situation",
                   "header": "Which of these best describes person 6’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2585,7 +2584,7 @@
               "description": "",
               "questions": {
                 "sex7": {
-                  "check_answer_label": "Person 7’s gender",
+                  "check_answer_label": "Person 7’s gender identity",
                   "header": "Which of these best describes person 7’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2614,7 +2613,7 @@
               "description": "",
               "questions": {
                 "ecstat7": {
-                  "check_answer_label": "Person 7’s Work",
+                  "check_answer_label": "Person 7’s working situation",
                   "header": "Which of these best describes person 7’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2750,7 +2749,7 @@
               "description": "",
               "questions": {
                 "sex8": {
-                  "check_answer_label": "Person 8’s gender",
+                  "check_answer_label": "Person 8’s gender identity",
                   "header": "Which of these best describes person 8’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2779,7 +2778,7 @@
               "description": "",
               "questions": {
                 "ecstat8": {
-                  "check_answer_label": "Person 8’s Work",
+                  "check_answer_label": "Person 8’s working situation",
                   "header": "Which of these best describes person 8’s working situation?",
                   "hint_text": "",
                   "type": "radio",
