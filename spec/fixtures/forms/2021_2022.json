@@ -814,7 +814,7 @@
                 "questions": {
                   "declaration": {
                     "check_answer_label": "",
-                    "header": "Submit your lettings log ",
+                    "header": "Submit this lettings log ",
                     "type": "checkbox",
                     "answer_options": {
                       "declaration": {

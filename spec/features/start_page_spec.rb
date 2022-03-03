@@ -10,14 +10,14 @@ RSpec.describe "Start Page Features" do
       sign_in user
     end
 
-    it "takes you to your logs" do
+    it "takes you to logs" do
       visit("/")
       expect(page).to have_current_path("/logs")
     end
   end
 
   context "when the user is not signed in" do
-    it "takes you to sign in and then to your logs" do
+    it "takes you to sign in and then to logs" do
       visit("/")
       click_link("Start now")
       expect(page).to have_current_path("/users/sign-in?start=true")
