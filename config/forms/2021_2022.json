@@ -1076,10 +1076,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Yes - sheltered housing"
+                      "value": "Yes – sheltered housing"
                     },
                     "1": {
-                      "value": "Yes - extra care housing"
+                      "value": "Yes – extra care housing"
                     },
                     "2": {
                       "value": "No"
@@ -1502,10 +1502,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -1743,10 +1743,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -1925,10 +1925,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -2106,10 +2106,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -2281,10 +2281,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -2452,10 +2452,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -2620,10 +2620,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -2785,10 +2785,10 @@
                   "type": "radio",
                   "answer_options": {
                     "0": {
-                      "value": "Part-time - Less than 30 hours"
+                      "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
-                      "value": "Full-time - 30 hours or more"
+                      "value": "Full-time – 30 hours or more"
                     },
                     "2": {
                       "value": "In government training into work, such as New Deal"
@@ -3166,16 +3166,16 @@
                   "type": "radio",
                   "answer_options": {
                     "40": {
-                      "value": "End of assured shorthold tenancy - no fault"
+                      "value": "End of assured shorthold tenancy – no fault"
                     },
                     "41": {
-                      "value": "End of assured shorthold tenancy - eviction or tenant at fault"
+                      "value": "End of assured shorthold tenancy – eviction or tenant at fault"
                     },
                     "42": {
-                      "value": "End of fixed term tenancy - no fault"
+                      "value": "End of fixed term tenancy – no fault"
                     },
                     "43": {
-                      "value": "End of fixed term tenancy - eviction or tenant at fault"
+                      "value": "End of fixed term tenancy – eviction or tenant at fault"
                     },
                     "1": {
                       "value": "Permanently decanted from another property owned by this landlord"
@@ -3229,13 +3229,13 @@
                       "value": "Couldn’t afford increase in rent"
                     },
                     "37": {
-                      "value": "Couldn’t afford rent or mortgage - welfare reforms"
+                      "value": "Couldn’t afford rent or mortgage – welfare reforms"
                     },
                     "38": {
-                      "value": "Couldn’t afford rent or mortgage - employment"
+                      "value": "Couldn’t afford rent or mortgage – employment"
                     },
                     "39": {
-                      "value": "Couldn’t afford rent or mortgage - other"
+                      "value": "Couldn’t afford rent or mortgage – other"
                     },
                     "12": {
                       "value": "Property unsuitable because of overcrowding"
@@ -3247,10 +3247,10 @@
                       "value": "Property unsuitable because of poor condition"
                     },
                     "30": {
-                      "value": "Under occupation - no incentive"
+                      "value": "Under occupation – no incentive"
                     },
                     "29": {
-                      "value": "Under occupation - offered incentive to downsize"
+                      "value": "Under occupation – offered incentive to downsize"
                     },
                     "18": {
                       "value": "To move to accommodation with support"
@@ -3294,10 +3294,10 @@
                   "type": "radio",
                   "answer_options": {
                     "42": {
-                      "value": "End of fixed term tenancy - no fault"
+                      "value": "End of fixed term tenancy – no fault"
                     },
                     "40": {
-                      "value": "End of assured shorthold tenancy - no fault"
+                      "value": "End of assured shorthold tenancy – no fault"
                     }
                   }
                 }
@@ -3420,13 +3420,13 @@
                   "type": "radio",
                   "answer_options": {
                     "4": {
-                      "value": "Yes - removal of the spare room subsidy"
+                      "value": "Yes – removal of the spare room subsidy"
                     },
                     "5": {
-                      "value": "Yes - benefit cap"
+                      "value": "Yes – benefit cap"
                     },
                     "6": {
-                      "value": "Yes - both"
+                      "value": "Yes – both"
                     },
                     "2": {
                       "value": "No"
@@ -3456,7 +3456,7 @@
                       "value": "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
                     },
                     "7": {
-                      "value": "Other homeless - not found statutorily homeless but considered homeless by landlord"
+                      "value": "Other homeless – not found statutorily homeless but considered homeless by landlord"
                     },
                     "1": {
                       "value": "No"
@@ -4079,7 +4079,7 @@
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
+                      "value": "Private registered provider (PRP) lettings only – nominated by a local housing authority"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -4136,7 +4136,7 @@
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
+                      "value": "Private registered provider (PRP) supported lettings only – referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -4193,10 +4193,10 @@
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) lettings only - nominated by a local housing authority"
+                      "value": "Private registered provider (PRP) lettings only – nominated by a local housing authority"
                     },
                     "4": {
-                      "value": "Private registered provider (PRP) supported lettings only - referred by local authority housing department"
+                      "value": "Private registered provider (PRP) supported lettings only – referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
