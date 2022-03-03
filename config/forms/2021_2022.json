@@ -124,7 +124,11 @@
                       "value": "Other intermediate rent product"
                     }
                   },
-                  "conditional_for": { "intermediate_rent_product_name": [5] }
+                  "conditional_for": {
+                    "intermediate_rent_product_name": [
+                      5
+                    ]
+                  }
                 },
                 "intermediate_rent_product_name": {
                   "check_answer_label": "Product name",
@@ -191,7 +195,11 @@
                       "value": "No"
                     }
                   },
-                  "conditional_for": { "property_postcode": [1] },
+                  "conditional_for": {
+                    "property_postcode": [
+                      1
+                    ]
+                  },
                   "hidden_in_check_answers": true
                 },
                 "property_postcode": {
@@ -233,7 +241,9 @@
                     }
                   },
                   "conditional_for": {
-                    "la": [1]
+                    "la": [
+                      1
+                    ]
                   }
                 },
                 "la": {
@@ -561,7 +571,9 @@
                     "E06000014": "York"
                   },
                   "inferred_check_answers_value": {
-                    "condition": { "la_known": 0 },
+                    "condition": {
+                      "la_known": 0
+                    },
                     "value": "Not known"
                   }
                 }
@@ -874,7 +886,10 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": [12, 13]
+                  "rsnvac": [
+                    12,
+                    13
+                  ]
                 }
               ]
             },
@@ -914,7 +929,9 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [1]
+                    "mrcdate": [
+                      1
+                    ]
                   }
                 },
                 "mrcdate": {
@@ -927,7 +944,10 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": [12, 13]
+                  "rsnvac": [
+                    12,
+                    13
+                  ]
                 }
               ]
             }
@@ -988,7 +1008,9 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [4]
+                    "tenancyother": [
+                      4
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1030,7 +1052,9 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [4]
+                    "tenancyother": [
+                      4
+                    ]
                   }
                 },
                 "tenancyother": {
@@ -1061,8 +1085,12 @@
                 }
               },
               "depends_on": [
-                { "tenancy": 3 },
-                { "tenancy": 1 }
+                {
+                  "tenancy": 3
+                },
+                {
+                  "tenancy": 1
+                }
               ]
             },
             "letting_in_sheltered_accommodation": {
@@ -1131,7 +1159,6 @@
                 }
               }
             },
-
             "lead_tenant_age": {
               "header": "",
               "description": "",
@@ -1149,7 +1176,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age1": [0]
+                    "age1": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -1555,7 +1584,6 @@
                 }
               }
             },
-
             "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
               "description": "",
@@ -1574,28 +1602,29 @@
                   }
                 }
               },
-              "depends_on": [{
-                "other_hhmemb": 1
-              },
-              {
-                "other_hhmemb": 2
-              },
-              {
-                "other_hhmemb": 3
-              },
-              {
-                "other_hhmemb": 4
-              },
-              {
-                "other_hhmemb": 5
-              },
-              {
-                "other_hhmemb": 6
-              },
-              {
-                "other_hhmemb": 7
-              }
-            ]
+              "depends_on": [
+                {
+                  "other_hhmemb": 1
+                },
+                {
+                  "other_hhmemb": 2
+                },
+                {
+                  "other_hhmemb": 3
+                },
+                {
+                  "other_hhmemb": 4
+                },
+                {
+                  "other_hhmemb": 5
+                },
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }
+              ]
             },
             "person_2_relationship": {
               "header": "",
@@ -1626,9 +1655,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_2": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_2": 0
+                }
+              ]
             },
             "person_2_age": {
               "header": "",
@@ -1647,7 +1678,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age2": [0]
+                    "age2": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -1667,9 +1700,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_2": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_2": 0
+                }
+              ]
             },
             "person_2_gender_identity": {
               "header": "",
@@ -1699,9 +1734,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_2": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_2": 0
+                }
+              ]
             },
             "person_2_working_situation": {
               "header": "",
@@ -1752,11 +1789,12 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_2": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_2": 0
+                }
+              ]
             },
-
             "person_3_known": {
               "header": "You’ve given us the details for 2 people in the household",
               "description": "",
@@ -1793,7 +1831,8 @@
                 },
                 {
                   "other_hhmemb": 7
-                }]
+                }
+              ]
             },
             "person_3_relationship": {
               "header": "",
@@ -1824,9 +1863,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_3": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_3": 0
+                }
+              ]
             },
             "person_3_age": {
               "header": "",
@@ -1845,7 +1886,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age3": [0]
+                    "age3": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -1865,9 +1908,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_3": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_3": 0
+                }
+              ]
             },
             "person_3_gender_identity": {
               "header": "",
@@ -1897,9 +1942,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_3": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_3": 0
+                }
+              ]
             },
             "person_3_working_situation": {
               "header": "",
@@ -1956,7 +2003,6 @@
                 }
               ]
             },
-
             "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
               "description": "",
@@ -1990,7 +2036,8 @@
                 },
                 {
                   "other_hhmemb": 7
-                }]
+                }
+              ]
             },
             "person_4_relationship": {
               "header": "",
@@ -2021,9 +2068,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_4": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_4": 0
+                }
+              ]
             },
             "person_4_age": {
               "header": "",
@@ -2042,7 +2091,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age4": [0]
+                    "age4": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2062,9 +2113,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_4": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_4": 0
+                }
+              ]
             },
             "person_4_gender_identity": {
               "header": "",
@@ -2094,9 +2147,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_4": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_4": 0
+                }
+              ]
             },
             "person_4_working_situation": {
               "header": "",
@@ -2147,11 +2202,12 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_4": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_4": 0
+                }
+              ]
             },
-
             "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
               "description": "",
@@ -2170,7 +2226,8 @@
                   }
                 }
               },
-              "depends_on": [{
+              "depends_on": [
+                {
                   "other_hhmemb": 4
                 },
                 {
@@ -2181,7 +2238,8 @@
                 },
                 {
                   "other_hhmemb": 7
-                }]
+                }
+              ]
             },
             "person_5_relationship": {
               "header": "",
@@ -2212,9 +2270,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_5": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_5": 0
+                }
+              ]
             },
             "person_5_age": {
               "header": "",
@@ -2233,7 +2293,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age5": [0]
+                    "age5": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2253,9 +2315,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_5": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_5": 0
+                }
+              ]
             },
             "person_5_gender_identity": {
               "header": "",
@@ -2285,9 +2349,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_5": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_5": 0
+                }
+              ]
             },
             "person_5_working_situation": {
               "header": "",
@@ -2338,11 +2404,12 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_5": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_5": 0
+                }
+              ]
             },
-
             "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
               "description": "",
@@ -2361,15 +2428,17 @@
                   }
                 }
               },
-              "depends_on": [{
-                "other_hhmemb": 5
-              },
-              {
-                "other_hhmemb": 6
-              },
-              {
-                "other_hhmemb": 7
-              }]
+              "depends_on": [
+                {
+                  "other_hhmemb": 5
+                },
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }
+              ]
             },
             "person_6_relationship": {
               "header": "",
@@ -2400,9 +2469,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_6": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_6": 0
+                }
+              ]
             },
             "person_6_age": {
               "header": "",
@@ -2421,7 +2492,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age6": [0]
+                    "age6": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2441,9 +2514,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_6": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_6": 0
+                }
+              ]
             },
             "person_6_gender_identity": {
               "header": "",
@@ -2473,9 +2548,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_6": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_6": 0
+                }
+              ]
             },
             "person_6_working_situation": {
               "header": "",
@@ -2526,11 +2603,12 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_6": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_6": 0
+                }
+              ]
             },
-
             "person_7_known": {
               "header": "You’ve given us the details for 7 people in the household",
               "description": "",
@@ -2549,12 +2627,14 @@
                   }
                 }
               },
-              "depends_on": [{
-                "other_hhmemb": 6
-              },
-              {
-                "other_hhmemb": 7
-              }]
+              "depends_on": [
+                {
+                  "other_hhmemb": 6
+                },
+                {
+                  "other_hhmemb": 7
+                }
+              ]
             },
             "person_7_relationship": {
               "header": "",
@@ -2585,9 +2665,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_7": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_7": 0
+                }
+              ]
             },
             "person_7_age": {
               "header": "",
@@ -2606,7 +2688,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age7": [0]
+                    "age7": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2626,9 +2710,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_7": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_7": 0
+                }
+              ]
             },
             "person_7_gender_identity": {
               "header": "",
@@ -2658,9 +2744,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_7": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_7": 0
+                }
+              ]
             },
             "person_7_working_situation": {
               "header": "",
@@ -2711,11 +2799,12 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_7": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_7": 0
+                }
+              ]
             },
-
             "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
               "description": "",
@@ -2734,9 +2823,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "other_hhmemb": 7
-              }]
+              "depends_on": [
+                {
+                  "other_hhmemb": 7
+                }
+              ]
             },
             "person_8_relationship": {
               "header": "",
@@ -2767,9 +2858,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_8": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_8": 0
+                }
+              ]
             },
             "person_8_age": {
               "header": "",
@@ -2788,7 +2881,9 @@
                     }
                   },
                   "conditional_for": {
-                    "age8": [0]
+                    "age8": [
+                      0
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -2808,9 +2903,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_8": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_8": 0
+                }
+              ]
             },
             "person_8_gender_identity": {
               "header": "",
@@ -2840,9 +2937,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_8": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_8": 0
+                }
+              ]
             },
             "person_8_working_situation": {
               "header": "",
@@ -2893,9 +2992,11 @@
                   }
                 }
               },
-              "depends_on": [{
-                "details_known_8": 0
-              }]
+              "depends_on": [
+                {
+                  "details_known_8": 0
+                }
+              ]
             }
           }
         },
@@ -3184,7 +3285,11 @@
                   }
                 }
               },
-              "depends_on":  [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "time_on_la_waiting_list": {
               "header": "",
@@ -3226,7 +3331,11 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "reason_for_leaving_last_settled_home": {
               "header": "",
@@ -3345,7 +3454,9 @@
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": [31]
+                    "other_reason_for_leaving_last_settled_home": [
+                      31
+                    ]
                   }
                 },
                 "other_reason_for_leaving_last_settled_home": {
@@ -3354,7 +3465,11 @@
                   "type": "text"
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "reason_for_leaving_last_settled_home_renewal": {
               "header": "",
@@ -3375,7 +3490,11 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 1 }]
+              "depends_on": [
+                {
+                  "renewal": 1
+                }
+              ]
             },
             "previous_housing_situation": {
               "header": "",
@@ -3459,7 +3578,12 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0, "needstype": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0,
+                  "needstype": 0
+                }
+              ]
             },
             "previous_housing_situation_renewal": {
               "header": "",
@@ -3480,7 +3604,12 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 1, "needstype": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 1,
+                  "needstype": 0
+                }
+              ]
             },
             "underoccupation_benefitcap": {
               "header": "",
@@ -3513,7 +3642,11 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "homelessness": {
               "header": "",
@@ -3537,7 +3670,11 @@
                   }
                 }
               },
-              "depends_on": [{ "renewal": 0 }]
+              "depends_on": [
+                {
+                  "renewal": 0
+                }
+              ]
             },
             "previous_postcode": {
               "header": "",
@@ -3548,11 +3685,17 @@
                   "hint_text": "This is also known as the household’s ’last settled home’.",
                   "type": "radio",
                   "answer_options": {
-                    "1": { "value": "Yes" },
-                    "0": { "value": "No" }
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
+                    }
                   },
                   "conditional_for": {
-                    "previous_postcode": [1]
+                    "previous_postcode": [
+                      1
+                    ]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -3563,10 +3706,14 @@
                   "type": "text",
                   "width": 5,
                   "inferred_answers": {
-                    "prevloc": { "is_previous_la_inferred": true }
+                    "prevloc": {
+                      "is_previous_la_inferred": true
+                    }
                   },
                   "inferred_check_answers_value": {
-                    "condition": { "previous_postcode_known": 0 },
+                    "condition": {
+                      "previous_postcode_known": 0
+                    },
                     "value": "Not known"
                   }
                 }
@@ -3583,11 +3730,17 @@
                   "type": "radio",
                   "hidden_in_check_answers": true,
                   "answer_options": {
-                    "1": { "value": "Yes" },
-                    "0": { "value": "No" }
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
+                    }
                   },
                   "conditional_for": {
-                    "prevloc": [1]
+                    "prevloc": [
+                      1
+                    ]
                   }
                 },
                 "prevloc": {
@@ -3982,12 +4135,18 @@
                     "9300000XX": "Outside UK"
                   },
                   "inferred_check_answers_value": {
-                    "condition": { "previous_la_known": 0 },
+                    "condition": {
+                      "previous_la_known": 0
+                    },
                     "value": "Not known"
                   }
                 }
               },
-              "depends_on": [{ "is_previous_la_inferred": false }]
+              "depends_on": [
+                {
+                  "is_previous_la_inferred": false
+                }
+              ]
             },
             "reasonable_preference": {
               "header": "",
@@ -4351,7 +4510,11 @@
               }
             },
             "net_income": {
-              "depends_on": [{ "net_income_known": 0 }],
+              "depends_on": [
+                {
+                  "net_income_known": 0
+                }
+              ],
               "header": "Household’s combined income after tax",
               "description": "",
               "questions": {
@@ -4368,15 +4531,21 @@
                   "suffix": [
                     {
                       "label": "every week",
-                      "depends_on": { "incfreq": 0 }
+                      "depends_on": {
+                        "incfreq": 0
+                      }
                     },
                     {
                       "label": "every month",
-                      "depends_on": { "incfreq": 1 }
+                      "depends_on": {
+                        "incfreq": 1
+                      }
                     },
                     {
                       "label": "every month",
-                      "depends_on": { "incfreq": 2 }
+                      "depends_on": {
+                        "incfreq": 2
+                      }
                     }
                   ]
                 },
@@ -4568,7 +4737,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -4662,7 +4833,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -4706,7 +4879,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -4750,7 +4925,9 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [1]
+                    "chcharge": [
+                      1
+                    ]
                   }
                 },
                 "chcharge": {
@@ -4790,7 +4967,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4804,7 +4986,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4818,7 +5005,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4832,7 +5024,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -4848,7 +5045,12 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -4988,7 +5190,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5002,7 +5209,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5016,7 +5228,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5030,7 +5247,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5046,7 +5268,12 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -5086,7 +5313,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5100,7 +5332,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5114,7 +5351,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5128,7 +5370,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5144,7 +5391,12 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
@@ -5184,7 +5436,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5198,7 +5455,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5212,7 +5474,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5226,7 +5493,12 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "fields-to-add": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5242,7 +5514,12 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
+                  "fields_added": [
+                    "brent",
+                    "scharge",
+                    "pscharge",
+                    "supcharg"
+                  ]
                 }
               },
               "depends_on": [
