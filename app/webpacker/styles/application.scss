@@ -16,8 +16,9 @@ $govuk-global-styles: true;
 @import "input";
 @import "related-navigation";
 @import "section-skip-link";
-@import "task-list";
 @import "tab-navigation";
+@import "task-list";
+@import "template";
 
 // Overrides
 .app-\!-colour-muted {
