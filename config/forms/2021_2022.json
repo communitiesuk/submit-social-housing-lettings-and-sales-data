@@ -1152,7 +1152,7 @@
                 },
                 "age1": {
                   "header": "Do you know the lead tenant’s age?",
-                  "check_answer_label": "Lead tenant’s age",                 
+                  "check_answer_label": "Lead tenant’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -1257,7 +1257,7 @@
                 }
               ]
             },
-            
+
             "person_1_ethnic_group_detail_asian": {
               "header": "",
               "description": "",
@@ -1435,59 +1435,56 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "UK national resident in UK"
                     },
-                    "1": {
+                    "2": {
                       "value": "UK national returning from residence overseas"
                     },
-                    "2": {
-                      "value": "Czech"
-                    },
-                    "3": {
-                      "value": "Estonian"
-                    },
-                    "4": {
-                      "value": "Hungarian"
-                    },
-                    "5": {
-                      "value": "Latvian"
-                    },
-                    "6": {
-                      "value": "Lithuanian"
-                    },
-                    "7": {
-                      "value": "Polish"
-                    },
-                    "8": {
-                      "value": "Slovakian"
-                    },
-                    "9": {
+                    "14": {
                       "value": "Bulgarian"
                     },
-                    "10": {
-                      "value": "Romanian"
-                    },
-                    "11": {
-                      "value": "Irish"
-                    },
-                    "12": {
-                      "value": "Slovakian"
-                    },
-                    "13": {
-                      "value": "Slovenian"
-                    },
-                    "14": {
+                    "16": {
                       "value": "Croatian"
                     },
-                    "15": {
-                      "value": "From another European Economic Area (EEA) country"
+                    "3": {
+                      "value": "Czech"
                     },
-                    "divider": true,
-                    "16": {
-                      "value": "From any other country"
+                    "4": {
+                      "value": "Estonian"
                     },
                     "17": {
+                      "value": "Irish"
+                    },
+                    "5": {
+                      "value": "Hungarian"
+                    },
+                    "6": {
+                      "value": "Latvian"
+                    },
+                    "7": {
+                      "value": "Lithuanian"
+                    },
+                    "8": {
+                      "value": "Polish"
+                    },
+                    "15": {
+                      "value": "Romanian"
+                    },
+                    "9": {
+                      "value": "Slovakian"
+                    },
+                    "10": {
+                      "value": "Slovenian"
+                    },
+                    "11": {
+                      "value": "From another European Economic Area (EEA) country"
+                    },
+                    "12": {
+                      "value": "From any other country"
+                    },
+                    "divider": true,
+                    "13": {
                       "value": "Tenant prefers not to say"
                     }
                   }
@@ -1591,7 +1588,7 @@
               }
             ]
             },
-            
+
             "person_2_relationship": {
               "header": "",
               "description": "",
@@ -1669,7 +1666,7 @@
                 },
                 "age2": {
                   "header": "Age",
-                  "check_answer_label": "Person 2’s age",                 
+                  "check_answer_label": "Person 2’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -1823,7 +1820,7 @@
                   "other_hhmemb": 7
                 }]
             },
-            
+
             "person_3_relationship": {
               "header": "",
               "description": "",
@@ -1876,7 +1873,7 @@
                 },
                 "age3": {
                   "header": "Age",
-                  "check_answer_label": "Person 3’s age",                 
+                  "check_answer_label": "Person 3’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2004,7 +2001,7 @@
                   "other_hhmemb": 7
                 }]
             },
-            
+
             "person_4_relationship": {
               "header": "",
               "description": "",
@@ -2057,7 +2054,7 @@
                 },
                 "age4": {
                   "header": "Age",
-                  "check_answer_label": "Person 4’s age",                 
+                  "check_answer_label": "Person 4’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2179,7 +2176,7 @@
                   "other_hhmemb": 7
                 }]
             },
-            
+
             "person_5_relationship": {
               "header": "",
               "description": "",
@@ -2232,7 +2229,7 @@
                 },
                 "age5": {
                   "header": "Age",
-                  "check_answer_label": "Person 5’s age",                 
+                  "check_answer_label": "Person 5’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2403,7 +2400,7 @@
                 },
                 "age6": {
                   "header": "Age",
-                  "check_answer_label": "Person 6’s age",                 
+                  "check_answer_label": "Person 6’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2571,7 +2568,7 @@
                 },
                 "age7": {
                   "header": "Age",
-                  "check_answer_label": "Person 7’s age",                 
+                  "check_answer_label": "Person 7’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2736,7 +2733,7 @@
                 },
                 "age8": {
                   "header": "Age",
-                  "check_answer_label": "Person 8’s age",                 
+                  "check_answer_label": "Person 8’s age",
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
