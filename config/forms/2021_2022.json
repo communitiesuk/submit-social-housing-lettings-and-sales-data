@@ -7,7 +7,7 @@
       "label": "Before you start",
       "subsections": {
         "setup": {
-          "label": "Set up your lettings log",
+          "label": "Set up this lettings log",
           "pages": {
             "organisation_details": {
               "header": "Organisation details",
@@ -5640,7 +5640,7 @@
               "questions": {
                 "declaration": {
                   "check_answer_label": "",
-                  "header": "Submit your lettings log ",
+                  "header": "Submit this lettings log ",
                   "hint_text": "",
                   "type": "checkbox",
                   "answer_options": {

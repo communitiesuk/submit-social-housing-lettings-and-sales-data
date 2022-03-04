@@ -13,13 +13,29 @@ $govuk-global-styles: true;
 @import "~govuk-frontend/govuk/all";
 
 @import "accessible-autocomplete";
+@import "figure";
 @import "input";
 @import "related-navigation";
 @import "section-skip-link";
-@import "task-list";
 @import "tab-navigation";
+@import "table-group";
+@import "task-list";
+@import "template";
 
-// Overrides
+// App utilities
 .app-\!-colour-muted {
   color: $govuk-secondary-text-colour !important;
+}
+
+.app-\!-font-tabular {
+  @include govuk-font($size: false, $tabular: true);
+}
+
+// Overrides
+.govuk-button-group {
+  align-items: center;
+}
+
+.govuk-tag {
+  white-space: nowrap;
 }
