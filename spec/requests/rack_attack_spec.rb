@@ -1,6 +1,5 @@
 require "rails_helper"
 require_relative "../support/devise"
-require_relative "../support/rack_attack"
 require "rack/attack"
 
 describe "Rack::Attack" do
@@ -31,12 +30,8 @@ describe "Rack::Attack" do
           post "/users/password", params: params
           follow_redirect!
         end
+        last_response = response
         expect(last_response.status).to eq(200)
-
-        # post "/users/password", params: params
-        # expect(response).to have_http_status(:redirect)
-        # follow_redirect!
-        # expect(response.body).to match(/Check your email/)
       end
     end
   end
