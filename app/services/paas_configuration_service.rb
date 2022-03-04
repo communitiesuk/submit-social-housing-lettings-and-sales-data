@@ -1,10 +1,11 @@
 class PaasConfigurationService
-  attr_reader :s3_buckets
+  attr_reader :s3_buckets, :redis_uris
 
   def initialize(logger = Rails.logger)
     @logger = logger
     @paas_config = read_pass_config
     @s3_buckets = read_s3_buckets
+    @redis_uris = read_redis_uris
   end
 
   def config_present?
@@ -13,6 +14,10 @@ class PaasConfigurationService
 
   def s3_config_present?
     config_present? && @paas_config.key?(:"aws-s3-bucket")
+  end
+
+  def redis_config_present?
+    config_present? && @paas_config.key?(:redis)
   end
 
 private
@@ -41,5 +46,17 @@ private
       end
     end
     s3_buckets
+  end
+
+  def read_redis_uris
+    return {} unless redis_config_present?
+
+    redis_uris = {}
+    @paas_config[:redis].each do |redis_config|
+      if redis_config.key?(:instance_name)
+        redis_uris[redis_config[:instance_name].to_sym] = redis_config.dig(:credentials, :uri)
+      end
+    end
+    redis_uris
   end
 end
