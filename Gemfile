@@ -50,6 +50,7 @@ gem "paper_trail"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
 # Receive exceptions and configure alerts
+gem "rack-attack"
 gem "sentry-rails"
 gem "sentry-ruby"
 
