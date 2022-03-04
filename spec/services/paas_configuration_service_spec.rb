@@ -136,5 +136,4 @@ RSpec.describe PaasConfigurationService do
       expect(config_service.redis_uris).to be_empty
     end
   end
-
 end

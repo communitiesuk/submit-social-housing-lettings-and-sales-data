@@ -51,6 +51,7 @@ gem "paper_trail"
 gem "paper_trail-globalid"
 # Receive exceptions and configure alerts
 gem "rack-attack"
+gem "redis"
 gem "sentry-rails"
 gem "sentry-ruby"
 
