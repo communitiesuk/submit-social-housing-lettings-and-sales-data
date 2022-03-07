@@ -3359,32 +3359,32 @@
                 "reason": {
                   "check_answer_label": "Reason for leaving last settled home",
                   "header": "What is the tenant’s main reason for the household leaving their last settled home?",
-                  "hint_text": "The tenant’s ’last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
+                  "hint_text": "The tenant’s ‘last settled home’ is their last long-standing home. For tenants who were in temporary accommodation or sleeping rough, their last settled home is where they were living previously.",
                   "type": "radio",
                   "answer_options": {
                     "40": {
-                      "value": "End of assured shorthold tenancy – no fault"
+                      "value": "End of assured shorthold tenancy (no fault)"
                     },
                     "41": {
-                      "value": "End of assured shorthold tenancy – eviction or tenant at fault"
+                      "value": "End of assured shorthold tenancy (eviction or tenant at fault)"
                     },
                     "42": {
-                      "value": "End of fixed term tenancy – no fault"
+                      "value": "End of fixed term tenancy (no fault)"
                     },
                     "43": {
-                      "value": "End of fixed term tenancy – eviction or tenant at fault"
+                      "value": "End of fixed term tenancy (eviction or tenant at fault)"
                     },
                     "1": {
                       "value": "Permanently decanted from another property owned by this landlord"
                     },
-                    "2": {
-                      "value": "Left home country as a refugee"
+                    "45": {
+                      "value": "Discharged from long-stay hospital or similar institution"
                     },
                     "44": {
                       "value": "Discharged from prison"
                     },
-                    "45": {
-                      "value": "Discharged from long stay hospital or similar institution"
+                    "2": {
+                      "value": "Left home country as a refugee"
                     },
                     "4": {
                       "value": "Loss of tied accommodation"
@@ -3392,11 +3392,11 @@
                     "9": {
                       "value": "Asked to leave by family or friends"
                     },
-                    "8": {
-                      "value": "Relationship breakdown (non-violent) with partner"
-                    },
                     "46": {
                       "value": "Death of household member in last settled accommodation"
+                    },
+                    "8": {
+                      "value": "Relationship breakdown (non-violent) with partner"
                     },
                     "16": {
                       "value": "To move nearer to family, friends or school"
@@ -3407,17 +3407,14 @@
                     "7": {
                       "value": "Domestic abuse"
                     },
-                    "10": {
-                      "value": "Racial harassment"
-                    },
                     "31": {
                       "value": "Hate crime"
                     },
+                    "10": {
+                      "value": "Racial harassment"
+                    },
                     "11": {
                       "value": "Other problems with neighbours"
-                    },
-                    "34": {
-                      "value": "Repossession"
                     },
                     "35": {
                       "value": "Couldn’t afford fees attached to renewing the tenancy"
@@ -3425,14 +3422,17 @@
                     "36": {
                       "value": "Couldn’t afford increase in rent"
                     },
-                    "37": {
-                      "value": "Couldn’t afford rent or mortgage – welfare reforms"
-                    },
                     "38": {
-                      "value": "Couldn’t afford rent or mortgage – employment"
+                      "value": "Couldn’t afford rent or mortgage (employment)"
+                    },
+                    "37": {
+                      "value": "Couldn’t afford rent or mortgage (welfare reforms)"
                     },
                     "39": {
-                      "value": "Couldn’t afford rent or mortgage – other"
+                      "value": "Couldn’t afford rent or mortgage (other)"
+                    },
+                    "34": {
+                      "value": "Repossession"
                     },
                     "12": {
                       "value": "Property unsuitable because of overcrowding"
@@ -3443,17 +3443,17 @@
                     "14": {
                       "value": "Property unsuitable because of poor condition"
                     },
-                    "30": {
-                      "value": "Under occupation – no incentive"
-                    },
-                    "29": {
-                      "value": "Under occupation – offered incentive to downsize"
-                    },
                     "18": {
                       "value": "To move to accommodation with support"
                     },
                     "19": {
                       "value": "To move to independent accommodation"
+                    },
+                    "30": {
+                      "value": "Under occupation (no incentive)"
+                    },
+                    "29": {
+                      "value": "Under occupation (offered incentive to downsize)"
                     },
                     "20": {
                       "value": "Other"
@@ -3496,11 +3496,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "42": {
-                      "value": "End of fixed term tenancy – no fault"
-                    },
                     "40": {
-                      "value": "End of assured shorthold tenancy – no fault"
+                      "value": "End of assured shorthold tenancy (no fault)"
+                    },
+                    "42": {
+                      "value": "End of fixed term tenancy (no fault)"
                     }
                   }
                 }
@@ -3524,53 +3524,56 @@
                     "30": {
                       "value": "Fixed-term local authority general needs tenancy"
                     },
-                    "31": {
-                      "value": "Lifetime local authority general needs tenancy"
-                    },
                     "32": {
                       "value": "Fixed-term private registered provider (PRP) general needs tenancy"
+                    },
+                    "31": {
+                      "value": "Lifetime local authority general needs tenancy"
                     },
                     "33": {
                       "value": "Lifetime private registered provider (PRP) general needs tenancy"
                     },
-                    "6": {
-                      "value": "Supported housing"
-                    },
                     "8": {
                       "value": "Sheltered accommodation"
+                    },
+                    "6": {
+                      "value": "Supported housing"
                     },
                     "3": {
                       "value": "Private sector tenancy"
                     },
-                    "26": {
-                      "value": "Owner occupation (private)"
-                    },
                     "27": {
                       "value": "Owner occupation (low-cost home ownership)"
+                    },
+                    "26": {
+                      "value": "Owner occupation (private)"
                     },
                     "28": {
                       "value": "Living with friends or family"
                     },
-                    "7": {
-                      "value": "Direct access hostel"
-                    },
                     "14": {
                       "value": "Bed and breakfast"
                     },
-                    "29": {
-                      "value": "Prison or approved probation hostel"
+                    "7": {
+                      "value": "Direct access hostel"
                     },
                     "10": {
                       "value": "Hospital"
                     },
-                    "18": {
-                      "value": "Any other temporary accommodation"
+                    "29": {
+                      "value": "Prison or approved probation hostel"
                     },
                     "19": {
                       "value": "Rough sleeping"
                     },
-                    "4": {
-                      "value": "Tied housing or rented with job"
+                    "18": {
+                      "value": "Any other temporary accommodation"
+                    },
+                    "13": {
+                      "value": "Children’s home or foster care"
+                    },
+                    "24": {
+                      "value": "Home Office Asylum Support"
                     },
                     "23": {
                       "value": "Mobile home or caravan"
@@ -3578,14 +3581,11 @@
                     "21": {
                       "value": "Refuge"
                     },
-                    "13": {
-                      "value": "Children’s home or foster care"
-                    },
                     "9": {
                       "value": "Residential care home"
                     },
-                    "24": {
-                      "value": "Home Office Asylum Support"
+                    "4": {
+                      "value": "Tied housing or rented with job"
                     },
                     "25": {
                       "value": "Any other accommodation"
@@ -3610,11 +3610,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "6": {
-                      "value": "Supported housing"
-                    },
                     "8": {
                       "value": "Sheltered accommodation"
+                    },
+                    "6": {
+                      "value": "Supported housing"
                     }
                   }
                 }
@@ -3626,7 +3626,7 @@
                 }
               ]
             },
-            "underoccupation_benefitcap": {
+            "under_occupation_benefit_cap": {
               "header": "",
               "description": "",
               "questions": {
@@ -3697,7 +3697,7 @@
               "questions": {
                 "previous_postcode_known": {
                   "header": "Do you know the postcode of the household’s last settled accommodation?",
-                  "hint_text": "This is also known as the household’s ’last settled home’.",
+                  "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
                   "answer_options": {
                     "1": {
@@ -3741,7 +3741,7 @@
                 "previous_la_known": {
                   "check_answer_label": "Do you know the local authority of the household’s last settled accommodation?",
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
-                  "hint_text": "This is also known as the household’s ’last settled home’.",
+                  "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
                   "hidden_in_check_answers": true,
                   "answer_options": {
@@ -4226,7 +4226,7 @@
                 }
               ]
             },
-            "lettings_policy": {
+            "allocation_system": {
               "header": "",
               "description": "",
               "questions": {
@@ -4239,11 +4239,11 @@
                     "cbl": {
                       "value": "Choice-based lettings (CBL)"
                     },
-                    "chr": {
-                      "value": "Common housing register (CHR)"
-                    },
                     "cap": {
                       "value": "Common Allocation Policy (CAP)"
+                    },
+                    "chr": {
+                      "value": "Common housing register (CHR)"
                     },
                     "divider": {
                       "value": true
@@ -4289,11 +4289,11 @@
                     "12": {
                       "value": "Police, probation or prison"
                     },
-                    "13": {
-                      "value": "Youth offending team"
-                    },
                     "7": {
                       "value": "Voluntary agency"
+                    },
+                    "13": {
+                      "value": "Youth offending team"
                     },
                     "16": {
                       "value": "Other"
@@ -4323,10 +4323,10 @@
                       "value": "Internal transfer"
                     },
                     "2": {
-                      "value": "Tenant applied directly (no referral or nomination)"
+                      "value": "Tenant applied directly (no nomination)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) lettings only – nominated by a local housing authority"
+                      "value": "Nominated by a local housing authority"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -4346,11 +4346,11 @@
                     "12": {
                       "value": "Police, probation or prison"
                     },
-                    "13": {
-                      "value": "Youth offending team"
-                    },
                     "7": {
                       "value": "Voluntary agency"
+                    },
+                    "13": {
+                      "value": "Youth offending team"
                     },
                     "16": {
                       "value": "Other"
@@ -4380,10 +4380,10 @@
                       "value": "Internal transfer"
                     },
                     "2": {
-                      "value": "Tenant applied directly (no referral or nomination)"
+                      "value": "Tenant applied directly (no referral)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) supported lettings only – referred by local authority housing department"
+                      "value": "Referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -4403,11 +4403,11 @@
                     "12": {
                       "value": "Police, probation or prison"
                     },
-                    "13": {
-                      "value": "Youth offending team"
-                    },
                     "7": {
                       "value": "Voluntary agency"
+                    },
+                    "13": {
+                      "value": "Youth offending team"
                     },
                     "16": {
                       "value": "Other"
@@ -4440,10 +4440,10 @@
                       "value": "Tenant applied directly (no referral or nomination)"
                     },
                     "3": {
-                      "value": "Private registered provider (PRP) lettings only – nominated by a local housing authority"
+                      "value": "Nominated by a local housing authority"
                     },
                     "4": {
-                      "value": "Private registered provider (PRP) supported lettings only – referred by local authority housing department"
+                      "value": "Referred by local authority housing department"
                     },
                     "8": {
                       "value": "Re-located through official housing mobility scheme"
@@ -4463,11 +4463,11 @@
                     "12": {
                       "value": "Police, probation or prison"
                     },
-                    "13": {
-                      "value": "Youth offending team"
-                    },
                     "7": {
                       "value": "Voluntary agency"
+                    },
+                    "13": {
+                      "value": "Youth offending team"
                     },
                     "16": {
                       "value": "Other"
