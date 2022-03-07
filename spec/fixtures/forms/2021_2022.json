@@ -64,6 +64,56 @@
                   }
                 }
               },
+              "person_1_working_situation": {
+                "header": "",
+                "description": "",
+                "questions": {
+                  "ecstat1": {
+                    "check_answer_label": "Lead tenant’s working situation",
+                    "header": "Which of these best describes the lead tenant’s working situation?",
+                    "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": {
+                        "value": "Part-time – Less than 30 hours"
+                      },
+                      "1": {
+                        "value": "Full-time – 30 hours or more"
+                      },
+                      "2": {
+                        "value": "Full-time student"
+                      },
+                      "3": {
+                        "value": "In government training into work, such as New Deal"
+                      },
+                      "4": {
+                        "value": "Jobseeker"
+                      },
+                      "5": {
+                        "value": "Not seeking work"
+                      },
+                      "6": {
+                        "value": "Unable to work because of long term sick or disability"
+                      },
+                      "7": {
+                        "value": "Retired"
+                      },
+                      "8": {
+                        "value": "Child under 16"
+                      },
+                      "9": {
+                        "value": "Other"
+                      },
+                      "divider": {
+                        "value": true
+                      },
+                      "10": {
+                        "value": "Tenant prefers not to say"
+                      }
+                    }
+                  }
+                }
+              },
               "household_number_of_other_members": {
                 "questions": {
                   "other_hhmemb": {
@@ -489,12 +539,16 @@
               },
               "net_income_value_check": {
                 "depends_on": [{ "net_income_soft_validation_triggered?": true }],
-                "title_text": "Net income value outside expected range",
+                "title_text": "Net income is higher than expected based on the main tenant’s working situation",
+                "informative_text": {
+                  "translation": "soft_validations.net_income.hint_text", 
+                  "argument": "ecstat1"
+                },
                 "questions": {
                   "net_income_value_check": {
                     "check_answer_label": "Net income soft validation",
                     "hidden_in_check_answers": true,
-                    "header": "Is this value correct?",
+                    "header": "Are you sure this is correct?",
                     "type": "interruption_screen",
                     "answer_options": {
                       "0": {
