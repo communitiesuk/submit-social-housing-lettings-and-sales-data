@@ -542,7 +542,7 @@
                 "title_text": "Net income is higher than expected based on the main tenant’s working situation",
                 "informative_text": {
                   "translation": "soft_validations.net_income.hint_text", 
-                  "argument": "ecstat1"
+                  "argument": ["ecstat1", "earnings"]
                 },
                 "questions": {
                   "net_income_value_check": {
