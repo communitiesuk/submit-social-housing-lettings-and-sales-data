@@ -24,7 +24,7 @@ gem "notifications-ruby-client"
 # Turbo and Stimulus
 gem "hotwire-rails"
 # Administration framework
-gem "activeadmin", git: "https://github.com/tagliala/activeadmin.git", branch: "feature/railties-7"
+gem "activeadmin", github: "activeadmin/activeadmin"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
@@ -49,9 +49,10 @@ gem "aws-sdk-s3"
 gem "paper_trail"
 # Store active record objects in version whodunnits
 gem "paper_trail-globalid"
-# Receive exceptions and configure alerts
+# Request rate limiting
 gem "rack-attack"
 gem "redis"
+# Receive exceptions and configure alerts
 gem "sentry-rails"
 gem "sentry-ruby"
 
