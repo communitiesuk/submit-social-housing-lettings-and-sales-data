@@ -2,10 +2,12 @@
   title_text: title_text,
   classes: 'app-panel--interruption',
 ) do %>
+  <% translation_question = case_log.form.get_question(informative_text["argument"]) %>
+  <% binding.pry %>
+  <%= I18n.t(informative_text["translation"], informative_text["argument"].to_sym => translation_question.answer_label(case_log)) %>
   <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
     legend: legend(question, page_header, conditional),
     hint: { text: question.hint_text&.html_safe } do %>
-
     <% question.answer_options.map do |key, options| %>
       <% if key.starts_with?("divider") %>
         <%= f.govuk_radio_divider %>

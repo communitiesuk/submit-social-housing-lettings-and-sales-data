@@ -1,6 +1,6 @@
 class Form::Page
   attr_accessor :id, :header, :description, :questions, :soft_validations,
-                :depends_on, :title_text, :subsection, :hide_subsection_label
+                :depends_on, :title_text, :informative_text, :subsection, :hide_subsection_label
 
   def initialize(id, hsh, subsection)
     @id = id
@@ -9,6 +9,7 @@ class Form::Page
     @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
     @depends_on = hsh["depends_on"]
     @title_text = hsh["title_text"]
+    @informative_text = hsh["informative_text"]
     @hide_subsection_label = hsh["hide_subsection_label"]
     @soft_validations = hsh["soft_validations"]&.map { |sv_id, s| Form::Question.new(sv_id, s, self) }
     @subsection = subsection
