@@ -54,6 +54,7 @@ describe "Rack::Attack" do
       it "throttles" do
         over_limit.times do
           post "/users/password", params: params
+          follow_redirect!
         end
         last_response = response
         expect(last_response.status).to eq(429)

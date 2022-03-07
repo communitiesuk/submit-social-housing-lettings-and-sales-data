@@ -11,3 +11,10 @@ Rack::Attack.throttle("password reset requests", limit: 5, period: 60.seconds) d
     request.params["user"]["email"].to_s.downcase.gsub(/\s+/, "")
   end
 end
+
+Rack::Attack.throttled_responder = lambda do |_env|
+  headers = {
+    "Location" => "/429",
+  }
+  [301, headers, []]
+end
