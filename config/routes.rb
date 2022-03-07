@@ -26,6 +26,10 @@ Rails.application.routes.draw do
     get "confirmations/reset", to: "auth/passwords#reset_confirmation"
   end
 
+  constraints CanAccessFlipperUI do
+    mount Flipper::UI.app(Flipper) => "/feature-flags"
+  end
+
   get "/health", to: ->(_) { [204, {}, [nil]] }
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

@@ -52,6 +52,10 @@ gem "paper_trail-globalid"
 # Receive exceptions and configure alerts
 gem "sentry-rails"
 gem "sentry-ruby"
+# Feature flagging
+gem "flipper"
+gem "flipper-active_record"
+gem "flipper-ui"
 
 group :development, :test do
   # Check gems for known vulnerabilities

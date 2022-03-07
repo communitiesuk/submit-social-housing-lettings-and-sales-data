@@ -23,7 +23,7 @@ GIT
 
 GIT
   remote: https://github.com/tagliala/activeadmin.git
-  revision: 871c6af8dec41f764a9f08bf04b5422971a23e32
+  revision: 32995284eb1a54a570f025ab27b3bbca582c10ce
   branch: feature/railties-7
   specs:
     activeadmin (2.10.1)
@@ -111,8 +111,8 @@ GEM
       ruby2_keywords (>= 0.0.2, < 1.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.562.0)
-    aws-sdk-core (3.127.0)
+    aws-partitions (1.563.0)
+    aws-sdk-core (3.128.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -173,6 +173,16 @@ GEM
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffi (1.15.5)
+    flipper (0.24.0)
+    flipper-active_record (0.24.0)
+      activerecord (>= 4.2, < 8)
+      flipper (~> 0.24.0)
+    flipper-ui (0.24.0)
+      erubi (>= 1.0.0, < 2.0.0)
+      flipper (~> 0.24.0)
+      rack (>= 1.4, < 3)
+      rack-protection (>= 1.5.3, < 2.2.0)
+      sanitize (< 7)
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
     formtastic_i18n (0.7.0)
@@ -292,6 +302,8 @@ GEM
     rack (2.2.3)
     rack-mini-profiler (2.3.4)
       rack (>= 1.2.0)
+    rack-protection (2.1.0)
+      rack
     rack-proxy (0.7.2)
       rack
     rack-test (1.1.0)
@@ -377,7 +389,7 @@ GEM
       rubocop-rails (= 2.13.2)
       rubocop-rake (= 0.6.0)
       rubocop-rspec (= 2.7.0)
-    rubocop-performance (1.13.2)
+    rubocop-performance (1.13.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.13.2)
@@ -391,6 +403,9 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sanitize (6.0.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.12.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -477,6 +492,9 @@ DEPENDENCIES
   devise!
   dotenv-rails
   factory_bot_rails
+  flipper
+  flipper-active_record
+  flipper-ui
   govuk-components
   govuk_design_system_formbuilder
   hotwire-rails

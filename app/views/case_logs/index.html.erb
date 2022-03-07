@@ -6,7 +6,7 @@
 
 <div class="govuk-button-group">
   <%= govuk_button_to "Create a new lettings log", case_logs_path %>
-  <%= govuk_link_to "Upload logs", bulk_upload_case_logs_path %>
+  <%= govuk_link_to("Upload logs", bulk_upload_case_logs_path) if Flipper.enabled?(:bulk_upload, current_user) %>
 </div>
 
 <% if @case_logs.present? %>

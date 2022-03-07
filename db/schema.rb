@@ -45,32 +45,24 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.datetime "updated_at", null: false
     t.string "tenant_code"
     t.integer "age1"
-    t.string "sex1"
     t.integer "ethnic"
     t.integer "national"
     t.integer "prevten"
     t.integer "ecstat1"
     t.integer "hhmemb"
     t.integer "age2"
-    t.string "sex2"
     t.integer "ecstat2"
     t.integer "age3"
-    t.string "sex3"
     t.integer "ecstat3"
     t.integer "age4"
-    t.string "sex4"
     t.integer "ecstat4"
     t.integer "age5"
-    t.string "sex5"
     t.integer "ecstat5"
     t.integer "age6"
-    t.string "sex6"
     t.integer "ecstat6"
     t.integer "age7"
-    t.string "sex7"
     t.integer "ecstat7"
     t.integer "age8"
-    t.string "sex8"
     t.integer "ecstat8"
     t.integer "homeless"
     t.integer "underoccupation_benefitcap"
@@ -157,7 +149,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.datetime "property_void_date", precision: nil
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
-    t.integer "renttype"
     t.integer "needstype"
     t.integer "lettype"
     t.integer "postcode_known"
@@ -186,24 +177,16 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "previous_postcode_known"
     t.integer "previous_la_known"
     t.boolean "is_previous_la_inferred"
-    t.integer "age1_known"
-    t.integer "age2_known"
-    t.integer "age3_known"
-    t.integer "age4_known"
-    t.integer "age5_known"
-    t.integer "age6_known"
-    t.integer "age7_known"
-    t.integer "age8_known"
-    t.integer "ethnic_group"
-    t.string "ethnic_other"
     t.integer "letting_allocation_unknown"
-    t.integer "details_known_2"
-    t.integer "details_known_3"
-    t.integer "details_known_4"
-    t.integer "details_known_5"
-    t.integer "details_known_6"
-    t.integer "details_known_7"
-    t.integer "details_known_8"
+    t.integer "renttype"
+    t.string "sex1"
+    t.string "sex2"
+    t.string "sex3"
+    t.string "sex4"
+    t.string "sex5"
+    t.string "sex6"
+    t.string "sex7"
+    t.string "sex8"
     t.integer "relat2"
     t.integer "relat3"
     t.integer "relat4"
@@ -214,8 +197,41 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "rent_type"
     t.integer "has_benefits"
     t.integer "renewal"
+    t.integer "age1_known"
+    t.integer "age2_known"
+    t.integer "age3_known"
+    t.integer "age4_known"
+    t.integer "age5_known"
+    t.integer "age6_known"
+    t.integer "age7_known"
+    t.integer "age8_known"
+    t.integer "ethnic_group"
+    t.string "ethnic_other"
+    t.integer "details_known_2"
+    t.integer "details_known_3"
+    t.integer "details_known_4"
+    t.integer "details_known_5"
+    t.integer "details_known_6"
+    t.integer "details_known_7"
+    t.integer "details_known_8"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
+  end
+
+  create_table "flipper_features", force: :cascade do |t|
+    t.string "key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "flipper_gates", force: :cascade do |t|
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "organisations", force: :cascade do |t|
