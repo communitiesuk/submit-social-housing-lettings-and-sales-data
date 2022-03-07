@@ -17,6 +17,7 @@ applications:
       RAILS_ENV: staging
     services:
       - dluhc-core-staging-postgres
+      - dluhc-core-staging-redis-rate-limit
 
   - name: dluhc-core-production
     <<: *defaults
@@ -30,3 +31,4 @@ applications:
     host: submit-social-housing-lettings-sales-data
     services:
       - dluhc-core-production-postgres
+      - dluhc-core-production-redis-rate-limit

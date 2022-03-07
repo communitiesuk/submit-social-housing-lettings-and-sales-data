@@ -22,4 +22,11 @@ class ErrorsController < ApplicationController
       format.json { render json: { error: "Unprocessable entity" }, status: :unprocessable_entity }
     end
   end
+
+  def too_many_requests
+    respond_to do |format|
+      format.html { render status: :too_many_requests }
+      format.json { render json: { error: "Too many requests" }, status: :too_many_requests }
+    end
+  end
 end
