@@ -16,7 +16,7 @@ class CaseLogValidator < ActiveModel::Validator
 end
 
 class CaseLog < ApplicationRecord
-  # include Validations::SoftValidations
+  include Validations::SoftValidations
   ALLOWED_INCOME_RANGES = {
     1 => OpenStruct.new(soft_min: 143, soft_max: 730, hard_min: 90, hard_max: 1230),
     0 => OpenStruct.new(soft_min: 67, soft_max: 620, hard_min: 50, hard_max: 950),
@@ -125,7 +125,7 @@ class CaseLog < ApplicationRecord
   end
 
   def net_income_soft_validation_triggered?
-    true
+    net_income_in_soft_min_range? || net_income_in_soft_max_range?
   end
 
   def given_reasonable_preference?
