@@ -886,10 +886,11 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": [
-                    12,
-                    13
-                  ]
+                  "rsnvac": 12
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 13
                 }
               ]
             },
@@ -944,10 +945,11 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": [
-                    12,
-                    13
-                  ]
+                  "rsnvac": 12
+                },
+                {
+                  "renewal": 0,
+                  "rsnvac": 13
                 }
               ]
             }
