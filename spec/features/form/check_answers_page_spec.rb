@@ -72,7 +72,7 @@ RSpec.describe "Form Check Answers Page" do
     # This way only the links in the table will get picked up
     it "has an answer link for questions missing an answer" do
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
       assert_selector "a", text: "Change", count: 0
       expect(page).to have_link("Answer", href: "/logs/#{empty_case_log.id}/person-1-age")
     end
@@ -80,7 +80,7 @@ RSpec.describe "Form Check Answers Page" do
     it "has a change link for answered questions" do
       fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
-      assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
+      assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 1
       expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age")
     end

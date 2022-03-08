@@ -25,6 +25,18 @@ module Validations::SoftValidations
     public_send(soft_errors.keys.first) == 1 if soft_errors.present?
   end
 
+  def net_income_in_soft_max_range?
+    return unless weekly_net_income && ecstat1
+
+    weekly_net_income.between?(applicable_income_range.soft_max, applicable_income_range.hard_max)
+  end
+
+  def net_income_in_soft_min_range?
+    return unless weekly_net_income && ecstat1
+
+    weekly_net_income.between?(applicable_income_range.hard_min, applicable_income_range.soft_min)
+  end
+
 private
 
   def net_income_validations
@@ -43,17 +55,5 @@ private
       update_column(:net_income_value_check, nil)
     end
     net_income_errors
-  end
-
-  def net_income_in_soft_max_range?
-    return unless weekly_net_income && ecstat1
-
-    weekly_net_income.between?(applicable_income_range.soft_max, applicable_income_range.hard_max)
-  end
-
-  def net_income_in_soft_min_range?
-    return unless weekly_net_income && ecstat1
-
-    weekly_net_income.between?(applicable_income_range.hard_min, applicable_income_range.soft_min)
   end
 end
