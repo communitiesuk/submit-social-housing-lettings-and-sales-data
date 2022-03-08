@@ -345,7 +345,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "returns an error message" do
         json_response = JSON.parse(response.body)
-        expect(json_response["errors"]).to eq({ "age1" => ["Lead tenant’s age must be an integer between 16 and 120"] })
+        expect(json_response["errors"]).to eq({ "age1" => ["Lead tenant’s age must be a number between 16 and 120"] })
       end
     end
 
