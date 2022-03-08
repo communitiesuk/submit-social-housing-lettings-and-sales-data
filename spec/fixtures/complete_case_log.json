@@ -118,7 +118,7 @@
     "rp_hardship": 0,
     "rp_dontknow": 0,
     "discarded_at": "05/05/2020",
-    "net_income_value_check": "",
+    "net_income_value_check": 0,
     "property_owner_organisation": "",
     "property_manager_organisation": "",
     "rent_type": 0,
@@ -141,7 +141,7 @@
     "has_benefits": 1,
     "household_charge": 1,
     "is_carehome": 1,
-    "chcharge":  6,
+    "chcharge": 6,
     "letting_in_sheltered_accommodation": 0,
     "declaration": 1,
     "referral": 1

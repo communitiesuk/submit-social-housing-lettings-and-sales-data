@@ -1,5 +1,5 @@
 class Form::Page
-  attr_accessor :id, :header, :description, :questions, :soft_validations,
+  attr_accessor :id, :header, :description, :questions,
                 :depends_on, :title_text, :informative_text, :subsection, :hide_subsection_label
 
   def initialize(id, hsh, subsection)
@@ -11,16 +11,11 @@ class Form::Page
     @title_text = hsh["title_text"]
     @informative_text = hsh["informative_text"]
     @hide_subsection_label = hsh["hide_subsection_label"]
-    @soft_validations = hsh["soft_validations"]&.map { |sv_id, s| Form::Question.new(sv_id, s, self) }
     @subsection = subsection
   end
 
   def expected_responses
-    questions + (soft_validations || [])
-  end
-
-  def has_soft_validations?
-    soft_validations.present?
+    questions
   end
 
   def routed_to?(case_log)

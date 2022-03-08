@@ -9,7 +9,7 @@ RSpec.describe CheckAnswersHelper do
     context "when a section hasn't been completed yet" do
       it "returns that you have unanswered questions" do
         expect(display_answered_questions_summary(subsection, case_log))
-          .to match(/You have answered 2 of 5 questions./)
+          .to match(/You have answered 2 of 6 questions./)
       end
     end
 
@@ -18,6 +18,7 @@ RSpec.describe CheckAnswersHelper do
         case_log.sex1 = "F"
         case_log.other_hhmemb = 0
         case_log.propcode = "123"
+        case_log.ecstat1 = 200
         expect(display_answered_questions_summary(subsection, case_log))
           .to match(/You answered all the questions./)
         expect(display_answered_questions_summary(subsection, case_log))

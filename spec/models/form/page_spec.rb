@@ -31,15 +31,6 @@ RSpec.describe Form::Page, type: :model do
     expect(page.questions.map(&:id)).to eq(expected_questions)
   end
 
-  it "has soft validations" do
-    expected_soft_validations = %w[net_income_value_check]
-    expect(page.soft_validations.map(&:id)).to eq(expected_soft_validations)
-  end
-
-  it "has a soft_validation helper" do
-    expect(page.has_soft_validations?).to be true
-  end
-
   it "has expected form responses" do
     expected_responses = %w[earnings incfreq net_income_value_check]
     expect(page.expected_responses.map(&:id)).to eq(expected_responses)
