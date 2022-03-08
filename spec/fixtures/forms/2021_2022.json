@@ -34,8 +34,8 @@
                     "check_answer_label": "Lead tenant’s age",
                     "header": "What is the tenant’s age?",
                     "type": "numeric",
-                    "min": 0,
-                    "max": 150,
+                    "min": 16,
+                    "max": 120,
                     "step": 1,
                     "width": 2
                   }
@@ -72,7 +72,7 @@
                     "hint_text": "The maximum number of others is 1",
                     "type": "numeric",
                     "min": 0,
-                    "max": 1,
+                    "max": 7,
                     "step": 1,
                     "width": 2,
                     "conditional_for": {
@@ -99,8 +99,8 @@
                     "check_answer_label": "Person 2’s age",
                     "header": "Do you know person 2’s age?",
                     "type": "numeric",
-                    "min": 0,
-                    "max": 150,
+                    "min": 1,
+                    "max": 120,
                     "step": 1,
                     "width": 2
                   },

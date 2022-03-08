@@ -132,6 +132,10 @@ class Form
     questions.select(&:read_only?)
   end
 
+  def numeric_questions
+    questions.select { |q| q.type == "numeric" }
+  end
+
   def is_last_question?(page, subsection, case_log)
     subsection_ids = subsections.map(&:id)
     subsection.id == subsection_ids[subsection_ids.length - 1] && next_page(page, case_log) == :check_answers

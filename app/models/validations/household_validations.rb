@@ -38,17 +38,12 @@ module Validations::HouseholdValidations
 
   def validate_household_number_of_other_members(record)
     (2..8).each do |n|
-      validate_person_age(record, n)
       validate_person_age_matches_economic_status(record, n)
       validate_person_age_matches_relationship(record, n)
       validate_person_age_and_gender_match_economic_status(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
     end
     validate_partner_count(record)
-  end
-
-  def validate_person_1_age(record)
-    validate_person_age(record, 1, 16)
   end
 
   def validate_person_1_economic(record)
@@ -101,21 +96,6 @@ private
       next if record["sex#{n}"].nil? || record["age#{n}"].nil?
 
       (record["sex#{n}"]) == "F" && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
-    end
-  end
-
-  def validate_person_age(record, person_num, lower_bound = 1)
-    age = record.public_send("age#{person_num}")
-    return unless age
-
-    begin
-      Integer(record.public_send("age#{person_num}_before_type_cast"))
-    rescue ArgumentError
-      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound:)
-    end
-
-    if age < lower_bound || age > 120
-      record.errors.add "age#{person_num}".to_sym, I18n.t("validations.household.age.must_be_valid", lower_bound:)
     end
   end
 

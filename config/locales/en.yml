@@ -37,6 +37,8 @@ en:
   validations:
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
+    numeric:
+      valid: "%{field} must be an integer between %{min} and %{max}"
     date:
       invalid_date: "Please enter a valid date"
       outside_collection_window: "Date must be within the current collection windows"
@@ -101,7 +103,6 @@ en:
       preg_occ:
         no_female: "You must answer no as there are no female tenants aged 16-50 in the property"
       age:
-        must_be_valid: "Tenant age must be an integer between %{lower_bound} and 120"
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
       ecstat:
