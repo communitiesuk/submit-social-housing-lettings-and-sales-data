@@ -18,6 +18,7 @@ RSpec.describe "Form Navigation" do
       tenant_code: { type: "text", answer: "BZ737", path: "tenant-code" },
       age1: { type: "numeric", answer: 25, path: "person-1-age" },
       sex1: { type: "radio", answer: "Female", path: "person-1-gender" },
+      ecstat1: {type: "radio", answer: 3, path: "person-1-working-situation"},
       other_hhmemb: { type: "numeric", answer: 2, path: "household-number-of-other-members" },
     }
   end

@@ -32,7 +32,7 @@ RSpec.describe Form::Page, type: :model do
   end
 
   it "has expected form responses" do
-    expected_responses = %w[earnings incfreq net_income_value_check]
+    expected_responses = %w[earnings incfreq]
     expect(page.expected_responses.map(&:id)).to eq(expected_responses)
   end
 
