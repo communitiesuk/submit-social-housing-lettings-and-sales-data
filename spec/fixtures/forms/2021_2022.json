@@ -70,7 +70,7 @@
                 "questions": {
                   "ecstat1": {
                     "check_answer_label": "Lead tenant’s working situation",
-                    "header": "Which of these best describes the lead tenant’s working situation?",
+                    "header": "Which of these best describes the lead tenant’s socks?",
                     "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                     "type": "radio",
                     "answer_options": {

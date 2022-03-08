@@ -60,7 +60,6 @@ Rails.application.routes.draw do
     FormHandler.instance.forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form##{page.id}"
-        get "#{page.id.to_s.dasherize}/soft-validations", to: "soft_validations#show" if page.has_soft_validations?
       end
 
       form.subsections.map do |subsection|
