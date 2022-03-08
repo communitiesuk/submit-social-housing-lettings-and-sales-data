@@ -7,7 +7,7 @@ RSpec.describe "form/page" do
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
   let(:initial_page_attributes) { { description: nil, hide_subsection_label: nil } }
-  let(:initial_question_attributes) { { type: "numeric", answer_options: nil, prefix: nil, suffix: nil } }
+  let(:initial_question_attributes) { { type: "numeric", answer_options: nil, prefix: "£", suffix: " every week" } }
   let(:page_attributes) { {} }
   let(:question_attributes) { {} }
 
