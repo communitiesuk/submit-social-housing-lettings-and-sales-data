@@ -9,55 +9,55 @@ RSpec.describe Validations::HouseholdValidations do
   describe "age validations" do
     it "validates that person 1's age is a number" do
       record.age1 = "random"
-      household_validator.validate_person_1_age(record)
+      household_validator.validate_numeric_min_max(record)
       expect(record.errors["age1"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 16))
+        .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
     end
 
     it "validates that other household member ages are a number" do
-      record.age3 = "random"
-      household_validator.validate_household_number_of_other_members(record)
-      expect(record.errors["age3"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 1))
+      record.age2 = "random"
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["age2"])
+        .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
     end
 
     it "validates that person 1's age is greater than 16" do
       record.age1 = 15
-      household_validator.validate_person_1_age(record)
+      household_validator.validate_numeric_min_max(record)
       expect(record.errors["age1"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 16))
+        .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
     end
 
     it "validates that other household member ages are greater than 1" do
-      record.age4 = 0
-      household_validator.validate_household_number_of_other_members(record)
-      expect(record.errors["age4"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 1))
+      record.age2 = 0
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["age2"])
+        .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
     end
 
     it "validates that person 1's age is less than 121" do
       record.age1 = 121
-      household_validator.validate_person_1_age(record)
+      household_validator.validate_numeric_min_max(record)
       expect(record.errors["age1"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 16))
+        .to include(match I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120))
     end
 
     it "validates that other household member ages are greater than 121" do
-      record.age4 = 123
-      household_validator.validate_household_number_of_other_members(record)
-      expect(record.errors["age4"])
-        .to include(match I18n.t("validations.household.age.must_be_valid", lower_bound: 1))
+      record.age2 = 123
+      household_validator.validate_numeric_min_max(record)
+      expect(record.errors["age2"])
+        .to include(match I18n.t("validations.numeric.valid", field: "Person 2’s age", min: 1, max: 120))
     end
 
     it "validates that person 1's age is between 16 and 120" do
       record.age1 = 63
-      household_validator.validate_person_1_age(record)
+      household_validator.validate_numeric_min_max(record)
       expect(record.errors["age1"]).to be_empty
     end
 
     it "validates that other household member ages are between 1 and 120" do
       record.age6 = 45
-      household_validator.validate_household_number_of_other_members(record)
+      household_validator.validate_numeric_min_max(record)
       expect(record.errors["age6"]).to be_empty
     end
   end
@@ -414,6 +414,26 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+      end
+
+      it "validates that the number of other household members cannot be less than 0" do
+        record.other_hhmemb = -1
+        household_validator.validate_numeric_min_max(record)
+        expect(record.errors["other_hhmemb"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Number of Other Household Members", min: 0, max: 7))
+      end
+
+      it "validates that the number of other household members cannot be more than 7" do
+        record.other_hhmemb = 8
+        household_validator.validate_numeric_min_max(record)
+        expect(record.errors["other_hhmemb"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Number of Other Household Members", min: 0, max: 7))
+      end
+
+      it "expects that the number of other household members is between the min and max" do
+        record.other_hhmemb = 5
+        household_validator.validate_numeric_min_max(record)
+        expect(record.errors["other_hhmemb"]).to be_empty
       end
     end
 

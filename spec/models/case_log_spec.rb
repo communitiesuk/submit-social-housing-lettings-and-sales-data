@@ -88,8 +88,7 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_startdate)
     end
 
-    it "validates ages" do
-      expect(validator).to receive(:validate_person_1_age)
+    it "validates other household member details" do
       expect(validator).to receive(:validate_household_number_of_other_members)
     end
 
@@ -125,6 +124,10 @@ RSpec.describe CaseLog do
 
     it "validates previous housing situation" do
       expect(validator).to receive(:validate_previous_housing_situation)
+    end
+
+    it "validates the min and max of numeric questions" do
+      expect(validator).to receive(:validate_numeric_min_max)
     end
 
     it "validates armed forces" do
