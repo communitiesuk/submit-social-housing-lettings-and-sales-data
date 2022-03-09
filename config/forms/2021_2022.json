@@ -1188,7 +1188,7 @@
                   "header": "Age",
                   "check_answer_label": "Lead tenant’s age",
                   "type": "numeric",
-                  "min": 0,
+                  "min": 16,
                   "max": 120,
                   "step": 1,
                   "width": 2,
