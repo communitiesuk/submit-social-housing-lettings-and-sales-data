@@ -52,13 +52,14 @@
     %>
 
     <div class="govuk-width-container">
-      <%= govuk_phase_banner(
-        tag: { text: 'Beta' },
-        text: "This is a new service – #{govuk_mail_to("submitcoredata@levellingup.gov.uk", "give feedback or report a problem", subject: "Feedback about #{t('service_name')}")}".html_safe
-      ) %>
-
-      <%= content_for(:breadcrumbs) %>
-      <%= content_for(:before_content) %>
+      <aside>
+        <%= govuk_phase_banner(
+          tag: { text: 'Beta' },
+          text: "This is a new service – #{govuk_mail_to("submitcoredata@levellingup.gov.uk", "give feedback or report a problem", subject: "Feedback about #{t('service_name')}")}".html_safe
+        ) %>
+        <%= content_for(:breadcrumbs) %>
+        <%= content_for(:before_content) %>
+      </aside>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?('translation missing')  %>
