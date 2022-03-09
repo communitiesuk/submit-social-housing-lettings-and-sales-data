@@ -143,7 +143,7 @@ en:
 
   soft_validations:
     net_income:
-      hint_text: "This is based on the tenant’s work situation: %{ecstat1}<br>The household income you have entered is %{earnings}"
+      hint_text: "This is based on the tenant’s work situation: <strong>%{ecstat1}</strong><br>The household income you have entered is <strong>%{earnings}</strong>"
       in_soft_min_range:
         message: "Net income is lower than expected based on the main tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:

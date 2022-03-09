@@ -16,7 +16,7 @@
 <%= turbo_frame_tag "case_log_form", target: "_top" do %>
   <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds-from-desktop">
+      <div class=<%= @page.questions[0].type == "interruption_screen" ? "govuk-grid-column-full-from-desktop" : "govuk-grid-column-two-thirds-from-desktop"%>>
         <% remove_other_page_errors(@case_log, @page) %>
         <%= f.govuk_error_summary %>
 
