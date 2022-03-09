@@ -11,6 +11,6 @@ module InteruptionScreenHelper
     rescue StandardError
       return ""
     end
-    translation.html_safe
+    "<p class='govuk-body'>#{translation}</p>".html_safe
   end
 end
