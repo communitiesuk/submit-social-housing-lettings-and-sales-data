@@ -3598,7 +3598,7 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "needstype": 0
+                  "needstype": 1
                 }
               ]
             },
@@ -3624,7 +3624,7 @@
               "depends_on": [
                 {
                   "renewal": 1,
-                  "needstype": 0
+                  "needstype": 1
                 }
               ]
             },
