@@ -240,7 +240,7 @@ RSpec.describe FormController, type: :request do
           let(:page) { case_log.form.get_page("accessibility_requirements") }
 
           it "updates both question fields" do
-            allow(page).to receive(:expected_responses).and_return(questions_for_page)
+            allow(page).to receive(:questions).and_return(questions_for_page)
             post "/logs/#{case_log.id}/form", params: case_log_form_params
             case_log.reload
 

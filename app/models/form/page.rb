@@ -14,10 +14,6 @@ class Form::Page
     @subsection = subsection
   end
 
-  def expected_responses
-    questions
-  end
-
   def routed_to?(case_log)
     return true unless depends_on || subsection.depends_on
 
