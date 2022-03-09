@@ -138,18 +138,15 @@ RSpec.describe "validations" do
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
       end
 
-      # it "does not require confirming the value if the value is amended" do
-      #   visit("/logs/#{case_log.id}/net-income")
-      #   fill_in("case-log-earnings-field", with: income_over_soft_limit)
-      #   choose("case-log-incfreq-0-field", allow_label_click: true)
-      #   click_button("Save and continue")
-      #   fill_in("case-log-earnings-field", with: income_under_soft_limit)
-      #   click_button("Save and continue")
-      #   expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
-      #   case_log.reload
-      #   expect(case_log.net_income_value_check).to be_nil
-      # end
-
+      it "returns the user to the previous question if they do not confirm the value as correct on the interruption screen" do
+        visit("/logs/#{case_log.id}/net-income")
+        fill_in("case-log-earnings-field", with: income_over_soft_limit)
+        choose("case-log-incfreq-0-field", allow_label_click: true)
+        click_button("Save and continue")
+        choose("case-log-net-income-value-check-1-field", allow_label_click: true)
+        click_button("Save and continue")
+        expect(page).to have_current_path("/logs/#{case_log.id}/net-income")
+      end
       # it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
       #   visit("/logs/#{case_log.id}/net-income")
       #   fill_in("case-log-earnings-field", with: income_over_soft_limit)
