@@ -54,7 +54,7 @@ class FormController < ApplicationController
 private
 
   def responses_for_page(page)
-    page.expected_responses.each_with_object({}) do |question, result|
+    page.questions.each_with_object({}) do |question, result|
       question_params = params["case_log"][question.id]
       if question.type == "date"
         day = params["case_log"]["#{question.id}(3i)"]

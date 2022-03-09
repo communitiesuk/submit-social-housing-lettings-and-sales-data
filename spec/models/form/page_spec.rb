@@ -31,11 +31,6 @@ RSpec.describe Form::Page, type: :model do
     expect(page.questions.map(&:id)).to eq(expected_questions)
   end
 
-  it "has expected form responses" do
-    expected_responses = %w[earnings incfreq]
-    expect(page.expected_responses.map(&:id)).to eq(expected_responses)
-  end
-
   context "with a page having conditional questions" do
     let(:page_id) { "housing_benefit" }
 
