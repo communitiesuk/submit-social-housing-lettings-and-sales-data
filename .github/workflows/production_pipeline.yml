@@ -38,7 +38,7 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
-      GEMFILE_RUBY_VERSION: 3.1.0
+      GEMFILE_RUBY_VERSION: 3.1.1
       DB_HOST: localhost
       DB_DATABASE: data_collector
       DB_USERNAME: postgres
