@@ -25,7 +25,7 @@ RSpec.describe InteruptionScreenHelper do
           "argument" => %w[ecstat1 earnings],
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("<p class='govuk-body'>You told us the main tenant's working situation is: <strong>Full-time – 30 hours or more</strong><br><br>The household income you have entered is <strong>£750.00 every week</strong></p>")
+          .to eq("<p class='govuk-body'>You told us the main tenant's working situation is: <strong>Full-time – 30 hours or more</strong></p><p class='govuk-body'>The household income you have entered is <strong>£750.00 every week</strong></p>")
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe InteruptionScreenHelper do
           "argument" => %w[ecstat1],
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("<p class='govuk-body'>This is based on the tenant’s work situation: Full-time – 30 hours or more</p>")
+          .to eq("This is based on the tenant’s work situation: Full-time – 30 hours or more")
       end
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe InteruptionScreenHelper do
         "argument" => %w[ecstat1 earnings],
       }
       expect(display_informative_text(informative_text, case_log))
-        .to eq("<p class='govuk-body'>This is based on the tenant’s work situation: Full-time – 30 hours or more</p>")
+        .to eq("This is based on the tenant’s work situation: Full-time – 30 hours or more")
     end
   end
 
