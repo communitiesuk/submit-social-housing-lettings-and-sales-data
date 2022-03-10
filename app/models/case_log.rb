@@ -304,8 +304,8 @@ private
       self.layear = 1
     end
     if is_general_needs?
-      self.prevten = 2 if managing_organisation.provider_type == "PRP"
-      self.prevten = 0 if managing_organisation.provider_type == "LA"
+      self.prevten = 32 if managing_organisation.provider_type == "PRP"
+      self.prevten = 30 if managing_organisation.provider_type == "LA"
     end
   end
 
