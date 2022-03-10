@@ -623,8 +623,8 @@ RSpec.describe CaseLog do
 
       it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
         record_from_db = ActiveRecord::Base.connection.execute("select underoccupation_benefitcap from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["underoccupation_benefitcap"]).to eq(3)
-        expect(case_log["underoccupation_benefitcap"]).to eq(3)
+        expect(record_from_db["underoccupation_benefitcap"]).to eq(2)
+        expect(case_log["underoccupation_benefitcap"]).to eq(2)
       end
 
       it "correctly derives and saves prevten" do
