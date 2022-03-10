@@ -3597,8 +3597,7 @@
               },
               "depends_on": [
                 {
-                  "renewal": 0,
-                  "needstype": 0
+                  "renewal": 0
                 }
               ]
             },
