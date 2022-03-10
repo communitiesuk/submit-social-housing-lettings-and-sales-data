@@ -37,6 +37,7 @@ class Auth::PasswordsController < Devise::PasswordsController
         set_flash_message!(:notice, password_update_flash_message)
         resource.after_database_authentication
         sign_in(resource_name, resource)
+        warden.session(:admin_user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true if resource_class == AdminUser
       else
         set_flash_message!(:notice, :updated_not_active)
       end
