@@ -631,15 +631,15 @@ RSpec.describe CaseLog do
         case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(2)
-        expect(case_log["prevten"]).to eq(2)
+        expect(record_from_db["prevten"]).to eq(32)
+        expect(case_log["prevten"]).to eq(32)
 
         case_log.managing_organisation.update!({ provider_type: "LA" })
         case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["prevten"]).to eq(0)
-        expect(case_log["prevten"]).to eq(0)
+        expect(record_from_db["prevten"]).to eq(30)
+        expect(case_log["prevten"]).to eq(30)
       end
 
       it "correctly derives and saves referral" do
