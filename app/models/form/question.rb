@@ -113,7 +113,7 @@ class Form::Question
             else
               value.to_s
             end
-    label || value
+    label || value.to_s
   end
 
   def value_is_yes?(value)

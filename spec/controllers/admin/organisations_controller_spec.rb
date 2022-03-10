@@ -26,7 +26,7 @@ describe Admin::OrganisationsController, type: :controller do
   end
 
   describe "Create organisation" do
-    let(:params) { { organisation: { name: "DLUHC" } } }
+    let(:params) { { organisation: { name: "DLUHC", provider_type: "LA" } } }
 
     it "creates a organisation" do
       expect { post :create, session: valid_session, params: params }.to change(Organisation, :count).by(1)

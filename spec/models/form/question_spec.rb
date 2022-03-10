@@ -118,7 +118,7 @@ RSpec.describe Form::Question, type: :model do
 
     context "when the saved answer is not in the value map" do
       it "displays the saved answer umapped" do
-        expect(question.label_from_value(9999)).to eq(9999)
+        expect(question.label_from_value(9999)).to eq("9999")
       end
     end
   end
@@ -139,7 +139,7 @@ RSpec.describe Form::Question, type: :model do
 
     context "when the saved answer is not in the value map" do
       it "displays the saved answer umapped" do
-        expect(question.label_from_value(9999)).to eq(9999)
+        expect(question.label_from_value(9999)).to eq("9999")
       end
     end
   end

@@ -121,7 +121,7 @@
     <managing_organisation_id>{managing_org_id}</managing_organisation_id>
     <renttype>2</renttype>
     <needstype>1</needstype>
-    <lettype>5</lettype>
+    <lettype>7</lettype>
     <postcode_known>1</postcode_known>
     <la_known>1</la_known>
     <is_la_inferred>false</is_la_inferred>

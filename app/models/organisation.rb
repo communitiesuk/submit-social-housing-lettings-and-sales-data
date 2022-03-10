@@ -12,6 +12,8 @@ class Organisation < ApplicationRecord
 
   enum provider_type: PROVIDER_TYPE
 
+  validates :provider_type, presence: true
+
   def case_logs
     CaseLog.for_organisation(self)
   end

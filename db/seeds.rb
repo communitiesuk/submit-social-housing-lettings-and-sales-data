@@ -15,6 +15,7 @@ org = Organisation.create!(
   holds_own_stock: false,
   other_stock_owners: "None",
   managing_agents: "None",
+  provider_type: "LA",
 )
 User.create!(
   email: "test@example.com",
