@@ -99,7 +99,10 @@ private
   def api_case_log_params
     return {} unless params[:case_log]
 
-    params.require(:case_log).permit(CaseLog.editable_fields)
+    permitted = params.require(:case_log).permit(CaseLog.editable_fields)
+    permitted["owning_organisation"] = Organisation.find_by(permitted["owning_organisation"])
+    permitted["managing_organisation"] = Organisation.find_by(permitted["managing_organisation"])
+    permitted
   end
 
   def find_resource
