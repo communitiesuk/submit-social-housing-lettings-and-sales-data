@@ -115,6 +115,12 @@ RSpec.describe Form::Question, type: :model do
         expect(question).to be_value_is_dont_know(7)
       end
     end
+
+    context "when the saved answer is not in the value map" do
+      it "displays the saved answer umapped" do
+        expect(question.label_from_value(9999)).to eq(9999)
+      end
+    end
   end
 
   context "when type is select" do
@@ -129,6 +135,12 @@ RSpec.describe Form::Question, type: :model do
 
     it "can map label from value" do
       expect(question.label_from_value("E06000014")).to eq("York")
+    end
+
+    context "when the saved answer is not in the value map" do
+      it "displays the saved answer umapped" do
+        expect(question.label_from_value(9999)).to eq(9999)
+      end
     end
   end
 

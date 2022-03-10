@@ -104,14 +104,16 @@ class Form::Question
   def label_from_value(value)
     return unless value
 
-    case type
-    when "radio"
-      answer_options[value.to_s]["value"]
-    when "select"
-      answer_options[value.to_s]
-    else
-      value.to_s
-    end
+    label = case type
+            when "radio"
+              labels = answer_options[value.to_s]
+              labels["value"] if labels
+            when "select"
+              answer_options[value.to_s]
+            else
+              value.to_s
+            end
+    label || value
   end
 
   def value_is_yes?(value)
