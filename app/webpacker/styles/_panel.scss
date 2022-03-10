@@ -1,24 +1,18 @@
-.app-panel--informational {
-  background-color: govuk-colour("blue");
-  color: govuk-colour("white");
-  text-align: left;
-
-  .app-panel__body {
-    @include govuk-font($size: 19);
-    margin: 0;
-  }
-}
-
 .app-panel--interruption {
   background-color: govuk-colour("blue");
   color: govuk-colour("white");
   text-align: left;
 
+  p,
   .govuk-body,
   .govuk-label,
   .govuk-fieldset__legend,
   .govuk-hint {
     color: govuk-colour("white");
+  }
+
+  a:not(:focus) {
+    color: inherit;
   }
 
   *:last-child {
