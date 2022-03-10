@@ -254,6 +254,44 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
+  describe "#create" do
+    let(:params) do
+      {
+        "user": {
+          name: "new user",
+          email: "new_user@example.com",
+          role: "data_coordinator",
+        },
+      }
+    end
+    let(:request) { post "/users/", headers: headers, params: params }
+
+    before do
+      sign_in user
+    end
+
+    it "invites a new user" do
+      expect { request }.to change(User, :count).by(1)
+    end
+
+    it "redirects back to organisation users page" do
+      request
+      expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
+    end
+
+    context "when the email is already taken" do
+      before do
+        FactoryBot.create(:user, email: "new_user@example.com")
+      end
+
+      it "shows an error" do
+        request
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(page).to have_content(I18n.t("validations.email.taken"))
+      end
+    end
+  end
+
   describe "title link" do
     before do
       sign_in user

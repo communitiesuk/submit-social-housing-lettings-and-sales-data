@@ -27,16 +27,21 @@ class UsersController < ApplicationController
   def create
     @resource = User.new
     if user_params["email"].empty?
-      @resource.errors.add :email, "Enter an email address"
+      @resource.errors.add :email, I18n.t("validations.email.blank")
     elsif !email_valid?(user_params["email"])
-      @resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
+      @resource.errors.add :email, I18n.t("validations.email.invalid")
     end
     if @resource.errors.present?
       render :new, status: :unprocessable_entity
     else
-      @user = User.create!(user_params.merge(org_params).merge(password_params))
-      @user.send_reset_password_instructions
-      redirect_to users_organisation_path(current_user.organisation)
+      user = User.create(user_params.merge(org_params).merge(password_params))
+      if user.persisted?
+        user.send_reset_password_instructions
+        redirect_to users_organisation_path(current_user.organisation)
+      else
+        @resource.errors.add :email, I18n.t("validations.email.taken")
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
