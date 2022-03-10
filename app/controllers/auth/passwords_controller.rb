@@ -37,6 +37,7 @@ class Auth::PasswordsController < Devise::PasswordsController
         set_flash_message!(:notice, password_update_flash_message)
         resource.after_database_authentication
         sign_in(resource_name, resource)
+        set_2fa_required
       else
         set_flash_message!(:notice, :updated_not_active)
       end
@@ -48,6 +49,13 @@ class Auth::PasswordsController < Devise::PasswordsController
   end
 
 protected
+
+  def set_2fa_required
+    return unless resource.respond_to?(:need_two_factor_authentication?) &&
+      resource.need_two_factor_authentication?(request)
+
+    warden.session(resource_class.name.underscore)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+  end
 
   def password_update_flash_message
     resource_class == AdminUser ? :updated_2FA : :updated
