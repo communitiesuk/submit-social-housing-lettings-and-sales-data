@@ -4,7 +4,7 @@
 ) do %>
   <%= display_informative_text(informative_text, case_log) %>
   <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
-    legend: legend(question, page_header, conditional),
+    legend: { text: question.header },
     hint: { text: question.hint_text&.html_safe } do %>
     <% question.answer_options.map do |key, options| %>
       <% if key.starts_with?("divider") %>
@@ -19,4 +19,5 @@
       <% end %>
     <% end %>
   <% end %>
+  <%= f.govuk_submit "Save and continue", accesskey: "s", class: "app-button--inverse govuk-!-margin-bottom-0" %>
 <% end %>
