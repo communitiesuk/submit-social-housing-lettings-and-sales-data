@@ -51,7 +51,8 @@ class Auth::PasswordsController < Devise::PasswordsController
 protected
 
   def set_2fa_required
-    return unless resource_class == AdminUser
+    return unless resource.respond_to?(:need_two_factor_authentication?) &&
+      resource.need_two_factor_authentication?(request)
 
     warden.session(resource_class.name.underscore)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
   end
