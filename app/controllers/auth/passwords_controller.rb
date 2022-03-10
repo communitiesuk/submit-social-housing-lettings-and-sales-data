@@ -5,10 +5,10 @@ class Auth::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.new
     @email = params["email"]
     if @email.empty?
-      resource.errors.add :email, "Enter an email address"
+      resource.errors.add :email, I18n.t("validations.email.blank")
       render "devise/passwords/new", status: :unprocessable_entity
     elsif !email_valid?(@email)
-      resource.errors.add :email, "Enter an email address in the correct format, like name@example.com"
+      resource.errors.add :email, I18n.t("validations.email.invalid")
       render "devise/passwords/new", status: :unprocessable_entity
     else
       render "devise/confirmations/reset"
