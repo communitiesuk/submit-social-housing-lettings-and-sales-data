@@ -36,7 +36,11 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.integer "failed_attempts", default: 0
+    t.string "unlock_token"
+    t.datetime "locked_at", precision: nil
     t.index ["encrypted_otp_secret_key"], name: "index_admin_users_on_encrypted_otp_secret_key", unique: true
+    t.index ["unlock_token"], name: "index_admin_users_on_unlock_token", unique: true
   end
 
   create_table "case_logs", force: :cascade do |t|
