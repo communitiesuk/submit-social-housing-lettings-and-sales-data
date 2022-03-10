@@ -11,6 +11,6 @@ module InteruptionScreenHelper
     rescue StandardError
       return ""
     end
-    "#{translation}".html_safe
+    translation.to_s.html_safe
   end
 end
