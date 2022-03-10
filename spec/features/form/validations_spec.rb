@@ -147,27 +147,6 @@ RSpec.describe "validations" do
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income")
       end
-      # it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
-      #   visit("/logs/#{case_log.id}/net-income")
-      #   fill_in("case-log-earnings-field", with: income_over_soft_limit)
-      #   choose("case-log-incfreq-0-field", allow_label_click: true)
-      #   click_button("Save and continue")
-      #   fill_in("case-log-earnings-field", with: income_under_soft_limit)
-      #   click_button("Save and continue")
-      #   click_link(text: "Back")
-      #   expect(page).to have_no_content("Are you sure this is correct?")
-      # end
-
-      # it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
-      #   visit("/logs/#{case_log.id}/net-income")
-      #   fill_in("case-log-earnings-field", with: income_over_soft_limit)
-      #   choose("case-log-incfreq-0-field", allow_label_click: true)
-      #   click_button("Save and continue")
-      #   check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
-      #   click_button("Save and continue")
-      #   click_link(text: "Back")
-      #   expect(page).to have_content("Are you sure this is correct?")
-      # end
     end
   end
 
