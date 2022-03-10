@@ -243,7 +243,8 @@ private
   def reset_derived_questions
     dependent_questions = { layear: [{ key: :renewal, value: 0 }],
                             homeless: [{ key: :renewal, value: 0 }],
-                            referral: [{ key: :renewal, value: 0 }] }
+                            referral: [{ key: :renewal, value: 0 }],
+                            underoccupation_benefitcap: [{ key: :renewal, value: 0 }] }
 
     dependent_questions.each do |dependent, conditions|
       condition_key = conditions.first[:key]
@@ -299,13 +300,14 @@ private
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
     self.ethnic = ethnic || ethnic_group
     if is_renewal?
+      self.underoccupation_benefitcap = 2 if year == 2021
       self.homeless = 2
       self.referral = 0
       self.layear = 1
-    end
-    if is_general_needs?
-      self.prevten = 32 if managing_organisation.provider_type == "PRP"
-      self.prevten = 30 if managing_organisation.provider_type == "LA"
+      if is_general_needs?
+        self.prevten = 32 if managing_organisation.provider_type == "PRP"
+        self.prevten = 30 if managing_organisation.provider_type == "LA"
+      end
     end
   end
 
