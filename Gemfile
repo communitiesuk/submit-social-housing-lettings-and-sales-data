@@ -24,7 +24,7 @@ gem "notifications-ruby-client"
 # Turbo and Stimulus
 gem "hotwire-rails"
 # Administration framework
-gem "activeadmin", github: "activeadmin/activeadmin"
+gem "activeadmin"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
