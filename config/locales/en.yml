@@ -109,6 +109,8 @@ en:
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
+        lead:
+          over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
         retired_over_70: "Tenant %{person_num} must be retired if over 70"
         child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
@@ -120,12 +122,16 @@ en:
         one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
+        over_20_foster_care: "Answer cannot be children's home or foster care as the lead tenant is 20 or older"
+        male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
+        internal_transfer: "Answer cannot be %{prevten} as you already told us this tenancy is an internal transfer"
       referral:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
         cannot_be_secure_tenancy: "Answer cannot be secure tenancy as you already told us this is not an internal transfer"
         assessed_homeless: "Answer cannot be internal transfer as you already told us the tenant was assessed as homeless"
         other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
+        prevten_invalid: "Answer cannot be internal transfer as you already told us the source of referral for this letting was %{prevten}"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
@@ -134,6 +140,8 @@ en:
         reasonpref:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter a local authority"
+      gender:
+        male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
 
     tenancy:
       length:

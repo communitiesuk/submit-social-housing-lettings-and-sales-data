@@ -219,6 +219,13 @@ class CaseLog < ApplicationRecord
     rent_type == 2 || rent_type == 4
   end
 
+  def previous_tenancy_was_foster_care?
+    prevten == 13
+  end
+
+  def previous_tenancy_was_refuge?
+    prevten == 21
+  end
 private
 
   PIO = Postcodes::IO.new
