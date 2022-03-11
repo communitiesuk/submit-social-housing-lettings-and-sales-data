@@ -570,7 +570,7 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["prevten"])
           .to include(match I18n.t("validations.household.prevten.over_20_foster_care"))
         expect(record.errors["age1"])
-        .to include(match I18n.t("validations.household.age.lead.over_20"))
+          .to include(match I18n.t("validations.household.age.lead.over_20"))
       end
     end
 
@@ -582,7 +582,7 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["prevten"])
           .to include(match I18n.t("validations.household.prevten.male_refuge"))
         expect(record.errors["sex1"])
-        .to include(match I18n.t("validations.household.gender.male_refuge"))
+          .to include(match I18n.t("validations.household.gender.male_refuge"))
       end
     end
 
@@ -594,7 +594,7 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["prevten"])
           .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
         expect(record.errors["referral"])
-        .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
       end
 
       it "cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
@@ -602,9 +602,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
-        .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
+          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
         expect(record.errors["referral"])
-        .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+          .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
       end
     end
   end
