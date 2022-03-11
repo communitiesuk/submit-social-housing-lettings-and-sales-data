@@ -132,6 +132,7 @@ en:
         assessed_homeless: "Answer cannot be internal transfer as you already told us the tenant was assessed as homeless"
         other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
         prevten_invalid: "Answer cannot be internal transfer as you already told us the source of referral for this letting was %{prevten}"
+        reason_permanently_decanted: "Answer must be internal transfer as you already told us the tenant was permanently decanted from another property owned by this landlord"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
@@ -142,6 +143,8 @@ en:
       previous_la_known: "Enter a local authority"
       gender:
         male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
+      reason:
+        not_internal_transfer: "Answer cannot be permanently decanted from another property owned by this landlord as you told us the source of referral for this tenancy was not an internal transfer"
 
     tenancy:
       length:

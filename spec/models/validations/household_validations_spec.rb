@@ -229,6 +229,30 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["reason"]).to be_empty
       end
     end
+
+    context "when referral is not internal transfer" do
+      it "cannot be permanently decanted from another property owned by this landlord" do
+        record.reason = 1
+        record.referral = 2
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["reason"])
+          .to include(match(I18n.t("validations.household.reason.not_internal_transfer")))
+        expect(record.errors["referral"])
+          .to include(match(I18n.t("validations.household.referral.reason_permanently_decanted")))
+      end
+    end
+
+    context "when referral is internal transfer" do
+      it "can be permanently decanted from another property owned by this landlord" do
+        record.reason = 1
+        record.referral = 1
+        household_validator.validate_reason_for_leaving_last_settled_home(record)
+        expect(record.errors["reason"])
+          .to be_empty
+        expect(record.errors["referral"])
+          .to be_empty
+      end
+    end
   end
 
   describe "armed forces validations" do
