@@ -8,7 +8,7 @@ on:
 concurrency: 'production'
 
 env:
-  REPO_URL: communitiesuk/mhclg-data-collection-beta
+  REPO_URL: communitiesuk/submit-social-housing-lettings-and-sales-data
 
 defaults:
   run:
