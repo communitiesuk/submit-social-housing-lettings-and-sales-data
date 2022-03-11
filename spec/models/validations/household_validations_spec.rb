@@ -561,5 +561,51 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match I18n.t("validations.household.prevten.non_temp_accommodation"))
       end
     end
+
+    context "when the lead tenant is over 20" do
+      it "cannot be children's home/foster care" do
+        record.prevten = 13
+        record.age1 = 21
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to include(match I18n.t("validations.household.prevten.over_20_foster_care"))
+        expect(record.errors["age1"])
+        .to include(match I18n.t("validations.household.age.lead.over_20"))
+      end
+    end
+
+    context "when the lead tenant is male" do
+      it "cannot be refuge" do
+        record.prevten = 21
+        record.sex1 = "M"
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to include(match I18n.t("validations.household.prevten.male_refuge"))
+        expect(record.errors["sex1"])
+        .to include(match I18n.t("validations.household.gender.male_refuge"))
+      end
+    end
+
+    context "when the referral is internal transfer" do
+      it "cannot be 3" do
+        record.referral = 1
+        record.prevten = 3
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+          .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
+        expect(record.errors["referral"])
+        .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+      end
+
+      it "cannot be 4, 10, 13, 19, 23, 24, 25, 26, 28, 29" do
+        record.referral = 1
+        record.prevten = 4
+        household_validator.validate_previous_housing_situation(record)
+        expect(record.errors["prevten"])
+        .to include(match I18n.t("validations.household.prevten.internal_transfer", prevten: ""))
+        expect(record.errors["referral"])
+        .to include(match I18n.t("validations.household.referral.prevten_invalid", prevten: ""))
+      end
+    end
   end
 end

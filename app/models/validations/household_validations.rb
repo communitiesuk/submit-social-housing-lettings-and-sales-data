@@ -64,6 +64,22 @@ module Validations::HouseholdValidations
     if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
     end
+
+    if record.age1.present? && record.age1 > 19 && record.prevten == 13
+      record.errors.add :prevten, I18n.t("validations.household.prevten.over_20_foster_care")
+      record.errors.add :age1, I18n.t("validations.household.age.lead.over_20")
+    end
+
+    if record.sex1 == "M" && record.prevten == 21
+      record.errors.add :prevten, I18n.t("validations.household.prevten.male_refuge")
+      record.errors.add :sex1, I18n.t("validations.household.gender.male_refuge")
+    end
+
+    if record.is_internal_transfer? && [3, 4, 10, 13, 19, 23, 24, 25, 26, 28, 29].include?(record.prevten)
+      label = record.form.get_question("prevten").present? ? record.form.get_question("prevten").label_from_value(record.prevten) : ""
+      record.errors.add :prevten, I18n.t("validations.household.prevten.internal_transfer", prevten: label)
+      record.errors.add :referral, I18n.t("validations.household.referral.prevten_invalid", prevten: label)
+    end
   end
 
   def validate_referral(record)
