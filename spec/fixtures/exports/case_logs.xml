@@ -160,5 +160,11 @@
     <rent_type>1</rent_type>
     <has_benefits>1</has_benefits>
     <renewal>0</renewal>
+    <wrent>100.0</wrent>
+    <wscharge/>
+    <wpschrge/>
+    <wsupchrge/>
+    <wtchrge/>
+    <wtshortfall/>
   </form>
 </forms>

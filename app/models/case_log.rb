@@ -85,6 +85,31 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def weekly_rent
+    return unless brent && period
+
+    case rent_period
+    when "Every 2 weeks"
+      brent / 2
+    when "Every 4 weeks"
+      brent / 4
+    when "Every calendar month"
+      brent * 12 / 52
+    when "Weekly for 50 weeks"
+      brent / 52 * 50
+    when "Weekly for 49 weeks"
+      brent / 52 * 49
+    when "Weekly for 48 weeks"
+      brent / 52 * 48
+    when "Weekly for 47 weeks"
+      brent / 52 * 47
+    when "Weekly for 46 weeks"
+      brent / 52 * 46
+    when "Weekly for 52 weeks"
+      brent
+    end
+  end
+
   def applicable_income_range
     return unless ecstat1
 
@@ -231,6 +256,31 @@ class CaseLog < ApplicationRecord
     reason == 1
   end
 
+  def rent_period
+    return unless period
+
+    case period
+    when 0
+      "Every 2 weeks"
+    when 1
+      "Every 4 weeks"
+    when 2
+      "Every calendar month"
+    when 3
+      "Weekly for 50 weeks"
+    when 4
+      "Weekly for 49 weeks"
+    when 5
+      "Weekly for 48 weeks"
+    when 6
+      "Weekly for 47 weeks"
+    when 7
+      "Weekly for 46 weeks"
+    when 8
+      "Weekly for 52 weeks"
+    end
+  end
+
 private
 
   PIO = Postcodes::IO.new
@@ -304,6 +354,7 @@ private
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
+    self.wrent = weekly_rent if brent.present? && period.present?
     if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
       self.brent ||= 0
       self.scharge ||= 0

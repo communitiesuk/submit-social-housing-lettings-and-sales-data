@@ -218,6 +218,12 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "rent_type"
     t.integer "has_benefits"
     t.integer "renewal"
+    t.decimal "wrent", precision: 10, scale: 2
+    t.decimal "wscharge", precision: 10, scale: 2
+    t.decimal "wpschrge", precision: 10, scale: 2
+    t.decimal "wsupchrge", precision: 10, scale: 2
+    t.decimal "wtchrge", precision: 10, scale: 2
+    t.decimal "wtshortfall", precision: 10, scale: 2
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end

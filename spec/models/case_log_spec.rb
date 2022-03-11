@@ -298,6 +298,87 @@ RSpec.describe CaseLog do
             expect(record_from_db["lettype"]).to eq(1)
           end
         end
+
+        context "when rent is paid bi-weekly" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 100, period: 0)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(50.0)
+            expect(record_from_db["wrent"]).to eq(50.0)
+          end
+        end
+
+        context "when rent is paid every 4 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 120, period: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(30.0)
+            expect(record_from_db["wrent"]).to eq(30.0)
+          end
+        end
+
+        context "when rent is paid every calendar month" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 2)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(30.0)
+            expect(record_from_db["wrent"]).to eq(30.0)
+          end
+        end
+
+        context "when rent is paid weekly for 50 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 3)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(125.0)
+            expect(record_from_db["wrent"]).to eq(125.0)
+          end
+        end
+
+        context "when rent is paid weekly for 49 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 4)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(122.5)
+            expect(record_from_db["wrent"]).to eq(122.5)
+          end
+        end
+
+        context "when rent is paid weekly for 48 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 5)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(120.0)
+            expect(record_from_db["wrent"]).to eq(120.0)
+          end
+        end
+
+        context "when rent is paid weekly for 47 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 6)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(117.5)
+            expect(record_from_db["wrent"]).to eq(117.5)
+          end
+        end
+
+        context "when rent is paid weekly for 46 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 7)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(115.0)
+            expect(record_from_db["wrent"]).to eq(115.0)
+          end
+        end
+
+        context "when rent is paid weekly for 52 weeks" do
+          it "correctly derives and saves weekly rent" do
+            case_log.update!(brent: 130, period: 8)
+            record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wrent).to eq(130.0)
+            expect(record_from_db["wrent"]).to eq(130.0)
+          end
+        end
       end
 
       context "when the owning organisation is an LA" do
