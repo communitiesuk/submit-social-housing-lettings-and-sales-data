@@ -85,28 +85,28 @@ class CaseLog < ApplicationRecord
     end
   end
 
-  def weekly_rent
-    return unless brent && period
+  def weekly_value(field_value)
+    return unless field_value && period
 
-    case rent_period
+    case period_label
     when "Every 2 weeks"
-      brent / 2
+      field_value / 2
     when "Every 4 weeks"
-      brent / 4
+      field_value / 4
     when "Every calendar month"
-      brent * 12 / 52
+      field_value * 12 / 52
     when "Weekly for 50 weeks"
-      brent / 52 * 50
+      field_value / 52 * 50
     when "Weekly for 49 weeks"
-      brent / 52 * 49
+      field_value / 52 * 49
     when "Weekly for 48 weeks"
-      brent / 52 * 48
+      field_value / 52 * 48
     when "Weekly for 47 weeks"
-      brent / 52 * 47
+      field_value / 52 * 47
     when "Weekly for 46 weeks"
-      brent / 52 * 46
+      field_value / 52 * 46
     when "Weekly for 52 weeks"
-      brent
+      field_value
     end
   end
 
@@ -256,7 +256,7 @@ class CaseLog < ApplicationRecord
     reason == 1
   end
 
-  def rent_period
+  def period_label
     return unless period
 
     case period
@@ -354,13 +354,19 @@ private
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
-    self.wrent = weekly_rent if brent.present? && period.present?
     if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
       self.brent ||= 0
       self.scharge ||= 0
       self.pscharge ||= 0
       self.supcharg ||= 0
       self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
+    end
+    if period.present?
+      self.wrent = weekly_value(brent) if brent.present?
+      self.wscharge = weekly_value(scharge) if scharge.present?
+      self.wpschrge = weekly_value(pscharge) if pscharge.present?
+      self.wsupchrg = weekly_value(supcharg) if supcharg.present?
+      self.wtcharge = weekly_value(tcharge) if tcharge.present?
     end
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge&.zero? ? 1 : 0

@@ -4,8 +4,8 @@ class AddDerivedFields < ActiveRecord::Migration[7.0]
       t.decimal :wrent, precision: 10, scale: 2
       t.decimal :wscharge, precision: 10, scale: 2
       t.decimal :wpschrge, precision: 10, scale: 2
-      t.decimal :wsupchrge, precision: 10, scale: 2
-      t.decimal :wtchrge, precision: 10, scale: 2
+      t.decimal :wsupchrg, precision: 10, scale: 2
+      t.decimal :wtcharge, precision: 10, scale: 2
       t.decimal :wtshortfall, precision: 10, scale: 2
     end
   end

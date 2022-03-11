@@ -161,10 +161,10 @@
     <has_benefits>1</has_benefits>
     <renewal>0</renewal>
     <wrent>100.0</wrent>
-    <wscharge/>
-    <wpschrge/>
-    <wsupchrge/>
-    <wtchrge/>
+    <wscharge>25.0</wscharge>
+    <wpschrge>20.0</wpschrge>
+    <wsupchrg>17.5</wsupchrg>
+    <wtcharge>162.5</wtcharge>
     <wtshortfall/>
   </form>
 </forms>
