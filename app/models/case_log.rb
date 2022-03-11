@@ -388,6 +388,7 @@ private
     begin
       Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
     rescue Timeout::Error
+      Rails.logger.warn("Postcodes.io lookup timed out")
     end
     if postcode_lookup && postcode_lookup.info.present?
       postcode_lookup.codes["admin_district"]
