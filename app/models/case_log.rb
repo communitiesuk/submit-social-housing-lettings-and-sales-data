@@ -385,7 +385,7 @@ private
 
   def get_inferred_la(postcode)
     postcode_lookup = nil
-    Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
+    Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) } rescue Timeout::Error
     if postcode_lookup && postcode_lookup.info.present?
       postcode_lookup.codes["admin_district"]
     end
