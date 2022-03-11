@@ -57,6 +57,9 @@ module Validations::PropertyValidations
   def validate_la(record)
     if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
       record.errors.add :la, I18n.t("validations.property.la.london_rent")
+      if record.postcode_known? && record.property_postcode.present?
+        record.errors.add :property_postcode, I18n.t("validations.property.la.london_rent")
+      end
     end
 
     if record.la_known? && record.la.blank?
