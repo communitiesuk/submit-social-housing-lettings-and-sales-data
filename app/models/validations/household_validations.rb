@@ -20,7 +20,7 @@ module Validations::HouseholdValidations
     end
     validate_other_field(record, 31, :reason, :other_reason_for_leaving_last_settled_home)
 
-    if record.reason == 1 && record.referral.present? && !record.is_internal_transfer?
+    if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
       record.errors.add :reason, I18n.t("validations.household.reason.not_internal_transfer")
     end

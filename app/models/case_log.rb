@@ -226,6 +226,11 @@ class CaseLog < ApplicationRecord
   def previous_tenancy_was_refuge?
     prevten == 21
   end
+
+  def is_reason_permanently_decanted?
+    reason == 1
+  end
+
 private
 
   PIO = Postcodes::IO.new
