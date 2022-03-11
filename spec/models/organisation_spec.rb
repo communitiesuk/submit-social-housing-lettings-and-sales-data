@@ -13,6 +13,11 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.users.first).to eq(user)
     end
 
+    it "validates provider_type presence" do
+      expect { FactoryBot.create(:organisation, provider_type: nil) }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type can't be blank")
+    end
+
     context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do

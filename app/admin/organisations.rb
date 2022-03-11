@@ -2,7 +2,7 @@ ActiveAdmin.register Organisation do
   permit_params do
     permitted = %i[name
                    phone
-                   providertype
+                   provider_type
                    address_line1
                    address_line2
                    postcode
@@ -27,9 +27,5 @@ ActiveAdmin.register Organisation do
     column :other_stock_owners
     column :managing_agents
     actions
-  end
-
-  before_save do |org|
-    org.provider_type = params[:organisation][:provider_type]
   end
 end
