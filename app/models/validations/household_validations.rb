@@ -70,7 +70,7 @@ module Validations::HouseholdValidations
       record.errors.add :age1, I18n.t("validations.household.age.lead.over_20")
     end
 
-    if record.sex1 == "M" && record.prevten == 21
+    if record.sex1 == "M" && record.previous_tenancy_was_refuge?
       record.errors.add :prevten, I18n.t("validations.household.prevten.male_refuge")
       record.errors.add :sex1, I18n.t("validations.household.gender.male_refuge")
     end
