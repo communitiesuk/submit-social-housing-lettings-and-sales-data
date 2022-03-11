@@ -32,11 +32,4 @@ module Validations::TenancyValidations
   def validate_other_tenancy_type(record)
     validate_other_field(record, 4, :tenancy, :tenancyother)
   end
-
-  def validate_tenancy_type(record)
-    if record.tenancy.present? && !record.is_secure_tenancy? && record.is_internal_transfer?
-      record.errors.add :tenancy, I18n.t("validations.tenancy.internal_transfer")
-      record.errors.add :referral, I18n.t("validations.household.referral.cannot_be_secure_tenancy")
-    end
-  end
 end

@@ -67,11 +67,6 @@ module Validations::HouseholdValidations
   end
 
   def validate_referral(record)
-    if record.referral.present? && record.tenancy.present? && !record.is_internal_transfer? && record.is_secure_tenancy?
-      record.errors.add :referral, I18n.t("validations.household.referral.secure_tenancy")
-      record.errors.add :tenancy, I18n.t("validations.tenancy.cannot_be_internal_transfer")
-    end
-
     if record.is_internal_transfer? && record.is_assessed_homeless?
       record.errors.add :referral, I18n.t("validations.household.referral.assessed_homeless")
       record.errors.add :homeless, I18n.t("validations.household.homeless.assessed.internal_transfer")
