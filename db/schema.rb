@@ -124,7 +124,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "rp_hardship"
     t.integer "rp_dontknow"
     t.string "tenancyother"
-    t.integer "override_net_income_validation"
+    t.integer "net_income_value_check"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"

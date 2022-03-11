@@ -38,7 +38,7 @@ RSpec.describe "Form Page Routing" do
     visit("/logs/#{id}/person-1-gender")
     choose("case-log-sex1-f-field", allow_label_click: true)
     click_button("Save and continue")
-    expect(page).to have_current_path("/logs/#{id}/household-number-of-other-members")
+    expect(page).to have_current_path("/logs/#{id}/person-1-working-situation")
     visit("/logs/#{id}/conditional-question")
     choose("case-log-preg-occ-1-field", allow_label_click: true)
     click_button("Save and continue")

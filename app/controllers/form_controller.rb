@@ -7,7 +7,7 @@ class FormController < ApplicationController
     if @case_log
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
-      if @case_log.update(responses_for_page) && @case_log.has_no_unresolved_soft_errors?
+      if @case_log.update(responses_for_page)
         if @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
           redirect_to(case_logs_path)
         else
@@ -54,7 +54,7 @@ class FormController < ApplicationController
 private
 
   def responses_for_page(page)
-    page.expected_responses.each_with_object({}) do |question, result|
+    page.questions.each_with_object({}) do |question, result|
       question_params = params["case_log"][question.id]
       if question.type == "date"
         day = params["case_log"]["#{question.id}(3i)"]

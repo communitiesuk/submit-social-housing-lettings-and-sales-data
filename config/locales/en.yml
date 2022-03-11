@@ -90,8 +90,8 @@ en:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
-        reason_required: "If reasonable preference is \"Yes\", a reason must be given"
-        reason_not_required: "If reasonable preference is \"No\", no reasons should be given"
+        reason_required: 'If reasonable preference is "Yes", a reason must be given'
+        reason_not_required: 'If reasonable preference is "No", no reasons should be given'
       underoccupation_benefitcap:
         dont_know_required: "must be don’t know if tenant’s main reason for leaving is don’t know"
       reservist:
@@ -131,7 +131,6 @@ en:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter a local authority"
 
-
     tenancy:
       length:
         fixed_term_not_required: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term"
@@ -145,7 +144,7 @@ en:
 
   soft_validations:
     net_income:
-      hint_text: "This is based on the tenant’s work situation: %{ecstat1}"
+      hint_text: "<p>You told us the main tenant’s working situation is: <strong>%{ecstat1}</strong></p><p>The household income you have entered is <strong>%{earnings}</strong></p>"
       in_soft_min_range:
         message: "Net income is lower than expected based on the main tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
@@ -160,3 +159,6 @@ en:
       code_has_been_sent: "Your security code has been sent."
       code_required: "Security code is required"
       code_incorrect: "Security code is incorrect"
+
+  test:
+    one_argument: "This is based on the tenant’s work situation: %{ecstat1}"

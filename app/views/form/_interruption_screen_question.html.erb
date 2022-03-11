@@ -1,0 +1,23 @@
+<%= govuk_panel(
+  title_text: title_text,
+  classes: 'app-panel--interruption',
+) do %>
+  <%= display_informative_text(informative_text, case_log) %>
+  <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
+    legend: { text: question.header },
+    hint: { text: question.hint_text&.html_safe } do %>
+    <% question.answer_options.map do |key, options| %>
+      <% if key.starts_with?("divider") %>
+        <%= f.govuk_radio_divider %>
+      <% else %>
+        <%= f.govuk_radio_button question.id,
+          key,
+          label: { text: options['value'] },
+          hint: { text: options['hint'] },
+          **stimulus_html_attributes(question)
+        %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= f.govuk_submit "Save and continue", accesskey: "s", class: "app-button--inverse govuk-!-margin-bottom-0" %>
+<% end %>

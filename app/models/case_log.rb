@@ -111,6 +111,10 @@ class CaseLog < ApplicationRecord
     incfreq == 2
   end
 
+  def net_income_soft_validation_triggered?
+    net_income_in_soft_min_range? || net_income_in_soft_max_range?
+  end
+
   def given_reasonable_preference?
     reasonpref == 1
   end

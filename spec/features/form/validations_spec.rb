@@ -124,49 +124,28 @@ RSpec.describe "validations" do
       let(:income_over_soft_limit) { 750 }
       let(:income_under_soft_limit) { 700 }
 
-      it "prompts the user to confirm the value is correct", js: true do
+      it "prompts the user to confirm the value is correct with an interruption screen" do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
         choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_content("Are you sure this is correct?")
-        check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
+        expect(page).to have_current_path("/logs/#{case_log.id}/net-income-value-check")
+        expect(page).to have_content("Net income is outside the expected range based on the main tenant’s working situation")
+        expect(page).to have_content("You told us the main tenant’s working situation is: Full-time – 30 hours or more")
+        expect(page).to have_content("The household income you have entered is £750.00 every week")
+        choose("case-log-net-income-value-check-0-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
       end
 
-      it "does not require confirming the value if the value is amended" do
+      it "returns the user to the previous question if they do not confirm the value as correct on the interruption screen" do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
         choose("case-log-incfreq-0-field", allow_label_click: true)
         click_button("Save and continue")
-        fill_in("case-log-earnings-field", with: income_under_soft_limit)
+        choose("case-log-net-income-value-check-1-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
-        case_log.reload
-        expect(case_log.override_net_income_validation).to be_nil
-      end
-
-      it "clears the confirmation question if the amount was amended and the page is returned to using the back button", js: true do
-        visit("/logs/#{case_log.id}/net-income")
-        fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-0-field", allow_label_click: true)
-        click_button("Save and continue")
-        fill_in("case-log-earnings-field", with: income_under_soft_limit)
-        click_button("Save and continue")
-        click_link(text: "Back")
-        expect(page).to have_no_content("Are you sure this is correct?")
-      end
-
-      it "does not clear the confirmation question if the page is returned to using the back button and the amount is still over the soft limit", js: true do
-        visit("/logs/#{case_log.id}/net-income")
-        fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-0-field", allow_label_click: true)
-        click_button("Save and continue")
-        check("case-log-override-net-income-validation-override-net-income-validation-field", allow_label_click: true)
-        click_button("Save and continue")
-        click_link(text: "Back")
-        expect(page).to have_content("Are you sure this is correct?")
+        expect(page).to have_current_path("/logs/#{case_log.id}/net-income")
       end
     end
   end

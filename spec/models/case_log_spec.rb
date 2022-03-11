@@ -42,38 +42,6 @@ RSpec.describe CaseLog do
           .to include(CaseLogValidator)
       end
     end
-
-    context "when soft validations exist" do
-      context "with an income in upper soft range" do
-        let(:case_log) do
-          FactoryBot.create(:case_log,
-                            ecstat1: 1,
-                            earnings: 750,
-                            incfreq: 0)
-        end
-
-        it "updates soft errors" do
-          expect(case_log.has_no_unresolved_soft_errors?).to be false
-          expect(case_log.soft_errors["override_net_income_validation"].message)
-            .to match(I18n.t("soft_validations.net_income.in_soft_max_range.message"))
-        end
-      end
-
-      context "with an income in lower soft validation range" do
-        let(:case_log) do
-          FactoryBot.create(:case_log,
-                            ecstat1: 1,
-                            earnings: 120,
-                            incfreq: 0)
-        end
-
-        it "updates soft errors" do
-          expect(case_log.has_no_unresolved_soft_errors?).to be false
-          expect(case_log.soft_errors["override_net_income_validation"].message)
-            .to match(I18n.t("soft_validations.net_income.in_soft_min_range.message"))
-        end
-      end
-    end
   end
 
   describe "#update" do
