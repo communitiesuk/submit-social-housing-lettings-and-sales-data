@@ -51,7 +51,7 @@ FactoryBot.define do
       underoccupation_benefitcap { 0 }
       leftreg { 1 }
       reservist { 0 }
-      illness { 1 }
+      illness { 0 }
       preg_occ { 1 }
       tenancy_code { "BZ757" }
       startertenancy { 0 }

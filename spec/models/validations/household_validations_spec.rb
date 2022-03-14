@@ -489,7 +489,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates hearing can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -497,7 +497,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates mobility can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -505,7 +505,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates dexterity can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -513,7 +513,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates learning or understanding or concentrating can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -521,7 +521,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates memory can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -529,7 +529,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates mental health can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -537,15 +537,15 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
-    
+    end
+
     it "validates stamina or breathing or fatigue can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
       record.illness_type_8 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates socially or behaviourally can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -553,7 +553,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
 
     it "validates other can't be selected if answer to anyone in household with health condition is not yes" do
       record.illness = 1
@@ -561,7 +561,7 @@ RSpec.describe Validations::HouseholdValidations do
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
-    end 
+    end
   end
 
   describe "accessibility requirement validations" do
