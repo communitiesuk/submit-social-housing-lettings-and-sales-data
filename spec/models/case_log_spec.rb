@@ -299,6 +299,15 @@ RSpec.describe CaseLog do
           end
         end
 
+        context "when the tenant is not in receipt of applicable benefits" do
+          it "correctly resets total shortfall" do
+            case_log.update!(wtshortfall: 100, hb: 9)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wtshortfall).to be_nil
+            expect(record_from_db["wtshortfall"]).to be_nil
+          end
+        end
+
         context "when rent is paid bi-weekly" do
           it "correctly derives and saves weekly rent" do
             case_log.update!(brent: 100, period: 0)
