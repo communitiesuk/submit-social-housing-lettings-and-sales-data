@@ -1,4 +1,5 @@
 module Validations::FinancialValidations
+  include Validations::SharedValidations
   # Validations methods need to be called 'validate_<page_name>' to run on model save
   # or 'validate_' to run on submit as well
   def validate_outstanding_rent_amount(record)

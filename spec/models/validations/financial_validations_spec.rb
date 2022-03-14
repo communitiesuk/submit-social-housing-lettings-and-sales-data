@@ -175,5 +175,15 @@ RSpec.describe Validations::FinancialValidations do
           .to include(match I18n.t("validations.financial.negative_currency"))
       end
     end
+
+    context "when the field allows decimals" do
+      it "correctly co-erces values" do
+        record.brent = "20"
+        record.pscharge = "0.0"
+        record.period = "2"
+        financial_validator.validate_numeric_min_max(record)
+        expect(record.errors["pscharge"]).to be_empty
+      end
+    end
   end
 end
