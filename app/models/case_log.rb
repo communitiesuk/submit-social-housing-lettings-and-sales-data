@@ -239,6 +239,30 @@ class CaseLog < ApplicationRecord
     reason == 1
   end
 
+  def receives_housing_benefit_only?
+    hb == 1
+  end
+
+  def receives_housing_benefit_and_universal_credit?
+    hb == 8
+  end
+
+  def receives_uc_with_housing_element_excl_housing_benefit?
+    hb == 6
+  end
+
+  def receives_no_benefits?
+    hb == 9
+  end
+
+  def receives_universal_credit_but_no_housing_benefit?
+    hb == 7
+  end
+
+  def benefits_unknown?
+    hb == 3
+  end
+
 private
 
   PIO = Postcodes::IO.new
@@ -327,6 +351,11 @@ private
       self.wtcharge = weekly_value(tcharge) if tcharge.present?
     end
     self.has_benefits = get_has_benefits
+    if tshortfall && (receives_housing_benefit_only? ||
+        receives_housing_benefit_and_universal_credit? ||
+          receives_uc_with_housing_element_excl_housing_benefit?)
+      self.wtshortfall = weekly_value(tshortfall)
+    end
     self.nocharge = household_charge&.zero? ? 1 : 0
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
     self.ethnic = ethnic || ethnic_group
