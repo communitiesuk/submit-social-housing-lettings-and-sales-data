@@ -200,7 +200,7 @@ RSpec.describe CaseLog do
         other_hhmemb: 6,
         rent_type: 4,
         needstype: 1,
-        hb: 0,
+        hb: 1,
         hbrentshortfall: 1,
       })
     end
@@ -299,6 +299,15 @@ RSpec.describe CaseLog do
           end
         end
 
+        context "when the tenant is not in receipt of applicable benefits" do
+          it "correctly resets total shortfall" do
+            case_log.update!(wtshortfall: 100, hb: 9)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wtshortfall).to be_nil
+            expect(record_from_db["wtshortfall"]).to be_nil
+          end
+        end
+
         context "when rent is paid bi-weekly" do
           it "correctly derives and saves weekly rent" do
             case_log.update!(brent: 100, period: 0)
@@ -333,6 +342,35 @@ RSpec.describe CaseLog do
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(50.0)
             expect(record_from_db["wtcharge"]).to eq(50.0)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(50.0)
+                expect(record_from_db["wtshortfall"]).to eq(50.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(50.0)
+                expect(record_from_db["wtshortfall"]).to eq(50.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(50.0)
+                expect(record_from_db["wtshortfall"]).to eq(50.0)
+              end
+            end
           end
         end
 
@@ -371,6 +409,35 @@ RSpec.describe CaseLog do
             expect(case_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
           end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
+          end
         end
 
         context "when rent is paid every calendar month" do
@@ -407,6 +474,35 @@ RSpec.describe CaseLog do
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(30.0)
+                expect(record_from_db["wtshortfall"]).to eq(30.0)
+              end
+            end
           end
         end
 
@@ -445,6 +541,35 @@ RSpec.describe CaseLog do
             expect(case_log.wtcharge).to eq(125.0)
             expect(record_from_db["wtcharge"]).to eq(125.0)
           end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(125.0)
+                expect(record_from_db["wtshortfall"]).to eq(125.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(125.0)
+                expect(record_from_db["wtshortfall"]).to eq(125.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(125.0)
+                expect(record_from_db["wtshortfall"]).to eq(125.0)
+              end
+            end
+          end
         end
 
         context "when rent is paid weekly for 49 weeks" do
@@ -481,6 +606,35 @@ RSpec.describe CaseLog do
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(122.5)
             expect(record_from_db["wtcharge"]).to eq(122.5)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(122.5)
+                expect(record_from_db["wtshortfall"]).to eq(122.5)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(122.5)
+                expect(record_from_db["wtshortfall"]).to eq(122.5)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(122.5)
+                expect(record_from_db["wtshortfall"]).to eq(122.5)
+              end
+            end
           end
         end
 
@@ -519,6 +673,35 @@ RSpec.describe CaseLog do
             expect(case_log.wtcharge).to eq(120.0)
             expect(record_from_db["wtcharge"]).to eq(120.0)
           end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(120.0)
+                expect(record_from_db["wtshortfall"]).to eq(120.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(120.0)
+                expect(record_from_db["wtshortfall"]).to eq(120.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(120.0)
+                expect(record_from_db["wtshortfall"]).to eq(120.0)
+              end
+            end
+          end
         end
 
         context "when rent is paid weekly for 47 weeks" do
@@ -555,6 +738,35 @@ RSpec.describe CaseLog do
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(117.5)
             expect(record_from_db["wtcharge"]).to eq(117.5)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(117.5)
+                expect(record_from_db["wtshortfall"]).to eq(117.5)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(117.5)
+                expect(record_from_db["wtshortfall"]).to eq(117.5)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(117.5)
+                expect(record_from_db["wtshortfall"]).to eq(117.5)
+              end
+            end
           end
         end
 
@@ -593,6 +805,35 @@ RSpec.describe CaseLog do
             expect(case_log.wtcharge).to eq(115.0)
             expect(record_from_db["wtcharge"]).to eq(115.0)
           end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(115.0)
+                expect(record_from_db["wtshortfall"]).to eq(115.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(115.0)
+                expect(record_from_db["wtshortfall"]).to eq(115.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(115.0)
+                expect(record_from_db["wtshortfall"]).to eq(115.0)
+              end
+            end
+          end
         end
 
         context "when rent is paid weekly for 52 weeks" do
@@ -629,6 +870,35 @@ RSpec.describe CaseLog do
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(130.0)
             expect(record_from_db["wtcharge"]).to eq(130.0)
+          end
+
+          context "when the tenant has an outstanding amount after benefits" do
+            context "when tenant is in receipt of housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 1)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(130.0)
+                expect(record_from_db["wtshortfall"]).to eq(130.0)
+              end
+            end
+
+            context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 6)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(130.0)
+                expect(record_from_db["wtshortfall"]).to eq(130.0)
+              end
+            end
+
+            context "when tenant is in receipt of housing benefit and universal credit" do
+              it "correctly derives and saves weekly total shortfall" do
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 8)
+                record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
+                expect(case_log.wtshortfall).to eq(130.0)
+                expect(record_from_db["wtshortfall"]).to eq(130.0)
+              end
+            end
           end
         end
       end
@@ -910,8 +1180,6 @@ RSpec.describe CaseLog do
     end
 
     it "correctly derives and saves has_benefits" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["has_benefits"]).to eq(1)
     end

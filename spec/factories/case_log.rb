@@ -119,7 +119,7 @@ FactoryBot.define do
       majorrepairs { 1 }
       la { "E09000003" }
       prevloc { "E07000105" }
-      hb { 1 }
+      hb { 6 }
       hbrentshortfall { 0 }
       tshortfall { 12 }
       postcod2 { "w3" }

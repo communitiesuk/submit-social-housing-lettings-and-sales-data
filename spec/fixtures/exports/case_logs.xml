@@ -97,7 +97,7 @@
     <majorrepairs>1</majorrepairs>
     <la>E09000003</la>
     <prevloc>E07000105</prevloc>
-    <hb>1</hb>
+    <hb>6</hb>
     <hbrentshortfall>0</hbrentshortfall>
     <postcode>NW1</postcode>
     <postcod2>5TY</postcod2>
@@ -165,6 +165,6 @@
     <wpschrge>20.0</wpschrge>
     <wsupchrg>17.5</wsupchrg>
     <wtcharge>162.5</wtcharge>
-    <wtshortfall/>
+    <wtshortfall>6.0</wtshortfall>
   </form>
 </forms>

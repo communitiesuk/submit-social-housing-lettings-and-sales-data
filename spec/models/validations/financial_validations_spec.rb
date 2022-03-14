@@ -90,7 +90,7 @@ RSpec.describe Validations::FinancialValidations do
     context "when shortfall is yes" do
       it "validates that housing benefit is not none" do
         record.hbrentshortfall = 0
-        record.hb = 4
+        record.hb = 9
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
           .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
@@ -98,7 +98,7 @@ RSpec.describe Validations::FinancialValidations do
 
       it "validates that housing benefit is not don't know" do
         record.hbrentshortfall = 0
-        record.hb = 5
+        record.hb = 3
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
           .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
@@ -106,7 +106,7 @@ RSpec.describe Validations::FinancialValidations do
 
       it "validates that housing benefit is not Universal Credit without housing benefit" do
         record.hbrentshortfall = 0
-        record.hb = 3
+        record.hb = 7
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
           .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
@@ -114,7 +114,7 @@ RSpec.describe Validations::FinancialValidations do
 
       it "validates that housing benefit is provided" do
         record.hbrentshortfall = 0
-        record.hb = 0
+        record.hb = 1
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"]).to be_empty
       end

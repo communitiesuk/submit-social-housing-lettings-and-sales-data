@@ -51,11 +51,10 @@ module Validations::FinancialValidations
   end
 
   def validate_tshortfall(record)
-    hb_donotknow = record.hb == 5
-    hb_none = record.hb == 4
-    hb_uc_no_hb = record.hb == 3
-
-    if record.has_hbrentshortfall? && (hb_donotknow || hb_none || hb_uc_no_hb)
+    if record.has_hbrentshortfall? &&
+        (record.benefits_unknown? ||
+          record.receives_no_benefits? ||
+            record.receives_universal_credit_but_no_housing_benefit?)
       record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
     end
   end
