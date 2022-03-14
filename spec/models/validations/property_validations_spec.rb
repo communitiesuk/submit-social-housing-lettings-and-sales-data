@@ -167,6 +167,8 @@ RSpec.describe Validations::PropertyValidations do
       end
 
       context "when the la has been derived from a known postcode" do
+        let(:expected_error) { I18n.t("validations.property.la.london_rent_postcode") }
+
         it "also adds an error to the postcode field" do
           record.la = "E07000105"
           record.rent_type = 2

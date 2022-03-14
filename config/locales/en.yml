@@ -61,6 +61,7 @@ en:
         relet_number: "Property number of times relet must be between 0 and 20"
       la:
         london_rent: "Local authority has to be in London"
+        london_rent_postcode: "The postcode must be a London postcode because you told us the rent type is London Affordable Rent or London Living Rent"
         la_known: "Enter a local authority"
       rsnvac:
         first_let_not_social: "Reason for vacancy cannot be first let if unit has been previously let as social housing"
