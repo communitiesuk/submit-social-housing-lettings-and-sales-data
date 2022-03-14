@@ -142,7 +142,7 @@ en:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter a local authority"
       gender:
-        male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
+        male_refuge: "Answer cannot be male as you told us their housing situation immediately before this letting was a refuge"
       reason:
         not_internal_transfer: "Answer cannot be permanently decanted from another property owned by this landlord as you told us the source of referral for this tenancy was not an internal transfer"
 
