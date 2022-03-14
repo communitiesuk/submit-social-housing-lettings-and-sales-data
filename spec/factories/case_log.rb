@@ -68,7 +68,7 @@ FactoryBot.define do
       earnings { 68 }
       incfreq { 0 }
       benefits { 1 }
-      period { 0 }
+      period { 2 }
       brent { 200 }
       scharge { 50 }
       pscharge { 40 }
