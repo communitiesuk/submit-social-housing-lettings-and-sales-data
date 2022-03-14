@@ -6,25 +6,6 @@ export default class extends Controller {
   }
 
   displayConditional() {
-    switch(this.element.type) {
-      case "number":
-        this.displayConditionalNumeric()
-      case "radio":
-        this.displayConditionalRadio()
-      default:
-        break;
-    }
-  }
-
-  clearTextNumericInput(input) {
-    input.value = ""
-  }
-
-  clearDateInputs(inputs) {
-    inputs.forEach((input) => { input.value = "" })
-  }
-
-  displayConditionalRadio() {
     if(this.element.checked) {
       let selectedValue = this.element.value
       let conditional_for = JSON.parse(this.element.dataset.info)
@@ -45,17 +26,11 @@ export default class extends Controller {
     }
   }
 
-  displayConditionalNumeric() {
-    let enteredValue = this.element.value
-    let conditional_for = JSON.parse(this.element.dataset.info)
+  clearTextNumericInput(input) {
+    input.value = ""
+  }
 
-    Object.entries(conditional_for).map(([targetQuestion, condition]) => {
-      let div = document.getElementById(targetQuestion + "_div")
-      if(eval((enteredValue + condition))) {
-        div.style.display = "block"
-      } else {
-        div.style.display = "none"
-      }
-    })
+  clearDateInputs(inputs) {
+    inputs.forEach((input) => { input.value = "" })
   }
 }
