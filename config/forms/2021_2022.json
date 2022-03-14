@@ -1284,7 +1284,7 @@
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      "Other ethnic group"
+                      1
                     ]
                   }
                 },
@@ -1296,7 +1296,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": "Other ethnic group"
+                  "ethnic_group": 4
                 }
               ]
             },
@@ -1328,7 +1328,7 @@
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      "Other ethnic group"
+                      4
                     ]
                   }
                 },
@@ -1340,7 +1340,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": "Asian or Asian British"
+                  "ethnic_group": 2
                 }
               ]
             },
@@ -1366,7 +1366,7 @@
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      "Any other Black, African or Caribbean background"
+                      2
                     ]
                   }
                 },
@@ -1378,7 +1378,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": "Black, African, Caribbean or Black British"
+                  "ethnic_group": 3
                 }
               ]
             },
@@ -1404,7 +1404,7 @@
                   },
                   "conditional_for": {
                     "tenant_ethnic_group_mixed_other": [
-                      "Any other Mixed or Multiple ethnic background"
+                      2
                     ]
                   }
                 },
@@ -1416,7 +1416,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": "Mixed or Multiple ethnic groups"
+                  "ethnic_group": 1
                 }
               ]
             },
@@ -1445,7 +1445,7 @@
                   },
                   "conditional_for": {
                     "tenant_ethnic_group_white_other": [
-                      "Any other White background"
+                      3
                     ]
                   }
                 },
@@ -1457,7 +1457,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic": "White"
+                  "ethnic": 0
                 }
               ]
             },
