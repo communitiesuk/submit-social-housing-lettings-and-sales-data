@@ -40,6 +40,17 @@ class CaseLog < ApplicationRecord
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [0, 1, 2, 3].freeze
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
+  RENT_AND_CHARGES_PERIOD_LABEL = {
+    0 => "Every 2 weeks",
+    1 => "Every 4 weeks",
+    2 => "Every calendar month",
+    3 => "Weekly for 50 weeks",
+    4 => "Weekly for 49 weeks",
+    5 => "Weekly for 48 weeks",
+    6 => "Weekly for 47 weeks",
+    7 => "Weekly for 46 weeks",
+    8 => "Weekly for 52 weeks",
+  }.freeze
   enum status: STATUS
 
   def form
@@ -88,7 +99,7 @@ class CaseLog < ApplicationRecord
   def weekly_value(field_value)
     return unless field_value && period
 
-    case period_label
+    case RENT_AND_CHARGES_PERIOD_LABEL[period]
     when "Every 2 weeks"
       field_value / 2
     when "Every 4 weeks"
@@ -254,31 +265,6 @@ class CaseLog < ApplicationRecord
 
   def is_reason_permanently_decanted?
     reason == 1
-  end
-
-  def period_label
-    return unless period
-
-    case period
-    when 0
-      "Every 2 weeks"
-    when 1
-      "Every 4 weeks"
-    when 2
-      "Every calendar month"
-    when 3
-      "Weekly for 50 weeks"
-    when 4
-      "Weekly for 49 weeks"
-    when 5
-      "Weekly for 48 weeks"
-    when 6
-      "Weekly for 47 weeks"
-    when 7
-      "Weekly for 46 weeks"
-    when 8
-      "Weekly for 52 weeks"
-    end
   end
 
 private
