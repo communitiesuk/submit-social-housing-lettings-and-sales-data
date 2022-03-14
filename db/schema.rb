@@ -218,6 +218,12 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "rent_type"
     t.integer "has_benefits"
     t.integer "renewal"
+    t.decimal "wrent", precision: 10, scale: 2
+    t.decimal "wscharge", precision: 10, scale: 2
+    t.decimal "wpschrge", precision: 10, scale: 2
+    t.decimal "wsupchrg", precision: 10, scale: 2
+    t.decimal "wtcharge", precision: 10, scale: 2
+    t.decimal "wtshortfall", precision: 10, scale: 2
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
@@ -271,10 +277,10 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "last_sign_in_ip"
     t.integer "role"
     t.string "old_user_id"
-    t.string "phone"
     t.integer "failed_attempts", default: 0
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
+    t.string "phone"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -40,6 +40,7 @@ class CaseLog < ApplicationRecord
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [0, 1, 2, 3].freeze
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
+  NUM_OF_WEEKS_FROM_PERIOD = { 0 => 26, 1 => 13, 2 => 12, 3 => 50, 4 => 49, 5 => 48, 6 => 47, 7 => 46, 8 => 52 }.freeze
   enum status: STATUS
 
   def form
@@ -83,6 +84,13 @@ class CaseLog < ApplicationRecord
     elsif net_income_is_yearly?
       (earnings / 12.0).round(0)
     end
+  end
+
+  def weekly_value(field_value)
+    num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
+    return unless field_value && num_of_weeks
+
+    field_value / 52 * num_of_weeks
   end
 
   def applicable_income_range
@@ -310,6 +318,13 @@ private
       self.pscharge ||= 0
       self.supcharg ||= 0
       self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
+    end
+    if period.present?
+      self.wrent = weekly_value(brent) if brent.present?
+      self.wscharge = weekly_value(scharge) if scharge.present?
+      self.wpschrge = weekly_value(pscharge) if pscharge.present?
+      self.wsupchrg = weekly_value(supcharg) if supcharg.present?
+      self.wtcharge = weekly_value(tcharge) if tcharge.present?
     end
     self.has_benefits = get_has_benefits
     self.nocharge = household_charge&.zero? ? 1 : 0
