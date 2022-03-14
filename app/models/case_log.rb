@@ -38,7 +38,7 @@ class CaseLog < ApplicationRecord
   OPTIONAL_FIELDS = %w[postcode_known la_known first_time_property_let_as_social_housing tenant_code propcode].freeze
   RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
-  HAS_BENEFITS_OPTIONS = [0, 1, 2, 3].freeze
+  HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 0 => 26, 1 => 13, 2 => 12, 3 => 50, 4 => 49, 5 => 48, 6 => 47, 7 => 46, 8 => 52 }.freeze
   enum status: STATUS

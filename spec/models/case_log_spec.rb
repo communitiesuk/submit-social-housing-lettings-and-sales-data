@@ -200,7 +200,7 @@ RSpec.describe CaseLog do
         other_hhmemb: 6,
         rent_type: 4,
         needstype: 1,
-        hb: 0,
+        hb: 1,
         hbrentshortfall: 1,
       })
     end
@@ -910,8 +910,6 @@ RSpec.describe CaseLog do
     end
 
     it "correctly derives and saves has_benefits" do
-      case_log.reload
-
       record_from_db = ActiveRecord::Base.connection.execute("select has_benefits from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["has_benefits"]).to eq(1)
     end

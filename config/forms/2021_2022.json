@@ -4610,25 +4610,25 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Housing benefit"
                     },
-                    "1": {
+                    "6": {
                       "value": "Universal Credit with housing element (excluding housing benefit)"
                     },
-                    "2": {
+                    "8": {
                       "value": "Housing benefit and Universal Credit (without housing element)"
                     },
-                    "3": {
+                    "7": {
                       "value": "Universal Credit (without housing element)"
                     },
-                    "4": {
+                    "9": {
                       "value": "None"
                     },
                     "divider": {
                       "value": true
                     },
-                    "5": {
+                    "3": {
                       "value": "Don’t know"
                     },
                     "6": {
