@@ -365,6 +365,26 @@
                 "header": "",
                 "description": "",
                 "questions": {
+                  "postcode_known": {
+                    "check_answer_label": "Do you know the property postcode?",
+                    "header": "Do you know the property’s postcode?",
+                    "hint_text": "",
+                    "type": "radio",
+                    "answer_options": {
+                      "1": {
+                        "value": "Yes"
+                      },
+                      "0": {
+                        "value": "No"
+                      }
+                    },
+                    "conditional_for": {
+                      "property_postcode": [
+                        1
+                      ]
+                    },
+                    "hidden_in_check_answers": true
+                  },
                   "property_postcode": {
                     "check_answer_label": "Postcode",
                     "header": "",
@@ -541,7 +561,7 @@
                 "depends_on": [{ "net_income_soft_validation_triggered?": true }],
                 "title_text": "Net income is outside the expected range based on the main tenant’s working situation",
                 "informative_text": {
-                  "translation": "soft_validations.net_income.hint_text", 
+                  "translation": "soft_validations.net_income.hint_text",
                   "argument": ["ecstat1", "earnings"]
                 },
                 "questions": {
@@ -830,9 +850,9 @@
                   }
                 }
               },
-              "property_postcode": {
+              "other_postcode": {
                 "questions": {
-                  "property_postcode": {
+                  "other_postcode": {
                     "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
