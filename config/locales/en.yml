@@ -131,7 +131,7 @@ en:
         cannot_be_secure_tenancy: "Answer cannot be secure tenancy as you already told us this is not an internal transfer"
         assessed_homeless: "Answer cannot be internal transfer as you already told us the tenant was assessed as homeless"
         other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
-        prevten_invalid: "Answer cannot be internal transfer as you already told us the source of referral for this letting was %{prevten}"
+        prevten_invalid: "Answer cannot be internal transfer as you already told us the household situation immediately before this letting was %{prevten}"
         reason_permanently_decanted: "Answer must be internal transfer as you already told us the tenant was permanently decanted from another property owned by this landlord"
       homeless:
         assessed:
