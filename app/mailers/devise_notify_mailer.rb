@@ -5,10 +5,6 @@ class DeviseNotifyMailer < Devise::Mailer
     @notify_client ||= ::Notifications::Client.new(ENV["GOVUK_NOTIFY_API_KEY"])
   end
 
-  def host
-    @host ||= ENV["APP_HOST"]
-  end
-
   def send_email(email, template_id, personalisation)
     notify_client.send_email(
       email_address: email,
