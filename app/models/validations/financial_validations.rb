@@ -58,4 +58,11 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
     end
   end
+
+  def validate_rent_amount(record)
+    if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
+      record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
+      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+    end
+  end
 end

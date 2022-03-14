@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe Validations::HouseholdValidations do
+RSpec.describe Validations::SharedValidations do
   subject(:household_validator) { validator_class.new }
 
-  let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
+  let(:validator_class) { Class.new { include Validations::SharedValidations } }
   let(:record) { FactoryBot.create(:case_log) }
 
   describe "numeric min max validations" do

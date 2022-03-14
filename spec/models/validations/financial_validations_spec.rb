@@ -186,4 +186,19 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
   end
+
+  describe "rent and charges validations" do
+    context "when shortfall amount is provided" do
+      it "validates that basic rent is no less than double the shortfall" do
+        record.hbrentshortfall = 1
+        record.tshortfall = 99.50
+        record.brent = 198
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["brent"])
+          .to include(match I18n.t("validations.financial.rent.less_than_double_shortfall", shortfall: 198))
+        expect(record.errors["tshortfall"])
+          .to include(match I18n.t("validations.financial.tshortfall.more_than_rent"))
+      end
+    end
+  end
 end
