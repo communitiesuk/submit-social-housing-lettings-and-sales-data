@@ -21,7 +21,7 @@ module Validations::SharedValidations
       field = question.check_answer_label || question.id
 
       begin
-        answer = Integer(record.public_send("#{question.id}_before_type_cast"))
+        answer = Float(record.public_send("#{question.id}_before_type_cast"))
       rescue ArgumentError
         record.errors.add question.id.to_sym, I18n.t("validations.numeric.valid", field:, min: question.min, max: question.max)
       end
