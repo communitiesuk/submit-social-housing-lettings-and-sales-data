@@ -65,6 +65,13 @@ module Validations::HouseholdValidations
     end
   end
 
+  def validate_condition_effects(record)
+    all_options = [record.illness_type_1, record.illness_type_2, record.illness_type_3, record.illness_type_4, record.illness_type_5, record.illness_type_6, record.illness_type_7, record.illness_type_8, record.illness_type_9, record.illness_type_10]
+    if all_options.count(1) >= 1 && record.illness != 0
+      record.errors.add :condition_effects, I18n.t("validations.household.condition_effects.no_choices")
+    end   
+  end
+
   def validate_previous_housing_situation(record)
     if record.is_relet_to_temp_tenant? && !record.previous_tenancy_was_temporary?
       record.errors.add :prevten, I18n.t("validations.household.prevten.non_temp_accommodation")
