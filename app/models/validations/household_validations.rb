@@ -80,7 +80,7 @@ module Validations::HouseholdValidations
       record.errors.add :sex1, I18n.t("validations.household.gender.male_refuge")
     end
 
-    if record.is_internal_transfer? && [3, 4, 10, 13, 19, 23, 24, 25, 26, 28, 29].include?(record.prevten)
+    if record.is_internal_transfer? && [3, 4, 7, 9, 10, 13, 14, 19, 21, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten)
       label = record.form.get_question("prevten").present? ? record.form.get_question("prevten").label_from_value(record.prevten) : ""
       record.errors.add :prevten, I18n.t("validations.household.prevten.internal_transfer", prevten: label)
       record.errors.add :referral, I18n.t("validations.household.referral.prevten_invalid", prevten: label)
