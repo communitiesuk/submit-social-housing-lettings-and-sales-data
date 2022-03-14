@@ -92,6 +92,9 @@ en:
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_double_shortfall: "Answer cannot be less than double shortfall in basic rent"
+        scharge:
+          this_landlord:
+            general_needs: "Service charge must be between 0 and 55 per week if the landlord is this landlord"
 
     household:
       reasonpref:

@@ -266,6 +266,8 @@ class CaseLog < ApplicationRecord
 
   def benefits_unknown?
     hb == 3
+  def this_landlord?
+    landlord == 1
   end
 
 private

@@ -64,5 +64,10 @@ module Validations::FinancialValidations
       record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
+
+    if record.scharge.present? && record.this_landlord? && record.weekly_value(record.scharge).present? && !record.weekly_value(record.scharge).between?(0, 55)
+      record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.general_needs")
+      record.errors.add :landlord, I18n.t("validations.organisation.landlord.invalid_scharge")
+    end
   end
 end
