@@ -90,7 +90,7 @@ class CaseLog < ApplicationRecord
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return unless field_value && num_of_weeks
 
-    field_value / 52 * num_of_weeks
+    (field_value / 52 * num_of_weeks).round(2)
   end
 
   def applicable_income_range

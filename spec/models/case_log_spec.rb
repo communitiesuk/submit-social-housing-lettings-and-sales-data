@@ -372,6 +372,21 @@ RSpec.describe CaseLog do
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 2)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(50.06)
+            expect(case_log.wpschrge).to eq(50.07)
+            expect(case_log.wscharge).to eq(50.49)
+            expect(case_log.wrent).to eq(50.49)
+            expect(case_log.wtcharge).to eq(201.1)
+            expect(record_from_db["wsupchrg"]).to eq(50.06)
+            expect(record_from_db["wpschrge"]).to eq(50.07)
+            expect(record_from_db["wscharge"]).to eq(50.49)
+            expect(record_from_db["wrent"]).to eq(50.49)
+            expect(record_from_db["wtcharge"]).to eq(201.1)
+          end
         end
 
         context "when rent is paid every 4 weeks" do
@@ -437,6 +452,21 @@ RSpec.describe CaseLog do
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 3)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(25.03)
+            expect(case_log.wpschrge).to eq(25.03)
+            expect(case_log.wscharge).to eq(25.24)
+            expect(case_log.wrent).to eq(25.24)
+            expect(case_log.wtcharge).to eq(100.55)
+            expect(record_from_db["wsupchrg"]).to eq(25.03)
+            expect(record_from_db["wpschrge"]).to eq(25.03)
+            expect(record_from_db["wscharge"]).to eq(25.24)
+            expect(record_from_db["wrent"]).to eq(25.24)
+            expect(record_from_db["wtcharge"]).to eq(100.55)
           end
         end
 
@@ -504,6 +534,21 @@ RSpec.describe CaseLog do
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 4)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(23.10)
+            expect(case_log.wpschrge).to eq(23.11)
+            expect(case_log.wscharge).to eq(23.30)
+            expect(case_log.wrent).to eq(23.30)
+            expect(case_log.wtcharge).to eq(92.82)
+            expect(record_from_db["wsupchrg"]).to eq(23.10)
+            expect(record_from_db["wpschrge"]).to eq(23.11)
+            expect(record_from_db["wscharge"]).to eq(23.30)
+            expect(record_from_db["wrent"]).to eq(23.30)
+            expect(record_from_db["wtcharge"]).to eq(92.82)
+          end
         end
 
         context "when rent is paid weekly for 50 weeks" do
@@ -569,6 +614,21 @@ RSpec.describe CaseLog do
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 5)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(96.27)
+            expect(case_log.wpschrge).to eq(96.28)
+            expect(case_log.wscharge).to eq(97.1)
+            expect(case_log.wrent).to eq(97.09)
+            expect(case_log.wtcharge).to eq(386.73)
+            expect(record_from_db["wsupchrg"]).to eq(96.27)
+            expect(record_from_db["wpschrge"]).to eq(96.28)
+            expect(record_from_db["wscharge"]).to eq(97.1)
+            expect(record_from_db["wrent"]).to eq(97.09)
+            expect(record_from_db["wtcharge"]).to eq(386.73)
           end
         end
 
@@ -636,6 +696,21 @@ RSpec.describe CaseLog do
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 6)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(94.34)
+            expect(case_log.wpschrge).to eq(94.35)
+            expect(case_log.wscharge).to eq(95.15)
+            expect(case_log.wrent).to eq(95.14)
+            expect(case_log.wtcharge).to eq(379)
+            expect(record_from_db["wsupchrg"]).to eq(94.34)
+            expect(record_from_db["wpschrge"]).to eq(94.35)
+            expect(record_from_db["wscharge"]).to eq(95.15)
+            expect(record_from_db["wrent"]).to eq(95.14)
+            expect(record_from_db["wtcharge"]).to eq(379)
+          end
         end
 
         context "when rent is paid weekly for 48 weeks" do
@@ -701,6 +776,21 @@ RSpec.describe CaseLog do
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 7)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(92.42)
+            expect(case_log.wpschrge).to eq(92.43)
+            expect(case_log.wscharge).to eq(93.21)
+            expect(case_log.wrent).to eq(93.20)
+            expect(case_log.wtcharge).to eq(371.26)
+            expect(record_from_db["wsupchrg"]).to eq(92.42)
+            expect(record_from_db["wpschrge"]).to eq(92.43)
+            expect(record_from_db["wscharge"]).to eq(93.21)
+            expect(record_from_db["wrent"]).to eq(93.20)
+            expect(record_from_db["wtcharge"]).to eq(371.26)
           end
         end
 
@@ -768,6 +858,21 @@ RSpec.describe CaseLog do
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 8)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(90.49)
+            expect(case_log.wpschrge).to eq(90.50)
+            expect(case_log.wscharge).to eq(91.27)
+            expect(case_log.wrent).to eq(91.26)
+            expect(case_log.wtcharge).to eq(363.53)
+            expect(record_from_db["wsupchrg"]).to eq(90.49)
+            expect(record_from_db["wpschrge"]).to eq(90.50)
+            expect(record_from_db["wscharge"]).to eq(91.27)
+            expect(record_from_db["wrent"]).to eq(91.26)
+            expect(record_from_db["wtcharge"]).to eq(363.53)
+          end
         end
 
         context "when rent is paid weekly for 46 weeks" do
@@ -834,6 +939,21 @@ RSpec.describe CaseLog do
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 9)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(88.57)
+            expect(case_log.wpschrge).to eq(88.58)
+            expect(case_log.wscharge).to eq(89.33)
+            expect(case_log.wrent).to eq(89.32)
+            expect(case_log.wtcharge).to eq(355.79)
+            expect(record_from_db["wsupchrg"]).to eq(88.57)
+            expect(record_from_db["wpschrge"]).to eq(88.58)
+            expect(record_from_db["wscharge"]).to eq(89.33)
+            expect(record_from_db["wrent"]).to eq(89.32)
+            expect(record_from_db["wtcharge"]).to eq(355.79)
+          end
         end
 
         context "when rent is paid weekly for 52 weeks" do
@@ -899,6 +1019,21 @@ RSpec.describe CaseLog do
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(100.12)
+            expect(case_log.wpschrge).to eq(100.13)
+            expect(case_log.wscharge).to eq(100.98)
+            expect(case_log.wrent).to eq(100.97)
+            expect(case_log.wtcharge).to eq(402.2)
+            expect(record_from_db["wsupchrg"]).to eq(100.12)
+            expect(record_from_db["wpschrge"]).to eq(100.13)
+            expect(record_from_db["wscharge"]).to eq(100.98)
+            expect(record_from_db["wrent"]).to eq(100.97)
+            expect(record_from_db["wtcharge"]).to eq(402.2)
           end
         end
       end
