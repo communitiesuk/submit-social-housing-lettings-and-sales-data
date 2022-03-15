@@ -66,7 +66,8 @@ module Validations::HouseholdValidations
   end
 
   def validate_condition_effects(record)
-    if has_illness?(record) && record.illness != 0
+    all_options = [record.illness_type_1, record.illness_type_2, record.illness_type_3, record.illness_type_4, record.illness_type_5, record.illness_type_6, record.illness_type_7, record.illness_type_8, record.illness_type_9, record.illness_type_10]
+    if all_options.count(1) >= 1 && household_no_illness?(record)
       record.errors.add :condition_effects, I18n.t("validations.household.condition_effects.no_choices")
     end
   end
@@ -113,9 +114,8 @@ module Validations::HouseholdValidations
 
 private
 
-  def has_illness?(record)
-    all_options = [record.illness_type_1, record.illness_type_2, record.illness_type_3, record.illness_type_4, record.illness_type_5, record.illness_type_6, record.illness_type_7, record.illness_type_8, record.illness_type_9, record.illness_type_10]
-    all_options.count(1) >= 1
+  def household_no_illness?(record)
+    record.illness != 0
   end
 
   def women_of_child_bearing_age_in_household(record)
