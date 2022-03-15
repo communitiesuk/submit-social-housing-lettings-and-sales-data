@@ -562,6 +562,15 @@ RSpec.describe Validations::HouseholdValidations do
       expect(record.errors["condition_effects"])
         .to include(match I18n.t("validations.household.condition_effects.no_choices"))
     end
+
+    it "expects that an illness can be selected if answer to anyone in household with health condition is yes " do
+      record.illness = 0
+      record.illness_type_1 = 1
+      record.illness_type_2 = 1
+      record.illness_type_3 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"]).to be_empty
+    end
   end
 
   describe "accessibility requirement validations" do
