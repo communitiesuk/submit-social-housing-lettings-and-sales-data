@@ -205,7 +205,7 @@ RSpec.describe Validations::FinancialValidations do
       it "does not allow the scharge to be outside of 0 and 55 range per week when period is weekly" do
         record.needstype = 1
         record.landlord = 1
-        record.period = 7
+        record.period = 1
         record.scharge = 56
         financial_validator.validate_rent_amount(record)
         expect(record.errors["scharge"])
@@ -215,7 +215,7 @@ RSpec.describe Validations::FinancialValidations do
       it "does allow the scharge to be between of 0 and 55 per week when period is weekly" do
         record.needstype = 1
         record.landlord = 1
-        record.period = 7
+        record.period = 1
         record.scharge = 54
         financial_validator.validate_rent_amount(record)
         expect(record.errors["scharge"])
