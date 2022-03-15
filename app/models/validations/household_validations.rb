@@ -115,7 +115,7 @@ private
 
   def has_illness?(record)
     all_options = [record.illness_type_1, record.illness_type_2, record.illness_type_3, record.illness_type_4, record.illness_type_5, record.illness_type_6, record.illness_type_7, record.illness_type_8, record.illness_type_9, record.illness_type_10]
-    return all_options.count(1) >= 1
+    all_options.count(1) >= 1
   end
 
   def women_of_child_bearing_age_in_household(record)
