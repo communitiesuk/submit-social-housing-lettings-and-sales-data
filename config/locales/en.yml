@@ -94,7 +94,8 @@ en:
         less_than_double_shortfall: "Answer must be more than double the shortfall in basic rent"
         scharge:
           this_landlord:
-            general_needs: "Service charge must be between 0 and 55 per week if the landlord is this landlord"
+            general_needs: "Service charge must be between 0 and 55 per week if the landlord is this landlord and it is a general needs letting"
+            supported_housing: "Service charge must be between 0 and 280 per week if the landlord is this landlord and it is a suported housing letting"
 
     household:
       reasonpref:
