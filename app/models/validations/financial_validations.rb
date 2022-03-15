@@ -65,11 +65,19 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
 
-    if record.scharge.present? && record.this_landlord? && record.weekly_value(record.scharge).present?
-      if !record.weekly_value(record.scharge).between?(0, 55) && record.is_general_needs?
-        record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.general_needs")
-      elsif !record.weekly_value(record.scharge).between?(0, 280) && record.is_supported_housing?
-        record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing")
+    if record.scharge.present? && record.weekly_value(record.scharge).present?
+      if record.this_landlord?
+        if !record.weekly_value(record.scharge).between?(0, 55) && record.is_general_needs?
+          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.general_needs")
+        elsif !record.weekly_value(record.scharge).between?(0, 280) && record.is_supported_housing?
+          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing")
+        end
+      elsif record.other_landlord?
+        if !record.weekly_value(record.scharge).between?(0, 45) && record.is_general_needs?
+          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.other_landlord.general_needs")
+        elsif !record.weekly_value(record.scharge).between?(0, 165) && record.is_supported_housing?
+          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing")
+        end
       end
     end
   end

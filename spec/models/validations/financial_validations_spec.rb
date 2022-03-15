@@ -326,5 +326,131 @@ RSpec.describe Validations::FinancialValidations do
         end
       end
     end
+
+    context "when the landlord is another RP" do
+      context "when needstype is general needs" do
+        it "does not allow the scharge to be outside of 0 and 45 range per week when period is weekly" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 1
+          record.scharge = 46
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
+        end
+
+        it "does allow the scharge to be between of 0 and 45 per week when period is weekly" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 1
+          record.scharge = 44
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+
+        it "does not allow the scharge to be outside of 0 and 45 range per week when period is monthly" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 4
+          record.scharge = 200
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
+        end
+
+        it "does allow the scharge to be between of 0 and 45 per week when period is monthly" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 4
+          record.scharge = 160
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+
+        it "does not allow the scharge to be outside of 0 and 45 range per week when period is every 2 weeks" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 2
+          record.scharge = 91
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
+        end
+
+        it "does allow the scharge to be between of 0 and 45 per week when period is every 2 weeks" do
+          record.needstype = 1
+          record.landlord = 2
+          record.period = 2
+          record.scharge = 89
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+      end
+
+      context "when needstype is supported housing" do
+        it "does not allow the scharge to be outside of 0 and 165 range per week when period is weekly" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 1
+          record.scharge = 165.90
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
+        end
+
+        it "does allow the scharge to be between of 0 and 165 per week when period is weekly" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 1
+          record.scharge = 120.88
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+
+        it "does not allow the scharge to be outside of 0 and 165 range per week when period is monthly" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 4
+          record.scharge = 750
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
+        end
+
+        it "does allow the scharge to be between of 0 and 165 per week when period is monthly" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 4
+          record.scharge = 608
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+
+        it "does not allow the scharge to be outside of 0 and 165 range per week when period is every 2 weeks" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 2
+          record.scharge = 330.50
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
+        end
+
+        it "does allow the scharge to be between of 0 and 165 per week when period is every 2 weeks" do
+          record.needstype = 0
+          record.landlord = 2
+          record.period = 2
+          record.scharge = 329.99
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["scharge"])
+            .to be_empty
+        end
+      end
+    end
   end
 end

@@ -272,6 +272,10 @@ class CaseLog < ApplicationRecord
     landlord == 1
   end
 
+  def other_landlord?
+    landlord == 2
+  end
+
 private
 
   PIO = Postcodes::IO.new
