@@ -146,6 +146,8 @@ en:
         male_refuge: "Answer cannot be male as you told us their housing situation immediately before this letting was a refuge"
       reason:
         not_internal_transfer: "Answer cannot be permanently decanted from another property owned by this landlord as you told us the source of referral for this tenancy was not an internal transfer"
+      condition_effects:
+        no_choices: "You can not provide details about effects of conditions on any of the household members if you have not answered yes to the any of the household having a physical or mental health condition (or other illness) expected to last 12 months or more"
 
     tenancy:
       length:

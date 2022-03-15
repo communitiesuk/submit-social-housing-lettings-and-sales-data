@@ -482,6 +482,97 @@ RSpec.describe Validations::HouseholdValidations do
     end
   end
 
+  describe "condition effects validation" do
+    it "validates vision can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_1 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates hearing can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_2 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates mobility can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_3 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates dexterity can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_4 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates learning or understanding or concentrating can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_5 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates memory can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_6 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates mental health can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_7 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates stamina or breathing or fatigue can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_8 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates socially or behaviourally can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_9 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "validates other can't be selected if answer to anyone in household with health condition is not yes" do
+      record.illness = 1
+      record.illness_type_10 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"])
+        .to include(match I18n.t("validations.household.condition_effects.no_choices"))
+    end
+
+    it "expects that an illness can be selected if answer to anyone in household with health condition is yes " do
+      record.illness = 0
+      record.illness_type_1 = 1
+      record.illness_type_2 = 1
+      record.illness_type_3 = 1
+      household_validator.validate_condition_effects(record)
+      expect(record.errors["condition_effects"]).to be_empty
+    end
+  end
+
   describe "accessibility requirement validations" do
     it "validates that mutually exclusive options can't be selected together" do
       record.housingneeds_a = 1
