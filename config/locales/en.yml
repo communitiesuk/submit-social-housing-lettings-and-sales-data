@@ -47,6 +47,10 @@ en:
       taken: "Email already exists"
       invalid: "Enter an email address in the correct format, like name@example.com"
       blank: "Enter an email address"
+    
+    setup:
+      intermediate_rent_product_name:
+        blank: "Enter an intermediate rent product name"
 
     property:
       mrcdate:
