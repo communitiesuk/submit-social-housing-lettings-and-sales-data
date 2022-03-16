@@ -56,6 +56,10 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_startdate)
     end
 
+    it "validates intermediate rent product name" do
+      expect(validator).to receive(:validate_intermediate_rent_product_name)
+    end
+
     it "validates other household member details" do
       expect(validator).to receive(:validate_household_number_of_other_members)
     end

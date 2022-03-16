@@ -50,7 +50,7 @@ en:
     
     setup:
       intermediate_rent_product_name:
-        blank: "Enter an intermediate rent product name"
+        blank: "Enter name of other intermediate rent product"
 
     property:
       mrcdate:
