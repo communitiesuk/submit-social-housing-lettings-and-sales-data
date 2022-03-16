@@ -34,7 +34,11 @@
   "babel": {
     "presets": [
       "@babel/preset-env"
-    ]
+    ],
+    "plugins": [
+     "@babel/plugin-proposal-class-properties",
+     "@babel/plugin-proposal-private-methods"
+   ]
   },
   "scripts": {
     "build": "webpack --config webpack.config.js"
