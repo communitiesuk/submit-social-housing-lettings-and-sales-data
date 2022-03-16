@@ -231,6 +231,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 61 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 41 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 200 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 81 },
          }].each do |test_case|
           it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -264,6 +276,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 59 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 39 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 120 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 79 },
          }].each do |test_case|
           it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -304,6 +328,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 400.80 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 466 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 3100 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 990 },
          }].each do |test_case|
           it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -337,6 +373,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 400 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 464 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 2000 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 880 },
          }].each do |test_case|
           it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -379,6 +427,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 71 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 61 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 300 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 122 },
          }].each do |test_case|
           it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -412,6 +472,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 69 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 59.99 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 240 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 119 },
          }].each do |test_case|
           it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -452,6 +524,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 151 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 121 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 620 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 241 },
          }].each do |test_case|
           it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
@@ -485,6 +569,18 @@ RSpec.describe Validations::FinancialValidations do
          {
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "pscharge", value: 149 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "supcharg", value: 119 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "supcharg", value: 480 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "supcharg", value: 239 },
          }].each do |test_case|
           it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]

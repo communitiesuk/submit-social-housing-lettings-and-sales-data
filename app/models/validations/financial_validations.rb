@@ -59,56 +59,35 @@ module Validations::FinancialValidations
     end
   end
 
-  SCHARGE_RANGES = {
-    this_landlord: {
-      general_needs: {
-        min: 0,
-        max: 55,
-        error: I18n.t("validations.financial.rent.scharge.this_landlord.general_needs"),
+  CHARGE_MAXIMUMS = {
+    scharge: {
+      this_landlord: {
+        general_needs: 55,
+        supported_housing: 280,
       },
-      supported_housing: {
-        min: 0,
-        max: 280,
-        error: I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing"),
+      other_landlord: {
+        general_needs: 45,
+        supported_housing: 165,
       },
     },
-    other_landlord: {
-      general_needs: {
-        min: 0,
-        max: 45,
-        error: I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"),
+    pscharge: {
+      this_landlord: {
+        general_needs: 30,
+        supported_housing: 200,
       },
-      supported_housing: {
-        min: 0,
-        max: 165,
-        error: I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"),
+      other_landlord: {
+        general_needs: 35,
+        supported_housing: 75,
       },
     },
-  }.freeze
-
-  PSCHARGE_RANGES = {
-    this_landlord: {
-      general_needs: {
-        min: 0,
-        max: 30,
-        error: I18n.t("validations.financial.rent.pscharge.this_landlord.general_needs"),
+    supcharg: {
+      this_landlord: {
+        general_needs: 40,
+        supported_housing: 465,
       },
-      supported_housing: {
-        min: 0,
-        max: 200,
-        error: I18n.t("validations.financial.rent.pscharge.this_landlord.supported_housing"),
-      },
-    },
-    other_landlord: {
-      general_needs: {
-        min: 0,
-        max: 35,
-        error: I18n.t("validations.financial.rent.pscharge.other_landlord.general_needs"),
-      },
-      supported_housing: {
-        min: 0,
-        max: 75,
-        error: I18n.t("validations.financial.rent.pscharge.other_landlord.supported_housing"),
+      other_landlord: {
+        general_needs: 60,
+        supported_housing: 120,
       },
     },
   }.freeze
@@ -128,19 +107,16 @@ module Validations::FinancialValidations
 private
 
   def validate_charges(record)
-    scharge_range = SCHARGE_RANGES.dig(LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
-    pscharge_range = PSCHARGE_RANGES.dig(LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
+    %i[scharge pscharge supcharg].each do |charge|
+      maximum = CHARGE_MAXIMUMS.dig(charge, LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
 
-    if scharge_range.present? && !weekly_value_in_range(record, "scharge", scharge_range[:min], scharge_range[:max])
-      record.errors.add :scharge, scharge_range[:error]
-    end
-
-    if pscharge_range.present? && !weekly_value_in_range(record, "pscharge", pscharge_range[:min], pscharge_range[:max])
-      record.errors.add :pscharge, pscharge_range[:error]
+      if maximum.present? && !weekly_value_in_range(record, charge, maximum)
+        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{LANDLORD_VALUES[record.landlord]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+      end
     end
   end
 
-  def weekly_value_in_range(record, field, min, max)
-    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(min, max)
+  def weekly_value_in_range(record, field, max)
+    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(0, max)
   end
 end
