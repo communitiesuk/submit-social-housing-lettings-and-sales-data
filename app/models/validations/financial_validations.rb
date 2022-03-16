@@ -59,6 +59,28 @@ module Validations::FinancialValidations
     end
   end
 
+  def validate_rent_amount(record)
+    if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
+      record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
+      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+    end
+
+    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 9.99)
+      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
+    end
+
+    answered_questions = [record.tcharge, record.chcharge].concat(!(record.household_charge && record.household_charge.zero?).nil? ? [record.household_charge] : [])
+    if answered_questions.count(&:present?) > 1
+      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :chcharge, I18n.t("validations.financial.chcharge.complete_1_of_3") if record.chcharge.present?
+      record.errors.add :household_charge, I18n.t("validations.financial.household_charge.complete_1_of_3") if record.household_charge.present?
+    end
+
+    validate_charges(record)
+  end
+
+private
+
   CHARGE_MAXIMUMS = {
     scharge: {
       this_landlord: {
@@ -94,28 +116,6 @@ module Validations::FinancialValidations
 
   LANDLORD_VALUES = { 1 => :this_landlord, 2 => :other_landlord }.freeze
   NEEDSTYPE_VALUES = { 0 => :supported_housing, 1 => :general_needs }.freeze
-
-  def validate_rent_amount(record)
-    if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
-      record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
-      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
-    end
-
-    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 9.99)
-      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
-    end
-
-    answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge.zero? ? [record.household_charge] : [])
-    if answered_questions.count(&:present?) > 1
-      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.complete_1_of_3") if record.tcharge.present?
-      record.errors.add :chcharge, I18n.t("validations.financial.chcharge.complete_1_of_3") if record.chcharge.present?
-      record.errors.add :household_charge, I18n.t("validations.financial.household_charge.complete_1_of_3") if record.household_charge.present?
-    end
-
-    validate_charges(record)
-  end
-
-private
 
   def validate_charges(record)
     %i[scharge pscharge supcharg].each do |charge|
