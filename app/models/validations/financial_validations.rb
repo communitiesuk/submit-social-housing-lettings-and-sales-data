@@ -59,26 +59,47 @@ module Validations::FinancialValidations
     end
   end
 
+  SCHARGE_RANGES = { this_landlord_general_needs:
+  { min: 0, max: 55, error: I18n.t("validations.financial.rent.scharge.this_landlord.general_needs") },
+                     this_landlord_supported_housing:
+  { min: 0, max: 280, error: I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing") },
+                     other_landlord_general_needs:
+  { min: 0, max: 45, error: I18n.t("validations.financial.rent.scharge.other_landlord.general_needs") },
+                     other_landlord_supported_housing:
+  { min: 0, max: 165, error: I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing") } }.freeze
+
   def validate_rent_amount(record)
     if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
       record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
 
-    if record.scharge.present? && record.weekly_value(record.scharge).present?
-      if record.this_landlord?
-        if !record.weekly_value(record.scharge).between?(0, 55) && record.is_general_needs?
-          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.general_needs")
-        elsif !record.weekly_value(record.scharge).between?(0, 280) && record.is_supported_housing?
-          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing")
-        end
-      elsif record.other_landlord?
-        if !record.weekly_value(record.scharge).between?(0, 45) && record.is_general_needs?
-          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.other_landlord.general_needs")
-        elsif !record.weekly_value(record.scharge).between?(0, 165) && record.is_supported_housing?
-          record.errors.add :scharge, I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing")
-        end
-      end
+    validate_scharge(record)
+  end
+
+private
+
+  def validate_scharge(record)
+    scharge_range = if record.this_landlord?
+                      if record.is_general_needs?
+                        SCHARGE_RANGES[:this_landlord_general_needs]
+                      elsif record.is_supported_housing?
+                        SCHARGE_RANGES[:this_landlord_supported_housing]
+                      end
+                    elsif record.other_landlord?
+                      if record.is_general_needs?
+                        SCHARGE_RANGES[:other_landlord_general_needs]
+                      elsif record.is_supported_housing?
+                        SCHARGE_RANGES[:other_landlord_supported_housing]
+                      end
+                    end
+
+    if scharge_range.present? && !weekly_value_in_range(record, "scharge", scharge_range[:min], scharge_range[:max])
+      record.errors.add :scharge, scharge_range[:error]
     end
+  end
+ 
+  def weekly_value_in_range(record, field, min, max)
+    record.scharge.present? && record.weekly_value(record.scharge).present? && record.weekly_value(record[field]).between?(min, max)
   end
 end
