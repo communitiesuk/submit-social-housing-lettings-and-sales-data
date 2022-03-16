@@ -20,9 +20,16 @@
         </li>
         <li class="govuk-!-margin-bottom-0">We aim to respond within 2 working days</li>
       </ul>
+
+      <h2 class="govuk-visually-hidden">Helpful links</h2>
+      <ul class="govuk-footer__inline-list govuk-!-margin-top-6 govuk-!-margin-bottom-0">
+        <li class="govuk-footer__inline-list-item">
+          <%= govuk_link_to("Privacy notice", privacy_notice_path, class: "govuk-footer__link") %>
+        </li>
+      </ul>
     </div>
     <div class="govuk-footer__meta-item">
-      <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
+      <a class="govuk-footer__link govuk-footer__copyright-logo govuk-!-margin-bottom-1" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
     </div>
   <% end %>
 <% end %>
