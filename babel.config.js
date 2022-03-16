@@ -22,7 +22,9 @@ module.exports = function(api) {
         {
           targets: {
             node: 'current',
-            ie: "11"
+            browsers: [
+              'ie >= 10'
+            ]
           }
         }
       ],
@@ -36,7 +38,9 @@ module.exports = function(api) {
           exclude: ['transform-typeof-symbol'],
           targets: {
             node: 'current',
-            ie: "11"
+            browsers: [
+              'ie >= 10'
+            ]
           }
         }
       ]
