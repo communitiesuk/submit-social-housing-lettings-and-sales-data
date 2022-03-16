@@ -59,14 +59,62 @@ module Validations::FinancialValidations
     end
   end
 
-  SCHARGE_RANGES = { this_landlord_general_needs:
-  { min: 0, max: 55, error: I18n.t("validations.financial.rent.scharge.this_landlord.general_needs") },
-                     this_landlord_supported_housing:
-  { min: 0, max: 280, error: I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing") },
-                     other_landlord_general_needs:
-  { min: 0, max: 45, error: I18n.t("validations.financial.rent.scharge.other_landlord.general_needs") },
-                     other_landlord_supported_housing:
-  { min: 0, max: 165, error: I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing") } }.freeze
+  SCHARGE_RANGES = {
+    this_landlord: {
+      general_needs: {
+        min: 0,
+        max: 55,
+        error: I18n.t("validations.financial.rent.scharge.this_landlord.general_needs"),
+      },
+      supported_housing: {
+        min: 0,
+        max: 280,
+        error: I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing"),
+      },
+    },
+    other_landlord: {
+      general_needs: {
+        min: 0,
+        max: 45,
+        error: I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"),
+      },
+      supported_housing: {
+        min: 0,
+        max: 165,
+        error: I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"),
+      },
+    },
+  }.freeze
+
+  PSCHARGE_RANGES = {
+    this_landlord: {
+      general_needs: {
+        min: 0,
+        max: 30,
+        error: I18n.t("validations.financial.rent.pscharge.this_landlord.general_needs"),
+      },
+      supported_housing: {
+        min: 0,
+        max: 200,
+        error: I18n.t("validations.financial.rent.pscharge.this_landlord.supported_housing"),
+      },
+    },
+    other_landlord: {
+      general_needs: {
+        min: 0,
+        max: 35,
+        error: I18n.t("validations.financial.rent.pscharge.other_landlord.general_needs"),
+      },
+      supported_housing: {
+        min: 0,
+        max: 75,
+        error: I18n.t("validations.financial.rent.pscharge.other_landlord.supported_housing"),
+      },
+    },
+  }.freeze
+
+  LANDLORD_VALUES = { 1 => :this_landlord, 2 => :other_landlord }.freeze
+  NEEDSTYPE_VALUES = { 0 => :supported_housing, 1 => :general_needs }.freeze
 
   def validate_rent_amount(record)
     if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
@@ -74,32 +122,25 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
 
-    validate_scharge(record)
+    validate_charges(record)
   end
 
 private
 
-  def validate_scharge(record)
-    scharge_range = if record.this_landlord?
-                      if record.is_general_needs?
-                        SCHARGE_RANGES[:this_landlord_general_needs]
-                      elsif record.is_supported_housing?
-                        SCHARGE_RANGES[:this_landlord_supported_housing]
-                      end
-                    elsif record.other_landlord?
-                      if record.is_general_needs?
-                        SCHARGE_RANGES[:other_landlord_general_needs]
-                      elsif record.is_supported_housing?
-                        SCHARGE_RANGES[:other_landlord_supported_housing]
-                      end
-                    end
+  def validate_charges(record)
+    scharge_range = SCHARGE_RANGES.dig(LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
+    pscharge_range = PSCHARGE_RANGES.dig(LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
 
     if scharge_range.present? && !weekly_value_in_range(record, "scharge", scharge_range[:min], scharge_range[:max])
       record.errors.add :scharge, scharge_range[:error]
     end
+
+    if pscharge_range.present? && !weekly_value_in_range(record, "pscharge", pscharge_range[:min], pscharge_range[:max])
+      record.errors.add :pscharge, pscharge_range[:error]
+    end
   end
- 
+
   def weekly_value_in_range(record, field, min, max)
-    record.scharge.present? && record.weekly_value(record.scharge).present? && record.weekly_value(record[field]).between?(min, max)
+    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(min, max)
   end
 end

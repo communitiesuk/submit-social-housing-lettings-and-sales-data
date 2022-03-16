@@ -203,252 +203,296 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when the landlord is this landlord" do
       context "when needstype is general needs" do
-        it "does not allow the scharge to be outside of 0 and 55 range per week when period is weekly" do
+        before do
           record.needstype = 1
           record.landlord = 1
-          record.period = 1
-          record.scharge = 56
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.general_needs"))
         end
 
-        it "does allow the scharge to be between of 0 and 55 per week when period is weekly" do
-          record.needstype = 1
-          record.landlord = 1
-          record.period = 1
-          record.scharge = 54
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 56 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 300 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 111 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 31 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 150 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 61 },
+         }].each do |test_case|
+          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.this_landlord.general_needs"))
+          end
         end
 
-        it "does not allow the scharge to be outside of 0 and 55 range per week when period is monthly" do
-          record.needstype = 1
-          record.landlord = 1
-          record.period = 4
-          record.scharge = 300
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.general_needs"))
-        end
-
-        it "does allow the scharge to be between of 0 and 55 per week when period is monthly" do
-          record.needstype = 1
-          record.landlord = 1
-          record.period = 4
-          record.scharge = 220
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
-        end
-
-        it "does not allow the scharge to be outside of 0 and 55 range per week when period is every 2 weeks" do
-          record.needstype = 1
-          record.landlord = 1
-          record.period = 2
-          record.scharge = 111
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.general_needs"))
-        end
-
-        it "does allow the scharge to be between of 0 and 55 per week when period is every 2 weeks" do
-          record.needstype = 1
-          record.landlord = 1
-          record.period = 2
-          record.scharge = 109
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 54 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 220 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 109 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 30 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 120 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 59 },
+         }].each do |test_case|
+          it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to be_empty
+          end
         end
       end
 
       context "when needstype is supported housing" do
-        it "does not allow the scharge to be outside of 0 and 280 range per week when period is weekly" do
+        before do
           record.needstype = 0
           record.landlord = 1
-          record.period = 1
-          record.scharge = 281
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing"))
         end
 
-        it "does allow the scharge to be between of 0 and 280 per week when period is weekly" do
-          record.needstype = 0
-          record.landlord = 1
-          record.period = 1
-          record.scharge = 280
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 281 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 1225 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 561 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 201 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 1000 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 400.80 },
+         }].each do |test_case|
+          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.this_landlord.supported_housing"))
+          end
         end
 
-        it "does not allow the scharge to be outside of 0 and 280 range per week when period is monthly" do
-          record.needstype = 0
-          record.landlord = 1
-          record.period = 4
-          record.scharge = 1225
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing"))
-        end
-
-        it "does allow the scharge to be between of 0 and 280 per week when period is monthly" do
-          record.needstype = 0
-          record.landlord = 1
-          record.period = 4
-          record.scharge = 1200
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
-        end
-
-        it "does not allow the scharge to be outside of 0 and 280 range per week when period is every 2 weeks" do
-          record.needstype = 0
-          record.landlord = 1
-          record.period = 2
-          record.scharge = 561
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.this_landlord.supported_housing"))
-        end
-
-        it "does allow the scharge to be between of 0 and 280 per week when period is every 2 weeks" do
-          record.needstype = 0
-          record.landlord = 1
-          record.period = 2
-          record.scharge = 559
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 280 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 1200 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 559 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 199.99 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 800 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 400 },
+         }].each do |test_case|
+          it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to be_empty
+          end
         end
       end
     end
 
     context "when the landlord is another RP" do
       context "when needstype is general needs" do
-        it "does not allow the scharge to be outside of 0 and 45 range per week when period is weekly" do
+        before do
           record.needstype = 1
           record.landlord = 2
-          record.period = 1
-          record.scharge = 46
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
         end
 
-        it "does allow the scharge to be between of 0 and 45 per week when period is weekly" do
-          record.needstype = 1
-          record.landlord = 2
-          record.period = 1
-          record.scharge = 44
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 46 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 200 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 91 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 36 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 190 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 71 },
+         }].each do |test_case|
+          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.other_landlord.general_needs"))
+          end
         end
 
-        it "does not allow the scharge to be outside of 0 and 45 range per week when period is monthly" do
-          record.needstype = 1
-          record.landlord = 2
-          record.period = 4
-          record.scharge = 200
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
-        end
-
-        it "does allow the scharge to be between of 0 and 45 per week when period is monthly" do
-          record.needstype = 1
-          record.landlord = 2
-          record.period = 4
-          record.scharge = 160
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
-        end
-
-        it "does not allow the scharge to be outside of 0 and 45 range per week when period is every 2 weeks" do
-          record.needstype = 1
-          record.landlord = 2
-          record.period = 2
-          record.scharge = 91
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.general_needs"))
-        end
-
-        it "does allow the scharge to be between of 0 and 45 per week when period is every 2 weeks" do
-          record.needstype = 1
-          record.landlord = 2
-          record.period = 2
-          record.scharge = 89
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 44 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 160 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 89 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 34 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 140 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 69 },
+         }].each do |test_case|
+          it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to be_empty
+          end
         end
       end
 
       context "when needstype is supported housing" do
-        it "does not allow the scharge to be outside of 0 and 165 range per week when period is weekly" do
+        before do
           record.needstype = 0
           record.landlord = 2
-          record.period = 1
-          record.scharge = 165.90
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
         end
 
-        it "does allow the scharge to be between of 0 and 165 per week when period is weekly" do
-          record.needstype = 0
-          record.landlord = 2
-          record.period = 1
-          record.scharge = 120.88
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 165.90 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 750 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 330.50 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 76 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 400 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 151 },
+         }].each do |test_case|
+          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.other_landlord.supported_housing"))
+          end
         end
 
-        it "does not allow the scharge to be outside of 0 and 165 range per week when period is monthly" do
-          record.needstype = 0
-          record.landlord = 2
-          record.period = 4
-          record.scharge = 750
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
-        end
-
-        it "does allow the scharge to be between of 0 and 165 per week when period is monthly" do
-          record.needstype = 0
-          record.landlord = 2
-          record.period = 4
-          record.scharge = 608
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
-        end
-
-        it "does not allow the scharge to be outside of 0 and 165 range per week when period is every 2 weeks" do
-          record.needstype = 0
-          record.landlord = 2
-          record.period = 2
-          record.scharge = 330.50
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to include(match I18n.t("validations.financial.rent.scharge.other_landlord.supported_housing"))
-        end
-
-        it "does allow the scharge to be between of 0 and 165 per week when period is every 2 weeks" do
-          record.needstype = 0
-          record.landlord = 2
-          record.period = 2
-          record.scharge = 329.99
-          financial_validator.validate_rent_amount(record)
-          expect(record.errors["scharge"])
-            .to be_empty
+        [{
+          period: { label: "weekly", value: 1 },
+          charge: { field: "scharge", value: 120.88 },
+        },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "scharge", value: 608 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "scharge", value: 329.99 },
+         },
+         {
+           period: { label: "weekly", value: 1 },
+           charge: { field: "pscharge", value: 74 },
+         },
+         {
+           period: { label: "monthly", value: 4 },
+           charge: { field: "pscharge", value: 210 },
+         },
+         {
+           period: { label: "every 2 weeks", value: 2 },
+           charge: { field: "pscharge", value: 149 },
+         }].each do |test_case|
+          it "does allow charges inside the range when period is #{test_case[:period][:label]}" do
+            record.period = test_case[:period][:value]
+            record[test_case[:charge][:field]] = test_case[:charge][:value]
+            financial_validator.validate_rent_amount(record)
+            expect(record.errors[test_case[:charge][:field]])
+              .to be_empty
+          end
         end
       end
     end
