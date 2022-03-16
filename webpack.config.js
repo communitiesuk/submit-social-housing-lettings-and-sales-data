@@ -17,7 +17,7 @@ module.exports = {
     application: [
       "./app/frontend/application.js",
     ],
-    active_admin:[
+    active_admin: [
       './app/frontend/active_admin.js',
       './app/frontend/styles/active_admin.scss'
     ]

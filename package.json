@@ -18,10 +18,12 @@
     "chart.js": "^3.6.0",
     "chartkick": "^4.1.0",
     "copy-webpack-plugin": "^10.2.4",
+    "core-js": "^3.21.1",
     "css-loader": "^6.7.1",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^4.0.1",
     "mini-css-extract-plugin": "^2.6.0",
+    "regenerator-runtime": "^0.13.9",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
     "stimulus": "^3.0.0",
@@ -36,9 +38,9 @@
       "@babel/preset-env"
     ],
     "plugins": [
-     "@babel/plugin-proposal-class-properties",
-     "@babel/plugin-proposal-private-methods"
-   ]
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-private-methods"
+    ]
   },
   "scripts": {
     "build": "webpack --config webpack.config.js"
