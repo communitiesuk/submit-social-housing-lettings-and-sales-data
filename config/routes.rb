@@ -33,6 +33,10 @@ Rails.application.routes.draw do
 
   root to: "start#index"
 
+  # Content pages
+  get "/accessibility-statement", to: "content#accessibility_statement"
+  get "/privacy-notice", to: "content#privacy_notice"
+
   resources :users do
     member do
       get "password/edit", to: "users#edit_password"
