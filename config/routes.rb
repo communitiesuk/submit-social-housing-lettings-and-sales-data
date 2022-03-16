@@ -1,3 +1,4 @@
+# For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
   devise_for :admin_users, {
     path: :admin,
@@ -28,12 +29,10 @@ Rails.application.routes.draw do
 
   get "/health", to: ->(_) { [204, {}, [nil]] }
 
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   ActiveAdmin.routes(self)
 
   root to: "start#index"
 
-  # Content pages
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
 
