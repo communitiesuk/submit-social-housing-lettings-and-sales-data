@@ -101,6 +101,17 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
 
+    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 9.99)
+      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
+    end
+
+    answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge.zero? ? [record.household_charge] : [])
+    if answered_questions.count(&:present?) > 1
+      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :chcharge, I18n.t("validations.financial.chcharge.complete_1_of_3") if record.chcharge.present?
+      record.errors.add :household_charge, I18n.t("validations.financial.household_charge.complete_1_of_3") if record.household_charge.present?
+    end
+
     validate_charges(record)
   end
 

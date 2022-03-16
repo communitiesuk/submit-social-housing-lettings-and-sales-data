@@ -591,6 +591,128 @@ RSpec.describe Validations::FinancialValidations do
           end
         end
       end
+
+      context "when period is weekly" do
+        it "validates that total charge is at least 10 per week" do
+          record.period = 1
+          record.tcharge = 9
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+                .to include(match I18n.t("validations.financial.tcharge.under_10"))
+        end
+
+        it "allows the total charge to be over 10 per week" do
+          record.period = 1
+          record.tcharge = 10
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+                .to be_empty
+        end
+      end
+
+      context "when period is every 2 weeks" do
+        it "validates that total charge is at least 10 per week" do
+          record.period = 2
+          record.tcharge = 19.99
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+                .to include(match I18n.t("validations.financial.tcharge.under_10"))
+        end
+
+        it "allows the total charge to be over 10 per week" do
+          record.period = 2
+          record.tcharge = 20
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+                .to be_empty
+        end
+      end
+
+      context "when entering charges" do
+        it "returns an error for 3 charge types selected" do
+          record.tcharge = 19.99
+          record.chcharge = 20
+          record.household_charge = 0
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+          expect(record.errors["household_charge"])
+            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+        end
+
+        it "returns an error for tcharge and chcharge types selected" do
+          record.tcharge = 19.99
+          record.chcharge = 20
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["household_charge"])
+            .to be_empty
+          expect(record.errors["tcharge"])
+            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+        end
+
+        it "returns an error for tcharge and household_charge types selected" do
+          record.tcharge = 19.99
+          record.household_charge = 0
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["chcharge"])
+            .to be_empty
+          expect(record.errors["tcharge"])
+            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+          expect(record.errors["household_charge"])
+            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+        end
+
+        it "returns an error for chcharge and household_charge types selected" do
+          record.chcharge = 20
+          record.household_charge = 0
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tcharge"])
+            .to be_empty
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+          expect(record.errors["household_charge"])
+            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+        end
+      end
+
+      it "does not return an error for household_charge being yes" do
+        record.household_charge = 0
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["tcharge"])
+          .to be_empty
+        expect(record.errors["chcharge"])
+          .to be_empty
+        expect(record.errors["household_charge"])
+          .to be_empty
+      end
+
+      it "does not return an error for chcharge being selected" do
+        record.household_charge = 1
+        record.chcharge = 20
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["tcharge"])
+          .to be_empty
+        expect(record.errors["chcharge"])
+          .to be_empty
+        expect(record.errors["household_charge"])
+          .to be_empty
+      end
+
+      it "does not return an error for tcharge being selected" do
+        record.household_charge = 1
+        record.tcharge = 19.99
+        financial_validator.validate_rent_amount(record)
+        expect(record.errors["tcharge"])
+          .to be_empty
+        expect(record.errors["chcharge"])
+          .to be_empty
+        expect(record.errors["household_charge"])
+          .to be_empty
+      end
     end
   end
 end
