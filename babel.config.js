@@ -21,7 +21,8 @@ module.exports = function(api) {
         '@babel/preset-env',
         {
           targets: {
-            node: 'current'
+            node: 'current',
+            ie: "11"
           }
         }
       ],
@@ -32,7 +33,11 @@ module.exports = function(api) {
           useBuiltIns: 'entry',
           corejs: 3,
           modules: false,
-          exclude: ['transform-typeof-symbol']
+          exclude: ['transform-typeof-symbol'],
+          targets: {
+            node: 'current',
+            ie: "11"
+          }
         }
       ]
     ].filter(Boolean),
