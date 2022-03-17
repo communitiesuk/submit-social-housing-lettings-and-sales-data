@@ -314,35 +314,35 @@ RSpec.describe CaseLog do
 
         context "when rent is paid bi-weekly" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 100, period: 0)
+            case_log.update!(brent: 100, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(50.0)
             expect(record_from_db["wrent"]).to eq(50.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 100, period: 0)
+            case_log.update!(scharge: 100, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(50.0)
             expect(record_from_db["wscharge"]).to eq(50.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 100, period: 0)
+            case_log.update!(pscharge: 100, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(50.0)
             expect(record_from_db["wpschrge"]).to eq(50.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 100, period: 0)
+            case_log.update!(supcharg: 100, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(50.0)
             expect(record_from_db["wsupchrg"]).to eq(50.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 100, period: 0)
+            case_log.update!(tcharge: 100, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(50.0)
             expect(record_from_db["wtcharge"]).to eq(50.0)
@@ -351,7 +351,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 2, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
@@ -360,7 +360,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 2, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
@@ -369,46 +369,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 0, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 100, period: 2, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(50.0)
                 expect(record_from_db["wtshortfall"]).to eq(50.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 2)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(50.06)
+            expect(case_log.wpschrge).to eq(50.07)
+            expect(case_log.wscharge).to eq(50.49)
+            expect(case_log.wrent).to eq(50.49)
+            expect(case_log.wtcharge).to eq(201.1)
+            expect(record_from_db["wsupchrg"]).to eq(50.06)
+            expect(record_from_db["wpschrge"]).to eq(50.07)
+            expect(record_from_db["wscharge"]).to eq(50.49)
+            expect(record_from_db["wrent"]).to eq(50.49)
+            expect(record_from_db["wtcharge"]).to eq(201.1)
           end
         end
 
         context "when rent is paid every 4 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 120, period: 1)
+            case_log.update!(brent: 120, period: 3)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(30.0)
             expect(record_from_db["wrent"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 120, period: 1)
+            case_log.update!(scharge: 120, period: 3)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(30.0)
             expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 120, period: 1)
+            case_log.update!(pscharge: 120, period: 3)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 120, period: 1)
+            case_log.update!(supcharg: 120, period: 3)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.0)
             expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 120, period: 1)
+            case_log.update!(tcharge: 120, period: 3)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
@@ -417,7 +432,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 3, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
@@ -426,7 +441,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 3, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
@@ -435,46 +450,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 1, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 120, period: 3, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 3)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(25.03)
+            expect(case_log.wpschrge).to eq(25.03)
+            expect(case_log.wscharge).to eq(25.24)
+            expect(case_log.wrent).to eq(25.24)
+            expect(case_log.wtcharge).to eq(100.55)
+            expect(record_from_db["wsupchrg"]).to eq(25.03)
+            expect(record_from_db["wpschrge"]).to eq(25.03)
+            expect(record_from_db["wscharge"]).to eq(25.24)
+            expect(record_from_db["wrent"]).to eq(25.24)
+            expect(record_from_db["wtcharge"]).to eq(100.55)
           end
         end
 
         context "when rent is paid every calendar month" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 2)
+            case_log.update!(brent: 130, period: 4)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(30.0)
             expect(record_from_db["wrent"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 2)
+            case_log.update!(scharge: 130, period: 4)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(30.0)
             expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 2)
+            case_log.update!(pscharge: 130, period: 4)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(30.0)
             expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 2)
+            case_log.update!(supcharg: 130, period: 4)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.0)
             expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 2)
+            case_log.update!(tcharge: 130, period: 4)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(30.0)
             expect(record_from_db["wtcharge"]).to eq(30.0)
@@ -483,7 +513,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
@@ -492,7 +522,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
@@ -501,46 +531,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 2, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(30.0)
                 expect(record_from_db["wtshortfall"]).to eq(30.0)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 4)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(23.10)
+            expect(case_log.wpschrge).to eq(23.11)
+            expect(case_log.wscharge).to eq(23.30)
+            expect(case_log.wrent).to eq(23.30)
+            expect(case_log.wtcharge).to eq(92.82)
+            expect(record_from_db["wsupchrg"]).to eq(23.10)
+            expect(record_from_db["wpschrge"]).to eq(23.11)
+            expect(record_from_db["wscharge"]).to eq(23.30)
+            expect(record_from_db["wrent"]).to eq(23.30)
+            expect(record_from_db["wtcharge"]).to eq(92.82)
+          end
         end
 
         context "when rent is paid weekly for 50 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 3)
+            case_log.update!(brent: 130, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(125.0)
             expect(record_from_db["wrent"]).to eq(125.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 3)
+            case_log.update!(scharge: 130, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(125.0)
             expect(record_from_db["wscharge"]).to eq(125.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 3)
+            case_log.update!(pscharge: 130, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(125.0)
             expect(record_from_db["wpschrge"]).to eq(125.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 3)
+            case_log.update!(supcharg: 130, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(125.0)
             expect(record_from_db["wsupchrg"]).to eq(125.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 3)
+            case_log.update!(tcharge: 130, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(125.0)
             expect(record_from_db["wtcharge"]).to eq(125.0)
@@ -549,7 +594,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
@@ -558,7 +603,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
@@ -567,46 +612,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 3, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(125.0)
                 expect(record_from_db["wtshortfall"]).to eq(125.0)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 5)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(96.27)
+            expect(case_log.wpschrge).to eq(96.28)
+            expect(case_log.wscharge).to eq(97.1)
+            expect(case_log.wrent).to eq(97.09)
+            expect(case_log.wtcharge).to eq(386.73)
+            expect(record_from_db["wsupchrg"]).to eq(96.27)
+            expect(record_from_db["wpschrge"]).to eq(96.28)
+            expect(record_from_db["wscharge"]).to eq(97.1)
+            expect(record_from_db["wrent"]).to eq(97.09)
+            expect(record_from_db["wtcharge"]).to eq(386.73)
+          end
         end
 
         context "when rent is paid weekly for 49 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 4)
+            case_log.update!(brent: 130, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(122.5)
             expect(record_from_db["wrent"]).to eq(122.5)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 4)
+            case_log.update!(scharge: 130, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(122.5)
             expect(record_from_db["wscharge"]).to eq(122.5)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 4)
+            case_log.update!(pscharge: 130, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(122.5)
             expect(record_from_db["wpschrge"]).to eq(122.5)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 4)
+            case_log.update!(supcharg: 130, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(122.5)
             expect(record_from_db["wsupchrg"]).to eq(122.5)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 4)
+            case_log.update!(tcharge: 130, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(122.5)
             expect(record_from_db["wtcharge"]).to eq(122.5)
@@ -615,7 +675,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(122.5)
                 expect(record_from_db["wtshortfall"]).to eq(122.5)
@@ -624,7 +684,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(122.5)
                 expect(record_from_db["wtshortfall"]).to eq(122.5)
@@ -633,46 +693,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 4, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(122.5)
                 expect(record_from_db["wtshortfall"]).to eq(122.5)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 6)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(94.34)
+            expect(case_log.wpschrge).to eq(94.35)
+            expect(case_log.wscharge).to eq(95.15)
+            expect(case_log.wrent).to eq(95.14)
+            expect(case_log.wtcharge).to eq(379)
+            expect(record_from_db["wsupchrg"]).to eq(94.34)
+            expect(record_from_db["wpschrge"]).to eq(94.35)
+            expect(record_from_db["wscharge"]).to eq(95.15)
+            expect(record_from_db["wrent"]).to eq(95.14)
+            expect(record_from_db["wtcharge"]).to eq(379)
+          end
         end
 
         context "when rent is paid weekly for 48 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 5)
+            case_log.update!(brent: 130, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(120.0)
             expect(record_from_db["wrent"]).to eq(120.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 5)
+            case_log.update!(scharge: 130, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(120.0)
             expect(record_from_db["wscharge"]).to eq(120.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 5)
+            case_log.update!(pscharge: 130, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(120.0)
             expect(record_from_db["wpschrge"]).to eq(120.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 5)
+            case_log.update!(supcharg: 130, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(120.0)
             expect(record_from_db["wsupchrg"]).to eq(120.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 5)
+            case_log.update!(tcharge: 130, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(120.0)
             expect(record_from_db["wtcharge"]).to eq(120.0)
@@ -681,7 +756,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
@@ -690,7 +765,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
@@ -699,46 +774,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 5, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(120.0)
                 expect(record_from_db["wtshortfall"]).to eq(120.0)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 7)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(92.42)
+            expect(case_log.wpschrge).to eq(92.43)
+            expect(case_log.wscharge).to eq(93.21)
+            expect(case_log.wrent).to eq(93.20)
+            expect(case_log.wtcharge).to eq(371.26)
+            expect(record_from_db["wsupchrg"]).to eq(92.42)
+            expect(record_from_db["wpschrge"]).to eq(92.43)
+            expect(record_from_db["wscharge"]).to eq(93.21)
+            expect(record_from_db["wrent"]).to eq(93.20)
+            expect(record_from_db["wtcharge"]).to eq(371.26)
+          end
         end
 
         context "when rent is paid weekly for 47 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 6)
+            case_log.update!(brent: 130, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(117.5)
             expect(record_from_db["wrent"]).to eq(117.5)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 6)
+            case_log.update!(scharge: 130, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(117.5)
             expect(record_from_db["wscharge"]).to eq(117.5)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 6)
+            case_log.update!(pscharge: 130, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(117.5)
             expect(record_from_db["wpschrge"]).to eq(117.5)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 6)
+            case_log.update!(supcharg: 130, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(117.5)
             expect(record_from_db["wsupchrg"]).to eq(117.5)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 6)
+            case_log.update!(tcharge: 130, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(117.5)
             expect(record_from_db["wtcharge"]).to eq(117.5)
@@ -747,7 +837,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
@@ -756,7 +846,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
@@ -765,46 +855,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 6, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(117.5)
                 expect(record_from_db["wtshortfall"]).to eq(117.5)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 8)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(90.49)
+            expect(case_log.wpschrge).to eq(90.50)
+            expect(case_log.wscharge).to eq(91.27)
+            expect(case_log.wrent).to eq(91.26)
+            expect(case_log.wtcharge).to eq(363.53)
+            expect(record_from_db["wsupchrg"]).to eq(90.49)
+            expect(record_from_db["wpschrge"]).to eq(90.50)
+            expect(record_from_db["wscharge"]).to eq(91.27)
+            expect(record_from_db["wrent"]).to eq(91.26)
+            expect(record_from_db["wtcharge"]).to eq(363.53)
+          end
         end
 
         context "when rent is paid weekly for 46 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 7)
+            case_log.update!(brent: 130, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(115.0)
             expect(record_from_db["wrent"]).to eq(115.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 7)
+            case_log.update!(scharge: 130, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(115.0)
             expect(record_from_db["wscharge"]).to eq(115.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 7)
+            case_log.update!(pscharge: 130, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(115.0)
             expect(record_from_db["wpschrge"]).to eq(115.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 7)
+            case_log.update!(supcharg: 130, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(115.0)
             expect(record_from_db["wsupchrg"]).to eq(115.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 7)
+            case_log.update!(tcharge: 130, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(115.0)
             expect(record_from_db["wtcharge"]).to eq(115.0)
@@ -813,7 +918,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 9, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
@@ -822,7 +927,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 9, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
@@ -831,46 +936,61 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 7, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 9, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(115.0)
                 expect(record_from_db["wtshortfall"]).to eq(115.0)
               end
             end
           end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 9)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(88.57)
+            expect(case_log.wpschrge).to eq(88.58)
+            expect(case_log.wscharge).to eq(89.33)
+            expect(case_log.wrent).to eq(89.32)
+            expect(case_log.wtcharge).to eq(355.79)
+            expect(record_from_db["wsupchrg"]).to eq(88.57)
+            expect(record_from_db["wpschrge"]).to eq(88.58)
+            expect(record_from_db["wscharge"]).to eq(89.33)
+            expect(record_from_db["wrent"]).to eq(89.32)
+            expect(record_from_db["wtcharge"]).to eq(355.79)
+          end
         end
 
         context "when rent is paid weekly for 52 weeks" do
           it "correctly derives and saves weekly rent" do
-            case_log.update!(brent: 130, period: 8)
+            case_log.update!(brent: 130, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wrent).to eq(130.0)
             expect(record_from_db["wrent"]).to eq(130.0)
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 8)
+            case_log.update!(scharge: 130, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wscharge).to eq(130.0)
             expect(record_from_db["wscharge"]).to eq(130.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 8)
+            case_log.update!(pscharge: 130, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wpschrge).to eq(130.0)
             expect(record_from_db["wpschrge"]).to eq(130.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 8)
+            case_log.update!(supcharg: 130, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(130.0)
             expect(record_from_db["wsupchrg"]).to eq(130.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 8)
+            case_log.update!(tcharge: 130, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wtcharge).to eq(130.0)
             expect(record_from_db["wtcharge"]).to eq(130.0)
@@ -879,7 +999,7 @@ RSpec.describe CaseLog do
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 1)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 1, hb: 1)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
@@ -888,7 +1008,7 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of universal credit with housing element exc. housing benefit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 6)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 1, hb: 6)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
@@ -897,12 +1017,27 @@ RSpec.describe CaseLog do
 
             context "when tenant is in receipt of housing benefit and universal credit" do
               it "correctly derives and saves weekly total shortfall" do
-                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 8, hb: 8)
+                case_log.update!(hbrentshortfall: 0, tshortfall: 130, period: 1, hb: 8)
                 record_from_db = ActiveRecord::Base.connection.execute("select wtshortfall from case_logs where id=#{case_log.id}").to_a[0]
                 expect(case_log.wtshortfall).to eq(130.0)
                 expect(record_from_db["wtshortfall"]).to eq(130.0)
               end
             end
+          end
+
+          it "correctly derives floats" do
+            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 1)
+            record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.wsupchrg).to eq(100.12)
+            expect(case_log.wpschrge).to eq(100.13)
+            expect(case_log.wscharge).to eq(100.98)
+            expect(case_log.wrent).to eq(100.97)
+            expect(case_log.wtcharge).to eq(402.2)
+            expect(record_from_db["wsupchrg"]).to eq(100.12)
+            expect(record_from_db["wpschrge"]).to eq(100.13)
+            expect(record_from_db["wscharge"]).to eq(100.98)
+            expect(record_from_db["wrent"]).to eq(100.97)
+            expect(record_from_db["wtcharge"]).to eq(402.2)
           end
         end
       end

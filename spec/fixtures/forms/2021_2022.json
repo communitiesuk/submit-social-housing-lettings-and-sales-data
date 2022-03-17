@@ -661,10 +661,10 @@
                     "header": "Which period are rent and other charges due?",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "2": {
                         "value": "Weekly for 52 weeks"
                       },
-                      "1": {
+                      "3": {
                         "value": "Every 2 weeks"
                       }
                     }

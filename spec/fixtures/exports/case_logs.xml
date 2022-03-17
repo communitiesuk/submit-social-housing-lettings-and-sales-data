@@ -54,7 +54,7 @@
     <earnings>68</earnings>
     <incfreq>0</incfreq>
     <benefits>1</benefits>
-    <period>0</period>
+    <period>2</period>
     <layear>2</layear>
     <lawaitlist>1</lawaitlist>
     <property_postcode>NW1 5TY</property_postcode>
@@ -135,7 +135,7 @@
     <nocharge>0</nocharge>
     <is_carehome>0</is_carehome>
     <letting_in_sheltered_accommodation>0</letting_in_sheltered_accommodation>
-    <household_charge>1</household_charge>
+    <household_charge/>
     <referral/>
     <brent>200.0</brent>
     <scharge>50.0</scharge>
@@ -143,7 +143,7 @@
     <supcharg>35.0</supcharg>
     <tcharge>325.0</tcharge>
     <tshortfall>12.0</tshortfall>
-    <chcharge>7.0</chcharge>
+    <chcharge/>
     <declaration>1</declaration>
     <previous_postcode_known>1</previous_postcode_known>
     <previous_la_known/>

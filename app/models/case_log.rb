@@ -41,7 +41,7 @@ class CaseLog < ApplicationRecord
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
-  NUM_OF_WEEKS_FROM_PERIOD = { 0 => 26, 1 => 13, 2 => 12, 3 => 50, 4 => 49, 5 => 48, 6 => 47, 7 => 46, 8 => 52 }.freeze
+  NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
   enum status: STATUS
 
   def form
@@ -91,7 +91,7 @@ class CaseLog < ApplicationRecord
     num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
     return unless field_value && num_of_weeks
 
-    field_value / 52 * num_of_weeks
+    (field_value / 52 * num_of_weeks).round(2)
   end
 
   def applicable_income_range
@@ -267,6 +267,14 @@ class CaseLog < ApplicationRecord
 
   def benefits_unknown?
     hb == 3
+  end
+
+  def this_landlord?
+    landlord == 1
+  end
+
+  def other_landlord?
+    landlord == 2
   end
 
 private

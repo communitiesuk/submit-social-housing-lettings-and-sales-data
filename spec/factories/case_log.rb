@@ -68,7 +68,7 @@ FactoryBot.define do
       earnings { 68 }
       incfreq { 0 }
       benefits { 1 }
-      period { 0 }
+      period { 2 }
       brent { 200 }
       scharge { 50 }
       pscharge { 40 }
@@ -139,10 +139,8 @@ FactoryBot.define do
       armedforces { 0 }
       builtype { 1 }
       unitletas { 2 }
-      household_charge { 1 }
       has_benefits { 1 }
       is_carehome { 0 }
-      chcharge { 7 }
       letting_in_sheltered_accommodation { 0 }
       la_known { 1 }
       declaration { 1 }

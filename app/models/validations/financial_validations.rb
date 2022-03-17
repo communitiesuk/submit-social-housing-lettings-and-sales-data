@@ -58,4 +58,76 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
     end
   end
+
+  def validate_rent_amount(record)
+    if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
+      record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
+      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+    end
+
+    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 9.99)
+      record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
+    end
+
+    answered_questions = [record.tcharge, record.chcharge].concat(record.household_charge && record.household_charge.zero? ? [record.household_charge] : [])
+    if answered_questions.count(&:present?) > 1
+      record.errors.add :tcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.tcharge.present?
+      record.errors.add :chcharge, I18n.t("validations.financial.charges.complete_1_of_3") if record.chcharge.present?
+      record.errors.add :household_charge, I18n.t("validations.financial.charges.complete_1_of_3") if record.household_charge.present?
+    end
+
+    validate_charges(record)
+  end
+
+private
+
+  CHARGE_MAXIMUMS = {
+    scharge: {
+      this_landlord: {
+        general_needs: 55,
+        supported_housing: 280,
+      },
+      other_landlord: {
+        general_needs: 45,
+        supported_housing: 165,
+      },
+    },
+    pscharge: {
+      this_landlord: {
+        general_needs: 30,
+        supported_housing: 200,
+      },
+      other_landlord: {
+        general_needs: 35,
+        supported_housing: 75,
+      },
+    },
+    supcharg: {
+      this_landlord: {
+        general_needs: 40,
+        supported_housing: 465,
+      },
+      other_landlord: {
+        general_needs: 60,
+        supported_housing: 120,
+      },
+    },
+  }.freeze
+
+  LANDLORD_VALUES = { 1 => :this_landlord, 2 => :other_landlord }.freeze
+  NEEDSTYPE_VALUES = { 0 => :supported_housing, 1 => :general_needs }.freeze
+
+  def validate_charges(record)
+    %i[scharge pscharge supcharg].each do |charge|
+      maximum = CHARGE_MAXIMUMS.dig(charge, LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
+
+      if maximum.present? && !weekly_value_in_range(record, charge, maximum)
+        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{LANDLORD_VALUES[record.landlord]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+      end
+    end
+  end
+
+  def weekly_value_in_range(record, field, max)
+    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(0, max)
+  end
 end
