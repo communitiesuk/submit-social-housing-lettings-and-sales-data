@@ -355,6 +355,7 @@ private
     self.totchild = get_totchild
     self.totelder = get_totelder
     self.totadult = get_totadult
+    self.refused = get_refused
     if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
       self.brent ||= 0
       self.scharge ||= 0
@@ -446,6 +447,15 @@ private
       relat = public_send("relat#{i}")
       !age.nil? && ((age >= 16 && age < 18 && [0, 2].include?(relat)) || age >= 18 && age < 60)
     end
+  end
+
+  def get_refused
+    return 1 if [age1_known, age2_known, age3_known, age4_known, age5_known, age6_known, age7_known, age8_known].any?(1)
+    return 1 if [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
+    return 1 if [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?(3)
+    return 1 if [ecstat1, ecstat2, ecstat3, ecstat4, ecstat5, ecstat6, ecstat7, ecstat8].any?(10)
+
+    0
   end
 
   def get_inferred_la(postcode)

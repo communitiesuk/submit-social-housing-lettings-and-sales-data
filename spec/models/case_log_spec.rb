@@ -1378,6 +1378,25 @@ RSpec.describe CaseLog do
       end
     end
 
+    context "when answering the household characteristics questions" do
+      let!(:case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          age1_known: 1,
+          sex1: "R",
+          relat2: 3,
+          ecstat1: 10,
+        })
+      end
+
+      it "correctly derives and saves refused" do
+        record_from_db = ActiveRecord::Base.connection.execute("select refused from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["refused"]).to eq(1)
+        expect(case_log["refused"]).to eq(1)
+      end
+    end
+
     context "when the data provider is filling in household needs" do
       let!(:case_log) do
         described_class.create({
