@@ -33,6 +33,11 @@
   },
   "version": "0.1.0",
   "devDependencies": {},
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "IE 10"
+  ],
   "babel": {
     "presets": [
       "@babel/preset-env"
