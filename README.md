@@ -37,10 +37,28 @@ Pre-requisites:
 6. Install the frontend depenencies:\
   `yarn install`
 
-7. Start the Rails server:\
-  `bundle exec rails s`
+7. Start the dev servers using foreman:\
+  `./bin/dev`
+
+  Or start them individually:\
+
+  a. Rails:\
+    `bundle exec rails s`
+
+  b. JS (for hot reloading):\
+    `yarn build mode=development --watch`
+
+If you're not modifying front end assets you can bundle them as a one off task:\
+  `yarn build mode=development`
+
+Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while
+production mode will target older browsers.
 
 The Rails server will start on <http://localhost:3000>.
+
+Running the test suite (front end assets need to be built or server needs to be running):\
+  `bundle exec rspec`
+  
 
 ### Using Docker
 
