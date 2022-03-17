@@ -94,11 +94,29 @@ en:
         less_than_double_shortfall: "Answer must be more than double the shortfall in basic rent"
         scharge:
           this_landlord:
-            general_needs: "Service charge must be between 0 and 55 per week if the landlord is this landlord and it is a general needs letting"
-            supported_housing: "Service charge must be between 0 and 280 per week if the landlord is this landlord and it is a suported housing letting"
+            general_needs: "Service charge must be between £0 and £55 per week if the landlord is this landlord and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is this landlord and it is a suported housing letting"
           other_landlord:
-            general_needs: "Service charge must be between 0 and 45 per week if the landlord is another RP and it is a general needs letting"
-            supported_housing: "Service charge must be between 0 and 165 per week if the landlord is another RP and it is a suported housing letting"
+            general_needs: "Service charge must be between £0 and £45 per week if the landlord is another RP and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is another RP and it is a suported housing letting"
+        pscharge:
+          this_landlord:
+            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is this landlord and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is this landlord and it is a suported housing letting"
+          other_landlord:
+            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is another RP and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is another RP and it is a suported housing letting"
+        supcharg:
+          this_landlord:
+            general_needs: "Support charge must be between £0 and £40 per week if the landlord is this landlord and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is this landlord and it is a suported housing letting"
+          other_landlord:
+            general_needs: "Support charge must be between £0 and £60 per week if the landlord is another RP and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is another RP and it is a suported housing letting"
+      charges:
+        complete_1_of_3: 'Only one question out of "Total charge", "Charges for carehomes" and "Does the household pay rent or charges?" needs to be selected and completed'
+      tcharge:
+        under_10: "Total charge must be at least £10 per week"
 
     household:
       reasonpref:

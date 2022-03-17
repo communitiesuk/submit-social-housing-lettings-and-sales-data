@@ -139,10 +139,8 @@ FactoryBot.define do
       armedforces { 0 }
       builtype { 1 }
       unitletas { 2 }
-      household_charge { 1 }
       has_benefits { 1 }
       is_carehome { 0 }
-      chcharge { 7 }
       letting_in_sheltered_accommodation { 0 }
       la_known { 1 }
       declaration { 1 }

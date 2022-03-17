@@ -635,11 +635,11 @@ RSpec.describe Validations::FinancialValidations do
           record.household_charge = 0
           financial_validator.validate_rent_amount(record)
           expect(record.errors["tcharge"])
-            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
           expect(record.errors["household_charge"])
-            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
 
         it "returns an error for tcharge and chcharge types selected" do
@@ -649,9 +649,9 @@ RSpec.describe Validations::FinancialValidations do
           expect(record.errors["household_charge"])
             .to be_empty
           expect(record.errors["tcharge"])
-            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
 
         it "returns an error for tcharge and household_charge types selected" do
@@ -661,9 +661,9 @@ RSpec.describe Validations::FinancialValidations do
           expect(record.errors["chcharge"])
             .to be_empty
           expect(record.errors["tcharge"])
-            .to include(match I18n.t("validations.financial.tcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
           expect(record.errors["household_charge"])
-            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
 
         it "returns an error for chcharge and household_charge types selected" do
@@ -673,9 +673,9 @@ RSpec.describe Validations::FinancialValidations do
           expect(record.errors["tcharge"])
             .to be_empty
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.chcharge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
           expect(record.errors["household_charge"])
-            .to include(match I18n.t("validations.financial.household_charge.complete_1_of_3"))
+            .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
       end
 
