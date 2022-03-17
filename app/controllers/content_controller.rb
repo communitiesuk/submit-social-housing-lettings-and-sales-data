@@ -7,6 +7,10 @@ class ContentController < ApplicationController
     render_content_page :privacy_notice, page_title: "Privacy notice for tenants and buyers of new social housing"
   end
 
+  def data_sharing_agreement
+    render_content_page :data_sharing_agreement, page_title: "Data sharing agreement"
+  end
+
 private
 
   def render_content_page(page_name, page_title: nil, locals: {})
