@@ -3,7 +3,7 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 require.context("govuk-frontend/govuk/assets")
-import "core-js/features/promise"
+import "core-js"
 
 import "./styles/application.scss"
 import "./controllers"
