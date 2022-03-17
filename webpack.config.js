@@ -9,9 +9,6 @@ const mode = process.env.NODE_ENV === 'development' ? 'development' : 'productio
 
 module.exports = {
   mode,
-  optimization: {
-    moduleIds: 'deterministic'
-  },
   devtool: "source-map",
   entry: {
     application: [
@@ -22,6 +19,7 @@ module.exports = {
       './app/frontend/styles/active_admin.scss'
     ]
   },
+  target: ['web', 'es5'],
   module: {
     rules: [
       {
