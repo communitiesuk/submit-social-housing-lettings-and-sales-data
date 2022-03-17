@@ -18,15 +18,7 @@ module.exports = function(api) {
   return {
     presets: [
       isTestEnv && [
-        '@babel/preset-env',
-        {
-          targets: {
-            node: 'current',
-            browsers: [
-              'ie >= 10'
-            ]
-          }
-        }
+        '@babel/preset-env'
       ],
       (isProductionEnv || isDevelopmentEnv) && [
         '@babel/preset-env',
@@ -35,13 +27,7 @@ module.exports = function(api) {
           useBuiltIns: 'entry',
           corejs: 3,
           modules: false,
-          exclude: ['transform-typeof-symbol'],
-          targets: {
-            node: 'current',
-            browsers: [
-              'ie >= 10'
-            ]
-          }
+          exclude: ['transform-typeof-symbol']
         }
       ]
     ].filter(Boolean),
