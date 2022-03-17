@@ -31,4 +31,18 @@ RSpec.describe ContentController, type: :request do
       expect(page).to have_title("Accessibility statement")
     end
   end
+
+  describe "render data sharing agreement" do
+    before do
+      get "/data-sharing-agreement", headers: headers, params: {}
+    end
+
+    it "returns a 200" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "returns the page" do
+      expect(page).to have_title("Data sharing agreement")
+    end
+  end
 end

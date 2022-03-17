@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
+  get "/data-sharing-agreement", to: "content#data_sharing_agreement"
 
   resources :users do
     member do
