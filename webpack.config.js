@@ -19,7 +19,6 @@ module.exports = {
       './app/frontend/styles/active_admin.scss'
     ]
   },
-  target: ['web', 'es5'],
   module: {
     rules: [
       {
