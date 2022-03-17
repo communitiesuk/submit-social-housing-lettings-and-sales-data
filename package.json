@@ -23,6 +23,7 @@
     "file-loader": "^6.2.0",
     "govuk-frontend": "^4.0.1",
     "mini-css-extract-plugin": "^2.6.0",
+    "modernizr": "^3.12.0",
     "regenerator-runtime": "^0.13.9",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
@@ -33,7 +34,11 @@
     "webpack-remove-empty-scripts": "^0.7.3"
   },
   "version": "0.1.0",
-  "devDependencies": {},
+  "devDependencies": {
+    "@sect/modernizr-loader": "^1.0.2",
+    "json-loader": "^0.5.7",
+    "modernizr-loader": "^1.0.1"
+  },
   "browserslist": {
     "production": [
       "last 1 version",

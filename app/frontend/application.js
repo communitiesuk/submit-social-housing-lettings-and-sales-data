@@ -3,15 +3,24 @@
 // a relevant structure within app/javascript and only use these pack files to reference
 // that code so it'll be compiled.
 require.context("govuk-frontend/govuk/assets")
-
-// Polyfills for IE
-import "core-js/features/promise"
+import "core-js/stable"
 import "unfetch/polyfill"
-//
+import Modernizr from 'modernizr'
 
 import "./styles/application.scss"
-// import "./controllers"
-import "@hotwired/turbo-rails"
-import { initAll } from "govuk-frontend"
+import "./controllers"
+
+if (Modernizr.fetch) {
+    import('@hotwired/turbo-rails').then(() => {
+        console.log('imported Turbo')
+    }).catch((err) => {
+        console.log('Error loading turbo')
+
+    })
+} else {
+    console.log('skipped importing Turbo. Fetch API unsupported by browser.')
+}
+
+const { initAll } = require("govuk-frontend")
 
 initAll()

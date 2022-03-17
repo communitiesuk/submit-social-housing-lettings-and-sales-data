@@ -22,8 +22,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js)$/,
-        exclude: /node_modules/,
+        test: /\.modernizrrc.js$/,
+        use: ['@sect/modernizr-loader']
+      },
+      {
+        test: /\.modernizrrc(\.json)?$/,
+        use: [
+          '@sect/modernizr-loader','json-loader'
+        ],
+        type: 'javascript/auto'
+      },
+      {
+        test: /\.(js|ts)$/,
+        include: [/node_modules/, /frontend/],
         use: ['babel-loader'],
       },
       {
@@ -37,7 +48,11 @@ module.exports = {
     ],
   },
   resolve: {
-    modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
+    modules: ['node_modules', 'node_modules/govuk-frontend/govuk'],
+    alias: {
+      // You can add comment "Please do not delete this file" in this file
+      modernizr$: path.resolve(__dirname, ".modernizrrc")
+    }
   },
   output: {
     filename: "[name].js",
