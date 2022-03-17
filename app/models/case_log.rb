@@ -450,10 +450,7 @@ private
   end
 
   def get_refused
-    return 1 if [age1_known, age2_known, age3_known, age4_known, age5_known, age6_known, age7_known, age8_known].any?(1)
-    return 1 if [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
-    return 1 if [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?(3)
-    return 1 if [ecstat1, ecstat2, ecstat3, ecstat4, ecstat5, ecstat6, ecstat7, ecstat8].any?(10)
+    return 1 if age_refused? || sex_refused? || relat_refused? || ecstat_refused?
 
     0
   end
@@ -535,5 +532,21 @@ private
 
   def mandatory_fields
     form.questions.map(&:id).difference(OPTIONAL_FIELDS, dynamically_not_required)
+  end
+
+  def age_refused?
+    [age1_known, age2_known, age3_known, age4_known, age5_known, age6_known, age7_known, age8_known].any?(1)
+  end
+
+  def sex_refused?
+    [sex1, sex2, sex3, sex4, sex5, sex6, sex7, sex8].any?("R")
+  end
+
+  def relat_refused?
+    [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?(3)
+  end
+
+  def ecstat_refused?
+    [ecstat1, ecstat2, ecstat3, ecstat4, ecstat5, ecstat6, ecstat7, ecstat8].any?(10)
   end
 end
