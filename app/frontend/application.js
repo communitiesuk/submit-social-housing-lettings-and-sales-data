@@ -10,5 +10,4 @@ import "./controllers"
 import "@hotwired/turbo-rails"
 import { initAll } from "govuk-frontend"
 
-ActiveStorage.start()
 initAll()
