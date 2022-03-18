@@ -4,6 +4,8 @@
 // that code so it'll be compiled.
 
 // Polyfills for IE
+import "@webcomponents/webcomponentsjs"
+import "core-js/stable"
 import "regenerator-runtime/runtime"
 import "@stimulus/polyfills"
 import "custom-event-polyfill"
