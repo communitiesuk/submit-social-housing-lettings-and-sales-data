@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       two_factor_authentication: "auth/two_factor_authentication",
     },
     path_names: { sign_in: "sign-in", sign_out: "sign-out", two_factor_authentication: "two-factor-authentication" },
-    sign_out_via: %i[delete get],
+    sign_out_via: %i[get],
   }
 
   devise_scope :admin_user do
