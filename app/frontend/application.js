@@ -9,6 +9,7 @@ import "core-js/stable"
 import "regenerator-runtime/runtime"
 import "@stimulus/polyfills"
 import "custom-event-polyfill"
+import "intersection-observer"
 //
 
 require.context("govuk-frontend/govuk/assets")
