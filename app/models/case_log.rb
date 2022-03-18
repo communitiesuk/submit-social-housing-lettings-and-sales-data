@@ -482,15 +482,26 @@ private
   end
 
   def get_housingneeds
-    if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
-      return 1
-    end
-    if housingneeds_g == 1
-      return 2
-    end
+    return 1 if has_housingneeds?
+    return 2 if no_housingneeds?
+    return 3 if unknown_housingneeds?
+  end
 
+  def has_housingneeds?
+    if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
+      1
+    end
+  end
+
+  def no_housingneeds?
+    if housingneeds_g == 1
+      1
+    end
+  end
+
+  def unknown_housingneeds?
     if housingneeds_h == 1
-      3
+      1
     end
   end
 
