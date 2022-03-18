@@ -21,6 +21,7 @@
     "copy-webpack-plugin": "^10.2.4",
     "core-js": "^3.21.1",
     "css-loader": "^6.7.1",
+    "custom-event-polyfill": "^1.0.7",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^4.0.1",
     "mini-css-extract-plugin": "^2.6.0",
@@ -44,15 +45,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-private-methods"
     ]
   },
   "scripts": {
