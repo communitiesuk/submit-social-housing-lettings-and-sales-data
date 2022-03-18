@@ -9,7 +9,7 @@ ActiveAdmin.setup do |config|
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
-  # config.site_title_link = "/"
+  config.site_title_link = "/admin"
 
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
@@ -332,6 +332,77 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   config.use_webpacker = true
+
+  # == Adminterface
+  #
+  # https://adminterface.io/docs/enhancements/customizations
+  #
+  config.css_classes = {
+    action_items: {
+      group: "govuk-button-group govuk-!-margin-bottom-0",
+      item: "govuk-link govuk-link--no-visited-state govuk-!-font-size-16 govuk-!-font-weight-bold govuk-!-margin-bottom-1",
+    },
+    attributes_table: {
+      wrapper: "app-table-group",
+    },
+    confirm_dialog: {
+      cancel: "govuk-button govuk-button--secondary govuk-!-margin-bottom-0",
+      confirm: "govuk-button govuk-!-margin-bottom-0",
+    },
+    filters: {
+      actions: {
+        cancel: "govuk-button govuk-button--secondary govuk-!-margin-bottom-0",
+        submit: "govuk-button govuk-!-margin-bottom-0",
+      },
+    },
+    footer: {
+      wrapper: "govuk-!-margin-top-9",
+      body: "govuk-body-s",
+    },
+    form: {
+      actions: {
+        cancel: "govuk-button govuk-button--secondary govuk-!-margin-bottom-0",
+        submit: "govuk-button govuk-!-margin-bottom-0",
+      },
+    },
+    header: {
+      wrapper: "govuk-header__container",
+    },
+    index_as_table: {
+      actions: {
+        dropdown: {
+          toggle: "app-button--small govuk-button govuk-button--secondary",
+        },
+      },
+      wrapper: "app-table-group",
+    },
+    panel: {
+      body: nil,
+      header: {
+        title: "govuk-heading-l govuk-!-font-size-27",
+        wrapper: nil,
+      },
+      wrapper: "govuk-!-margin-bottom-8",
+    },
+    sidebar: {
+      position: "left",
+    },
+    status_tag: {
+      'no': "app-tag--small govuk-tag govuk-tag--red",
+      unset: "app-tag--small govuk-tag govuk-tag--orange",
+      'yes': "app-tag--small govuk-tag govuk-tag--green",
+    },
+    table_tools: {
+      btn: "app-button--small govuk-button govuk-button--secondary",
+      confirm_dialog: {
+        cancel: "govuk-button govuk-button--secondary",
+        confirm: "govuk-button",
+      },
+    },
+    title_bar: {
+      wrapper: "navbar navbar-light bg-light",
+    },
+  }
 end
 
 # Print stylesheet is no longer a separate stylesheet in upstream so we can

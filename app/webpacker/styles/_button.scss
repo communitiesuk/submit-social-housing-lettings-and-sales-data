@@ -29,3 +29,7 @@ $app-button-inverse-hover-background-colour: govuk-tint($app-button-inverse-fore
   background-color: $app-button-inverse-hover-background-colour;
   box-shadow: inset 0 0 0 2px $govuk-focus-colour;
 }
+
+.app-button--small {
+  @include govuk-font($size: 16);
+}

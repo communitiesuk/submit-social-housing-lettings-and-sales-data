@@ -1,0 +1,69 @@
+// Tactical overrides to the themed Adminterface styles
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+a:not([class]) {
+  @include govuk-link-common;
+  @include govuk-link-style-no-visited-state;
+
+  &:focus {
+    color: $govuk-focus-text-colour;
+  }
+}
+
+.btn-primary {
+  @extend .govuk-button;
+
+  .govuk-button-group & {
+    margin-bottom: 0;
+  }
+}
+
+.btn-light,
+.btn-secondary {
+  @extend .govuk-button--secondary;
+}
+
+.header {
+  margin-bottom: 0;
+  min-height: 60px;
+}
+
+.title {
+  a:not(:focus) {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.navbar-brand,
+.navbar-nav {
+  font-weight: $govuk-font-weight-bold;
+
+  .nav-link:focus {
+    color: $govuk-focus-text-colour !important;
+    background-color: $govuk-focus-colour;
+    outline: none;
+  }
+}
+
+.breadcrumb {
+  a:not(:focus) {
+    color: $body-color;
+  }
+}
+
+.table_for:not(.attributes_table) tr.selected td {
+  background-color: govuk-tint($govuk-focus-colour, 75);
+}
+
+// Align submit/cancel buttons with left side of form
+.modal-footer {
+  flex-direction: row-reverse;
+}
+
+.formtastic fieldset.actions ol {
+  flex-direction: row;
+  gap: govuk-spacing(2);
+}

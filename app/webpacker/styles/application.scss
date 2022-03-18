@@ -20,6 +20,7 @@ $govuk-global-styles: true;
 @import "section-skip-link";
 @import "tab-navigation";
 @import "table-group";
+@import "tag";
 @import "task-list";
 @import "template";
 @import "panel";
@@ -42,8 +43,4 @@ $govuk-global-styles: true;
 // Overrides
 .govuk-button-group {
   align-items: center;
-}
-
-.govuk-tag {
-  white-space: nowrap;
 }

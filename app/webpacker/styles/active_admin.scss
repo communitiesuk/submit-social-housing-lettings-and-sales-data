@@ -1,17 +1,156 @@
-// Sass variable overrides must be declared before loading up Active Admin's styles.
-//
-// To view the variables that Active Admin provides, take a look at
-// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
-// Active Admin source.
-//
-// For example, to change the sidebar width:
-// $sidebar-width: 242px;
+// Import GOV.UK Frontend styles
+@function frontend-font-url($filename) {
+  @return url("~assets/fonts/" + $filename);
+}
 
-// Active Admin's got SASS!
-@import "~@activeadmin/activeadmin/src/scss/mixins";
-@import "~@activeadmin/activeadmin/src/scss/base";
+@function frontend-image-url($filename) {
+  @return url("~assets/images/" + $filename);
+}
 
-// Overriding any non-variable Sass must be done after the fact.
-// For example, to change the default status-tag color:
-//
-//   .status_tag { background: #6090DB; }
+$govuk-font-url-function: frontend-font-url;
+$govuk-image-url-function: frontend-image-url;
+
+@import "~govuk-frontend/govuk/base";
+@import "~govuk-frontend/govuk/core/typography";
+@import "~govuk-frontend/govuk/objects/all";
+
+@import "~govuk-frontend/govuk/components/button";
+@import "~govuk-frontend/govuk/components/header";
+@import "~govuk-frontend/govuk/components/table";
+@import "~govuk-frontend/govuk/components/tag";
+
+@import "~govuk-frontend/govuk/overrides/all";
+
+@import "../styles/button";
+@import "../styles/table-group";
+@import "../styles/tag";
+
+// Override default Bootstrap colour palette to match that of GOV.UK
+// https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss
+
+// Colour system
+$white: govuk-colour("white");
+$gray-100: govuk-colour("light-grey");
+$gray-200: govuk-colour("light-grey");
+$gray-300: govuk-colour("light-grey");
+$gray-400: govuk-colour("mid-grey");
+$gray-500: govuk-colour("mid-grey");
+$gray-600: govuk-colour("mid-grey");
+$gray-700: govuk-colour("dark-grey");
+$gray-800: govuk-colour("dark-grey");
+$gray-900: govuk-colour("dark-grey");
+$black: govuk-colour("black");
+
+$blue: govuk-colour("blue");
+$indigo: govuk-colour("light-purple");
+$purple: govuk-colour("purple");
+$pink: govuk-colour("pink");
+$red: govuk-colour("red");
+$orange: govuk-colour("orange");
+$yellow: govuk-colour("yellow");
+$green: govuk-colour("green");
+$teal: govuk-colour("turquoise");
+$cyan: govuk-colour("light-blue");
+
+// Colour assignments
+$primary: govuk-colour("green");
+$secondary: govuk-colour("light-grey");
+$success: $govuk-success-colour;
+$info: govuk-colour("blue");
+$warning: $govuk-error-colour;
+$danger: $govuk-error-colour;
+$light: govuk-colour("light-grey");
+$dark: govuk-colour("black");
+
+// Options
+$enable-rounded: false;
+$enable-transitions: false;
+$enable-shadows: false;
+
+// Spacing
+$spacers: (
+  0: 0,
+  1: govuk-spacing(1),
+  2: govuk-spacing(2),
+  3: govuk-spacing(3),
+  4: govuk-spacing(6),
+  5: govuk-spacing(9),
+);
+
+// Body
+$body-bg: $govuk-body-background-colour;
+$body-color: $govuk-text-colour;
+$text-muted: $govuk-secondary-text-colour;
+
+// Links
+$link-hover-color: $govuk-text-colour;
+$link-hover-decoration: underline;
+
+// Focus
+$component-active-bg: $govuk-focus-colour;
+
+// Typography
+$font-family-sans-serif: $govuk-font-family-gds-transport;
+$font-size-base: 1rem;
+$font-size-sm: $font-size-base * .875; // 14px
+$font-size-lg: $font-size-base * 1.1875; // 19px
+
+$h1-font-size: $font-size-base * 3; // 48px
+$h2-font-size: $font-size-base * 2.25; // 36px
+$h3-font-size: $font-size-base * 1.6875; // 27px
+$h4-font-size: $font-size-base * 1.5; // 24px
+$h5-font-size: $font-size-base * 1.1875; // 19px
+$h6-font-size: $font-size-base;
+
+$headings-font-weight: $govuk-font-weight-regular;
+
+// Tables
+$table-border-width: 1px;
+$table-border-color: $govuk-border-colour;
+
+// Forms
+$input-btn-padding-y: (govuk-spacing(2) - $govuk-border-width-form-element);
+$input-btn-padding-x: govuk-spacing(2);
+$input-btn-border-width: $govuk-border-width-form-element;
+$input-btn-focus-width: $govuk-focus-width;
+$input-btn-focus-color-opacity: 1.0;
+$input-btn-focus-color: $component-active-bg;
+$input-btn-focus-color: $yellow;
+$input-btn-line-height: 1;
+
+// Form - Inputs
+$input-border-color: $black;
+$input-focus-border-color: $black;
+
+// Form - Labels
+$form-label-font-size: $font-size-lg;
+$form-label-font-weight: $govuk-font-weight-bold;
+
+// Form - Check boxes
+$form-check-input-bg: $body-bg;
+$form-check-input-border: 2px solid $body-color;
+
+$form-check-input-checked-color: $body-color;
+$form-check-input-checked-bg-color: $body-bg;
+$form-check-input-checked-border-color: $body-color;
+
+$form-check-input-indeterminate-color: $body-color;
+$form-check-input-indeterminate-bg-color: $body-bg;
+$form-check-input-indeterminate-border-color: $body-color;
+
+// Breadcrumb
+$breadcrumb-active-color: $govuk-text-colour;
+$breadcrumb-divider-color: $govuk-secondary-text-colour;
+
+// Navigation bar
+$navbar-brand-font-size: $h4-font-size;
+$navbar-dark-color: $white;
+$navbar-dark-active-color: #1d8feb;
+$navbar-dark-hover-color: $white;
+$navbar-dark-brand-color: $white;
+$navbar-dark-brand-hover-color: $white;
+
+// Sass variable overrides must be declared before loading Adminterface styles.
+// See: https://adminterface.io/docs/enhancements/customizations#adminterface
+@import "~@cmdbrew/adminterface/src/scss/base";
+@import "./active_admin/overrides";

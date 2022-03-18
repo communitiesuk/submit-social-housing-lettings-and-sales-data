@@ -25,8 +25,9 @@ gem "govuk_markdown"
 gem "notifications-ruby-client"
 # Turbo and Stimulus
 gem "hotwire-rails"
-# Administration framework
+# Administration interface
 gem "activeadmin"
+gem "adminterface"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing

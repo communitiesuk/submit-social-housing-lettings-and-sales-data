@@ -1,0 +1,8 @@
+.govuk-tag {
+  white-space: nowrap;
+}
+
+.app-tag--small {
+  @include govuk-font($size: 14, $weight: bold, $line-height: 1);
+  padding: 4px 6px;
+}
