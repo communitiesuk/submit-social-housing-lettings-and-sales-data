@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /\.(js|ts)$/,
         include: [
-          path.resolve(__dirname, 'node_modules/@hotwired'),
+          path.resolve(__dirname, 'node_modules/@hotwired/stimulus'),
           path.resolve(__dirname, 'node_modules/@rails/actioncable'),
           path.resolve(__dirname, 'app/frontend/controllers'),
         ],
