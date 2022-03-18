@@ -40,7 +40,7 @@ RSpec.describe QuestionAttributeHelper do
       let(:expected_attribs) do
         {
           "data-controller": "numeric-question conditional-question",
-          "data-action": "input->numeric-question#calculateFields conditional-question#displayConditional",
+          "data-action": "input->numeric-question#calculateFields click->conditional-question#displayConditional",
           "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
           "data-calculated": question.fields_to_add.to_json,
           "data-info": question.conditional_for.to_json,
