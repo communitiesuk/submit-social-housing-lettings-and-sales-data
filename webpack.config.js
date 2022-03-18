@@ -23,7 +23,10 @@ module.exports = {
     rules: [
       {
         test: /\.(js|ts)$/,
-        include: [/node_modules/, /frontend/],
+        include: [
+          path.resolve(__dirname, 'node_modules'),
+          path.resolve(__dirname, 'app/frontend/controllers'),
+        ],
         use: ['babel-loader'],
       },
       {
