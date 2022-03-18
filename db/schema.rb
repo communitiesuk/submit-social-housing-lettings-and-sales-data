@@ -224,6 +224,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.decimal "wsupchrg", precision: 10, scale: 2
     t.decimal "wtcharge", precision: 10, scale: 2
     t.decimal "wtshortfall", precision: 10, scale: 2
+    t.integer "housingneeds"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end

@@ -1366,6 +1366,33 @@ RSpec.describe CaseLog do
         expect(case_log["referral"]).to eq(0)
       end
     end
+
+    context "when the data provider is filling in household needs" do
+      let!(:case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+        })
+      end
+
+      it "correctly derives and saves housing neeeds as 1" do
+        case_log.update!(housingneeds_a: 1)
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["housingneeds"]).to eq(1)
+      end
+
+      it "correctly derives and saves housing neeeds as 2" do
+        case_log.update!(housingneeds_g: 1)
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["housingneeds"]).to eq(2)
+      end
+
+      it "correctly derives and saves housing neeeds as 3" do
+        case_log.update!(housingneeds_h: 1)
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["housingneeds"]).to eq(3)
+      end
+    end
   end
 
   describe "resetting invalidated fields" do

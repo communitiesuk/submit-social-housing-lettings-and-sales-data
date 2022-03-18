@@ -371,6 +371,7 @@ private
     self.nocharge = household_charge&.zero? ? 1 : 0
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
     self.ethnic = ethnic || ethnic_group
+    self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if year == 2021
       self.homeless = 2
@@ -477,6 +478,30 @@ private
       elsif is_general_needs?
         owning_organisation[:provider_type] == "PRP" ? 9 : 11
       end
+    end
+  end
+
+  def get_housingneeds
+    return 1 if has_housingneeds?
+    return 2 if no_housingneeds?
+    return 3 if unknown_housingneeds?
+  end
+
+  def has_housingneeds?
+    if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
+      1
+    end
+  end
+
+  def no_housingneeds?
+    if housingneeds_g == 1
+      1
+    end
+  end
+
+  def unknown_housingneeds?
+    if housingneeds_h == 1
+      1
     end
   end
 
