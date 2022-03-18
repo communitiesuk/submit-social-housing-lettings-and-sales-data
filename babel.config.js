@@ -36,11 +36,11 @@ module.exports = function(api) {
       '@babel/plugin-syntax-dynamic-import',
       isTestEnv && 'babel-plugin-dynamic-import-node',
       '@babel/plugin-proposal-class-properties',
+      '@babel/plugin-proposal-object-rest-spread',
       '@babel/plugin-proposal-private-methods',
       '@babel/plugin-proposal-private-property-in-object',
-      '@babel/plugin-transform-runtime',
       '@babel/plugin-transform-regenerator',
-      '@babel/plugin-proposal-object-rest-spread',
+      '@babel/plugin-transform-runtime',
       [
         '@babel/plugin-transform-spread',
         {
