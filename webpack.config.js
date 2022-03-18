@@ -45,6 +45,9 @@ module.exports = {
   },
   output: {
     filename: "[name].js",
+    // we must set publicPath to an empty value to override the default of
+    // auto which doesn't work in IE11
+    publicPath: '',
     path: path.resolve(__dirname, "app/assets/builds"),
   },
   plugins: [
