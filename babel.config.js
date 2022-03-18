@@ -70,6 +70,12 @@ module.exports = function(api) {
         {
           async: false
         }
+      ],
+      [
+        "@babel/plugin-transform-spread",
+        {
+          "loose": true
+        }
       ]
     ].filter(Boolean)
   }
