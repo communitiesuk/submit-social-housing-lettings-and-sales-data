@@ -22,15 +22,27 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.modernizrrc.js$/,
+        use: ['@sect/modernizr-loader']
+      },
+      {
+        test: /\.modernizrrc(\.json)?$/,
+        use: [
+          '@sect/modernizr-loader','json-loader'
+        ],
+        type: 'javascript/auto'
+      },
+      {
         test: /\.(js|ts)$/,
         include: [
           path.resolve(__dirname, 'node_modules/@hotwired/stimulus'),
           path.resolve(__dirname, 'node_modules/@stimulus/polyfills'),
+          path.resolve(__dirname, 'node_modules/@hotwired/turbo'),
           path.resolve(__dirname, 'node_modules/@rails/actioncable'),
           path.resolve(__dirname, 'node_modules/chartjs'),
           path.resolve(__dirname, 'app/frontend'),
         ],
-        use: ['babel-loader'],
+        use: ['babel-loader']
       },
       {
         test: /\.(png|jpe?g|gif|eot|woff|woff2|ttf|svg|ico)$/i,
@@ -43,7 +55,11 @@ module.exports = {
     ],
   },
   resolve: {
-    modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
+    modules: ['node_modules', 'node_modules/govuk-frontend/govuk'],
+    alias: {
+      // You can add comment "Please do not delete this file" in this file
+      modernizr$: path.resolve(__dirname, ".modernizrrc")
+    }
   },
   output: {
     filename: "[name].js",
