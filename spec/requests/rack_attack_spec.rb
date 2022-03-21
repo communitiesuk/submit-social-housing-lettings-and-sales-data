@@ -31,7 +31,7 @@ describe "Rack::Attack" do
     context "when the number of requests is under the throttle limit" do
       it "does not throttle" do
         under_limit.times do
-          post "/users/password", params: params
+          post "/account/password", params: params
           follow_redirect!
         end
         last_response = response
@@ -42,7 +42,7 @@ describe "Rack::Attack" do
     context "when the number of requests is at the throttle limit" do
       it "does not throttle" do
         limit.times do
-          post "/users/password", params: params
+          post "/account/password", params: params
           follow_redirect!
         end
         last_response = response
@@ -53,7 +53,7 @@ describe "Rack::Attack" do
     context "when the number of requests is over the throttle limit" do
       it "throttles" do
         over_limit.times do
-          post "/users/password", params: params
+          post "/account/password", params: params
           follow_redirect!
         end
         last_response = response

@@ -10,7 +10,11 @@ Rails.application.routes.draw do
       confirmations: "active_admin/devise/confirmations",
       two_factor_authentication: "auth/two_factor_authentication",
     },
-    path_names: { sign_in: "sign-in", sign_out: "sign-out", two_factor_authentication: "two-factor-authentication" },
+    path_names: {
+      sign_in: "sign-in",
+      sign_out: "sign-out",
+      two_factor_authentication: "two-factor-authentication",
+    },
     sign_out_via: %i[get],
   }
 
@@ -18,13 +22,20 @@ Rails.application.routes.draw do
     get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
   end
 
-  devise_for :users, controllers: {
-    passwords: "auth/passwords",
-    sessions: "auth/sessions",
-  }, path_names: { sign_in: "sign-in", sign_out: "sign-out" }
+  devise_for :users, {
+    path: :account,
+    controllers: {
+      passwords: "auth/passwords",
+      sessions: "auth/sessions",
+    },
+    path_names: {
+      sign_in: "sign-in",
+      sign_out: "sign-out",
+    },
+  }
 
   devise_scope :user do
-    get "confirmations/reset", to: "auth/passwords#reset_confirmation"
+    get "account/password/reset-confirmation", to: "auth/passwords#reset_confirmation"
   end
 
   get "/health", to: ->(_) { [204, {}, [nil]] }

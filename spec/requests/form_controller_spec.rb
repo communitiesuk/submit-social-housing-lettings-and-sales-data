@@ -24,19 +24,19 @@ RSpec.describe FormController, type: :request do
     describe "GET" do
       it "does not let you get case logs pages you don't have access to" do
         get "/logs/#{case_log.id}/person-1-age", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
 
       it "does not let you get case log check answer pages you don't have access to" do
         get "/logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "POST" do
       it "does not let you post form answers to case logs you don't have access to" do
         post "/logs/#{case_log.id}/form", params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
   end

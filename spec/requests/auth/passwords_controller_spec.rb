@@ -20,7 +20,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
       let(:email) { user.email }
 
       it "redirects to the email sent page" do
-        post "/users/password", params: params
+        post "/account/password", params: params
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(response.body).to match(/Check your email/)
@@ -35,7 +35,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
       let(:email) { "madeup_email@test.com" }
 
       it "redirects to the email sent page anyway" do
-        post "/users/password", params: params
+        post "/account/password", params: params
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(response.body).to match(/Check your email/)
@@ -59,12 +59,12 @@ RSpec.describe Auth::PasswordsController, type: :request do
       let(:message) { "Your password has been changed successfully. You are now signed in" }
 
       it "changes the password" do
-        expect { put "/users/password", params: update_password_params }
+        expect { put "/account/password", params: update_password_params }
           .to(change { user.reload.encrypted_password })
       end
 
       it "after password change, the user is signed in" do
-        put "/users/password", params: update_password_params
+        put "/account/password", params: update_password_params
         # Devise redirects once after re-sign in with new password and then root redirects as well.
         follow_redirect!
         follow_redirect!

@@ -20,35 +20,35 @@ RSpec.describe UsersController, type: :request do
     describe "#show" do
       it "does not let you see user details" do
         get "/users/#{user.id}", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "#edit" do
       it "does not let you edit user details" do
         get "/users/#{user.id}/edit", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "#password" do
       it "does not let you edit user passwords" do
         get "/users/#{user.id}/password/edit", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "#patch" do
       it "does not let you update user details" do
         patch "/logs/#{user.id}", params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "reset password" do
       it "renders the user edit password view" do
         _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
-        get "/users/password/edit?reset_password_token=#{enc}"
+        get "/account/password/edit?reset_password_token=#{enc}"
         expect(page).to have_css("h1", class: "govuk-heading-l", text: "Reset your password")
       end
 
@@ -88,7 +88,7 @@ RSpec.describe UsersController, type: :request do
           before do
             allow(User).to receive(:find_or_initialize_with_error_by).and_return(user)
             allow(user).to receive(:reset_password_sent_at).and_return(4.hours.ago)
-            put "/users/password", headers: headers, params: params
+            put "/account/password", headers: headers, params: params
           end
 
           it "shows an error" do

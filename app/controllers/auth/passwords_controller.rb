@@ -66,7 +66,7 @@ protected
   end
 
   def after_sending_reset_password_instructions_path_for(_resource)
-    confirmations_reset_path(email: params.dig(resource_class_name, "email"))
+    account_password_reset_confirmation_path(email: params.dig(resource_class_name, "email"))
   end
 
   def after_resetting_password_path_for(resource)
