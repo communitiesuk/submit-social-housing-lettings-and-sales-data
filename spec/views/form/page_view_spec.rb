@@ -34,9 +34,9 @@ RSpec.describe "form/page" do
   end
 
   context "with a page containing a description" do
-    let(:description) { "Test description <a class=\"govuk-link\" href=\"/files/privacy-notice.pdf\">with link</a>." }
+    let(:description) { "Test description <a class=\"govuk-link\" href=\"/test-link\">with link</a>." }
     let(:page_attributes) { { description: description } }
-    let(:expected_html) { '<p class="govuk-body govuk-body-m">Test description <a class="govuk-link" href="/files/privacy-notice.pdf">with link</a>.</p>' }
+    let(:expected_html) { '<p class="govuk-body govuk-body-m">Test description <a class="govuk-link" href="/test-link">with link</a>.</p>' }
 
     it "renders the description" do
       expect(rendered).to match(expected_html)
