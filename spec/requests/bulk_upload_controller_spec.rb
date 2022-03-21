@@ -17,7 +17,7 @@ RSpec.describe BulkUploadController, type: :request do
       before { get url, headers: headers, params: {} }
 
       it "does not let you see the bulk upload page" do
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
 
@@ -25,7 +25,7 @@ RSpec.describe BulkUploadController, type: :request do
       before { post url, params: { bulk_upload: { case_log_bulk_upload: valid_file } } }
 
       it "does not let you submit bulk uploads" do
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
   end

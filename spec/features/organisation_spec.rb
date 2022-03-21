@@ -55,7 +55,7 @@ RSpec.describe "User Features" do
               name: "New User",
               email: "new_user@example.com",
               organisation: organisation.name,
-              link: "http://localhost:3000/users/password/edit?reset_password_token=#{reset_password_token}",
+              link: "http://localhost:3000/account/password/edit?reset_password_token=#{reset_password_token}",
             },
           },
         )

@@ -17,7 +17,7 @@ RSpec.describe "User Features" do
   context "when the user navigates to case logs" do
     it " is required to log in" do
       visit("/logs")
-      expect(page).to have_current_path("/users/sign-in")
+      expect(page).to have_current_path("/account/sign-in")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
 
@@ -59,11 +59,11 @@ RSpec.describe "User Features" do
     it " is redirected to the reset password page when they click the reset password link" do
       visit("/logs")
       click_link("reset your password")
-      expect(page).to have_current_path("/users/password/new")
+      expect(page).to have_current_path("/account/password/new")
     end
 
     it " is shown an error message if they submit without entering an email address" do
-      visit("/users/password/new")
+      visit("/account/password/new")
       click_button("Send email")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
@@ -71,7 +71,7 @@ RSpec.describe "User Features" do
     end
 
     it " is shown an error message if they submit an invalid email address" do
-      visit("/users/password/new")
+      visit("/account/password/new")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Send email")
       expect(page).to have_selector("#error-summary-title")
@@ -80,24 +80,24 @@ RSpec.describe "User Features" do
     end
 
     it " is redirected to check your email page after submitting an email on the reset password page" do
-      visit("/users/password/new")
+      visit("/account/password/new")
       fill_in("user[email]", with: user.email)
       click_button("Send email")
       expect(page).to have_content("Check your email")
     end
 
     it " is shown their email on the password reset confirmation page" do
-      visit("/users/password/new")
+      visit("/account/password/new")
       fill_in("user[email]", with: user.email)
       click_button("Send email")
       expect(page).to have_content(user.email)
     end
 
     it " is shown the reset password confirmation page even if their email doesn't exist in the system" do
-      visit("/users/password/new")
+      visit("/account/password/new")
       fill_in("user[email]", with: "idontexist@example.com")
       click_button("Send email")
-      expect(page).to have_current_path("/confirmations/reset?email=idontexist%40example.com")
+      expect(page).to have_current_path("/account/password/reset-confirmation?email=idontexist%40example.com")
     end
 
     it " is sent a reset password email via Notify" do
@@ -109,11 +109,11 @@ RSpec.describe "User Features" do
             name: user.name,
             email: user.email,
             organisation: user.organisation.name,
-            link: "http://localhost:3000/users/password/edit?reset_password_token=#{reset_password_token}",
+            link: "http://localhost:3000/account/password/edit?reset_password_token=#{reset_password_token}",
           },
         },
       )
-      visit("/users/password/new")
+      visit("/account/password/new")
       fill_in("user[email]", with: user.email)
       click_button("Send email")
     end

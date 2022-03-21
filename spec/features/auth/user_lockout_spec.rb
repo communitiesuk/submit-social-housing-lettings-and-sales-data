@@ -9,7 +9,7 @@ RSpec.describe "User Lockout" do
 
   context "when login-in with the wrong user password up to a maximum number of attempts" do
     before do
-      visit("/users/sign-in")
+      visit("/account/sign-in")
       max_login_attempts.times do
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "wrong_password")
@@ -18,7 +18,7 @@ RSpec.describe "User Lockout" do
     end
 
     it "locks the user account" do
-      visit("/users/sign-in")
+      visit("/account/sign-in")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")

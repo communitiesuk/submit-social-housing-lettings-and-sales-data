@@ -20,7 +20,7 @@ RSpec.describe "Start Page Features" do
     it "takes you to sign in and then to logs" do
       visit("/")
       click_link("Start now")
-      expect(page).to have_current_path("/users/sign-in?start=true")
+      expect(page).to have_current_path("/account/sign-in?start=true")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")

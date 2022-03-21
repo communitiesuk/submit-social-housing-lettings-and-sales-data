@@ -13,17 +13,17 @@ RSpec.describe OrganisationsController, type: :request do
     describe "#show" do
       it "does not let you see organisation details from org route" do
         get "/organisations/#{organisation.id}", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
 
       it "does not let you see organisation details from details route" do
         get "/organisations/#{organisation.id}/details", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
 
       it "does not let you see organisation users" do
         get "/organisations/#{organisation.id}/users", headers: headers, params: {}
-        expect(response).to redirect_to("/users/sign-in")
+        expect(response).to redirect_to("/account/sign-in")
       end
     end
   end
