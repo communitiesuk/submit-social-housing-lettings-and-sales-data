@@ -15,7 +15,7 @@ private
 
     {
       "data-controller": "numeric-question",
-      "data-action": "numeric-question#calculateFields",
+      "data-action": "input->numeric-question#calculateFields",
       "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
       "data-calculated": question.fields_to_add.to_json,
     }
@@ -26,7 +26,7 @@ private
 
     {
       "data-controller": "conditional-question",
-      "data-action": "conditional-question#displayConditional",
+      "data-action": "click->conditional-question#displayConditional",
       "data-info": question.conditional_for.to_json,
     }
   end

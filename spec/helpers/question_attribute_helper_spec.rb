@@ -15,7 +15,7 @@ RSpec.describe QuestionAttributeHelper do
       brent = questions.find { |q| q.id == "brent" }
       expect(stimulus_html_attributes(brent)).to eq({
         "data-controller": "numeric-question",
-        "data-action": "numeric-question#calculateFields",
+        "data-action": "input->numeric-question#calculateFields",
         "data-target": "case-log-#{brent.result_field.to_s.dasherize}-field",
         "data-calculated": brent.fields_to_add.to_json,
       })
@@ -40,7 +40,7 @@ RSpec.describe QuestionAttributeHelper do
       let(:expected_attribs) do
         {
           "data-controller": "numeric-question conditional-question",
-          "data-action": "numeric-question#calculateFields conditional-question#displayConditional",
+          "data-action": "input->numeric-question#calculateFields click->conditional-question#displayConditional",
           "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
           "data-calculated": question.fields_to_add.to_json,
           "data-info": question.conditional_for.to_json,
