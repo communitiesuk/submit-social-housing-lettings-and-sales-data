@@ -713,6 +713,67 @@ RSpec.describe Validations::FinancialValidations do
         expect(record.errors["household_charge"])
           .to be_empty
       end
+
+      context "when validating ranges based on LA and needstype" do
+        rent_range = LaRentRange.create!(
+          ranges_rent_id: "1",
+          needstype: "General Needs",
+          provider_type: "HA",
+          ons_code: "E07000223",
+          la: "Adur",
+          beds: 1,
+          soft_min: 12.41,
+          soft_max: 89.54,
+          hard_min: 9.87,
+          hard_max: 100.99,
+          year: 2021,
+          renttype: 1,
+        )
+
+        after do
+          rent_range.destroy
+        end
+
+        it "validates hard minimum" do
+          record.needstype = 1
+          record.period = 1
+          record.managing_organisation.provider_type = 2
+          record.la = "E07000223"
+          record.beds = 1
+          record.year = 2021
+          record.brent = 9.17
+          record.renttype = 1
+
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to include(match I18n.t("validations.financial.brent.not_in_range"))
+        end
+
+        it "validates hard max" do
+          record.needstype = 1
+          record.period = 1
+          record.managing_organisation.provider_type = 2
+          record.la = "E07000223"
+          record.beds = 1
+          record.year = 2021
+          record.brent = 200
+          record.renttype = 1
+
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to include(match I18n.t("validations.financial.brent.not_in_range"))
+        end
+
+        it "does not error if some of the fields are missing" do
+          record.managing_organisation.provider_type = 2
+          record.year = 2021
+          record.brent = 200
+
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to be_empty
+        end
+      end
     end
   end
 end

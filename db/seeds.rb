@@ -32,3 +32,16 @@ User.create!(
 )
 
 AdminUser.create!(email: "admin@example.com", password: "password", phone: "000000000")
+
+LaRentRange.create!(
+  ranges_rent_id: "1",
+  lettype: "General Needs HA",
+  ons_code: "E07000223",
+  la: "Adur",
+  bedrooms: 1,
+  soft_min: 12.41,
+  soft_max: 89.54,
+  hard_min: 9.87,
+  hard_max: 100.99,
+  year: "2021",
+)

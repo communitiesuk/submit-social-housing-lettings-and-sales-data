@@ -232,6 +232,24 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
 
+  create_table "la_rent_ranges", force: :cascade do |t|
+    t.integer "ranges_rent_id"
+    t.integer "needstype"
+    t.integer "provider_type"
+    t.string "ons_code"
+    t.string "la"
+    t.integer "beds"
+    t.decimal "soft_min", precision: 10, scale: 2
+    t.decimal "soft_max", precision: 10, scale: 2
+    t.decimal "hard_min", precision: 10, scale: 2
+    t.decimal "hard_max", precision: 10, scale: 2
+    t.integer "year"
+    t.integer "renttype"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["year"], name: "index_la_rent_ranges_on_year"
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string "name"
     t.string "phone"

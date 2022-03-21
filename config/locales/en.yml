@@ -47,7 +47,7 @@ en:
       taken: "Email already exists"
       invalid: "Enter an email address in the correct format, like name@example.com"
       blank: "Enter an email address"
-    
+
     setup:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
@@ -118,6 +118,8 @@ en:
           other_landlord:
             general_needs: "Support charge must be between £0 and £60 per week if the landlord is another RP and it is a general needs letting"
             supported_housing: "Support charge must be between £0 and £120 per week if the landlord is another RP and it is a suported housing letting"
+        brent:
+          not_in_range: "Basic rent is lower than expected based on the lettings type, local authority and number of bedrooms"
       charges:
         complete_1_of_3: 'Only one question out of "Total charge", "Charges for carehomes" and "Does the household pay rent or charges?" needs to be selected and completed'
       tcharge:
