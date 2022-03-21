@@ -39,8 +39,8 @@ class FormController < ApplicationController
       define_method(page.id) do |_errors = {}|
         if @case_log
           if session["errors"]
-            JSON(session["errors"]).each do |field, message|
-              @case_log.errors.add field.to_sym, message.first
+            JSON(session["errors"]).each do |field, messages|
+              messages.each { |message| @case_log.errors.add field.to_sym, message }
             end
           end
           @subsection = @case_log.form.subsection_for_page(page)
