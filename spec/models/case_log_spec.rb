@@ -200,6 +200,7 @@ RSpec.describe CaseLog do
         previous_postcode: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
+        property_void_date: Time.gm(2021, 3, 3),
         net_income_known: 2,
         other_hhmemb: 6,
         rent_type: 4,
@@ -229,6 +230,16 @@ RSpec.describe CaseLog do
       expect(record_from_db["mrcday"]).to eq(4)
       expect(record_from_db["mrcmonth"]).to eq(5)
       expect(record_from_db["mrcyear"]).to eq(2021)
+    end
+
+    it "correctly derives and saves partial and full major property void date" do
+      record_from_db = ActiveRecord::Base.connection.execute("select vday, vmonth, vyear, property_void_date from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["property_void_date"].day).to eq(3)
+      expect(record_from_db["property_void_date"].month).to eq(3)
+      expect(record_from_db["property_void_date"].year).to eq(2021)
+      expect(record_from_db["vday"]).to eq(3)
+      expect(record_from_db["vmonth"]).to eq(3)
+      expect(record_from_db["vyear"]).to eq(2021)
     end
 
     it "correctly derives and saves incref" do

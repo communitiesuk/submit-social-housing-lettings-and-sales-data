@@ -63,6 +63,9 @@ FactoryBot.define do
       unittype_gn { 2 }
       beds { 3 }
       property_void_date { "03/11/2019" }
+      vday { 3 }
+      vmonth { 11 }
+      vyear { 2019 }
       offered { 2 }
       wchair { 1 }
       earnings { 68 }

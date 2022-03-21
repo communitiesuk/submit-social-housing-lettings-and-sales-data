@@ -167,5 +167,8 @@
     <wtcharge>162.5</wtcharge>
     <wtshortfall>6.0</wtshortfall>
     <housingneeds>1</housingneeds>
+    <vday>3</vday>
+    <vmonth>11</vmonth>
+    <vyear>2019</vyear>
   </form>
 </forms>
