@@ -5,31 +5,29 @@
   subsection.label => ""
 }) %>
 
-<%= turbo_frame_tag "case_log_form", target: "_top" do %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters-from-desktop">
-      <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l"><%= subsection.label %></span>
-        Check your answers
-      </h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters-from-desktop">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l"><%= subsection.label %></span>
+      Check your answers
+    </h1>
 
-      <%= display_answered_questions_summary(subsection, @case_log) %>
+    <%= display_answered_questions_summary(subsection, @case_log) %>
 
-      <dl class="govuk-summary-list">
-        <% subsection.applicable_questions(@case_log).each do |question| %>
-          <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
-        <% end %>
-      </dl>
-
-      <%= form_with model: @case_log, method: "get" do |f| %>
-        <%= f.govuk_submit 'Save and return to log' do %>
-          <% if @case_log.status == "in_progress" && @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) == false %>
-            <%= govuk_button_link_to 'Save and go to next incomplete section', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
-          <% elsif @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) %>
-            <%= govuk_button_link_to 'Save and go to submit', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
-          <% end%>
-        <% end %>
+    <dl class="govuk-summary-list">
+      <% subsection.applicable_questions(@case_log).each do |question| %>
+        <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
       <% end %>
-    </div>
+    </dl>
+
+    <%= form_with model: @case_log, method: "get" do |f| %>
+      <%= f.govuk_submit 'Save and return to log' do %>
+        <% if @case_log.status == "in_progress" && @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) == false %>
+          <%= govuk_button_link_to 'Save and go to next incomplete section', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
+        <% elsif @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) %>
+          <%= govuk_button_link_to 'Save and go to submit', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
+        <% end%>
+      <% end %>
+    <% end %>
   </div>
-<% end %>
+</div>

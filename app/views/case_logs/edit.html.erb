@@ -4,30 +4,27 @@
   content_for(:title) => ""
 }) %>
 
-<%= turbo_frame_tag "case_log_form", target: "_top" do %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-xl">
-        <%= content_for(:title) %>
-      </h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
 
-      <% if @case_log.status == "in_progress" %>
-        <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@case_log, :completed) %> of <%= get_subsections_count(@case_log, :all) %> sections completed.</p>
-        <p class="govuk-body govuk-!-margin-bottom-2">
-          <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
-        </p>
-        <p>
-          <% if next_incomplete_section.present? %>
-            <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
-              Skip to next incomplete section: <%= next_incomplete_section.label %>
-            </a>
-          <% end %>
-        </p>
-      <% elsif @case_log.status == "not_started" %>
-        <p class="govuk-body">This log has not been started.</p>
-      <% end %>
-
-      <%= render "tasklist" %>
-    </div>
+    <% if @case_log.status == "in_progress" %>
+      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@case_log, :completed) %> of <%= get_subsections_count(@case_log, :all) %> sections completed.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
+      </p>
+      <p>
+        <% if next_incomplete_section.present? %>
+          <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
+            Skip to next incomplete section: <%= next_incomplete_section.label %>
+          </a>
+        <% end %>
+      </p>
+    <% elsif @case_log.status == "not_started" %>
+      <p class="govuk-body">This log has not been started.</p>
+    <% end %>
+    <%= render "tasklist" %>
   </div>
-<% end %>
+</div>
