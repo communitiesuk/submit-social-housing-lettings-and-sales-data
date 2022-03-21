@@ -129,7 +129,7 @@ RSpec.describe FormController, type: :request do
           let(:answer) { 2000 }
 
           it "re-renders the same page with errors if validation fails" do
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to redirect_to("/logs/#{case_log.id}/#{page_id.dasherize}")
           end
         end
 

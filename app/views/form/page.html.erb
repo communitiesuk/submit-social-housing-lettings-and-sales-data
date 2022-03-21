@@ -9,7 +9,7 @@
 
 <div data-controller="govukfrontend"></div>
 
-<%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+<%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class=<%= @page.questions[0].type == "interruption_screen" ? "govuk-grid-column-full-from-desktop" : "govuk-grid-column-two-thirds-from-desktop"%>>
       <% remove_other_page_errors(@case_log, @page) %>
