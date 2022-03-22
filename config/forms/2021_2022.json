@@ -1457,7 +1457,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic": 0
+                  "ethnic_group": 0
                 }
               ]
             },
