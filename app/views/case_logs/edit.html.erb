@@ -18,10 +18,7 @@
         </p>
         <p>
           <% if next_incomplete_section.present? %>
-            <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>"
-              data-controller="tasklist"
-              data-action="tasklist#addHighlight"
-              data-info=<%= next_incomplete_section.id %>>
+            <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
               Skip to next incomplete section: <%= next_incomplete_section.label %>
             </a>
           <% end %>

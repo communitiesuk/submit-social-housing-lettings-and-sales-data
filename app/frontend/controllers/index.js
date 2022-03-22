@@ -14,6 +14,3 @@ application.register("govukfrontend", GovukfrontendController)
 
 import NumericQuestionController from "./numeric_question_controller.js"
 application.register("numeric-question", NumericQuestionController)
-
-import TasklistController from "./tasklist_controller.js"
-application.register("tasklist", TasklistController)
