@@ -106,7 +106,7 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Affordable rent"
+                      "value": "Affordable Rent"
                     },
                     "2": {
                       "value": "London Affordable Rent"
@@ -132,7 +132,7 @@
                 },
                 "intermediate_rent_product_name": {
                   "check_answer_label": "Product name",
-                  "header": "What is intermediate rent product name?",
+                  "header": "Name of rent product",
                   "type": "text"
                 }
               }
