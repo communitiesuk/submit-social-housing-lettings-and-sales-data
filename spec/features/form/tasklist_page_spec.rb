@@ -42,4 +42,13 @@ RSpec.describe "Task List" do
     visit("/logs/#{empty_case_log.id}")
     expect(page).to have_link("Skip to next incomplete section", href: /#household-characteristics/)
   end
+
+  context "when the 'Skip to next incomplete section is clicked'" do
+    it "jumps to the next incomplete section" do
+      answer_all_questions_in_income_subsection(empty_case_log)
+      visit("/logs/#{empty_case_log.id}")
+      click_link("Skip to next incomplete section")
+      expect(page).to have_current_path("/logs/#{empty_case_log.id}#household-characteristics")
+    end
+  end
 end
