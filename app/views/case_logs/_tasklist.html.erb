@@ -15,7 +15,7 @@
               <%= subsection_link(subsection, @case_log) %>
             </span>
             <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>"
-                    id=<%= subsection.id.dasherize %>>
+                    id="<%= subsection.id.dasherize %>">
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
           </li>

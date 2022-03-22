@@ -26,19 +26,20 @@ RSpec.describe "Task List" do
     sign_in user
   end
 
-  it "skips to the first section if no answers are completed" do
+  it "shows if the section has not been started" do
     visit("/logs/#{empty_case_log.id}")
-    expect(page).to have_link("Skip to next incomplete section", href: /#household_characteristics/)
+    expect(page).to have_content("This log has not been started.")
   end
 
-  it "shows the number of completed sections if no sections are completed" do
-    visit("/logs/#{empty_case_log.id}")
-    expect(page).to have_content("You have completed 0 of 9 sections.")
-  end
-
-  it "shows the number of completed sections if one section is completed" do
+  it "shows number of completed sections if one section is completed" do
     answer_all_questions_in_income_subsection(empty_case_log)
     visit("/logs/#{empty_case_log.id}")
-    expect(page).to have_content("You have completed 1 of 9 sections.")
+    expect(page).to have_content("1 of 9 sections completed.")
+  end
+
+  it "show skip link for next incomplete section" do
+    answer_all_questions_in_income_subsection(empty_case_log)
+    visit("/logs/#{empty_case_log.id}")
+    expect(page).to have_link("Skip to next incomplete section", href: /#household-characteristics/)
   end
 end

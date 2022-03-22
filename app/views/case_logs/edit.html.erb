@@ -11,25 +11,22 @@
         <%= content_for(:title) %>
       </h1>
 
-      <h2 class="govuk-heading-s govuk-!-margin-bottom-2">
-        This log is
-        <%= @case_log.status.to_s.humanize.downcase %>
-      </h2>
+      <% if @case_log.status == "in_progress" %>
+        <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@case_log, :completed) %> of <%= get_subsections_count(@case_log, :all) %> sections completed.</p>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
+        </p>
+        <p>
+          <% if next_incomplete_section.present? %>
+            <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
+              Skip to next incomplete section: <%= next_incomplete_section.label %>
+            </a>
+          <% end %>
+        </p>
+      <% elsif @case_log.status == "not_started" %>
+        <p class="govuk-body">This log has not been started.</p>
+      <% end %>
 
-      <p class="govuk-body govuk-!-margin-bottom-7">You have completed <%= get_subsections_count(@case_log, :completed) %> of <%= get_subsections_count(@case_log, :all) %> sections.</p>
-      <p class="govuk-body govuk-!-margin-bottom-2">
-        <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
-      </p>
-      <p>
-        <% if next_incomplete_section.present? %>
-          <a class="app-section-skip-link" href="#<%= next_incomplete_section.id %>"
-            data-controller="tasklist"
-            data-action="tasklist#addHighlight"
-            data-info=<%= next_incomplete_section.id %>>
-            Skip to next incomplete section: <%= next_incomplete_section.label %>
-          </a>
-        <% end %>
-      </p>
       <%= render "tasklist" %>
     </div>
   </div>
