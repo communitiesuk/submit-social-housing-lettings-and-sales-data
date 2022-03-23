@@ -716,7 +716,7 @@ RSpec.describe Validations::FinancialValidations do
 
       context "when validating ranges based on LA and needstype" do
         before do
-          LaRentRange.find_or_create_by(
+          LaRentRange.create(
             ranges_rent_id: "1",
             la: "E07000223",
             beds: 1,
