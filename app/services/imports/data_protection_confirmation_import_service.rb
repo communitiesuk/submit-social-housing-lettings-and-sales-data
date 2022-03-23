@@ -8,17 +8,25 @@ module Imports
 
     def create_data_protection_confirmation(xml_document)
       org = Organisation.find_by(old_org_id: record_field_value(xml_document, "institution"))
-      dp_officer = User.find_or_create_by(
+      dp_officer = User.find_by(
         name: record_field_value(xml_document, "dp-user"),
         organisation: org,
         role: "data_protection_officer",
       )
-      dp_officer.encrypted_password = SecureRandom.hex(10)
-      dp_officer.save(validate: false)
+
+      if dp_officer.blank?
+        dp_officer = User.new(
+          name: record_field_value(xml_document, "dp-user"),
+          organisation: org,
+          role: "data_protection_officer",
+          encrypted_password: SecureRandom.hex(10),
+        )
+        dp_officer.save!(validate: false)
+      end
 
       DataProtectionConfirmation.create!(
         organisation: org,
-        confirmed: !!record_field_value(xml_document, "data-protection"),
+        confirmed: record_field_value(xml_document, "data-protection").casecmp("true").zero?,
         data_protection_officer: dp_officer,
         old_id: record_field_value(xml_document, "id"),
         old_org_id: record_field_value(xml_document, "institution"),

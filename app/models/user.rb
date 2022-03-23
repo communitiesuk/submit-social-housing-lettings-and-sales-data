@@ -14,7 +14,7 @@ class User < ApplicationRecord
     data_accessor: 0,
     data_provider: 1,
     data_coordinator: 2,
-    data_protection_officer: 3
+    data_protection_officer: 3,
   }.freeze
 
   enum role: ROLES

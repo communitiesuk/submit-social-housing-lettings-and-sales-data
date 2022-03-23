@@ -11,8 +11,8 @@ class CreateDataProtectionConfirmation < ActiveRecord::Migration[7.0]
     end
 
     add_index :data_protection_confirmations,
-      [:organisation_id, :data_protection_officer_id, :confirmed],
-      unique: true,
-      name: "data_protection_confirmations_unique"
+              %i[organisation_id data_protection_officer_id confirmed],
+              unique: true,
+              name: "data_protection_confirmations_unique"
   end
 end
