@@ -1413,6 +1413,14 @@ RSpec.describe CaseLog do
       it "clears the answer" do
         expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from(1).to(nil)
       end
+
+      context "when the question type does not have answer options" do
+        let(:case_log) { FactoryBot.create(:case_log, :in_progress, housingneeds_a: 1, tenant_code: "test") }
+
+        it "clears the answer" do
+          expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :tenant_code).from("test").to(nil)
+        end
+      end
     end
 
     context "with two pages having the same question key, only one's dependency is met" do

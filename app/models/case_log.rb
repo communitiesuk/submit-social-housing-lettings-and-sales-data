@@ -296,7 +296,7 @@ private
       enabled = form.enabled_page_questions(self)
       answer_options = enabled.map(&:id).include?(question.id) ? enabled.find { |q| q.id == question.id }.answer_options : []
       contains_selected_answer_option = answer_options.present? ? answer_options.key?(public_send(question.id).to_s) : false
-      if !contains_selected_answer_option && respond_to?(question.id.to_s) && (question.type == "radio" || question.type == "checkbox")
+      if !contains_selected_answer_option && respond_to?(question.id.to_s)
         public_send("#{question.id}=", nil)
       end
     end
