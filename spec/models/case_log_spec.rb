@@ -1404,6 +1404,160 @@ RSpec.describe CaseLog do
         expect(record_from_db["housingneeds"]).to eq(3)
       end
     end
+
+    context "when it is supported housing and a care home charge has been supplied" do
+      let!(:case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          needstype: 0,
+        })
+      end
+
+      context "when the care home charge is paid bi-weekly" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 100, period: 2)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(50.0)
+          expect(record_from_db["wchchrg"]).to eq(50.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 2)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(50.06)
+          expect(record_from_db["wchchrg"]).to eq(50.06)
+        end
+      end
+
+      context "when the care home charge is paid every 4 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 120, period: 3)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(30.0)
+          expect(record_from_db["wchchrg"]).to eq(30.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 3)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(25.03)
+          expect(record_from_db["wchchrg"]).to eq(25.03)
+        end
+      end
+
+      context "when the care home charge is paid every calendar month" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 4)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(30.0)
+          expect(record_from_db["wchchrg"]).to eq(30.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 4)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(23.10)
+          expect(record_from_db["wchchrg"]).to eq(23.10)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 50 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 5)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(125.0)
+          expect(record_from_db["wchchrg"]).to eq(125.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 5)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(96.27)
+          expect(record_from_db["wchchrg"]).to eq(96.27)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 49 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 6)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(122.5)
+          expect(record_from_db["wchchrg"]).to eq(122.5)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 6)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(94.34)
+          expect(record_from_db["wchchrg"]).to eq(94.34)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 48 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 7)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(120.0)
+          expect(record_from_db["wchchrg"]).to eq(120.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 7)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(92.42)
+          expect(record_from_db["wchchrg"]).to eq(92.42)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 47 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 8)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(117.5)
+          expect(record_from_db["wchchrg"]).to eq(117.5)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 8)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(90.49)
+          expect(record_from_db["wchchrg"]).to eq(90.49)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 46 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 9)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(115.0)
+          expect(record_from_db["wchchrg"]).to eq(115.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 9)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(88.57)
+          expect(record_from_db["wchchrg"]).to eq(88.57)
+        end
+      end
+
+      context "when the care home charge is paid weekly for 52 weeks" do
+        it "correctly derives and saves weekly care home charge" do
+          case_log.update!(chcharge: 130, period: 1)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(130.0)
+          expect(record_from_db["wchchrg"]).to eq(130.0)
+        end
+
+        it "correctly derives floats" do
+          case_log.update!(chcharge: 100.12, period: 1)
+          record_from_db = ActiveRecord::Base.connection.execute("select wchchrg from case_logs where id=#{case_log.id}").to_a[0]
+          expect(case_log.wchchrg).to eq(100.12)
+          expect(record_from_db["wchchrg"]).to eq(100.12)
+        end
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
