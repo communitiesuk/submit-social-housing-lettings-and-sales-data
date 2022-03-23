@@ -48,15 +48,16 @@ class CaseLog < ApplicationRecord
     FormHandler.instance.get_form(form_name) || FormHandler.instance.forms.first.second
   end
 
+  def get_collection_start_year
+    window_end_date = Time.zone.local(startdate.year, 4, 1)
+    startdate < window_end_date ? startdate.year - 1 : startdate.year
+  end
+
   def form_name
     return unless startdate
 
-    window_end_date = Time.zone.local(startdate.year, 4, 1)
-    if startdate < window_end_date
-      "#{startdate.year - 1}_#{startdate.year}"
-    else
-      "#{startdate.year}_#{startdate.year + 1}"
-    end
+    collection_start_year = get_collection_start_year
+    "#{collection_start_year}_#{collection_start_year + 1}"
   end
 
   def self.editable_fields

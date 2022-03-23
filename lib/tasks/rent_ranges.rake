@@ -22,7 +22,7 @@ namespace :data_import do
           hard_max: row["hard_max"] },
         unique_by: %i[start_year lettype beds la],
       )
-      count +=1
+      count += 1
     end
     pp "Created/updated #{count} records"
   end
