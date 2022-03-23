@@ -43,7 +43,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           confirmation = Organisation.find_by(old_org_id:).data_protection_confirmations.last
           expect(confirmation.data_protection_officer.name).to eq("John Doe")
           expect(confirmation.confirmed).to be_truthy
-          expect(confirmation.created_at).to eq(Time.zone.local(2018, 06, 05, 10, 36, 49))
+          expect(confirmation.created_at).to eq(Time.zone.local(2018, 0o6, 0o5, 10, 36, 49))
         end
       end
 
@@ -58,7 +58,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           confirmation = Organisation.find_by(old_org_id:).data_protection_confirmations.last
           expect(confirmation.data_protection_officer.id).to eq(data_protection_officer.id)
           expect(confirmation.confirmed).to be_truthy
-          expect(confirmation.created_at).to eq(Time.zone.local(2018, 06, 05, 10, 36, 49))
+          expect(confirmation.created_at).to eq(Time.zone.local(2018, 0o6, 0o5, 10, 36, 49))
         end
 
         context "when the data protection record has already been imported previously" do
