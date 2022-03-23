@@ -368,6 +368,9 @@ private
       self.wpschrge = weekly_value(pscharge) if pscharge.present?
       self.wsupchrg = weekly_value(supcharg) if supcharg.present?
       self.wtcharge = weekly_value(tcharge) if tcharge.present?
+      if is_supported_housing? && chcharge.present?
+        self.wchchrg = weekly_value(chcharge)
+      end
     end
     self.has_benefits = get_has_benefits
     self.wtshortfall = if tshortfall && receives_housing_related_benefits?
