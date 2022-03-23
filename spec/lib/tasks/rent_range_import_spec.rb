@@ -16,10 +16,6 @@ RSpec.describe "data_import" do
       let(:rent_ranges_file_path) { "./spec/fixtures/files/rent_ranges.csv" }
       let(:wrong_file_path) { "/test/no_csv_here.csv" }
 
-      before do
-        LaRentRange.delete_all
-      end
-
       it "creates new rent range records" do
         expect { task.invoke(start_year, rent_ranges_file_path) }.to change(LaRentRange, :count).by(5)
         expect(LaRentRange.where(ranges_rent_id: 1).exists?).to be true
