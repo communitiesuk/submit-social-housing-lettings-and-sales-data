@@ -132,10 +132,8 @@ private
     record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(min, max)
   end
 
-  PROVIDER_TYPE = { "LA" => "LA", "PRP" => "HA" }.freeze
-
   def validate_rent_range(record)
-    rent_range = LaRentRange.find_by(year: record.year, ons_code: record.la, provider_type: PROVIDER_TYPE[record.managing_organisation.provider_type], needstype: record.needstype, beds: record.beds, renttype: record.renttype)
+    rent_range = LaRentRange.find_by(start_year: record.year, la: record.la, beds: record.beds, lettype: record.lettype)
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max)
       record.errors.add :brent, I18n.t("validations.financial.brent.not_in_range")

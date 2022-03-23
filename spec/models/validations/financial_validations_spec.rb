@@ -715,34 +715,27 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       context "when validating ranges based on LA and needstype" do
-        rent_range = LaRentRange.create!(
-          ranges_rent_id: "1",
-          needstype: "General Needs",
-          provider_type: "HA",
-          ons_code: "E07000223",
-          la: "Adur",
-          beds: 1,
-          soft_min: 12.41,
-          soft_max: 89.54,
-          hard_min: 9.87,
-          hard_max: 100.99,
-          year: 2021,
-          renttype: 1,
-        )
-
-        after do
-          rent_range.destroy
+        before do
+          LaRentRange.find_or_create_by(
+            ranges_rent_id: "1",
+            la: "E07000223",
+            beds: 1,
+            lettype: 1,
+            soft_min: 12.41,
+            soft_max: 89.54,
+            hard_min: 9.87,
+            hard_max: 100.99,
+            start_year: 2021,
+          )
         end
 
         it "validates hard minimum" do
-          record.needstype = 1
+          record.lettype = 1
           record.period = 1
-          record.managing_organisation.provider_type = 2
           record.la = "E07000223"
           record.beds = 1
           record.year = 2021
           record.brent = 9.17
-          record.renttype = 1
 
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])
@@ -750,14 +743,12 @@ RSpec.describe Validations::FinancialValidations do
         end
 
         it "validates hard max" do
-          record.needstype = 1
+          record.lettype = 1
           record.period = 1
-          record.managing_organisation.provider_type = 2
           record.la = "E07000223"
           record.beds = 1
           record.year = 2021
           record.brent = 200
-          record.renttype = 1
 
           financial_validator.validate_rent_amount(record)
           expect(record.errors["brent"])

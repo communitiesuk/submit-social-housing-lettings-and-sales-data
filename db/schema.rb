@@ -234,20 +234,17 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
 
   create_table "la_rent_ranges", force: :cascade do |t|
     t.integer "ranges_rent_id"
-    t.integer "needstype"
-    t.integer "provider_type"
-    t.string "ons_code"
+    t.integer "lettype"
     t.string "la"
     t.integer "beds"
     t.decimal "soft_min", precision: 10, scale: 2
     t.decimal "soft_max", precision: 10, scale: 2
     t.decimal "hard_min", precision: 10, scale: 2
     t.decimal "hard_max", precision: 10, scale: 2
-    t.integer "year"
-    t.integer "renttype"
+    t.integer "start_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["year"], name: "index_la_rent_ranges_on_year"
+    t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
   end
 
   create_table "organisations", force: :cascade do |t|
