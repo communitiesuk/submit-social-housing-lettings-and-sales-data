@@ -133,10 +133,18 @@ private
   end
 
   def validate_rent_range(record)
-    rent_range = LaRentRange.find_by(start_year: record.year, la: record.la, beds: record.beds, lettype: record.lettype)
+    return if record.startdate.blank?
+
+    window_end_date = Time.zone.local(record.year, 4, 1)
+    collection_year = record.startdate < window_end_date ? record.year - 1 : record.year
+    rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds, lettype: record.lettype)
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max)
       record.errors.add :brent, I18n.t("validations.financial.brent.not_in_range")
+      record.errors.add :beds, I18n.t("validations.financial.brent.beds.not_in_range")
+      record.errors.add :la, I18n.t("validations.financial.brent.la.not_in_range")
+      record.errors.add :rent_type, I18n.t("validations.financial.brent.rent_type.not_in_range")
+      record.errors.add :needstype, I18n.t("validations.financial.brent.needstype.not_in_range")
     end
   end
 end
