@@ -233,6 +233,19 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
 
+  create_table "data_protection_confirmations", force: :cascade do |t|
+    t.bigint "organisation_id"
+    t.bigint "data_protection_officer_id"
+    t.boolean "confirmed"
+    t.string "old_id"
+    t.string "old_org_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["data_protection_officer_id"], name: "dpo_user_id"
+    t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
+    t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
+  end
+
   create_table "la_rent_ranges", force: :cascade do |t|
     t.integer "ranges_rent_id"
     t.integer "lettype"
