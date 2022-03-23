@@ -1,0 +1,2 @@
+class LaRentRange < ApplicationRecord
+end

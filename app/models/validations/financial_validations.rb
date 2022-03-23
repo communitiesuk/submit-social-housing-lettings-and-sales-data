@@ -65,7 +65,7 @@ module Validations::FinancialValidations
       record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
     end
 
-    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 9.99)
+    if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 0, 9.99)
       record.errors.add :tcharge, I18n.t("validations.financial.tcharge.under_10")
     end
 
@@ -77,6 +77,7 @@ module Validations::FinancialValidations
     end
 
     validate_charges(record)
+    validate_rent_range(record)
   end
 
 private
@@ -121,13 +122,28 @@ private
     %i[scharge pscharge supcharg].each do |charge|
       maximum = CHARGE_MAXIMUMS.dig(charge, LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
 
-      if maximum.present? && !weekly_value_in_range(record, charge, maximum)
+      if maximum.present? && !weekly_value_in_range(record, charge, 0, maximum)
         record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{LANDLORD_VALUES[record.landlord]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
     end
   end
 
-  def weekly_value_in_range(record, field, max)
-    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(0, max)
+  def weekly_value_in_range(record, field, min, max)
+    record[field].present? && record.weekly_value(record[field]).present? && record.weekly_value(record[field]).between?(min, max)
+  end
+
+  def validate_rent_range(record)
+    return if record.startdate.blank?
+
+    collection_year = record.collection_start_year
+    rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds, lettype: record.lettype)
+
+    if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max)
+      record.errors.add :brent, I18n.t("validations.financial.brent.not_in_range")
+      record.errors.add :beds, I18n.t("validations.financial.brent.beds.not_in_range")
+      record.errors.add :la, I18n.t("validations.financial.brent.la.not_in_range")
+      record.errors.add :rent_type, I18n.t("validations.financial.brent.rent_type.not_in_range")
+      record.errors.add :needstype, I18n.t("validations.financial.brent.needstype.not_in_range")
+    end
   end
 end

@@ -34,10 +34,16 @@ Pre-requisites:
 5. Seed the database if required:\
 `rake db:seed`
 
-6. Install the frontend depenencies:\
+6. Seed the database with rent ranges if required (~7000 rows per year):\
+`rake "data_import:rent_ranges[<start_year>,<rent_ranges_path>]"`
+
+    For 2021-2022 ranges run:\
+    `rake "data_import:rent_ranges[2021,config/rent_range_data/2021.csv]"`
+
+7. Install the frontend depenencies:\
   `yarn install`
 
-7. Start the dev servers using foreman:\
+8. Start the dev servers using foreman:\
   `./bin/dev`
 
   Or start them individually:\
