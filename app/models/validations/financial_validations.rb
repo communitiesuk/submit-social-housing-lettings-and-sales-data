@@ -135,7 +135,7 @@ private
   def validate_rent_range(record)
     return if record.startdate.blank?
 
-    collection_year = record.get_collection_start_year
+    collection_year = record.collection_start_year
     rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds, lettype: record.lettype)
 
     if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max)
