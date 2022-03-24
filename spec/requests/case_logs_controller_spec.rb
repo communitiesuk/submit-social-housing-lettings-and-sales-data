@@ -28,6 +28,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:tenant_code) { "T365" }
     let(:age1) { 35 }
     let(:offered) { 12 }
+    let(:period) { 2 }
     let(:property_postcode) { "SE11 6TY" }
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
@@ -41,6 +42,7 @@ RSpec.describe CaseLogsController, type: :request do
           "age1": age1,
           "property_postcode": property_postcode,
           "offered": offered,
+          "period": period,
         }
       end
 
