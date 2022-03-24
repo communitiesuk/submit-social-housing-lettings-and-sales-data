@@ -46,7 +46,7 @@ FactoryBot.define do
       relat2 { 0 }
       age2 { 32 }
       sex2 { "M" }
-      ecstat2 { 5 }
+      ecstat2 { 6 }
       homeless { 1 }
       underoccupation_benefitcap { 0 }
       leftreg { 1 }

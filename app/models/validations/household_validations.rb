@@ -131,15 +131,15 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age > 70 && economic_status != 4
+    if age > 70 && economic_status != 5
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_over_70", person_num:)
     end
-    if age < 16 && economic_status != 8
+    if age < 16 && economic_status != 9
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
     end
-    if economic_status == 8 && age > 16
+    if economic_status == 9 && age > 16
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
     end
@@ -162,7 +162,7 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && relationship == 1 && (economic_status != 6 && economic_status != 10)
+    if age >= 16 && age <= 19 && relationship == 1 && (economic_status != 7 && economic_status != 10)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19", person_num:)
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19", person_num:)
@@ -175,12 +175,12 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status && gender
 
-    if gender == "M" && economic_status == 4 && age < 65
+    if gender == "M" && economic_status == 5 && age < 65
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_male")
       record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_male")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_male")
     end
-    if gender == "F" && economic_status == 4 && age < 60
+    if gender == "F" && economic_status == 5 && age < 60
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_female")
       record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_female")
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_female")
