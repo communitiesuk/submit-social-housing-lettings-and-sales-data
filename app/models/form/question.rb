@@ -74,7 +74,9 @@ class Form::Question
   end
 
   def update_answer_link_name(case_log)
-    link_type = if type == "checkbox"
+    link_type = if has_inferred_check_answers_value?(case_log)
+                  "Change"
+                elsif type == "checkbox"
                   answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } ? "Change" : "Answer"
                 else
                   case_log[id].blank? ? "Answer" : "Change"
