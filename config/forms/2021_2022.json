@@ -1403,12 +1403,12 @@
                     }
                   },
                   "conditional_for": {
-                    "tenant_ethnic_group_mixed_other": [
+                    "ethnic_other": [
                       2
                     ]
                   }
                 },
-                "tenant_ethnic_group_mixed_other": {
+                "ethnic_other": {
                   "header": "How would the lead tenant describe their background? (optional)",
                   "hint_text": "",
                   "type": "text"
@@ -1444,12 +1444,12 @@
                     }
                   },
                   "conditional_for": {
-                    "tenant_ethnic_group_white_other": [
+                    "ethnic_other": [
                       3
                     ]
                   }
                 },
-                "tenant_ethnic_group_white_other": {
+                "ethnic_other": {
                   "header": "How would the lead tenant describe their background? (optional)",
                   "hint_text": "",
                   "type": "text"
@@ -1457,7 +1457,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic": 0
+                  "ethnic_group": 0
                 }
               ]
             },
