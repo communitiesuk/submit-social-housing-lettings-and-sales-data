@@ -24,6 +24,6 @@ namespace :data_import do
       )
       count += 1
     end
-    pp "Created/updated #{count} records"
+    pp "Created/updated #{count} records" unless Rails.env.test?
   end
 end
