@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
   "start_date": "2022-04-01T00:00:00.000+01:00",
-  "end_date": "2023-07-01T00:00:00.000+01:00",
+  "end_date": "2023-03-31T23:59:59.999+01:00",
   "sections": {
     "setup": {
       "label": "Before you start",
@@ -1016,30 +1016,33 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Assured"
-                    },
                     "1": {
-                      "value": "Assured Shorthold"
+                      "value": "Assured Shorthold Tenancy (AST) - fixed term"
                     },
                     "2": {
-                      "value": "Licence agreement (almshouses only)"
+                      "value": "Assured - lifetime"
+                    },
+                    "6": {
+                      "value": "Secure - fixed term"
+                    },
+                    "7": {
+                      "value": "Secure - lifetime"
+                    },
+                    "5": {
+                      "value": "Licence agreement"
                     },
                     "3": {
-                      "value": "Secure (including flexible)"
-                    },
-                    "4": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
                 "tenancyother": {
-                  "header": "Please state the tenancy type",
+                  "header": "Tenancy type",
                   "hint_text": "",
                   "type": "text"
                 }
@@ -1060,25 +1063,28 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Assured"
-                    },
                     "1": {
-                      "value": "Assured Shorthold"
+                      "value": "Assured Shorthold Tenancy (AST) - fixed term"
                     },
                     "2": {
-                      "value": "Licence agreement (almshouses only)"
+                      "value": "Assured - lifetime"
+                    },
+                    "6": {
+                      "value": "Secure - fixed term"
+                    },
+                    "7": {
+                      "value": "Secure - lifetime"
+                    },
+                    "5": {
+                      "value": "Licence agreement"
                     },
                     "3": {
-                      "value": "Secure (including flexible)"
-                    },
-                    "4": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1128,19 +1134,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
-                      "value": "Yes – sheltered housing"
-                    },
                     "1": {
-                      "value": "Yes – extra care housing"
+                      "value": "Yes - specialist retirement housing"
                     },
                     "2": {
+                      "value": "Yes – extra care housing"
+                    },
+                    "3": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
