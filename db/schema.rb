@@ -224,6 +224,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.decimal "wsupchrg", precision: 10, scale: 2
     t.decimal "wtcharge", precision: 10, scale: 2
     t.decimal "wtshortfall", precision: 10, scale: 2
+    t.integer "refused"
     t.integer "housingneeds"
     t.integer "vday"
     t.integer "vmonth"
