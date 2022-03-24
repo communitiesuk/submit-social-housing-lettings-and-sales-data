@@ -318,6 +318,15 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 8
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+      it "validates that a person with economic status 'child' must be under 16" do
+        record.age2 = 21
+        record.relat2 = 1
+        record.ecstat2 = 8
+        household_validator.validate_household_number_of_other_members(record)
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.child_over_16", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_over_16", person_num: 2))
       end
     end
 

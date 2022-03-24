@@ -136,6 +136,9 @@ private
     end
     if age < 16 && economic_status != 8
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
+    if economic_status == 8 && age > 16
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
     end
   end
 

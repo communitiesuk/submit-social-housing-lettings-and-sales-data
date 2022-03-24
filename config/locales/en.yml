@@ -152,11 +152,13 @@ en:
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
+        child_over_16: 'Answer cannot be over 16 as tenant %{person_num} has economic status "Child under 16"'
         lead:
           over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
         retired_over_70: "Tenant %{person_num} must be retired if over 70"
         child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
+        child_over_16: 'Answer cannot be "Child under 16" as tenant %{person_num} is older than 16'
         student_16_19: "If age is between 16 and 19 - tenant %{person_num} must be a full time student or prefer not to say."
       relat:
         child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be Child if their age is under 16"
