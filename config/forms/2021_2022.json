@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
   "start_date": "2021-04-01T00:00:00.000+01:00",
-  "end_date": "2022-07-01T00:00:00.000+01:00",
+  "end_date": "2022-03-31T23:59:59.999+01:00",
   "sections": {
     "setup": {
       "label": "Before you start",
@@ -993,25 +993,25 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1037,25 +1037,25 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
