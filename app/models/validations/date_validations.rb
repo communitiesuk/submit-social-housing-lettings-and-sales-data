@@ -31,9 +31,9 @@ module Validations::DateValidations
   def validate_startdate(record)
     return unless record.startdate && date_valid?("startdate", record)
 
-    if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
-      record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
-    end
+    # if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
+    #   record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
+    # end
   end
 
   def validate_sale_completion_date(record)
