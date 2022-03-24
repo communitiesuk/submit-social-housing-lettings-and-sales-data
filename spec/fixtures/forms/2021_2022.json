@@ -762,6 +762,34 @@
                     "suffix": " every week"
                   }
                 }
+              },
+              "care_home_charge": {
+                "questions": {
+                  "offered": {
+                    "check_answer_label": "Basic Rent",
+                    "header": "What is the basic rent?",
+                    "hint_text": "Eligible for housing benefit or Universal Credit",
+                    "type": "numeric",
+                    "min": 0,
+                    "step": 1,
+                    "width": 4
+                  }
+                },
+                "depends_on": [{"period": 3}]   
+              },
+              "care_home_charge_bi_weekly": {
+                "questions": {
+                  "offered": {
+                    "check_answer_label": "Basic Rent",
+                    "header": "What is the basic rent?",
+                    "hint_text": "Eligible for housing benefit or Universal Credit",
+                    "type": "numeric",
+                    "min": 0,
+                    "step": 1,
+                    "width": 4
+                  }
+                },
+                "depends_on": [{"period": 2}]   
               }
             }
           }

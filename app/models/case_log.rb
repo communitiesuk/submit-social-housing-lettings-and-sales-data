@@ -293,11 +293,14 @@ private
 
   def reset_not_routed_questions
     form.invalidated_page_questions(self).each do |question|
-      enabled = form.enabled_page_questions(self)
-      answer_options = enabled.map(&:id).include?(question.id) ? enabled.find { |q| q.id == question.id }.answer_options : []
-      contains_selected_answer_option = answer_options.present? ? answer_options.key?(public_send(question.id).to_s) : false
-      if !contains_selected_answer_option && respond_to?(question.id.to_s)
-        public_send("#{question.id}=", nil)
+      enabled_questions = form.enabled_page_questions(self)
+      enabled_question_ids = enabled_questions.map(&:id)
+      if %w[radio checkbox].include?(question.type)
+        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
+        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(public_send(question.id).to_s) : false
+        public_send("#{question.id}=", nil) if !current_answer_option_valid && respond_to?(question.id.to_s)
+      else
+        public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
       end
     end
   end

@@ -1593,6 +1593,16 @@ RSpec.describe CaseLog do
       end
     end
 
+    context "when a non select question associated with several pages is routed to" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, period: 2) }
+
+      it "does not clear the answer value" do
+        case_log.update!({ offered: 4 })
+        case_log.reload
+        expect(case_log.offered).to eq(4)
+      end
+    end
+
     context "when the case log does not have a valid form set yet" do
       let(:case_log) { FactoryBot.create(:case_log) }
 
