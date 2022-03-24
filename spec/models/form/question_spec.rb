@@ -207,6 +207,18 @@ RSpec.describe Form::Question, type: :model do
       expect(question.update_answer_link_name(case_log)).to match(/Change/)
     end
 
+    context "when the question has an inferred answer" do
+      let(:section_id) { "tenancy_and_property" }
+      let(:subsection_id) { "property_information" }
+      let(:page_id) { "property_postcode" }
+      let(:case_log) { FactoryBot.build(:case_log, :in_progress, postcode_known: 0, property_postcode: nil) }
+      let(:question_id) { "property_postcode" }
+
+      it "displays 'change' in the check answers link text" do
+        expect(question.update_answer_link_name(case_log)).to match(/Change/)
+      end
+    end
+
     context "when type is date" do
       let(:section_id) { "local_authority" }
       let(:subsection_id) { "local_authority" }
