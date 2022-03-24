@@ -296,6 +296,8 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
           .to include(match I18n.t("validations.household.relat.child_under_16", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_under_16_relat", person_num: 2))
       end
 
       it "expects that person is a child of the tenant" do
@@ -303,6 +305,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.relat2 = 1
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
 
       it "validates that person's economic status must be Child" do
@@ -311,6 +314,8 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
           .to include(match I18n.t("validations.household.ecstat.child_under_16", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.child_under_16", person_num: 2))
       end
 
       it "expects that person's economic status is Child" do
@@ -318,6 +323,9 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 8
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+      end
+
       it "validates that a person with economic status 'child' must be under 16" do
         record.age2 = 21
         record.relat2 = 1
@@ -338,6 +346,10 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
           .to include(match I18n.t("validations.household.ecstat.student_16_19", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.student_16_19", person_num: 2))
+        expect(record.errors["relat2"])
+          .to include(match I18n.t("validations.household.relat.student_16_19", person_num: 2))
       end
 
       it "expects that person can be a full time student" do
@@ -346,6 +358,8 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 6
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+        expect(record.errors["relat2"]).to be_empty
       end
 
       it "expects that person can refuse to share their work status" do
@@ -354,6 +368,8 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 10
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
+        expect(record.errors["relat2"]).to be_empty
       end
     end
 
@@ -364,6 +380,8 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
           .to include(match I18n.t("validations.household.ecstat.retired_over_70", person_num: 2))
+        expect(record.errors["age2"])
+          .to include(match I18n.t("validations.household.age.retired_over_70", person_num: 2))
       end
 
       it "expects that person is retired" do
@@ -371,6 +389,7 @@ RSpec.describe Validations::HouseholdValidations do
         record.ecstat2 = 1
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
     end
 
@@ -382,6 +401,10 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["age2"])
           .to include(match I18n.t("validations.household.age.retired_male"))
+        expect(record.errors["sex2"])
+          .to include(match I18n.t("validations.household.gender.retired_male"))
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.retired_male"))
       end
 
       it "expects that person is over 65" do
@@ -391,6 +414,8 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["sex2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
 
       it "validates that the number of other household members cannot be less than 0" do
@@ -422,6 +447,10 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["age2"])
           .to include(match I18n.t("validations.household.age.retired_female"))
+        expect(record.errors["sex2"])
+          .to include(match I18n.t("validations.household.gender.retired_female"))
+        expect(record.errors["ecstat2"])
+          .to include(match I18n.t("validations.household.ecstat.retired_female"))
       end
 
       it "expects that person is over 60" do
@@ -431,6 +460,8 @@ RSpec.describe Validations::HouseholdValidations do
         household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
+        expect(record.errors["sex2"]).to be_empty
+        expect(record.errors["age2"]).to be_empty
       end
     end
   end
