@@ -30,7 +30,7 @@ module Imports
         data_protection_officer: dp_officer,
         old_id: record_field_value(xml_document, "id"),
         old_org_id: record_field_value(xml_document, "institution"),
-        created_at: record_field_value(xml_document, "change-date").to_time,
+        created_at: record_field_value(xml_document, "change-date").to_time(:utc),
       )
     rescue ActiveRecord::RecordNotUnique
       id = record_field_value(xml_document, "id")
