@@ -1105,19 +1105,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes – sheltered housing"
                     },
-                    "1": {
+                    "2": {
                       "value": "Yes – extra care housing"
                     },
-                    "2": {
+                    "3": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
