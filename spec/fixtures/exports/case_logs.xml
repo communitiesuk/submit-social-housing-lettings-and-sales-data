@@ -166,11 +166,11 @@
     <wsupchrg>17.5</wsupchrg>
     <wtcharge>162.5</wtcharge>
     <wtshortfall>6.0</wtshortfall>
+    <refused>0</refused>
     <housingneeds>1</housingneeds>
     <vday>3</vday>
     <vmonth>11</vmonth>
     <vyear>2019</vyear>
     <wchchrg/>
-    <refused>0</refused>
   </form>
 </forms>
