@@ -299,7 +299,7 @@ RSpec.describe Form::Question, type: :model do
       let(:section_id) { "tenancy_and_property" }
       let(:subsection_id) { "property_information" }
       let(:page_id) { "property_postcode" }
-      let(:question_id) { "property_postcode" }
+      let(:question_id) { "postcode_full" }
 
       it "returns true" do
         case_log["postcode_known"] = 0

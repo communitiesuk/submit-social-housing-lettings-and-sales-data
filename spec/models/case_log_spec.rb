@@ -196,8 +196,8 @@ RSpec.describe CaseLog do
       described_class.create({
         managing_organisation: organisation,
         owning_organisation: organisation,
-        property_postcode: "M1 1AE",
-        previous_postcode: "M2 2AE",
+        postcode_full: "M1 1AE",
+        ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
         property_void_date: Time.gm(2021, 3, 3),
@@ -1145,7 +1145,7 @@ RSpec.describe CaseLog do
           managing_organisation: organisation,
           owning_organisation: organisation,
           postcode_known: 1,
-          property_postcode: "M1 1AE",
+          postcode_full: "M1 1AE",
         })
       end
 
@@ -1156,12 +1156,12 @@ RSpec.describe CaseLog do
       end
 
       it "errors if the property postcode is emptied" do
-        expect { address_case_log.update!({ property_postcode: "" }) }
+        expect { address_case_log.update!({ postcode_full: "" }) }
           .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
       it "errors if the property postcode is not valid" do
-        expect { address_case_log.update!({ property_postcode: "invalid_postcode" }) }
+        expect { address_case_log.update!({ postcode_full: "invalid_postcode" }) }
           .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
@@ -1172,15 +1172,15 @@ RSpec.describe CaseLog do
 
         it "logs a warning" do
           expect(Rails.logger).to receive(:warn).with("Postcodes.io lookup timed out")
-          address_case_log.update!({ postcode_known: 1, property_postcode: "M1 1AD" })
+          address_case_log.update!({ postcode_known: 1, postcode_full: "M1 1AD" })
         end
       end
 
       it "correctly resets all fields if property postcode not known" do
         address_case_log.update!({ postcode_known: 0 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["property_postcode"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["postcode_full"]).to eq(nil)
         expect(address_case_log.la).to eq(nil)
         expect(record_from_db["la"]).to eq(nil)
       end
@@ -1189,15 +1189,15 @@ RSpec.describe CaseLog do
         address_case_log.update!({ postcode_known: 0 })
         address_case_log.update!({ la_known: 1, la: "E09000033" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["property_postcode"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["postcode_full"]).to eq(nil)
         expect(address_case_log.la).to eq("E09000033")
         expect(record_from_db["la"]).to eq("E09000033")
 
-        address_case_log.update!({ postcode_known: 1, property_postcode: "M1 1AD" })
+        address_case_log.update!({ postcode_known: 1, postcode_full: "M1 1AD" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select la, property_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["property_postcode"]).to eq("M1 1AD")
+        record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["postcode_full"]).to eq("M1 1AD")
         expect(address_case_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
       end
@@ -1214,7 +1214,7 @@ RSpec.describe CaseLog do
           managing_organisation: organisation,
           owning_organisation: organisation,
           previous_postcode_known: 1,
-          previous_postcode: "M1 1AE",
+          ppostcode_full: "M1 1AE",
         })
       end
 
@@ -1225,20 +1225,20 @@ RSpec.describe CaseLog do
       end
 
       it "errors if the previous postcode is emptied" do
-        expect { address_case_log.update!({ previous_postcode: "" }) }
+        expect { address_case_log.update!({ ppostcode_full: "" }) }
           .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
       it "errors if the previous postcode is not valid" do
-        expect { address_case_log.update!({ previous_postcode: "invalid_postcode" }) }
+        expect { address_case_log.update!({ ppostcode_full: "invalid_postcode" }) }
           .to raise_error(ActiveRecord::RecordInvalid, /#{I18n.t("validations.postcode")}/)
       end
 
       it "correctly resets all fields if previous postcode not known" do
         address_case_log.update!({ previous_postcode_known: 0 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["previous_postcode"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(address_case_log.prevloc).to eq(nil)
         expect(record_from_db["prevloc"]).to eq(nil)
       end
@@ -1260,15 +1260,15 @@ RSpec.describe CaseLog do
         address_case_log.update!({ previous_postcode_known: 0 })
         address_case_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["previous_postcode"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["ppostcode_full"]).to eq(nil)
         expect(address_case_log.prevloc).to eq("E09000033")
         expect(record_from_db["prevloc"]).to eq("E09000033")
 
-        address_case_log.update!({ previous_postcode_known: 0, previous_postcode: "M1 1AD" })
+        address_case_log.update!({ previous_postcode_known: 0, ppostcode_full: "M1 1AD" })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, previous_postcode from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["previous_postcode"]).to eq("M1 1AD")
+        record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
+        expect(record_from_db["ppostcode_full"]).to eq("M1 1AD")
         expect(address_case_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
       end

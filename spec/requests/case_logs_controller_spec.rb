@@ -29,7 +29,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:age1) { 35 }
     let(:offered) { 12 }
     let(:period) { 2 }
-    let(:property_postcode) { "SE11 6TY" }
+    let(:postcode_full) { "SE11 6TY" }
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
 
@@ -40,7 +40,7 @@ RSpec.describe CaseLogsController, type: :request do
           "managing_organisation_id": managing_organisation.id,
           "tenant_code": tenant_code,
           "age1": age1,
-          "property_postcode": property_postcode,
+          "postcode_full": postcode_full,
           "offered": offered,
           "period": period,
         }
@@ -63,7 +63,7 @@ RSpec.describe CaseLogsController, type: :request do
         json_response = JSON.parse(response.body)
         expect(json_response["tenant_code"]).to eq(tenant_code)
         expect(json_response["age1"]).to eq(age1)
-        expect(json_response["property_postcode"]).to eq(property_postcode)
+        expect(json_response["postcode_full"]).to eq(postcode_full)
       end
 
       context "with invalid json parameters" do
@@ -283,7 +283,7 @@ RSpec.describe CaseLogsController, type: :request do
                                      la_known: 1,
                                      is_la_inferred: true,
                                      postcode_known: 1,
-                                     property_postcode: "PO5 3TE")
+                                     postcode_full: "PO5 3TE")
         id = case_log.id
         get "/logs/#{id}/property-information/check-answers"
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
@@ -309,7 +309,7 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "PATCH" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "M1 1AE")
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "M1 1AE")
     end
     let(:params) do
       { tenant_code: "New Value" }
@@ -327,7 +327,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.property_postcode).to eq("M1 1AE")
+      expect(case_log.postcode_full).to eq("M1 1AE")
     end
 
     context "with an invalid case log id" do
@@ -367,7 +367,7 @@ RSpec.describe CaseLogsController, type: :request do
   # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
   describe "PUT" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", property_postcode: "SW1A 2AA")
+      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "SW1A 2AA")
     end
     let(:params) do
       { tenant_code: "New Value" }
@@ -385,7 +385,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.property_postcode).to eq("SW1A 2AA")
+      expect(case_log.postcode_full).to eq("SW1A 2AA")
     end
 
     context "with an invalid case log id" do

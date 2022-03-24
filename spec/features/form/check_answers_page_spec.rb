@@ -184,9 +184,9 @@ RSpec.describe "Form Check Answers Page" do
           age1: nil,
           layear: 2,
           lawaitlist: 1,
-          property_postcode: "NW1 5TY",
+          postcode_full: "NW1 5TY",
           reason: 4,
-          previous_postcode: "SE2 6RT",
+          ppostcode_full: "SE2 6RT",
           mrcdate: Time.zone.parse("03/11/2019"),
         )
       end

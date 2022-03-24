@@ -22,8 +22,8 @@ class CaseLog < ApplicationRecord
   has_paper_trail
 
   validates_with CaseLogValidator
-  before_validation :process_postcode_changes!, if: :property_postcode_changed?
-  before_validation :process_previous_postcode_changes!, if: :previous_postcode_changed?
+  before_validation :process_postcode_changes!, if: :postcode_full_changed?
+  before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
@@ -332,9 +332,9 @@ private
   end
 
   def set_derived_fields!
-    if previous_postcode.present?
-      self.ppostc1 = UKPostcode.parse(previous_postcode).outcode
-      self.ppostc2 = UKPostcode.parse(previous_postcode).incode
+    if ppostcode_full.present?
+      self.ppostc1 = UKPostcode.parse(ppostcode_full).outcode
+      self.ppostc2 = UKPostcode.parse(ppostcode_full).incode
     end
     if mrcdate.present?
       self.mrcday = mrcdate.day
@@ -397,11 +397,11 @@ private
   end
 
   def process_postcode_changes!
-    process_postcode(property_postcode, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
+    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
   end
 
   def process_previous_postcode_changes!
-    process_postcode(previous_postcode, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
+    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key, outcode_key, incode_key)
@@ -416,11 +416,11 @@ private
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "property_postcode", "postcode", "postcod2", la_known)
+    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", "postcode", "postcod2", la_known)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "previous_postcode", "ppostc1", "ppostc2", previous_la_known)
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", "ppostc1", "ppostc2", previous_la_known)
   end
 
   def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key, is_la_known)

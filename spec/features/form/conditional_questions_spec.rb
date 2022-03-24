@@ -38,9 +38,9 @@ RSpec.describe "Form Conditional Questions" do
 
   context "when a conditional question has a saved answer", js: true do
     it "is displayed correctly" do
-      case_log.update!(postcode_known: 1, property_postcode: "NW1 6RT")
+      case_log.update!(postcode_known: 1, postcode_full: "NW1 6RT")
       visit("/logs/#{id}/property-postcode")
-      expect(page).to have_field("case-log-property-postcode-field", with: "NW1 6RT")
+      expect(page).to have_field("case-log-postcode-full-field", with: "NW1 6RT")
     end
   end
 end

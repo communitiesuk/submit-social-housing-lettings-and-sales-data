@@ -11,7 +11,7 @@ ActiveAdmin.register_page "Dashboard" do
             column :updated_at
             column :status
             column :tenant_code
-            column :property_postcode
+            column :postcode_full
           end
         end
       end

@@ -324,7 +324,7 @@
               "tenancy": 3,
               "landlord": "This landlord",
               "la": "Barnet",
-              "property_postcode": "NW1 5TY",
+              "postcode_full": "NW1 5TY",
               "property_relet": 0,
               "rsnvac": 0,
               "property_reference": "P9876",
@@ -354,7 +354,7 @@
               "layear": 2,
               "lawaitlist": 1,
               "prevloc": "E07000105",
-              "previous_postcode": "SE2 6RT",
+              "ppostcode_full": "SE2 6RT",
               "reasonpref": 1,
               "cbl": 1,
               "chr": 1,
@@ -625,7 +625,7 @@
             "type": "string",
             "minLength": 1
           },
-          "previous_postcode": {
+          "ppostcode_full": {
             "type": "string",
             "minLength": 1
           },
@@ -710,7 +710,7 @@
             "type": "string",
             "minLength": 1
           },
-          "property_postcode": {
+          "postcode_full": {
             "type": "string",
             "minLength": 1
           },
@@ -866,7 +866,7 @@
           "lettype",
           "landlord",
           "la",
-          "previous_postcode",
+          "ppostcode_full",
           "property_relet",
           "rsnvac",
           "property_reference",
@@ -892,7 +892,7 @@
           "layear",
           "lawaitlist",
           "prevloc",
-          "property_postcode",
+          "postcode_full",
           "reasonpref",
           "reasonable_preference_reason",
           "cbl",

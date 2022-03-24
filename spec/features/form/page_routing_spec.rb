@@ -50,7 +50,7 @@ RSpec.describe "Form Page Routing" do
   context "when the answers are inferred", js: true do
     it "shows question if the answer could not be inferred" do
       visit("/logs/#{id}/property-postcode")
-      fill_in("case-log-property-postcode-field", with: "PO5 3TE")
+      fill_in("case-log-postcode-full-field", with: "PO5 3TE")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
     end
@@ -66,7 +66,7 @@ RSpec.describe "Form Page Routing" do
         .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\", \"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
 
       visit("/logs/#{id}/property-postcode")
-      fill_in("case-log-property-postcode-field", with: "P0 5ST")
+      fill_in("case-log-postcode-full-field", with: "P0 5ST")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
     end
