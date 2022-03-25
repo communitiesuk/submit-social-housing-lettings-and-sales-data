@@ -211,7 +211,7 @@ RSpec.describe Form::Question, type: :model do
       let(:section_id) { "tenancy_and_property" }
       let(:subsection_id) { "property_information" }
       let(:page_id) { "property_postcode" }
-      let(:case_log) { FactoryBot.build(:case_log, :in_progress, postcode_known: 0, property_postcode: nil) }
+      let(:case_log) { FactoryBot.build(:case_log, :in_progress, postcode_known: 0, postcode_full: nil) }
       let(:question_id) { "property_postcode" }
 
       it "displays 'change' in the check answers link text" do
