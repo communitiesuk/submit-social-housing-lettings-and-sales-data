@@ -152,7 +152,7 @@ en:
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
-        retired_over_70: 'Answer cannot be over 70 as as tenant %{person_num} has economic status that is not "Retired"'
+        retired_over_70: 'Answer cannot be over 70 as the tenant's %{person_num} working situation is not 'retired''
         child_under_16_relat: 'Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant'
         child_under_16: 'Answer cannot be under 16 as tenant %{person_num} has economic status that is not "Child under 16"'
         child_over_16: 'Answer cannot be over 16 as tenant %{person_num} has economic status "Child under 16"'
