@@ -352,7 +352,7 @@ private
       self.vyear = property_void_date.year
     end
     self.incref = 1 if net_income_refused?
-    self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
+    self.other_hhmemb = hhmemb - 1 if hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
     self.totchild = get_totchild

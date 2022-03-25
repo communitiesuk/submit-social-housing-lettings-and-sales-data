@@ -1149,12 +1149,12 @@
               "header": "",
               "description": "",
               "questions": {
-                "other_hhmemb": {
-                  "check_answer_label": "Number of other household members",
+                "hhmemb": {
+                  "check_answer_label": "Number of household members",
                   "header": "How many people live in the household for this letting?",
                   "hint_text": "You can provide details for a maximum of 8 people.",
                   "type": "numeric",
-                  "min": 0,
+                  "min": 1,
                   "max": 8,
                   "step": 1,
                   "width": 2
