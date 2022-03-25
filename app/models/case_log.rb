@@ -352,11 +352,7 @@ private
       self.vyear = property_void_date.year
     end
     if rsnvac.present?
-      self.newprop = if has_first_let_vacancy_reason?
-                       1
-                     else
-                       2
-                     end
+      self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
     self.incref = 1 if net_income_refused?
     self.hhmemb = other_hhmemb + 1 if other_hhmemb.present?
