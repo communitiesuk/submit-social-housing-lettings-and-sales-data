@@ -8,6 +8,9 @@ FactoryBot.define do
     trait :data_coordinator do
       role { "data_coordinator" }
     end
+    trait :data_protection_officer do
+      role { "data_protection_officer" }
+    end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
