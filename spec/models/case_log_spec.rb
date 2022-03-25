@@ -1577,6 +1577,38 @@ RSpec.describe CaseLog do
         end
       end
     end
+
+    context "when the data provider is filling in the reason for the property being vacant" do
+      let!(:first_let_case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          first_time_property_let_as_social_housing: 1,
+        })
+      end
+
+      let!(:relet_case_log) do
+        described_class.create({
+          managing_organisation: organisation,
+          owning_organisation: organisation,
+          first_time_property_let_as_social_housing: 0,
+        })
+      end
+
+      it "the newprop variable is correctly derived and saved as 1 for a first let vacancy reason" do
+        first_let_case_log.update!({ rsnvac: 15 })
+        record_from_db = ActiveRecord::Base.connection.execute("select newprop from case_logs where id=#{first_let_case_log.id}").to_a[0]
+        expect(record_from_db["newprop"]).to eq(1)
+        expect(first_let_case_log["newprop"]).to eq(1)
+      end
+
+      it "the newprop variable is correctly derived and saved as 2 for anything that is not a first let vacancy reason" do
+        relet_case_log.update!({ rsnvac: 2 })
+        record_from_db = ActiveRecord::Base.connection.execute("select newprop from case_logs where id=#{relet_case_log.id}").to_a[0]
+        expect(record_from_db["newprop"]).to eq(2)
+        expect(relet_case_log["newprop"]).to eq(2)
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
