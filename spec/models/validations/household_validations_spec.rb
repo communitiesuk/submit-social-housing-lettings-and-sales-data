@@ -276,15 +276,15 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "household member validations" do
     it "validates that only 1 partner exists" do
-      record.relat2 = 0
-      record.relat3 = 0
+      record.relat2 = "P"
+      record.relat3 = "P"
       household_validator.validate_household_number_of_other_members(record)
       expect(record.errors["base"])
         .to include(match I18n.t("validations.household.relat.one_partner"))
     end
 
     it "expects that a tenant can have a partner" do
-      record.relat3 = 0
+      record.relat3 = "P"
       household_validator.validate_household_number_of_other_members(record)
       expect(record.errors["base"]).to be_empty
     end
@@ -292,7 +292,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when the household contains a person under 16" do
       it "validates that person must be a child of the tenant" do
         record.age2 = 14
-        record.relat2 = 0
+        record.relat2 = "P"
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"])
           .to include(match I18n.t("validations.household.relat.child_under_16", person_num: 2))
@@ -302,7 +302,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "expects that person is a child of the tenant" do
         record.age2 = 14
-        record.relat2 = 1
+        record.relat2 = "C"
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["relat2"]).to be_empty
         expect(record.errors["age2"]).to be_empty
@@ -328,7 +328,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "validates that a person with economic status 'child' must be under 16" do
         record.age2 = 21
-        record.relat2 = 1
+        record.relat2 = "C"
         record.ecstat2 = 9
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
@@ -341,7 +341,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when the household contains a tenant's child between the ages of 16 and 19" do
       it "validates that person's economic status must be full time student or refused" do
         record.age2 = 17
-        record.relat2 = 1
+        record.relat2 = "C"
         record.ecstat2 = 1
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"])
@@ -354,7 +354,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "expects that person can be a full time student" do
         record.age2 = 17
-        record.relat2 = 1
+        record.relat2 = "C"
         record.ecstat2 = 7
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
@@ -364,7 +364,7 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "expects that person can refuse to share their work status" do
         record.age2 = 17
-        record.relat2 = 1
+        record.relat2 = "C"
         record.ecstat2 = 10
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty

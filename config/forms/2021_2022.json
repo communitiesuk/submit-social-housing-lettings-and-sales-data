@@ -1626,20 +1626,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -1834,20 +1834,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -2039,20 +2039,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -2241,20 +2241,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -2440,20 +2440,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -2636,20 +2636,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -2829,20 +2829,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "P": {
                       "value": "Partner"
                     },
-                    "1": {
+                    "C": {
                       "value": "Child",
                       "hint": "Must be eligible for child benefit, aged under 16 or under 20 if still in full-time education."
                     },
-                    "2": {
+                    "X": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "R": {
                       "value": "Person prefers not to say"
                     }
                   }

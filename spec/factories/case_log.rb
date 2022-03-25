@@ -43,7 +43,7 @@ FactoryBot.define do
       ecstat1 { 0 }
       other_hhmemb { 1 }
       hhmemb { 2 }
-      relat2 { 0 }
+      relat2 { "P" }
       age2 { 32 }
       sex2 { "M" }
       ecstat2 { 6 }

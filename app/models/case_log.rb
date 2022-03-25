@@ -440,7 +440,7 @@ private
 
   def get_totchild
     relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
-    relationships.count(1)
+    relationships.count("C")
   end
 
   def get_totadult
@@ -448,7 +448,7 @@ private
     total + (2..8).count do |i|
       age = public_send("age#{i}")
       relat = public_send("relat#{i}")
-      !age.nil? && ((age >= 16 && age < 18 && [0, 2].include?(relat)) || age >= 18 && age < 60)
+      !age.nil? && ((age >= 16 && age < 18 && %w[P X].include?(relat)) || age >= 18 && age < 60)
     end
   end
 
@@ -546,7 +546,7 @@ private
   end
 
   def relat_refused?
-    [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?(3)
+    [relat2, relat3, relat4, relat5, relat6, relat7, relat8].any?("R")
   end
 
   def ecstat_refused?

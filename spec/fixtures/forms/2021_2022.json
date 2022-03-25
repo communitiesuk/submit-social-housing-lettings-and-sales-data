@@ -137,10 +137,10 @@
                     "header": "What is person 2’s relationship to lead tenant",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "X": {
                         "value":  "Other"
                       },
-                      "1": {
+                      "R": {
                         "value":  "Prefer not to say"
                       }
                     }
@@ -775,7 +775,7 @@
                     "width": 4
                   }
                 },
-                "depends_on": [{"period": 3}]   
+                "depends_on": [{"period": 3}]
               },
               "care_home_charge_bi_weekly": {
                 "questions": {
@@ -789,7 +789,7 @@
                     "width": 4
                   }
                 },
-                "depends_on": [{"period": 2}]   
+                "depends_on": [{"period": 2}]
               }
             }
           }
