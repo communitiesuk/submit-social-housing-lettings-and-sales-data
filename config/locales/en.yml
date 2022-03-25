@@ -154,22 +154,22 @@ en:
         retired_female: "Female tenant who is retired must be 60 or over"
         retired_over_70: 'Answer cannot be over 70 as as tenant %{person_num} has economic status that is not "Retired"'
         child_under_16_relat: 'Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant'
-        child_under_16: 'Answer cannot be under 16 as tenant %{person_num} has economic status that is not "Child under 16"'
-        child_over_16: 'Answer cannot be over 16 as tenant %{person_num} has economic status "Child under 16"'
-        student_16_19: 'Answer cannot be between 16 and 19 as tenant %{person_num} is a child of the lead tenant but is not a full time student'
+        child_under_16: "Answer cannot be under 16 as tenant's %{person_num} working situation is not 'child under 16'"
+        child_over_16: "Answer cannot be over 16 as tenant's %{person_num} working situation is 'child under 16'"
+        student_16_19: 'Answer cannot be between 16 and 19 as tenant %{person_num} is a child of the lead tenant but is not a full-time student'
         lead:
           over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
         retired_over_70: "Tenant %{person_num} must be retired if over 70"
         child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
-        child_over_16: 'Answer cannot be "Child under 16" as tenant %{person_num} is older than 16'
+        child_over_16: "Answer cannot be 'child under 16' as tenant %{person_num} is older than 16"
         student_16_19: "If age is between 16 and 19 - tenant %{person_num} must be a full time student or prefer not to say."
-        retired_male: "Male tenant who is under 65 cannot be retired"
-        retired_female: "Female tenant who is under 60 cannot be retired"
+        retired_male: "Answer cannot be 'retired' as male tenant is under 65"
+        retired_female: "Answer cannot be 'retired' as female tenant is under 60"
       relat:
         child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be Child if their age is under 16"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: 'Answer cannot be "Child" as tenant %{person_num} is between 16 and 19 but is not a full time student'
+        student_16_19: "Answer cannot be 'child' as tenant %{person_num} is between 16 and 19 but is not a full-time student"
       housingneeds_a:
         one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
       prevten:
@@ -194,8 +194,8 @@ en:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter a local authority"
       gender:
-        retired_male: 'Answer cannot be "Male" as tenant is under 65 and retired'
-        retired_female: 'Answer cannot be "Female" as tenant is under 60 and retired'
+        retired_male: "Answer cannot be 'male' as tenant is under 65 and retired"
+        retired_female: "Answer cannot be 'female' as tenant is under 60 and retired"
         male_refuge: "Answer cannot be male as you told us their housing situation immediately before this letting was a refuge"
       reason:
         not_internal_transfer: "Answer cannot be permanently decanted from another property owned by this landlord as you told us the source of referral for this tenancy was not an internal transfer"
