@@ -185,7 +185,7 @@ class CaseLog < ApplicationRecord
   end
 
   def has_first_let_vacancy_reason?
-    [11, 12, 13].include?(rsnvac)
+    [15, 16, 17].include?(rsnvac)
   end
 
   def previous_tenancy_was_temporary?

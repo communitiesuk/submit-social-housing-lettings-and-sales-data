@@ -60,6 +60,6 @@ private
   end
 
   def is_rsnvac_first_let?(record)
-    [11, 12, 13].include?(record["rsnvac"])
+    [15, 16, 17].include?(record["rsnvac"])
   end
 end

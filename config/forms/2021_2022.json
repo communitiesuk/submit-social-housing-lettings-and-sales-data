@@ -710,14 +710,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "12": {
+                    "15": {
+                      "value": "First let of new-build property"
+                    },
+                    "16": {
                       "value": "First let of conversion, rehabilitation or acquired property"
                     },
-                    "13": {
+                    "17": {
                       "value": "First let of leased property"
-                    },
-                    "11": {
-                      "value": "First let of new-build property"
                     }
                   }
                 }
@@ -886,11 +886,11 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": 12
+                  "rsnvac": 16
                 },
                 {
                   "renewal": 0,
-                  "rsnvac": 13
+                  "rsnvac": 17
                 }
               ]
             },
@@ -908,7 +908,7 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": 11
+                  "rsnvac": 15
                 }
               ]
             },
@@ -945,11 +945,11 @@
               "depends_on": [
                 {
                   "renewal": 0,
-                  "rsnvac": 12
+                  "rsnvac": 16
                 },
                 {
                   "renewal": 0,
-                  "rsnvac": 13
+                  "rsnvac": 17
                 }
               ]
             }
