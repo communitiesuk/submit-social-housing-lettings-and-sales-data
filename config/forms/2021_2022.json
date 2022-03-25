@@ -1537,13 +1537,13 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1552,19 +1552,16 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
-                      "value": "Child under 16"
-                    },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
@@ -1743,13 +1740,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1758,26 +1755,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -1951,13 +1948,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1966,26 +1963,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -2156,13 +2153,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2171,26 +2168,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -2358,13 +2355,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2373,26 +2370,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -2557,13 +2554,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2572,26 +2569,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -2753,13 +2750,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2768,26 +2765,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -2946,13 +2943,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "2": {
+                    "7": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2961,26 +2958,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "5": {
+                    "6": {
                       "value": "Not seeking work"
                     },
-                    "6": {
+                    "8": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "7": {
+                    "5": {
                       "value": "Retired"
                     },
-                    "8": {
+                    "9": {
                       "value": "Child under 16"
                     },
-                    "9": {
+                    "0": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Person prefers not to say"
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }

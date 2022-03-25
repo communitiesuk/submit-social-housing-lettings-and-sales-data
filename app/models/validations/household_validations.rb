@@ -131,11 +131,17 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age > 70 && economic_status != 4
+    if age > 70 && !tenant_is_retired?(economic_status)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_over_70", person_num:)
     end
-    if age < 16 && economic_status != 8
+    if age < 16 && !tenant_is_economic_child?(economic_status)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
+    end
+    if tenant_is_economic_child?(economic_status) && age > 16
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_over_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_over_16", person_num:)
     end
   end
 
@@ -144,8 +150,9 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && relationship
 
-    if age < 16 && relationship != 1
+    if age < 16 && !tenant_is_child?(relationship)
       record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.child_under_16", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16_relat", person_num:)
     end
   end
 
@@ -155,8 +162,10 @@ private
     relationship = record.public_send("relat#{person_num}")
     return unless age && economic_status && relationship
 
-    if age >= 16 && age <= 19 && relationship == 1 && (economic_status != 6 && economic_status != 10)
+    if age >= 16 && age <= 19 && tenant_is_child?(relationship) && (!tenant_is_fulltime_student?(economic_status) && !tenant_economic_status_refused?(economic_status))
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.student_16_19", person_num:)
+      record.errors.add "age#{person_num}", I18n.t("validations.household.age.student_16_19", person_num:)
+      record.errors.add "relat#{person_num}", I18n.t("validations.household.relat.student_16_19", person_num:)
     end
   end
 
@@ -166,11 +175,15 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status && gender
 
-    if gender == "M" && economic_status == 4 && age < 65
+    if gender == "M" && tenant_is_retired?(economic_status) && age < 65
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_male")
+      record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_male")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_male")
     end
-    if gender == "F" && economic_status == 4 && age < 60
+    if gender == "F" && tenant_is_retired?(economic_status) && age < 60
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_female")
+      record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_female")
+      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_female")
     end
   end
 
@@ -179,5 +192,25 @@ private
     if partner_count > 1
       record.errors.add :base, I18n.t("validations.household.relat.one_partner")
     end
+  end
+
+  def tenant_is_retired?(economic_status)
+    economic_status == 5
+  end
+
+  def tenant_is_economic_child?(economic_status)
+    economic_status == 9
+  end
+
+  def tenant_is_fulltime_student?(economic_status)
+    economic_status == 7
+  end
+
+  def tenant_economic_status_refused?(economic_status)
+    economic_status == 10
+  end
+
+  def tenant_is_child?(relationship)
+    relationship == 1
   end
 end
