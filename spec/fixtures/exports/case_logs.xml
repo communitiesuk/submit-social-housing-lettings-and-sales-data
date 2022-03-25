@@ -150,13 +150,6 @@
     <is_previous_la_inferred>false</is_previous_la_inferred>
     <ethnic_other/>
     <letting_allocation_unknown/>
-    <relat2>0</relat2>
-    <relat3/>
-    <relat4/>
-    <relat5/>
-    <relat6/>
-    <relat7/>
-    <relat8/>
     <rent_type>1</rent_type>
     <has_benefits>1</has_benefits>
     <renewal>0</renewal>
@@ -172,5 +165,12 @@
     <vmonth>11</vmonth>
     <vyear>2019</vyear>
     <wchchrg/>
+    <relat2>P</relat2>
+    <relat3/>
+    <relat4/>
+    <relat5/>
+    <relat6/>
+    <relat7/>
+    <relat8/>
   </form>
 </forms>

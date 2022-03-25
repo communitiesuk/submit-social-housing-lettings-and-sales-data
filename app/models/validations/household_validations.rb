@@ -188,7 +188,7 @@ private
   end
 
   def validate_partner_count(record)
-    partner_count = (2..8).count { |n| record.public_send("relat#{n}")&.zero? }
+    partner_count = (2..8).count { |n| tenant_is_partner?(record["relat#{n}"]) }
     if partner_count > 1
       record.errors.add :base, I18n.t("validations.household.relat.one_partner")
     end
@@ -210,7 +210,11 @@ private
     economic_status == 10
   end
 
+  def tenant_is_partner?(relationship)
+    relationship == "P"
+  end
+
   def tenant_is_child?(relationship)
-    relationship == 1
+    relationship == "C"
   end
 end
