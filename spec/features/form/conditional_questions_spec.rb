@@ -40,7 +40,7 @@ RSpec.describe "Form Conditional Questions" do
     it "is displayed correctly" do
       case_log.update!(postcode_known: 1, postcode_full: "NW1 6RT")
       visit("/logs/#{id}/property-postcode")
-      expect(page).to have_field("case-log-postcode-full-field", with: "NW1 6RT")
+      expect(page).to have_field("case-log-postcode-full-field", with: "NW16RT")
     end
   end
 end

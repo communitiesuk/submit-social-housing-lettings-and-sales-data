@@ -29,7 +29,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:age1) { 35 }
     let(:offered) { 12 }
     let(:period) { 2 }
-    let(:postcode_full) { "SE11 6TY" }
+    let(:postcode_full) { "SE116TY" }
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
 
@@ -327,7 +327,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.postcode_full).to eq("M1 1AE")
+      expect(case_log.postcode_full).to eq("M11AE")
     end
 
     context "with an invalid case log id" do
@@ -385,7 +385,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenant_code).to eq("New Value")
-      expect(case_log.postcode_full).to eq("SW1A 2AA")
+      expect(case_log.postcode_full).to eq("SW1A2AA")
     end
 
     context "with an invalid case log id" do

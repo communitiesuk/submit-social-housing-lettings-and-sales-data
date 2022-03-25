@@ -397,10 +397,12 @@ private
   end
 
   def process_postcode_changes!
+    self.postcode_full = postcode_full.present? ? postcode_full.upcase.gsub(/\s+/, "") : postcode_full
     process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
   end
 
   def process_previous_postcode_changes!
+    self.ppostcode_full = ppostcode_full.present? ? ppostcode_full.upcase.gsub(/\s+/, "") : ppostcode_full
     process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
   end
 
