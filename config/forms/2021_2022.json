@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
   "start_date": "2021-04-01T00:00:00.000+01:00",
-  "end_date": "2022-07-01T00:00:00.000+01:00",
+  "end_date": "2022-03-31T23:59:59.999+01:00",
   "sections": {
     "setup": {
       "label": "Before you start",
@@ -993,25 +993,25 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1037,25 +1037,25 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1105,19 +1105,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes – sheltered housing"
                     },
-                    "1": {
+                    "2": {
                       "value": "Yes – extra care housing"
                     },
-                    "2": {
+                    "3": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
@@ -1403,12 +1403,12 @@
                     }
                   },
                   "conditional_for": {
-                    "ethnic_other": [
+                    "tenant_ethnic_group_mixed_other": [
                       2
                     ]
                   }
                 },
-                "ethnic_other": {
+                "tenant_ethnic_group_mixed_other": {
                   "header": "How would the lead tenant describe their background? (optional)",
                   "hint_text": "",
                   "type": "text"
@@ -1444,12 +1444,12 @@
                     }
                   },
                   "conditional_for": {
-                    "ethnic_other": [
+                    "tenant_ethnic_group_white_other": [
                       3
                     ]
                   }
                 },
-                "ethnic_other": {
+                "tenant_ethnic_group_white_other": {
                   "header": "How would the lead tenant describe their background? (optional)",
                   "hint_text": "",
                   "type": "text"
@@ -1457,7 +1457,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 0
+                  "ethnic": 0
                 }
               ]
             },
@@ -1537,13 +1537,13 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1552,16 +1552,19 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "0": {
+                    "8": {
+                      "value": "Child under 16"
+                    },
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
@@ -1740,13 +1743,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1755,26 +1758,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -1948,13 +1951,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -1963,26 +1966,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2153,13 +2156,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2168,26 +2171,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2355,13 +2358,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2370,26 +2373,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2554,13 +2557,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2569,26 +2572,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2750,13 +2753,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2765,26 +2768,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -2943,13 +2946,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
+                    "0": {
                       "value": "Part-time – Less than 30 hours"
                     },
                     "1": {
                       "value": "Full-time – 30 hours or more"
                     },
-                    "7": {
+                    "2": {
                       "value": "Full-time student"
                     },
                     "3": {
@@ -2958,26 +2961,26 @@
                     "4": {
                       "value": "Jobseeker"
                     },
-                    "6": {
+                    "5": {
                       "value": "Not seeking work"
                     },
-                    "8": {
+                    "6": {
                       "value": "Unable to work because of long term sick or disability"
                     },
-                    "5": {
+                    "7": {
                       "value": "Retired"
                     },
-                    "9": {
+                    "8": {
                       "value": "Child under 16"
                     },
-                    "0": {
+                    "9": {
                       "value": "Other"
                     },
                     "divider": {
                       "value": true
                     },
                     "10": {
-                      "value": "Tenant prefers not to say"
+                      "value": "Person prefers not to say"
                     }
                   }
                 }
@@ -4574,11 +4577,18 @@
               }
             },
             "check_income_amount": {
-              "depends_on": [{ "net_income_soft_validation_triggered?": true }],
+              "depends_on": [
+                {
+                  "net_income_soft_validation_triggered?": true
+                }
+              ],
               "title_text": "Net income is outside the expected range based on the main tenant’s working situation",
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
-                "argument": ["ecstat1", "earnings"]
+                "argument": [
+                  "ecstat1",
+                  "earnings"
+                ]
               },
               "questions": {
                 "net_income_value_check": {
@@ -4588,10 +4598,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
