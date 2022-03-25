@@ -202,7 +202,7 @@ RSpec.describe CaseLog do
         mrcdate: Time.gm(2021, 5, 4),
         property_void_date: Time.gm(2021, 3, 3),
         net_income_known: 2,
-        other_hhmemb: 6,
+        hhmemb: 7,
         rent_type: 4,
         needstype: 1,
         hb: 1,
@@ -247,9 +247,9 @@ RSpec.describe CaseLog do
       expect(record_from_db["incref"]).to eq(1)
     end
 
-    it "correctly derives and saves hhmemb" do
-      record_from_db = ActiveRecord::Base.connection.execute("select hhmemb from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["hhmemb"]).to eq(7)
+    it "correctly derives and saves other_hhmemb" do
+      record_from_db = ActiveRecord::Base.connection.execute("select other_hhmemb from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["other_hhmemb"]).to eq(6)
     end
 
     it "correctly derives and saves renttype" do
