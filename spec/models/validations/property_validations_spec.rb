@@ -235,13 +235,13 @@ RSpec.describe Validations::PropertyValidations do
 
       it "expects to have a first let reason for vacancy" do
         record.first_time_property_let_as_social_housing = 1
-        record.rsnvac = 11
+        record.rsnvac = 15
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = 12
+        record.rsnvac = 16
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = 13
+        record.rsnvac = 17
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
       end
@@ -250,15 +250,15 @@ RSpec.describe Validations::PropertyValidations do
     context "when the property has been let as social housing before" do
       it "validates that the reason for vacancy is not a first let as social housing reason" do
         record.first_time_property_let_as_social_housing = 0
-        record.rsnvac = 11
+        record.rsnvac = 15
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
-        record.rsnvac = 12
+        record.rsnvac = 16
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
-        record.rsnvac = 13
+        record.rsnvac = 17
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"])
           .to include(match I18n.t("validations.property.rsnvac.first_let_not_social"))
@@ -266,13 +266,13 @@ RSpec.describe Validations::PropertyValidations do
 
       it "expects the reason for vacancy to be a first let as social housing reason" do
         record.first_time_property_let_as_social_housing = 1
-        record.rsnvac = 11
+        record.rsnvac = 15
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = 12
+        record.rsnvac = 16
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
-        record.rsnvac = 13
+        record.rsnvac = 17
         property_validator.validate_rsnvac(record)
         expect(record.errors["rsnvac"]).to be_empty
       end

@@ -65,7 +65,7 @@ RSpec.describe Validations::DateValidations do
 
     context "when reason for vacancy is first let of property" do
       it "validates that no major repair date is provided for a new build" do
-        record.rsnvac = 11
+        record.rsnvac = 15
         record.mrcdate = Time.zone.local(2022, 1, 1)
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
@@ -73,7 +73,7 @@ RSpec.describe Validations::DateValidations do
       end
 
       it "validates that no major repair date is provided for a conversion" do
-        record.rsnvac = 12
+        record.rsnvac = 16
         record.mrcdate = Time.zone.local(2022, 1, 1)
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])
@@ -81,7 +81,7 @@ RSpec.describe Validations::DateValidations do
       end
 
       it "validates that no major repair date is provided for a leased property" do
-        record.rsnvac = 13
+        record.rsnvac = 17
         record.mrcdate = Time.zone.local(2022, 1, 1)
         date_validator.validate_property_major_repairs(record)
         expect(record.errors["mrcdate"])

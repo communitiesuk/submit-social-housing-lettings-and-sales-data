@@ -223,6 +223,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "vmonth"
     t.integer "vyear"
     t.decimal "wchchrg", precision: 10, scale: 2
+    t.integer "newprop"
     t.string "relat2"
     t.string "relat3"
     t.string "relat4"
