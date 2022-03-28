@@ -26,7 +26,7 @@
         spellcheck: "false"
       %>
 
-      <%= f.govuk_check_boxes_fieldset :is_dpo, multiple: false, legend: { text: "Are they a data protection officer?", size: "m" } do %>
+      <%= f.govuk_check_boxes_fieldset :is_dpo, multiple: false, legend: { text: "Are #{@user == current_user ? "you" : "they"} a data protection officer?", size: "m" } do %>
         <%= f.govuk_check_box :is_dpo, 1, 0, multiple: false, link_errors: true, label: { text: "Yes" } %>
       <% end %>
 
