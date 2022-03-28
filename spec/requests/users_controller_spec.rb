@@ -5,8 +5,9 @@ RSpec.describe UsersController, type: :request do
   let(:other_user) { FactoryBot.create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:new_value) { "new test name" }
-  let(:params) { { id: user.id, user: { name: new_value } } }
+  let(:new_name) { "new test name" }
+  let(:new_email) { "new@example.com" }
+  let(:params) { { id: user.id, user: { name: new_name } } }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
@@ -56,7 +57,7 @@ RSpec.describe UsersController, type: :request do
         context "when the reset token is valid" do
           let(:params) do
             {
-              id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+              id: user.id, user: { password: new_name, password_confirmation: "something_else" }
             }
           end
 
@@ -78,8 +79,8 @@ RSpec.describe UsersController, type: :request do
             {
               id: user.id,
               user: {
-                password: new_value,
-                password_confirmation: new_value,
+                password: new_name,
+                password_confirmation: new_name,
                 reset_password_token: raw,
               },
             }
@@ -199,7 +200,7 @@ RSpec.describe UsersController, type: :request do
 
         it "updates the user" do
           user.reload
-          expect(user.name).to eq(new_value)
+          expect(user.name).to eq(new_name)
         end
 
         it "tracks who updated the record" do
@@ -207,6 +208,16 @@ RSpec.describe UsersController, type: :request do
           whodunnit_actor = user.versions.last.actor
           expect(whodunnit_actor).to be_a(User)
           expect(whodunnit_actor.id).to eq(user.id)
+        end
+
+        context "when user changes email and dpo" do
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+
+          it "allows changing email and dpo" do
+            user.reload
+            expect(user.email).to eq(new_email)
+            expect(user.is_data_protection_officer?).to be true
+          end
         end
       end
 
@@ -224,7 +235,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when the current user does not matches the user ID" do
-        let(:params) { { id: other_user.id, user: { name: new_value } } }
+        let(:params) { { id: other_user.id, user: { name: new_name } } }
 
         before do
           sign_in user
@@ -239,7 +250,7 @@ RSpec.describe UsersController, type: :request do
       context "when we update the user password" do
         let(:params) do
           {
-            id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+            id: user.id, user: { password: new_name, password_confirmation: "something_else" }
           }
         end
 
@@ -284,7 +295,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "shows the user details page" do
-            expect(page).to have_content("#{other_user.name}'s account")
+            expect(page).to have_content("#{other_user.name}’s account")
           end
         end
 
@@ -326,7 +337,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "shows the user details page" do
-            expect(page).to have_content("Change #{other_user.name}'s personal details")
+            expect(page).to have_content("Change #{other_user.name}’s personal details")
           end
         end
 
@@ -377,7 +388,7 @@ RSpec.describe UsersController, type: :request do
 
         it "updates the user" do
           user.reload
-          expect(user.name).to eq(new_value)
+          expect(user.name).to eq(new_name)
         end
 
         it "tracks who updated the record" do
@@ -387,10 +398,20 @@ RSpec.describe UsersController, type: :request do
           expect(whodunnit_actor.id).to eq(user.id)
         end
 
+        context "when user changes email and dpo" do
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+
+          it "allows changing email and dpo" do
+            user.reload
+            expect(user.email).to eq(new_email)
+            expect(user.is_data_protection_officer?).to be true
+          end
+        end
+
         context "when we update the user password" do
           let(:params) do
             {
-              id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+              id: user.id, user: { password: new_name, password_confirmation: "something_else" }
             }
           end
 
@@ -414,7 +435,7 @@ RSpec.describe UsersController, type: :request do
         context "when the user is part of the same organisation as the current user" do
           it "updates the user" do
             expect { patch "/users/#{other_user.id}", headers: headers, params: params }
-              .to change { other_user.reload.name }.from(other_user.name).to(new_value)
+              .to change { other_user.reload.name }.from(other_user.name).to(new_name)
           end
 
           it "tracks who updated the record" do
@@ -422,10 +443,28 @@ RSpec.describe UsersController, type: :request do
               .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
           end
 
+          context "when user changes email and dpo" do
+            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+
+            it "allows changing email and dpo" do
+              patch "/users/#{other_user.id}", headers: headers, params: params
+              other_user.reload
+              expect(other_user.email).to eq(new_email)
+              expect(other_user.is_data_protection_officer?).to be true
+            end
+          end
+
+          it "does not bypass sign in for the coordinator" do
+            patch "/users/#{other_user.id}", headers: headers, params: params
+            follow_redirect!
+            expect(page).to have_content("#{other_user.reload.name}’s account")
+            expect(page).to have_content(other_user.reload.email.to_s)
+          end
+
           context "when we try to update the user password" do
             let(:params) do
               {
-                id: user.id, user: { password: new_value, password_confirmation: new_value, name: "new name" }
+                id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name" }
               }
             end
 
@@ -444,7 +483,7 @@ RSpec.describe UsersController, type: :request do
         context "when the current user does not matches the user ID" do
           context "when the user is not part of the same organisation as the current user" do
             let(:other_user) { FactoryBot.create(:user) }
-            let(:params) { { id: other_user.id, user: { name: new_value } } }
+            let(:params) { { id: other_user.id, user: { name: new_name } } }
 
             before do
               sign_in user

@@ -7,8 +7,10 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      bypass_sign_in @user
-      flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
+      if @user == current_user
+        bypass_sign_in @user
+        flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
+      end
       redirect_to user_path(@user)
     elsif user_params.key?("password")
       format_error_messages
@@ -74,9 +76,9 @@ private
 
   def user_params
     if @user == current_user
-      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role)
+      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo)
     else
-      params.require(:user).permit(:email, :name, :role)
+      params.require(:user).permit(:email, :name, :role, :is_dpo)
     end
   end
 
