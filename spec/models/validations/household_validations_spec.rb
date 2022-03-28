@@ -196,6 +196,24 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["referral"])
           .to be_empty
       end
+
+      it "cannot have `this landlord` as landlord and Housing situation before this letting cannot be LA general needs" do
+        record.landlord = 1
+        record.prevten = 30
+        record.referral = 1
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match(I18n.t("validations.household.referral.la_general_needs.internal_transfer")))
+        expect(record.errors["prevten"])
+          .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
+
+        record.prevten = 31
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match(I18n.t("validations.household.referral.la_general_needs.internal_transfer")))
+        expect(record.errors["prevten"])
+          .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
+      end
     end
   end
 
