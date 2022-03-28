@@ -212,7 +212,7 @@ RSpec.describe Form::Question, type: :model do
       let(:subsection_id) { "property_information" }
       let(:page_id) { "property_postcode" }
       let(:case_log) { FactoryBot.build(:case_log, :in_progress, postcode_known: 0, postcode_full: nil) }
-      let(:question_id) { "property_postcode" }
+      let(:question_id) { "postcode_full" }
 
       it "displays 'change' in the check answers link text" do
         expect(question.update_answer_link_name(case_log)).to match(/Change/)
