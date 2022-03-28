@@ -54,6 +54,24 @@ describe "rake core:data_import", type: :task do
     end
   end
 
+  context "when importing data protection confirmation data" do
+    let(:type) { "data-protection-confirmation" }
+    let(:import_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
+    let(:fixture_path) { "spec/fixtures/softwire_imports/data_protection_confirmations" }
+
+    before do
+      allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates an organisation from the given XML file" do
+      expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_data_protection_confirmations).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
   it "raises an exception if no parameters are provided" do
     expect { task.invoke }.to raise_error(/Usage/)
   end

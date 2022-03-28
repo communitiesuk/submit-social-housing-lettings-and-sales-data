@@ -12,6 +12,8 @@ namespace :core do
       Imports::OrganisationImportService.new(storage_service).create_organisations(path)
     when "user"
       Imports::UserImportService.new(storage_service).create_users(path)
+    when "data-protection-confirmation"
+      Imports::DataProtectionConfirmationImportService.new(storage_service).create_data_protection_confirmations(path)
     else
       raise "Type #{type} is not supported by data_import"
     end
