@@ -1,4 +1,4 @@
-<% content_for :title, "Your account" %>
+<% content_for :title, current_user == @user ? "Your account" : "#{@user.name}'s account" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

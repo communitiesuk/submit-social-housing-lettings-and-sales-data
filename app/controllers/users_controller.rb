@@ -73,7 +73,11 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :password, :password_confirmation, :role)
+    if @user == current_user
+      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role)
+    else
+      params.require(:user).permit(:email, :name, :role)
+    end
   end
 
   def find_resource
@@ -81,6 +85,8 @@ private
   end
 
   def authenticate_scope!
-    render_not_found if current_user != @user
+    render_not_found and return unless current_user.organisation == @user.organisation
+    render_not_found and return if action_name == "edit_password" && current_user != @user
+    render_not_found and return unless current_user.role == "data_coordinator" || current_user == @user
   end
 end

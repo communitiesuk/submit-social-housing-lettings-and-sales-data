@@ -1,4 +1,4 @@
-<% content_for :title, "Change your personal details" %>
+<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name}'s personal details" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(

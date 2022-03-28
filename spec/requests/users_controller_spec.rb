@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
   let(:user) { FactoryBot.create(:user) }
-  let(:unauthorised_user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:new_value) { "new test name" }
@@ -109,147 +109,366 @@ RSpec.describe UsersController, type: :request do
     end
   end
 
-  describe "#show" do
-    context "when the current user matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{user.id}", headers: headers, params: {}
+  context "when user is signed in as a data provider" do
+    describe "#show" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}", headers: headers, params: {}
+        end
+
+        it "show the user details" do
+          expect(page).to have_content("Your account")
+        end
       end
 
-      it "show the user details" do
-        expect(page).to have_content("Your account")
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}", headers: headers, params: {}
+        end
+
+        it "returns not found 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "shows the 404 view" do
+          expect(page).to have_content("Page not found")
+        end
       end
     end
 
-    context "when the current user does not matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{unauthorised_user.id}", headers: headers, params: {}
+    describe "#edit" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}/edit", headers: headers, params: {}
+        end
+
+        it "show the edit personal details page" do
+          expect(page).to have_content("Change your personal details")
+        end
       end
 
-      it "returns not found 404" do
-        expect(response).to have_http_status(:not_found)
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+        end
+
+        it "returns not found 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    describe "#edit_password" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}/password/edit", headers: headers, params: {}
+        end
+
+        it "shows the edit password page" do
+          expect(page).to have_content("Change your password")
+        end
+
+        it "shows the password requirements hint" do
+          expect(page).to have_css("#user-password-hint")
+        end
       end
 
-      it "shows the 404 view" do
-        expect(page).to have_content("Page not found")
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+        end
+
+        it "returns not found 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    describe "#update" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          patch "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "updates the user" do
+          user.reload
+          expect(user.name).to eq(new_value)
+        end
+
+        it "tracks who updated the record" do
+          user.reload
+          whodunnit_actor = user.versions.last.actor
+          expect(whodunnit_actor).to be_a(User)
+          expect(whodunnit_actor.id).to eq(user.id)
+        end
+      end
+
+      context "when the update fails to persist" do
+        before do
+          sign_in user
+          allow(User).to receive(:find_by).and_return(user)
+          allow(user).to receive(:update).and_return(false)
+          patch "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "show an error" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context "when the current user does not matches the user ID" do
+        let(:params) { { id: other_user.id, user: { name: new_value } } }
+
+        before do
+          sign_in user
+          patch "/users/#{other_user.id}", headers: headers, params: params
+        end
+
+        it "returns not found 404" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when we update the user password" do
+        let(:params) do
+          {
+            id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+          }
+        end
+
+        before do
+          sign_in user
+          patch "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "shows an error if passwords don't match" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_selector("#error-summary-title")
+        end
       end
     end
   end
 
-  describe "#edit" do
-    context "when the current user matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{user.id}/edit", headers: headers, params: {}
+  context "when user is signed in as a data coordinator" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator) }
+    let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+
+    describe "#show" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}", headers: headers, params: {}
+        end
+
+        it "show the user details" do
+          expect(page).to have_content("Your account")
+        end
       end
 
-      it "show the edit personal details page" do
-        expect(page).to have_content("Change your personal details")
-      end
-    end
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}", headers: headers, params: {}
+        end
 
-    context "when the current user does not matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
-      end
+        context "when the user is part of the same organisation as the current user" do
+          it "returns 200" do
+            expect(response).to have_http_status(:ok)
+          end
 
-      it "returns not found 404" do
-        expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
+          it "shows the user details page" do
+            expect(page).to have_content("#{other_user.name}'s account")
+          end
+        end
 
-  describe "#edit_password" do
-    context "when the current user matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{user.id}/password/edit", headers: headers, params: {}
-      end
+        context "when the user is not part of the same organisation as the current user" do
+          let(:other_user) { FactoryBot.create(:user) }
 
-      it "shows the edit password page" do
-        expect(page).to have_content("Change your password")
-      end
+          it "returns not found 404" do
+            expect(response).to have_http_status(:not_found)
+          end
 
-      it "shows the password requirements hint" do
-        expect(page).to have_css("#user-password-hint")
-      end
-    end
-
-    context "when the current user does not matches the user ID" do
-      before do
-        sign_in user
-        get "/users/#{unauthorised_user.id}/edit", headers: headers, params: {}
-      end
-
-      it "returns not found 404" do
-        expect(response).to have_http_status(:not_found)
-      end
-    end
-  end
-
-  describe "#update" do
-    context "when the current user matches the user ID" do
-      before do
-        sign_in user
-        patch "/users/#{user.id}", headers: headers, params: params
-      end
-
-      it "updates the user" do
-        user.reload
-        expect(user.name).to eq(new_value)
-      end
-
-      it "tracks who updated the record" do
-        user.reload
-        whodunnit_actor = user.versions.last.actor
-        expect(whodunnit_actor).to be_a(User)
-        expect(whodunnit_actor.id).to eq(user.id)
+          it "shows the 404 view" do
+            expect(page).to have_content("Page not found")
+          end
+        end
       end
     end
 
-    context "when the update fails to persist" do
-      before do
-        sign_in user
-        allow(User).to receive(:find_by).and_return(user)
-        allow(user).to receive(:update).and_return(false)
-        patch "/users/#{user.id}", headers: headers, params: params
+    describe "#edit" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}/edit", headers: headers, params: {}
+        end
+
+        it "show the edit personal details page" do
+          expect(page).to have_content("Change your personal details")
+        end
       end
 
-      it "show an error" do
-        expect(response).to have_http_status(:unprocessable_entity)
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+        end
+
+        context "when the user is part of the same organisation as the current user" do
+          it "returns 200" do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it "shows the user details page" do
+            expect(page).to have_content("Change #{other_user.name}'s personal details")
+          end
+        end
+
+        context "when the user is not part of the same organisation as the current user" do
+          let(:other_user) { FactoryBot.create(:user) }
+
+          it "returns not found 404" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
       end
     end
 
-    context "when the current user does not matches the user ID" do
-      let(:params) { { id: unauthorised_user.id, user: { name: new_value } } }
+    describe "#edit_password" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{user.id}/password/edit", headers: headers, params: {}
+        end
 
-      before do
-        sign_in user
-        patch "/users/#{unauthorised_user.id}", headers: headers, params: params
+        it "shows the edit password page" do
+          expect(page).to have_content("Change your password")
+        end
+
+        it "shows the password requirements hint" do
+          expect(page).to have_css("#user-password-hint")
+        end
       end
 
-      it "returns not found 404" do
-        expect(response).to have_http_status(:not_found)
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+          get "/users/#{other_user.id}/password/edit", headers: headers, params: {}
+        end
+
+        it "returns not found 404" do
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
 
-    context "when we update the user password" do
-      let(:params) do
-        {
-          id: user.id, user: { password: new_value, password_confirmation: "something_else" }
-        }
+    describe "#update" do
+      context "when the current user matches the user ID" do
+        before do
+          sign_in user
+          patch "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "updates the user" do
+          user.reload
+          expect(user.name).to eq(new_value)
+        end
+
+        it "tracks who updated the record" do
+          user.reload
+          whodunnit_actor = user.versions.last.actor
+          expect(whodunnit_actor).to be_a(User)
+          expect(whodunnit_actor.id).to eq(user.id)
+        end
+
+        context "when we update the user password" do
+          let(:params) do
+            {
+              id: user.id, user: { password: new_value, password_confirmation: "something_else" }
+            }
+          end
+
+          before do
+            sign_in user
+            patch "/users/#{user.id}", headers: headers, params: params
+          end
+
+          it "shows an error if passwords don't match" do
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_selector("#error-summary-title")
+          end
+        end
       end
 
-      before do
-        sign_in user
-        patch "/users/#{user.id}", headers: headers, params: params
+      context "when the current user does not matches the user ID" do
+        before do
+          sign_in user
+        end
+
+        context "when the user is part of the same organisation as the current user" do
+          it "updates the user" do
+            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              .to change { other_user.reload.name }.from(other_user.name).to(new_value)
+          end
+
+          it "tracks who updated the record" do
+            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
+          end
+
+          context "when we try to update the user password" do
+            let(:params) do
+              {
+                id: user.id, user: { password: new_value, password_confirmation: new_value, name: "new name" }
+              }
+            end
+
+            it "does not update the password" do
+              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+                .not_to change(other_user, :encrypted_password)
+            end
+
+            it "does update other values" do
+              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+                .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+            end
+          end
+        end
+
+        context "when the current user does not matches the user ID" do
+          context "when the user is not part of the same organisation as the current user" do
+            let(:other_user) { FactoryBot.create(:user) }
+            let(:params) { { id: other_user.id, user: { name: new_value } } }
+
+            before do
+              sign_in user
+              patch "/users/#{other_user.id}", headers: headers, params: params
+            end
+
+            it "returns not found 404" do
+              expect(response).to have_http_status(:not_found)
+            end
+          end
+        end
       end
 
-      it "shows an error if passwords don't match" do
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(page).to have_selector("#error-summary-title")
+      context "when the update fails to persist" do
+        before do
+          sign_in user
+          allow(User).to receive(:find_by).and_return(user)
+          allow(user).to receive(:update).and_return(false)
+          patch "/users/#{user.id}", headers: headers, params: params
+        end
+
+        it "show an error" do
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
       end
     end
   end
