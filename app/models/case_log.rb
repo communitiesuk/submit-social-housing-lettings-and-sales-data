@@ -277,6 +277,10 @@ class CaseLog < ApplicationRecord
     landlord == 2
   end
 
+  def is_prevten_la_general_needs?
+    [30, 31].any?(prevten)
+  end
+
 private
 
   PIO = Postcodes::IO.new

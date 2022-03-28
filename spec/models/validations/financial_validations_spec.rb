@@ -244,7 +244,7 @@ RSpec.describe Validations::FinancialValidations do
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 81 },
          }].each do |test_case|
-          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+          it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
@@ -341,7 +341,7 @@ RSpec.describe Validations::FinancialValidations do
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 990 },
          }].each do |test_case|
-          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+          it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
@@ -440,7 +440,7 @@ RSpec.describe Validations::FinancialValidations do
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 122 },
          }].each do |test_case|
-          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+          it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
@@ -537,12 +537,35 @@ RSpec.describe Validations::FinancialValidations do
            period: { label: "every 2 weeks", value: 2 },
            charge: { field: "supcharg", value: 241 },
          }].each do |test_case|
-          it "does not allow charges outide the range when period is #{test_case[:period][:label]}" do
+          it "does not allow charges outside the range when period is #{test_case[:period][:label]}" do
             record.period = test_case[:period][:value]
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
               .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.other_landlord.supported_housing"))
+          end
+        end
+
+        context "when charges are not given" do
+          [{
+            period: { label: "weekly", value: 1 },
+            charge: { field: "scharge", value: nil },
+          },
+           {
+             period: { label: "weekly", value: 1 },
+             charge: { field: "pscharge", value: nil },
+           },
+           {
+             period: { label: "weekly", value: 1 },
+             charge: { field: "supcharg", value: nil },
+           }].each do |test_case|
+            it "does not error" do
+              record.period = test_case[:period][:value]
+              record[test_case[:charge][:field]] = test_case[:charge][:value]
+              financial_validator.validate_rent_amount(record)
+              expect(record.errors[test_case[:charge][:field]])
+                .to be_empty
+            end
           end
         end
 

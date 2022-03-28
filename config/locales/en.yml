@@ -177,6 +177,8 @@ en:
         over_20_foster_care: "Answer cannot be children's home or foster care as the lead tenant is 20 or older"
         male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
         internal_transfer: "Answer cannot be %{prevten} as you already told us this tenancy is an internal transfer"
+        la_general_needs:
+          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it's the same landlord on the tenancy agreement and it is an internal transfer"
       referral:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
@@ -185,6 +187,8 @@ en:
         other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
         prevten_invalid: "Answer cannot be internal transfer as you already told us the household situation immediately before this letting was %{prevten}"
         reason_permanently_decanted: "Answer must be internal transfer as you already told us the tenant was permanently decanted from another property owned by this landlord"
+        la_general_needs:
+          internal_transfer: "Answer cannot be internal transfer as you already told us it's the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
