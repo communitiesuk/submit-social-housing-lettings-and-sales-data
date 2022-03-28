@@ -14,6 +14,12 @@ Rack::Attack.throttle("password reset requests", limit: 5, period: 60.seconds) d
   end
 end
 
+Rack::Attack.throttle("admin password reset requests", limit: 5, period: 60.seconds) do |request|
+  if request.params["admin_user"].present? && request.path == "/admin/password" && request.post?
+    request.params["admin_user"]["email"].to_s.downcase.gsub(/\s+/, "")
+  end
+end
+
 Rack::Attack.throttled_responder = lambda do |_env|
   headers = {
     "Location" => "/429",
