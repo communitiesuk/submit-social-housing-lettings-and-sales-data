@@ -156,7 +156,7 @@ RSpec.describe Validations::PropertyValidations do
         record.rent_type = 2
         property_validator.validate_la(record)
         expect(record.errors["la"]).to include(match(expected_error))
-        expect(record.errors["property_postcode"]).to be_empty
+        expect(record.errors["postcode_full"]).to be_empty
       end
 
       it "expects that the local authority is in London" do
@@ -173,9 +173,9 @@ RSpec.describe Validations::PropertyValidations do
           record.la = "E07000105"
           record.rent_type = 2
           record.postcode_known = 1
-          record.property_postcode = "BN18 7TR"
+          record.postcode_full = "BN18 7TR"
           property_validator.validate_la(record)
-          expect(record.errors["property_postcode"]).to include(match(expected_error))
+          expect(record.errors["postcode_full"]).to include(match(expected_error))
         end
       end
     end

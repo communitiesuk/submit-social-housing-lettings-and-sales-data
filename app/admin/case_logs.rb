@@ -12,7 +12,7 @@ ActiveAdmin.register CaseLog do
     column :updated_at
     column :status
     column :tenant_code
-    column :property_postcode
+    column :postcode_full
     column :owning_organisation
     column :managing_organisation
     actions

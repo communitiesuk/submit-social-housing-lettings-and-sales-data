@@ -12,8 +12,8 @@ FactoryBot.define do
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }
-      property_postcode { "PO5 3TE" }
-      previous_postcode { "SW2 6HI" }
+      postcode_full { "PO5 3TE" }
+      ppostcode_full { "SW2 6HI" }
       age1 { 17 }
     end
     trait :soft_validations_triggered do
@@ -58,7 +58,7 @@ FactoryBot.define do
       tenancylength { 5 }
       tenancy { 3 }
       landlord { 1 }
-      previous_postcode { "SE2 6RT" }
+      ppostcode_full { "SE2 6RT" }
       rsnvac { 7 }
       unittype_gn { 2 }
       beds { 3 }
@@ -79,7 +79,7 @@ FactoryBot.define do
       tcharge { 325 }
       layear { 2 }
       lawaitlist { 1 }
-      property_postcode { "NW1 5TY" }
+      postcode_full { "NW1 5TY" }
       reasonpref { 1 }
       cbl { 1 }
       chr { 1 }

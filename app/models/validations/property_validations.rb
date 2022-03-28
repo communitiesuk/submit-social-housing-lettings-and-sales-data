@@ -57,8 +57,8 @@ module Validations::PropertyValidations
   def validate_la(record)
     if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
       record.errors.add :la, I18n.t("validations.property.la.london_rent")
-      if record.postcode_known? && record.property_postcode.present?
-        record.errors.add :property_postcode, I18n.t("validations.property.la.london_rent_postcode")
+      if record.postcode_known? && record.postcode_full.present?
+        record.errors.add :postcode_full, I18n.t("validations.property.la.london_rent_postcode")
       end
     end
 
@@ -94,10 +94,10 @@ module Validations::PropertyValidations
   end
 
   def validate_property_postcode(record)
-    postcode = record.property_postcode
+    postcode = record.postcode_full
     if record.postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
       error_message = I18n.t("validations.postcode")
-      record.errors.add :property_postcode, error_message
+      record.errors.add :postcode_full, error_message
     end
   end
 

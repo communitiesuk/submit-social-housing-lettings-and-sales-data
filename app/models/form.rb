@@ -117,7 +117,7 @@ class Form
 
   def invalidated_page_questions(case_log)
     # we're already treating address fields as a special case and reset their values upon saving a case_log
-    address_questions = %w[postcode_known la previous_postcode_known prevloc property_postcode previous_postcode]
+    address_questions = %w[postcode_known la previous_postcode_known prevloc postcode_full ppostcode_full]
     invalidated_pages(case_log).flat_map(&:questions).reject { |q| address_questions.include?(q.id) } || []
   end
 

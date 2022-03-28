@@ -45,7 +45,7 @@
     <tenancylength>5</tenancylength>
     <tenancy>3</tenancy>
     <landlord>1</landlord>
-    <previous_postcode>SE2 6RT</previous_postcode>
+    <ppostcode_full>SE26RT</ppostcode_full>
     <rsnvac>7</rsnvac>
     <unittype_gn>2</unittype_gn>
     <beds>3</beds>
@@ -57,7 +57,7 @@
     <period>2</period>
     <layear>2</layear>
     <lawaitlist>1</lawaitlist>
-    <property_postcode>NW1 5TY</property_postcode>
+    <postcode_full>NW15TY</postcode_full>
     <reasonpref>1</reasonpref>
     <cbl>1</cbl>
     <chr>1</chr>

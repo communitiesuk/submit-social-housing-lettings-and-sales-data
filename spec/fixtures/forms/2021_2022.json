@@ -379,13 +379,13 @@
                       }
                     },
                     "conditional_for": {
-                      "property_postcode": [
+                      "postcode_full": [
                         1
                       ]
                     },
                     "hidden_in_check_answers": true
                   },
-                  "property_postcode": {
+                  "postcode_full": {
                     "check_answer_label": "Postcode",
                     "header": "",
                     "hint_text": "",
@@ -888,7 +888,7 @@
                     "width": 5,
                     "conditional_for": { "fake_key": "fake_condition" }
                   },
-                  "previous_postcode": {
+                  "ppostcode_full": {
                     "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
                     "header": "Postcode for the previous accommodation",
                     "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
