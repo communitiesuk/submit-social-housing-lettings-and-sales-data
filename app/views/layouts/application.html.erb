@@ -14,6 +14,13 @@
     <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-167x167.png'), rel: 'apple-touch-icon', type: 'image/png', size: '167x167' %>
     <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-180x180.png'), rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "vendor/html5shiv.min.js" %>
+    <%= javascript_tag do -%>
+      window.html5.elements = 'output';
+      html5.shivDocument(document);
+    <% end -%>
+    <%= javascript_include_tag "vendor/polyfill-output-value.js" %>
+    <%= javascript_include_tag "vendor/outerHTML.js" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 
     <% if content_for?(:head) %>

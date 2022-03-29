@@ -25,6 +25,7 @@
     "custom-event-polyfill": "^1.0.7",
     "file-loader": "^6.2.0",
     "govuk-frontend": "^4.0.1",
+    "html5shiv": "^3.7.3",
     "intersection-observer": "^0.12.0",
     "mini-css-extract-plugin": "^2.6.0",
     "regenerator-runtime": "^0.13.9",
