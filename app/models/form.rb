@@ -24,8 +24,10 @@ class Form
     pages.find { |p| p.id == id.to_s.underscore }
   end
 
-  def get_question(id)
-    questions.find { |q| q.id == id.to_s.underscore }
+  def get_question(id, case_log)
+    all_questions = questions.select { |q| q.id == id.to_s.underscore }
+    routed_question = all_questions.find { |q| q.page.routed_to?(case_log) }
+    routed_question || all_questions[0]
   end
 
   def subsection_for_page(page)

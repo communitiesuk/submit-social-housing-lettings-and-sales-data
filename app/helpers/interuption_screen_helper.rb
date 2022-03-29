@@ -1,6 +1,7 @@
 module InteruptionScreenHelper
   def display_informative_text(informative_text, case_log)
-    translation_questions = informative_text["argument"].map { |x| case_log.form.get_question(x) }
+    translation_questions = informative_text["argument"].map { |x| case_log.form.get_question(x, case_log) }
+
     begin
       case translation_questions.count
       when 2

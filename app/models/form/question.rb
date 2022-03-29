@@ -49,7 +49,7 @@ class Form::Question
     return [] unless inferred_answers
 
     enabled_inferred_answers(inferred_answers, case_log).keys.map do |x|
-      form.get_question(x).label_from_value(case_log[x])
+      form.get_question(x, case_log).label_from_value(case_log[x])
     end
   end
 
