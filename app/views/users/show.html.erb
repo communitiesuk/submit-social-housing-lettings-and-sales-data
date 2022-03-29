@@ -48,13 +48,21 @@
       <%= summary_list.row do |row|
         row.key { 'Data protection officer' }
         row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
-        row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a data protection officer?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-data-protection-officer" })
+        if current_user.data_coordinator?
+          row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a data protection officer?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-data-protection-officer" })
+        else
+          row.action()
+        end
       end %>
 
       <%= summary_list.row do |row|
         row.key { 'Key contact' }
         row.value { @user.is_key_contact? ? "Yes" : "No" }
-        row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a key contact?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-key-contact" })
+        if current_user.data_coordinator?
+          row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a key contact?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-key-contact" })
+        else
+          row.action()
+        end
       end %>
     <% end %>
   </div>

@@ -172,123 +172,156 @@ RSpec.describe "User Features" do
     end
   end
 
-  context "when viewing your account" do
-    before do
-      visit("/logs")
-      fill_in("user[email]", with: user.email)
-      fill_in("user[password]", with: "pAssword1")
-      click_button("Sign in")
-    end
+  context "when signed in as a data provider" do
+    context "when viewing your account" do
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+      end
 
-    it "shows 'Your account' link in navigation if logged in and redirect to correct page" do
-      visit("/logs")
-      expect(page).to have_link("Your account")
-      click_link("Your account")
-      expect(page).to have_current_path("/users/#{user.id}")
-    end
+      it "does not have change links for dpo and key contact" do
+        visit("/users/#{user.id}")
+        expect(page).not_to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
+        expect(page).not_to have_selector('[data-qa="change-are-you-a-key-contact"]')
+      end
 
-    it "can navigate to change your password page from main account page" do
-      visit("/users/#{user.id}")
-      find('[data-qa="change-password"]').click
-      expect(page).to have_content("Change your password")
-      fill_in("user[password]", with: "Password123!")
-      fill_in("user[password_confirmation]", with: "Password123!")
-      click_button("Update")
-      expect(page).to have_current_path("/users/#{user.id}")
-    end
-
-    it "allow user to change name" do
-      visit("/users/#{user.id}")
-      find('[data-qa="change-name"]').click
-      expect(page).to have_content("Change your personal details")
-      fill_in("user[name]", with: "Test New")
-      click_button("Save changes")
-      expect(page).to have_current_path("/users/#{user.id}")
-      expect(page).to have_content("Test New")
+      it "does not have dpo and key contact as editable fields" do
+        visit("/users/#{user.id}/edit")
+        expect(page).not_to have_field("user[is_dpo]")
+        expect(page).not_to have_field("user[is_key_contact]")
+      end
     end
   end
 
-  context "when adding a new user" do
-    before do
-      visit("/logs")
-      fill_in("user[email]", with: user.email)
-      fill_in("user[password]", with: "pAssword1")
-      click_button("Sign in")
-    end
-
-    it "validates an email has been provided" do
-      visit("users/new")
-      fill_in("user[name]", with: "New User")
-      click_button("Continue")
-      expect(page).to have_selector("#error-summary-title")
-      expect(page).to have_selector("#user-email-field-error")
-      expect(page).to have_content(/Enter an email address/)
-      expect(page).to have_title("Error")
-    end
-
-    it "validates email" do
-      visit("users/new")
-      fill_in("user[name]", with: "New User")
-      fill_in("user[email]", with: "thisis'tanemail")
-      click_button("Continue")
-      expect(page).to have_selector("#error-summary-title")
-      expect(page).to have_selector("#user-email-field-error")
-      expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
-      expect(page).to have_title("Error")
-    end
-
-    it "sets name, email, role, is_dpo and is_key_contact fields" do
-      visit("users/new")
-      fill_in("user[name]", with: "New User")
-      fill_in("user[email]", with: "newuser@example.com")
-      choose("user-role-data-provider-field")
-      choose("user-is-dpo-true-field")
-      choose("user-is-key-contact-true-field")
-      click_button("Continue")
-      expect(User.find_by(
-               name: "New User",
-               email: "newuser@example.com",
-               role: "data_provider",
-               is_dpo: true,
-               is_key_contact: true,
-             )).to be_a(User)
-    end
-
-    it "defaults to is_dpo false" do
-      visit("users/new")
-      expect(page).to have_field("user[is_dpo]", with: false)
-    end
-  end
-
-  context "when editing someone elses account details" do
+  context "when signed in as a data coordinator" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-    let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: true, organisation: user.organisation) }
 
-    before do
-      visit("/logs")
-      fill_in("user[email]", with: user.email)
-      fill_in("user[password]", with: "pAssword1")
-      click_button("Sign in")
+    context "when viewing your account" do
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+      end
+
+      it "shows 'Your account' link in navigation if logged in and redirect to correct page" do
+        visit("/logs")
+        expect(page).to have_link("Your account")
+        click_link("Your account")
+        expect(page).to have_current_path("/users/#{user.id}")
+      end
+
+      it "can navigate to change your password page from main account page" do
+        visit("/users/#{user.id}")
+        find('[data-qa="change-password"]').click
+        expect(page).to have_content("Change your password")
+        fill_in("user[password]", with: "Password123!")
+        fill_in("user[password_confirmation]", with: "Password123!")
+        click_button("Update")
+        expect(page).to have_current_path("/users/#{user.id}")
+      end
+
+      it "allow user to change name" do
+        visit("/users/#{user.id}")
+        find('[data-qa="change-name"]').click
+        expect(page).to have_content("Change your personal details")
+        fill_in("user[name]", with: "Test New")
+        click_button("Save changes")
+        expect(page).to have_current_path("/users/#{user.id}")
+        expect(page).to have_content("Test New")
+      end
+
+      it "has dpo and key contact as editable fields" do
+        visit("/users/#{user.id}")
+        expect(page).to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
+        expect(page).to have_selector('[data-qa="change-are-you-a-key-contact"]')
+      end
     end
 
-    it "allows updating other users details" do
-      visit("/organisations/#{user.organisation.id}")
-      click_link("Users")
-      click_link(other_user.name)
-      expect(page).to have_title("Other name’s account")
-      first(:link, "Change").click
-      expect(page).to have_field("user[is_dpo]", with: true)
-      choose("user-is-dpo-field")
-      choose("user-is-key-contact-true-field")
-      fill_in("user[name]", with: "Updated new name")
-      click_button("Save changes")
-      expect(page).to have_title("Updated new name’s account")
-      expect(User.find_by(
-               name: "Updated new name",
-               role: "data_provider",
-               is_dpo: false,
-               is_key_contact: true,
-             )).to be_a(User)
+    context "when adding a new user" do
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+      end
+
+      it "validates an email has been provided" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-email-field-error")
+        expect(page).to have_content(/Enter an email address/)
+        expect(page).to have_title("Error")
+      end
+
+      it "validates email" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "thisis'tanemail")
+        click_button("Continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-email-field-error")
+        expect(page).to have_content(/Enter an email address in the correct format, like name@example.com/)
+        expect(page).to have_title("Error")
+      end
+
+      it "sets name, email, role, is_dpo and is_key_contact fields" do
+        visit("users/new")
+        fill_in("user[name]", with: "New User")
+        fill_in("user[email]", with: "newuser@example.com")
+        choose("user-role-data-provider-field")
+        choose("user-is-dpo-true-field")
+        choose("user-is-key-contact-true-field")
+        click_button("Continue")
+        expect(User.find_by(
+                 name: "New User",
+                 email: "newuser@example.com",
+                 role: "data_provider",
+                 is_dpo: true,
+                 is_key_contact: true,
+               )).to be_a(User)
+      end
+
+      it "defaults to is_dpo false" do
+        visit("users/new")
+        expect(page).to have_field("user[is_dpo]", with: false)
+      end
+    end
+
+    context "when editing someone elses account details" do
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: true, organisation: user.organisation) }
+
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+      end
+
+      it "allows updating other users details" do
+        visit("/organisations/#{user.organisation.id}")
+        click_link("Users")
+        click_link(other_user.name)
+        expect(page).to have_title("Other name’s account")
+        first(:link, "Change").click
+        expect(page).to have_field("user[is_dpo]", with: true)
+        choose("user-is-dpo-field")
+        choose("user-is-key-contact-true-field")
+        fill_in("user[name]", with: "Updated new name")
+        click_button("Save changes")
+        expect(page).to have_title("Updated new name’s account")
+        expect(User.find_by(
+                 name: "Updated new name",
+                 role: "data_provider",
+                 is_dpo: false,
+                 is_key_contact: true,
+               )).to be_a(User)
+      end
     end
   end
 end
