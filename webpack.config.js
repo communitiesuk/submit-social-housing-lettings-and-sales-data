@@ -26,9 +26,10 @@ module.exports = {
         include: [
           path.resolve(__dirname, 'node_modules/@hotwired/stimulus'),
           path.resolve(__dirname, 'node_modules/@stimulus/polyfills'),
+          path.resolve(__dirname, 'node_modules/@hotwired/turbo'),
           path.resolve(__dirname, 'node_modules/@rails/actioncable'),
           path.resolve(__dirname, 'node_modules/chartjs'),
-          path.resolve(__dirname, 'app/frontend/controllers'),
+          path.resolve(__dirname, 'app/frontend'),
         ],
         use: ['babel-loader'],
       },
@@ -60,6 +61,9 @@ module.exports = {
       patterns: [
         { from: "node_modules/govuk-frontend/govuk/assets/images", to: "images" },
         { from: "node_modules/govuk-frontend/govuk/assets/fonts", to: "fonts" },
+        { from: "node_modules/html5shiv/dist/html5shiv.min.js", to: "vendor" },
+        { from: "app/frontend/vendor/outerHTML.js", to: "vendor" },
+        { from: "app/frontend/vendor/polyfill-output-value.js", to: "vendor" }
       ],
     }),
     new webpack.ProvidePlugin({
