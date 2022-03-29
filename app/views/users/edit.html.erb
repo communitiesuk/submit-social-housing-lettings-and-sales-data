@@ -1,4 +1,4 @@
-<% content_for :title, "Change your personal details" %>
+<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name}’s personal details" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= form_for(current_user, as: :user, html: { method: :patch }) do |f| %>
+<%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -24,6 +24,14 @@
         label: { text: "Email address" },
         autocomplete: "email",
         spellcheck: "false"
+      %>
+
+      <%= f.govuk_collection_radio_buttons :is_dpo,
+        [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+        :id,
+        :name,
+        inline: true,
+        legend: { text: "Are #{current_user == @user ? "you" : "they"} a data protection officer?", size: "m" }
       %>
 
       <%= f.govuk_submit "Save changes" %>

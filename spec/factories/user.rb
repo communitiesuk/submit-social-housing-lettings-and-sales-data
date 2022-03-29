@@ -9,7 +9,7 @@ FactoryBot.define do
       role { "data_coordinator" }
     end
     trait :data_protection_officer do
-      role { "data_protection_officer" }
+      is_dpo { true }
     end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }

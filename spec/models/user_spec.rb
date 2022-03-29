@@ -46,6 +46,15 @@ RSpec.describe User, type: :model do
       expect(user.data_provider?).to be true
       expect(user.data_coordinator?).to be false
     end
+
+    it "is not a data protection officer by default" do
+      expect(user.is_data_protection_officer?).to be false
+    end
+
+    it "can be set to data protection officer" do
+      expect { user.is_data_protection_officer! }
+        .to change { user.reload.is_data_protection_officer? }.from(false).to(true)
+    end
   end
 
   describe "paper trail" do

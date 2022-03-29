@@ -1,4 +1,4 @@
-<% content_for :title, "Your account" %>
+<% content_for :title, current_user == @user ? "Your account" : "#{@user.name}’s account" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -13,32 +13,42 @@
     <%= govuk_summary_list do |summary_list| %>
       <%= summary_list.row do |row|
         row.key { 'Name' }
-        row.value { current_user.name }
+        row.value { @user.name }
         row.action(visually_hidden_text: 'name', href: edit_user_path, html_attributes: { 'data-qa': 'change-name' })
       end %>
 
       <%= summary_list.row() do |row|
         row.key { 'Email address' }
-        row.value { current_user.email }
+        row.value { @user.email }
         row.action(visually_hidden_text: 'email address', href: edit_user_path, html_attributes: { 'data-qa': 'change-email' })
       end %>
 
       <%= summary_list.row do |row|
         row.key { 'Password' }
         row.value { '••••••••' }
-        row.action(visually_hidden_text: 'password', href: password_edit_user_path, html_attributes: { 'data-qa': 'change-password' })
+        if current_user == @user
+          row.action(visually_hidden_text: 'password', href: password_edit_user_path, html_attributes: { 'data-qa': 'change-password' })
+        else
+          row.action()
+        end
       end %>
 
       <%= summary_list.row do |row|
         row.key { 'Organisation' }
-        row.value { current_user.organisation.name }
+        row.value { @user.organisation.name }
         row.action()
       end %>
 
       <%= summary_list.row do |row|
         row.key { 'Role' }
-        row.value { current_user.role.humanize }
+        row.value { @user.role.humanize }
         row.action()
+      end %>
+
+      <%= summary_list.row do |row|
+        row.key { 'Data protection officer' }
+        row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
+        row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a data protection officer?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-data-protection-officer" })
       end %>
     <% end %>
   </div>

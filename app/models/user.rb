@@ -14,7 +14,6 @@ class User < ApplicationRecord
     data_accessor: 0,
     data_provider: 1,
     data_coordinator: 2,
-    data_protection_officer: 3,
   }.freeze
 
   enum role: ROLES
@@ -36,5 +35,13 @@ class User < ApplicationRecord
 
   def reset_password_notify_template
     last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
+  end
+
+  def is_data_protection_officer?
+    is_dpo
+  end
+
+  def is_data_protection_officer!
+    update!(is_dpo: true)
   end
 end

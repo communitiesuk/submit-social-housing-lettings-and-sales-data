@@ -34,7 +34,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
         it "creates a data protection officer without sign in credentials" do
           expect { import_service.create_data_protection_confirmations("data_protection_directory") }
             .to change(User, :count).by(1)
-          data_protection_officer = User.find_by(organisation:, role: "data_protection_officer")
+          data_protection_officer = User.find_by(organisation:, is_dpo: true)
           expect(data_protection_officer.email).to eq("")
         end
 

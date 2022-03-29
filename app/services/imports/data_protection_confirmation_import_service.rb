@@ -11,14 +11,14 @@ module Imports
       dp_officer = User.find_by(
         name: record_field_value(xml_document, "dp-user"),
         organisation: org,
-        role: "data_protection_officer",
+        is_dpo: true,
       )
 
       if dp_officer.blank?
         dp_officer = User.new(
           name: record_field_value(xml_document, "dp-user"),
           organisation: org,
-          role: "data_protection_officer",
+          is_dpo: true,
           encrypted_password: SecureRandom.hex(10),
         )
         dp_officer.save!(validate: false)
