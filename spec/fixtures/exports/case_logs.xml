@@ -174,5 +174,6 @@
     <relat7/>
     <relat8/>
     <rent_value_check/>
+    <providertype>1</providertype>
   </form>
 </forms>
