@@ -50,6 +50,12 @@
         row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
         row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a data protection officer?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-data-protection-officer" })
       end %>
+
+      <%= summary_list.row do |row|
+        row.key { 'Key contact' }
+        row.value { @user.is_key_contact? ? "Yes" : "No" }
+        row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a key contact?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-key-contact" })
+      end %>
     <% end %>
   </div>
 </div>

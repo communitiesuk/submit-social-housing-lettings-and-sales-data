@@ -34,6 +34,14 @@
         legend: { text: "Are #{current_user == @user ? "you" : "they"} a data protection officer?", size: "m" }
       %>
 
+      <%= f.govuk_collection_radio_buttons :is_key_contact,
+        [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+        :id,
+        :name,
+        inline: true,
+        legend: { text: "Are #{current_user == @user ? "you" : "they"} a key contact?", size: "m" }
+      %>
+
       <%= f.govuk_submit "Save changes" %>
     </div>
   </div>

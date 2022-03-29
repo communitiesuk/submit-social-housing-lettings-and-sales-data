@@ -237,16 +237,21 @@ RSpec.describe "User Features" do
       expect(page).to have_title("Error")
     end
 
-    it "sets name, email, role and is_dpo" do
+    it "sets name, email, role, is_dpo and is_key_contact fields" do
       visit("users/new")
       fill_in("user[name]", with: "New User")
       fill_in("user[email]", with: "newuser@example.com")
       choose("user-role-data-provider-field")
       choose("user-is-dpo-true-field")
+      choose("user-is-key-contact-true-field")
       click_button("Continue")
-      expect(
-        User.find_by(name: "New User", email: "newuser@example.com", role: "data_provider", is_dpo: true),
-      ).to be_a(User)
+      expect(User.find_by(
+               name: "New User",
+               email: "newuser@example.com",
+               role: "data_provider",
+               is_dpo: true,
+               is_key_contact: true,
+             )).to be_a(User)
     end
 
     it "defaults to is_dpo false" do
@@ -274,10 +279,16 @@ RSpec.describe "User Features" do
       first(:link, "Change").click
       expect(page).to have_field("user[is_dpo]", with: true)
       choose("user-is-dpo-field")
+      choose("user-is-key-contact-true-field")
       fill_in("user[name]", with: "Updated new name")
       click_button("Save changes")
       expect(page).to have_title("Updated new name’s account")
-      expect(User.find_by(name: "Updated new name", role: "data_provider", is_dpo: false)).to be_a(User)
+      expect(User.find_by(
+               name: "Updated new name",
+               role: "data_provider",
+               is_dpo: false,
+               is_key_contact: true,
+             )).to be_a(User)
     end
   end
 end

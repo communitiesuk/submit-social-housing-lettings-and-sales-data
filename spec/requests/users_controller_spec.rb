@@ -210,13 +210,14 @@ RSpec.describe UsersController, type: :request do
           expect(whodunnit_actor.id).to eq(user.id)
         end
 
-        context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+        context "when user changes email, dpo, key_contact" do
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
           it "allows changing email and dpo" do
             user.reload
             expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
+            expect(user.is_key_contact?).to be true
           end
         end
       end
@@ -399,12 +400,13 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
           it "allows changing email and dpo" do
             user.reload
             expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
+            expect(user.is_key_contact?).to be true
           end
         end
 
@@ -443,14 +445,15 @@ RSpec.describe UsersController, type: :request do
               .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
           end
 
-          context "when user changes email and dpo" do
-            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+          context "when user changes email, dpo, key_contact" do
+            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
-            it "allows changing email and dpo" do
+            it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
               expect(other_user.email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
+              expect(other_user.is_key_contact?).to be true
             end
           end
 

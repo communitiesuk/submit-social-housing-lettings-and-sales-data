@@ -76,9 +76,9 @@ private
 
   def user_params
     if @user == current_user
-      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo)
+      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact)
     else
-      params.require(:user).permit(:email, :name, :role, :is_dpo)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
     end
   end
 
