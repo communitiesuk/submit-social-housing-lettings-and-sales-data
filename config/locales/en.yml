@@ -224,6 +224,9 @@ en:
         message: "Net income is lower than expected based on the main tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the main tenant’s working situation. Are you sure this is correct?"
+    rent:
+      min_max: 
+        hint_text: "You have entered %{brent}"
   devise:
     two_factor_authentication:
       success: "Two factor authentication successful."

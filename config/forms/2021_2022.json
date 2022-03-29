@@ -5568,6 +5568,54 @@
                 }
               ]
             },
+            "check_min_rent_amount": {
+              "depends_on": [{ "rent_in_soft_min_range?": true }],
+              "title_text": "Rent value is under the expected range",
+              "informative_text": {
+                "translation": "soft_validations.rent.min_max.hint_text",
+                "argument": ["brent"]
+              },
+              "questions": {
+                "rent_value_check": {
+                  "check_answer_label": "Rent soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value":"Yes"
+                    },
+                    "1": {
+                      "value":"No"
+                    }
+                  }
+                }
+              }
+            },
+            "check_max_rent_amount": {
+              "depends_on": [{ "rent_in_soft_max_range?": true }],
+              "title_text": "Rent value is over the expected range",
+              "informative_text": {
+                "translation": "soft_validations.rent.min_max.hint_text",
+                "argument": ["brent"]
+              },
+              "questions": {
+                "rent_value_check": {
+                  "check_answer_label": "Rent soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value":"Yes"
+                    },
+                    "1": {
+                      "value":"No"
+                    }
+                  }
+                }
+              }
+            },
             "outstanding": {
               "header": "",
               "description": "",
