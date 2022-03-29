@@ -211,7 +211,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
 
           it "allows changing email and dpo" do
             user.reload
@@ -399,7 +399,7 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
 
           it "allows changing email and dpo" do
             user.reload
@@ -444,7 +444,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           context "when user changes email and dpo" do
-            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "1" } } }
+            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
 
             it "allows changing email and dpo" do
               patch "/users/#{other_user.id}", headers: headers, params: params

@@ -31,9 +31,13 @@
         f.govuk_collection_radio_buttons :role, roles, :id, :name, legend: { text: "Role", size: "m" }
       %>
 
-      <%= f.govuk_check_boxes_fieldset :is_dpo, legend: { text: "Are they a data protection officer?", size: "m" } do %>
-        <%= f.govuk_check_box :is_dpo, :is_dpo, label: { text: "Yes" } %>
-      <% end %>
+      <%= f.govuk_collection_radio_buttons :is_dpo,
+        [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+        :id,
+        :name,
+        inline: true,
+        legend: { text: "Are they a data protection officer?", size: "m" }
+      %>
 
       <%= f.govuk_submit "Continue" %>
     </div>
