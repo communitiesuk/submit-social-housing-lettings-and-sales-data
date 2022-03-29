@@ -245,7 +245,7 @@ RSpec.describe "User Features" do
       choose("user-is-dpo-true-field")
       click_button("Continue")
       expect(
-        User.find_by(name: "New User", email: "newuser@example.com", role: "data_provider", is_dpo: true)
+        User.find_by(name: "New User", email: "newuser@example.com", role: "data_provider", is_dpo: true),
       ).to be_a(User)
     end
 

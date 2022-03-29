@@ -36,7 +36,7 @@
         :id,
         :name,
         inline: true,
-        legend: { text: "Are they a data protection officer?", size: "m" }
+        legend: { text: "Are #{current_user == @user ? "you" : "they"} a data protection officer?", size: "m" }
       %>
 
       <%= f.govuk_submit "Continue" %>
