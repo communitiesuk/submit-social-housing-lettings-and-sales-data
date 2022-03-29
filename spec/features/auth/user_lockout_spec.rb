@@ -23,7 +23,7 @@ RSpec.describe "User Lockout" do
       fill_in("user[password]", with: user.password)
       click_button("Sign in")
       expect(page).to have_http_status(:unprocessable_entity)
-      expect(page).to have_content("Your account is locked.")
+      expect(page).to have_content(I18n.t("devise.failure.locked"))
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe "User Lockout" do
       fill_in("admin_user[password]", with: admin.password)
       click_button("Sign in")
       expect(page).to have_http_status(:unprocessable_entity)
-      expect(page).to have_content("Your account is locked.")
+      expect(page).to have_content(I18n.t("devise.failure.locked"))
     end
   end
 
