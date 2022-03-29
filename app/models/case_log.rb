@@ -124,6 +124,10 @@ class CaseLog < ApplicationRecord
     net_income_in_soft_min_range? || net_income_in_soft_max_range?
   end
 
+  def rent_in_soft_validation_range?
+    rent_in_soft_min_range? || rent_in_soft_max_range?
+  end
+
   def given_reasonable_preference?
     reasonpref == 1
   end

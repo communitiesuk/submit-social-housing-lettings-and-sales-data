@@ -37,7 +37,7 @@ class Form
   def next_page(page, case_log)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = page.id.include?("value_check") && case_log[page.id] == 1 ? page_ids[page_index - 1] : page_ids[page_index + 1]
+    page_id = page.id.include?("value_check") && case_log[page.questions[0].id] == 1 ? previous_page(page_ids, page_index, case_log) : page_ids[page_index + 1]
     nxt_page = get_page(page_id)
 
     return :check_answers if nxt_page.nil?
@@ -143,5 +143,12 @@ class Form
   def is_last_question?(page, subsection, case_log)
     subsection_ids = subsections.map(&:id)
     subsection.id == subsection_ids[subsection_ids.length - 1] && next_page(page, case_log) == :check_answers
+  end
+
+  def previous_page(page_ids, page_index, case_log)
+    prev_page = get_page(page_ids[page_index - 1])
+    return prev_page.id if prev_page.routed_to?(case_log)
+
+    previous_page(page_ids, page_index - 1, case_log)
   end
 end

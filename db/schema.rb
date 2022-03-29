@@ -231,7 +231,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "relat6"
     t.string "relat7"
     t.string "relat8"
-    t.boolean "rent_value_check"
+    t.integer "rent_value_check"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
