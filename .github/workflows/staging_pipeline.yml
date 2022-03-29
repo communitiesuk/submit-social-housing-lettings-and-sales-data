@@ -7,8 +7,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-concurrency: 'staging'
-
 defaults:
   run:
     shell: bash
@@ -105,6 +103,7 @@ jobs:
 
   deploy:
     name: Deploy
+    concurrency: 'staging'
 
     runs-on: ubuntu-latest
     environment: 'staging'

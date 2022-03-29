@@ -5,8 +5,6 @@ on:
     types: [released]
   workflow_dispatch:
 
-concurrency: 'production'
-
 env:
   REPO_URL: communitiesuk/submit-social-housing-lettings-and-sales-data
 
@@ -133,6 +131,7 @@ jobs:
 
   deploy:
     name: Deploy
+    concurrency: 'production'
 
     runs-on: ubuntu-latest
     environment: 'production'
