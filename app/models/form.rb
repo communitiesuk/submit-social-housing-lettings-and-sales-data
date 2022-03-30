@@ -37,7 +37,7 @@ class Form
   def next_page(page, case_log)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = page.id.include?("value_check") && case_log[page.questions[0].id] == 1 ? previous_page(page_ids, page_index, case_log) : page_ids[page_index + 1]
+    page_id = page.id.include?("value_check") && case_log[page.questions[0].id] == 1 && page.routed_to?(case_log) ? previous_page(page_ids, page_index, case_log) : page_ids[page_index + 1]
     nxt_page = get_page(page_id)
 
     return :check_answers if nxt_page.nil?

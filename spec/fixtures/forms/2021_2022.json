@@ -562,7 +562,7 @@
                 "title_text": "Net income is outside the expected range based on the main tenant’s working situation",
                 "informative_text": {
                   "translation": "soft_validations.net_income.hint_text",
-                  "argument": ["ecstat1", "earnings"]
+                  "argument": {"ecstat1": "question", "earnings": "question"}
                 },
                 "questions": {
                   "net_income_value_check": {

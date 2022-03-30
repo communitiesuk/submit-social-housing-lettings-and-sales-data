@@ -225,8 +225,10 @@ en:
       in_soft_max_range:
         message: "Net income is higher than expected based on the main tenant’s working situation. Are you sure this is correct?"
     rent:
-      min_max: 
-        hint_text: "You have entered %{brent}"
+      min: 
+        hint_text: "<p>The minimum rent for a property in %{la} is £%{soft_min} every week.</p><p>You entered <strong>%{brent}</strong></p>"
+      max: 
+        hint_text: "<p>The maximum rent for a property in %{la} is £%{soft_max} every week.</p><p>You entered <strong>%{brent}</strong></p>"
   devise:
     two_factor_authentication:
       success: "Two factor authentication successful."

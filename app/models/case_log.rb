@@ -285,6 +285,14 @@ class CaseLog < ApplicationRecord
     [30, 31].any?(prevten)
   end
 
+  def soft_min
+    LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_min
+  end
+
+  def soft_max
+    LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
+  end
+
 private
 
   PIO = Postcodes::IO.new
