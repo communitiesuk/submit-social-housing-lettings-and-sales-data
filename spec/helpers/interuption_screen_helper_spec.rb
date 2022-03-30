@@ -22,10 +22,10 @@ RSpec.describe InteruptionScreenHelper do
       it "returns correct informative text" do
         informative_text = {
           "translation" => "soft_validations.net_income.hint_text",
-          "argument" => %w[ecstat1 earnings],
+          "argument" => { "ecstat1": "question", "earnings": "question" },
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("<p>You told us the main tenant’s working situation is: <strong>Full-time – 30 hours or more</strong></p><p>The household income you have entered is <strong>£750.00 every week</strong></p>")
+          .to eq("<p>You told us the lead tenant’s working situation is: <strong>Full-time – 30 hours or more</strong></p><p>The household income you have entered is <strong>£750.00 every week</strong></p>")
       end
     end
 
@@ -33,7 +33,7 @@ RSpec.describe InteruptionScreenHelper do
       it "returns correct informative text" do
         informative_text = {
           "translation" => "test.one_argument",
-          "argument" => %w[ecstat1],
+          "argument" => { "ecstat1": "question" },
         }
         expect(display_informative_text(informative_text, case_log))
           .to eq("This is based on the tenant’s work situation: Full-time – 30 hours or more")
@@ -45,7 +45,7 @@ RSpec.describe InteruptionScreenHelper do
     it "returns correct informative text" do
       informative_text = {
         "translation" => "test.one_argument",
-        "argument" => %w[ecstat1 earnings],
+        "argument" => { "ecstat1": "question", "earnings": "question" },
       }
       expect(display_informative_text(informative_text, case_log))
         .to eq("This is based on the tenant’s work situation: Full-time – 30 hours or more")
@@ -56,7 +56,7 @@ RSpec.describe InteruptionScreenHelper do
     it "returns an empty string" do
       informative_text = {
         "translation" => "soft_validations.net_income.hint_text",
-        "argument" => %w[ecstat1],
+        "argument" => { "ecstat1": "question" },
       }
       expect(display_informative_text(informative_text, case_log))
         .to eq("")

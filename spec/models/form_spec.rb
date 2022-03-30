@@ -8,9 +8,49 @@ RSpec.describe Form, type: :model do
 
   describe ".next_page" do
     let(:previous_page) { form.get_page("person_1_age") }
+    let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
       expect(form.next_page(previous_page, case_log)).to eq("person_1_gender")
+    end
+
+    context "when the current page is a value check page" do
+      before do
+        case_log.incfreq = 0
+        case_log.earnings = 140
+        case_log.ecstat1 = 1
+      end
+
+      it "returns the previous page if answer is `No` and the page is routed to" do
+        case_log.net_income_value_check = 1
+        expect(form.next_page(value_check_previous_page, case_log)).to eq("net_income")
+      end
+
+      it "returns the next page if answer is `Yes` answer and the page is routed to" do
+        case_log.net_income_value_check = 0
+        expect(form.next_page(value_check_previous_page, case_log)).to eq("net_income_uc_proportion")
+      end
+    end
+  end
+
+  describe ".previous_page" do
+    context "when the current page is not a value check page" do
+      let!(:subsection) { form.get_subsection("conditional_question") }
+      let!(:page_ids) { subsection.pages.map(&:id) }
+
+      before do
+        case_log.preg_occ = 1
+      end
+
+      it "returns the previous page if the page is routed to" do
+        page_index = page_ids.index("conditional_question_no_second_page")
+        expect(form.previous_page(page_ids, page_index, case_log)).to eq("conditional_question_no_page")
+      end
+
+      it "returns the page before the previous one if the previous page is not routed to" do
+        page_index = page_ids.index("conditional_question_no_page")
+        expect(form.previous_page(page_ids, page_index, case_log)).to eq("conditional_question")
+      end
     end
   end
 

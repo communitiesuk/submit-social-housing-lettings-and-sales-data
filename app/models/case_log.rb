@@ -124,6 +124,10 @@ class CaseLog < ApplicationRecord
     net_income_in_soft_min_range? || net_income_in_soft_max_range?
   end
 
+  def rent_in_soft_validation_range?
+    rent_in_soft_min_range? || rent_in_soft_max_range?
+  end
+
   def given_reasonable_preference?
     reasonpref == 1
   end
@@ -279,6 +283,14 @@ class CaseLog < ApplicationRecord
 
   def is_prevten_la_general_needs?
     [30, 31].any?(prevten)
+  end
+
+  def soft_min
+    LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_min
+  end
+
+  def soft_max
+    LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
   end
 
 private

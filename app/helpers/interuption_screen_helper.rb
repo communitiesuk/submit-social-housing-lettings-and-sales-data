@@ -1,13 +1,10 @@
 module InteruptionScreenHelper
   def display_informative_text(informative_text, case_log)
-    translation_questions = informative_text["argument"].map { |x| case_log.form.get_question(x) }
+    arguments = informative_text["argument"].map { |x, type| type == "question" ? case_log.form.get_question(x, case_log).answer_label(case_log) : case_log.public_send(x) }
+    keys = informative_text["argument"].keys
+
     begin
-      case translation_questions.count
-      when 2
-        translation = I18n.t(informative_text["translation"], informative_text["argument"][0].to_sym => translation_questions[0].answer_label(case_log), informative_text["argument"][1].to_sym => translation_questions[1].answer_label(case_log))
-      when 1
-        translation = I18n.t(informative_text["translation"], informative_text["argument"][0].to_sym => translation_questions[0].answer_label(case_log))
-      end
+      translation = I18n.t(informative_text["translation"], keys[0].present? ? keys[0].to_sym : "" => arguments[0], keys[1].present? ? keys[1].to_sym : "" => arguments[1], keys[2].present? ? keys[2].to_sym : "" => arguments[2])
     rescue StandardError
       return ""
     end
