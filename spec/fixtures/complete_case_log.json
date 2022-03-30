@@ -53,7 +53,7 @@
     "startertenancy": 0,
     "tenancylength": 5,
     "tenancy": 3,
-    "landlord": "This landlord",
+    "landlord": 1,
     "la": "Barnet",
     "postcode_full": "NW1 5TY",
     "property_relet": 0,

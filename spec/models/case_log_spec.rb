@@ -192,6 +192,7 @@ RSpec.describe CaseLog do
 
   describe "derived variables" do
     let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
+    let(:la_organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
     let!(:case_log) do
       described_class.create({
         managing_organisation: organisation,
@@ -601,6 +602,13 @@ RSpec.describe CaseLog do
             expect(case_log.wtcharge).to eq(125.0)
             expect(record_from_db["wtcharge"]).to eq(125.0)
           end
+
+          # it "correctly derives and saves landlord based on owning_organisation provider_type" do
+          #   case_log.update!(owning_organisation: la_organisation)
+          #   record_from_db = ActiveRecord::Base.connection.execute("select owning_organisation_id from case_logs where id=#{case_log.id}").to_a[0]
+          #   expect(case_log.landlord).to eq(2)
+          #   expect(record_from_db["landlord"]).to eq(2)
+          # end
 
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
