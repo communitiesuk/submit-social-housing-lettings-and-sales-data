@@ -63,6 +63,7 @@ module Exports
             form << doc.create_element(key, value)
           end
         end
+        form << doc.create_element("providertype", case_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
       end
       doc.write_xml_to(StringIO.new, encoding: "UTF-8")
     end
