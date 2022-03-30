@@ -86,7 +86,7 @@ RSpec.describe Validations::HouseholdValidations do
         end
       end
 
-      context "and they are the main tenant and under 51" do
+      context "and they are the lead tenant and under 51" do
         it "pregnancy can be yes" do
           record.preg_occ = 0
           record.sex1 = "F"

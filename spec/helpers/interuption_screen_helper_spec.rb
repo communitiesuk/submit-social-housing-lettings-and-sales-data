@@ -25,7 +25,7 @@ RSpec.describe InteruptionScreenHelper do
           "argument" => { "ecstat1": "question", "earnings": "question" },
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("<p>You told us the main tenant’s working situation is: <strong>Full-time – 30 hours or more</strong></p><p>The household income you have entered is <strong>£750.00 every week</strong></p>")
+          .to eq("<p>You told us the lead tenant’s working situation is: <strong>Full-time – 30 hours or more</strong></p><p>The household income you have entered is <strong>£750.00 every week</strong></p>")
       end
     end
 
