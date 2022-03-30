@@ -8,9 +8,19 @@ RSpec.describe Form, type: :model do
 
   describe ".next_page" do
     let(:previous_page) { form.get_page("person_1_age") }
+    let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
       expect(form.next_page(previous_page, case_log)).to eq("person_1_gender")
+    end
+
+    it "returns the previuos page if the current page is a value check page with a `No` answer and the page is routed to" do
+      case_log.net_income_value_check = 1
+      case_log.incfreq = 0
+      case_log.earnings = 140
+      case_log.ecstat1 = 1
+
+      expect(form.next_page(value_check_previous_page, case_log)).to eq("net_income")
     end
   end
 
