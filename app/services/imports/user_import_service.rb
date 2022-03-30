@@ -24,13 +24,40 @@ module Imports
           phone: user_field_value(xml_document, "telephone-no"),
           old_user_id:,
           organisation:,
-          role: PROVIDER_TYPE[user_field_value(xml_document, "user-type")],
+          role: role(user_field_value(xml_document, "user-type")),
+          is_dpo: is_dpo?(user_field_value(xml_document, "user-type")),
+          is_key_contact: is_key_contact?(user_field_value(xml_document, "contact-priority-id")),
         )
       end
     end
 
     def user_field_value(xml_document, field)
       field_value(xml_document, "user", field)
+    end
+
+    def role(field_value)
+      return unless field_value
+
+      case field_value.downcase.strip
+      when "data provider"
+        "data_provider"
+      when "co-ordinator"
+        "data_coordinator"
+      when "private data downloader"
+        "data_accessor"
+      end
+    end
+
+    def is_dpo?(field_value)
+      return false unless field_value.present?
+
+      field_value.downcase.strip == "data protection officer"
+    end
+
+    def is_key_contact?(field_value)
+      return false unless field_value.present?
+
+      ["ecore contact", "key performance contact"].include?(field_value.downcase.strip)
     end
   end
 end

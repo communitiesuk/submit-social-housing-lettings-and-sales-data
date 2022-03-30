@@ -29,11 +29,46 @@ RSpec.describe Imports::UserImportService do
       expect(user.phone).to eq("02012345678")
       expect(user).to be_data_provider
       expect(user.organisation.old_org_id).to eq(old_org_id)
+      expect(user.is_key_contact?).to be false
     end
 
     it "refuses to create a user belonging to a non existing organisation" do
       expect { import_service.create_users("user_directory") }
         .to raise_error(ActiveRecord::RecordInvalid, /Organisation must exist/)
+    end
+
+    context "when the user is a data coordinator" do
+      let(:old_user_id) { "d4729b1a5dfb68bb1e01c08445830c0add40907c" }
+
+      it "sets their role correctly" do
+        FactoryBot.create(:organisation, old_org_id:)
+        import_service.create_users("user_directory")
+        expect(User.find_by(old_user_id:)).to be_data_coordinator
+      end
+    end
+
+    context "when the user was a 'Key Performance Contact' in the old system" do
+      let(:old_user_id) { "d4729b1a5dfb68bb1e01c08445830c0add40907c" }
+
+      it "marks them as a key contact" do
+        FactoryBot.create(:organisation, old_org_id:)
+        import_service.create_users("user_directory")
+
+        user = User.find_by(old_user_id:)
+        expect(user.is_key_contact?).to be true
+      end
+    end
+
+    context "when the user was a 'eCORE Contact' in the old system" do
+      let(:old_user_id) { "d6717836154cd9a58f9e2f1d3077e3ab81e07613" }
+
+      it "marks them as a key contact" do
+        FactoryBot.create(:organisation, old_org_id:)
+        import_service.create_users("user_directory")
+
+        user = User.find_by(old_user_id:)
+        expect(user.is_key_contact?).to be true
+      end
     end
 
     context "when the user has already been imported previously" do
