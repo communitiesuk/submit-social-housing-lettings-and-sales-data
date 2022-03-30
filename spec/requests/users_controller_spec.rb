@@ -210,13 +210,14 @@ RSpec.describe UsersController, type: :request do
           expect(whodunnit_actor.id).to eq(user.id)
         end
 
-        context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+        context "when user changes email, dpo, key_contact" do
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
-          it "allows changing email and dpo" do
+          it "allows changing email but not dpo or key_contact" do
             user.reload
             expect(user.email).to eq(new_email)
-            expect(user.is_data_protection_officer?).to be true
+            expect(user.is_data_protection_officer?).to be false
+            expect(user.is_key_contact?).to be false
           end
         end
       end
@@ -263,6 +264,32 @@ RSpec.describe UsersController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_selector("#error-summary-title")
         end
+      end
+    end
+
+    describe "#create" do
+      let(:params) do
+        {
+          "user": {
+            name: "new user",
+            email: "new_user@example.com",
+            role: "data_coordinator",
+          },
+        }
+      end
+      let(:request) { post "/users/", headers: headers, params: params }
+
+      before do
+        sign_in user
+      end
+
+      it "does not invite a new user" do
+        expect { request }.not_to change(User, :count)
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -399,12 +426,13 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when user changes email and dpo" do
-          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+          let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
           it "allows changing email and dpo" do
             user.reload
             expect(user.email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
+            expect(user.is_key_contact?).to be true
           end
         end
 
@@ -443,14 +471,15 @@ RSpec.describe UsersController, type: :request do
               .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
           end
 
-          context "when user changes email and dpo" do
-            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true" } } }
+          context "when user changes email, dpo, key_contact" do
+            let(:params) { { id: other_user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
 
-            it "allows changing email and dpo" do
+            it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
               expect(other_user.email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
+              expect(other_user.is_key_contact?).to be true
             end
           end
 
@@ -510,42 +539,43 @@ RSpec.describe UsersController, type: :request do
         end
       end
     end
-  end
 
-  describe "#create" do
-    let(:params) do
-      {
-        "user": {
-          name: "new user",
-          email: "new_user@example.com",
-          role: "data_coordinator",
-        },
-      }
-    end
-    let(:request) { post "/users/", headers: headers, params: params }
+    describe "#create" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:params) do
+        {
+          "user": {
+            name: "new user",
+            email: "new_user@example.com",
+            role: "data_coordinator",
+          },
+        }
+      end
+      let(:request) { post "/users/", headers: headers, params: params }
 
-    before do
-      sign_in user
-    end
-
-    it "invites a new user" do
-      expect { request }.to change(User, :count).by(1)
-    end
-
-    it "redirects back to organisation users page" do
-      request
-      expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
-    end
-
-    context "when the email is already taken" do
       before do
-        FactoryBot.create(:user, email: "new_user@example.com")
+        sign_in user
       end
 
-      it "shows an error" do
+      it "invites a new user" do
+        expect { request }.to change(User, :count).by(1)
+      end
+
+      it "redirects back to organisation users page" do
         request
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(page).to have_content(I18n.t("validations.email.taken"))
+        expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
+      end
+
+      context "when the email is already taken" do
+        before do
+          FactoryBot.create(:user, email: "new_user@example.com")
+        end
+
+        it "shows an error" do
+          request
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.email.taken"))
+        end
       end
     end
   end

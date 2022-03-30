@@ -317,6 +317,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
     t.boolean "is_dpo", default: false
+    t.boolean "is_key_contact", default: false
     t.string "phone"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"

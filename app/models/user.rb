@@ -37,6 +37,14 @@ class User < ApplicationRecord
     last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
   end
 
+  def is_key_contact?
+    is_key_contact
+  end
+
+  def is_key_contact!
+    update(is_key_contact: true)
+  end
+
   def is_data_protection_officer?
     is_dpo
   end

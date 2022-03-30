@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   include Helpers::Email
   before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
-  before_action :authenticate_scope!, except: %i[new create]
+  before_action :authenticate_scope!, except: %i[new]
 
   def update
     if @user.update(user_params)
@@ -76,9 +76,13 @@ private
 
   def user_params
     if @user == current_user
-      params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo)
-    else
-      params.require(:user).permit(:email, :name, :role, :is_dpo)
+      if current_user.data_coordinator?
+        params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact)
+      else
+        params.require(:user).permit(:email, :name, :password, :password_confirmation)
+      end
+    elsif current_user.data_coordinator?
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
     end
   end
 
@@ -87,8 +91,12 @@ private
   end
 
   def authenticate_scope!
-    render_not_found and return unless current_user.organisation == @user.organisation
-    render_not_found and return if action_name == "edit_password" && current_user != @user
-    render_not_found and return unless current_user.role == "data_coordinator" || current_user == @user
+    if action_name == "create"
+      head :unauthorized and return unless current_user.data_coordinator?
+    else
+      render_not_found and return unless current_user.organisation == @user.organisation
+      render_not_found and return if action_name == "edit_password" && current_user != @user
+      render_not_found and return unless current_user.data_coordinator? || current_user == @user
+    end
   end
 end
