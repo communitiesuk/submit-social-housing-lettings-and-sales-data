@@ -38,24 +38,21 @@ module Imports
     def role(field_value)
       return unless field_value
 
-      case field_value.downcase.strip
-      when "data provider"
-        "data_provider"
-      when "co-ordinator"
-        "data_coordinator"
-      when "private data downloader"
-        "data_accessor"
-      end
+      {
+        "co-ordinator" => "data_coordinator",
+        "data provider" => "data_provider",
+        "private data downloader" => "data_accessor",
+      }[field_value.downcase.strip]
     end
 
     def is_dpo?(field_value)
-      return false unless field_value.present?
+      return false if field_value.blank?
 
       field_value.downcase.strip == "data protection officer"
     end
 
     def is_key_contact?(field_value)
-      return false unless field_value.present?
+      return false if field_value.blank?
 
       ["ecore contact", "key performance contact"].include?(field_value.downcase.strip)
     end
