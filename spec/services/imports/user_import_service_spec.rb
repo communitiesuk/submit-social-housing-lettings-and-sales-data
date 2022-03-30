@@ -57,6 +57,18 @@ RSpec.describe Imports::UserImportService do
       end
     end
 
+    context "when the user is a data protection officer" do
+      let(:old_user_id) { "10c887710550844e2551b3e0fb88dc9b4a8a642b" }
+
+      it "marks them as a data protection officer" do
+        FactoryBot.create(:organisation, old_org_id:)
+        import_service.create_users("user_directory")
+
+        user = User.find_by(old_user_id:)
+        expect(user.is_data_protection_officer?).to be true
+      end
+    end
+
     context "when the user was a 'Key Performance Contact' in the old system" do
       let(:old_user_id) { "d4729b1a5dfb68bb1e01c08445830c0add40907c" }
 
@@ -90,6 +102,55 @@ RSpec.describe Imports::UserImportService do
       it "logs that the user already exists" do
         expect(Rails.logger).to receive(:warn)
         import_service.create_users("user_directory")
+      end
+    end
+
+    context "when a user has already been imported with that email" do
+      let!(:org) { FactoryBot.create(:organisation, old_org_id:) }
+      let!(:user) { FactoryBot.create(:user, :data_provider, organisation: org, email: "john.doe@gov.uk") }
+
+      context "when the duplicate role is higher than the original role" do
+        let(:old_user_id) { "d4729b1a5dfb68bb1e01c08445830c0add40907c" }
+
+        it "upgrades their role" do
+          import_service.create_users("user_directory")
+          expect(user.reload).to be_data_coordinator
+        end
+
+        it "does not create a new record" do
+          expect { import_service.create_users("user_directory") }
+            .not_to change(User, :count)
+        end
+      end
+
+      context "when the duplicate role is lower than the original role" do
+        let!(:user) { FactoryBot.create(:user, :data_coordinator, organisation: org, email: "john.doe@gov.uk") }
+        let(:old_user_id) { "fc7625a02b24ae16162aa63ae7cb33feeec0c373" }
+
+        it "does not change their role" do
+          expect { import_service.create_users("user_directory") }
+            .not_to(change { user.reload.role })
+        end
+
+        it "does not create a new record" do
+          expect { import_service.create_users("user_directory") }
+            .not_to change(User, :count)
+        end
+      end
+
+      context "when the duplicate record is a data protection officer role" do
+        let!(:user) { FactoryBot.create(:user, :data_coordinator, organisation: org, email: "john.doe@gov.uk") }
+        let(:old_user_id) { "10c887710550844e2551b3e0fb88dc9b4a8a642b" }
+
+        it "marks them as a data protection officer" do
+          import_service.create_users("user_directory")
+          expect(user.reload.is_data_protection_officer?).to be true
+        end
+
+        it "does not create a new record" do
+          expect { import_service.create_users("user_directory") }
+            .not_to change(User, :count)
+        end
       end
     end
   end
