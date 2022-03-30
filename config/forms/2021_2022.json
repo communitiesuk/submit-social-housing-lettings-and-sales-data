@@ -9,40 +9,6 @@
         "setup": {
           "label": "Set up this lettings log",
           "pages": {
-            "organisation_details": {
-              "header": "Organisation details",
-              "description": "",
-              "questions": {
-                "property_owner_organisation": {
-                  "check_answer_label": "Owning organisation",
-                  "header": "Which organisation owns this property?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "A"
-                    },
-                    "1": {
-                      "value": "B"
-                    }
-                  }
-                },
-                "property_manager_organisation": {
-                  "check_answer_label": "Managing organisation",
-                  "header": "Which organisation manages this property?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "0": {
-                      "value": "A"
-                    },
-                    "1": {
-                      "value": "B"
-                    }
-                  }
-                }
-              }
-            },
             "needs_type": {
               "header": "",
               "description": "",
