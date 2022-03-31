@@ -59,6 +59,8 @@ gem "redis"
 # Receive exceptions and configure alerts
 gem "sentry-rails"
 gem "sentry-ruby"
+# Pagination
+gem "pagy"
 
 group :development, :test do
   # Check gems for known vulnerabilities

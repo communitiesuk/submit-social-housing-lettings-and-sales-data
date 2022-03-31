@@ -137,6 +137,7 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "GET" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
     let(:other_organisation) { FactoryBot.create(:organisation) }
@@ -160,14 +161,102 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         sign_in user
-        get "/logs", headers: headers, params: {}
       end
 
-      it "only shows case logs for your organisation" do
-        expected_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{case_log.id}\">#{case_log.id}</a>"
-        unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
-        expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
-        expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+      context "when there are less than 20 logs" do
+        before do
+          get "/logs", headers: headers, params: {}
+        end
+
+        it "shows a table of logs" do
+          expect(CGI.unescape_html(response.body)).to match(/<table class="govuk-table">/)
+          expect(CGI.unescape_html(response.body)).to match(/logs/)
+        end
+
+        it "only shows case logs for your organisation" do
+          expected_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{case_log.id}\">#{case_log.id}</a>"
+          unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+          expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
+          expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+        end
+
+        it "shows the formatted created at date for each log" do
+          formatted_date = case_log.created_at.to_formatted_s(:govuk_date)
+          expect(CGI.unescape_html(response.body)).to include(formatted_date)
+        end
+
+        it "shows the log's status" do
+          expect(CGI.unescape_html(response.body)).to include(case_log.status.humanize)
+        end
+
+        it "shows the total log count" do
+          expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total logs")
+        end
+
+        it "does not show the pagination links" do
+          expect(page).not_to have_link("Previous")
+          expect(page).not_to have_link("Next")
+        end
+
+        it "does not show the pagination result line" do
+          expect(CGI.unescape_html(response.body)).not_to match("Showing <b>1</b> to <b>20</b> of <b>26</b> logs")
+        end
+
+        it "does not have pagination in the title" do
+          expect(page).to have_title("Logs")
+        end
+      end
+
+      context "when there are more than 20 logs" do
+        before do
+          FactoryBot.create_list(:case_log, 25, owning_organisation: organisation, managing_organisation: organisation)
+        end
+
+        context "when on the first page" do
+          before do
+            get "/logs", headers: headers, params: {}
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+
+          it "shows which logs are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>26</b> logs")
+          end
+
+          it "has pagination in the title" do
+            expect(page).to have_title("Logs (page 1 of 2)")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/logs?page=2", headers: headers, params: {}
+          end
+
+          it "shows the total log count" do
+            expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> total logs")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+
+          it "shows which logs are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>26</b> of <b>26</b> logs")
+          end
+
+          it "has pagination in the title" do
+            expect(page).to have_title("Logs (page 2 of 2)")
+          end
+        end
       end
     end
 

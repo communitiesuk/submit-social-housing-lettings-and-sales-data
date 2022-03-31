@@ -10,5 +10,6 @@
 </div>
 
 <% if @case_logs.present? %>
-  <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs" } %>
+  <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
+  <%== render partial: 'pagy/nav', locals: { pagy: @pagy, item_name: "logs" } %>
 <% end %>
