@@ -1,8 +1,7 @@
-<% content_for :title, "Logs" %>
+<% title = @pagy.pages > 1 ? "Logs (page #{@pagy.page} of #{@pagy.pages})" : "Logs" %>
+<% content_for :title, title %>
 
-<h1 class="govuk-heading-l">
-  <%= content_for(:title) %>
-</h1>
+<h1 class="govuk-heading-l">Logs</h1>
 
 <div class="govuk-button-group">
   <%= govuk_button_to "Create a new lettings log", case_logs_path %>
