@@ -18,6 +18,7 @@ end
 
 class CaseLog < ApplicationRecord
   include Validations::SoftValidations
+  include GenerateCsv
 
   has_paper_trail
 
