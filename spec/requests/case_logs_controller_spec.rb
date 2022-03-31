@@ -208,7 +208,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       it "shows the download csv link" do
-        expect(page).to have_link("Download (CSV)")
+        expect(page).to have_link("Download (CSV)", href: "/logs.csv")
       end
 
       context "when there are more than 20 logs" do
