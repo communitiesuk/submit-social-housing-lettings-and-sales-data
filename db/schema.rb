@@ -319,7 +319,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.boolean "is_dpo", default: false
     t.boolean "is_key_contact", default: false
     t.string "phone"
-    t.boolean "is_dpo", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
