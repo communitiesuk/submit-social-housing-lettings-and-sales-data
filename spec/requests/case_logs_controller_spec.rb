@@ -309,6 +309,10 @@ RSpec.describe CaseLogsController, type: :request do
           it "shows which logs are being shown on the current page" do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>26</b> logs")
           end
+
+          it "has pagination in the title" do
+            expect(page).to have_title("Logs (page 1 of 2)")
+          end
         end
 
         context "when on the second page" do
@@ -329,6 +333,10 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows which logs are being shown on the current page" do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>26</b> of <b>26</b> logs")
+          end
+
+          it "has pagination in the title" do
+            expect(page).to have_title("Logs (page 2 of 2)")
           end
         end
       end
