@@ -258,6 +258,15 @@ RSpec.describe CaseLogsController, type: :request do
           end
         end
       end
+
+      it "shows the formatted created at date for each log" do
+        formatted_date = case_log.created_at.to_formatted_s(:govuk_date)
+        expect(CGI.unescape_html(response.body)).to include(formatted_date)
+      end
+
+      it "shows the log's status" do
+        expect(CGI.unescape_html(response.body)).to include(case_log.status.humanize)
+      end
     end
 
     context "when requesting a specific case log" do
