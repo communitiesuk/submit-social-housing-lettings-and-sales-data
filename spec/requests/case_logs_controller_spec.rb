@@ -191,9 +191,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       context "when there are more than 20 logs" do
         before do
-          25.times do
-            FactoryBot.create(:case_log, owning_organisation: organisation, managing_organisation: organisation,)
-          end
+          FactoryBot.create_list(:case_log, 25, owning_organisation: organisation, managing_organisation: organisation)
           get "/logs", headers: headers, params: {}
         end
 
@@ -206,7 +204,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "shows which logs are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> logs")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>26</b> logs")
           end
         end
 
@@ -227,7 +225,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "shows which logs are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>26</b> logs")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>26</b> of <b>26</b> logs")
           end
         end
       end
