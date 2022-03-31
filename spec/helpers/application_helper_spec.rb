@@ -5,16 +5,33 @@ RSpec.describe ApplicationHelper do
   let(:form) { form_handler.get_form("test_form") }
   let(:subsection) { form.get_subsection("household_characteristics") }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:pagy) { nil }
 
   describe "browser_title" do
-    it "returns correct browser title when title is given" do
-      expect(browser_title("title"))
-        .to eq("title - #{t('service_name')} - GOV.UK")
+    context "with no pagination" do
+      it "returns correct browser title when title is given" do
+        expect(browser_title("title", pagy))
+          .to eq("title - #{t('service_name')} - GOV.UK")
+      end
+
+      it "returns correct browser title when title is not given" do
+        expect(browser_title(nil, pagy))
+          .to eq("#{t('service_name')} - GOV.UK")
+      end
     end
 
-    it "returns correct browser title when title is not given" do
-      expect(browser_title(nil))
-        .to eq("#{t('service_name')} - GOV.UK")
+    context "with pagination" do
+      let(:pagy) { OpenStruct.new(page: 1, pages: 2) }
+
+      it "returns correct browser title when title is given" do
+        expect(browser_title("title", pagy))
+          .to eq("title (page 1 of 2) - #{t('service_name')} - GOV.UK")
+      end
+
+      it "returns correct browser title when title is not given" do
+        expect(browser_title(nil, pagy))
+          .to eq("#{t('service_name')} - GOV.UK")
+      end
     end
   end
 end
