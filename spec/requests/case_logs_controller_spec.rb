@@ -207,6 +207,10 @@ RSpec.describe CaseLogsController, type: :request do
         end
       end
 
+      it "shows the download csv link" do
+        expect(page).to have_link("Download (CSV)")
+      end
+
       context "when there are more than 20 logs" do
         before do
           FactoryBot.create_list(:case_log, 25, owning_organisation: organisation, managing_organisation: organisation)
