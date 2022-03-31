@@ -18,7 +18,6 @@ end
 
 class CaseLog < ApplicationRecord
   include Validations::SoftValidations
-  include GenerateCsv
 
   has_paper_trail
 
@@ -292,6 +291,18 @@ class CaseLog < ApplicationRecord
 
   def soft_max
     LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
+  end
+
+  def self.to_csv
+    CSV.generate(headers: true) do |csv|
+      csv << attribute_names
+
+      all.find_each do |record|
+        csv << record.attributes.map do |att, val|
+          record.form.get_question(att, record)&.label_from_value(val) || val
+        end
+      end
+    end
   end
 
 private

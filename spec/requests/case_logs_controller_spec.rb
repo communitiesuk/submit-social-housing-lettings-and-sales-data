@@ -410,6 +410,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
+        ecstat1: 1,
       )
     end
 
@@ -428,6 +429,11 @@ RSpec.describe CaseLogsController, type: :request do
     it "does not download other orgs logs" do
       csv = CSV.parse(response.body)
       expect(csv.count).to eq(2)
+    end
+
+    it "downloads answer labels rather than values" do
+      csv = CSV.parse(response.body)
+      expect(csv.second[10]).to eq("Full-time - 30 hours or more")
     end
   end
 
