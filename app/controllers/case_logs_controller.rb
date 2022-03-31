@@ -1,11 +1,13 @@
 class CaseLogsController < ApplicationController
+  include Pagy::Backend
+
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
   before_action :authenticate_user!, unless: :json_api_request?
   before_action :find_resource, except: %i[create index edit]
 
   def index
-    @case_logs = current_user.case_logs
+    @pagy, @case_logs = pagy(current_user.case_logs)
   end
 
   def create

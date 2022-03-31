@@ -266,6 +266,8 @@ GEM
       childprocess (>= 0.6.3, < 5)
       iniparse (~> 1.4)
       rexml (~> 3.2)
+    pagy (5.10.1)
+      activesupport
     paper_trail (12.3.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
@@ -486,6 +488,7 @@ DEPENDENCIES
   listen (~> 3.3)
   notifications-ruby-client
   overcommit (>= 0.37.0)
+  pagy
   paper_trail
   paper_trail-globalid
   pg (~> 1.1)
