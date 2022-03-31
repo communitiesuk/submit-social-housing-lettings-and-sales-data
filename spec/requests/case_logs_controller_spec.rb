@@ -482,6 +482,32 @@ RSpec.describe CaseLogsController, type: :request do
     end
   end
 
+  describe "CSV download" do
+    let(:headers) { { "Accept" => "text/csv" } }
+    let(:user) { FactoryBot.create(:user) }
+    let(:organisation) { user.organisation }
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let!(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
+
+    before do
+      sign_in user
+      get "/logs", headers: headers, params: {}
+    end
+
+    it "downloads a CSV file with headers" do
+      csv = CSV.parse(response.body)
+      expect(csv.count).to eq(2)
+      expect(csv.first.first).to eq("id")
+      expect(csv.second.first).to eq(case_log.id.to_s)
+    end
+  end
+
   describe "PATCH" do
     let(:case_log) do
       FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "M1 1AE")
