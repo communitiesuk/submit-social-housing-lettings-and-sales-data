@@ -137,6 +137,7 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "GET" do
+    let(:page) { Capybara::Node::Simple.new(response.body) }
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
     let(:other_organisation) { FactoryBot.create(:organisation) }
@@ -196,8 +197,38 @@ RSpec.describe CaseLogsController, type: :request do
           get "/logs", headers: headers, params: {}
         end
 
-        it "shows the total log count" do
-          expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> total logs")
+        context "when on the first page" do
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+
+          it "shows which logs are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> logs")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/logs?page=2", headers: headers, params: {}
+          end
+
+          it "shows the total log count" do
+            expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> total logs")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+
+          it "shows which logs are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>26</b> logs")
+          end
         end
       end
     end
