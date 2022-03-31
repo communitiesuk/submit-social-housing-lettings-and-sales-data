@@ -18,6 +18,17 @@ RSpec.describe Organisation, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type can't be blank")
     end
 
+    context "with data protection confirmations" do
+      before do
+        FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false)
+        FactoryBot.create(:data_protection_confirmation, organisation:)
+      end
+
+      it "takes the most recently created" do
+        expect(organisation.data_protection_confirmed?).to be true
+      end
+    end
+
     context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do
