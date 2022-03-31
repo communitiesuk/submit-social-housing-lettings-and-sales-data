@@ -71,10 +71,10 @@ RSpec.describe "Form Check Answers Page" do
     # Regex explanation: match the string "Answer" but not if it's follow by "the missing questions"
     # This way only the links in the table will get picked up
     it "has an answer link for questions missing an answer" do
-      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
+      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers?referrer=check_answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
       assert_selector "a", text: "Change", count: 0
-      expect(page).to have_link("Answer", href: "/logs/#{empty_case_log.id}/person-1-age")
+      expect(page).to have_link("Answer", href: "/logs/#{empty_case_log.id}/person-1-age?referrer=check_answers")
     end
 
     it "has a change link for answered questions" do
@@ -82,7 +82,7 @@ RSpec.describe "Form Check Answers Page" do
       visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 1
-      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age")
+      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age?referrer=check_answers")
     end
 
     it "updates the change/answer link when answers get updated" do
@@ -95,7 +95,7 @@ RSpec.describe "Form Check Answers Page" do
       visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
       assert_selector "a", text: "Change", count: 2
-      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements")
+      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements?referrer=check_answers")
     end
 
     it "does not display conditional questions that were not visited" do
@@ -124,6 +124,20 @@ RSpec.describe "Form Check Answers Page" do
       excluded_question_labels = ["Has the next condition been met?"]
       excluded_question_labels.each do |label|
         expect(page).not_to have_content(label)
+      end
+    end
+
+    context "when the user changes their answer from check answer page" do
+      it "routes back to check answers" do
+        visit("/logs/#{empty_case_log.id}/accessibility-requirements")
+        check("case-log-accessibility-requirements-housingneeds-c-field")
+        click_button("Save and continue")
+        visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
+        first("a", text: /Change/).click
+        uncheck("case-log-accessibility-requirements-housingneeds-c-field")
+        check("case-log-accessibility-requirements-housingneeds-b-field")
+        click_button("Save and continue")
+        expect(page).to have_current_path("/logs/#{empty_case_log.id}/household-needs/check-answers")
       end
     end
 

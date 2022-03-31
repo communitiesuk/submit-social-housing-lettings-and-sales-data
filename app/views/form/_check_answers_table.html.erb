@@ -9,6 +9,6 @@
     <% end %>
   </dd>
   <dd class="govuk-summary-list__actions">
-    <%= govuk_link_to(question.update_answer_link_name(@case_log), "/logs/#{@case_log.id}/#{question.page.id.to_s.dasherize}").html_safe %>
+    <%= govuk_link_to(question.update_answer_link_name(@case_log), "/logs/#{@case_log.id}/#{question.page.id.to_s.dasherize}?referrer=check_answers").html_safe %>
   </dd>
 </div>

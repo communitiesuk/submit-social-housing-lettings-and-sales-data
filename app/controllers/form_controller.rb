@@ -8,7 +8,9 @@ class FormController < ApplicationController
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
       if @case_log.update(responses_for_page)
-        if @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
+        if is_referrer_check_answers?
+          redirect_to(send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log))
+        elsif @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
           redirect_to(case_logs_path)
         else
           redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
@@ -87,5 +89,10 @@ private
 
   def find_resource_by_named_id
     @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+  end
+
+  def is_referrer_check_answers?
+    referrer = request.headers["HTTP_REFERER"].presence || ""
+    referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
   end
 end
