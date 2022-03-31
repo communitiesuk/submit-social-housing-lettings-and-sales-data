@@ -163,11 +163,25 @@ RSpec.describe CaseLogsController, type: :request do
         get "/logs", headers: headers, params: {}
       end
 
+      it "shows a table of logs" do
+        expect(CGI.unescape_html(response.body)).to match(/<table class="govuk-table">/)
+        expect(CGI.unescape_html(response.body)).to match(/logs/)
+      end
+
       it "only shows case logs for your organisation" do
         expected_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{case_log.id}\">#{case_log.id}</a>"
         unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
         expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
         expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+      end
+
+      it "shows the formatted created at date for each log" do
+        formatted_date = case_log.created_at.to_formatted_s(:govuk_date)
+        expect(CGI.unescape_html(response.body)).to include(formatted_date)
+      end
+
+      it "shows the log's status" do
+        expect(CGI.unescape_html(response.body)).to include(case_log.status.humanize)
       end
     end
 
