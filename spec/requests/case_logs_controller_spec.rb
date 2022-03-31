@@ -205,10 +205,10 @@ RSpec.describe CaseLogsController, type: :request do
         it "does not have pagination in the title" do
           expect(page).to have_title("Logs")
         end
-      end
 
-      it "shows the download csv link" do
-        expect(page).to have_link("Download (CSV)", href: "/logs.csv")
+        it "shows the download csv link" do
+          expect(page).to have_link("Download (CSV)", href: "/logs.csv")
+        end
       end
 
       context "when there are more than 20 logs" do
@@ -497,14 +497,19 @@ RSpec.describe CaseLogsController, type: :request do
 
     before do
       sign_in user
+      FactoryBot.create(:case_log)
       get "/logs", headers: headers, params: {}
     end
 
     it "downloads a CSV file with headers" do
       csv = CSV.parse(response.body)
-      expect(csv.count).to eq(2)
       expect(csv.first.first).to eq("id")
       expect(csv.second.first).to eq(case_log.id.to_s)
+    end
+
+    it "does not download other orgs logs" do
+      csv = CSV.parse(response.body)
+      expect(csv.count).to eq(2)
     end
   end
 
