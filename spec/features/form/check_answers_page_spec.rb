@@ -127,7 +127,7 @@ RSpec.describe "Form Check Answers Page" do
       end
     end
 
-    context "when the user changes their answer" do
+    context "when the user changes their answer from check answer page" do
       it "routes back to check answers" do
         visit("/logs/#{empty_case_log.id}/accessibility-requirements")
         check("case-log-accessibility-requirements-housingneeds-c-field")
