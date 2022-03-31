@@ -205,6 +205,10 @@ RSpec.describe CaseLogsController, type: :request do
         it "does not have pagination in the title" do
           expect(page).to have_title("Logs")
         end
+
+        it "shows the download csv link" do
+          expect(page).to have_link("Download (CSV)", href: "/logs.csv")
+        end
       end
 
       context "when there are more than 20 logs" do
@@ -393,6 +397,43 @@ RSpec.describe CaseLogsController, type: :request do
         get "/logs/#{id}/income-and-benefits/check-answers"
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
       end
+    end
+  end
+
+  describe "CSV download" do
+    let(:headers) { { "Accept" => "text/csv" } }
+    let(:user) { FactoryBot.create(:user) }
+    let(:organisation) { user.organisation }
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+    let!(:case_log) do
+      FactoryBot.create(
+        :case_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+        ecstat1: 1,
+      )
+    end
+
+    before do
+      sign_in user
+      FactoryBot.create(:case_log)
+      get "/logs", headers: headers, params: {}
+    end
+
+    it "downloads a CSV file with headers" do
+      csv = CSV.parse(response.body)
+      expect(csv.first.first).to eq("id")
+      expect(csv.second.first).to eq(case_log.id.to_s)
+    end
+
+    it "does not download other orgs logs" do
+      csv = CSV.parse(response.body)
+      expect(csv.count).to eq(2)
+    end
+
+    it "downloads answer labels rather than values" do
+      csv = CSV.parse(response.body)
+      expect(csv.second[10]).to eq("Full-time – 30 hours or more")
     end
   end
 

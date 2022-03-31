@@ -1,6 +1,9 @@
 <figure class="app-figure">
   <figcaption id="<%= title.dasherize %>" class="app-figure__caption">
-    <strong><%= pagy.count %></strong> total <%= title.downcase %>
+    <span class="govuk-!-margin-right-4">
+      <strong><%= pagy.count %></strong> total <%= title.downcase %>
+    </span>
+    <a class="govuk-link" download href="/logs.csv" type="text/csv">Download (CSV)</a>
   </figcaption>
   <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
     <table class="govuk-table">

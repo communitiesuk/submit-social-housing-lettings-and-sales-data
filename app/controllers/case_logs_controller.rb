@@ -8,6 +8,11 @@ class CaseLogsController < ApplicationController
 
   def index
     @pagy, @case_logs = pagy(current_user.case_logs)
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @case_logs.to_csv, filename: "logs-#{Time.zone.now}.csv" }
+    end
   end
 
   def create
