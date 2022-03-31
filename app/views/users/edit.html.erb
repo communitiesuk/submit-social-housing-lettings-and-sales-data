@@ -27,6 +27,10 @@
       %>
 
       <% if current_user.data_coordinator? %>
+        <%= roles = User::ROLES.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
+          f.govuk_collection_radio_buttons :role, roles, :id, :name, legend: { text: "Role", size: "m" }
+        %>
+
         <%= f.govuk_collection_radio_buttons :is_dpo,
           [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
           :id,

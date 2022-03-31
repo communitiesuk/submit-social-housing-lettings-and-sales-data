@@ -121,6 +121,15 @@ RSpec.describe UsersController, type: :request do
         it "show the user details" do
           expect(page).to have_content("Your account")
         end
+
+        it "allows changing name, email and password" do
+          expect(page).to have_link("Change", text: "name")
+          expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "password")
+          expect(page).not_to have_link("Change", text: "role")
+          expect(page).not_to have_link("Change", text: "are you a data protection officer?")
+          expect(page).not_to have_link("Change", text: "are you a key contact?")
+        end
       end
 
       context "when the current user does not matches the user ID" do
@@ -148,6 +157,14 @@ RSpec.describe UsersController, type: :request do
 
         it "show the edit personal details page" do
           expect(page).to have_content("Change your personal details")
+        end
+
+        it "has fields for name and email" do
+          expect(page).to have_field("user[name]")
+          expect(page).to have_field("user[email]")
+          expect(page).not_to have_field("user[role]")
+          expect(page).not_to have_field("user[is_dpo]")
+          expect(page).not_to have_field("user[is_key_contact]")
         end
       end
 
@@ -308,6 +325,15 @@ RSpec.describe UsersController, type: :request do
         it "show the user details" do
           expect(page).to have_content("Your account")
         end
+
+        it "allows changing name, email, password, role, dpo and key contact" do
+          expect(page).to have_link("Change", text: "name")
+          expect(page).to have_link("Change", text: "email address")
+          expect(page).to have_link("Change", text: "password")
+          expect(page).to have_link("Change", text: "role")
+          expect(page).to have_link("Change", text: "are you a data protection officer?")
+          expect(page).to have_link("Change", text: "are you a key contact?")
+        end
       end
 
       context "when the current user does not matches the user ID" do
@@ -323,6 +349,15 @@ RSpec.describe UsersController, type: :request do
 
           it "shows the user details page" do
             expect(page).to have_content("#{other_user.name}’s account")
+          end
+
+          it "allows changing name, email, role, dpo and key contact" do
+            expect(page).to have_link("Change", text: "name")
+            expect(page).to have_link("Change", text: "email address")
+            expect(page).not_to have_link("Change", text: "password")
+            expect(page).to have_link("Change", text: "role")
+            expect(page).to have_link("Change", text: "are they a data protection officer?")
+            expect(page).to have_link("Change", text: "are they a key contact?")
           end
         end
 
@@ -350,6 +385,14 @@ RSpec.describe UsersController, type: :request do
         it "show the edit personal details page" do
           expect(page).to have_content("Change your personal details")
         end
+
+        it "has fields for name, email, role, dpo and key contact" do
+          expect(page).to have_field("user[name]")
+          expect(page).to have_field("user[email]")
+          expect(page).to have_field("user[role]")
+          expect(page).to have_field("user[is_dpo]")
+          expect(page).to have_field("user[is_key_contact]")
+        end
       end
 
       context "when the current user does not matches the user ID" do
@@ -365,6 +408,14 @@ RSpec.describe UsersController, type: :request do
 
           it "shows the user details page" do
             expect(page).to have_content("Change #{other_user.name}’s personal details")
+          end
+
+          it "has fields for name, email, role, dpo and key contact" do
+            expect(page).to have_field("user[name]")
+            expect(page).to have_field("user[email]")
+            expect(page).to have_field("user[role]")
+            expect(page).to have_field("user[is_dpo]")
+            expect(page).to have_field("user[is_key_contact]")
           end
         end
 
