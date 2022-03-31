@@ -183,6 +183,23 @@ RSpec.describe CaseLogsController, type: :request do
       it "shows the log's status" do
         expect(CGI.unescape_html(response.body)).to include(case_log.status.humanize)
       end
+
+      it "shows the total log count" do
+        expect(CGI.unescape_html(response.body)).to match("<strong>1</strong> total logs")
+      end
+
+      context "when there are more than 20 logs" do
+        before do
+          25.times do
+            FactoryBot.create(:case_log, owning_organisation: organisation, managing_organisation: organisation,)
+          end
+          get "/logs", headers: headers, params: {}
+        end
+
+        it "shows the total log count" do
+          expect(CGI.unescape_html(response.body)).to match("<strong>26</strong> total logs")
+        end
+      end
     end
 
     context "when requesting a specific case log" do
