@@ -138,12 +138,32 @@ RSpec.describe UsersController, type: :request do
           get "/users/#{other_user.id}", headers: headers, params: {}
         end
 
-        it "returns not found 404" do
-          expect(response).to have_http_status(:not_found)
+        context "when the user is part of the same organisation" do
+          let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+
+          it "shows their details" do
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("#{other_user.name}’s account")
+          end
+
+          it "does not have edit links" do
+            expect(page).not_to have_link("Change", text: "name")
+            expect(page).not_to have_link("Change", text: "email address")
+            expect(page).not_to have_link("Change", text: "password")
+            expect(page).not_to have_link("Change", text: "role")
+            expect(page).not_to have_link("Change", text: "are you a data protection officer?")
+            expect(page).not_to have_link("Change", text: "are you a key contact?")
+          end
         end
 
-        it "shows the 404 view" do
-          expect(page).to have_content("Page not found")
+        context "when the user is not part of the same organisation" do
+          it "returns not found 404" do
+            expect(response).to have_http_status(:not_found)
+          end
+
+          it "shows the 404 view" do
+            expect(page).to have_content("Page not found")
+          end
         end
       end
     end
