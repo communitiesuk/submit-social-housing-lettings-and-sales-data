@@ -134,6 +134,10 @@ RSpec.describe Form::Question, type: :model do
       it "does not include those options in the displayed options" do
         expect(question.displayed_answer_options).to match(expected_answer_options)
       end
+
+      it "can still map the value label" do
+        expect(question.label_from_value(9)).to eq("Child under 16")
+      end
     end
 
     context "when the saved answer is not in the value map" do
