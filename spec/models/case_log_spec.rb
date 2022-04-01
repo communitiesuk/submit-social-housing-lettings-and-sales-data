@@ -1372,6 +1372,17 @@ RSpec.describe CaseLog do
         record_from_db = ActiveRecord::Base.connection.execute("select totadult from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["totadult"]).to eq(3)
       end
+
+      it "correctly derives economic status for tenants under 16" do
+        record_from_db = ActiveRecord::Base.connection.execute("select ecstat7 from case_logs where id=#{household_case_log.id}").to_a[0]
+        expect(record_from_db["ecstat7"]).to eq(9)
+      end
+
+      it "correctly resets economic status when age changes from under 16" do
+        household_case_log.update!(age7: 17)
+        record_from_db = ActiveRecord::Base.connection.execute("select ecstat7 from case_logs where id=#{household_case_log.id}").to_a[0]
+        expect(record_from_db["ecstat7"]).to eq(nil)
+      end
     end
 
     it "correctly derives and saves has_benefits" do
