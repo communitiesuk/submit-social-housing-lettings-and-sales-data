@@ -55,28 +55,28 @@ en:
     property:
       mrcdate:
         before_tenancy_start: "Major repairs date must be before the tenancy start date"
-        not_first_let: "Major repairs date must not be completed if the tenancy is first let"
+        not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
         730_days_before_tenancy_start: "The major repairs completion date should be no more than 730 days before the tenancy start date"
       void_date:
         ten_years_before_tenancy_start: "The void date must be no more than 10 years before the tenancy start date"
         before_tenancy_start: "Void date must be before the tenancy start date"
-        after_mrcdate: "Void date must be after the major repair date if a major repair date has been provided"
+        after_mrcdate: "Void date must be after the major repairs date if provided"
       offered:
-        relet_number: "Property number of times relet must be between 0 and 20"
+        relet_number: "Number of times the property has been re-let must be between 0 and 20"
       la:
-        london_rent: "Local authority has to be in London"
+        london_rent: "Local authority must be in London"
         london_rent_postcode: "The postcode must be a London postcode because you told us the rent type is London Affordable Rent or London Living Rent"
-        la_known: "Enter a local authority"
+        la_known: "Enter name of local authority"
       rsnvac:
         first_let_not_social: "Reason for vacancy cannot be first let if unit has been previously let as social housing"
         first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
-        previous_let_social: "Property cannot have a previous let type if it is being let as social housing for the first time"
+        previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
         non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us this accommodation is not temporary"
         referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us a different source of referral for this letting"
       unittype_gn:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
-        one_three_bedroom_single_tenant_shared: "A shared house with less than two tenants must have 1 to 3 bedrooms"
+        one_three_bedroom_single_tenant_shared: "A shared house with fewer than two tenants must have 1 to 3 bedrooms"
       beds:
         negative: "Number of bedrooms has to be greater than 0"
         over_max: "Number of bedrooms cannot be more than 12"
@@ -86,9 +86,9 @@ en:
         outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges"
         more_than_rent: "Answer must be less than half of the basic rent amount"
       hbrentshortfall:
-        outstanding_no_benefits: "Outstanding amount for basic rent and/or benefit eligible charges cannot be 'Yes' if tenant is not in receipt of housing benefit or universal benefit or if benefit is unknown"
+        outstanding_no_benefits: "Answer cannot be 'yes' to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you're not sure"
       benefits:
-        part_or_full_time: "income is from Universal Credit, state pensions or benefits cannot be All if the tenant or the partner works part or full time"
+        part_or_full_time: "Answer cannot be 'all' for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
       earnings:
         over_hard_max: "Net income cannot be greater than %{hard_max} given the tenant’s working situation"
         under_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
@@ -99,25 +99,25 @@ en:
         less_than_double_shortfall: "Answer must be more than double the shortfall in basic rent"
         scharge:
           this_landlord:
-            general_needs: "Service charge must be between £0 and £55 per week if the landlord is this landlord and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is this landlord and it is a suported housing letting"
+            general_needs: "Service charge must be between £0 and £55 per week if the landlord is the same and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is the same and it is a supported housing letting"
           other_landlord:
-            general_needs: "Service charge must be between £0 and £45 per week if the landlord is another RP and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is another RP and it is a suported housing letting"
+            general_needs: "Service charge must be between £0 and £45 per week if the landlord is another registered provider and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is another registered provider and it is a supported housing letting"
         pscharge:
           this_landlord:
-            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is this landlord and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is this landlord and it is a suported housing letting"
+            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is the same and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is the same and it is a supported housing letting"
           other_landlord:
-            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is another RP and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is another RP and it is a suported housing letting"
+            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is another registered provider and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is another registered provider and it is a supported housing letting"
         supcharg:
           this_landlord:
-            general_needs: "Support charge must be between £0 and £40 per week if the landlord is this landlord and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is this landlord and it is a suported housing letting"
+            general_needs: "Support charge must be between £0 and £40 per week if the landlord is the same and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is the same and it is a supported housing letting"
           other_landlord:
-            general_needs: "Support charge must be between £0 and £60 per week if the landlord is another RP and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is another RP and it is a suported housing letting"
+            general_needs: "Support charge must be between £0 and £60 per week if the landlord is another registered provider and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is another registered provider and it is a supported housing letting"
       brent:
         not_in_range: "Basic rent is outside of the expected range based on the lettings type, local authority and number of bedrooms"
         la:
@@ -129,7 +129,7 @@ en:
         rent_type:
           not_in_range: "Basic rent is outside of the expected range based on this lettings type"
       charges:
-        complete_1_of_3: 'Only one question out of "Total charge", "Charges for carehomes" and "Does the household pay rent or charges?" needs to be selected and completed'
+        complete_1_of_3: "Answer only one of the following questions: 'total charges', 'care home charges' or 'does the household pay rent or charges?'"
       tcharge:
         under_10: "Total charge must be at least £10 per week"
 
