@@ -51,13 +51,18 @@ RSpec.describe User, type: :model do
       expect(user.is_key_contact?).to be false
     end
 
+    it "can be set to key contact" do
+      expect { user.is_key_contact! }
+        .to change { user.reload.is_key_contact? }.from(false).to(true)
+    end
+
     it "is not a data protection officer by default" do
       expect(user.is_data_protection_officer?).to be false
     end
 
-    it "can be set to key contact" do
-      expect { user.is_key_contact! }
-        .to change { user.reload.is_key_contact? }.from(false).to(true)
+    it "can be set to data protection officer" do
+      expect { user.is_data_protection_officer! }
+        .to change { user.reload.is_data_protection_officer? }.from(false).to(true)
     end
   end
 
