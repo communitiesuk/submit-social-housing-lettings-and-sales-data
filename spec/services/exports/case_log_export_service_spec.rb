@@ -5,7 +5,7 @@ RSpec.describe Exports::CaseLogExportService do
   let(:export_filepath) { "spec/fixtures/exports/case_logs.xml" }
   let(:export_file) { File.open(export_filepath, "r:UTF-8") }
   let(:expected_filename) { "core_2022_02_08/dat_core_2022_02_08_0001.xml" }
-  let(:case_log) { FactoryBot.create(:case_log, :completed) }
+  let!(:case_log) { FactoryBot.create(:case_log, :completed) }
 
   def replace_entity_ids(export_template)
     export_template.sub!(/\{id\}/, case_log["id"].to_s)
@@ -18,7 +18,6 @@ RSpec.describe Exports::CaseLogExportService do
 
     before do
       Timecop.freeze(Time.new(2022, 2, 8, 16, 52, 15, "+00:00"))
-      case_log
     end
 
     it "generate an XML export file with the expected filename" do

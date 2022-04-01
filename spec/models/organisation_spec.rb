@@ -20,8 +20,8 @@ RSpec.describe Organisation, type: :model do
 
     context "with data protection confirmations" do
       before do
-        FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false)
-        FactoryBot.create(:data_protection_confirmation, organisation:)
+        FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false, created_at: Time.utc(2018, 0o6, 0o5, 10, 36, 49))
+        FactoryBot.create(:data_protection_confirmation, organisation:, created_at: Time.utc(2019, 0o6, 0o5, 10, 36, 49))
       end
 
       it "takes the most recently created" do
