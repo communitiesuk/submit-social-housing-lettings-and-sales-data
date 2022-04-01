@@ -1,0 +1,33 @@
+<% content_for :title, "Review lettings log" %>
+<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+  "Logs" => "/logs",
+  "Log #{@case_log.id.to_s}" => "/logs/" + @case_log.id.to_s,
+  "Review lettings log" => ""
+}) %>
+
+<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        <%= content_for(:title) %>
+      </h1>
+      <% @case_log.form.sections.map do |section|  %>
+      <h2 class="govuk-heading-m"><%= section.label %></h2>
+        <% section.subsections.map do |subsection|  %>
+          <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+            <div class="x-govuk-summary-card__header">
+              <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
+            </div>
+            <div class="x-govuk-summary-card__body">
+              <dl class="govuk-summary-list">
+                <% subsection.applicable_questions(@case_log).each do |question| %>
+                  <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
+                <% end %>
+              </dl>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

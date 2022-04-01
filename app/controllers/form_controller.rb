@@ -1,7 +1,7 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: [:submit_form]
-  before_action :find_resource_by_named_id, except: [:submit_form]
+  before_action :find_resource, only: [:submit_form, :review]
+  before_action :find_resource_by_named_id, except: [:submit_form, :review]
 
   def submit_form
     if @case_log
@@ -36,6 +36,14 @@ class FormController < ApplicationController
       render_not_found
     end
   end
+
+  def review
+    if @case_log
+      render "form/review"
+    else
+      render_not_found
+    end
+  end 
 
   FormHandler.instance.forms.each do |_key, form|
     form.pages.map do |page|

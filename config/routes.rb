@@ -77,6 +77,7 @@ Rails.application.routes.draw do
 
     member do
       post "form", to: "form#submit_form"
+      get "review", to: "form#review"
     end
 
     FormHandler.instance.forms.each do |_key, form|

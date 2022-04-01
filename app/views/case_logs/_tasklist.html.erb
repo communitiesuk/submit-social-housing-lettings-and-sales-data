@@ -24,3 +24,7 @@
     </li>
   <% end %>
 </ol>
+
+<h2 class="govuk-heading-m">Review and submit</h2>
+<p>Review your answers and submit this log to the Department of Levelling Up, Housing & Communities.</p>
+<%= govuk_button_link_to 'Review lettings log', "/logs/#{@case_log.id}/review" %>

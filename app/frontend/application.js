@@ -12,9 +12,15 @@ import "custom-event-polyfill"
 import "intersection-observer"
 //
 
+// Import GOV.UK Frontend
+import GOVUKFrontend from 'govuk-frontend'
+
+// Import GOV.UK Prototype Components
+import GOVUKPrototypeComponents from 'govuk-prototype-components'
+
 require.context("govuk-frontend/govuk/assets")
-import { initAll } from "govuk-frontend"
 import "./styles/application.scss"
 import "./controllers"
 
-initAll()
+GOVUKFrontend.initAll()
+GOVUKPrototypeComponents.initAll()

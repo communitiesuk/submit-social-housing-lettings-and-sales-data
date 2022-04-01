@@ -1164,7 +1164,7 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-accessible-autocomplete@^2.0.3:
+accessible-autocomplete@^2.0.3, accessible-autocomplete@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-2.0.4.tgz#e295256c8d268b97c5ab456a1cb084b553ed3eb0"
   integrity sha512-2p0txrSpvs5wXFUeQJHMheDPTZVSEmiUHWlEPb7vJnv2Dd1xPfoLnBQQMfNbTSit2pL/9sSQYESuD2Yyohd4Yw==
@@ -1647,6 +1647,11 @@ events@^3.2.0:
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
+eventslibjs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/eventslibjs/-/eventslibjs-1.2.0.tgz#5d242b1d71d7376b999611448e91b7947d8cb9d0"
+  integrity sha512-nui7FHXHeeZjWkQ1dZ4R3RchkT+164+y1/puiOY1Zc3CPU9W8XzAzdhqvuVQ4EJt7F/W94O5U26/oVFpBOPY3w==
+
 execa@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/execa/-/execa-5.1.1.tgz#f80ad9cbf4298f7bd1d4c9555c21e93741c411dd"
@@ -1796,6 +1801,16 @@ govuk-frontend@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.0.1.tgz#bceff58ecb399272cba32bd2b357fe16198e3249"
   integrity sha512-X+B88mqYHoxAz0ID87Uxo3oHqdKBRnNHd3Cz8+u8nvQUAsrEzROFLK+t7sAu7e+fKqCCrJyIgx6Cmr6dIGnohQ==
+
+govuk-prototype-components@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/govuk-prototype-components/-/govuk-prototype-components-0.1.5.tgz#e420c3200660fc6ff0f4df66474e8796ec446d37"
+  integrity sha512-ssUW5qcxnyJ9B+TRafRjLdeMmAK67cC5TE5TzkVhoMDzdYTQWzfp+FtFg2SFM0dO9pAc1npMVxZ8rUxEA174IQ==
+  dependencies:
+    accessible-autocomplete "^2.0.4"
+    eventslibjs "^1.2.0"
+    govuk-frontend "^4.0.1"
+    lodash "^4.17.21"
 
 graceful-fs@^4.1.2, graceful-fs@^4.2.4, graceful-fs@^4.2.9:
   version "4.2.9"
@@ -2039,6 +2054,11 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^6.0.0:
   version "6.0.0"
