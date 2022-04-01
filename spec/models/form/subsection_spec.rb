@@ -85,21 +85,21 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   context "with a completed case log" do
-    let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
+    let(:case_log) { FactoryBot.build(:case_log, :completed) }
 
     it "has a status" do
-      expect(subsection.status(completed_case_log)).to eq(:completed)
+      expect(subsection.status(case_log)).to eq(:completed)
     end
 
     it "has a status when optional fields are not filled" do
       case_log.update!({ propcode: nil })
       case_log.reload
-      expect(subsection.status(completed_case_log)).to eq(:completed)
+      expect(subsection.status(case_log)).to eq(:completed)
     end
 
     it "has status helpers" do
-      expect(subsection.is_incomplete?(completed_case_log)).to be(false)
-      expect(subsection.is_started?(completed_case_log)).to be(true)
+      expect(subsection.is_incomplete?(case_log)).to be(false)
+      expect(subsection.is_started?(case_log)).to be(true)
     end
   end
 end

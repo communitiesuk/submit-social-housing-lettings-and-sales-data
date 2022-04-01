@@ -104,14 +104,14 @@
     <ppostc1>SE2</ppostc1>
     <ppostc2>6RT</ppostc2>
     <property_relet>0</property_relet>
-    <mrcdate>2022-02-08 16:52:15 UTC</mrcdate>
-    <mrcday>8</mrcday>
-    <mrcmonth>2</mrcmonth>
-    <mrcyear>2022</mrcyear>
+    <mrcdate>2020-05-05 10:36:49 UTC</mrcdate>
+    <mrcday>5</mrcday>
+    <mrcmonth>5</mrcmonth>
+    <mrcyear>2020</mrcyear>
     <other_hhmemb>1</other_hhmemb>
     <incref>0</incref>
     <sale_completion_date/>
-    <startdate>2022-02-08 16:52:15 UTC</startdate>
+    <startdate>2022-02-02 10:36:49 UTC</startdate>
     <armedforces>0</armedforces>
     <first_time_property_let_as_social_housing/>
     <unitletas>2</unitletas>
@@ -125,7 +125,7 @@
     <postcode_known>1</postcode_known>
     <la_known>1</la_known>
     <is_la_inferred>false</is_la_inferred>
-    <day>8</day>
+    <day>2</day>
     <month>2</month>
     <year>2022</year>
     <totchild>0</totchild>

@@ -129,16 +129,16 @@ FactoryBot.define do
       ppostc1 { "w3" }
       ppostc2 { "w3" }
       property_relet { 0 }
-      mrcdate { Time.zone.now }
-      mrcday { 5 }
-      mrcmonth { 5 }
-      mrcyear { 2020 }
+      mrcdate { Time.utc(2020, 0o5, 0o5, 10, 36, 49) }
+      mrcday { mrcdate.day }
+      mrcmonth { mrcdate.month }
+      mrcyear { mrcdate.year }
       incref { 0 }
       sale_completion_date { nil }
-      startdate { Time.zone.now }
-      day { Time.zone.now.day }
-      month { Time.zone.now.month }
-      year { 2021 }
+      startdate { Time.utc(2022, 0o2, 0o2, 10, 36, 49) }
+      day { startdate.day }
+      month { startdate.month }
+      year { startdate.year }
       armedforces { 0 }
       builtype { 1 }
       unitletas { 2 }
@@ -148,7 +148,7 @@ FactoryBot.define do
       la_known { 1 }
       declaration { 1 }
     end
-    created_at { Time.zone.now }
-    updated_at { Time.zone.now }
+    created_at { Time.utc(2022, 0o2, 8, 16, 52, 15) }
+    updated_at { Time.utc(2022, 0o2, 8, 16, 52, 15) }
   end
 end
