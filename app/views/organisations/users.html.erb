@@ -4,7 +4,9 @@
   <%= "Users" %>
 <% end %>
 
-<%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
+<% if current_user.data_coordinator? %>
+  <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
+<% end %>
 <%= govuk_table do |table| %>
   <%= table.head do |head| %>
     <%= head.row do |row|

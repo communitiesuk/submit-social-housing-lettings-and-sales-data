@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Organisation, type: :model do
   describe "#new" do
     let(:user) { FactoryBot.create(:user) }
-    let(:organisation) { user.organisation }
+    let!(:organisation) { user.organisation }
 
     it "has expected fields" do
       expect(organisation.attribute_names).to include("name", "phone", "provider_type")

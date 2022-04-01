@@ -257,8 +257,8 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/#{organisation.id}/users", headers: headers, params: {}
         end
 
-        it "returns unauthorized 401" do
-          expect(response).to have_http_status(:unauthorized)
+        it "returns 200" do
+          expect(response).to have_http_status(:ok)
         end
       end
 

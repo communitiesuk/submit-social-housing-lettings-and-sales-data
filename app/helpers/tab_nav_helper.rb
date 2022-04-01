@@ -11,10 +11,9 @@ module TabNavHelper
   end
 
   def tab_items(user)
-    items = [{ name: t("Details"), url: details_organisation_path(user.organisation) }]
-    if user.data_coordinator?
-      items << { name: t("Users"), url: users_organisation_path(user.organisation) }
-    end
-    items
+    [
+      { name: t("Details"), url: details_organisation_path(user.organisation) },
+      { name: t("Users"), url: users_organisation_path(user.organisation) },
+    ]
   end
 end

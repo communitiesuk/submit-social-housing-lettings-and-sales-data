@@ -31,10 +31,11 @@ RSpec.describe TabNavHelper do
     end
 
     context "when user is a data_provider" do
-      it "returns details tab only" do
+      it "returns details and user tabs" do
         result = tab_items(user).map { |i| i[:name] }
-        expect(result.count).to eq(1)
+        expect(result.count).to eq(2)
         expect(result.first).to match("Details")
+        expect(result.second).to match("Users")
       end
     end
   end

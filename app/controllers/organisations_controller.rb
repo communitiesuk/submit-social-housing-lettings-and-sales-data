@@ -8,11 +8,7 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    if current_user.data_coordinator?
-      render "users"
-    else
-      head :unauthorized
-    end
+    render "users"
   end
 
   def details

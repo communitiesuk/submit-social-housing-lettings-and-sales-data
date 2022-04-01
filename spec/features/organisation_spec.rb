@@ -70,11 +70,12 @@ RSpec.describe "User Features" do
     let(:user) { FactoryBot.create(:user) }
 
     context "when viewing organisation page" do
-      it "can only see the details tab" do
+      it "can see the details tab and users tab" do
         visit("/logs")
         click_link("Your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
-        expect(page).to have_no_link("Users")
+        expect(page).to have_link("Details")
+        expect(page).to have_link("Users")
       end
     end
   end
