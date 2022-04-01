@@ -116,6 +116,26 @@ RSpec.describe Form::Question, type: :model do
       end
     end
 
+    context "when answer options do not include derived options" do
+      it "displays all answer options" do
+        expect(question.displayed_answer_options).to match(question.answer_options)
+      end
+    end
+
+    context "when answer options include derived options" do
+      let(:section_id) { "household" }
+      let(:subsection_id) { "household_characteristics" }
+      let(:page_id) { "household_number_of_other_members" }
+      let(:question_id) { "ecstat2" }
+      let(:expected_answer_options) do
+        { "0" => { "value" => "Other" }, "1" => { "value" => "Prefer not to say" } }
+      end
+
+      it "does not include those options in the displayed options" do
+        expect(question.displayed_answer_options).to match(expected_answer_options)
+      end
+    end
+
     context "when the saved answer is not in the value map" do
       it "displays the saved answer umapped" do
         expect(question.label_from_value(9999)).to eq("9999")

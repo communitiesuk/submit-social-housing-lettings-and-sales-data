@@ -181,12 +181,21 @@
                       "0": {
                         "value": "Other"
                       },
+                      "9": {
+                        "value": "Child under 16",
+                        "derived": true
+                      },
                       "1": {
                         "value": "Prefer not to say"
                       }
                     }
                   }
-                }
+                },
+                "depends_on": [
+                  {
+                    "age2": { "operator": ">", "operand": 15 }
+                  }
+                ]
               },
               "propcode": {
                 "questions": {

@@ -1339,21 +1339,21 @@ RSpec.describe CaseLog do
 
     context "when validating household members derived vars" do
       let!(:household_case_log) do
-        described_class.create({
+        described_class.create!({
           managing_organisation: organisation,
           owning_organisation: organisation,
           other_hhmemb: 4,
-          relat2: "C",
+          relat2: "X",
           relat3: "C",
           relat4: "X",
           relat5: "C",
-          relat7: "X",
+          relat7: "C",
           relat8: "X",
           age1: 22,
-          age2: 14,
+          age2: 16,
           age4: 60,
           age6: 88,
-          age7: 16,
+          age7: 14,
           age8: 42,
         })
       end

@@ -1731,7 +1731,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -1747,7 +1748,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_2": 0
+                  "details_known_2": 0,
+                  "age2": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -1939,7 +1941,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -1955,7 +1958,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_3": 0
+                  "details_known_3": 0,
+                  "age3": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -2144,7 +2148,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -2160,7 +2165,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_4": 0
+                  "details_known_4": 0,
+                  "age4": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -2346,7 +2352,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -2362,7 +2369,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_5": 0
+                  "details_known_5": 0,
+                  "age5": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -2545,7 +2553,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -2561,7 +2570,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_6": 0
+                  "details_known_6": 0,
+                  "age6": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -2741,7 +2751,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -2757,7 +2768,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_7": 0
+                  "details_known_7": 0,
+                  "age7": { "operator": ">", "operand": 15 }
                 }
               ]
             },
@@ -2934,7 +2946,8 @@
                       "value": "Retired"
                     },
                     "9": {
-                      "value": "Child under 16"
+                      "value": "Child under 16",
+                      "derived": true
                     },
                     "0": {
                       "value": "Other"
@@ -2950,7 +2963,8 @@
               },
               "depends_on": [
                 {
-                  "details_known_8": 0
+                  "details_known_8": 0,
+                  "age8": { "operator": ">", "operand": 15 }
                 }
               ]
             }

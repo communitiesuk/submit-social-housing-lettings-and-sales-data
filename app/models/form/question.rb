@@ -60,7 +60,7 @@ class Form::Question
   def enabled?(case_log)
     return true if conditional_on.blank?
 
-    conditional_on.map { |condition| evaluate_condition(condition, case_log) }.all?
+    conditional_on.all? { |condition| evaluate_condition(condition, case_log) }
   end
 
   def hidden_in_check_answers?
@@ -71,6 +71,12 @@ class Form::Question
     return inferred_check_answers_value["condition"].values[0] == case_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
 
     false
+  end
+
+  def displayed_answer_options
+    answer_options.select do |_key, val|
+      !val.is_a?(Hash) || !val["derived"]
+    end
   end
 
   def update_answer_link_name(case_log)
