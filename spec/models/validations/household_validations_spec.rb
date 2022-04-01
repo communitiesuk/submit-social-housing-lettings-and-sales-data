@@ -198,7 +198,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "cannot have `this landlord` as landlord and Housing situation before this letting cannot be LA general needs" do
-        record.landlord = 1
+        record.owning_organisation.provider_type = 1
         record.prevten = 30
         record.referral = 1
         household_validator.validate_referral(record)

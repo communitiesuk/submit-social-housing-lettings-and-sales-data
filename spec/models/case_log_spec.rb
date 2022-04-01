@@ -205,7 +205,7 @@ RSpec.describe CaseLog do
         net_income_known: 2,
         hhmemb: 7,
         rent_type: 4,
-        needstype: 1,
+        # needstype: 1,
         hb: 1,
         hbrentshortfall: 1,
       })
@@ -603,12 +603,12 @@ RSpec.describe CaseLog do
             expect(record_from_db["wtcharge"]).to eq(125.0)
           end
 
-          # it "correctly derives and saves landlord based on owning_organisation provider_type" do
-          #   case_log.update!(owning_organisation: la_organisation)
-          #   record_from_db = ActiveRecord::Base.connection.execute("select owning_organisation_id from case_logs where id=#{case_log.id}").to_a[0]
-          #   expect(case_log.landlord).to eq(2)
-          #   expect(record_from_db["landlord"]).to eq(2)
-          # end
+          it "correctly derives and saves landlord based on owning_organisation provider_type" do
+            case_log.update!(owning_organisation: la_organisation)
+            record_from_db = ActiveRecord::Base.connection.execute("select owning_organisation_id from case_logs where id=#{case_log.id}").to_a[0]
+            expect(case_log.landlord).to eq(1)
+            expect(record_from_db["landlord"]).to eq(1)
+          end
 
           context "when the tenant has an outstanding amount after benefits" do
             context "when tenant is in receipt of housing benefit" do
@@ -1132,7 +1132,7 @@ RSpec.describe CaseLog do
 
     context "when any charge field is set" do
       before do
-        case_log.update!(pscharge: 10)
+        case_log.update!(pscharge: 10, period: 1)
       end
 
       it "derives that any blank ones are 0" do

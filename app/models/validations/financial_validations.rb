@@ -121,7 +121,6 @@ private
   def validate_charges(record)
     %i[scharge pscharge supcharg].each do |charge|
       maximum = CHARGE_MAXIMUMS.dig(charge, LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
-
       if maximum.present? && record[charge].present? && !weekly_value_in_range(record, charge, 0, maximum)
         record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{LANDLORD_VALUES[record.landlord]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
