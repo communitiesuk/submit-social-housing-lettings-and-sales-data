@@ -10,8 +10,8 @@ $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
 $govuk-global-styles: true;
 
-@import "node_modules/govuk-frontend/govuk/all";
-@import "node_modules/govuk-prototype-components/x-govuk/all";
+@import "govuk-frontend-styles";
+@import "govuk-prototype-styles";
 
 @import "accessible-autocomplete";
 @import "button";

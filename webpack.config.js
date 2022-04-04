@@ -43,6 +43,10 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: {
+      'govuk-frontend-styles': path.resolve(__dirname, 'node_modules/govuk-frontend/govuk/all.scss'),
+      'govuk-prototype-styles': path.resolve(__dirname, 'node_modules/govuk-prototype-components/x-govuk/all.scss')
+    },
     modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
   },
   output: {
