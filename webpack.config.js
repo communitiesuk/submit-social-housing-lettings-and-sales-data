@@ -43,7 +43,7 @@ module.exports = {
     ],
   },
   resolve: {
-    modules: ['node_modules', 'node_modules/govuk-frontend/govuk', 'node_modules/govuk-prototype-components/x-govuk']
+    modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
   },
   output: {
     filename: "[name].js",
