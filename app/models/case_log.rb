@@ -416,6 +416,8 @@ private
         self["ecstat#{idx}"] = nil
       end
     end
+    self.landlord = 1 if owning_organisation.provider_type == "LA"
+    self.landlord = 2 if owning_organisation.provider_type == "PRP"
   end
 
   def process_postcode_changes!

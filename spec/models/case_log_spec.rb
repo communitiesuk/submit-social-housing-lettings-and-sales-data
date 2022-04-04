@@ -258,6 +258,24 @@ RSpec.describe CaseLog do
       expect(record_from_db["renttype"]).to eq(3)
     end
 
+    context "when the owning organisation is a PRP" do
+      it "correctly derives and saves landlord based on owning_organisation provider_type" do
+        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
+        expect(case_log.landlord).to eq(2)
+        expect(record_from_db["landlord"]).to eq(2)
+      end
+    end
+
+    context "when the owning organisation is an LA" do
+      let(:organisation) { FactoryBot.create(:organisation) }
+
+      it "correctly derives and saves landlord based on owning_organisation provider_type" do
+        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
+        expect(case_log.landlord).to eq(1)
+        expect(record_from_db["landlord"]).to eq(1)
+      end
+    end
+
     context "when deriving lettype" do
       context "when the owning organisation is a PRP" do
         context "when the rent type is intermediate rent and supported housing" do
