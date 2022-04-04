@@ -68,6 +68,7 @@ class Form::Question
   end
 
   def has_inferred_check_answers_value?(case_log)
+    return true if selected_answer_option_is_derived?(case_log)
     return inferred_check_answers_value["condition"].values[0] == case_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
 
     false
@@ -155,6 +156,11 @@ class Form::Question
   end
 
 private
+
+  def selected_answer_option_is_derived?(case_log)
+    selected_option = answer_options&.dig(case_log[id].to_s.presence)
+    selected_option.is_a?(Hash) && selected_option["derived"]
+  end
 
   def has_inferred_display_value?(case_log)
     inferred_check_answers_value.present? && case_log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first

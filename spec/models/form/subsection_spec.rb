@@ -25,7 +25,7 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   it "has pages" do
-    expected_pages = %w[tenant_code person_1_age person_1_gender person_1_working_situation household_number_of_other_members propcode]
+    expected_pages = %w[tenant_code person_1_age person_1_gender person_1_working_situation household_number_of_other_members person_2_working_situation propcode]
     expect(subsection.pages.map(&:id)).to eq(expected_pages)
   end
 
@@ -58,9 +58,9 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has question helpers for the number of applicable questions" do
-      expected_questions = %w[tenant_code age1 sex1 ecstat1 other_hhmemb propcode]
+      expected_questions = %w[tenant_code age1 sex1 ecstat1 other_hhmemb ecstat2 propcode]
       expect(subsection.applicable_questions(case_log).map(&:id)).to eq(expected_questions)
-      expect(subsection.applicable_questions_count(case_log)).to eq(6)
+      expect(subsection.applicable_questions_count(case_log)).to eq(7)
     end
 
     it "has question helpers for the number of answered questions" do
@@ -79,7 +79,7 @@ RSpec.describe Form::Subsection, type: :model do
     end
 
     it "has a question helpers for the unanswered questions" do
-      expected_questions = %w[sex1 ecstat1 other_hhmemb propcode]
+      expected_questions = %w[sex1 ecstat1 other_hhmemb ecstat2 propcode]
       expect(subsection.unanswered_questions(case_log).map(&:id)).to eq(expected_questions)
     end
   end

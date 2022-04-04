@@ -125,7 +125,7 @@ RSpec.describe Form::Question, type: :model do
     context "when answer options include derived options" do
       let(:section_id) { "household" }
       let(:subsection_id) { "household_characteristics" }
-      let(:page_id) { "household_number_of_other_members" }
+      let(:page_id) { "person_2_working_situation" }
       let(:question_id) { "ecstat2" }
       let(:expected_answer_options) do
         { "0" => { "value" => "Other" }, "1" => { "value" => "Prefer not to say" } }
@@ -240,6 +240,20 @@ RSpec.describe Form::Question, type: :model do
 
       it "displays 'change' in the check answers link text" do
         expect(question.update_answer_link_name(case_log)).to match(/Change/)
+      end
+    end
+
+    context "when the answer option is a derived answer option" do
+      let(:section_id) { "household" }
+      let(:subsection_id) { "household_characteristics" }
+      let(:page_id) { "person_2_working_situation" }
+      let(:question_id) { "ecstat2" }
+      let(:case_log) do
+        FactoryBot.create(:case_log, :in_progress, hhmemb: 2, details_known_2: 0, age2_known: 0, age2: 12)
+      end
+
+      it "knows it has an inferred value for check answers" do
+        expect(question.has_inferred_check_answers_value?(case_log)).to be true
       end
     end
 

@@ -64,7 +64,7 @@ RSpec.describe Form::Page, type: :model do
     context "with expression routing conditions" do
       let(:section_id) { "household" }
       let(:subsection_id) { "household_characteristics" }
-      let(:page_id) { "household_number_of_other_members" }
+      let(:page_id) { "person_2_working_situation" }
 
       it "evaluates not met conditions correctly" do
         case_log.age2 = 12
