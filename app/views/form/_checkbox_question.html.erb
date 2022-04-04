@@ -6,7 +6,7 @@
     hint: { text: question.hint_text&.html_safe } do %>
     <% after_divider = false %>
 
-    <% question.answer_options.map do |key, options| %>
+    <% question.displayed_answer_options.map do |key, options| %>
       <% if key.starts_with?("divider") %>
       <% after_divider = true %>
       <%= f.govuk_check_box_divider %>

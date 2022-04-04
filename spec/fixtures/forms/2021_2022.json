@@ -128,8 +128,7 @@
                     "conditional_for": {
                       "relat2": ">0",
                       "age2": ">0",
-                      "sex2": ">0",
-                      "ecstat2": ">0"
+                      "sex2": ">0"
                     }
                   },
                   "relat2": {
@@ -172,7 +171,13 @@
                         "value": "Prefer not to say"
                       }
                     }
-                  },
+                  }
+                }
+              },
+              "person_2_working_situation": {
+                "header": "",
+                "description": "",
+                "questions": {
                   "ecstat2": {
                     "check_answer_label": "Person 2’s Work",
                     "header": "Which of these best describes person 2’s working situation?",
@@ -181,12 +186,21 @@
                       "0": {
                         "value": "Other"
                       },
+                      "9": {
+                        "value": "Child under 16",
+                        "derived": true
+                      },
                       "1": {
                         "value": "Prefer not to say"
                       }
                     }
                   }
-                }
+                },
+                "depends_on": [
+                  {
+                    "age2": { "operator": ">", "operand": 15 }
+                  }
+                ]
               },
               "propcode": {
                 "questions": {

@@ -409,6 +409,13 @@ private
         self.prevten = 30 if managing_organisation.provider_type == "LA"
       end
     end
+    (2..8).each do |idx|
+      if public_send("age#{idx}") && public_send("age#{idx}") < 16
+        self["ecstat#{idx}"] = 9
+      elsif public_send("ecstat#{idx}") == 9 && (public_send("age#{idx}").nil? || public_send("age#{idx}") >= 16)
+        self["ecstat#{idx}"] = nil
+      end
+    end
   end
 
   def process_postcode_changes!

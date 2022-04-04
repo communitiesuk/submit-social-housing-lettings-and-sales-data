@@ -46,10 +46,16 @@ private
 
     depends_on.any? do |conditions_set|
       conditions_set.all? do |question, value|
-        parts = question.split(".")
-        case_log_value = send_chain(parts, case_log)
+        if value.is_a?(Hash) && value.key?("operator")
+          operator = value["operator"]
+          operand = value["operand"]
+          case_log[question]&.send(operator, operand)
+        else
+          parts = question.split(".")
+          case_log_value = send_chain(parts, case_log)
 
-        value.nil? ? case_log_value == value : !case_log_value.nil? && case_log_value == value
+          value.nil? ? case_log_value == value : !case_log_value.nil? && case_log_value == value
+        end
       end
     end
   end

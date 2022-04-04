@@ -15,6 +15,7 @@ FactoryBot.define do
       postcode_full { "PO5 3TE" }
       ppostcode_full { "SW2 6HI" }
       age1 { 17 }
+      age2 { 19 }
     end
     trait :soft_validations_triggered do
       status { 1 }

@@ -55,8 +55,24 @@ RSpec.describe Form::Page, type: :model do
         expect(page.routed_to?(case_log)).to be false
       end
 
-      it "evaluates not conditions correctly" do
+      it "evaluates met conditions correctly" do
         case_log.incfreq = "Weekly"
+        expect(page.routed_to?(case_log)).to be true
+      end
+    end
+
+    context "with expression routing conditions" do
+      let(:section_id) { "household" }
+      let(:subsection_id) { "household_characteristics" }
+      let(:page_id) { "person_2_working_situation" }
+
+      it "evaluates not met conditions correctly" do
+        case_log.age2 = 12
+        expect(page.routed_to?(case_log)).to be false
+      end
+
+      it "evaluates met conditions correctly" do
+        case_log.age2 = 17
         expect(page.routed_to?(case_log)).to be true
       end
     end
