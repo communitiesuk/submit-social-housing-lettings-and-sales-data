@@ -172,6 +172,34 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("Owning organisation")
           expect(page).to have_content("Managing organisation")
         end
+
+        context "when filtering" do
+          let!(:in_progress_case_log) do
+            FactoryBot.create(:case_log, :in_progress,
+                              owning_organisation: organisation,
+                              managing_organisation: organisation)
+          end
+          let!(:completed_case_log) do
+            FactoryBot.create(:case_log, :completed,
+                              owning_organisation: organisation,
+                              managing_organisation: organisation)
+          end
+
+          it "only shows case logs for selected status" do
+            in_progress_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{in_progress_case_log.id}\">#{in_progress_case_log.id}</a>"
+            completed_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{completed_case_log.id}\">#{completed_case_log.id}</a>"
+
+            cookies[:case_logs_filters] = { status: %w[in_progress completed] }.to_json
+            get "/logs", headers: headers, params: {}
+            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
+            expect(CGI.unescape_html(response.body)).to include(completed_case_row_log)
+
+            cookies[:case_logs_filters] = { status: %w[in_progress] }.to_json
+            get "/logs", headers: headers, params: {}
+            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
+            expect(CGI.unescape_html(response.body)).not_to include(completed_case_row_log)
+          end
+        end
       end
 
       context "when the user is not a customer support user" do
@@ -624,6 +652,25 @@ RSpec.describe CaseLogsController, type: :request do
       it "returns an unprocessable entity 422" do
         expect(response).to have_http_status(:unprocessable_entity)
       end
+    end
+  end
+
+  describe "POST #filter" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:params) do
+      {
+        "status": ["In progress"],
+      }
+    end
+
+    before do
+      sign_in user
+    end
+
+    it "sets status filter in the cookies" do
+      expect(cookies[:case_logs_filters]).to be_nil
+      post "/logs/filter", headers: headers, params: params.to_json
+      expect(JSON.parse(cookies[:case_logs_filters])["status"]).to eq(["In progress"])
     end
   end
 end
