@@ -350,17 +350,17 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 100, period: 2)
+            case_log.update!(scharge: 70, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(50.0)
-            expect(record_from_db["wscharge"]).to eq(50.0)
+            expect(case_log.wscharge).to eq(35.0)
+            expect(record_from_db["wscharge"]).to eq(35.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 100, period: 2)
+            case_log.update!(pscharge: 70, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(50.0)
-            expect(record_from_db["wpschrge"]).to eq(50.0)
+            expect(case_log.wpschrge).to eq(35.0)
+            expect(record_from_db["wpschrge"]).to eq(35.0)
           end
 
           it "correctly derives and saves weekly support charge" do
@@ -407,18 +407,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 2)
+            case_log.update!(supcharg: 60.12, pscharge: 60.13, scharge: 60.98, brent: 60.97, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(50.06)
-            expect(case_log.wpschrge).to eq(50.07)
-            expect(case_log.wscharge).to eq(50.49)
-            expect(case_log.wrent).to eq(50.49)
-            expect(case_log.wtcharge).to eq(201.1)
-            expect(record_from_db["wsupchrg"]).to eq(50.06)
-            expect(record_from_db["wpschrge"]).to eq(50.07)
-            expect(record_from_db["wscharge"]).to eq(50.49)
-            expect(record_from_db["wrent"]).to eq(50.49)
-            expect(record_from_db["wtcharge"]).to eq(201.1)
+            expect(case_log.wsupchrg).to eq(30.06)
+            expect(case_log.wpschrge).to eq(30.06)
+            expect(case_log.wscharge).to eq(30.49)
+            expect(case_log.wrent).to eq(30.49)
+            expect(case_log.wtcharge).to eq(121.1)
+            expect(record_from_db["wsupchrg"]).to eq(30.06)
+            expect(record_from_db["wpschrge"]).to eq(30.06)
+            expect(record_from_db["wscharge"]).to eq(30.49)
+            expect(record_from_db["wrent"]).to eq(30.49)
+            expect(record_from_db["wtcharge"]).to eq(121.1)
           end
         end
 
@@ -593,24 +593,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 5)
+            case_log.update!(scharge: 20, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(125.0)
-            expect(record_from_db["wscharge"]).to eq(125.0)
+            expect(case_log.wscharge).to eq(19.23)
+            expect(record_from_db["wscharge"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 5)
+            case_log.update!(pscharge: 20, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(125.0)
-            expect(record_from_db["wpschrge"]).to eq(125.0)
+            expect(case_log.wpschrge).to eq(19.23)
+            expect(record_from_db["wpschrge"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 5)
+            case_log.update!(supcharg: 20, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(125.0)
-            expect(record_from_db["wsupchrg"]).to eq(125.0)
+            expect(case_log.wsupchrg).to eq(19.23)
+            expect(record_from_db["wsupchrg"]).to eq(19.23)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -650,18 +650,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 5)
+            case_log.update!(supcharg: 20.12, pscharge: 20.13, scharge: 20.98, brent: 100.97, period: 5)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(96.27)
-            expect(case_log.wpschrge).to eq(96.28)
-            expect(case_log.wscharge).to eq(97.1)
+            expect(case_log.wsupchrg).to eq(19.35)
+            expect(case_log.wpschrge).to eq(19.36)
+            expect(case_log.wscharge).to eq(20.17)
             expect(case_log.wrent).to eq(97.09)
-            expect(case_log.wtcharge).to eq(386.73)
-            expect(record_from_db["wsupchrg"]).to eq(96.27)
-            expect(record_from_db["wpschrge"]).to eq(96.28)
-            expect(record_from_db["wscharge"]).to eq(97.1)
+            expect(case_log.wtcharge).to eq(155.96)
+            expect(record_from_db["wsupchrg"]).to eq(19.35)
+            expect(record_from_db["wpschrge"]).to eq(19.36)
+            expect(record_from_db["wscharge"]).to eq(20.17)
             expect(record_from_db["wrent"]).to eq(97.09)
-            expect(record_from_db["wtcharge"]).to eq(386.73)
+            expect(record_from_db["wtcharge"]).to eq(155.96)
           end
         end
 
@@ -674,24 +674,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 6)
+            case_log.update!(scharge: 30, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(122.5)
-            expect(record_from_db["wscharge"]).to eq(122.5)
+            expect(case_log.wscharge).to eq(28.27)
+            expect(record_from_db["wscharge"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 6)
+            case_log.update!(pscharge: 30, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(122.5)
-            expect(record_from_db["wpschrge"]).to eq(122.5)
+            expect(case_log.wpschrge).to eq(28.27)
+            expect(record_from_db["wpschrge"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 6)
+            case_log.update!(supcharg: 30, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(122.5)
-            expect(record_from_db["wsupchrg"]).to eq(122.5)
+            expect(case_log.wsupchrg).to eq(28.27)
+            expect(record_from_db["wsupchrg"]).to eq(28.27)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -731,18 +731,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 6)
+            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 6)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(94.34)
-            expect(case_log.wpschrge).to eq(94.35)
-            expect(case_log.wscharge).to eq(95.15)
+            expect(case_log.wsupchrg).to eq(28.38)
+            expect(case_log.wpschrge).to eq(28.39)
+            expect(case_log.wscharge).to eq(29.19)
             expect(case_log.wrent).to eq(95.14)
-            expect(case_log.wtcharge).to eq(379)
-            expect(record_from_db["wsupchrg"]).to eq(94.34)
-            expect(record_from_db["wpschrge"]).to eq(94.35)
-            expect(record_from_db["wscharge"]).to eq(95.15)
+            expect(case_log.wtcharge).to eq(181.11)
+            expect(record_from_db["wsupchrg"]).to eq(28.38)
+            expect(record_from_db["wpschrge"]).to eq(28.39)
+            expect(record_from_db["wscharge"]).to eq(29.19)
             expect(record_from_db["wrent"]).to eq(95.14)
-            expect(record_from_db["wtcharge"]).to eq(379)
+            expect(record_from_db["wtcharge"]).to eq(181.11)
           end
         end
 
@@ -755,24 +755,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 7)
+            case_log.update!(scharge: 30, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(120.0)
-            expect(record_from_db["wscharge"]).to eq(120.0)
+            expect(case_log.wscharge).to eq(27.69)
+            expect(record_from_db["wscharge"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 7)
+            case_log.update!(pscharge: 30, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(120.0)
-            expect(record_from_db["wpschrge"]).to eq(120.0)
+            expect(case_log.wpschrge).to eq(27.69)
+            expect(record_from_db["wpschrge"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 7)
+            case_log.update!(supcharg: 30, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(120.0)
-            expect(record_from_db["wsupchrg"]).to eq(120.0)
+            expect(case_log.wsupchrg).to eq(27.69)
+            expect(record_from_db["wsupchrg"]).to eq(27.69)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -812,18 +812,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 7)
+            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 7)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(92.42)
-            expect(case_log.wpschrge).to eq(92.43)
-            expect(case_log.wscharge).to eq(93.21)
+            expect(case_log.wsupchrg).to eq(27.8)
+            expect(case_log.wpschrge).to eq(27.81)
+            expect(case_log.wscharge).to eq(28.6)
             expect(case_log.wrent).to eq(93.20)
-            expect(case_log.wtcharge).to eq(371.26)
-            expect(record_from_db["wsupchrg"]).to eq(92.42)
-            expect(record_from_db["wpschrge"]).to eq(92.43)
-            expect(record_from_db["wscharge"]).to eq(93.21)
+            expect(case_log.wtcharge).to eq(177.42)
+            expect(record_from_db["wsupchrg"]).to eq(27.8)
+            expect(record_from_db["wpschrge"]).to eq(27.81)
+            expect(record_from_db["wscharge"]).to eq(28.6)
             expect(record_from_db["wrent"]).to eq(93.20)
-            expect(record_from_db["wtcharge"]).to eq(371.26)
+            expect(record_from_db["wtcharge"]).to eq(177.42)
           end
         end
 
@@ -836,24 +836,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 8)
+            case_log.update!(scharge: 30, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(117.5)
-            expect(record_from_db["wscharge"]).to eq(117.5)
+            expect(case_log.wscharge).to eq(27.12)
+            expect(record_from_db["wscharge"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 8)
+            case_log.update!(pscharge: 30, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(117.5)
-            expect(record_from_db["wpschrge"]).to eq(117.5)
+            expect(case_log.wpschrge).to eq(27.12)
+            expect(record_from_db["wpschrge"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 8)
+            case_log.update!(supcharg: 30, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(117.5)
-            expect(record_from_db["wsupchrg"]).to eq(117.5)
+            expect(case_log.wsupchrg).to eq(27.12)
+            expect(record_from_db["wsupchrg"]).to eq(27.12)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -893,18 +893,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 8)
+            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 8)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(90.49)
-            expect(case_log.wpschrge).to eq(90.50)
-            expect(case_log.wscharge).to eq(91.27)
+            expect(case_log.wsupchrg).to eq(27.22)
+            expect(case_log.wpschrge).to eq(27.23)
+            expect(case_log.wscharge).to eq(28)
             expect(case_log.wrent).to eq(91.26)
-            expect(case_log.wtcharge).to eq(363.53)
-            expect(record_from_db["wsupchrg"]).to eq(90.49)
-            expect(record_from_db["wpschrge"]).to eq(90.50)
-            expect(record_from_db["wscharge"]).to eq(91.27)
+            expect(case_log.wtcharge).to eq(173.72)
+            expect(record_from_db["wsupchrg"]).to eq(27.22)
+            expect(record_from_db["wpschrge"]).to eq(27.23)
+            expect(record_from_db["wscharge"]).to eq(28)
             expect(record_from_db["wrent"]).to eq(91.26)
-            expect(record_from_db["wtcharge"]).to eq(363.53)
+            expect(record_from_db["wtcharge"]).to eq(173.72)
           end
         end
 
@@ -917,24 +917,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 9)
+            case_log.update!(scharge: 30, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(115.0)
-            expect(record_from_db["wscharge"]).to eq(115.0)
+            expect(case_log.wscharge).to eq(26.54)
+            expect(record_from_db["wscharge"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 9)
+            case_log.update!(pscharge: 30, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(115.0)
-            expect(record_from_db["wpschrge"]).to eq(115.0)
+            expect(case_log.wpschrge).to eq(26.54)
+            expect(record_from_db["wpschrge"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 9)
+            case_log.update!(supcharg: 30, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(115.0)
-            expect(record_from_db["wsupchrg"]).to eq(115.0)
+            expect(case_log.wsupchrg).to eq(26.54)
+            expect(record_from_db["wsupchrg"]).to eq(26.54)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -974,18 +974,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 9)
+            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 9)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(88.57)
-            expect(case_log.wpschrge).to eq(88.58)
-            expect(case_log.wscharge).to eq(89.33)
+            expect(case_log.wsupchrg).to eq(26.64)
+            expect(case_log.wpschrge).to eq(26.65)
+            expect(case_log.wscharge).to eq(27.41)
             expect(case_log.wrent).to eq(89.32)
-            expect(case_log.wtcharge).to eq(355.79)
-            expect(record_from_db["wsupchrg"]).to eq(88.57)
-            expect(record_from_db["wpschrge"]).to eq(88.58)
-            expect(record_from_db["wscharge"]).to eq(89.33)
+            expect(case_log.wtcharge).to eq(170.02)
+            expect(record_from_db["wsupchrg"]).to eq(26.64)
+            expect(record_from_db["wpschrge"]).to eq(26.65)
+            expect(record_from_db["wscharge"]).to eq(27.41)
             expect(record_from_db["wrent"]).to eq(89.32)
-            expect(record_from_db["wtcharge"]).to eq(355.79)
+            expect(record_from_db["wtcharge"]).to eq(170.02)
           end
         end
 
@@ -998,31 +998,31 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly service charge" do
-            case_log.update!(scharge: 130, period: 1)
+            case_log.update!(scharge: 30, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wscharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wscharge).to eq(130.0)
-            expect(record_from_db["wscharge"]).to eq(130.0)
+            expect(case_log.wscharge).to eq(30.0)
+            expect(record_from_db["wscharge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 130, period: 1)
+            case_log.update!(pscharge: 30, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(130.0)
-            expect(record_from_db["wpschrge"]).to eq(130.0)
+            expect(case_log.wpschrge).to eq(30.0)
+            expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 130, period: 1)
+            case_log.update!(supcharg: 30, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(130.0)
-            expect(record_from_db["wsupchrg"]).to eq(130.0)
+            expect(case_log.wsupchrg).to eq(30.0)
+            expect(record_from_db["wsupchrg"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly total charge" do
-            case_log.update!(tcharge: 130, period: 1)
+            case_log.update!(tcharge: 30, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wtcharge).to eq(130.0)
-            expect(record_from_db["wtcharge"]).to eq(130.0)
+            expect(case_log.wtcharge).to eq(30.0)
+            expect(record_from_db["wtcharge"]).to eq(30.0)
           end
 
           context "when the tenant has an outstanding amount after benefits" do
@@ -1055,18 +1055,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 100.12, pscharge: 100.13, scharge: 100.98, brent: 100.97, period: 1)
+            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(100.12)
-            expect(case_log.wpschrge).to eq(100.13)
-            expect(case_log.wscharge).to eq(100.98)
+            expect(case_log.wsupchrg).to eq(30.12)
+            expect(case_log.wpschrge).to eq(30.13)
+            expect(case_log.wscharge).to eq(30.98)
             expect(case_log.wrent).to eq(100.97)
-            expect(case_log.wtcharge).to eq(402.2)
-            expect(record_from_db["wsupchrg"]).to eq(100.12)
-            expect(record_from_db["wpschrge"]).to eq(100.13)
-            expect(record_from_db["wscharge"]).to eq(100.98)
+            expect(case_log.wtcharge).to eq(192.2)
+            expect(record_from_db["wsupchrg"]).to eq(30.12)
+            expect(record_from_db["wpschrge"]).to eq(30.13)
+            expect(record_from_db["wscharge"]).to eq(30.98)
             expect(record_from_db["wrent"]).to eq(100.97)
-            expect(record_from_db["wtcharge"]).to eq(402.2)
+            expect(record_from_db["wtcharge"]).to eq(192.2)
           end
         end
       end
