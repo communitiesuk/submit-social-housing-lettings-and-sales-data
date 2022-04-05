@@ -35,7 +35,7 @@
         row.key { 'Password' }
         row.value { '••••••••' }
         if current_user == @user
-          row.action(visually_hidden_text: 'password', href: password_edit_account_path, html_attributes: { 'data-qa': 'change-password' })
+          row.action(visually_hidden_text: 'password', href: edit_password_account_path, html_attributes: { 'data-qa': 'change-password' })
         else
           row.action()
         end

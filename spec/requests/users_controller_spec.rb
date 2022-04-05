@@ -34,7 +34,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "#password" do
       it "does not let you edit user passwords" do
-        get "/users/#{user.id}/password/edit", headers: headers, params: {}
+        get "/account/edit/password", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe UsersController, type: :request do
 
           before do
             sign_in user
-            put "/users/#{user.id}", headers: headers, params: params
+            put "/account", headers: headers, params: params
           end
 
           it "shows an error if passwords don't match" do
@@ -204,7 +204,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}/password/edit", headers: headers, params: {}
+          get "/account/edit/password", headers: headers, params: {}
         end
 
         it "shows the edit password page" do
@@ -453,7 +453,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}/password/edit", headers: headers, params: {}
+          get "/account/edit/password", headers: headers, params: {}
         end
 
         it "shows the edit password page" do
@@ -468,11 +468,12 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not matches the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}/password/edit", headers: headers, params: {}
         end
 
-        it "returns not found 404" do
-          expect(response).to have_http_status(:not_found)
+        it "there is no route" do
+          expect {
+            get "/users/#{other_user.id}/password/edit", headers: headers, params: {}
+          }.to raise_error(ActionController::RoutingError)
         end
       end
     end

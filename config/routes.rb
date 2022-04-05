@@ -22,10 +22,6 @@ Rails.application.routes.draw do
     get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
   end
 
-  resource :account, only: %i[show edit], controller: "users" do
-    get "password/edit", to: "users#edit_password"
-  end
-
   devise_for :users, {
     path: :account,
     controllers: {
@@ -40,6 +36,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get "account/password/reset-confirmation", to: "auth/passwords#reset_confirmation"
+    put "account", to: "users#update"
   end
 
   get "/health", to: ->(_) { [204, {}, [nil]] }
@@ -51,6 +48,10 @@ Rails.application.routes.draw do
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
+
+  resource :account, only: %i[show edit], controller: "users" do
+    get "edit/password", to: "users#edit_password"
+  end
 
   resources :users
 
