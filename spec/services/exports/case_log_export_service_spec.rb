@@ -6,7 +6,7 @@ RSpec.describe Exports::CaseLogExportService do
   let(:export_filepath) { "spec/fixtures/exports/case_logs.xml" }
   let(:export_file) { File.open(export_filepath, "r:UTF-8") }
 
-  let(:expected_data_filename) { "core_2022_02_08/dat_core_2022_02_08_0001" }
+  let(:expected_data_filename) { "core_2022_02_08/dat_core_2022_02_08_0001.xml" }
   let(:expected_master_manifest_filename) { "Manifest_2022_02_08_0001.csv" }
   let(:expected_master_manifest_filename2) { "Manifest_2022_02_08_0002.csv" }
 

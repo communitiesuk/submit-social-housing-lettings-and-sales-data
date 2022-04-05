@@ -35,7 +35,8 @@ module Exports
       today = Time.zone.today
       increment_number = export.daily_run_number.to_s.rjust(4, "0")
       month = today.month.to_s.rjust(2, "0")
-      file_path = "Manifest_#{today.year}_#{month}_#{today.day}_#{increment_number}.csv"
+      day = today.day.to_s.rjust(2, "0")
+      file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
       string_io = build_manifest_csv_io
       @storage_service.write_file(file_path, string_io)
     end
