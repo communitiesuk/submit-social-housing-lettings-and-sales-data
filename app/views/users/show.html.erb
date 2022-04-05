@@ -15,7 +15,7 @@
         row.key { 'Name' }
         row.value { @user.name }
         if current_user == @user || current_user.data_coordinator?
-          row.action(visually_hidden_text: 'name', href: edit_user_path, html_attributes: { 'data-qa': 'change-name' })
+          row.action(visually_hidden_text: 'name', href: aliased_user_edit(@user, current_user), html_attributes: { 'data-qa': 'change-name' })
         else
           row.action()
         end
@@ -25,7 +25,7 @@
         row.key { 'Email address' }
         row.value { @user.email }
         if current_user == @user || current_user.data_coordinator?
-          row.action(visually_hidden_text: 'email address', href: edit_user_path, html_attributes: { 'data-qa': 'change-email' })
+          row.action(visually_hidden_text: 'email address', href: aliased_user_edit(@user, current_user), html_attributes: { 'data-qa': 'change-email' })
         else
           row.action()
         end
@@ -35,7 +35,7 @@
         row.key { 'Password' }
         row.value { '••••••••' }
         if current_user == @user
-          row.action(visually_hidden_text: 'password', href: password_edit_user_path, html_attributes: { 'data-qa': 'change-password' })
+          row.action(visually_hidden_text: 'password', href: password_edit_account_path, html_attributes: { 'data-qa': 'change-password' })
         else
           row.action()
         end
@@ -51,7 +51,7 @@
         row.key { 'Role' }
         row.value { @user.role.humanize }
         if current_user.data_coordinator?
-          row.action(visually_hidden_text: "role", href: edit_user_path, html_attributes: { "data-qa": "role" })
+          row.action(visually_hidden_text: "role", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "role" })
         else
           row.action()
         end
@@ -61,7 +61,7 @@
         row.key { 'Data protection officer' }
         row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
         if current_user.data_coordinator?
-          row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a data protection officer?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-data-protection-officer" })
+          row.action(visually_hidden_text: "are #{pronoun(@user, current_user)} a data protection officer?", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-data-protection-officer" })
         else
           row.action()
         end
@@ -71,7 +71,7 @@
         row.key { 'Key contact' }
         row.value { @user.is_key_contact? ? "Yes" : "No" }
         if current_user.data_coordinator?
-          row.action(visually_hidden_text: "are #{current_user == @user ? "you" : "they"} a key contact?", href: edit_user_path, html_attributes: { "data-qa": "change-are-#{current_user == @user ? "you" : "they"}-a-key-contact" })
+          row.action(visually_hidden_text: "are #{pronoun(@user, current_user)} a key contact?", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-key-contact" })
         else
           row.action()
         end

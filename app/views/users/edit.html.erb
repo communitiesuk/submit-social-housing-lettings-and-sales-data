@@ -36,7 +36,7 @@
           :id,
           :name,
           inline: true,
-          legend: { text: "Are #{current_user == @user ? "you" : "they"} a data protection officer?", size: "m" }
+          legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" }
         %>
 
         <%= f.govuk_collection_radio_buttons :is_key_contact,
@@ -44,7 +44,7 @@
           :id,
           :name,
           inline: true,
-          legend: { text: "Are #{current_user == @user ? "you" : "they"} a key contact?", size: "m" }
+          legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" }
         %>
       <% end %>
 

@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
   end
 
+  resource :account, only: %i[show edit], controller: "users" do
+    get "password/edit", to: "users#edit_password"
+  end
+
   devise_for :users, {
     path: :account,
     controllers: {
@@ -48,11 +52,7 @@ Rails.application.routes.draw do
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
 
-  resources :users do
-    member do
-      get "password/edit", to: "users#edit_password"
-    end
-  end
+  resources :users
 
   resources :organisations do
     member do
