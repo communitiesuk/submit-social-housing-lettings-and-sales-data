@@ -24,6 +24,7 @@ $govuk-global-styles: true;
 @import "template";
 @import "pagination";
 @import "panel";
+@import "filter";
 
 // App utilities
 .app-\!-colour-muted {

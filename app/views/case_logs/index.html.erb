@@ -5,11 +5,18 @@
 </h1>
 
 <div class="govuk-button-group">
+  <%= govuk_button_link_to 'Hide filters', "", secondary: true %>
   <%= govuk_button_to "Create a new lettings log", case_logs_path %>
   <%#= govuk_link_to "Upload logs", bulk_upload_case_logs_path %>
 </div>
 
-<% if @case_logs.present? %>
-  <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
-  <%== render partial: 'pagy/nav', locals: { pagy: @pagy, item_name: "logs" } %>
-<% end %>
+<div class="govuk-grid-row">
+  <%= render partial: "log_filters"%>
+  <% if @case_logs.present? %>
+    <div class="govuk-grid-column-three-quarters">
+      <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
+      <%== render partial: 'pagy/nav', locals: { pagy: @pagy, item_name: "logs" } %>
+    </div>
+  <% end %>
+</div>
+

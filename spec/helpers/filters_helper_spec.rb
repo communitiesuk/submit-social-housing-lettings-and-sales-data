@@ -9,7 +9,7 @@ RSpec.describe FiltersHelper do
       end
     end
 
-    context "one filter is selected" do
+    context "when one filter is selected" do
       before do
         cookies[:case_logs_filters] = { "status": "in_progress" }.to_json
       end
