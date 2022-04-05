@@ -10,9 +10,11 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "GET #edit_password" do
-    it "returns not found" do
-      get :edit_password, params: params
-      expect(response).to have_http_status(:not_found)
+    context "when trying to view the edit page for another user in your organisation" do
+      it "does not let you and returns not found" do
+        get :edit_password, params: params
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 end
