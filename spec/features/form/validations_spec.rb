@@ -60,51 +60,51 @@ RSpec.describe "validations" do
   describe "date validation", js: true do
     def fill_in_date(case_log_id, question, day, month, year, path)
       visit("/logs/#{case_log_id}/#{path}")
-      fill_in("#{question}_1i", with: year)
-      fill_in("#{question}_2i", with: month)
-      fill_in("#{question}_3i", with: day)
+      fill_in("case_log[#{question}(1i)]", with: year)
+      fill_in("case_log[#{question}(2i)]", with: month)
+      fill_in("case_log[#{question}(3i)]", with: day)
     end
 
     it "does not allow out of range dates to be submitted" do
-      fill_in_date(id, "case_log_mrcdate", 3100, 12, 2000, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 3100, 12, 2000, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
 
-      fill_in_date(id, "case_log_mrcdate", 12, 1, 20_000, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 12, 1, 20_000, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
 
-      fill_in_date(id, "case_log_mrcdate", 13, 100, 2020, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 13, 100, 2020, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
 
-      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 21, 11, 2020, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/local-authority/check-answers")
     end
 
     it "does not allow non numeric inputs to be submitted" do
-      fill_in_date(id, "case_log_mrcdate", "abc", "de", "ff", "property-major-repairs")
+      fill_in_date(id, "mrcdate", "abc", "de", "ff", "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
     end
 
     it "does not allow partial inputs to be submitted" do
-      fill_in_date(id, "case_log_mrcdate", 21, 12, nil, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 21, 12, nil, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
 
-      fill_in_date(id, "case_log_mrcdate", 12, nil, 2000, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 12, nil, 2000, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
 
-      fill_in_date(id, "case_log_mrcdate", nil, 10, 2020, "property-major-repairs")
+      fill_in_date(id, "mrcdate", nil, 10, 2020, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/property-major-repairs")
     end
 
     it "allows valid inputs to be submitted" do
-      fill_in_date(id, "case_log_mrcdate", 21, 11, 2020, "property-major-repairs")
+      fill_in_date(id, "mrcdate", 21, 11, 2020, "property-major-repairs")
       click_button("Save and continue")
       expect(page).to have_current_path("/logs/#{id}/local-authority/check-answers")
     end

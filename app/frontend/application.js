@@ -16,6 +16,5 @@ require.context("govuk-frontend/govuk/assets")
 import { initAll } from "govuk-frontend"
 import "./styles/application.scss"
 import "./controllers"
-import "@hotwired/turbo-rails"
 
 initAll()

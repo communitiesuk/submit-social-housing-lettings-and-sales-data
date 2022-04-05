@@ -25,12 +25,6 @@ $govuk-global-styles: true;
 @import "pagination";
 @import "panel";
 
-// Turbo
-.turbo-progress-bar {
-  height: govuk-spacing(1);
-  background-color: $govuk-brand-colour;
-}
-
 // App utilities
 .app-\!-colour-muted {
   color: $govuk-secondary-text-colour !important;

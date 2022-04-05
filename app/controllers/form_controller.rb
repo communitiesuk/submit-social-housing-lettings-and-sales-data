@@ -17,8 +17,9 @@ class FormController < ApplicationController
           redirect_to(send(redirect_path, @case_log))
         end
       else
-        @subsection = @case_log.form.subsection_for_page(@page)
-        render "form/page", status: :unprocessable_entity
+        redirect_path = "case_log_#{@page.id}_path"
+        session[:errors] = @case_log.errors.to_json
+        redirect_to(send(redirect_path, @case_log))
       end
     else
       render_not_found
@@ -39,6 +40,11 @@ class FormController < ApplicationController
     form.pages.map do |page|
       define_method(page.id) do |_errors = {}|
         if @case_log
+          if session["errors"]
+            JSON(session["errors"]).each do |field, messages|
+              messages.each { |message| @case_log.errors.add field.to_sym, message }
+            end
+          end
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
           if @page.routed_to?(@case_log) && @page.subsection.enabled?(@case_log)

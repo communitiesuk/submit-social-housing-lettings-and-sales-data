@@ -25,8 +25,8 @@ gem "govuk_design_system_formbuilder"
 gem "govuk_markdown"
 # GOV UK Notify
 gem "notifications-ruby-client"
-# Turbo and Stimulus
-gem "hotwire-rails"
+# A modest javascript framework for the html you already have
+gem "stimulus-rails"
 # Administration framework
 gem "activeadmin"
 # Admin charts
