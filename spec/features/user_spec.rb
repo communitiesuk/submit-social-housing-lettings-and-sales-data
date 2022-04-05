@@ -182,13 +182,13 @@ RSpec.describe "User Features" do
       end
 
       it "does not have change links for dpo and key contact" do
-        visit("/users/#{user.id}")
+        visit("/account")
         expect(page).not_to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
         expect(page).not_to have_selector('[data-qa="change-are-you-a-key-contact"]')
       end
 
       it "does not have dpo and key contact as editable fields" do
-        visit("/users/#{user.id}/edit")
+        visit("/account/edit")
         expect(page).not_to have_field("user[is_dpo]")
         expect(page).not_to have_field("user[is_key_contact]")
       end
@@ -210,31 +210,31 @@ RSpec.describe "User Features" do
         visit("/logs")
         expect(page).to have_link("Your account")
         click_link("Your account")
-        expect(page).to have_current_path("/users/#{user.id}")
+        expect(page).to have_current_path("/account")
       end
 
       it "can navigate to change your password page from main account page" do
-        visit("/users/#{user.id}")
+        visit("/account")
         find('[data-qa="change-password"]').click
         expect(page).to have_content("Change your password")
         fill_in("user[password]", with: "Password123!")
         fill_in("user[password_confirmation]", with: "Password123!")
         click_button("Update")
-        expect(page).to have_current_path("/users/#{user.id}")
+        expect(page).to have_current_path("/account")
       end
 
       it "allow user to change name" do
-        visit("/users/#{user.id}")
+        visit("/account")
         find('[data-qa="change-name"]').click
         expect(page).to have_content("Change your personal details")
         fill_in("user[name]", with: "Test New")
         click_button("Save changes")
-        expect(page).to have_current_path("/users/#{user.id}")
+        expect(page).to have_current_path("/account")
         expect(page).to have_content("Test New")
       end
 
       it "has dpo and key contact as editable fields" do
-        visit("/users/#{user.id}")
+        visit("/account")
         expect(page).to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
         expect(page).to have_selector('[data-qa="change-are-you-a-key-contact"]')
       end

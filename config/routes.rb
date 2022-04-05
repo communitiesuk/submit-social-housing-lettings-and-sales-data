@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get "account/password/reset-confirmation", to: "auth/passwords#reset_confirmation"
+    put "account", to: "users#update"
   end
 
   get "/health", to: ->(_) { [204, {}, [nil]] }
@@ -48,11 +49,11 @@ Rails.application.routes.draw do
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
 
-  resources :users do
-    member do
-      get "password/edit", to: "users#edit_password"
-    end
+  resource :account, only: %i[show edit], controller: "users" do
+    get "edit/password", to: "users#edit_password"
   end
+
+  resources :users
 
   resources :organisations do
     member do

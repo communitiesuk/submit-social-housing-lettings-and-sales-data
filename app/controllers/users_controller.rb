@@ -10,8 +10,10 @@ class UsersController < ApplicationController
       if @user == current_user
         bypass_sign_in @user
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
+        redirect_to account_path
+      else
+        redirect_to user_path(@user)
       end
-      redirect_to user_path(@user)
     elsif user_params.key?("password")
       format_error_messages
       @minimum_password_length = User.password_length.min
@@ -87,7 +89,7 @@ private
   end
 
   def find_resource
-    @user = User.find_by(id: params[:id])
+    @user = params[:id] ? User.find_by(id: params[:id]) : current_user
   end
 
   def authenticate_scope!

@@ -52,7 +52,7 @@
         elsif
           component.navigation_item(text: 'Logs', href: case_logs_path)
           component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
-          component.navigation_item(text: 'Your account', href: user_path(current_user))
+          component.navigation_item(text: 'Your account', href: account_path)
           component.navigation_item(text: 'Sign out', href: destroy_user_session_path)
         end
       end
