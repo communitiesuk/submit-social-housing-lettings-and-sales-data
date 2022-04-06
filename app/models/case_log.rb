@@ -42,6 +42,7 @@ class CaseLog < ApplicationRecord
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
+  SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every calendar month" }.freeze
   enum status: STATUS
 
   def form
@@ -287,6 +288,16 @@ class CaseLog < ApplicationRecord
         end
       end
     end
+  end
+
+  def soft_min_for_period
+    soft_min = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_min
+    "#{soft_value_for_period(soft_min)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
+  end
+
+  def soft_max_for_period
+    soft_max = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:).soft_max
+    "#{soft_value_for_period(soft_max)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 
 private
@@ -577,5 +588,12 @@ private
 
   def ecstat_refused?
     [ecstat1, ecstat2, ecstat3, ecstat4, ecstat5, ecstat6, ecstat7, ecstat8].any?(10)
+  end
+
+  def soft_value_for_period(value)
+    num_of_weeks = NUM_OF_WEEKS_FROM_PERIOD[period]
+    return "" unless value && num_of_weeks
+
+    (value * 52 / num_of_weeks).round(2)
   end
 end

@@ -138,12 +138,13 @@ private
     collection_year = record.collection_start_year
     rent_range = LaRentRange.find_by(start_year: collection_year, la: record.la, beds: record.beds, lettype: record.lettype)
 
-    if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max) && record.brent.present?
+    if rent_range.present? && !weekly_value_in_range(record, "brent", rent_range.hard_min, rent_range.hard_max) && record.brent.present? && record.period.present?
       record.errors.add :brent, I18n.t("validations.financial.brent.not_in_range")
       record.errors.add :beds, I18n.t("validations.financial.brent.beds.not_in_range")
       record.errors.add :la, I18n.t("validations.financial.brent.la.not_in_range")
       record.errors.add :rent_type, I18n.t("validations.financial.brent.rent_type.not_in_range")
       record.errors.add :needstype, I18n.t("validations.financial.brent.needstype.not_in_range")
+      record.errors.add :period, I18n.t("validations.financial.brent.period.not_in_range")
     end
   end
 end

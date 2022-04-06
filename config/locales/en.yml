@@ -128,6 +128,8 @@ en:
           not_in_range: "Basic rent is outside of the expected range based on this lettings type"
         rent_type:
           not_in_range: "Basic rent is outside of the expected range based on this lettings type"
+        period:
+          not_in_range: "Basic rent is outside of the expected range based on this period"
       charges:
         complete_1_of_3: "Answer only one of the following questions: 'total charges', 'care home charges' or 'does the household pay rent or charges?'"
       tcharge:
@@ -153,10 +155,10 @@ en:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
         retired_over_70: 'Answer cannot be over 70 as as tenant %{person_num} has economic status that is not "Retired"'
-        child_under_16_relat: 'Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant'
+        child_under_16_relat: "Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant"
         child_under_16: "Answer cannot be under 16 as tenant's %{person_num} working situation is not 'child under 16'"
         child_over_16: "Answer cannot be over 16 as tenant's %{person_num} working situation is 'child under 16'"
-        student_16_19: 'Answer cannot be between 16 and 19 as tenant %{person_num} is a child of the lead tenant but is not a full-time student'
+        student_16_19: "Answer cannot be between 16 and 19 as tenant %{person_num} is a child of the lead tenant but is not a full-time student"
         lead:
           over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
@@ -225,10 +227,10 @@ en:
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
-      min: 
-        hint_text: "<p>The minimum rent for a property in %{la} is £%{soft_min} every week.</p><p>You entered <strong>%{brent}</strong></p>"
-      max: 
-        hint_text: "<p>The maximum rent for a property in %{la} is £%{soft_max} every week.</p><p>You entered <strong>%{brent}</strong></p>"
+      min:
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}</p>"
+      max:
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}</p>"
   devise:
     two_factor_authentication:
       success: "Two factor authentication successful."
