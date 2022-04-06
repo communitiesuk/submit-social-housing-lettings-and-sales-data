@@ -1115,9 +1115,9 @@
               "description": "",
               "questions": {
                 "declaration": {
-                  "check_answer_label": "",
-                  "header": "Submit this lettings log ",
-                  "hint_text": "",
+                  "check_answer_label": "Tenant has seen the privacy notice",
+                  "header": "Department for Levelling Up, Housing & Communities privacy notice ",
+                  "hint_text": "Make sure the tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice before submitting this log",
                   "type": "checkbox",
                   "answer_options": {
                     "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"

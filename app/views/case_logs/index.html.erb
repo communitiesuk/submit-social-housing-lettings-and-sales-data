@@ -1,5 +1,9 @@
 <% content_for :title, "Logs" %>
 
+<% if @case_log.present? %>
+<%= render partial: "success", locals: { case_log: @case_log } %>
+<% end %>
+
 <h1 class="govuk-heading-l">
   <%= content_for(:title) %>
 </h1>

@@ -5,6 +5,10 @@ class FormController < ApplicationController
 
   def submit_form
     if @case_log
+      if is_referrer_review?
+        @case_log.update!(@case_log.attributes)
+        redirect_to(send(case_logs_path, @case_log))
+      else
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
       if @case_log.update(responses_for_page)
@@ -109,5 +113,10 @@ private
   def is_referrer_check_answers?
     referrer = request.headers["HTTP_REFERER"].presence || ""
     referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
+  end
+
+  def is_referrer_review?
+    referrer = request.headers["HTTP_REFERER"].presence || ""
+    referrer.present? && referrer.split("/")[-1].present? && referrer.split("/")[-1] == "review"
   end
 end

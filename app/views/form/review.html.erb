@@ -12,7 +12,7 @@
         <%= content_for(:title) %>
       </h1>
       <% @case_log.form.sections.map do |section|  %>
-      <h2 class="govuk-heading-m"><%= section.label %></h2>
+        <h2 class="govuk-heading-m"><%= section.label %></h2>
         <% section.subsections.map do |subsection|  %>
           <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
             <div class="x-govuk-summary-card__header">
@@ -27,6 +27,12 @@
             </div>
           </div>
         <% end %>
+      <% end %>
+      <div class="govuk-inset-text">
+        You can submit changes to this log until the close of the current collection year, 31 March 2022.
+      </div>
+      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+        <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
       <% end %>
     </div>
   </div>
