@@ -79,7 +79,7 @@ class CaseLogsController < ApplicationController
   end
 
   def filter
-    cookies[:case_logs_filters] = { status: params[:status] }.to_json
+    session[:case_logs_filters] = { status: JSON.parse(params[:status]) }.to_json
     redirect_back(fallback_location: root_path)
   end
 
@@ -125,7 +125,7 @@ private
 
   def filtered_case_logs
     user_case_logs = current_user.case_logs
-    status_filter = JSON.parse(cookies[:case_logs_filters])["status"] if cookies[:case_logs_filters].present?
+    status_filter = JSON.parse(session[:case_logs_filters])["status"] if session[:case_logs_filters].present?
     return user_case_logs unless status_filter
 
     user_case_logs.filter_by_status(status_filter)
