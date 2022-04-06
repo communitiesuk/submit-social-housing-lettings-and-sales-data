@@ -12,7 +12,7 @@
         </div>
         <div class="app-filter__content">
             <div class="govuk-form-group app-filter__group">
-                <%= form_with url: "/logs/filter", html: { method: :post }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
+                <%= form_with url: "/logs/filter", html: { method: :post } do |f| %>
                     <%= f.govuk_check_boxes_fieldset :status, legend: { text: "Status", size: "s"} do %>
                         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                             <% statuses = status_filters %>
