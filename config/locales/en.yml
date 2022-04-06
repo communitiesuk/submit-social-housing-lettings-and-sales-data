@@ -137,18 +137,18 @@ en:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
-        reason_required: 'If reasonable preference is "Yes", a reason must be given'
-        reason_not_required: 'If reasonable preference is "No", no reasons should be given'
+        reason_required: "If reasonable preference is 'yes', a reason must be given"
+        reason_not_required: "If reasonable preference is 'no', no reason should be given"
       underoccupation_benefitcap:
-        dont_know_required: "must be don’t know if tenant’s main reason for leaving is don’t know"
+        dont_know_required: "Answer must be 'don’t know' as you told us you don't know the tenant’s main reason for leaving"
       reservist:
-        injury_required: "You must answer the armed forces injury question if the tenant has served in the armed forces"
-        injury_not_required: "You must not answer the armed forces injury question if the tenant has not served in the armed forces or prefer not to say was chosen"
+        injury_required: "You must answer whether the person was seriously injured or ill as a result of serving in the UK armed forces"
+        injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say"
       leftreg:
-        question_required: "You must answer the armed forces active question if the tenant has served as a regular in the armed forces"
-        question_not_required: "You must not answer the armed forces active question if the tenant has not served as a regular in the armed forces"
+        question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they're a current or former regular"
+        question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they're not a current or former regular"
       preg_occ:
-        no_female: "You must answer no as there are no female tenants aged 16-50 in the property"
+        no_female: "You must answer 'no' as there are no female tenants aged 16-50 in the property"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
