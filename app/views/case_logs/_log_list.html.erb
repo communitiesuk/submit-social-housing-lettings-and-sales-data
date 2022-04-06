@@ -15,6 +15,10 @@
           <th class="govuk-table__header" scope="col">Tenancy starts</th>
           <th class="govuk-table__header" scope="col">Log created</th>
           <th class="govuk-table__header" scope="col">Completed</th>
+          <% if current_user.support? %>
+            <th class="govuk-table__header" scope="col">Owning organisation</th>
+            <th class="govuk-table__header" scope="col">Managing organisation</th>
+          <% end %>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -41,6 +45,14 @@
               text: log.status.humanize
             ) %>
           </td>
+          <% if current_user.support? %>
+            <td class="govuk-table__cell">
+              <%= log.owning_organisation.name %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= log.managing_organisation.name %>
+            </td>
+          <% end %>
         </tr>
         <% end %>
       </tbody>
