@@ -27,7 +27,7 @@ class User < ApplicationRecord
     data_accessor: 0,
     data_provider: 1,
     data_coordinator: 2,
-    support: 99
+    support: 99,
   }.freeze
 
   enum role: ROLES
@@ -71,7 +71,9 @@ class User < ApplicationRecord
     update!(is_dpo: true)
   end
 
-  def need_two_factor_authentication?
+  def need_two_factor_authentication?(_request)
     support?
   end
+
+  def send_two_factor_authentication_code(code); end
 end

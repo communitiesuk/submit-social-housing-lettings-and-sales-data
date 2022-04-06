@@ -1,4 +1,4 @@
-<% content_for :title, "Check your phone" %>
+<% content_for :title, "Check your email" %>
 
 <%= form_with(model: resource, url: "/admin/two-factor-authentication", html: { method: :put }) do |f| %>
   <div class="govuk-grid-row">
@@ -9,7 +9,7 @@
         <%= content_for(:title) %>
       </h1>
 
-      <p class="govuk-body">We’ve sent you a text message with a security code.</p>
+      <p class="govuk-body">We’ve sent you an email with a security code.</p>
 
       <%= f.govuk_number_field :code,
         label: { text: "Security code", size: "m" },
@@ -24,5 +24,5 @@
 <% end %>
 
 <p class="govuk-body">
-  <%= govuk_link_to "Not received a text message?", admin_two_factor_authentication_resend_path %>
+  <%= govuk_link_to "Not received an email?", admin_two_factor_authentication_resend_path %>
 </p>

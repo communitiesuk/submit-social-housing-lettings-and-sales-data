@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       sign_in: "sign-in",
       sign_out: "sign-out",
       two_factor_authentication: "two-factor-authentication",
+      two_factor_authentication_resend_code: "resend-code",
     },
     sign_out_via: %i[get],
   }
@@ -27,15 +28,20 @@ Rails.application.routes.draw do
     controllers: {
       passwords: "auth/passwords",
       sessions: "auth/sessions",
+      two_factor_authentication: "auth/two_factor_authentication",
     },
     path_names: {
       sign_in: "sign-in",
       sign_out: "sign-out",
+      two_factor_authentication: "two-factor-authentication",
+      two_factor_authentication_resend_code: "resend-code",
     },
+    sign_out_via: %i[get],
   }
 
   devise_scope :user do
     get "account/password/reset-confirmation", to: "auth/passwords#reset_confirmation"
+    get "account/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
     put "account", to: "users#update"
   end
 

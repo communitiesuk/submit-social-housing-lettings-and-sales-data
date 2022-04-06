@@ -42,7 +42,7 @@ RSpec.describe "Admin Panel" do
         admin.update!(direct_otp_sent_at: 16.minutes.ago)
         fill_in("code", with: otp)
         click_button("Submit")
-        expect(page).to have_content("Check your phone")
+        expect(page).to have_content("Check your email")
         expect(page).to have_http_status(:unprocessable_entity)
         expect(page).to have_title("Error")
         expect(page).to have_selector("#error-summary-title")
@@ -58,7 +58,7 @@ RSpec.describe "Admin Panel" do
       click_button("Sign in")
       fill_in("code", with: otp)
       click_button("Submit")
-      expect(page).to have_content("Check your phone")
+      expect(page).to have_content("Check your email")
       expect(page).to have_http_status(:unprocessable_entity)
       expect(page).to have_title("Error")
       expect(page).to have_selector("#error-summary-title")
@@ -74,12 +74,12 @@ RSpec.describe "Admin Panel" do
     end
 
     it "displays the resend view" do
-      click_link("Not received a text message?")
+      click_link("Not received an email?")
       expect(page).to have_button("Resend security code")
     end
 
     it "send a new OTP code and redirects back to the 2FA view" do
-      click_link("Not received a text message?")
+      click_link("Not received an email?")
       expect { click_button("Resend security code") }.to(change { admin.reload.direct_otp })
       expect(page).to have_current_path("/admin/two-factor-authentication")
     end
@@ -102,7 +102,7 @@ RSpec.describe "Admin Panel" do
       fill_in("admin_user[email]", with: admin.email)
       fill_in("admin_user[password]", with: admin.password)
       click_button("Sign in")
-      expect(page).to have_content("Check your phone")
+      expect(page).to have_content("Check your email")
     end
   end
 

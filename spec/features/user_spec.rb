@@ -324,4 +324,22 @@ RSpec.describe "User Features" do
       end
     end
   end
+
+  context "when the user is a customer support person" do
+    context "when they are logging in" do
+      let!(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
+
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: support_user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+      end
+
+      it "asks for a 2FA code" do
+        expect(page).to have_content("We’ve sent you an email with a security code.")
+        expect(page).to have_field("user[code]")
+      end
+    end
+  end
 end

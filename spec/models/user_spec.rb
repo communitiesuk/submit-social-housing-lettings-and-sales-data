@@ -66,7 +66,7 @@ RSpec.describe User, type: :model do
     end
 
     it "does not require 2FA" do
-      expect(user.need_two_factor_authentication?).to be false
+      expect(user.need_two_factor_authentication?(nil)).to be false
     end
 
     context "when the user is a Customer Support person" do
@@ -78,7 +78,7 @@ RSpec.describe User, type: :model do
       end
 
       it "requires 2FA" do
-        expect(user.need_two_factor_authentication?).to be true
+        expect(user.need_two_factor_authentication?(nil)).to be true
       end
     end
   end
