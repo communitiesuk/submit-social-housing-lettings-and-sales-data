@@ -7,6 +7,8 @@ class CaseLogsController < ApplicationController
   before_action :find_resource, except: %i[create index edit]
 
   def index
+    set_session_filters if params[:status].present?
+
     @pagy, @case_logs = pagy(filtered_case_logs)
 
     respond_to do |format|
@@ -78,11 +80,6 @@ class CaseLogsController < ApplicationController
     end
   end
 
-  def filter
-    session[:case_logs_filters] = { status: params[:status] }.to_json
-    redirect_back(fallback_location: root_path)
-  end
-
 private
 
   API_ACTIONS = %w[create show update destroy].freeze
@@ -129,5 +126,9 @@ private
     return user_case_logs unless status_filter
 
     user_case_logs.filter_by_status(status_filter)
+  end
+
+  def set_session_filters
+    session[:case_logs_filters] = { status: params[:status] }.to_json
   end
 end

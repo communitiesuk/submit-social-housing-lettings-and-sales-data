@@ -90,8 +90,6 @@ Rails.application.routes.draw do
     end
   end
 
-  post "/logs/filter", to: "case_logs#filter"
-
   scope via: :all do
     match "/404", to: "errors#not_found"
     match "/429", to: "errors#too_many_requests", status: 429
