@@ -168,6 +168,7 @@ private
 
   def checkbox_answer_label(case_log)
     answer = []
+    return "Yes" if id == "declaration" && value_is_yes?(case_log["declaration"])
     answer_options.each { |key, options| value_is_yes?(case_log[key]) ? answer << options["value"] : nil }
     answer.join(", ")
   end
