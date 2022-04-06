@@ -405,35 +405,51 @@ RSpec.describe CaseLogsController, type: :request do
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
     let(:other_organisation) { FactoryBot.create(:organisation) }
-    let!(:case_log) do
-      FactoryBot.create(
-        :case_log,
-        owning_organisation: organisation,
-        managing_organisation: organisation,
-        ecstat1: 1,
-      )
+
+    context "when a log exists" do
+      let!(:case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: organisation,
+          managing_organisation: organisation,
+          ecstat1: 1,
+        )
+      end
+
+      before do
+        sign_in user
+        FactoryBot.create(:case_log)
+        get "/logs", headers: headers, params: {}
+      end
+
+      it "downloads a CSV file with headers" do
+        csv = CSV.parse(response.body)
+        expect(csv.first.first).to eq("id")
+        expect(csv.second.first).to eq(case_log.id.to_s)
+      end
+
+      it "does not download other orgs logs" do
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(2)
+      end
+
+      it "downloads answer labels rather than values" do
+        csv = CSV.parse(response.body)
+        expect(csv.second[10]).to eq("Full-time – 30 hours or more")
+      end
     end
 
-    before do
-      sign_in user
-      FactoryBot.create(:case_log)
-      get "/logs", headers: headers, params: {}
-    end
+    context "when there are more than 20 logs" do
+      before do
+        sign_in user
+        FactoryBot.create_list(:case_log, 26, owning_organisation: organisation)
+        get "/logs", headers: headers, params: {}
+      end
 
-    it "downloads a CSV file with headers" do
-      csv = CSV.parse(response.body)
-      expect(csv.first.first).to eq("id")
-      expect(csv.second.first).to eq(case_log.id.to_s)
-    end
-
-    it "does not download other orgs logs" do
-      csv = CSV.parse(response.body)
-      expect(csv.count).to eq(2)
-    end
-
-    it "downloads answer labels rather than values" do
-      csv = CSV.parse(response.body)
-      expect(csv.second[10]).to eq("Full-time – 30 hours or more")
+      it "does not paginate, it downloads all the user's logs" do
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(27)
+      end
     end
   end
 

@@ -11,7 +11,9 @@ class CaseLogsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { send_data @case_logs.to_csv, filename: "logs-#{Time.zone.now}.csv" }
+      format.csv do
+        send_data current_user.case_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
+      end
     end
   end
 
