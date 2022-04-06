@@ -73,7 +73,7 @@ protected
     if Devise.sign_in_after_reset_password
       if resource.need_two_factor_authentication?(request)
         resource.send_new_otp
-        admin_user_two_factor_authentication_path
+        send("#{resource_name}_two_factor_authentication_path")
       else
         after_sign_in_path_for(resource)
       end

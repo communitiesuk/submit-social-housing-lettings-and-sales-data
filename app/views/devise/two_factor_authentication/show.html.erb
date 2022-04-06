@@ -1,6 +1,7 @@
 <% content_for :title, "Check your email" %>
 
-<%= form_with(model: resource, url: "/admin/two-factor-authentication", html: { method: :put }) do |f| %>
+<% url_prefix = resource_name == :user ? "account" : "admin" %>
+<%= form_with(model: resource, url: "/#{url_prefix}/two-factor-authentication", html: { method: :put }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -24,5 +25,5 @@
 <% end %>
 
 <p class="govuk-body">
-  <%= govuk_link_to "Not received an email?", admin_two_factor_authentication_resend_path %>
+  <%= govuk_link_to "Not received an email?", send("#{resource_name}_two_factor_authentication_resend_path") %>
 </p>

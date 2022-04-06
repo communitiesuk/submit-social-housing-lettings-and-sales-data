@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   }
 
   devise_scope :admin_user do
-    get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
+    get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend", as: "admin_user_two_factor_authentication_resend"
   end
 
   devise_for :users, {
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get "account/password/reset-confirmation", to: "auth/passwords#reset_confirmation"
-    get "account/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend"
+    get "account/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend", as: "user_two_factor_authentication_resend"
     put "account", to: "users#update"
   end
 

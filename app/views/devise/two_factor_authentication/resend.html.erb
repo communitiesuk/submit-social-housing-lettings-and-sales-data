@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= form_with(url: resend_code_admin_user_two_factor_authentication_path, html: { method: :get }) do |f| %>
+<%= form_with(url: send("resend_code_#{resource_name}_two_factor_authentication_path"), html: { method: :get }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -15,7 +15,7 @@
         <%= content_for(:title) %>
       </h1>
 
-      <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can request a new one.</p>
+      <p class="govuk-body">Emails sometimes take a few minutes to arrive. If you do not receive the email, you can request a new one.</p>
 
       <%= f.govuk_submit "Resend security code" %>
     </div>
