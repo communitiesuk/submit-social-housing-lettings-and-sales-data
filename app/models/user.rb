@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-         :trackable, :lockable
+         :trackable, :lockable, :two_factor_authenticatable
 
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation
@@ -20,6 +20,8 @@ class User < ApplicationRecord
                              remember_created_at
                              sign_in_count
                              updated_at]
+
+  has_one_time_password(encrypted: true)
 
   ROLES = {
     data_accessor: 0,
@@ -67,5 +69,9 @@ class User < ApplicationRecord
 
   def is_data_protection_officer!
     update!(is_dpo: true)
+  end
+
+  def need_two_factor_authentication?
+    support?
   end
 end
