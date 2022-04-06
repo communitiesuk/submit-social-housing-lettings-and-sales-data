@@ -1801,7 +1801,7 @@ RSpec.describe CaseLog do
       case_log.startdate = Time.zone.local(2021, 10, 10)
     end
 
-    context "when period is weekly for 47 weeks" do
+    context "when period is weekly for 52 weeks" do
       it "returns weekly soft min for 52 weeks" do
         case_log.period = 1
         expect(case_log.soft_min_for_period).to eq("100.0 every week")
