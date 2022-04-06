@@ -264,6 +264,11 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
   end
 
+  create_table "logs_exports", force: :cascade do |t|
+    t.integer "daily_run_number"
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string "name"
     t.string "phone"

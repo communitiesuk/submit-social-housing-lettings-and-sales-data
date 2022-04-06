@@ -1,27 +1,3 @@
-# Temporary instructions for reference
-# (to be updated on feedback and deleted when implemented)
-#
-# create manifest file (one per run), have to be daily even with no data
-# manifest => Manifest_2022_01_30_0001(i).csv
-# folder_name / timestamp / full_path
-#
-# folder => core_year_month_f0001 (use day for now)
-# file => dat_core_year_month_f0001_0001(i).xml (increment matches manifest for a given day)
-#
-# [Manifest generation]
-# iterate manifests for the day and determine next increment
-# read previous manifest if present (read timestamp / reuse folder name)
-# otherwise determine next folder for the month
-# hold writing manifest until we checked for data
-#
-# [Retrieve case logs]
-# Find all case logs updates from last run of the day (midnight if none)
-# Write manifest
-# Determine next increment for the folder (inc = 1 if none)
-# Export retrieved case logs into XML file
-#
-# [Zipping mechanism left for later]
-
 module Exports
   class CaseLogExportService
     def initialize(storage_service, logger = Rails.logger)
@@ -31,9 +7,9 @@ module Exports
 
     def export_case_logs
       case_logs = retrieve_case_logs
-      string_io = build_export_string_io(case_logs)
-      file_path = "#{get_folder_name}/#{get_file_name}.xml"
-      @storage_service.write_file(file_path, string_io)
+      export = save_export_run
+      write_master_manifest(export)
+      write_export_data(case_logs)
     end
 
     def is_omitted_field?(field_name)
@@ -44,12 +20,47 @@ module Exports
 
   private
 
+    def save_export_run
+      today = Time.zone.today
+      last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
+      last_daily_run_number = 0 if last_daily_run_number.nil?
+
+      export = LogsExport.new
+      export.daily_run_number = last_daily_run_number + 1
+      export.save!
+      export
+    end
+
+    def write_master_manifest(export)
+      today = Time.zone.today
+      increment_number = export.daily_run_number.to_s.rjust(4, "0")
+      month = today.month.to_s.rjust(2, "0")
+      day = today.day.to_s.rjust(2, "0")
+      file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
+      string_io = build_manifest_csv_io
+      @storage_service.write_file(file_path, string_io)
+    end
+
+    def write_export_data(case_logs)
+      string_io = build_export_xml_io(case_logs)
+      file_path = "#{get_folder_name}/#{get_file_name}.xml"
+      @storage_service.write_file(file_path, string_io)
+    end
+
     def retrieve_case_logs
       params = { from: Time.current.beginning_of_day, to: Time.current, status: CaseLog.statuses[:completed] }
       CaseLog.where("updated_at >= :from and updated_at <= :to and status = :status", params)
     end
 
-    def build_export_string_io(case_logs)
+    def build_manifest_csv_io
+      headers = ["zip-name", "date-time zipped folder generated", "zip-file-uri"]
+      csv_string = CSV.generate do |csv|
+        csv << headers
+      end
+      StringIO.new(csv_string)
+    end
+
+    def build_export_xml_io(case_logs)
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
