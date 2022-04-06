@@ -29,7 +29,7 @@ private
   end
 
   def after_sign_in_path_for(resource)
-    if resource_class == AdminUser
+    if resource.need_two_factor_authentication?(request)
       admin_user_two_factor_authentication_path
     else
       params.dig(resource_class_name, "start").present? ? case_logs_path : super

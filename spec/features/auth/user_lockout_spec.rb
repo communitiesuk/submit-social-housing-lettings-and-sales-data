@@ -48,9 +48,12 @@ RSpec.describe "User Lockout" do
   end
 
   context "when login-in with the right admin password and incorrect 2FA token up to a maximum number of attempts" do
+    let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+
     before do
-      allow(Sms).to receive(:notify_client).and_return(notify_client)
-      allow(notify_client).to receive(:send_sms).and_return(true)
+      allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+      allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+      allow(notify_client).to receive(:send_email).and_return(true)
 
       visit("/admin/sign-in")
       fill_in("admin_user[email]", with: admin.email)

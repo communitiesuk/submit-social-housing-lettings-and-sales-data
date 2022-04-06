@@ -80,8 +80,8 @@ RSpec.describe Auth::PasswordsController, type: :request do
       let(:new_value) { "new-password" }
 
       before do
-        allow(Sms).to receive(:notify_client).and_return(notify_client)
-        allow(notify_client).to receive(:send_sms).and_return(true)
+        allow(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_email).and_return(true)
       end
 
       it "renders the user edit password view" do
@@ -137,8 +137,8 @@ RSpec.describe Auth::PasswordsController, type: :request do
           expect(response).to redirect_to("/admin/two-factor-authentication")
         end
 
-        it "triggers an SMS" do
-          expect(notify_client).to receive(:send_sms)
+        it "triggers an email" do
+          expect(notify_client).to receive(:send_email)
           put "/admin/password", headers: headers, params: params
         end
       end

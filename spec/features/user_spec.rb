@@ -327,18 +327,37 @@ RSpec.describe "User Features" do
 
   context "when the user is a customer support person" do
     context "when they are logging in" do
-      let!(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
+      let(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
+      let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+      let(:notify_client) { instance_double(Notifications::Client) }
+      let(:mfa_template_id) { User::MFA_TEMPLATE_ID }
+      let(:otp) { "999111" }
 
       before do
+        allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+        allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_email).and_return(true)
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
         visit("/logs")
         fill_in("user[email]", with: support_user.email)
         fill_in("user[password]", with: "pAssword1")
-        click_button("Sign in")
       end
 
-      it "asks for a 2FA code" do
+      it "shows the 2FA code screen" do
+        click_button("Sign in")
         expect(page).to have_content("We’ve sent you an email with a security code.")
         expect(page).to have_field("user[code]")
+      end
+
+      it "sends a 2FA code by email" do
+        expect(notify_client).to receive(:send_email).with(
+          {
+            email_address: support_user.email,
+            template_id: mfa_template_id,
+            personalisation: { otp: },
+          },
+        )
+        click_button("Sign in")
       end
     end
   end

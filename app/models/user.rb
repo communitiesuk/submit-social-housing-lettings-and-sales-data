@@ -48,13 +48,6 @@ class User < ApplicationRecord
     case_logs.not_completed
   end
 
-  RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
-  SET_PASSWORD_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
-
-  def reset_password_notify_template
-    last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
-  end
-
   def is_key_contact?
     is_key_contact
   end
@@ -71,9 +64,21 @@ class User < ApplicationRecord
     update!(is_dpo: true)
   end
 
+  MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
+  RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
+  SET_PASSWORD_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
+
+  def reset_password_notify_template
+    last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
+  end
+
   def need_two_factor_authentication?(_request)
     support?
   end
 
-  def send_two_factor_authentication_code(code); end
+  def send_two_factor_authentication_code(code)
+    template_id = MFA_TEMPLATE_ID
+    personalisation = { otp: code }
+    DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
+  end
 end

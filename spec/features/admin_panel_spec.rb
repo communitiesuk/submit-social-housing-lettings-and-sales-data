@@ -2,13 +2,15 @@ require "rails_helper"
 
 RSpec.describe "Admin Panel" do
   let!(:admin) { FactoryBot.create(:admin_user) }
+  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
   let(:notify_client) { instance_double(Notifications::Client) }
-  let(:mfa_template_id) { AdminUser::MFA_SMS_TEMPLATE_ID }
+  let(:mfa_template_id) { AdminUser::MFA_TEMPLATE_ID }
   let(:otp) { "999111" }
 
   before do
-    allow(Sms).to receive(:notify_client).and_return(notify_client)
-    allow(notify_client).to receive(:send_sms).and_return(true)
+    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+    allow(notify_client).to receive(:send_email).and_return(true)
   end
 
   it "shows the admin sign in page" do
@@ -26,8 +28,12 @@ RSpec.describe "Admin Panel" do
     end
 
     it "authenticates successfully" do
-      expect(notify_client).to receive(:send_sms).with(
-        hash_including(phone_number: admin.phone, template_id: mfa_template_id),
+      expect(notify_client).to receive(:send_email).with(
+        {
+          email_address: admin.email,
+          template_id: mfa_template_id,
+          personalisation: { otp: },
+        },
       )
       click_button("Sign in")
       fill_in("code", with: otp)
@@ -108,14 +114,9 @@ RSpec.describe "Admin Panel" do
 
   context "when the admin has forgotten their password" do
     let!(:admin_user) { FactoryBot.create(:admin_user, last_sign_in_at: Time.zone.now) }
-    let(:notify_client) { instance_double(Notifications::Client) }
     let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
-    let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
     before do
-      allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
-      allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
-      allow(notify_client).to receive(:send_email).and_return(true)
       allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
     end
 
