@@ -15,7 +15,7 @@
                 <%= form_with url: "/logs/filter", html: { method: :post }, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |f| %>
                     <%= f.govuk_check_boxes_fieldset :status, legend: { text: "Status", size: "s"} do %>
                         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                            <% statuses = {in_progress: "In progress", submitted: "Completed", not_started: "Not started"} %>
+                            <% statuses = status_filters %>
                             <% statuses.map do |key, option| %>
                                 <%= f.govuk_check_box "status", "#{key}",
                                 label: { text: option },

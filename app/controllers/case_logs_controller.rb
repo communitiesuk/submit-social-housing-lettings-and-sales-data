@@ -79,7 +79,7 @@ class CaseLogsController < ApplicationController
   end
 
   def filter
-    session[:case_logs_filters] = { status: JSON.parse(params[:status]) }.to_json
+    session[:case_logs_filters] = { status: params[:status] }.to_json
     redirect_back(fallback_location: root_path)
   end
 

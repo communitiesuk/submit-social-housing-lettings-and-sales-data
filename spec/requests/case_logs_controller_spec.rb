@@ -189,12 +189,12 @@ RSpec.describe CaseLogsController, type: :request do
             in_progress_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{in_progress_case_log.id}\">#{in_progress_case_log.id}</a>"
             completed_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{completed_case_log.id}\">#{completed_case_log.id}</a>"
 
-            post "/logs/filter", headers: headers, params: { status: %w[in_progress completed].to_json }
+            post "/logs/filter", headers: headers, params: { status: %w[in_progress completed] }
             get "/logs", headers: headers, params: {}
             expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
             expect(CGI.unescape_html(response.body)).to include(completed_case_row_log)
 
-            post "/logs/filter", headers: headers, params: { status: %w[in_progress].to_json }
+            post "/logs/filter", headers: headers, params: { status: %w[in_progress] }
             get "/logs", headers: headers, params: {}
             expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
             expect(CGI.unescape_html(response.body)).not_to include(completed_case_row_log)
