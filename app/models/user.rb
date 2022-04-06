@@ -25,12 +25,17 @@ class User < ApplicationRecord
     data_accessor: 0,
     data_provider: 1,
     data_coordinator: 2,
+    support: 99
   }.freeze
 
   enum role: ROLES
 
   def case_logs
-    CaseLog.for_organisation(organisation)
+    if support?
+      CaseLog.all
+    else
+      CaseLog.for_organisation(organisation)
+    end
   end
 
   def completed_case_logs

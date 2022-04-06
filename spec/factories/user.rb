@@ -11,6 +11,9 @@ FactoryBot.define do
     trait :data_protection_officer do
       is_dpo { true }
     end
+    trait :support do
+      role { "support" }
+    end
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end

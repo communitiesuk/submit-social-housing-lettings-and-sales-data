@@ -64,6 +64,14 @@ RSpec.describe User, type: :model do
       expect { user.is_data_protection_officer! }
         .to change { user.reload.is_data_protection_officer? }.from(false).to(true)
     end
+    context "when the user is a Customer Support person" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:other_orgs_log) { FactoryBot.create(:case_log) }
+
+      it "has access to logs from all organisations" do
+        expect(user.case_logs.to_a).to eq([owned_case_log, managed_case_log, other_orgs_log])
+      end
+    end
   end
 
   describe "paper trail" do
