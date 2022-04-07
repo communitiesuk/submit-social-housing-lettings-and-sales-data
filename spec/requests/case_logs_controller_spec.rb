@@ -169,8 +169,8 @@ RSpec.describe CaseLogsController, type: :request do
 
         it "does have organisation columns" do
           get "/logs", headers: headers, params: {}
-          expect(CGI.unescape_html(response.body)).to match(/<th class="govuk-table__header" scope="col">Owning organisation<\/th>/)
-          expect(CGI.unescape_html(response.body)).to match(/<th class="govuk-table__header" scope="col">Managing organisation<\/th>/)
+          expect(page).to have_content("Owning organisation")
+          expect(page).to have_content("Managing organisation")
         end
       end
 
@@ -181,8 +181,8 @@ RSpec.describe CaseLogsController, type: :request do
 
         it "does not have organisation columns" do
           get "/logs", headers: headers, params: {}
-          expect(CGI.unescape_html(response.body)).not_to match(/<th class="govuk-table__header" scope="col">Owning organisation<\/th>/)
-          expect(CGI.unescape_html(response.body)).not_to match(/<th class="govuk-table__header" scope="col">Managing organisation<\/th>/)
+          expect(page).not_to have_content("Owning organisation")
+          expect(page).not_to have_content("Managing organisation")
         end
 
         context "when there are less than 20 logs" do
