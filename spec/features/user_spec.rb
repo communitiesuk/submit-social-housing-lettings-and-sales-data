@@ -15,7 +15,7 @@ RSpec.describe "User Features" do
   end
 
   context "when the user navigates to case logs" do
-    it " is required to log in" do
+    it "is required to log in" do
       visit("/logs")
       expect(page).to have_current_path("/account/sign-in")
       expect(page).to have_content("Sign in to your account to submit CORE data")
@@ -26,7 +26,7 @@ RSpec.describe "User Features" do
       expect(page).to have_no_content("You need to sign in or sign up before continuing.")
     end
 
-    it " is redirected to case logs after signing in" do
+    it "is redirected to case logs after signing in" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -34,7 +34,7 @@ RSpec.describe "User Features" do
       expect(page).to have_current_path("/logs")
     end
 
-    it " can log out again", js: true do
+    it "can log out again", js: true do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -44,7 +44,7 @@ RSpec.describe "User Features" do
       expect(page).to have_content("Start now")
     end
 
-    it " can log out again with js disabled" do
+    it "can log out again with js disabled" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
@@ -56,13 +56,13 @@ RSpec.describe "User Features" do
   end
 
   context "when the user has forgotten their password" do
-    it " is redirected to the reset password page when they click the reset password link" do
+    it "is redirected to the reset password page when they click the reset password link" do
       visit("/logs")
       click_link("reset your password")
       expect(page).to have_current_path("/account/password/new")
     end
 
-    it " is shown an error message if they submit without entering an email address" do
+    it "is shown an error message if they submit without entering an email address" do
       visit("/account/password/new")
       click_button("Send email")
       expect(page).to have_selector("#error-summary-title")
@@ -70,7 +70,7 @@ RSpec.describe "User Features" do
       expect(page).to have_title("Error")
     end
 
-    it " is shown an error message if they submit an invalid email address" do
+    it "is shown an error message if they submit an invalid email address" do
       visit("/account/password/new")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Send email")
@@ -79,28 +79,28 @@ RSpec.describe "User Features" do
       expect(page).to have_title("Error")
     end
 
-    it " is redirected to check your email page after submitting an email on the reset password page" do
+    it "is redirected to check your email page after submitting an email on the reset password page" do
       visit("/account/password/new")
       fill_in("user[email]", with: user.email)
       click_button("Send email")
       expect(page).to have_content("Check your email")
     end
 
-    it " is shown their email on the password reset confirmation page" do
+    it "is shown their email on the password reset confirmation page" do
       visit("/account/password/new")
       fill_in("user[email]", with: user.email)
       click_button("Send email")
       expect(page).to have_content(user.email)
     end
 
-    it " is shown the reset password confirmation page even if their email doesn't exist in the system" do
+    it "is shown the reset password confirmation page even if their email doesn't exist in the system" do
       visit("/account/password/new")
       fill_in("user[email]", with: "idontexist@example.com")
       click_button("Send email")
       expect(page).to have_current_path("/account/password/reset-confirmation?email=idontexist%40example.com")
     end
 
-    it " is sent a reset password email via Notify" do
+    it "is sent a reset password email via Notify" do
       expect(notify_client).to receive(:send_email).with(
         {
           email_address: user.email,
@@ -321,6 +321,170 @@ RSpec.describe "User Features" do
                  is_dpo: false,
                  is_key_contact: true,
                )).to be_a(User)
+      end
+    end
+  end
+
+  context "when the user is a customer support person" do
+    let(:support_user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
+    let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+    let(:notify_client) { instance_double(Notifications::Client) }
+    let(:mfa_template_id) { User::MFA_TEMPLATE_ID }
+    let(:otp) { "999111" }
+
+    before do
+      allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+      allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+      allow(notify_client).to receive(:send_email).and_return(true)
+      visit("/logs")
+      fill_in("user[email]", with: support_user.email)
+      fill_in("user[password]", with: "pAssword1")
+    end
+
+    context "when they are logging in" do
+      before do
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
+      end
+
+      it "shows the 2FA code screen" do
+        click_button("Sign in")
+        expect(page).to have_content("We’ve sent you an email with a security code.")
+        expect(page).to have_field("user[code]")
+      end
+
+      it "sends a 2FA code by email" do
+        expect(notify_client).to receive(:send_email).with(
+          {
+            email_address: support_user.email,
+            template_id: mfa_template_id,
+            personalisation: { otp: },
+          },
+        )
+        click_button("Sign in")
+      end
+    end
+
+    context "with a valid 2FA code" do
+      before do
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
+      end
+
+      it "authenticates successfully" do
+        click_button("Sign in")
+        fill_in("code", with: otp)
+        click_button("Submit")
+        expect(page).to have_content("Logs")
+        expect(page).to have_content("Two factor authentication successful.")
+      end
+
+      context "but it is more than 15 minutes old" do
+        it "does not authenticate successfully" do
+          click_button("Sign in")
+          support_user.update!(direct_otp_sent_at: 16.minutes.ago)
+          fill_in("code", with: otp)
+          click_button("Submit")
+          expect(page).to have_content("Check your email")
+          expect(page).to have_http_status(:unprocessable_entity)
+          expect(page).to have_title("Error")
+          expect(page).to have_selector("#error-summary-title")
+        end
+      end
+    end
+
+    context "with an invalid 2FA code" do
+      it "does not authenticate successfully" do
+        click_button("Sign in")
+        fill_in("code", with: otp)
+        click_button("Submit")
+        expect(page).to have_content("Check your email")
+        expect(page).to have_http_status(:unprocessable_entity)
+        expect(page).to have_title("Error")
+        expect(page).to have_selector("#error-summary-title")
+      end
+    end
+
+    context "when the 2FA code needs to be resent" do
+      before do
+        click_button("Sign in")
+      end
+
+      it "displays the resend view" do
+        click_link("Not received an email?")
+        expect(page).to have_button("Resend security code")
+      end
+
+      it "send a new OTP code and redirects back to the 2FA view" do
+        click_link("Not received an email?")
+        expect { click_button("Resend security code") }.to(change { support_user.reload.direct_otp })
+        expect(page).to have_current_path("/account/two-factor-authentication")
+      end
+    end
+
+    context "when signing in and out again" do
+      before do
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
+      end
+
+      it "requires the 2FA code on each login" do
+        click_button("Sign in")
+        fill_in("code", with: otp)
+        click_button("Submit")
+        click_link("Sign out")
+        visit("/logs")
+        fill_in("user[email]", with: support_user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        expect(page).to have_content("Check your email")
+      end
+    end
+
+    context "when they have forgotten their password" do
+      let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+
+      before do
+        allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
+        allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+        allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_email).and_return(true)
+      end
+
+      it "is redirected to the reset password page when they click the reset password link" do
+        visit("/account/sign-in")
+        click_link("reset your password")
+        expect(page).to have_current_path("/account/password/new")
+      end
+
+      it "is shown an error message if they submit without entering an email address" do
+        visit("/account/password/new")
+        click_button("Send email")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#user-email-field-error")
+        expect(page).to have_title("Error")
+      end
+
+      it "is redirected to login page after reset email is sent" do
+        visit("/account/password/new")
+        fill_in("user[email]", with: support_user.email)
+        click_button("Send email")
+        expect(page).to have_content("Check your email")
+      end
+
+      it "is sent a reset password email via Notify" do
+        expect(notify_client).to receive(:send_email).with(
+          {
+            email_address: support_user.email,
+            template_id: support_user.reset_password_notify_template,
+            personalisation: {
+              name: support_user.name,
+              email: support_user.email,
+              organisation: support_user.organisation.name,
+              link: "http://localhost:3000/account/password/edit?reset_password_token=#{reset_password_token}",
+            },
+          },
+        )
+        visit("/account/password/new")
+        fill_in("user[email]", with: support_user.email)
+        click_button("Send email")
       end
     end
   end

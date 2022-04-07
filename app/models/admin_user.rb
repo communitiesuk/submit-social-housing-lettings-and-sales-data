@@ -21,13 +21,13 @@ class AdminUser < ApplicationRecord
 
   validates :phone, presence: true, numericality: true
 
-  MFA_SMS_TEMPLATE_ID = "bf309d93-804e-4f95-b1f4-bd513c48ecb0".freeze
+  MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
   RESET_PASSWORD_TEMPLATE_ID = "fbb2d415-b9b1-4507-ba0a-6e542fa3504d".freeze
 
   def send_two_factor_authentication_code(code)
-    template_id = MFA_SMS_TEMPLATE_ID
+    template_id = MFA_TEMPLATE_ID
     personalisation = { otp: code }
-    Sms.send(phone, template_id, personalisation)
+    DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
 
   def reset_password_notify_template

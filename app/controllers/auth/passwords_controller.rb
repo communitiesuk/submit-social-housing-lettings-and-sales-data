@@ -58,7 +58,7 @@ protected
   end
 
   def password_update_flash_message
-    resource_class == AdminUser ? :updated_2FA : :updated
+    resource.need_two_factor_authentication?(request) ? :updated_2FA : :updated
   end
 
   def resource_class_name
@@ -71,9 +71,9 @@ protected
 
   def after_resetting_password_path_for(resource)
     if Devise.sign_in_after_reset_password
-      if resource_class == AdminUser
+      if resource.need_two_factor_authentication?(request)
         resource.send_new_otp
-        admin_user_two_factor_authentication_path
+        send("#{resource_name}_two_factor_authentication_path")
       else
         after_sign_in_path_for(resource)
       end

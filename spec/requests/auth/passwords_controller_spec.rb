@@ -80,8 +80,8 @@ RSpec.describe Auth::PasswordsController, type: :request do
       let(:new_value) { "new-password" }
 
       before do
-        allow(Sms).to receive(:notify_client).and_return(notify_client)
-        allow(notify_client).to receive(:send_sms).and_return(true)
+        allow(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_email).and_return(true)
       end
 
       it "renders the user edit password view" do
@@ -137,9 +137,81 @@ RSpec.describe Auth::PasswordsController, type: :request do
           expect(response).to redirect_to("/admin/two-factor-authentication")
         end
 
-        it "triggers an SMS" do
-          expect(notify_client).to receive(:send_sms)
+        it "triggers an email" do
+          expect(notify_client).to receive(:send_email)
           put "/admin/password", headers: headers, params: params
+        end
+      end
+    end
+  end
+
+  context "when a customer support user" do
+    let(:support_user) { FactoryBot.create(:user, :support) }
+
+    describe "reset password" do
+      let(:new_value) { "new-password" }
+
+      before do
+        allow(DeviseNotifyMailer).to receive(:notify_client).and_return(notify_client)
+        allow(notify_client).to receive(:send_email).and_return(true)
+      end
+
+      it "renders the user edit password view" do
+        _raw, enc = Devise.token_generator.generate(User, :reset_password_token)
+        get "/account/password/edit?reset_password_token=#{enc}"
+        expect(page).to have_css("h1", text: "Reset your password")
+      end
+
+      context "when passwords entered don't match" do
+        let(:raw) { support_user.send_reset_password_instructions }
+        let(:params) do
+          {
+            id: support_user.id,
+            user: {
+              password: new_value,
+              password_confirmation: "something_else",
+              reset_password_token: raw,
+            },
+          }
+        end
+
+        it "shows an error" do
+          put "/account/password", headers: headers, params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("doesn't match Password")
+        end
+      end
+
+      context "when passwords is reset" do
+        let(:raw) { support_user.send_reset_password_instructions }
+        let(:params) do
+          {
+            id: support_user.id,
+            user: {
+              password: new_value,
+              password_confirmation: new_value,
+              reset_password_token: raw,
+            },
+          }
+        end
+
+        it "updates the password" do
+          expect {
+            put "/account/password", headers: headers, params: params
+            support_user.reload
+          }.to change(support_user, :encrypted_password)
+        end
+
+        it "sends you to the 2FA page and does not allow bypassing 2FA code" do
+          put "/account/password", headers: headers, params: params
+          expect(response).to redirect_to("/account/two-factor-authentication")
+          get "/logs", headers: headers
+          expect(response).to redirect_to("/account/two-factor-authentication")
+        end
+
+        it "triggers an email" do
+          expect(notify_client).to receive(:send_email)
+          put "/account/password", headers: headers, params: params
         end
       end
     end
