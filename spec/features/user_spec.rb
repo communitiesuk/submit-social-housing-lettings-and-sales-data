@@ -374,7 +374,7 @@ RSpec.describe "User Features" do
         fill_in("code", with: otp)
         click_button("Submit")
         expect(page).to have_content("Logs")
-        expect(page).to have_content("Two factor authentication successful.")
+        expect(page).to have_content(I18n.t("devise.two_factor_authentication.success"))
       end
 
       context "but it is more than 15 minutes old" do
