@@ -1,0 +1,32 @@
+<div class="app-filter-layout__filter" tabindex="-1" id="filter-panel">
+    <div class="app-filter" >
+        <div class="app-filter__header">
+            <h2 class="govuk-heading-m">Filters</h2>
+            <button 
+            class="app-filter__close" 
+            type="button" 
+            data-controller="filter"
+            data-action="click->filter#toggleFilter">
+            Close
+            </button>
+        </div>
+        <div class="app-filter__content">
+            <div class="govuk-form-group app-filter__group">
+                <%= form_with url: "/logs", html: { method: :get } do |f| %>
+                    <%= f.govuk_check_boxes_fieldset :status, legend: { text: "Status", size: "s"} do %>
+                        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                            <% statuses = status_filters %>
+                            <% statuses.map do |key, option| %>
+                                <%= f.govuk_check_box "status", "#{key}",
+                                label: { text: option },
+                                checked: filter_selected?(key),
+                                size: "s" %>
+                            <% end %>
+                        </div>
+                    <% end %>
+                    <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-top-4" %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

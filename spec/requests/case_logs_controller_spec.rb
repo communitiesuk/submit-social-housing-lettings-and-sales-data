@@ -172,6 +172,41 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("Owning organisation")
           expect(page).to have_content("Managing organisation")
         end
+
+        context "when filtering" do
+          let!(:in_progress_case_log) do
+            FactoryBot.create(:case_log, :in_progress,
+                              owning_organisation: organisation,
+                              managing_organisation: organisation)
+          end
+          let!(:completed_case_log) do
+            FactoryBot.create(:case_log, :completed,
+                              owning_organisation: organisation,
+                              managing_organisation: organisation)
+          end
+
+          it "shows case logs for multiple selected statuses" do
+            get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).to have_link(completed_case_log.id.to_s)
+          end
+
+          it "shows case logs for one selected status" do
+            get "/logs?status[]=in_progress", headers: headers, params: {}
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
+          end
+
+          it "does not reset the filters" do
+            get "/logs?status[]=in_progress", headers: headers, params: {}
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
+
+            get "/logs", headers: headers, params: {}
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
+          end
+        end
       end
 
       context "when the user is not a customer support user" do

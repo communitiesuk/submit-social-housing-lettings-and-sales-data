@@ -7,7 +7,9 @@ class CaseLogsController < ApplicationController
   before_action :find_resource, except: %i[create index edit]
 
   def index
-    @pagy, @case_logs = pagy(current_user.case_logs)
+    set_session_filters if params[:status].present?
+
+    @pagy, @case_logs = pagy(filtered_case_logs)
 
     respond_to do |format|
       format.html
@@ -116,5 +118,17 @@ private
 
   def find_resource
     @case_log = CaseLog.find_by(id: params[:id])
+  end
+
+  def filtered_case_logs
+    user_case_logs = current_user.case_logs
+    status_filter = JSON.parse(session[:case_logs_filters])["status"] if session[:case_logs_filters].present?
+    return user_case_logs unless status_filter
+
+    user_case_logs.filter_by_status(status_filter)
+  end
+
+  def set_session_filters
+    session[:case_logs_filters] = { status: params[:status] }.to_json
   end
 end
