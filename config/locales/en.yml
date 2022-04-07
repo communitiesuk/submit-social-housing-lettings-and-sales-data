@@ -192,7 +192,7 @@ en:
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as you already told us it's the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
         prp:
-          local_housing_referral: "Answer cannot be Nominated by a local housing authority as you already told us it's another landlord on the tenancy agreement"
+          local_housing_referral: "Answer cannot be 'nominated by a local housing authority' as you already told us it's another landlord on the tenancy agreement"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
