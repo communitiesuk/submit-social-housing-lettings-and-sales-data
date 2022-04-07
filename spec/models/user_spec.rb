@@ -77,5 +77,24 @@ RSpec.describe User, type: :model do
       user.update!(name: "new test name")
       expect(user.paper_trail.previous_version.name).to eq("Danny Rojas")
     end
+
+    it "signing in does not create a new version" do
+      expect {
+        user.update!(
+          last_sign_in_at: Time.zone.now,
+          current_sign_in_at: Time.zone.now,
+          current_sign_in_ip: "127.0.0.1",
+          last_sign_in_ip: "127.0.0.1",
+          failed_attempts: 3,
+          unlock_token: "dummy",
+          locked_at: Time.zone.now,
+          reset_password_token: "dummy",
+          reset_password_sent_at: Time.zone.now,
+          remember_created_at: Time.zone.now,
+          sign_in_count: 5,
+          updated_at: Time.zone.now,
+        )
+      }.not_to change(user.versions, :count)
+    end
   end
 end

@@ -6,7 +6,18 @@ class AdminUser < ApplicationRecord
 
   has_one_time_password(encrypted: true)
 
-  has_paper_trail
+  has_paper_trail ignore: %w[last_sign_in_at
+                             current_sign_in_at
+                             current_sign_in_ip
+                             last_sign_in_ip
+                             failed_attempts
+                             unlock_token
+                             locked_at
+                             reset_password_token
+                             reset_password_sent_at
+                             remember_created_at
+                             sign_in_count
+                             updated_at]
 
   validates :phone, presence: true, numericality: true
 
