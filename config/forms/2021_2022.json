@@ -5549,10 +5549,9 @@
             },
             "min_rent_value_check": {
               "depends_on": [{ "rent_in_soft_min_range?": true }],
-              "title_text": "Rent value is outside of the expected range",
               "informative_text": {
                 "translation": "soft_validations.rent.min.hint_text",
-                "argument": {"la": "question", "soft_min": "method", "brent":"question"}
+                "argument": {"la": "question", "soft_min_for_period": "method", "brent":"question"}
               },
               "questions": {
                 "rent_value_check": {
@@ -5573,10 +5572,9 @@
             },
             "max_rent_value_check": {
               "depends_on": [{ "rent_in_soft_max_range?": true }],
-              "title_text": "Rent value is outside of the expected range",
               "informative_text": {
                 "translation": "soft_validations.rent.max.hint_text",
-                "argument": {"la": "question", "soft_max": "method", "brent":"question"}
+                "argument": {"la": "question", "soft_max_for_period": "method", "brent":"question"}
               },
               "questions": {
                 "rent_value_check": {
