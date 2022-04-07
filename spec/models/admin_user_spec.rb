@@ -61,5 +61,24 @@ RSpec.describe AdminUser, type: :model do
       admin_user.update!(phone: "09673867853")
       expect(admin_user.paper_trail.previous_version.phone).to eq("07563867654")
     end
+
+    it "signing in does not create a new version" do
+      expect {
+        admin_user.update!(
+          last_sign_in_at: Time.zone.now,
+          current_sign_in_at: Time.zone.now,
+          current_sign_in_ip: "127.0.0.1",
+          last_sign_in_ip: "127.0.0.1",
+          failed_attempts: 3,
+          unlock_token: "dummy",
+          locked_at: Time.zone.now,
+          reset_password_token: "dummy",
+          reset_password_sent_at: Time.zone.now,
+          remember_created_at: Time.zone.now,
+          sign_in_count: 5,
+          updated_at: Time.zone.now,
+        )
+      }.not_to change(admin_user.versions, :count)
+    end
   end
 end
