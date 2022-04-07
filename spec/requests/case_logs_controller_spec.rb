@@ -185,30 +185,26 @@ RSpec.describe CaseLogsController, type: :request do
                               managing_organisation: organisation)
           end
 
-          it "only shows case logs for selected status" do
-            in_progress_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{in_progress_case_log.id}\">#{in_progress_case_log.id}</a>"
-            completed_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{completed_case_log.id}\">#{completed_case_log.id}</a>"
-
+          it "shows case logs for multiple selected statuses" do
             get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
-            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
-            expect(CGI.unescape_html(response.body)).to include(completed_case_row_log)
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).to have_link(completed_case_log.id.to_s)
+          end
 
+          it "shows case logs for one selected status" do
             get "/logs?status[]=in_progress", headers: headers, params: {}
-            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
-            expect(CGI.unescape_html(response.body)).not_to include(completed_case_row_log)
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
           end
 
           it "does not reset the filters" do
-            in_progress_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{in_progress_case_log.id}\">#{in_progress_case_log.id}</a>"
-            completed_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{completed_case_log.id}\">#{completed_case_log.id}</a>"
-
             get "/logs?status[]=in_progress", headers: headers, params: {}
-            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
-            expect(CGI.unescape_html(response.body)).not_to include(completed_case_row_log)
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
 
             get "/logs", headers: headers, params: {}
-            expect(CGI.unescape_html(response.body)).to include(in_progress_case_row_log)
-            expect(CGI.unescape_html(response.body)).not_to include(completed_case_row_log)
+            expect(page).to have_link(in_progress_case_log.id.to_s)
+            expect(page).not_to have_link(completed_case_log.id.to_s)
           end
         end
       end
