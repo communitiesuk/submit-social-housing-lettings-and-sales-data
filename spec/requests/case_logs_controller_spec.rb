@@ -477,6 +477,10 @@ RSpec.describe CaseLogsController, type: :request do
       before do
         sign_in user
         FactoryBot.create(:case_log)
+        FactoryBot.create(:case_log,
+                          :completed,
+                          owning_organisation: organisation,
+                          managing_organisation: organisation)
         get "/logs", headers: headers, params: {}
       end
 
@@ -488,12 +492,18 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "does not download other orgs logs" do
         csv = CSV.parse(response.body)
-        expect(csv.count).to eq(2)
+        expect(csv.count).to eq(3)
       end
 
       it "downloads answer labels rather than values" do
         csv = CSV.parse(response.body)
         expect(csv.second[10]).to eq("Full-time – 30 hours or more")
+      end
+
+      it "dowloads filtered logs" do
+        get "/logs?status[]=completed", headers:, params: {}
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(2)
       end
     end
 
