@@ -154,7 +154,7 @@ en:
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
-        retired_over_70: 'Answer cannot be over 70 as as tenant %{person_num} has economic status that is not "Retired"'
+        retired_over_70: "Answer cannot be over 70 as tenant %{person_num} has economic status that is not 'retired'"
         child_under_16_relat: "Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant"
         child_under_16: "Answer cannot be under 16 as tenant's %{person_num} working situation is not 'child under 16'"
         child_over_16: "Answer cannot be over 16 as tenant's %{person_num} working situation is 'child under 16'"
@@ -163,17 +163,17 @@ en:
           over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
         retired_over_70: "Tenant %{person_num} must be retired if over 70"
-        child_under_16: "Tenant %{person_num} economic status must be Child under 16 if their age is under 16"
-        child_over_16: "Answer cannot be 'child under 16' as tenant %{person_num} is older than 16"
-        student_16_19: "If age is between 16 and 19 - tenant %{person_num} must be a full time student or prefer not to say."
+        child_under_16: "Tenant's %{person_num} working situation must be 'child under 16' as you told us they're under 16"
+        child_over_16: "Answer cannot be 'child under 16' as you told us the tenant %{person_num} is older than 16"
+        student_16_19: "Tenant's %{person_num} working situation must be full-time student or prefers not to say as you told us they're between 16 and 19."
         retired_male: "Answer cannot be 'retired' as male tenant is under 65"
         retired_female: "Answer cannot be 'retired' as female tenant is under 60"
       relat:
-        child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be Child if their age is under 16"
+        child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be 'child' as you told us they're under 16"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: "Answer cannot be 'child' as tenant %{person_num} is between 16 and 19 but is not a full-time student"
+        student_16_19: "Answer cannot be 'child' as you told us the tenant %{person_num} is between 16 and 19 and is not a full-time student"
       housingneeds_a:
-        one_or_two_choices: "Only one box must be ticked or 'other disabilities' plus one of mobility disabilities"
+        one_or_two_choices: "You can only select option or 'other disabled access needs' plus 'wheelchair-accessible housing', 'wheelchair access to essential rooms' or 'level access housing'"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be children's home or foster care as the lead tenant is 20 or older"
@@ -200,19 +200,19 @@ en:
           internal_transfer: "Answer cannot be other homelessness as you already told us this tenancy was an internal transfer"
         reasonpref:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
-      previous_la_known: "Enter a local authority"
+      previous_la_known: "Enter name of local authority"
       gender:
         retired_male: "Answer cannot be 'male' as tenant is under 65 and retired"
         retired_female: "Answer cannot be 'female' as tenant is under 60 and retired"
-        male_refuge: "Answer cannot be male as you told us their housing situation immediately before this letting was a refuge"
+        male_refuge: "Answer cannot be 'male' as you told us their housing situation immediately before this letting was a refuge"
       reason:
-        not_internal_transfer: "Answer cannot be permanently decanted from another property owned by this landlord as you told us the source of referral for this tenancy was not an internal transfer"
+        not_internal_transfer: "Answer cannot be 'permanently decanted from another property owned by this landlord' as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
-        no_choices: "You can not provide details about effects of conditions on any of the household members if you have not answered yes to the any of the household having a physical or mental health condition (or other illness) expected to last 12 months or more"
+        no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
 
     tenancy:
       length:
-        fixed_term_not_required: "You must only answer the fixed term tenancy length question if the tenancy type is fixed term"
+        fixed_term_not_required: "You must only answer the fixed-term tenancy length question if the tenancy type is fixed-term"
         shorthold: "Fixed term – Assured Shorthold Tenancy (AST) should be between 2 and 99 years"
         secure: "Secure (including flexible) should be between 2 and 99 years or not specified"
       internal_transfer: "Answer must be secure tenancy as you already told us this tenancy is an internal transfer"
@@ -235,12 +235,12 @@ en:
         hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}</p>"
   devise:
     two_factor_authentication:
-      success: "Two factor authentication successful."
-      attempt_failed: "Attempt failed."
-      max_login_attempts_reached: "Too many incorrect login attempts"
-      account_locked: "Your account has been locked for security reasons."
-      contact_administrator: "Contact another helpdesk administrator for access."
-      code_has_been_sent: "Your security code has been sent."
+      success: "Two-factor authentication successful"
+      attempt_failed: "Attempt failed"
+      max_login_attempts_reached: "Too many incorrect log in attempts"
+      account_locked: "Your account has been locked for security reasons"
+      contact_administrator: "Contact another helpdesk administrator for access"
+      code_has_been_sent: "Your security code has been sent"
       code_required: "Security code is required"
       code_incorrect: "Security code is incorrect"
 
