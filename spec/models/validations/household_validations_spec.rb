@@ -215,6 +215,24 @@ RSpec.describe Validations::HouseholdValidations do
           .to include(match(I18n.t("validations.household.prevten.la_general_needs.internal_transfer")))
       end
     end
+
+    context "when referral is nominated by a local housing authority" do
+      it "cannot have `other landlord`" do
+        record.landlord = 2
+        record.referral = 3
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to include(match(I18n.t("validations.household.referral.prp.local_housing_referral")))
+      end
+
+      it "can have `this landlord`" do
+        record.referral = 3
+        record.landlord = 1
+        household_validator.validate_referral(record)
+        expect(record.errors["referral"])
+          .to be_empty
+      end
+    end
   end
 
   describe "armed forces validations" do
