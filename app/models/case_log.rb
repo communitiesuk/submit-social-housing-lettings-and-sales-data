@@ -274,6 +274,14 @@ class CaseLog < ApplicationRecord
     landlord == 1
   end
 
+  def other_landlord?
+    landlord == 2
+  end
+
+  def local_housing_referral?
+    referral == 3
+  end
+
   def is_prevten_la_general_needs?
     [30, 31].any?(prevten)
   end

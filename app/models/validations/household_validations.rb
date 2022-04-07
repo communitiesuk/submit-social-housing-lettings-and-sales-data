@@ -109,6 +109,10 @@ module Validations::HouseholdValidations
       record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
       record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
     end
+
+    if record.other_landlord? && record.local_housing_referral?
+      record.errors.add :referral, I18n.t("validations.household.referral.prp.local_housing_referral")
+    end
   end
 
   def validate_prevloc(record)
