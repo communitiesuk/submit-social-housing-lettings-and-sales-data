@@ -14,11 +14,13 @@
             <span class="govuk-visually-hidden">page</span>
           </span></a>
       </li>
-      <% (1..pagy.pages).each do |idx| %>
-        <% if pagy.page == idx %>
-          <li class="app-pagination__item app-pagination__item--current"><span class="govuk-visually-hidden">Page </span><%= idx %><span class="govuk-visually-hidden"> (current page) </span></li>
+      <% pagy.series.each do |item| %>
+        <% if item == :gap %>
+          <li class="app-pagination__item app-pagination__item--ellipses">...</li>
+        <% elsif item.is_a?(String) %>
+          <li class="app-pagination__item app-pagination__item--current"><span class="govuk-visually-hidden">Page </span><%= item %><span class="govuk-visually-hidden"> (current page) </span></li>
         <% else %>
-          <li class="app-pagination__item"><a class="app-pagination__link" href=<%= "/logs?page=#{idx}" %>><span class="govuk-visually-hidden">Page </span><%= idx %></a></li>
+          <li class="app-pagination__item"><a class="app-pagination__link" href=<%= "/logs?page=#{item}" %>><span class="govuk-visually-hidden">Page </span><%= item %></a></li>
         <% end %>
       <% end %>
       <li class="app-pagination__item app-pagination__item--next">
