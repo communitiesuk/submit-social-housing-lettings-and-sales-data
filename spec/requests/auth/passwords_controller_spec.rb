@@ -56,7 +56,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
             },
         }
       end
-      let(:message) { "Your password has been changed successfully. You are now signed in" }
+      let(:message) { I18n.t("devise.passwords.updated") }
 
       it "changes the password" do
         expect { put "/account/password", params: update_password_params }
