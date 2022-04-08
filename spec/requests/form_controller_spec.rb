@@ -120,16 +120,35 @@ RSpec.describe FormController, type: :request do
             },
           }
         end
+        let(:valid_params) do
+          {
+            id: case_log.id,
+            case_log: {
+              page: page_id,
+              age1: valid_answer,
+            },
+          }
+        end
 
         before do
           post "/logs/#{case_log.id}/form", params: params
         end
 
         context "with invalid answers" do
+          let(:page) { Capybara::Node::Simple.new(response.body) }
           let(:answer) { 2000 }
+          let(:valid_answer) { 20 }
 
           it "re-renders the same page with errors if validation fails" do
             expect(response).to redirect_to("/logs/#{case_log.id}/#{page_id.dasherize}")
+            follow_redirect!
+            expect(page).to have_content("There is a problem")
+          end
+
+          it "resets errors when fixed" do
+            post "/logs/#{case_log.id}/form", params: valid_params
+            get "/logs/#{case_log.id}/#{page_id.dasherize}"
+            expect(page).not_to have_content("There is a problem")
           end
         end
 
