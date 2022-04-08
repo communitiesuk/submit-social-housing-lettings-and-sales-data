@@ -69,6 +69,32 @@ RSpec.describe User, type: :model do
       expect(user.need_two_factor_authentication?(nil)).to be false
     end
 
+    context "when the user is a data provider" do
+      it "cannot assign roles" do
+        expect(user.assignable_roles).to eq({})
+      end
+    end
+
+    context "when the user is a data accessor" do
+      let(:user) { FactoryBot.create(:user, :data_accessor) }
+
+      it "cannot assign roles" do
+        expect(user.assignable_roles).to eq({})
+      end
+    end
+
+    context "when the user is a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      it "can assign all roles except support" do
+        expect(user.assignable_roles).to eq({
+          data_accessor: 0,
+          data_provider: 1,
+          data_coordinator: 2,
+        })
+      end
+    end
+
     context "when the user is a Customer Support person" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:other_orgs_log) { FactoryBot.create(:case_log) }
@@ -79,6 +105,15 @@ RSpec.describe User, type: :model do
 
       it "requires 2FA" do
         expect(user.need_two_factor_authentication?(nil)).to be true
+      end
+
+      it "can assign all roles" do
+        expect(user.assignable_roles).to eq({
+          data_accessor: 0,
+          data_provider: 1,
+          data_coordinator: 2,
+          support: 99,
+        })
       end
     end
   end

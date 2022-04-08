@@ -27,27 +27,25 @@
         value: @resource.email
       %>
 
-      <%= roles = User::ROLES.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
+      <%= roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
         f.govuk_collection_radio_buttons :role, roles, :id, :name, legend: { text: "Role", size: "m" }
       %>
 
-      <% if current_user.data_coordinator? %>
-        <%= f.govuk_collection_radio_buttons :is_dpo,
-          [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
-          :id,
-          :name,
-          inline: true,
-          legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" }
-        %>
+      <%= f.govuk_collection_radio_buttons :is_dpo,
+        [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+        :id,
+        :name,
+        inline: true,
+        legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" }
+      %>
 
-        <%= f.govuk_collection_radio_buttons :is_key_contact,
-          [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
-          :id,
-          :name,
-          inline: true,
-          legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" }
-        %>
-      <% end %>
+      <%= f.govuk_collection_radio_buttons :is_key_contact,
+        [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+        :id,
+        :name,
+        inline: true,
+        legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" }
+      %>
 
       <%= f.govuk_submit "Continue" %>
     </div>

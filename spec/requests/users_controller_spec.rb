@@ -413,6 +413,10 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[is_dpo]")
           expect(page).to have_field("user[is_key_contact]")
         end
+
+        it "does not allow setting the role to `support`" do
+          expect(page).not_to have_field("user-role-support-field")
+        end
       end
 
       context "when the current user does not matches the user ID" do
@@ -636,6 +640,11 @@ RSpec.describe UsersController, type: :request do
       it "redirects back to organisation users page" do
         request
         expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
+      end
+
+      it "cannot assign support role to the new user" do
+        request
+        expect(page).not_to have_field("user-role-support-field")
       end
 
       context "when the email is already taken" do

@@ -81,4 +81,11 @@ class User < ApplicationRecord
     personalisation = { otp: code }
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
+
+  def assignable_roles
+    return {} unless data_coordinator? || support?
+    return ROLES if support?
+
+    ROLES.except(:support)
+  end
 end
