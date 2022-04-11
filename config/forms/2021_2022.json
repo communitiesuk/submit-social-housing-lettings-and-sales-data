@@ -1020,7 +1020,7 @@
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1053,10 +1053,10 @@
               },
               "depends_on": [
                 {
-                  "tenancy": 3
+                  "tenancy": 1
                 },
                 {
-                  "tenancy": 1
+                  "tenancy": 4
                 }
               ]
             },
