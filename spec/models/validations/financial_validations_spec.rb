@@ -655,7 +655,7 @@ RSpec.describe Validations::FinancialValidations do
         it "returns an error for 3 charge types selected" do
           record.tcharge = 19.99
           record.chcharge = 20
-          record.household_charge = 0
+          record.household_charge = 1
           financial_validator.validate_rent_amount(record)
           expect(record.errors["tcharge"])
             .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
@@ -677,9 +677,9 @@ RSpec.describe Validations::FinancialValidations do
             .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
 
-        it "returns an error for tcharge and household_charge types selected" do
+        it "returns an error for tcharge type and household_charge not paid selected" do
           record.tcharge = 19.99
-          record.household_charge = 0
+          record.household_charge = 1
           financial_validator.validate_rent_amount(record)
           expect(record.errors["chcharge"])
             .to be_empty
@@ -689,9 +689,9 @@ RSpec.describe Validations::FinancialValidations do
             .to include(match I18n.t("validations.financial.charges.complete_1_of_3"))
         end
 
-        it "returns an error for chcharge and household_charge types selected" do
+        it "returns an error for chcharge type and household_charge not paid selected" do
           record.chcharge = 20
-          record.household_charge = 0
+          record.household_charge = 1
           financial_validator.validate_rent_amount(record)
           expect(record.errors["tcharge"])
             .to be_empty
@@ -702,8 +702,8 @@ RSpec.describe Validations::FinancialValidations do
         end
       end
 
-      it "does not return an error for household_charge being yes" do
-        record.household_charge = 0
+      it "does not return an error for household_charge being no" do
+        record.household_charge = 1
         financial_validator.validate_rent_amount(record)
         expect(record.errors["tcharge"])
           .to be_empty
@@ -714,7 +714,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "does not return an error for chcharge being selected" do
-        record.household_charge = 1
+        record.household_charge = 0
         record.chcharge = 20
         financial_validator.validate_rent_amount(record)
         expect(record.errors["tcharge"])
@@ -726,7 +726,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "does not return an error for tcharge being selected" do
-        record.household_charge = 1
+        record.household_charge = 0
         record.tcharge = 19.99
         financial_validator.validate_rent_amount(record)
         expect(record.errors["tcharge"])
