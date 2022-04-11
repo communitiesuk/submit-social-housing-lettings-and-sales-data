@@ -621,39 +621,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "13": {
                       "value": "Internal transfer",
                       "hint": "Excluding renewals of a fixed-term tenancy"
                     },
-                    "10": {
+                    "5": {
                       "value": "Previous tenant died with no succession"
                     },
-                    "2": {
+                    "9": {
                       "value": "Re-let to tenant who occupied same property as temporary accommodation"
                     },
-                    "0": {
+                    "14": {
                       "value": "Renewal of fixed-term tenancy"
                     },
-                    "7": {
-                      "value": "Tenant abandoned property"
-                    },
-                    "3": {
+                    "19": {
                       "value": "Tenant involved in a succession downsize"
                     },
-                    "6": {
-                      "value": "Tenant moved to care home"
-                    },
-                    "5": {
-                      "value": "Tenant moved to other social housing provider"
-                    },
-                    "4": {
+                    "8": {
                       "value": "Tenant moved to private sector or other accommodation"
                     },
-                    "9": {
-                      "value": "Tenant was evicted due to anti-social behaviour"
+                    "12": {
+                      "value": "Tenant moved to other social housing provider"
                     },
-                    "8": {
+                    "18": {
+                      "value": "Tenant moved to care home"
+                    },
+                    "6": {
+                      "value": "Tenant abandoned property"
+                    },
+                    "10": {
                       "value": "Tenant was evicted due to rent arrears"
+                    },
+                    "11": {
+                      "value": "Tenant was evicted due to anti-social behaviour"
                     }
                   }
                 }
