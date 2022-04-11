@@ -37,6 +37,9 @@ class UsersController < ApplicationController
     end
     if @resource.errors.present?
       render :new, status: :unprocessable_entity
+    elsif user_params[:role] == "support" && !current_user.support?
+      @resource.errors.add :role, I18n.t("validations.role.invalid")
+      render :new, status: :unprocessable_entity
     else
       user = User.create(user_params.merge(org_params).merge(password_params))
       if user.persisted?
@@ -78,12 +81,12 @@ private
 
   def user_params
     if @user == current_user
-      if current_user.data_coordinator?
+      if current_user.data_coordinator? || current_user.support?
         params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact)
       else
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
       end
-    elsif current_user.data_coordinator?
+    elsif current_user.data_coordinator? || current_user.support?
       params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
     end
   end
@@ -94,11 +97,12 @@ private
 
   def authenticate_scope!
     if action_name == "create"
-      head :unauthorized and return unless current_user.data_coordinator?
+      head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
     else
-      render_not_found and return unless current_user.organisation == @user.organisation
+      render_not_found and return unless (current_user.organisation == @user.organisation) || current_user.support?
       render_not_found and return if action_name == "edit_password" && current_user != @user
-      render_not_found and return unless action_name == "show" || current_user.data_coordinator? || current_user == @user
+      render_not_found and return unless action_name == "show" ||
+        current_user.data_coordinator? || current_user.support? || current_user == @user
     end
   end
 end
