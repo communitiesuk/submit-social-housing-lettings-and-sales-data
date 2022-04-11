@@ -174,7 +174,7 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "when filtering" do
-          context "with status fileter" do
+          context "with status filter" do
             let!(:in_progress_case_log) do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
@@ -209,7 +209,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "with year fileter" do
+          context "with year filter" do
             let!(:case_log_2021) do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
