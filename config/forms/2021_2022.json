@@ -675,14 +675,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "15": {
-                      "value": "First let of new-build property"
-                    },
                     "16": {
                       "value": "First let of conversion, rehabilitation or acquired property"
                     },
                     "17": {
                       "value": "First let of leased property"
+                    },
+                    "15": {
+                      "value": "First let of new-build property"
                     }
                   }
                 }
