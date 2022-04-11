@@ -130,7 +130,7 @@ private
         query = query.public_send("filter_by_#{category}", values)
       end
     end
-    query.all
+    query.all.includes(:owning_organisation, :managing_organisation)
   end
 
   def set_session_filters
