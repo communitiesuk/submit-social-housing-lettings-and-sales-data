@@ -958,19 +958,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
