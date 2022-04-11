@@ -938,10 +938,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     }
                   }
