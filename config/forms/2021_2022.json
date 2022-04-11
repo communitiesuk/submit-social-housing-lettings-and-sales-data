@@ -3087,16 +3087,16 @@
                   "type": "radio",
                   "check_answer_label": "Anybody in household pregnant",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Tenant prefers not to say"
                     }
                   }
