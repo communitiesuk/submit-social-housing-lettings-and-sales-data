@@ -586,19 +586,19 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "2": {
                       "value": "Affordable rent basis"
                     },
-                    "2": {
+                    "3": {
                       "value": "Intermediate rent basis"
                     },
-                    "0": {
+                    "1": {
                       "value": "Social rent basis"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
