@@ -133,7 +133,7 @@ en:
         period:
           not_in_range: "Basic rent is outside of the expected range based on this period"
       charges:
-        complete_1_of_3: "Answer only one of the following questions: 'total charges', 'care home charges' or 'does the household pay rent or charges?'"
+        complete_1_of_3: "Answer only one of the following questions: 'total charges', 'care home charges' or answer 'no' to the 'does the household pay rent or charges?' question"
       tcharge:
         under_10: "Total charge must be at least £10 per week"
 
