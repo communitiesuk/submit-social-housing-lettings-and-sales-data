@@ -748,28 +748,28 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "2": {
                       "value": "Bedsit"
                     },
-                    "3": {
+                    "8": {
                       "value": "Bungalow"
                     },
-                    "0": {
+                    "1": {
                       "value": "Flat or maisonette"
                     },
-                    "2": {
+                    "7": {
                       "value": "House"
                     },
-                    "6": {
+                    "10": {
                       "value": "Shared bungalow"
                     },
                     "4": {
                       "value": "Shared flat or maisonette"
                     },
-                    "5": {
+                    "9": {
                       "value": "Shared house"
                     },
-                    "7": {
+                    "6": {
                       "value": "Other"
                     }
                   }
