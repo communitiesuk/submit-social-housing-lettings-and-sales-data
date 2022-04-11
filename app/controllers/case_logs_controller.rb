@@ -121,18 +121,16 @@ private
   end
 
   def filtered_case_logs
-    user_case_logs = current_user.case_logs
+    query = CaseLog.for_organisation(current_user.organisation)
     if session[:case_logs_filters].present?
       filters = JSON.parse(session[:case_logs_filters])
+      filters.each do |category, values|
+        next unless values.reject(&:empty?).present?
 
-      %w[status year].each do |category|
-        if filters[category]
-          filtered_by_category = filters[category].select(&:present?).map { |filter| user_case_logs.public_send("filter_by_#{category}", filter) }.flatten
-          user_case_logs = CaseLog.where(id: filtered_by_category.map(&:id))
-        end
+        query = query.public_send("filter_by_#{category}", values)
       end
     end
-    user_case_logs
+    query.all
   end
 
   def set_session_filters
