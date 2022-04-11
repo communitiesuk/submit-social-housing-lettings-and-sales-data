@@ -5,7 +5,8 @@
   "Review lettings log" => ""
 }) %>
 
-<%= turbo_frame_tag "case_log_form", target: "_top" do %>
+<%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
+  <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
@@ -31,9 +32,7 @@
       <div class="govuk-inset-text">
         You can submit changes to this log until the close of the current collection year, 31 March 2022.
       </div>
-      <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
-        <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
-      <% end %>
     </div>
   </div>
+  <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
 <% end %>
