@@ -1223,7 +1223,7 @@
                     "divider": {
                       "value": true
                     },
-                    "5": {
+                    "17": {
                       "value": "Tenant prefers not to say"
                     }
                   }
@@ -1240,16 +1240,16 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "19": {
                       "value": "Arab"
                     },
-                    "1": {
+                    "16": {
                       "value": "Other ethnic group"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      1
+                      16
                     ]
                   }
                 },
@@ -1275,25 +1275,25 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "10": {
                       "value": "Bangladeshi"
                     },
-                    "1": {
+                    "15": {
                       "value": "Chinese"
                     },
-                    "2": {
+                    "8": {
                       "value": "Indian"
                     },
-                    "3": {
+                    "9": {
                       "value": "Pakistani"
                     },
-                    "4": {
+                    "11": {
                       "value": "Other ethnic group"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      4
+                      11
                     ]
                   }
                 },
@@ -1319,13 +1319,13 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "13": {
                       "value": "African"
                     },
-                    "1": {
+                    "12": {
                       "value": "Caribbean"
                     },
-                    "2": {
+                    "14": {
                       "value": "Any other Black, African or Caribbean background"
                     }
                   },
@@ -1357,19 +1357,22 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "4": {
                       "value": "White and Black Caribbean"
                     },
-                    "1": {
+                    "5": {
                       "value": "White and Black African"
                     },
-                    "2": {
+                    "6": {
+                      "value": "White and Asian"
+                    },
+                    "7": {
                       "value": "Any other Mixed or Multiple ethnic background"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      2
+                      7
                     ]
                   }
                 },
@@ -1395,17 +1398,14 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "English, Welsh, Northern Irish, Scottish or British"
                     },
-                    "1": {
+                    "2": {
                       "value": "Irish"
                     },
-                    "2": {
+                    "18": {
                       "value": "Gypsy or Irish Traveller"
-                    },
-                    "3": {
-                      "value": "Any other White background"
                     }
                   },
                   "conditional_for": {
