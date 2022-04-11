@@ -2987,22 +2987,22 @@
                   "type": "radio",
                   "check_answer_label": "Household links to UK armed forces",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes – the person is a current or former regular"
                     },
-                    "1": {
+                    "4": {
                       "value": "Yes – the person is a current or former reserve"
                     },
-                    "2": {
+                    "5": {
                       "value": "Yes – the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                     },
-                    "3": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "4": {
+                    "3": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -3014,7 +3014,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": 0
+                  "armedforces": 1
                 }
               ],
               "questions": {
@@ -3048,10 +3048,10 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": 0
+                  "armedforces": 1
                 },
                 {
-                  "armedforces": 1
+                  "armedforces": 4
                 }
               ],
               "questions": {
