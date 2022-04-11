@@ -786,10 +786,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "2": {
                       "value": "Converted from previous residential or non-residential property"
                     },
-                    "0": {
+                    "1": {
                       "value": "Purpose built"
                     }
                   }
