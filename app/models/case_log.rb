@@ -35,12 +35,12 @@ class CaseLog < ApplicationRecord
 
   scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_status, ->(status) { where status: status }
-  scope :filter_by_year, ->(year) {
-    years = Array(year)
+  scope :filter_by_year, lambda { |year_s|
+    years = Array(year_s)
     first_year = years.shift
-    query = where('startdate >= ?', Time.utc(first_year.to_i, 4, 1)).where('startdate <= ?',Time.utc(first_year.to_i + 1, 3, 31).end_of_day)
+    query = where("startdate >= ?", Time.utc(first_year.to_i, 4, 1)).where("startdate <= ?", Time.utc(first_year.to_i + 1, 3, 31).end_of_day)
     years.each do |year|
-      query = query.or(where('startdate >= ?', Time.utc(year.to_i, 4, 1)).where('startdate <= ?',Time.utc(year.to_i + 1, 3, 31).end_of_day))
+      query = query.or(where("startdate >= ?", Time.utc(year.to_i, 4, 1)).where("startdate <= ?", Time.utc(year.to_i + 1, 3, 31).end_of_day))
     end
     query.all
   }

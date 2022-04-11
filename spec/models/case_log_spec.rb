@@ -1835,25 +1835,25 @@ RSpec.describe CaseLog do
 
     context "when filtering by year" do
       it "allows filtering on a single year" do
-        expect(CaseLog.filter_by_year("2021").count).to eq(2)
+        expect(described_class.filter_by_year("2021").count).to eq(2)
       end
 
       it "allows filtering by multiple years using OR" do
-        expect(CaseLog.filter_by_year(["2021", "2022"]).count).to eq(3)
+        expect(described_class.filter_by_year(%w[2021 2022]).count).to eq(3)
       end
 
       it "can filter by year(s) AND status" do
-        expect(CaseLog.filter_by_year(["2021", "2022"]).filter_by_status("completed").count).to eq(1)
+        expect(described_class.filter_by_year(%w[2021 2022]).filter_by_status("completed").count).to eq(1)
       end
     end
 
     context "when filtering on status" do
       it "allows filtering on a single status" do
-        expect(CaseLog.filter_by_status("in_progress").count).to eq(2)
+        expect(described_class.filter_by_status("in_progress").count).to eq(2)
       end
 
       it "allows filtering on multiple statuses" do
-        expect(CaseLog.filter_by_status(["in_progress", "completed"]).count).to eq(3)
+        expect(described_class.filter_by_status(%w[in_progress completed]).count).to eq(3)
       end
     end
   end
