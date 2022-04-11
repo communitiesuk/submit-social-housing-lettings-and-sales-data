@@ -174,37 +174,67 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "when filtering" do
-          let!(:in_progress_case_log) do
-            FactoryBot.create(:case_log, :in_progress,
-                              owning_organisation: organisation,
-                              managing_organisation: organisation)
-          end
-          let!(:completed_case_log) do
-            FactoryBot.create(:case_log, :completed,
-                              owning_organisation: organisation,
-                              managing_organisation: organisation)
+          context "with status fileter" do
+            let!(:in_progress_case_log) do
+              FactoryBot.create(:case_log, :in_progress,
+                                owning_organisation: organisation,
+                                managing_organisation: organisation)
+            end
+            let!(:completed_case_log) do
+              FactoryBot.create(:case_log, :completed,
+                                owning_organisation: organisation,
+                                managing_organisation: organisation)
+            end
+
+            it "shows case logs for multiple selected statuses" do
+              get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
+              expect(page).to have_link(in_progress_case_log.id.to_s)
+              expect(page).to have_link(completed_case_log.id.to_s)
+            end
+
+            it "shows case logs for one selected status" do
+              get "/logs?status[]=in_progress", headers: headers, params: {}
+              expect(page).to have_link(in_progress_case_log.id.to_s)
+              expect(page).not_to have_link(completed_case_log.id.to_s)
+            end
+
+            it "does not reset the filters" do
+              get "/logs?status[]=in_progress", headers: headers, params: {}
+              expect(page).to have_link(in_progress_case_log.id.to_s)
+              expect(page).not_to have_link(completed_case_log.id.to_s)
+
+              get "/logs", headers: headers, params: {}
+              expect(page).to have_link(in_progress_case_log.id.to_s)
+              expect(page).not_to have_link(completed_case_log.id.to_s)
+            end
           end
 
-          it "shows case logs for multiple selected statuses" do
-            get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
-            expect(page).to have_link(in_progress_case_log.id.to_s)
-            expect(page).to have_link(completed_case_log.id.to_s)
-          end
+          context "with year fileter" do
+            let!(:case_log_2021) do
+              FactoryBot.create(:case_log, :in_progress,
+                                owning_organisation: organisation,
+                                startdate: Time.zone.local(2022, 3, 1),
+                                managing_organisation: organisation)
+            end
+            let!(:case_log_2022) do
+              FactoryBot.create(:case_log, :completed,
+                                owning_organisation: organisation,
+                                mrcdate: Time.zone.local(2022, 2, 1),
+                                startdate: Time.zone.local(2022, 12, 1),
+                                managing_organisation: organisation)
+            end
 
-          it "shows case logs for one selected status" do
-            get "/logs?status[]=in_progress", headers: headers, params: {}
-            expect(page).to have_link(in_progress_case_log.id.to_s)
-            expect(page).not_to have_link(completed_case_log.id.to_s)
-          end
+            it "shows case logs for multiple selected statuses" do
+              get "/logs?year[]=2021&year[]=2022", headers: headers, params: {}
+              expect(page).to have_link(case_log_2021.id.to_s)
+              expect(page).to have_link(case_log_2022.id.to_s)
+            end
 
-          it "does not reset the filters" do
-            get "/logs?status[]=in_progress", headers: headers, params: {}
-            expect(page).to have_link(in_progress_case_log.id.to_s)
-            expect(page).not_to have_link(completed_case_log.id.to_s)
-
-            get "/logs", headers: headers, params: {}
-            expect(page).to have_link(in_progress_case_log.id.to_s)
-            expect(page).not_to have_link(completed_case_log.id.to_s)
+            it "shows case logs for one selected status" do
+              get "/logs?year[]=2021", headers: headers, params: {}
+              expect(page).to have_link(case_log_2021.id.to_s)
+              expect(page).not_to have_link(case_log_2022.id.to_s)
+            end
           end
         end
       end

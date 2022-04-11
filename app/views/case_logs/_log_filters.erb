@@ -19,7 +19,18 @@
                             <% statuses.map do |key, option| %>
                                 <%= f.govuk_check_box "status", "#{key}",
                                 label: { text: option },
-                                checked: filter_selected?(key),
+                                checked: filter_selected?("status", key),
+                                size: "s" %>
+                            <% end %>
+                        </div>
+                    <% end %>
+                    <%= f.govuk_check_boxes_fieldset :year, legend: { text: "Year", size: "s"} do %>
+                        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                            <% years = {"2021": "2021", "2022": "2022"} %>
+                            <% years.map do |key, option| %>
+                                <%= f.govuk_check_box "year", "#{key}",
+                                label: { text: option },
+                                checked: filter_selected?("year", key),
                                 size: "s" %>
                             <% end %>
                         </div>

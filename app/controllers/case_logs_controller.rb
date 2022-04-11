@@ -7,7 +7,7 @@ class CaseLogsController < ApplicationController
   before_action :find_resource, except: %i[create index edit]
 
   def index
-    set_session_filters if params[:status].present?
+    set_session_filters
 
     @pagy, @case_logs = pagy(filtered_case_logs)
 
@@ -122,13 +122,22 @@ private
 
   def filtered_case_logs
     user_case_logs = current_user.case_logs
-    status_filter = JSON.parse(session[:case_logs_filters])["status"] if session[:case_logs_filters].present?
-    return user_case_logs unless status_filter
+    if session[:case_logs_filters].present?
+      filters = JSON.parse(session[:case_logs_filters])
 
-    user_case_logs.filter_by_status(status_filter)
+      %w[status year].each do |category|
+        if filters[category]
+          filtered_by_category = filters[category].select(&:present?).map { |filter| user_case_logs.public_send("filter_by_#{category}", filter) }.flatten
+          user_case_logs = CaseLog.where(id: filtered_by_category.map(&:id))
+        end
+      end
+    end
+    user_case_logs
   end
 
   def set_session_filters
-    session[:case_logs_filters] = { status: params[:status] }.to_json
+    new_filters = session[:case_logs_filters].present? ? JSON.parse(session[:case_logs_filters]) : {}
+    %i[status year].each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
+    session[:case_logs_filters] = new_filters.to_json
   end
 end
