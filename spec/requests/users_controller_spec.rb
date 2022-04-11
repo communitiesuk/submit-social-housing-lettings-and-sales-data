@@ -132,7 +132,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}", headers: headers, params: {}
@@ -188,7 +188,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}/edit", headers: headers, params: {}
@@ -216,7 +216,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}/edit", headers: headers, params: {}
@@ -272,7 +272,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         let(:params) { { id: other_user.id, user: { name: new_name } } }
 
         before do
@@ -356,7 +356,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}", headers: headers, params: {}
@@ -419,7 +419,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}/edit", headers: headers, params: {}
@@ -469,7 +469,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
         end
@@ -531,7 +531,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
         end
@@ -566,7 +566,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_content(other_user.reload.email.to_s)
           end
 
-          context "when we try to update the user password" do
+          context "when the data coordinator tries to update the user’s password" do
             let(:params) do
               {
                 id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name" }
@@ -585,7 +585,7 @@ RSpec.describe UsersController, type: :request do
           end
         end
 
-        context "when the current user does not matches the user ID" do
+        context "when the current user does not match the user ID" do
           context "when the user is not part of the same organisation as the current user" do
             let(:other_user) { FactoryBot.create(:user) }
             let(:params) { { id: other_user.id, user: { name: new_name } } }
@@ -714,7 +714,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}", headers: headers, params: {}
@@ -786,7 +786,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
           get "/users/#{other_user.id}/edit", headers: headers, params: {}
@@ -848,7 +848,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
         end
@@ -910,7 +910,7 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
-      context "when the current user does not matches the user ID" do
+      context "when the current user does not match the user ID" do
         before do
           sign_in user
         end
@@ -945,7 +945,7 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_content(other_user.reload.email.to_s)
           end
 
-          context "when we try to update the user password" do
+          context "when the support user tries to update the user’s password" do
             let(:params) do
               {
                 id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name" }
@@ -964,7 +964,7 @@ RSpec.describe UsersController, type: :request do
           end
         end
 
-        context "when the current user does not matches the user ID" do
+        context "when the current user does not match the user ID" do
           context "when the user is not part of the same organisation as the current user" do
             let(:other_user) { FactoryBot.create(:user) }
             let(:params) { { id: other_user.id, user: { name: new_name } } }
@@ -1002,7 +1002,7 @@ RSpec.describe UsersController, type: :request do
               expect(page).to have_content(other_user.reload.email.to_s)
             end
 
-            context "when we try to update the user password" do
+            context "when the support user tries to update the user’s password" do
               let(:params) do
                 {
                   id: user.id, user: { password: new_name, password_confirmation: new_name, name: "new name" }
