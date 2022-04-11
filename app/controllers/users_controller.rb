@@ -34,11 +34,10 @@ class UsersController < ApplicationController
       @resource.errors.add :email, I18n.t("validations.email.blank")
     elsif !email_valid?(user_params["email"])
       @resource.errors.add :email, I18n.t("validations.email.invalid")
+    elsif user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
+      @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
     if @resource.errors.present?
-      render :new, status: :unprocessable_entity
-    elsif user_params[:role] == "support" && !current_user.support?
-      @resource.errors.add :role, I18n.t("validations.role.invalid")
       render :new, status: :unprocessable_entity
     else
       user = User.create(user_params.merge(org_params).merge(password_params))
