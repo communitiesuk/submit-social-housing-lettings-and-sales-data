@@ -47,6 +47,8 @@ en:
       taken: "Email already exists"
       invalid: "Enter an email address in the correct format, like name@example.com"
       blank: "Enter an email address"
+    role:
+      invalid: "Role must be data accessor, data provider or data coordinator"
 
     setup:
       intermediate_rent_product_name:

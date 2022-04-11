@@ -34,6 +34,8 @@ class UsersController < ApplicationController
       @resource.errors.add :email, I18n.t("validations.email.blank")
     elsif !email_valid?(user_params["email"])
       @resource.errors.add :email, I18n.t("validations.email.invalid")
+    elsif user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
+      @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
     if @resource.errors.present?
       render :new, status: :unprocessable_entity
@@ -78,12 +80,12 @@ private
 
   def user_params
     if @user == current_user
-      if current_user.data_coordinator?
+      if current_user.data_coordinator? || current_user.support?
         params.require(:user).permit(:email, :name, :password, :password_confirmation, :role, :is_dpo, :is_key_contact)
       else
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
       end
-    elsif current_user.data_coordinator?
+    elsif current_user.data_coordinator? || current_user.support?
       params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
     end
   end
@@ -94,11 +96,12 @@ private
 
   def authenticate_scope!
     if action_name == "create"
-      head :unauthorized and return unless current_user.data_coordinator?
+      head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
     else
-      render_not_found and return unless current_user.organisation == @user.organisation
+      render_not_found and return unless (current_user.organisation == @user.organisation) || current_user.support?
       render_not_found and return if action_name == "edit_password" && current_user != @user
-      render_not_found and return unless action_name == "show" || current_user.data_coordinator? || current_user == @user
+      render_not_found and return unless action_name == "show" ||
+        current_user.data_coordinator? || current_user.support? || current_user == @user
     end
   end
 end
