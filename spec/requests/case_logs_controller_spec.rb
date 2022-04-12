@@ -224,15 +224,52 @@ RSpec.describe CaseLogsController, type: :request do
                                 managing_organisation: organisation)
             end
 
-            it "shows case logs for multiple selected statuses" do
+            it "shows case logs for multiple selected years" do
               get "/logs?year[]=2021&year[]=2022", headers: headers, params: {}
               expect(page).to have_link(case_log_2021.id.to_s)
               expect(page).to have_link(case_log_2022.id.to_s)
             end
 
-            it "shows case logs for one selected status" do
+            it "shows case logs for one selected year" do
               get "/logs?year[]=2021", headers: headers, params: {}
               expect(page).to have_link(case_log_2021.id.to_s)
+              expect(page).not_to have_link(case_log_2022.id.to_s)
+            end
+          end
+
+          context "with year and status filter" do
+            let!(:case_log_2021) do
+              FactoryBot.create(:case_log, :in_progress,
+                                owning_organisation: organisation,
+                                startdate: Time.zone.local(2022, 3, 1),
+                                managing_organisation: organisation)
+            end
+            let!(:case_log_2022) do
+              FactoryBot.create(:case_log, :completed,
+                                owning_organisation: organisation,
+                                mrcdate: Time.zone.local(2022, 2, 1),
+                                startdate: Time.zone.local(2022, 12, 1),
+                                managing_organisation: organisation)
+            end
+            let!(:case_log_2022_in_progress) do
+              FactoryBot.create(:case_log, :in_progress,
+                                owning_organisation: organisation,
+                                mrcdate: Time.zone.local(2022, 2, 1),
+                                startdate: Time.zone.local(2022, 12, 1),
+                                managing_organisation: organisation)
+            end
+
+            it "shows case logs for multiple selected statuses and years" do
+              get "/logs?year[]=2021&year[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
+              expect(page).to have_link(case_log_2021.id.to_s)
+              expect(page).to have_link(case_log_2022.id.to_s)
+              expect(page).to have_link(case_log_2022_in_progress.id.to_s)
+            end
+
+            it "shows case logs for one selected status" do
+              get "/logs?year[]=2022&status[]=in_progress", headers: headers, params: {}
+              expect(page).to have_link(case_log_2022_in_progress.id.to_s)
+              expect(page).not_to have_link(case_log_2021.id.to_s)
               expect(page).not_to have_link(case_log_2022.id.to_s)
             end
           end
