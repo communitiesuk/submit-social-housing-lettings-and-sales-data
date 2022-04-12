@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe FiltersHelper do
   describe "#filter_selected?" do
     context "when no filters are selected" do
-      it "returns true for all filters" do
-        expect(filter_selected?("status", "completed")).to be_truthy
-        expect(filter_selected?("status", "in_progress")).to be_truthy
+      it "returns false for all filters" do
+        expect(filter_selected?("status", "completed")).to be_falsey
+        expect(filter_selected?("status", "in_progress")).to be_falsey
       end
     end
 
