@@ -7,7 +7,6 @@ FactoryBot.define do
       needstype { 1 }
       rent_type { 1 }
       startdate { Time.zone.local(2022, 5, 1) }
-      year { 2022 }
     end
     trait :in_progress do
       status { 1 }
@@ -30,7 +29,7 @@ FactoryBot.define do
       ethnic { 2 }
       national { 4 }
       ecstat1 { 2 }
-      other_hhmemb { 0 }
+      hhmemb { 1 }
     end
     trait :completed do
       status { 2 }
@@ -42,7 +41,6 @@ FactoryBot.define do
       national { 4 }
       prevten { 6 }
       ecstat1 { 0 }
-      other_hhmemb { 1 }
       hhmemb { 2 }
       relat2 { "P" }
       age2 { 32 }
@@ -115,7 +113,6 @@ FactoryBot.define do
       property_manager_organisation { "Test" }
       renewal { 0 }
       rent_type { 1 }
-      intermediate_rent_product_name { 2 }
       needstype { 1 }
       purchaser_code { 798_794 }
       reason { 4 }
@@ -127,8 +124,6 @@ FactoryBot.define do
       hbrentshortfall { 0 }
       tshortfall { 12 }
       postcod2 { "w3" }
-      ppostc1 { "w3" }
-      ppostc2 { "w3" }
       property_relet { 0 }
       mrcdate { Time.utc(2020, 5, 0o5, 10, 36, 49) }
       mrcday { mrcdate.day }
@@ -137,9 +132,6 @@ FactoryBot.define do
       incref { 0 }
       sale_completion_date { nil }
       startdate { Time.utc(2022, 2, 2, 10, 36, 49) }
-      day { startdate.day }
-      month { startdate.month }
-      year { startdate.year }
       armedforces { 0 }
       builtype { 1 }
       unitletas { 2 }

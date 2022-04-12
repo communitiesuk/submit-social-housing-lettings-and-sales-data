@@ -97,7 +97,7 @@ RSpec.describe Validations::PropertyValidations do
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 8
         record.unittype_gn = 5
-        record.other_hhmemb = 2
+        record.hhmemb = 3
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
@@ -110,7 +110,7 @@ RSpec.describe Validations::PropertyValidations do
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 0
         record.unittype_gn = 5
-        record.other_hhmemb = 2
+        record.hhmemb = 3
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
@@ -123,7 +123,7 @@ RSpec.describe Validations::PropertyValidations do
       it "adds an error" do
         record.beds = 4
         record.unittype_gn = 5
-        record.other_hhmemb = 0
+        record.hhmemb = 1
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared"))

@@ -757,7 +757,6 @@ RSpec.describe Validations::FinancialValidations do
           record.period = 1
           record.la = "E07000223"
           record.beds = 1
-          record.year = 2021
           record.startdate = Time.zone.local(2021, 9, 17)
           record.brent = 9.17
 
@@ -772,7 +771,6 @@ RSpec.describe Validations::FinancialValidations do
           record.la = "E07000223"
           record.beds = 1
           record.startdate = Time.zone.local(2021, 9, 17)
-          record.year = 2021
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)
@@ -794,9 +792,6 @@ RSpec.describe Validations::FinancialValidations do
           record.la = "E07000223"
           record.startdate = Time.zone.local(2022, 2, 5)
           record.beds = 1
-          record.year = 2022
-          record.month = 2
-          record.day = 5
           record.brent = 200
 
           financial_validator.validate_rent_amount(record)
@@ -814,7 +809,6 @@ RSpec.describe Validations::FinancialValidations do
 
         it "does not error if some of the fields are missing" do
           record.managing_organisation.provider_type = 2
-          record.year = 2021
           record.startdate = Time.zone.local(2021, 9, 17)
           record.brent = 200
 

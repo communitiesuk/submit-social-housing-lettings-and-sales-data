@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 202202071123100) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -132,7 +132,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"
-    t.string "intermediate_rent_product_name"
+    t.string "irproduct_other"
     t.string "purchaser_code"
     t.integer "reason"
     t.string "propcode"
@@ -143,14 +143,11 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "hbrentshortfall"
     t.string "postcode"
     t.string "postcod2"
-    t.string "ppostc1"
-    t.string "ppostc2"
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
     t.integer "mrcday"
     t.integer "mrcmonth"
     t.integer "mrcyear"
-    t.integer "other_hhmemb"
     t.integer "incref"
     t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
@@ -167,9 +164,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "postcode_known"
     t.integer "la_known"
     t.boolean "is_la_inferred"
-    t.integer "day"
-    t.integer "month"
-    t.integer "year"
     t.integer "totchild"
     t.integer "totelder"
     t.integer "totadult"
@@ -232,6 +226,9 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "relat7"
     t.string "relat8"
     t.integer "rent_value_check"
+    t.integer "form"
+    t.integer "lar"
+    t.integer "irproduct"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
@@ -318,12 +315,12 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "last_sign_in_ip"
     t.integer "role"
     t.string "old_user_id"
+    t.string "phone"
     t.integer "failed_attempts", default: 0
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
     t.boolean "is_dpo", default: false
     t.boolean "is_key_contact", default: false
-    t.string "phone"
     t.integer "second_factor_attempts_count", default: 0
     t.string "encrypted_otp_secret_key"
     t.string "encrypted_otp_secret_key_iv"

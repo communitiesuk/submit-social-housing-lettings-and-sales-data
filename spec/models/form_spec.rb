@@ -130,7 +130,7 @@ RSpec.describe Form, type: :model do
         case_log.age1 = 35
         case_log.sex1 = "M"
         case_log.ecstat1 = 0
-        case_log.other_hhmemb = 1
+        case_log.hhmemb = 2
         case_log.relat2 = "P"
         case_log.sex2 = "F"
         case_log.ecstat2 = 1

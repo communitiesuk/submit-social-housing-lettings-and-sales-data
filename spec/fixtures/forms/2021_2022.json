@@ -114,21 +114,21 @@
                   }
                 }
               },
-              "household_number_of_other_members": {
+              "household_number_of_members": {
                 "questions": {
-                  "other_hhmemb": {
-                    "check_answer_label": "Number of Other Household Members",
-                    "header": "How many other people are there in the household?",
-                    "hint_text": "The maximum number of others is 1",
+                  "hhmemb": {
+                    "check_answer_label": "Number of Household Members",
+                    "header": "How many people are there in the household?",
+                    "hint_text": "The maximum number of members is 8",
                     "type": "numeric",
                     "min": 0,
-                    "max": 7,
+                    "max": 8,
                     "step": 1,
                     "width": 2,
                     "conditional_for": {
-                      "relat2": ">0",
-                      "age2": ">0",
-                      "sex2": ">0"
+                      "relat2": ">1",
+                      "age2": ">1",
+                      "sex2": ">1"
                     }
                   },
                   "relat2": {

@@ -67,8 +67,7 @@ class BulkUpload
       tenancy: row[9],
       tenancyother: row[10],
       # tenancyduration: row[11],
-      other_hhmemb: other_hhmemb(row),
-      hhmemb: other_hhmemb(row) + 1,
+      hhmemb: hhmemb(row),
       age1: row[12],
       age2: row[13],
       age3: row[14],
@@ -193,7 +192,7 @@ class BulkUpload
       illness_type_10: row[128],
       # london_affordable: row[129],
       rent_type: row[130],
-      intermediate_rent_product_name: row[131],
+      irproduct: row[131],
       # data_protection: row[132],
       sale_or_letting: "letting",
       declaration: 1,
@@ -206,7 +205,7 @@ class BulkUpload
     Time.zone.local("20#{year}", month.to_s, day.to_s)
   end
 
-  def other_hhmemb(row)
-    [13, 14, 15, 16, 17, 18, 19].count { |idx| row[idx].present? }
+  def hhmemb(row)
+    [14, 15, 16, 17, 18, 19, 20].count { |idx| row[idx].present? }
   end
 end

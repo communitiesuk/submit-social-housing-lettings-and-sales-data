@@ -57,7 +57,7 @@ RSpec.describe CaseLog do
     end
 
     it "validates intermediate rent product name" do
-      expect(validator).to receive(:validate_intermediate_rent_product_name)
+      expect(validator).to receive(:validate_irproduct_other)
     end
 
     it "validates other household member details" do
@@ -216,12 +216,6 @@ RSpec.describe CaseLog do
       expect(record_from_db["postcod2"]).to eq("1AE")
     end
 
-    it "correctly derives and saves partial and full previous postcodes" do
-      record_from_db = ActiveRecord::Base.connection.execute("select ppostc1, ppostc2 from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["ppostc1"]).to eq("M2")
-      expect(record_from_db["ppostc2"]).to eq("2AE")
-    end
-
     it "correctly derives and saves partial and full major repairs date" do
       record_from_db = ActiveRecord::Base.connection.execute("select mrcday, mrcmonth, mrcyear, mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
@@ -245,11 +239,6 @@ RSpec.describe CaseLog do
     it "correctly derives and saves incref" do
       record_from_db = ActiveRecord::Base.connection.execute("select incref from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["incref"]).to eq(1)
-    end
-
-    it "correctly derives and saves other_hhmemb" do
-      record_from_db = ActiveRecord::Base.connection.execute("select other_hhmemb from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["other_hhmemb"]).to eq(6)
     end
 
     it "correctly derives and saves renttype" do
@@ -1131,13 +1120,10 @@ RSpec.describe CaseLog do
     end
 
     it "correctly derives and saves day, month, year from start date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select day, month, year, startdate from case_logs where id=#{case_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select startdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["startdate"].day).to eq(10)
       expect(record_from_db["startdate"].month).to eq(10)
       expect(record_from_db["startdate"].year).to eq(2021)
-      expect(record_from_db["day"]).to eq(10)
-      expect(record_from_db["month"]).to eq(10)
-      expect(record_from_db["year"]).to eq(2021)
     end
 
     context "when any charge field is set" do
@@ -1160,6 +1146,11 @@ RSpec.describe CaseLog do
       expect(record_from_db[outcode_field]).to eq("M1")
       expect(address_case_log[incode_field]).to eq("1AE")
       expect(record_from_db[incode_field]).to eq("1AE")
+    end
+    def check_previous_postcode_fields(postcode_field)
+      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
+      expect(address_case_log[postcode_field]).to eq("M11AE")
+      expect(record_from_db[postcode_field]).to eq("M11AE")
     end
     context "when saving addresses" do
       before do
@@ -1263,22 +1254,22 @@ RSpec.describe CaseLog do
         })
       end
 
-      def check_previous_postcode_fields
-        check_postcode_fields("ppostcode_full", "ppostc1", "ppostc2")
+      def previous_postcode_fields
+        check_previous_postcode_fields("ppostcode_full")
       end
 
       it "correctly formats previous postcode" do
         address_case_log.update!(ppostcode_full: "M1 1AE")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m1 1ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m11Ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m11ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
       end
 
       it "correctly infers prevloc" do
@@ -1360,7 +1351,7 @@ RSpec.describe CaseLog do
         described_class.create!({
           managing_organisation: organisation,
           owning_organisation: organisation,
-          other_hhmemb: 4,
+          hhmemb: 3,
           relat2: "X",
           relat3: "C",
           relat4: "X",
@@ -1414,7 +1405,7 @@ RSpec.describe CaseLog do
           managing_organisation: organisation,
           owning_organisation: organisation,
           renewal: 1,
-          year: 2021,
+          startdate: Time.zone.local(2021, 4, 10),
         })
       end
 

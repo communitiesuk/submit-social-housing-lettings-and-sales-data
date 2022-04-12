@@ -51,6 +51,8 @@ class CaseLog < ApplicationRecord
   end
 
   def collection_start_year
+    return unless startdate
+
     window_end_date = Time.zone.local(startdate.year, 4, 1)
     startdate < window_end_date ? startdate.year - 1 : startdate.year
   end
@@ -364,19 +366,10 @@ private
   end
 
   def set_derived_fields!
-    if ppostcode_full.present?
-      self.ppostc1 = UKPostcode.parse(ppostcode_full).outcode
-      self.ppostc2 = UKPostcode.parse(ppostcode_full).incode
-    end
     if mrcdate.present?
       self.mrcday = mrcdate.day
       self.mrcmonth = mrcdate.month
       self.mrcyear = mrcdate.year
-    end
-    if startdate.present?
-      self.day = startdate.day
-      self.month = startdate.month
-      self.year = startdate.year
     end
     if property_void_date.present?
       self.vday = property_void_date.day
@@ -387,7 +380,6 @@ private
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
     self.incref = 1 if net_income_refused?
-    self.other_hhmemb = hhmemb - 1 if hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
     self.totchild = get_totchild
@@ -416,11 +408,11 @@ private
                          weekly_value(tshortfall)
                        end
     self.nocharge = household_charge&.zero? ? 1 : 0
-    self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
+    self.underoccupation_benefitcap = 3 if renewal == 1 && collection_start_year == 2021
     self.ethnic = ethnic || ethnic_group
     self.housingneeds = get_housingneeds
     if is_renewal?
-      self.underoccupation_benefitcap = 2 if year == 2021
+      self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.homeless = 2
       self.referral = 0
       self.layear = 1
@@ -447,7 +439,7 @@ private
 
   def process_previous_postcode_changes!
     self.ppostcode_full = ppostcode_full.present? ? ppostcode_full.upcase.gsub(/\s+/, "") : ppostcode_full
-    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
+    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", nil, nil)
   end
 
   def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key, outcode_key, incode_key)
@@ -457,8 +449,8 @@ private
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
     self[la_key] = inferred_la if inferred_la.present?
-    self[outcode_key] = UKPostcode.parse(postcode).outcode
-    self[incode_key] = UKPostcode.parse(postcode).incode
+    self[outcode_key] = UKPostcode.parse(postcode).outcode unless outcode_key.nil?
+    self[incode_key] = UKPostcode.parse(postcode).incode unless incode_key.nil?
   end
 
   def reset_location_fields!
@@ -466,7 +458,7 @@ private
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", "ppostc1", "ppostc2", previous_la_known)
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", nil, nil, previous_la_known)
   end
 
   def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key, is_la_known)
@@ -475,8 +467,8 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
-    self[incode_key] = nil
-    self[outcode_key] = nil
+    self[incode_key] = nil unless incode_key.nil?
+    self[outcode_key] = nil unless outcode_key.nil?
   end
 
   def get_totelder
