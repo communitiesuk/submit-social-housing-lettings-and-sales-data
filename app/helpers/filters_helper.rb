@@ -1,9 +1,9 @@
 module FiltersHelper
   def filter_selected?(filter, value)
-    return true unless session[:case_logs_filters]
+    return false unless session[:case_logs_filters]
 
     selected_filters = JSON.parse(session[:case_logs_filters])
-    return true if selected_filters[filter].blank?
+    return false if selected_filters[filter].blank?
 
     selected_filters[filter].include?(value.to_s)
   end
