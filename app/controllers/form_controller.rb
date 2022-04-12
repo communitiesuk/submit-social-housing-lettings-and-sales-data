@@ -10,7 +10,7 @@ class FormController < ApplicationController
           redirect_to(case_logs_path, flash: { notice: "Log #{@case_log.id} has been submitted" })
         else
           @case_log.errors.add :base, "All mandatory fields have not been completed, please refer to section status"
-          session[:errors][:review] = @case_log.errors.to_json
+          session[:review_errors] = @case_log.errors.to_json
           redirect_to(review_case_log_path)
         end
       else
@@ -50,8 +50,8 @@ class FormController < ApplicationController
 
   def review
     if @case_log
-      if session["errors"]
-        JSON(session["errors"]).each do |field, messages|
+      if session[:review_errors]
+        JSON(session[:review_errors]).each do |field, messages|
           messages.each { |message| @case_log.errors.add field.to_sym, message }
         end
       end
