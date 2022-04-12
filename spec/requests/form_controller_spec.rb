@@ -18,6 +18,25 @@ RSpec.describe FormController, type: :request do
       managing_organisation: other_organisation,
     )
   end
+  let(:setup_complete_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :about_completed,
+      status: 1,
+      year: 2021,
+      startdate: Time.zone.local(2021, 10, 10),
+      owning_organisation: organisation,
+      managing_organisation: organisation,
+    )
+  end
+  let(:completed_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :completed,
+      owning_organisation: organisation,
+      managing_organisation: organisation,
+    )
+  end
   let(:headers) { { "Accept" => "text/html" } }
 
   context "when a user is not signed in" do
@@ -96,6 +115,13 @@ RSpec.describe FormController, type: :request do
           get "/logs/#{case_log.id}/conditional-question-no-second-page", headers: headers, params: {}
           expect(response).to redirect_to("/logs/#{case_log.id}")
         end
+      end
+
+      context "when visiting the review page" do
+        it "renders the review page for the case log" do
+          get "/logs/#{setup_complete_case_log.id}/review", headers: headers, params: {}
+          expect(response.body).to match("Review lettings log")
+        end 
       end
     end
 
@@ -336,6 +362,23 @@ RSpec.describe FormController, type: :request do
 
         it "does not let you post form answers to case logs you don't have access to" do
           expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "When submitting the case log from the review page" do
+
+        it "redirects to the case logs page on a successful submission of a complete case log" do
+          post "/logs/#{completed_case_log.id}/form", headers: { "HTTP_REFERER": "/logs/#{completed_case_log.id}/review" }
+          expect(response).to redirect_to("/logs")
+          follow_redirect!
+          expect(Capybara::Node::Simple.new(response.body)).to have_content("Log #{completed_case_log.id} has been submitted")
+        end
+
+        it "redirects to the review page and presents an error to the user if submitting an incomplete case log" do
+          post "/logs/#{setup_complete_case_log.id}/form", headers: { "HTTP_REFERER": "/logs/#{setup_complete_case_log.id}/review" }
+          expect(response).to redirect_to("/logs/#{setup_complete_case_log.id}/review")
+          follow_redirect!
+          expect(Capybara::Node::Simple.new(response.body)).to have_content("All mandatory fields have not been completed, please refer to section status")
         end
       end
     end
