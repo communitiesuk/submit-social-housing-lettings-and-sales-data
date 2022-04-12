@@ -3279,37 +3279,37 @@
               "header": "",
               "description": "",
               "questions": {
-                "lawaitlist": {
+                "waityear": {
                   "check_answer_label": "Length of time on local authority waiting list",
                   "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Just moved to local authority area"
                     },
-                    "1": {
+                    "2": {
                       "value": "Less than 1 year"
                     },
-                    "2": {
+                    "7": {
                       "value": "1 year but under 2 years"
                     },
-                    "3": {
+                    "8": {
                       "value": "2 years but under 3 years"
                     },
-                    "4": {
+                    "9": {
                       "value": "3 years but under 4 years"
                     },
-                    "5": {
+                    "10": {
                       "value": "4 years but under 5 years"
                     },
-                    "6": {
+                    "5": {
                       "value": "5 years or more"
                     },
                     "divider": {
                       "value": true
                     },
-                    "7": {
+                    "6": {
                       "value": "Don’t know"
                     }
                   }
