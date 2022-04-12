@@ -225,13 +225,13 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "shows case logs for multiple selected years" do
-              get "/logs?year[]=2021&year[]=2022", headers: headers, params: {}
+              get "/logs?years[]=2021&years[]=2022", headers: headers, params: {}
               expect(page).to have_link(case_log_2021.id.to_s)
               expect(page).to have_link(case_log_2022.id.to_s)
             end
 
             it "shows case logs for one selected year" do
-              get "/logs?year[]=2021", headers: headers, params: {}
+              get "/logs?years[]=2021", headers: headers, params: {}
               expect(page).to have_link(case_log_2021.id.to_s)
               expect(page).not_to have_link(case_log_2022.id.to_s)
             end
@@ -260,14 +260,14 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "shows case logs for multiple selected statuses and years" do
-              get "/logs?year[]=2021&year[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
+              get "/logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
               expect(page).to have_link(case_log_2021.id.to_s)
               expect(page).to have_link(case_log_2022.id.to_s)
               expect(page).to have_link(case_log_2022_in_progress.id.to_s)
             end
 
             it "shows case logs for one selected status" do
-              get "/logs?year[]=2022&status[]=in_progress", headers: headers, params: {}
+              get "/logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(case_log_2022_in_progress.id.to_s)
               expect(page).not_to have_link(case_log_2021.id.to_s)
               expect(page).not_to have_link(case_log_2022.id.to_s)
