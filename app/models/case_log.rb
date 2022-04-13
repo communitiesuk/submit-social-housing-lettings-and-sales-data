@@ -432,7 +432,6 @@ private
                        end
     self.nocharge = household_charge&.zero? ? 1 : 0
     self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
-    self.ethnic = ethnic || ethnic_group
     self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if year == 2021
