@@ -4515,12 +4515,6 @@
                     {
                       "label": "every week",
                       "depends_on": {
-                        "incfreq": 0
-                      }
-                    },
-                    {
-                      "label": "every month",
-                      "depends_on": {
                         "incfreq": 1
                       }
                     },
@@ -4528,6 +4522,12 @@
                       "label": "every month",
                       "depends_on": {
                         "incfreq": 2
+                      }
+                    },
+                    {
+                      "label": "every year",
+                      "depends_on": {
+                        "incfreq": 3
                       }
                     }
                   ]
@@ -4538,13 +4538,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Weekly"
                     },
-                    "1": {
+                    "2": {
                       "value": "Monthly"
                     },
-                    "2": {
+                    "3": {
                       "value": "Yearly"
                     }
                   },
