@@ -1846,6 +1846,14 @@ RSpec.describe CaseLog do
       it "can filter by year(s) AND status" do
         expect(described_class.filter_by_years(%w[2021 2022]).filter_by_status("completed").count).to eq(1)
       end
+
+      it "filters based on date boundaries correctly" do
+        case_log_1.update!(startdate: Time.zone.local(2022, 4, 1))
+        case_log_2.update!(startdate: Time.zone.local(2022, 3, 31))
+
+        expect(described_class.filter_by_years(%w[2021]).count).to eq(1)
+        expect(described_class.filter_by_years(%w[2022]).count).to eq(2)
+      end
     end
 
     context "when filtering on status" do

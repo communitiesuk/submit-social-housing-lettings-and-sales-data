@@ -41,7 +41,7 @@ class CaseLog < ApplicationRecord
     years.each { |year| query = query.or(filter_by_year(year)) }
     query.all
   }
-  scope :filter_by_year, ->(year) { where(startdate: Time.utc(year.to_i, 4, 1)...Time.utc(year.to_i + 1, 4, 1)) }
+  scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
 
   scope :filter_by_user, lambda { |selected_user, user|
                            if !selected_user.include?("all") && user.present?
