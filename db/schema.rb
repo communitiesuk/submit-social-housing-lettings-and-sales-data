@@ -226,7 +226,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.string "relat7"
     t.string "relat8"
     t.integer "rent_value_check"
-    t.integer "form"
+    t.integer "old_form_id"
     t.integer "lar"
     t.integer "irproduct"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
