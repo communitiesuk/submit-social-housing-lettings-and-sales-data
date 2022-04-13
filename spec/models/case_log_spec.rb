@@ -1147,6 +1147,7 @@ RSpec.describe CaseLog do
       expect(address_case_log[incode_field]).to eq("1AE")
       expect(record_from_db[incode_field]).to eq("1AE")
     end
+
     def check_previous_postcode_fields(postcode_field)
       record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
       expect(address_case_log[postcode_field]).to eq("M11AE")
