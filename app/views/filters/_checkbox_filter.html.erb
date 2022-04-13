@@ -1,0 +1,10 @@
+<%= f.govuk_check_boxes_fieldset category.to_sym, legend: { text: label, size: "s"} do %>
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+        <% options.map do |key, option| %>
+            <%= f.govuk_check_box category, "#{key}",
+            label: { text: option },
+            checked: filter_selected?(category, key),
+            size: "s" %>
+        <% end %>
+    </div>
+<% end %>
