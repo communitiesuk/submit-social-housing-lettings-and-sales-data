@@ -34,7 +34,7 @@ class CaseLog < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation"
 
   scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
-  scope :filter_by_status, ->(status, _user = nil) { where status: status }
+  scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
     first_year = years.shift
     query = filter_by_year(first_year)

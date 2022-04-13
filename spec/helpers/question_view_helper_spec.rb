@@ -48,7 +48,7 @@ RSpec.describe QuestionViewHelper do
     let(:size) { "m" }
     let(:tag) { "h2" }
     let(:legend_options_hash) do
-      { text: "Some question header".html_safe, size: size, tag: tag }
+      { text: "Some question header".html_safe, size:, tag: }
     end
 
     context "when viewing a page with a header" do

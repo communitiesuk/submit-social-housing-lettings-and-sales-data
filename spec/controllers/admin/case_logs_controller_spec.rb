@@ -40,7 +40,7 @@ describe Admin::CaseLogsController, type: :controller do
     end
 
     it "creates a new case log" do
-      expect { post :create, session: valid_session, params: params }.to change(CaseLog, :count).by(1)
+      expect { post :create, session: valid_session, params: }.to change(CaseLog, :count).by(1)
     end
 
     it "tracks who created the record" do
@@ -71,7 +71,7 @@ describe Admin::CaseLogsController, type: :controller do
       let(:params) { { id: case_log.id, case_log: { tenant_code: } } }
 
       before do
-        patch :update, session: valid_session, params: params
+        patch :update, session: valid_session, params:
       end
 
       it "updates the case log" do

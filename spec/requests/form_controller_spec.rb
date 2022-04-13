@@ -131,7 +131,7 @@ RSpec.describe FormController, type: :request do
         end
 
         before do
-          post "/logs/#{case_log.id}/form", params: params
+          post "/logs/#{case_log.id}/form", params:
         end
 
         context "with invalid answers" do

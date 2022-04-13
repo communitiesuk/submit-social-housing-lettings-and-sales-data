@@ -40,7 +40,7 @@ describe Admin::UsersController, type: :controller do
     end
 
     it "creates a new user" do
-      expect { post :create, session: valid_session, params: params }.to change(User, :count).by(1)
+      expect { post :create, session: valid_session, params: }.to change(User, :count).by(1)
     end
 
     it "tracks who created the record" do
@@ -73,7 +73,7 @@ describe Admin::UsersController, type: :controller do
       let(:params) { { id: user.id, user: { name: } } }
 
       before do
-        patch :update, session: valid_session, params: params
+        patch :update, session: valid_session, params:
       end
 
       it "updates the user without needing to input a password" do

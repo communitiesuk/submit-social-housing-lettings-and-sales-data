@@ -63,7 +63,7 @@ RSpec.describe UsersController, type: :request do
 
           before do
             sign_in user
-            put "/account", headers: headers, params: params
+            put "/account", headers:, params:
           end
 
           it "shows an error if passwords don't match" do
@@ -89,7 +89,7 @@ RSpec.describe UsersController, type: :request do
           before do
             allow(User).to receive(:find_or_initialize_with_error_by).and_return(user)
             allow(user).to receive(:reset_password_sent_at).and_return(4.hours.ago)
-            put "/account/password", headers: headers, params: params
+            put "/account/password", headers:, params:
           end
 
           it "shows an error" do
@@ -115,7 +115,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}", headers: headers, params: {}
+          get "/users/#{user.id}", headers:, params: {}
         end
 
         it "show the user details" do
@@ -135,7 +135,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}", headers: headers, params: {}
+          get "/users/#{other_user.id}", headers:, params: {}
         end
 
         context "when the user is part of the same organisation" do
@@ -172,7 +172,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}/edit", headers: headers, params: {}
+          get "/users/#{user.id}/edit", headers:, params: {}
         end
 
         it "show the edit personal details page" do
@@ -191,7 +191,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+          get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
         it "returns not found 404" do
@@ -204,7 +204,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/account/edit/password", headers: headers, params: {}
+          get "/account/edit/password", headers:, params: {}
         end
 
         it "shows the edit password page" do
@@ -219,7 +219,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+          get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
         it "returns not found 404" do
@@ -232,7 +232,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "updates the user" do
@@ -264,7 +264,7 @@ RSpec.describe UsersController, type: :request do
           sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "show an error" do
@@ -277,7 +277,7 @@ RSpec.describe UsersController, type: :request do
 
         before do
           sign_in user
-          patch "/users/#{other_user.id}", headers: headers, params: params
+          patch "/users/#{other_user.id}", headers:, params:
         end
 
         it "returns not found 404" do
@@ -294,7 +294,7 @@ RSpec.describe UsersController, type: :request do
 
         before do
           sign_in user
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "shows an error if passwords don't match" do
@@ -314,7 +314,7 @@ RSpec.describe UsersController, type: :request do
           },
         }
       end
-      let(:request) { post "/users/", headers: headers, params: params }
+      let(:request) { post "/users/", headers:, params: }
 
       before do
         sign_in user
@@ -339,7 +339,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}", headers: headers, params: {}
+          get "/users/#{user.id}", headers:, params: {}
         end
 
         it "show the user details" do
@@ -359,7 +359,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}", headers: headers, params: {}
+          get "/users/#{other_user.id}", headers:, params: {}
         end
 
         context "when the user is part of the same organisation as the current user" do
@@ -399,7 +399,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}/edit", headers: headers, params: {}
+          get "/users/#{user.id}/edit", headers:, params: {}
         end
 
         it "show the edit personal details page" do
@@ -422,7 +422,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+          get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
         context "when the user is part of the same organisation as the current user" do
@@ -457,7 +457,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/account/edit/password", headers: headers, params: {}
+          get "/account/edit/password", headers:, params: {}
         end
 
         it "shows the edit password page" do
@@ -476,7 +476,7 @@ RSpec.describe UsersController, type: :request do
 
         it "there is no route" do
           expect {
-            get "/users/#{other_user.id}/password/edit", headers: headers, params: {}
+            get "/users/#{other_user.id}/password/edit", headers:, params: {}
           }.to raise_error(ActionController::RoutingError)
         end
       end
@@ -486,7 +486,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "updates the user" do
@@ -521,7 +521,7 @@ RSpec.describe UsersController, type: :request do
 
           before do
             sign_in user
-            patch "/users/#{user.id}", headers: headers, params: params
+            patch "/users/#{user.id}", headers:, params:
           end
 
           it "shows an error if passwords don't match" do
@@ -538,12 +538,12 @@ RSpec.describe UsersController, type: :request do
 
         context "when the user is part of the same organisation as the current user" do
           it "updates the user" do
-            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+            expect { patch "/users/#{other_user.id}", headers:, params: }
               .to change { other_user.reload.name }.from(other_user.name).to(new_name)
           end
 
           it "tracks who updated the record" do
-            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+            expect { patch "/users/#{other_user.id}", headers:, params: }
               .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
           end
 
@@ -574,12 +574,12 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "does not update the password" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .not_to change(other_user, :encrypted_password)
             end
 
             it "does update other values" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
             end
           end
@@ -592,7 +592,7 @@ RSpec.describe UsersController, type: :request do
 
             before do
               sign_in user
-              patch "/users/#{other_user.id}", headers: headers, params: params
+              patch "/users/#{other_user.id}", headers:, params:
             end
 
             it "returns not found 404" do
@@ -607,7 +607,7 @@ RSpec.describe UsersController, type: :request do
           sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "show an error" do
@@ -627,7 +627,7 @@ RSpec.describe UsersController, type: :request do
           },
         }
       end
-      let(:request) { post "/users/", headers: headers, params: params }
+      let(:request) { post "/users/", headers:, params: }
 
       before do
         sign_in user
@@ -697,7 +697,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}", headers: headers, params: {}
+          get "/users/#{user.id}", headers:, params: {}
         end
 
         it "show the user details" do
@@ -717,7 +717,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}", headers: headers, params: {}
+          get "/users/#{other_user.id}", headers:, params: {}
         end
 
         context "when the user is part of the same organisation as the current user" do
@@ -766,7 +766,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/users/#{user.id}/edit", headers: headers, params: {}
+          get "/users/#{user.id}/edit", headers:, params: {}
         end
 
         it "show the edit personal details page" do
@@ -789,7 +789,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user does not match the user ID" do
         before do
           sign_in user
-          get "/users/#{other_user.id}/edit", headers: headers, params: {}
+          get "/users/#{other_user.id}/edit", headers:, params: {}
         end
 
         context "when the user is part of the same organisation as the current user" do
@@ -836,7 +836,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          get "/account/edit/password", headers: headers, params: {}
+          get "/account/edit/password", headers:, params: {}
         end
 
         it "shows the edit password page" do
@@ -855,7 +855,7 @@ RSpec.describe UsersController, type: :request do
 
         it "there is no route" do
           expect {
-            get "/users/#{other_user.id}/password/edit", headers: headers, params: {}
+            get "/users/#{other_user.id}/password/edit", headers:, params: {}
           }.to raise_error(ActionController::RoutingError)
         end
       end
@@ -865,7 +865,7 @@ RSpec.describe UsersController, type: :request do
       context "when the current user matches the user ID" do
         before do
           sign_in user
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "updates the user" do
@@ -900,7 +900,7 @@ RSpec.describe UsersController, type: :request do
 
           before do
             sign_in user
-            patch "/users/#{user.id}", headers: headers, params: params
+            patch "/users/#{user.id}", headers:, params:
           end
 
           it "shows an error if passwords don't match" do
@@ -917,12 +917,12 @@ RSpec.describe UsersController, type: :request do
 
         context "when the user is part of the same organisation as the current user" do
           it "updates the user" do
-            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+            expect { patch "/users/#{other_user.id}", headers:, params: }
               .to change { other_user.reload.name }.from(other_user.name).to(new_name)
           end
 
           it "tracks who updated the record" do
-            expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+            expect { patch "/users/#{other_user.id}", headers:, params: }
               .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
           end
 
@@ -953,12 +953,12 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "does not update the password" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .not_to change(other_user, :encrypted_password)
             end
 
             it "does update other values" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
             end
           end
@@ -974,12 +974,12 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the user" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .to change { other_user.reload.name }.from(other_user.name).to(new_name)
             end
 
             it "tracks who updated the record" do
-              expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+              expect { patch "/users/#{other_user.id}", headers:, params: }
                 .to change { other_user.reload.versions.last.actor&.id }.from(nil).to(user.id)
             end
 
@@ -1010,12 +1010,12 @@ RSpec.describe UsersController, type: :request do
               end
 
               it "does not update the password" do
-                expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+                expect { patch "/users/#{other_user.id}", headers:, params: }
                   .not_to change(other_user, :encrypted_password)
               end
 
               it "does update other values" do
-                expect { patch "/users/#{other_user.id}", headers: headers, params: params }
+                expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
               end
             end
@@ -1028,7 +1028,7 @@ RSpec.describe UsersController, type: :request do
           sign_in user
           allow(User).to receive(:find_by).and_return(user)
           allow(user).to receive(:update).and_return(false)
-          patch "/users/#{user.id}", headers: headers, params: params
+          patch "/users/#{user.id}", headers:, params:
         end
 
         it "show an error" do
@@ -1047,7 +1047,7 @@ RSpec.describe UsersController, type: :request do
           },
         }
       end
-      let(:request) { post "/users/", headers: headers, params: params }
+      let(:request) { post "/users/", headers:, params: }
 
       before do
         sign_in user
