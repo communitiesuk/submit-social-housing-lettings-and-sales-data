@@ -192,7 +192,7 @@ class BulkUpload
       illness_type_10: row[128],
       # london_affordable: row[129],
       rent_type: row[130],
-      irproduct: row[131],
+      irproduct_other: row[131],
       # data_protection: row[132],
       sale_or_letting: "letting",
       declaration: 1,
