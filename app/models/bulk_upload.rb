@@ -124,7 +124,7 @@ class BulkUpload
       # ppostc2: row[64],
       # prevpco_unknown: row[65],
       layear: row[66],
-      lawaitlist: row[67],
+      waityear: row[67],
       homeless: row[68],
       reasonpref: row[69],
       rp_homeless: row[70],

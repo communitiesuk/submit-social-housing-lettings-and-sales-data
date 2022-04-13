@@ -3279,7 +3279,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "lawaitlist": {
+                "waityear": {
                   "check_answer_label": "Length of time on local authority waiting list",
                   "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",

@@ -77,7 +77,7 @@ FactoryBot.define do
       supcharg { 35 }
       tcharge { 325 }
       layear { 2 }
-      lawaitlist { 1 }
+      waityear { 1 }
       postcode_full { "NW1 5TY" }
       reasonpref { 1 }
       cbl { 1 }

@@ -197,7 +197,7 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: nil,
           age1: nil,
           layear: 2,
-          lawaitlist: 1,
+          waityear: 1,
           postcode_full: "NW1 5TY",
           reason: 4,
           ppostcode_full: "SE2 6RT",

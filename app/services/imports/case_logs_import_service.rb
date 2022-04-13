@@ -39,38 +39,82 @@ module Imports
       other_intermediate_rent_product: 5,
     }.freeze
 
-    # Order matters since we derive from previous values (uses attributes)
     def create_log(xml_doc)
       attributes = {}
 
       # Required fields for status complete or logic to work
+      # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = start_date(xml_doc)
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
       attributes["previous_postcode_known"] = previous_postcode_known(xml_doc)
-      attributes["ppostcode_full"] = previous_postcode(xml_doc, attributes)
+      attributes["ppostcode_full"] = previous_postcode(xml_doc, attributes["previous_postcode_known"])
       attributes["needstype"] = needs_type(xml_doc)
       attributes["lar"] = london_affordable_rent(xml_doc)
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRPRODUCT")
       attributes["irproduct_other"] = field_value(xml_doc, "xmlns", "IRPRODUCTOTHER")
-      attributes["rent_type"] = rent_type(xml_doc, attributes)
+      attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
       attributes["rsnvac"] = unsafe_string_as_integer(xml_doc, "Q27")
-      attributes["renewal"] = renewal(attributes)
+      attributes["renewal"] = renewal(attributes["rsnvac"])
+      attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
       (1..8).each do |index|
-        attributes["age#{index}"] = age(xml_doc, index)
+        attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
+        attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
         attributes["sex#{index}"] = sex(xml_doc, index)
         attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}Eco")
       end
-      # attributes["hhmemb"] =
+      attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
+      attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
+      attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
+      attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
+      attributes["armedforces"] = unsafe_string_as_integer(xml_doc, "ArmedF")
+      attributes["preg_occ"] = unsafe_string_as_integer(xml_doc, "Preg")
+      %w[a b c f g h].each do |letter|
+        attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
+      end
+
+      attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q6Ben")
+      attributes["benefits"] = unsafe_string_as_integer(xml_doc, "Q7Ben")
+
+      attributes["underoccupation_benefitcap"] = unsafe_string_as_integer(xml_doc, "_9b")
+      attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
+      attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
+      attributes["waityear"] = unsafe_string_as_integer(xml_doc, "Q12d")
+      attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")
+
+      # Note recheck boolean values for 0 instead of nil
+      attributes["reasonpref"] = unsafe_string_as_integer(xml_doc, "Q14a")
+      attributes["rp_homeless"] = unsafe_string_as_integer(xml_doc, "Q14b1")
+      attributes["rp_insan_unsat"] = unsafe_string_as_integer(xml_doc, "Q14b2")
+      attributes["rp_medwel"] = unsafe_string_as_integer(xml_doc, "Q14b3")
+      attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4")
+      attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5")
+
+      attributes["cbl"] = unsafe_string_as_integer(xml_doc, "Q15CBL")
+      attributes["chr"] = unsafe_string_as_integer(xml_doc, "Q15CHR")
+      attributes["cap"] = unsafe_string_as_integer(xml_doc, "Q15CAP")
+
+      attributes["period"] = unsafe_string_as_integer(xml_doc, "Q17")
+
+      attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
+      attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
+      attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q24")
+      attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q25")
+      attributes["net_income_known"] = ""
 
       # Not specific to our form but required for CDS and can't be inferred
-      # attributes["form"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
-      # attributes["lettype"] = let_type(xml_doc, attributes)
+      attributes["old_form_id"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
 
-      case_log = CaseLog.new(attributes)
-      case_log.save!
+      # Required for us
+      attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
+      attributes["la_known"] = 1 # Defaulting to Yes (Required)
 
-      # pp attributes
+      # Derived and compared
+      attributes["earnings"] = ""
+
+      pp attributes
+      # case_log = CaseLog.new(attributes)
+      # case_log.save!
       # pp case_log.status
       # pp case_log.send(:mandatory_fields)
     end
@@ -100,27 +144,29 @@ module Imports
       end
     end
 
-    # This does not match renttype (CDS) which is derived by case logs logic
-    def rent_type(xml_doc, attributes)
+    # This does not match renttype (CDS) which is derived by case log logic
+    def rent_type(xml_doc, lar, irproduct)
       sr_ar_ir = get_form_name_component(xml_doc, -2)
 
       case sr_ar_ir
       when "SR"
         RENT_TYPE[:social_rent]
       when "AR"
-        if attributes["lar"] == 1
+        if lar == 1
           RENT_TYPE[:london_affordable_rent]
         else
           RENT_TYPE[:affordable_rent]
         end
       when "IR"
-        if attributes["irproduct"] == IRPRODUCT[:rent_to_buy]
+        if irproduct == IRPRODUCT[:rent_to_buy]
           RENT_TYPE[:rent_to_buy]
-        elsif attributes["irproduct"] == IRPRODUCT[:london_living_rent]
+        elsif irproduct == IRPRODUCT[:london_living_rent]
           RENT_TYPE[:london_living_rent]
-        elsif attributes["irproduct"] == IRPRODUCT[:other_intermediate_rent_product]
+        elsif irproduct == IRPRODUCT[:other_intermediate_rent_product]
           RENT_TYPE[:other_intermediate_rent_product]
         end
+      else
+        raise "Could not infer rent type with '#{sr_ar_ir}'"
       end
     end
 
@@ -202,10 +248,6 @@ module Imports
       organisation.id
     end
 
-    def age(xml_doc, index)
-      Integer(field_value(xml_doc, "xmlns", "P#{index}Age"), exception: false)
-    end
-
     def sex(xml_doc, index)
       sex = field_value(xml_doc, "xmlns", "P#{index}Sex")
       case sex
@@ -217,6 +259,19 @@ module Imports
         "X"
       when "Refused"
         "R"
+      else
+        nil
+      end
+    end
+
+    def age_known(xml_doc, index, hhmemb)
+      return nil if index > hhmemb
+
+      age_refused = field_value(xml_doc, "xmlns", "P#{index}AR")
+      if age_refused == "AGE_REFUSED"
+        1 # No
+      else
+        0 # Yes
       end
     end
 
@@ -229,8 +284,7 @@ module Imports
       end
     end
 
-    def previous_postcode(xml_doc, attributes)
-      previous_postcode_known = attributes["previous_postcode_known"]
+    def previous_postcode(xml_doc, previous_postcode_known)
       if previous_postcode_known.zero?
         nil
       else
@@ -250,9 +304,9 @@ module Imports
       end
     end
 
-    def renewal(attributes)
+    def renewal(rsnvac)
       #  Relet – renewal of fixed-term tenancy
-      if attributes["rsnvac"] == 14
+      if rsnvac == 14
         1
       else
         0
@@ -274,5 +328,41 @@ module Imports
         str.to_i
       end
     end
+
+    def ethnic_group(ethnic)
+      case ethnic
+      when 1,2,3,18
+        # White
+        0
+      when 4,5,6,7
+        # Mixed
+        1
+      when 8,9,10,11,15
+        # Asian
+        2
+      when 12,13,14
+        # Black
+        3
+      when 16,19
+        # Others
+        4
+      when 17
+        # Refused
+        5
+      else
+        nil
+      end
+    end
+
+    # Letters should be lowercase to match case
+    def housing_needs(xml_doc, letter)
+      housing_need = field_value(xml_doc, "xmlns", "Q10-#{letter}")
+      if housing_need == "Yes"
+        1
+      else
+        0
+      end
+    end
+
   end
 end
