@@ -1827,9 +1827,10 @@ RSpec.describe CaseLog do
   end
 
   describe "scopes" do
+    let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3)) }
+    let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3)) }
+
     before do
-      FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3))
-      FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3))
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
     end
 
@@ -1854,6 +1855,27 @@ RSpec.describe CaseLog do
 
       it "allows filtering on multiple statuses" do
         expect(described_class.filter_by_status(%w[in_progress completed]).count).to eq(3)
+      end
+    end
+
+    context "when filtering by user" do
+      let!(:user) { FactoryBot.create(:user) }
+
+      before do
+        PaperTrail::Version.find_by(item_id: case_log_1.id, event: "create").update!(whodunnit: user.to_global_id.uri.to_s)
+        PaperTrail::Version.find_by(item_id: case_log_2.id, event: "create").update!(whodunnit: user.to_global_id.uri.to_s)
+      end
+
+      it "allows filtering on current user" do
+        expect(described_class.filter_by_user(%w[yours], user).count).to eq(2)
+      end
+
+      it "returns all logs when all logs selected" do
+        expect(described_class.filter_by_user(%w[all], user).count).to eq(3)
+      end
+
+      it "returns all logs when all and your users selected" do
+        expect(described_class.filter_by_user(%w[all yours], user).count).to eq(3)
       end
     end
   end

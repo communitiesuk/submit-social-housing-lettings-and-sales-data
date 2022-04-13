@@ -16,6 +16,7 @@
                     <% years = {"2021": "2021/22", "2022": "2022/23"} %>
                     <%= render partial: "filters/checkbox_filter", locals: { f: f, options: years, label: "Collection year", category: "years" } %>
                     <%= render partial: "filters/checkbox_filter", locals: { f: f, options: status_filters, label: "Status", category: "status" } %>
+                    <%= render partial: "filters/checkbox_filter", locals: { f: f, options: {"all": "All", "yours": "Yours"}, label: "Logs", category: "user" } %>
                     <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-top-4" %>
                 <% end %>
             </div>
