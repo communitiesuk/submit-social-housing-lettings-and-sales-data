@@ -4624,19 +4624,19 @@
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "All"
                     },
-                    "1": {
+                    "2": {
                       "value": "Some"
                     },
-                    "2": {
+                    "3": {
                       "value": "None"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
