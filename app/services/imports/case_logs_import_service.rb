@@ -47,15 +47,17 @@ module Imports
       attributes["startdate"] = start_date(xml_doc)
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
+      attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
+      attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
+      attributes["tenancyother"] = string_or_nil(xml_doc, "Q2ba")
+      attributes["tenancylength"] = safe_string_as_integer(xml_doc, "_2cYears")
       attributes["previous_postcode_known"] = previous_postcode_known(xml_doc)
       attributes["ppostcode_full"] = previous_postcode(xml_doc, attributes["previous_postcode_known"])
       attributes["needstype"] = needs_type(xml_doc)
       attributes["lar"] = london_affordable_rent(xml_doc)
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRPRODUCT")
-      attributes["irproduct_other"] = field_value(xml_doc, "xmlns", "IRPRODUCTOTHER")
+      attributes["irproduct_other"] = string_or_nil(xml_doc, "IRPRODUCTOTHER")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
-      attributes["rsnvac"] = unsafe_string_as_integer(xml_doc, "Q27")
-      attributes["renewal"] = renewal(attributes["rsnvac"])
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
       (1..8).each do |index|
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
@@ -63,19 +65,29 @@ module Imports
         attributes["sex#{index}"] = sex(xml_doc, index)
         attributes["ecstat#{index}"] = unsafe_string_as_integer(xml_doc, "P#{index}Eco")
       end
+      (2..8).each do |index|
+        attributes["relat#{index}"] = relat(xml_doc, index)
+      end
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
       attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
-      attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
-      attributes["armedforces"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["preg_occ"] = unsafe_string_as_integer(xml_doc, "Preg")
       %w[a b c f g h].each do |letter|
         attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
       end
 
+      attributes["armedforces"] = unsafe_string_as_integer(xml_doc, "ArmedF")
+      attributes["leftreg"] = unsafe_string_as_integer(xml_doc, "LeftAF")
+      attributes["reservist"] = unsafe_string_as_integer(xml_doc, "Inj")
+
       attributes["hb"] = unsafe_string_as_integer(xml_doc, "Q6Ben")
       attributes["benefits"] = unsafe_string_as_integer(xml_doc, "Q7Ben")
+      attributes["earnings"] = safe_string_as_decimal(xml_doc, "Q8Money")
+      attributes["net_income_known"] = net_income_known(xml_doc, attributes["earnings"])
+      attributes["incfreq"] = unsafe_string_as_integer(xml_doc, "Q8a")
 
+      attributes["reason"] = unsafe_string_as_integer(xml_doc, "Q9a")
+      attributes["reasonother"] = string_or_nil(xml_doc, "Q9aa")
       attributes["underoccupation_benefitcap"] = unsafe_string_as_integer(xml_doc, "_9b")
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
       attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
@@ -100,23 +112,46 @@ module Imports
       attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
       attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q24")
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q25")
-      attributes["net_income_known"] = ""
+      attributes["rsnvac"] = unsafe_string_as_integer(xml_doc, "Q27")
+      attributes["renewal"] = renewal(attributes["rsnvac"])
 
       # Not specific to our form but required for CDS and can't be inferred
       attributes["old_form_id"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
 
-      # Required for us
+      # Specific to us
       attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
       attributes["la_known"] = 1 # Defaulting to Yes (Required)
+      attributes["created_at"] = Date.parse(field_value(xml_doc, "meta", "created-date"))
+      attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
 
-      # Derived and compared
-      attributes["earnings"] = ""
 
       pp attributes
       # case_log = CaseLog.new(attributes)
       # case_log.save!
       # pp case_log.status
       # pp case_log.send(:mandatory_fields)
+    end
+
+    # Safe: A string that represents only an integer (or empty/nil)
+    def safe_string_as_integer(xml_doc, attribute)
+      str = field_value(xml_doc, "xmlns", attribute)
+      Integer(str, exception: false)
+    end
+
+    # Safe: A string that represents only a decimal (or empty/nil)
+    def safe_string_as_decimal(xml_doc, attribute)
+      str = field_value(xml_doc, "xmlns", attribute)
+      BigDecimal(str, exception: false)
+    end
+
+    # Unsafe: A string that has more than just the integer value
+    def unsafe_string_as_integer(xml_doc, attribute)
+      str = field_value(xml_doc, "xmlns", attribute)
+      if str.blank?
+        nil
+      else
+        str.to_i
+      end
     end
 
     def start_date(xml_doc)
@@ -264,6 +299,22 @@ module Imports
       end
     end
 
+    def relat(xml_doc, index)
+      relat = field_value(xml_doc, "xmlns", "P#{index}Rel")
+      case relat
+      when "Child"
+        "C"
+      when "Partner"
+        "P"
+      when "Other", "Non-binary"
+        "X"
+      when "Refused"
+        "R"
+      else
+        nil
+      end
+    end
+
     def age_known(xml_doc, index, hhmemb)
       return nil if index > hhmemb
 
@@ -313,19 +364,12 @@ module Imports
       end
     end
 
-    # Safe: A string that represents only an integer (or empty/nil)
-    def safe_string_as_integer(xml_doc, attribute)
-      str = field_value(xml_doc, "xmlns", attribute)
-      Integer(str, exception: false)
-    end
-
-    # Unsafe: A string that has more than just the integer value
-    def unsafe_string_as_integer(xml_doc, attribute)
+    def string_or_nil(xml_doc, attribute)
       str = field_value(xml_doc, "xmlns", attribute)
       if str.blank?
         nil
       else
-        str.to_i
+        str
       end
     end
 
@@ -360,6 +404,20 @@ module Imports
       if housing_need == "Yes"
         1
       else
+        0
+      end
+    end
+
+    def net_income_known(xml_doc, earnings)
+      incref = field_value(xml_doc, "xmlns", "Q8Refused")
+      if incref == "Refused"
+        # Tenant prefers not to say
+        2
+      elsif earnings.nil?
+        # No
+        1
+      else
+        # Yes
         0
       end
     end

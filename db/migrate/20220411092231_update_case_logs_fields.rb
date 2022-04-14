@@ -6,6 +6,7 @@ class UpdateCaseLogsFields < ActiveRecord::Migration[7.0]
       t.remove :ppostc1, :ppostc2, type: :string
       t.rename :intermediate_rent_product_name, :irproduct_other
       t.rename :lawaitlist, :waityear
+      t.rename :other_reason_for_leaving_last_settled_home, :reasonother
     end
   end
 end

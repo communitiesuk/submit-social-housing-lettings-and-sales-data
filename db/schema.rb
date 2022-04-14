@@ -104,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.integer "cbl"
     t.integer "chr"
     t.integer "cap"
-    t.string "other_reason_for_leaving_last_settled_home"
+    t.string "reasonother"
     t.integer "housingneeds_a"
     t.integer "housingneeds_b"
     t.integer "housingneeds_c"

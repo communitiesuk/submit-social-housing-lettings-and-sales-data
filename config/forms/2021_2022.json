@@ -3438,12 +3438,12 @@
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": [
-                      31
+                    "reasonother": [
+                      20
                     ]
                   }
                 },
-                "other_reason_for_leaving_last_settled_home": {
+                "reasonother": {
                   "header": "What is the reason?",
                   "hint_text": "",
                   "type": "text"
