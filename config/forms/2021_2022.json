@@ -3432,9 +3432,6 @@
                     },
                     "28": {
                       "value": "Don’t know"
-                    },
-                    "10000": {
-                      "value": "Tenant prefers not to say"
                     }
                   },
                   "conditional_for": {
@@ -4606,9 +4603,6 @@
                     },
                     "3": {
                       "value": "Don’t know"
-                    },
-                    "1000": {
-                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
