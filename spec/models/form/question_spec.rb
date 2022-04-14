@@ -345,4 +345,20 @@ RSpec.describe Form::Question, type: :model do
       end
     end
   end
+
+  context "when the question has a hidden in check answers attribute with dependencies" do
+    let(:section_id) { "local_authority" }
+    let(:subsection_id) { "local_authority" }
+    let(:page_id) { "time_lived_in_la" }
+    let(:question_id) { "layear" }
+    let(:case_log) do
+      FactoryBot.create(:case_log, :in_progress)
+    end
+
+    it "can work out if the question will be shown in check answers" do
+      expect(question.hidden_in_check_answers?(case_log)).to be(false)
+      case_log.layear = 0
+      expect(question.hidden_in_check_answers?(case_log)).to be(true)
+    end
+  end
 end

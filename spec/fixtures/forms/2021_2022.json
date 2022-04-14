@@ -849,6 +849,12 @@
                       "7": {
                         "value": "Don’t know"
                       }
+                    },
+                    "hidden_in_check_answers": {
+                      "depends_on": [
+                        { "layear": 0 },
+                        { "layear": 1 }
+                      ]
                     }
                   }
                 },

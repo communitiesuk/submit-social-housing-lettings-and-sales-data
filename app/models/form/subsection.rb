@@ -30,9 +30,10 @@ class Form::Subsection
       return :cannot_start_yet
     end
 
-    qs = applicable_questions(case_log).reject { |q| CaseLog::OPTIONAL_FIELDS.include?(q.id) }
+    qs = applicable_questions(case_log)
+    qs_optional_removed = qs.reject { |q| CaseLog::OPTIONAL_FIELDS.include?(q.id) }
     return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
-    return :completed if qs.all? { |question| question.completed?(case_log) }
+    return :completed if qs_optional_removed.all? { |question| question.completed?(case_log) }
 
     :in_progress
   end
@@ -54,7 +55,7 @@ class Form::Subsection
   end
 
   def applicable_questions(case_log)
-    questions.select { |q| (displayed_to_user?(case_log, q) && !q.hidden_in_check_answers?) || q.has_inferred_check_answers_value?(case_log) }
+    questions.select { |q| (displayed_to_user?(case_log, q) && !q.hidden_in_check_answers?(case_log)) || q.has_inferred_check_answers_value?(case_log) }
   end
 
   def answered_questions(case_log)

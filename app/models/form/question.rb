@@ -63,8 +63,14 @@ class Form::Question
     conditional_on.all? { |condition| evaluate_condition(condition, case_log) }
   end
 
-  def hidden_in_check_answers?
-    hidden_in_check_answers
+  def hidden_in_check_answers?(case_log)
+    if hidden_in_check_answers.is_a?(Hash)
+      hidden_in_check_answers["depends_on"].any? do |hsh|
+        hsh.all? { |key, value| case_log[key] == value }
+      end
+    else
+      hidden_in_check_answers
+    end
   end
 
   def has_inferred_check_answers_value?(case_log)
