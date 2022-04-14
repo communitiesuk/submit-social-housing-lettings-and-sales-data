@@ -44,15 +44,13 @@ module Imports
 
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
-      attributes["startdate"] = start_date(xml_doc)
+      attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
       attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
       attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
       attributes["tenancyother"] = string_or_nil(xml_doc, "Q2ba")
       attributes["tenancylength"] = safe_string_as_integer(xml_doc, "_2cYears")
-      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc)
-      attributes["ppostcode_full"] = previous_postcode(xml_doc, attributes["previous_postcode_known"])
       attributes["needstype"] = needs_type(xml_doc)
       attributes["lar"] = london_affordable_rent(xml_doc)
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRPRODUCT")
@@ -72,9 +70,6 @@ module Imports
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
       attributes["national"] = unsafe_string_as_integer(xml_doc, "P1Nat")
       attributes["preg_occ"] = unsafe_string_as_integer(xml_doc, "Preg")
-      %w[a b c f g h].each do |letter|
-        attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
-      end
 
       attributes["armedforces"] = unsafe_string_as_integer(xml_doc, "ArmedF")
       attributes["leftreg"] = unsafe_string_as_integer(xml_doc, "LeftAF")
@@ -89,12 +84,23 @@ module Imports
       attributes["reason"] = unsafe_string_as_integer(xml_doc, "Q9a")
       attributes["reasonother"] = string_or_nil(xml_doc, "Q9aa")
       attributes["underoccupation_benefitcap"] = unsafe_string_as_integer(xml_doc, "_9b")
+      %w[a b c f g h].each do |letter|
+        attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
+      end
+
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
+      (1..10).each do |index|
+        attributes["illness_type_#{index}"] = illness_type(xml_doc, index)
+      end
+
+      attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
+      attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
+      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc)
+      attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
       attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
       attributes["waityear"] = unsafe_string_as_integer(xml_doc, "Q12d")
       attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")
 
-      # Note recheck boolean values for 0 instead of nil
       attributes["reasonpref"] = unsafe_string_as_integer(xml_doc, "Q14a")
       attributes["rp_homeless"] = unsafe_string_as_integer(xml_doc, "Q14b1")
       attributes["rp_insan_unsat"] = unsafe_string_as_integer(xml_doc, "Q14b2")
@@ -106,14 +112,33 @@ module Imports
       attributes["chr"] = unsafe_string_as_integer(xml_doc, "Q15CHR")
       attributes["cap"] = unsafe_string_as_integer(xml_doc, "Q15CAP")
 
+      attributes["referral"] = unsafe_string_as_integer(xml_doc, "Q16")
       attributes["period"] = unsafe_string_as_integer(xml_doc, "Q17")
 
+      attributes["brent"] = safe_string_as_decimal(xml_doc, "Q18ai")
+      attributes["scharge"] = safe_string_as_decimal(xml_doc, "Q18aii")
+      attributes["pscharge"] = safe_string_as_decimal(xml_doc, "Q18aiii")
+      attributes["supcharg"] = safe_string_as_decimal(xml_doc, "Q18aiv")
+      attributes["tcharge"] = safe_string_as_decimal(xml_doc, "Q18av")
+
+      attributes["hbrentshortfall"] = unsafe_string_as_integer(xml_doc, "Q18d")
+
+      attributes["voiddate"] = compose_date(xml_doc, "VDAY", "VMONTH", "VYEAR")
+      attributes["mrcdate"] = compose_date(xml_doc, "MRCDAY", "MRCMONTH", "MRCYEAR")
+
+      attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
+      attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
       attributes["unittype_gn"] = unsafe_string_as_integer(xml_doc, "Q23")
       attributes["builtype"] = unsafe_string_as_integer(xml_doc, "Q24")
       attributes["wchair"] = unsafe_string_as_integer(xml_doc, "Q25")
+      attributes["unitletas"] = unsafe_string_as_integer(xml_doc, "Q26")
       attributes["rsnvac"] = unsafe_string_as_integer(xml_doc, "Q27")
       attributes["renewal"] = renewal(attributes["rsnvac"])
+
+      attributes["la"] = string_or_nil(xml_doc, "Q28ONS")
+      attributes["postcode_full"] = compose_postcode(xml_doc, "POSTCODE", "POSTCOD2")
+      attributes["postcode_known"] = attributes["postcode_full"].nil? ? 0 : 1
 
       # Not specific to our form but required for CDS and can't be inferred
       attributes["old_form_id"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
@@ -124,12 +149,9 @@ module Imports
       attributes["created_at"] = Date.parse(field_value(xml_doc, "meta", "created-date"))
       attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
 
-
-      pp attributes
+      # Pending validation with new form
       # case_log = CaseLog.new(attributes)
       # case_log.save!
-      # pp case_log.status
-      # pp case_log.send(:mandatory_fields)
     end
 
     # Safe: A string that represents only an integer (or empty/nil)
@@ -154,11 +176,15 @@ module Imports
       end
     end
 
-    def start_date(xml_doc)
-      day = Integer(field_value(xml_doc, "xmlns", "DAY"))
-      month = Integer(field_value(xml_doc, "xmlns", "MONTH"))
-      year = Integer(field_value(xml_doc, "xmlns", "YEAR"))
-      Date.new(year, month, day)
+    def compose_date(xml_doc, day_str, month_str, year_str)
+      day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
+      month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
+      year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
+      if day.nil? || month.nil? ||year.nil?
+        nil
+      else
+        Date.new(year, month, day)
+      end
     end
 
     def get_form_name_component(xml_doc, index)
@@ -335,13 +361,13 @@ module Imports
       end
     end
 
-    def previous_postcode(xml_doc, previous_postcode_known)
-      if previous_postcode_known.zero?
+    def compose_postcode(xml_doc, outcode, incode)
+      outcode_value = field_value(xml_doc, "xmlns", outcode)
+      incode_value = field_value(xml_doc, "xmlns", incode)
+      if outcode_value.blank? || incode_value.blank?
         nil
       else
-        outcode = field_value(xml_doc, "xmlns", "PPOSTC1")
-        incode = field_value(xml_doc, "xmlns", "PPOSTC2")
-        "#{outcode} #{incode}"
+      "#{outcode_value} #{incode_value}"
       end
     end
 
@@ -418,6 +444,15 @@ module Imports
         1
       else
         # Yes
+        0
+      end
+    end
+
+    def illness_type(xml_doc, index)
+      illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
+      if illness_type == "Yes"
+        1
+      else
         0
       end
     end

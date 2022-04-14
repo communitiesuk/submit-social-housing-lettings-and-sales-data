@@ -140,13 +140,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.string "prevloc"
     t.integer "hb"
     t.integer "hbrentshortfall"
-    t.string "postcode"
-    t.string "postcod2"
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
-    t.integer "mrcday"
-    t.integer "mrcmonth"
-    t.integer "mrcyear"
     t.integer "incref"
     t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
@@ -154,7 +149,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "property_void_date", precision: nil
+    t.datetime "voiddate", precision: nil
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -212,9 +207,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.decimal "wtshortfall", precision: 10, scale: 2
     t.integer "refused"
     t.integer "housingneeds"
-    t.integer "vday"
-    t.integer "vmonth"
-    t.integer "vyear"
     t.decimal "wchchrg", precision: 10, scale: 2
     t.integer "newprop"
     t.string "relat2"
