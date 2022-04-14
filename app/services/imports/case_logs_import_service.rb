@@ -148,6 +148,7 @@ module Imports
       attributes["la_known"] = 1 # Defaulting to Yes (Required)
       attributes["created_at"] = Date.parse(field_value(xml_doc, "meta", "created-date"))
       attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
+      attributes
 
       # Pending validation with new form
       # case_log = CaseLog.new(attributes)
@@ -180,7 +181,7 @@ module Imports
       day = Integer(field_value(xml_doc, "xmlns", day_str), exception: false)
       month = Integer(field_value(xml_doc, "xmlns", month_str), exception: false)
       year = Integer(field_value(xml_doc, "xmlns", year_str), exception: false)
-      if day.nil? || month.nil? ||year.nil?
+      if day.nil? || month.nil? || year.nil?
         nil
       else
         Date.new(year, month, day)
@@ -320,8 +321,6 @@ module Imports
         "X"
       when "Refused"
         "R"
-      else
-        nil
       end
     end
 
@@ -336,8 +335,6 @@ module Imports
         "X"
       when "Refused"
         "R"
-      else
-        nil
       end
     end
 
@@ -367,7 +364,7 @@ module Imports
       if outcode_value.blank? || incode_value.blank?
         nil
       else
-      "#{outcode_value} #{incode_value}"
+        "#{outcode_value} #{incode_value}"
       end
     end
 
@@ -392,35 +389,29 @@ module Imports
 
     def string_or_nil(xml_doc, attribute)
       str = field_value(xml_doc, "xmlns", attribute)
-      if str.blank?
-        nil
-      else
-        str
-      end
+      str.presence
     end
 
     def ethnic_group(ethnic)
       case ethnic
-      when 1,2,3,18
+      when 1, 2, 3, 18
         # White
         0
-      when 4,5,6,7
+      when 4, 5, 6, 7
         # Mixed
         1
-      when 8,9,10,11,15
+      when 8, 9, 10, 11, 15
         # Asian
         2
-      when 12,13,14
+      when 12, 13, 14
         # Black
         3
-      when 16,19
+      when 16, 19
         # Others
         4
       when 17
         # Refused
         5
-      else
-        nil
       end
     end
 
@@ -456,6 +447,5 @@ module Imports
         0
       end
     end
-
   end
 end
