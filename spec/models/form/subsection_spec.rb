@@ -57,6 +57,20 @@ RSpec.describe Form::Subsection, type: :model do
       expect(subsection.is_started?(case_log)).to be(true)
     end
 
+    context "with optional fields" do 
+      subject(:subsection) { described_class.new(subsection_id, subsection_definition, section) }
+      let(:section_id) { "tenancy_and_property" }
+      let(:section_definition) { form.form_definition["sections"][section_id] }
+      let(:section) { Form::Section.new(section_id, section_definition, form) }
+      let(:subsection_id) { "property_information" }
+      let(:subsection_definition) { section_definition["subsections"][subsection_id] }
+      
+      it "has a started status even if only an optional field has been answered" do
+        case_log.postcode_known = 0
+        expect(subsection.is_started?(case_log)).to be(true)
+      end 
+    end
+
     it "has question helpers for the number of applicable questions" do
       expected_questions = %w[tenant_code age1 sex1 ecstat1 other_hhmemb ecstat2 propcode]
       expect(subsection.applicable_questions(case_log).map(&:id)).to eq(expected_questions)

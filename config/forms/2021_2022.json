@@ -1147,7 +1147,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age1_known": 0 },
+                      { "age1_known": 1 }
+                    ]
+                  }
                 },
                 "age1": {
                   "header": "Age",
