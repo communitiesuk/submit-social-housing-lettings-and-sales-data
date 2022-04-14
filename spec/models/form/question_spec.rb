@@ -354,11 +354,11 @@ RSpec.describe Form::Question, type: :model do
     let(:case_log) do
       FactoryBot.create(:case_log, :in_progress)
     end
-    
+
     it "can work out if the question will be shown in check answers" do
       expect(question.hidden_in_check_answers?(case_log)).to be(false)
       case_log.layear = 0
       expect(question.hidden_in_check_answers?(case_log)).to be(true)
     end
-  end 
+  end
 end
