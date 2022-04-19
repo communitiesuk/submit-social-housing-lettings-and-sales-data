@@ -200,7 +200,7 @@ RSpec.describe CaseLog do
         ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
-        property_void_date: Time.gm(2021, 3, 3),
+        voiddate: Time.gm(2021, 3, 3),
         net_income_known: 2,
         hhmemb: 7,
         rent_type: 4,
@@ -210,30 +210,18 @@ RSpec.describe CaseLog do
       })
     end
 
-    it "correctly derives and saves partial and full postcodes" do
-      record_from_db = ActiveRecord::Base.connection.execute("select postcode, postcod2 from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["postcode"]).to eq("M1")
-      expect(record_from_db["postcod2"]).to eq("1AE")
-    end
-
     it "correctly derives and saves partial and full major repairs date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select mrcday, mrcmonth, mrcyear, mrcdate from case_logs where id=#{case_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
       expect(record_from_db["mrcdate"].month).to eq(5)
       expect(record_from_db["mrcdate"].year).to eq(2021)
-      expect(record_from_db["mrcday"]).to eq(4)
-      expect(record_from_db["mrcmonth"]).to eq(5)
-      expect(record_from_db["mrcyear"]).to eq(2021)
     end
 
     it "correctly derives and saves partial and full major property void date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select vday, vmonth, vyear, property_void_date from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["property_void_date"].day).to eq(3)
-      expect(record_from_db["property_void_date"].month).to eq(3)
-      expect(record_from_db["property_void_date"].year).to eq(2021)
-      expect(record_from_db["vday"]).to eq(3)
-      expect(record_from_db["vmonth"]).to eq(3)
-      expect(record_from_db["vyear"]).to eq(2021)
+      record_from_db = ActiveRecord::Base.connection.execute("select voiddate from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["voiddate"].day).to eq(3)
+      expect(record_from_db["voiddate"].month).to eq(3)
+      expect(record_from_db["voiddate"].year).to eq(2021)
     end
 
     it "correctly derives and saves incref" do
@@ -1138,14 +1126,10 @@ RSpec.describe CaseLog do
       end
     end
 
-    def check_postcode_fields(postcode_field, outcode_field, incode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field}, #{outcode_field}, #{incode_field}  from case_logs where id=#{address_case_log.id}").to_a[0]
+    def check_postcode_fields(postcode_field)
+      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
       expect(address_case_log[postcode_field]).to eq("M11AE")
       expect(record_from_db[postcode_field]).to eq("M11AE")
-      expect(address_case_log[outcode_field]).to eq("M1")
-      expect(record_from_db[outcode_field]).to eq("M1")
-      expect(address_case_log[incode_field]).to eq("1AE")
-      expect(record_from_db[incode_field]).to eq("1AE")
     end
 
     def check_previous_postcode_fields(postcode_field)
@@ -1169,7 +1153,7 @@ RSpec.describe CaseLog do
       end
 
       def check_property_postcode_fields
-        check_postcode_fields("postcode_full", "postcode", "postcod2")
+        check_postcode_fields("postcode_full")
       end
 
       it "correctly formats previous postcode" do

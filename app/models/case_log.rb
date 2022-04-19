@@ -379,16 +379,6 @@ private
   end
 
   def set_derived_fields!
-    if mrcdate.present?
-      self.mrcday = mrcdate.day
-      self.mrcmonth = mrcdate.month
-      self.mrcyear = mrcdate.year
-    end
-    if property_void_date.present?
-      self.vday = property_void_date.day
-      self.vmonth = property_void_date.month
-      self.vyear = property_void_date.year
-    end
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
@@ -446,41 +436,37 @@ private
 
   def process_postcode_changes!
     self.postcode_full = postcode_full.present? ? postcode_full.upcase.gsub(/\s+/, "") : postcode_full
-    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
+    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
   end
 
   def process_previous_postcode_changes!
     self.ppostcode_full = ppostcode_full.present? ? ppostcode_full.upcase.gsub(/\s+/, "") : ppostcode_full
-    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", nil, nil)
+    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc")
   end
 
-  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key, outcode_key, incode_key)
+  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
     self[postcode_known_key] = 1
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
     self[la_key] = inferred_la if inferred_la.present?
-    self[outcode_key] = UKPostcode.parse(postcode).outcode unless outcode_key.nil?
-    self[incode_key] = UKPostcode.parse(postcode).incode unless incode_key.nil?
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", "postcode", "postcod2", la_known)
+    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", la_known)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", nil, nil, previous_la_known)
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
   end
 
-  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key, is_la_known)
+  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
     if is_inferred || is_la_known != 1
       self[la_key] = nil
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
-    self[incode_key] = nil unless incode_key.nil?
-    self[outcode_key] = nil unless outcode_key.nil?
   end
 
   def get_totelder

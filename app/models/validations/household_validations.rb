@@ -18,7 +18,7 @@ module Validations::HouseholdValidations
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
       record.errors.add :reason, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
-    validate_other_field(record, 31, :reason, :other_reason_for_leaving_last_settled_home)
+    validate_other_field(record, 31, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
@@ -56,7 +56,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_accessibility_requirements(record)
-    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h, record.accessibility_requirements_prefer_not_to_say]
+    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h]
     if all_options.count(1) > 1
       mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
       unless all_options.count(1) == 2 && record.housingneeds_f == 1 && mobility_accessibility_options.any? { |x| x == 1 }

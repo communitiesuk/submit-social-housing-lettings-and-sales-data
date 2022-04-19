@@ -361,7 +361,7 @@
               "cap": 0,
               "hbrentshortfall": 0,
               "tshortfall": 12,
-              "other_reason_for_leaving_last_settled_home": null,
+              "reasonother": null,
               "housingneeds_a": 1,
               "housingneeds_b": 0,
               "housingneeds_c": 0,

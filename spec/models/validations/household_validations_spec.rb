@@ -113,7 +113,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "reason for leaving last settled home validations" do
     let(:field) { "validations.other_field_not_required" }
     let(:main_field_label) { "reason" }
-    let(:other_field_label) { "other reason for leaving last settled home" }
+    let(:other_field_label) { "reasonother" }
     let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
 
     context "when reason is other" do
@@ -121,34 +121,34 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "validates that a reason is provided" do
         record.reason = 31
-        record.other_reason_for_leaving_last_settled_home = nil
+        record.reasonother = nil
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+        expect(record.errors["reasonother"])
           .to include(match(expected_error))
       end
 
       it "expects that a reason is provided" do
         record.reason = 31
-        record.other_reason_for_leaving_last_settled_home = "Some unusual reason"
+        record.reasonother = "Some unusual reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+        expect(record.errors["reasonother"]).to be_empty
       end
     end
 
     context "when reason is not other" do
       it "validates that other reason is not provided" do
         record.reason = 18
-        record.other_reason_for_leaving_last_settled_home = "Some other reason"
+        record.reasonother = "Some other reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+        expect(record.errors["reasonother"])
           .to include(match(expected_error))
       end
 
       it "expects that other reason is not provided" do
         record.reason = 18
-        record.other_reason_for_leaving_last_settled_home = nil
+        record.reasonother = nil
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+        expect(record.errors["reasonother"]).to be_empty
       end
     end
 
