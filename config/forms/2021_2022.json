@@ -22,7 +22,7 @@
                     "1": {
                       "value": "General needs"
                     },
-                    "0": {
+                    "2": {
                       "value": "Supported housing"
                     }
                   }
@@ -1090,7 +1090,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             }
@@ -3587,7 +3587,7 @@
               "depends_on": [
                 {
                   "renewal": 1,
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             },
@@ -4383,7 +4383,7 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": 0,
+                  "needstype": 2,
                   "renewal": 0
                 }
               ]
@@ -4443,7 +4443,7 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": 0,
+                  "needstype": 2,
                   "renewal": 0
                 }
               ]
@@ -4658,7 +4658,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             },
@@ -4748,62 +4748,62 @@
               "depends_on": [
                 {
                   "period": 1,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 1,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 5,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 5,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 6,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 6,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 7,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 7,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 8,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 8,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 9,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 9,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4845,12 +4845,12 @@
               "depends_on": [
                 {
                   "period": 2,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 2,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4892,12 +4892,12 @@
               "depends_on": [
                 {
                   "period": 3,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 3,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4939,12 +4939,12 @@
               "depends_on": [
                 {
                   "period": 4,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 4,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]

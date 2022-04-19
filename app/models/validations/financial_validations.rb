@@ -116,7 +116,7 @@ private
   }.freeze
 
   LANDLORD_VALUES = { 1 => :this_landlord, 2 => :other_landlord }.freeze
-  NEEDSTYPE_VALUES = { 0 => :supported_housing, 1 => :general_needs }.freeze
+  NEEDSTYPE_VALUES = { 2 => :supported_housing, 1 => :general_needs }.freeze
 
   def validate_charges(record)
     %i[scharge pscharge supcharg].each do |charge|

@@ -161,8 +161,8 @@ class CaseLog < ApplicationRecord
   end
 
   def is_supported_housing?
-    # 0: Supported Housing
-    !!needstype&.zero?
+    # 2: Supported Housing
+    needstype == 2
   end
 
   def has_hbrentshortfall?

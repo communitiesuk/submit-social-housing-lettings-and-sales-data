@@ -255,7 +255,7 @@ RSpec.describe CaseLog do
         before { case_log.owning_organisation.update!(provider_type: 2) }
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 4, needstype: 0)
+            case_log.update!(rent_type: 4, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(10)
             expect(record_from_db["lettype"]).to eq(10)
@@ -273,7 +273,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 2, needstype: 0)
+            case_log.update!(rent_type: 2, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(6)
             expect(record_from_db["lettype"]).to eq(6)
@@ -291,7 +291,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 0, needstype: 0)
+            case_log.update!(rent_type: 0, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(2)
             expect(record_from_db["lettype"]).to eq(2)
@@ -1051,7 +1051,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 4, needstype: 0)
+            case_log.update!(rent_type: 4, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(12)
             expect(record_from_db["lettype"]).to eq(12)
@@ -1069,7 +1069,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 2, needstype: 0)
+            case_log.update!(rent_type: 2, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(8)
             expect(record_from_db["lettype"]).to eq(8)
@@ -1087,7 +1087,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 0, needstype: 0)
+            case_log.update!(rent_type: 0, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(4)
             expect(record_from_db["lettype"]).to eq(4)
@@ -1477,7 +1477,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
-          needstype: 0,
+          needstype: 2,
         })
       end
 

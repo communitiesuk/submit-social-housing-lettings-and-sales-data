@@ -301,7 +301,7 @@ RSpec.describe Validations::FinancialValidations do
 
       context "when needstype is supported housing" do
         before do
-          record.needstype = 0
+          record.needstype = 2
           record.landlord = 1
         end
 
@@ -497,7 +497,7 @@ RSpec.describe Validations::FinancialValidations do
 
       context "when needstype is supported housing" do
         before do
-          record.needstype = 0
+          record.needstype = 2
           record.landlord = 2
         end
 
