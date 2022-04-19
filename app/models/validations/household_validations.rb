@@ -105,7 +105,7 @@ module Validations::HouseholdValidations
       record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
     end
 
-    if record.is_internal_transfer? && record.this_landlord? && record.is_prevten_la_general_needs?
+    if record.is_internal_transfer? && record.this_landlord? && record.is_prevten_general_needs_tenancy?
       record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
       record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
     end

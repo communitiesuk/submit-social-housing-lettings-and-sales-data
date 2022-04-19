@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CaseLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
-  let(:managing_organisation) { owning_organisation }
+  let(:different_managing_organisation) { FactoryBot.create(:organisation) }
 
   describe "#form" do
     let(:case_log) { FactoryBot.build(:case_log) }
@@ -33,7 +33,7 @@ RSpec.describe CaseLog do
       let(:case_log) do
         described_class.create(
           owning_organisation:,
-          managing_organisation:,
+          managing_organisation: owning_organisation,
         )
       end
 
@@ -191,11 +191,10 @@ RSpec.describe CaseLog do
   end
 
   describe "derived variables" do
-    let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
     let!(:case_log) do
       described_class.create({
-        managing_organisation: organisation,
-        owning_organisation: organisation,
+        managing_organisation: owning_organisation,
+        owning_organisation:,
         postcode_full: "M1 1AE",
         ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
@@ -235,17 +234,15 @@ RSpec.describe CaseLog do
       expect(record_from_db["renttype"]).to eq(3)
     end
 
-    context "when the owning organisation is a PRP" do
-      it "correctly derives and saves landlord based on owning_organisation provider_type" do
+    context "when the owning and managing organisations are different" do
+      it "correctly derives and saves landlord" do
         record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
         expect(case_log.landlord).to eq(2)
         expect(record_from_db["landlord"]).to eq(2)
       end
     end
 
-    context "when the owning organisation is an LA" do
-      let(:organisation) { FactoryBot.create(:organisation) }
-
+    context "when the owning and managing organisations are the same" do
       it "correctly derives and saves landlord based on owning_organisation provider_type" do
         record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
         expect(case_log.landlord).to eq(1)
@@ -255,6 +252,7 @@ RSpec.describe CaseLog do
 
     context "when deriving lettype" do
       context "when the owning organisation is a PRP" do
+        before { case_log.owning_organisation.update!(provider_type: 2) }
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
             case_log.update!(rent_type: 4, needstype: 0)
@@ -1145,8 +1143,8 @@ RSpec.describe CaseLog do
 
       let!(:address_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           postcode_known: 1,
           postcode_full: "M1 1AE",
         })
@@ -1232,8 +1230,8 @@ RSpec.describe CaseLog do
 
       let!(:address_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           previous_postcode_known: 1,
           ppostcode_full: "M1 1AE",
         })
@@ -1316,8 +1314,8 @@ RSpec.describe CaseLog do
     context "when saving rent and charges" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           brent: 5.77,
           scharge: 10.01,
           pscharge: 3,
@@ -1334,8 +1332,8 @@ RSpec.describe CaseLog do
     context "when validating household members derived vars" do
       let!(:household_case_log) do
         described_class.create!({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           hhmemb: 3,
           relat2: "X",
           relat3: "C",
@@ -1387,8 +1385,8 @@ RSpec.describe CaseLog do
     context "when it is a renewal" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
         })
@@ -1431,8 +1429,8 @@ RSpec.describe CaseLog do
     context "when answering the household characteristics questions" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           age1_known: 1,
           sex1: "R",
           relat2: "R",
@@ -1450,8 +1448,8 @@ RSpec.describe CaseLog do
     context "when the data provider is filling in household needs" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
         })
       end
 
@@ -1477,8 +1475,8 @@ RSpec.describe CaseLog do
     context "when it is supported housing and a care home charge has been supplied" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           needstype: 0,
         })
       end
@@ -1631,16 +1629,16 @@ RSpec.describe CaseLog do
     context "when the data provider is filling in the reason for the property being vacant" do
       let!(:first_let_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           first_time_property_let_as_social_housing: 1,
         })
       end
 
       let!(:relet_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           first_time_property_let_as_social_housing: 0,
         })
       end

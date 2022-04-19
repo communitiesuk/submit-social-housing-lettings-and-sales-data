@@ -45,8 +45,8 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
-      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
-      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
+      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID", "OWNINGORGNAME", "HCNUM")
+      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID", "MANINGORGNAME", "MANHCNUM")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
       attributes["tenancyother"] = string_or_nil(xml_doc, "Q2ba")
@@ -230,79 +230,22 @@ module Imports
       end
     end
 
-    # def let_type(xml_doc, attributes)
-    #   # "1 Private Registered Provider" or "2 Local Authority"
-    #   # We do not store providertype since it comes from the organisation import
-    #   landlord = field_value(xml_doc, "xmlns", "Landlord").to_i
-    #
-    #   if attributes["renttype"] == SR_AR_IR[:social_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     1
-    #   elsif attributes["renttype"] == SR_AR_IR[:social_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     2
-    #   elsif attributes["renttype"] == SR_AR_IR[:social_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     3
-    #   elsif attributes["renttype"] == SR_AR_IR[:social_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     4
-    #   elsif attributes["renttype"] == SR_AR_IR[:affordable_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     5
-    #   elsif attributes["renttype"] == SR_AR_IR[:affordable_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     6
-    #   elsif attributes["renttype"] == SR_AR_IR[:affordable_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     7
-    #   elsif attributes["renttype"] == SR_AR_IR[:affordable_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     8
-    #   elsif attributes["renttype"] == SR_AR_IR[:intermediate_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     9
-    #   elsif attributes["renttype"] == SR_AR_IR[:intermediate_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:private_registered_provider]
-    #     10
-    #   elsif attributes["renttype"] == SR_AR_IR[:intermediate_rent] &&
-    #       attributes["needstype"] == GN_SH[:general_needs] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     11
-    #   elsif attributes["renttype"] == SR_AR_IR[:intermediate_rent] &&
-    #       attributes["needstype"] == GN_SH[:supported_housing] &&
-    #       landlord == PRP_LA[:local_authority]
-    #     12
-    #   else
-    #     raise "Could not infer rent type with rentype:#{attributes['renttype']} / needstype:#{attributes['needstype']} / landlord:#{landlord}"
-    #   end
-    # end
-
-    def find_organisation_id(xml_doc, field)
-      old_visible_id = field_value(xml_doc, "xmlns", field).to_i
-      landlord = field_value(xml_doc, "xmlns", "Landlord").to_i
-
+    def find_organisation_id(xml_doc, id_field, name_field, reg_field)
+      old_visible_id = unsafe_string_as_integer(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
       # Quick hack: should be removed when all organisations are imported
       # Will fail in the future if the organisation is missing
       if organisation.nil?
         organisation = Organisation.new
         organisation.old_visible_id = old_visible_id
-        organisation.provider_type = if landlord == 2
+        let_type = unsafe_string_as_integer(xml_doc, "landlord")
+        organisation.provider_type = if let_type == PRP_LA[:local_authority]
                                        1
                                      else
                                        2
                                      end
+        organisation.name = string_or_nil(xml_doc, name_field)
+        organisation.housing_registration_no = string_or_nil(xml_doc, reg_field)
         organisation.save!
       end
       organisation.id

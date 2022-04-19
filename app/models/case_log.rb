@@ -349,7 +349,7 @@ class CaseLog < ApplicationRecord
     referral == 3
   end
 
-  def is_prevten_la_general_needs?
+  def is_prevten_general_needs_tenancy?
     # 30: Fixed term Local Authority General Needs tenancy
     # 31: Lifetime Local Authority General Needs tenancy
     # 32: Fixed term Private Registered Provider General Needs tenancy
@@ -473,7 +473,7 @@ private
       self.referral = 0
       self.layear = 1
       if is_general_needs?
-        # TODO: Check value since 30/31 are LA and 32/33 are PRP (fixed term VS lifetime)
+        # fixed term
         self.prevten = 32 if managing_organisation.provider_type == "PRP"
         self.prevten = 30 if managing_organisation.provider_type == "LA"
       end
@@ -485,8 +485,11 @@ private
         self["ecstat#{idx}"] = nil
       end
     end
-    self.landlord = 1 if owning_organisation.provider_type == "LA"
-    self.landlord = 2 if owning_organisation.provider_type == "PRP"
+    if owning_organisation == managing_organisation
+      self.landlord = 1
+    else
+      self.landlord = 2
+    end
   end
 
   def process_postcode_changes!

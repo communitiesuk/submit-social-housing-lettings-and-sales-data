@@ -2,6 +2,9 @@ FactoryBot.define do
   factory :case_log do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
+    trait :same_landlord do
+      managing_organisation { owning_organisation }
+    end
     trait :about_completed do
       renewal { 0 }
       needstype { 1 }

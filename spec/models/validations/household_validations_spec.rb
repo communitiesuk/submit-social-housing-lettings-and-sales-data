@@ -4,7 +4,7 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:case_log, :same_landlord) }
 
   describe "reasonable preference validations" do
     context "when reasonable preference is homeless" do
