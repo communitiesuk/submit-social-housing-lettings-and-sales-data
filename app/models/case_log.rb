@@ -411,7 +411,6 @@ private
                          weekly_value(tshortfall)
                        end
     self.nocharge = household_charge&.zero? ? 1 : 0
-    self.underoccupation_benefitcap = 3 if renewal == 1 && collection_start_year == 2021
     self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
