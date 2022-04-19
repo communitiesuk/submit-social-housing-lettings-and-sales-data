@@ -39,20 +39,20 @@
     <leftreg>1</leftreg>
     <reservist>0</reservist>
     <illness>0</illness>
-    <preg_occ>1</preg_occ>
+    <preg_occ>2</preg_occ>
     <tenancy_code>BZ757</tenancy_code>
     <startertenancy>0</startertenancy>
     <tenancylength>5</tenancylength>
-    <tenancy>3</tenancy>
+    <tenancy>1</tenancy>
     <landlord>1</landlord>
     <ppostcode_full>SE26RT</ppostcode_full>
-    <rsnvac>7</rsnvac>
-    <unittype_gn>2</unittype_gn>
+    <rsnvac>6</rsnvac>
+    <unittype_gn>7</unittype_gn>
     <beds>3</beds>
     <offered>2</offered>
     <wchair>1</wchair>
     <earnings>68</earnings>
-    <incfreq>0</incfreq>
+    <incfreq>1</incfreq>
     <benefits>1</benefits>
     <period>2</period>
     <layear>2</layear>
@@ -103,7 +103,7 @@
     <incref>0</incref>
     <sale_completion_date/>
     <startdate>2022-02-02 10:36:49 UTC</startdate>
-    <armedforces>0</armedforces>
+    <armedforces>1</armedforces>
     <first_time_property_let_as_social_housing/>
     <unitletas>2</unitletas>
     <builtype>1</builtype>

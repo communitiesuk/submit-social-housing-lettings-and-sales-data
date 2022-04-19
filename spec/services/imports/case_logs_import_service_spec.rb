@@ -24,6 +24,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
     it "successfully create a case log with the expected data" do
       case_log_service.create_logs(remote_folder)
+
     end
   end
 end

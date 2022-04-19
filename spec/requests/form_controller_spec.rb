@@ -275,7 +275,7 @@ RSpec.describe FormController, type: :request do
             id: case_log.id,
             case_log: {
               page: "conditional_question",
-              preg_occ: 0,
+              preg_occ: 1,
             },
           }
         end
@@ -284,7 +284,7 @@ RSpec.describe FormController, type: :request do
             id: case_log.id,
             case_log: {
               page: "conditional_question",
-              preg_occ: 1,
+              preg_occ: 2,
             },
           }
         end

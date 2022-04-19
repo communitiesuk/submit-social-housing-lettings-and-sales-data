@@ -17,7 +17,7 @@ RSpec.describe Validations::FinancialValidations do
 
     it "when income frequency is provided it validates that earnings must be provided" do
       record.earnings = nil
-      record.incfreq = 0
+      record.incfreq = 1
       financial_validator.validate_net_income(record)
       expect(record.errors["earnings"])
         .to include(match I18n.t("validations.financial.earnings.earnings_missing"))
@@ -124,7 +124,7 @@ RSpec.describe Validations::FinancialValidations do
   describe "Net income validations" do
     it "validates that the net income is within the expected range for the tenant's employment status" do
       record.earnings = 200
-      record.incfreq = 0
+      record.incfreq = 1
       record.ecstat1 = 1
       financial_validator.validate_net_income(record)
       expect(record.errors["earnings"]).to be_empty
@@ -133,7 +133,7 @@ RSpec.describe Validations::FinancialValidations do
     context "when the net income is higher than the hard max for their employment status" do
       it "adds an error" do
         record.earnings = 5000
-        record.incfreq = 0
+        record.incfreq = 1
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])
@@ -144,7 +144,7 @@ RSpec.describe Validations::FinancialValidations do
     context "when the net income is lower than the hard min for their employment status" do
       it "adds an error" do
         record.earnings = 50
-        record.incfreq = 0
+        record.incfreq = 1
         record.ecstat1 = 1
         financial_validator.validate_net_income(record)
         expect(record.errors["earnings"])

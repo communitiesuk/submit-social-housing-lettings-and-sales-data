@@ -58,7 +58,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "pregnancy validations" do
     context "when there are no female tenants" do
       it "validates that pregnancy cannot be yes" do
-        record.preg_occ = 0
+        record.preg_occ = 1
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
@@ -66,7 +66,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "validates that pregnancy cannot be prefer not to say" do
-        record.preg_occ = 2
+        record.preg_occ = 3
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
@@ -77,7 +77,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when there are female tenants" do
       context "but they are older than 50" do
         it "validates that pregnancy cannot be yes" do
-          record.preg_occ = 0
+          record.preg_occ = 1
           record.sex1 = "F"
           record.age1 = 51
           household_validator.validate_pregnancy(record)
@@ -248,7 +248,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant prefers not to say if they were or are in the armed forces" do
       it "validates that injured in the armed forces is not yes" do
-        record.armedforces = 4
+        record.armedforces = 3
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
@@ -276,7 +276,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant's partner was or is a member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
-        record.armedforces = 2
+        record.armedforces = 5
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"]).to be_empty
@@ -285,7 +285,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant or partner has left the armed forces" do
       it "validates that they served in the armed forces" do
-        record.armedforces = 3
+        record.armedforces = 2
         record.leftreg = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"])
@@ -293,14 +293,14 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "expects that they served in the armed forces" do
-        record.armedforces = 0
+        record.armedforces = 1
         record.leftreg = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"]).to be_empty
       end
 
       it "expects that they served in the armed forces and may have been injured" do
-        record.armedforces = 0
+        record.armedforces = 1
         record.leftreg = 0
         record.reservist = 0
         household_validator.validate_armed_forces(record)
@@ -697,7 +697,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "previous housing situation validations" do
     context "when the property is being relet to a previously temporary tenant" do
       it "validates that previous tenancy was temporary" do
-        record.rsnvac = 2
+        record.rsnvac = 9
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])

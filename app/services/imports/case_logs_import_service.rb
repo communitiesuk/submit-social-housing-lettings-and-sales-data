@@ -148,11 +148,9 @@ module Imports
       attributes["la_known"] = 1 # Defaulting to Yes (Required)
       attributes["created_at"] = Date.parse(field_value(xml_doc, "meta", "created-date"))
       attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
-      attributes
 
-      # Pending validation with new form
-      # case_log = CaseLog.new(attributes)
-      # case_log.save!
+      case_log = CaseLog.new(attributes)
+      case_log.save!
     end
 
     # Safe: A string that represents only an integer (or empty/nil)

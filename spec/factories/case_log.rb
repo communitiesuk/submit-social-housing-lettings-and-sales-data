@@ -20,7 +20,7 @@ FactoryBot.define do
       status { 1 }
       ecstat1 { 1 }
       earnings { 750 }
-      incfreq { 0 }
+      incfreq { 1 }
     end
     trait :conditional_section_complete do
       tenant_code { "TH356" }
@@ -50,21 +50,21 @@ FactoryBot.define do
       leftreg { 1 }
       reservist { 0 }
       illness { 0 }
-      preg_occ { 1 }
+      preg_occ { 2 }
       tenancy_code { "BZ757" }
       startertenancy { 0 }
       tenancylength { 5 }
-      tenancy { 3 }
+      tenancy { 1 }
       landlord { 1 }
       ppostcode_full { "SE2 6RT" }
-      rsnvac { 7 }
-      unittype_gn { 2 }
+      rsnvac { 6 }
+      unittype_gn { 7 }
       beds { 3 }
       voiddate { "03/11/2019" }
       offered { 2 }
       wchair { 1 }
       earnings { 68 }
-      incfreq { 0 }
+      incfreq { 1 }
       benefits { 1 }
       period { 2 }
       brent { 200 }
@@ -123,7 +123,7 @@ FactoryBot.define do
       incref { 0 }
       sale_completion_date { nil }
       startdate { Time.utc(2022, 2, 2, 10, 36, 49) }
-      armedforces { 0 }
+      armedforces { 1 }
       builtype { 1 }
       unitletas { 2 }
       has_benefits { 1 }

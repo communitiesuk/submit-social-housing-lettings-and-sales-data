@@ -113,7 +113,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays conditional question that were visited" do
       visit("/logs/#{id}/conditional-question")
-      choose("case-log-preg-occ-1-field", allow_label_click: true)
+      choose("case-log-preg-occ-2-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?", "Has the condition not been met?"]

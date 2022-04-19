@@ -218,9 +218,9 @@ private
   end
 
   ANSWER_SUFFIX_LABELS = {
-    0 => " every week",
-    1 => " every month",
-    2 => " every year",
+    1 => " every week",
+    2 => " every month",
+    3 => " every year",
   }.freeze
 
   RADIO_YES_VALUE = {

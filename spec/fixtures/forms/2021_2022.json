@@ -225,24 +225,24 @@
                     "type": "radio",
                     "check_answer_label": "Household links to UK armed forces",
                     "answer_options": {
-                      "0": {
+                      "1": {
                         "value": "Yes, the person is a current or former regular"
                       },
-                      "1": {
+                      "4": {
                         "value": "Yes, the person is a current or former reserve"
                       },
-                      "2": {
+                      "5": {
                         "value": "Yes, the tenant is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                       },
-                      "3": {
+                      "2": {
                         "value": "No"
                       },
-                      "4": {
+                      "3": {
                         "value": "Person prefers not to say"
                       }
                     },
                     "conditional_for": {
-                      "leftreg": [0]
+                      "leftreg": [1]
                     }
                   },
                   "leftreg": {
@@ -463,10 +463,10 @@
                     "header": "Has the condition been met?",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "1": {
                         "value": "Yes"
                       },
-                      "1": {
+                      "2": {
                         "value": "No"
                       }
                     }
@@ -486,7 +486,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 0 }, { "wchair" : 1 }]
+                "depends_on": [{ "preg_occ": 1 }, { "wchair" : 1 }]
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -504,7 +504,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 1 }]
+                "depends_on": [{ "preg_occ": 2 }]
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -522,7 +522,7 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 1, "sex1": "M" }]
+                "depends_on": [{ "preg_occ": 2, "sex1": "M" }]
               }
             }
           }
@@ -548,9 +548,9 @@
                     "width": 5,
                     "prefix": "£",
                     "suffix": [
-                      { "label": "every week", "depends_on" : { "incfreq": 0 } },
-                      { "label": "every month", "depends_on" : { "incfreq": 1 } },
-                      { "label": "every month", "depends_on" : { "incfreq": 2 } }
+                      { "label": "every week", "depends_on" : { "incfreq": 1 } },
+                      { "label": "every month", "depends_on" : { "incfreq": 2 } },
+                      { "label": "every month", "depends_on" : { "incfreq": 3 } }
                     ]
                   },
                   "incfreq": {
@@ -558,13 +558,13 @@
                     "header": "How often do they receive this income?",
                     "type": "radio",
                     "answer_options": {
-                      "0": {
+                      "1": {
                         "value": "Weekly"
                       },
-                      "1": {
+                      "2": {
                         "value": "Monthly"
                       },
-                      "2": {
+                      "3": {
                         "value": "Yearly"
                       }
                     }
@@ -646,7 +646,7 @@
                 }
               },
               "dependent_page": {
-                "depends_on": [{ "incfreq": 0 }],
+                "depends_on": [{ "incfreq": 1 }],
                 "questions": {
                   "dependent_question": {
                     "check_answer_label": "Dependent Question",

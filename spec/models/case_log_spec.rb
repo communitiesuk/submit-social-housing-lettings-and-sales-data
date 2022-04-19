@@ -175,17 +175,17 @@ RSpec.describe CaseLog do
     let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
 
     it "returns input income if frequency is already weekly" do
-      case_log.incfreq = 0
+      case_log.incfreq = 1
       expect(case_log.weekly_net_income).to eq(net_income)
     end
 
     it "calculates the correct weekly income from monthly income" do
-      case_log.incfreq = 1
+      case_log.incfreq = 2
       expect(case_log.weekly_net_income).to eq(1154)
     end
 
     it "calculates the correct weekly income from yearly income" do
-      case_log.incfreq = 2
+      case_log.incfreq = 3
       expect(case_log.weekly_net_income).to eq(417)
     end
   end
@@ -1663,7 +1663,7 @@ RSpec.describe CaseLog do
 
   describe "resetting invalidated fields" do
     context "when a question that has already been answered, no longer has met dependencies" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 1, wchair: 1) }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
 
       it "clears the answer" do
         expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from(1).to(nil)
@@ -1679,7 +1679,7 @@ RSpec.describe CaseLog do
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 0, preg_occ: 1, wchair: 1) }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 1) }
 
       it "does not clear the value for answers that apply to both pages" do
         expect(case_log.cbl).to eq(0)
@@ -1688,7 +1688,7 @@ RSpec.describe CaseLog do
       it "does clear the value for answers that do not apply for invalidated page" do
         case_log.update!({ wchair: 1, sex2: "F", age2: 33 })
         case_log.update!({ cbl: 1 })
-        case_log.update!({ preg_occ: 0 })
+        case_log.update!({ preg_occ: 1 })
 
         expect(case_log.cbl).to eq(nil)
       end

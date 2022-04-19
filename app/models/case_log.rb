@@ -122,19 +122,23 @@ class CaseLog < ApplicationRecord
   end
 
   def net_income_refused?
+    # 2: Tenant prefers not to say
     net_income_known == 2
   end
 
   def net_income_is_weekly?
-    !!(incfreq && incfreq.zero?)
+    # 1: Weekly
+    !!(incfreq && incfreq == 1)
   end
 
   def net_income_is_monthly?
-    incfreq == 1
+    # 2: Monthly
+    incfreq == 2
   end
 
   def net_income_is_yearly?
-    incfreq == 2
+    # 3: Yearly
+    incfreq == 3
   end
 
   def net_income_soft_validation_triggered?
@@ -142,138 +146,181 @@ class CaseLog < ApplicationRecord
   end
 
   def given_reasonable_preference?
+    # 1: Yes
     reasonpref == 1
   end
 
   def is_renewal?
+    # 1: Yes
     renewal == 1
   end
 
   def is_general_needs?
+    # 1: General Needs
     needstype == 1
   end
 
   def is_supported_housing?
-    !!(needstype && needstype.zero?)
+    # 0: Supported Housing
+    !!(needstype&.zero?)
   end
 
   def has_hbrentshortfall?
-    !!(hbrentshortfall && hbrentshortfall.zero?)
+    # 0: Yes
+    !!(hbrentshortfall&.zero?)
   end
 
   def postcode_known?
+    # 1: Yes
     postcode_known == 1
   end
 
   def previous_postcode_known?
+    # 1: Yes
     previous_postcode_known == 1
   end
 
   def la_known?
+    # 1: Yes
     la_known == 1
   end
 
   def previous_la_known?
+    # 1: Yes
     previous_la_known == 1
   end
 
   def is_secure_tenancy?
-    tenancy == 3
-  end
-
-  def is_assured_shorthold_tenancy?
+    # 1: Secure (including flexible)
     tenancy == 1
   end
 
+  def is_assured_shorthold_tenancy?
+    # 4: Assured Shorthold
+    tenancy == 4
+  end
+
   def is_internal_transfer?
+    # 1: Internal Transfer
     referral == 1
   end
 
   def is_relet_to_temp_tenant?
-    rsnvac == 2
+    # 9: Re-let to tenant who occupied same property as temporary accommodation
+    rsnvac == 9
   end
 
   def is_bedsit?
-    unittype_gn == 1
+    # 2: Bedsit
+    unittype_gn == 2
   end
 
   def is_shared_housing?
-    [4, 5, 6].include?(unittype_gn)
+    # 4: Shared flat or maisonette
+    # 9: Shared house
+    # 10: Shared bungalow
+    [4, 9, 10].include?(unittype_gn)
   end
 
   def has_first_let_vacancy_reason?
+    # 15: First let of new-build property
+    # 16: First let of conversion, rehabilitation or acquired property
+    # 17: First let of leased property
     [15, 16, 17].include?(rsnvac)
   end
 
   def previous_tenancy_was_temporary?
-    ![4, 5, 16, 21, 22].include?(prevten)
+    # 4: Tied housing or renting with job
+    # 6: Supported housing
+    # 8: Sheltered accomodation
+    # 24: Housed by National Asylum Support Service (prev Home Office)
+    # 25: Other
+    ![4, 6, 8, 24, 25].include?(prevten)
   end
 
   def armed_forces_regular?
-    !!(armedforces && armedforces.zero?)
+    # 1: Yes – the person is a current or former regular
+    !!(armedforces && armedforces == 1)
   end
 
   def armed_forces_no?
-    armedforces == 3
+    # 2: No
+    armedforces == 2
   end
 
   def armed_forces_refused?
-    armedforces == 4
+    # 3: Person prefers not to say / Refused
+    armedforces == 3
   end
 
   def has_pregnancy?
-    !!(preg_occ && preg_occ.zero?)
+    # 1: Yes
+    !!(preg_occ && preg_occ == 1)
   end
 
   def pregnancy_refused?
-    preg_occ == 2
+    # 3: Tenant prefers not to say / Refused
+    preg_occ == 3
   end
 
   def is_assessed_homeless?
+    # 11: Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty
     homeless == 11
   end
 
   def is_other_homeless?
+    # 7: Other homeless – not found statutorily homeless but considered homeless by landlord
     homeless == 7
   end
 
   def is_not_homeless?
+    # 1: No
     homeless == 1
   end
 
   def is_london_rent?
+    # 2: London Affordable Rent
+    # 4: London Living Rent
     rent_type == 2 || rent_type == 4
   end
 
   def previous_tenancy_was_foster_care?
+    # 13: Children's home or foster care
     prevten == 13
   end
 
   def previous_tenancy_was_refuge?
+    # 21: Refuge
     prevten == 21
   end
 
   def is_reason_permanently_decanted?
+    # 1: Permanently decanted from another property owned by this landlord
     reason == 1
   end
 
   def receives_housing_benefit_only?
+    # 1: Housing benefit
     hb == 1
   end
 
   def receives_housing_benefit_and_universal_credit?
+    # 8: Housing benefit and Universal Credit (without housing element)
     hb == 8
   end
 
   def receives_uc_with_housing_element_excl_housing_benefit?
+    # 6: Universal Credit with housing element (excluding housing benefit)
     hb == 6
   end
 
   def receives_no_benefits?
+    # 9: None
     hb == 9
   end
 
   def receives_universal_credit_but_no_housing_benefit?
+    # 7: Universal Credit (without housing element)
     hb == 7
   end
 
@@ -283,23 +330,31 @@ class CaseLog < ApplicationRecord
   end
 
   def benefits_unknown?
+    # 3: Don’t know
     hb == 3
   end
 
   def this_landlord?
+    # 1: This landlord
     landlord == 1
   end
 
   def other_landlord?
+    # 2: Another RP (HA/LA)
     landlord == 2
   end
 
   def local_housing_referral?
+    # 3: PRP lettings only - Nominated by local housing authority
     referral == 3
   end
 
   def is_prevten_la_general_needs?
-    [30, 31].any?(prevten)
+    # 30: Fixed term Local Authority General Needs tenancy
+    # 31: Lifetime Local Authority General Needs tenancy
+    # 32: Fixed term Private Registered Provider General Needs tenancy
+    # 33:  Lifetime Private Registered Provider General Needs tenancy
+    [30, 31, 32, 33].any?(prevten)
   end
 
   def self.to_csv
@@ -418,6 +473,7 @@ private
       self.referral = 0
       self.layear = 1
       if is_general_needs?
+        # TODO: Check value since 30/31 are LA and 32/33 are PRP (fixed term VS lifetime)
         self.prevten = 32 if managing_organisation.provider_type == "PRP"
         self.prevten = 30 if managing_organisation.provider_type == "LA"
       end

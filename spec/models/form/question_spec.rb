@@ -75,16 +75,16 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "incfreq" }
 
     it "has answer options" do
-      expected_answer_options = { "0" => { "value" => "Weekly" }, "1" => { "value" => "Monthly" }, "2" => { "value" => "Yearly" } }
+      expected_answer_options = { "1" => { "value" => "Weekly" }, "2" => { "value" => "Monthly" }, "3" => { "value" => "Yearly" } }
       expect(question.answer_options).to eq(expected_answer_options)
     end
 
     it "can map value from label" do
-      expect(question.value_from_label("Monthly")).to eq("1")
+      expect(question.value_from_label("Monthly")).to eq("2")
     end
 
     it "can map label from value" do
-      expect(question.label_from_value(2)).to eq("Yearly")
+      expect(question.label_from_value(3)).to eq("Yearly")
     end
 
     context "when answer options include yes, no, prefer not to say" do
@@ -221,7 +221,7 @@ RSpec.describe Form::Question, type: :model do
     let(:question_id) { "incfreq" }
 
     it "has an answer label" do
-      case_log.incfreq = 0
+      case_log.incfreq = 1
       expect(question.answer_label(case_log)).to eq("Weekly")
     end
 
@@ -321,12 +321,12 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "earnings" }
 
       it "displays the correct label for given suffix and answer the suffix depends on" do
-        case_log.incfreq = 0
+        case_log.incfreq = 1
         case_log.earnings = 500
         expect(question.answer_label(case_log)).to eq("£500.00 every week")
-        case_log.incfreq = 1
-        expect(question.answer_label(case_log)).to eq("£500.00 every month")
         case_log.incfreq = 2
+        expect(question.answer_label(case_log)).to eq("£500.00 every month")
+        case_log.incfreq = 3
         expect(question.answer_label(case_log)).to eq("£500.00 every year")
       end
     end

@@ -12,7 +12,7 @@ RSpec.describe Validations::TenancyValidations do
         let(:expected_error) { I18n.t("validations.tenancy.length.fixed_term_not_required") }
 
         it "tenancy length should not be present" do
-          record.tenancy = 4
+          record.tenancy = 3
           record.tenancylength = 10
           tenancy_validator.validate_fixed_term_tenancy(record)
           expect(record.errors["tenancylength"]).to include(match(expected_error))
@@ -22,10 +22,10 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when type of tenancy is assured shorthold" do
         let(:expected_error) { I18n.t("validations.tenancy.length.shorthold") }
+        before { record.tenancy = 4 }
 
         context "when tenancy length is greater than 1" do
           it "adds an error" do
-            record.tenancy = 1
             record.tenancylength = 1
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to include(match(expected_error))
@@ -35,7 +35,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length is less than 100" do
           it "adds an error" do
-            record.tenancy = 1
             record.tenancylength = 100
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to include(match(expected_error))
@@ -45,7 +44,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length is between 2-99" do
           it "does not add an error" do
-            record.tenancy = 1
             record.tenancylength = 3
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
@@ -55,7 +53,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length has not been answered" do
           it "does not add an error" do
-            record.tenancy = 1
             record.tenancylength = nil
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
@@ -66,10 +63,10 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when type of tenancy is secure" do
         let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+        before { record.tenancy = 1 }
 
         context "when tenancy length is greater than 1" do
           it "adds an error" do
-            record.tenancy = 3
             record.tenancylength = 1
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to include(match(expected_error))
@@ -79,7 +76,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length is less than 100" do
           it "adds an error" do
-            record.tenancy = 3
             record.tenancylength = 100
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to include(match(expected_error))
@@ -89,7 +85,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length is between 2-99" do
           it "does not add an error" do
-            record.tenancy = 3
             record.tenancylength = 3
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
@@ -99,7 +94,6 @@ RSpec.describe Validations::TenancyValidations do
 
         context "when tenancy length has not been answered" do
           it "does not add an error" do
-            record.tenancy = 3
             record.tenancylength = nil
             tenancy_validator.validate_fixed_term_tenancy(record)
             expect(record.errors["tenancylength"]).to be_empty
@@ -117,15 +111,15 @@ RSpec.describe Validations::TenancyValidations do
     let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
 
     context "when tenancy type is other" do
+      before { record.tenancy = 3 }
+
       it "validates that other tenancy type is provided" do
-        record.tenancy = 4
         record.tenancyother = nil
         tenancy_validator.validate_other_tenancy_type(record)
         expect(record.errors[other_field_label]).to include(match(expected_error))
       end
 
       it "expects that other tenancy type is provided" do
-        record.tenancy = 4
         record.tenancyother = "Some other tenancy type"
         tenancy_validator.validate_other_tenancy_type(record)
         expect(record.errors[other_field_label]).to be_empty
@@ -136,14 +130,14 @@ RSpec.describe Validations::TenancyValidations do
       let(:field) { "validations.other_field_not_required" }
 
       it "validates that other tenancy type is not provided" do
-        record.tenancy = 0
+        record.tenancy = 2
         record.tenancyother = "Some other tenancy type"
         tenancy_validator.validate_other_tenancy_type(record)
         expect(record.errors[other_field_label]).to include(match(expected_error))
       end
 
       it "expects that other tenancy type is not provided" do
-        record.tenancy = 3
+        record.tenancy = 1
         record.tenancyother = nil
         tenancy_validator.validate_other_tenancy_type(record)
         expect(record.errors[other_field_label]).to be_empty
