@@ -22,6 +22,7 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when type of tenancy is assured shorthold" do
         let(:expected_error) { I18n.t("validations.tenancy.length.shorthold") }
+
         before { record.tenancy = 4 }
 
         context "when tenancy length is greater than 1" do
@@ -63,6 +64,7 @@ RSpec.describe Validations::TenancyValidations do
 
       context "when type of tenancy is secure" do
         let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+
         before { record.tenancy = 1 }
 
         context "when tenancy length is greater than 1" do

@@ -162,12 +162,12 @@ class CaseLog < ApplicationRecord
 
   def is_supported_housing?
     # 0: Supported Housing
-    !!(needstype&.zero?)
+    !!needstype&.zero?
   end
 
   def has_hbrentshortfall?
     # 0: Yes
-    !!(hbrentshortfall&.zero?)
+    !!hbrentshortfall&.zero?
   end
 
   def postcode_known?

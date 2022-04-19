@@ -238,7 +238,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "armed forces validations" do
     context "when the tenant or partner was and is not a member of the armed forces" do
       it "validates that injured in the armed forces is not yes" do
-        record.armedforces = 3
+        record.armedforces = 2
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
