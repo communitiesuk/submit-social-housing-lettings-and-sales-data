@@ -260,20 +260,14 @@
                     "type": "radio",
                     "check_answer_label": "Physical, mental health or illness in the household",
                     "answer_options": {
-                      "0": {
+                      "1": {
                         "value":  "Yes"
                       },
-                      "1": {
+                      "2": {
                         "value": "No"
                       },
-                      "divider": {
-                        "value": true
-                      },
-                      "2": {
-                        "value": "Don’t know"
-                      },
                       "3": {
-                        "value": "Prefer not to say"
+                        "value": "Don’t know"
                       }
                     }
                   }

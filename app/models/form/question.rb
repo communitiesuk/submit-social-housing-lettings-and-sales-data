@@ -283,6 +283,7 @@ private
     hb: [5],
     benefits: [3],
     unitletas: [3],
+    illness: [3],
   }.freeze
 
   RADIO_REFUSED_VALUE = {
@@ -314,7 +315,6 @@ private
     leftreg: [3],
     reservist: [2],
     preg_occ: [3],
-    illness: [3],
     hb: [6],
   }.freeze
 end

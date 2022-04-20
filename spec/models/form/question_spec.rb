@@ -94,11 +94,11 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "illness" }
 
       it "maps those options" do
-        expect(question).to be_value_is_yes(0)
-        expect(question).not_to be_value_is_no(0)
-        expect(question).not_to be_value_is_refused(0)
-        expect(question).to be_value_is_no(1)
-        expect(question).to be_value_is_refused(2)
+        expect(question).to be_value_is_yes(1)
+        expect(question).not_to be_value_is_no(1)
+        expect(question).not_to be_value_is_refused(1)
+        expect(question).to be_value_is_no(2)
+        expect(question).to be_value_is_dont_know(3)
       end
     end
 

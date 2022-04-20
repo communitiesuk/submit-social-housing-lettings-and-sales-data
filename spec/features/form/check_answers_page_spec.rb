@@ -166,7 +166,7 @@ RSpec.describe "Form Check Answers Page" do
           sex1: "M",
           hhmemb: 1,
           armedforces: 3,
-          illness: 0,
+          illness: 1,
         )
       end
 
@@ -181,7 +181,7 @@ RSpec.describe "Form Check Answers Page" do
           sex1: "M",
           hhmemb: 1,
           armedforces: 3,
-          illness: 0,
+          illness: 1,
           housingneeds_h: 1,
           la: "E06000014",
           illness_type_1: 1,

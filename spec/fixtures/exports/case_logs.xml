@@ -38,7 +38,7 @@
     <underoccupation_benefitcap>0</underoccupation_benefitcap>
     <leftreg>1</leftreg>
     <reservist>0</reservist>
-    <illness>0</illness>
+    <illness>1</illness>
     <preg_occ>2</preg_occ>
     <tenancy_code>BZ757</tenancy_code>
     <startertenancy>0</startertenancy>
