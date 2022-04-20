@@ -103,6 +103,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "title link" do
       it "routes user to the /logs page" do
+        sign_in user
         get "/", headers:, params: {}
         follow_redirect!
         expect(path).to include("/logs")
