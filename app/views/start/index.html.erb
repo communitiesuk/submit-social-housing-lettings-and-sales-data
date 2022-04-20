@@ -3,7 +3,7 @@
 </h1>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
     <p class="govuk-body">Use this service to submit social housing lettings and sales data to the Department for Levelling Up, Housing and Communities (DLUHC).</p>
     <p class="govuk-body">We’ll ask you questions about a letting or sale, like details about the household or property. Your answers will create a log that you can submit directly to us.</p>
     <p class="govuk-body">Your organisation can also set up and manage user accounts.</p>
@@ -22,22 +22,7 @@
     <p class="govuk-body">You can <%= govuk_link_to("request an account", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %> if your organisation doesn’t have one.</p>
   </div>
 
-  <div class="govuk-grid-column-one-third">
-    <div class="app-related-navigation">
-      <nav class="app-related-navigation__nav-section" role="navigation" aria-labelledby="related-content">
-        <h2 class="app-related-navigation__main-heading" id="related-content">
-          Related content
-        </h2>
-        <ul class="app-related-navigation__link-list">
-          <li class="app-related-navigation__link">
-            <%# TODO: Add link to guidance %>
-            <%= govuk_link_to("How to submit social housing lettings and sales data (CORE)", "#", classes: "app-related-navigation__section-link app-related-navigation__section-link--other") %>
-          </li>
-          <li>
-            <%= govuk_link_to("Data sharing agreement", data_sharing_agreement_path, classes: "app-related-navigation__section-link app-related-navigation__section-link--other") %>
-          </li>
-        </ul>
-      </nav>
-    </div>
+  <div class="govuk-grid-column-one-third-from-desktop">
+    <%= render partial: "layouts/collection_resources" %>
   </div>
 </div>
