@@ -65,15 +65,15 @@
     <% if !current_user.nil? %>
       <% if current_user.support? %>
         <% items = [
-          { name: t("Organisations"), url: "/organisations" },
-          { name: t("Users"), url: "/users" },
-          { name: t("Logs"), url: case_logs_path },
+          { name: "Organisations", url: "/organisations" },
+          { name: "Users", url: "/users" },
+          { name: "Logs", url: case_logs_path },
         ] %>
       <% else %>
         <% items = [
-          { name: t("Logs"), url: case_logs_path },
-          { name: t("Users"), url: users_organisation_path(current_user.organisation) },
-          { name: t("About your organisation"), url: "/organisations/#{current_user.organisation.id}" },
+          { name: "Logs", url: case_logs_path },
+          { name: "Users", url: users_organisation_path(current_user.organisation) },
+          { name: "About your organisation", url: "/organisations/#{current_user.organisation.id}" },
         ] %>
       <% end %>
       <%= render partial: "layouts/primary_navigation", locals: {items: items} %>
