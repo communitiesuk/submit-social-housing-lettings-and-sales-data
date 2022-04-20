@@ -76,7 +76,7 @@
           { name: "About your organisation", url: "/organisations/#{current_user.organisation.id}" },
         ] %>
       <% end %>
-      <%= render partial: "layouts/primary_navigation", locals: {items: items} %>
+      <%= render PrimaryNavigationComponent.new(items:) %>
     <% end %>
 
     <div class="govuk-width-container">
