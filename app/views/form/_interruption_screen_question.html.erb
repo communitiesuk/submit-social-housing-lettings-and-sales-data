@@ -1,6 +1,6 @@
 <%= govuk_panel(
-  title_text: title_text,
-  classes: 'app-panel--interruption',
+  title_text:,
+  classes: "app-panel--interruption",
 ) do %>
   <%= display_informative_text(informative_text, case_log) %>
   <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
@@ -12,8 +12,8 @@
       <% else %>
         <%= f.govuk_radio_button question.id,
           key,
-          label: { text: options['value'] },
-          hint: { text: options['hint'] },
+          label: { text: options["value"] },
+          hint: { text: options["hint"] },
           **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>

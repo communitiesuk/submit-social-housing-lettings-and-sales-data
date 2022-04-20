@@ -5,7 +5,8 @@
   label: legend(question, page_header, conditional),
   hint: { text: question.hint_text&.html_safe },
   min: question.min, max: question.max, step: question.step,
-  width: question.width, :readonly => question.read_only?,
+  width: question.width,
+  readonly: question.read_only?,
   prefix_text: question.prefix.to_s,
   suffix_text: question.suffix.is_a?(String) ? question.suffix : nil,
   **stimulus_html_attributes(question) %>

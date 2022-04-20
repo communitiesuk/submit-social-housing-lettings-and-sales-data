@@ -12,8 +12,8 @@
       <%= f.govuk_check_box_divider %>
       <% else %>
         <%= f.govuk_check_box question.id, key,
-          label: { text: options['value'] },
-          hint: { text: options['hint'] },
+          label: { text: options["value"] },
+          hint: { text: options["hint"] },
           checked: @case_log[key] == 1,
           exclusive: after_divider,
           **stimulus_html_attributes(question) %>

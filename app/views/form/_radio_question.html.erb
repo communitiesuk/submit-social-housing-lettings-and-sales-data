@@ -13,21 +13,21 @@
       <% if conditional_question.nil? %>
         <%= f.govuk_radio_button question.id,
           key,
-          label: { text: options['value'] },
-          hint: { text: options['hint'] },
+          label: { text: options["value"] },
+          hint: { text: options["hint"] },
           **stimulus_html_attributes(question) %>
       <% else %>
         <%= f.govuk_radio_button question.id,
           key,
-          label: { text: options['value'] },
-          hint: { text: options['hint'] },
+          label: { text: options["value"] },
+          hint: { text: options["hint"] },
           **stimulus_html_attributes(question) do %>
             <%= render partial: "#{conditional_question.type}_question", locals: {
               question: conditional_question,
-              caption_text: caption_text,
-              page_header: page_header,
-              f: f,
-              conditional: true
+              caption_text:,
+              page_header:,
+              f:,
+              conditional: true,
             } %>
         <% end %>
       <% end %>

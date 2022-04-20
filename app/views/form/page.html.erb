@@ -1,9 +1,9 @@
-<% content_for :title, @page.header.present? ? @page.header : @page.questions.first().header.html_safe %>
+<% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: 'Back',
-    href: 'javascript:history.back()',
+    text: "Back",
+    href: "javascript:history.back()",
   ) %>
 <% end %>
 
@@ -34,9 +34,9 @@
             <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
           <% end %>
           <% if question.type == "interruption_screen" %>
-            <%= render partial: "form/#{question.type}_question", locals: { question: question, caption_text: @subsection.label, page_header: @page.header, case_log: @case_log, title_text: @page.title_text, informative_text:  @page.informative_text, form: @form, f: f, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, case_log: @case_log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
           <% else %>
-            <%= render partial: "form/#{question.type}_question", locals: { question: question, caption_text: @subsection.label, page_header: @page.header, case_log: @case_log, f: f, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, case_log: @case_log, f:, conditional: false } %>
           <% end %>
         </div>
       <% end %>
