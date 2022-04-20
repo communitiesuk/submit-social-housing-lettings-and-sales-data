@@ -90,12 +90,12 @@
                     }
                   },
                   "conditional_for": {
-                    "intermediate_rent_product_name": [
+                    "irproduct_other": [
                       5
                     ]
                   }
                 },
-                "intermediate_rent_product_name": {
+                "irproduct_other": {
                   "check_answer_label": "Product name",
                   "header": "Name of rent product",
                   "type": "text"
