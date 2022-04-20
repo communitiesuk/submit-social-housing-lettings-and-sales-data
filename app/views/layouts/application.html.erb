@@ -15,10 +15,10 @@
     <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-180x180.png'), rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "vendor/html5shiv.min.js" %>
-    <%= javascript_tag do -%>
+    <script>
       window.html5.elements = 'output';
       html5.shivDocument(document);
-    <% end -%>
+    </script>
     <%= javascript_include_tag "vendor/polyfill-output-value.js" %>
     <%= javascript_include_tag "vendor/outerHTML.js" %>
     <%= javascript_include_tag "application", defer: true %>
@@ -43,20 +43,19 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-        logotype: 'GOV.UK',
-        service_name: t('service_name'),
-        service_url: current_user.nil? ? "/" : '/logs'
-      ) do |component|
-        if current_user.nil?
-          component.navigation_item(text: 'Sign in', href: user_session_path)
-        elsif
-          component.navigation_item(text: 'Logs', href: case_logs_path)
-          component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
-          component.navigation_item(text: 'Your account', href: account_path)
-          component.navigation_item(text: 'Sign out', href: destroy_user_session_path)
-        end
+      logotype: 'GOV.UK',
+      service_name: t('service_name'),
+      service_url: current_user.nil? ? "/" : '/logs'
+    ) do |component|
+      if current_user.nil?
+        component.navigation_item(text: 'Sign in', href: user_session_path)
+      elsif
+        component.navigation_item(text: 'Logs', href: case_logs_path)
+        component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
+        component.navigation_item(text: 'Your account', href: account_path)
+        component.navigation_item(text: 'Sign out', href: destroy_user_session_path)
       end
-    %>
+    end %>
 
     <div class="govuk-width-container">
       <aside>
@@ -69,14 +68,13 @@
       </aside>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
-        <% if flash.notice && !flash.notice.include?('translation missing')  %>
+        <% if flash.notice && !flash.notice.include?('translation missing') %>
           <%= govuk_notification_banner(
             title_text: 'Success',
             success: true, title_heading_level: 3,
             title_id: "swanky-notifications") do |notification_banner|
               notification_banner.heading(text: flash.notice)
-            end
-          %>
+          end %>
         <% end %>
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>

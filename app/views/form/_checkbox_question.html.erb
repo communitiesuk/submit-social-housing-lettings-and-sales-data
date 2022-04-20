@@ -16,8 +16,7 @@
           hint: { text: options['hint'] },
           checked: @case_log[key] == 1,
           exclusive: after_divider,
-          **stimulus_html_attributes(question)
-        %>
+          **stimulus_html_attributes(question) %>
       <% end %>
     <% end %>
 <% end %>

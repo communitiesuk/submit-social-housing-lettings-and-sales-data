@@ -9,7 +9,7 @@
     <%#= govuk_link_to "Upload logs", bulk_upload_case_logs_path %>
   </div>
 
-  <%= render partial: "log_filters"%>
+  <%= render partial: "log_filters" %>
   <% if @case_logs.present? %>
     <div class="app-filter-layout__content">
       <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
@@ -17,4 +17,3 @@
     </div>
   <% end %>
 </div>
-

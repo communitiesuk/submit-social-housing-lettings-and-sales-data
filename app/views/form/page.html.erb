@@ -11,7 +11,7 @@
 
 <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
-    <div class=<%= @page.questions[0].type == "interruption_screen" ? "govuk-grid-column-full-from-desktop" : "govuk-grid-column-two-thirds-from-desktop"%>>
+    <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
       <% remove_other_page_errors(@case_log, @page) %>
       <%= f.govuk_error_summary %>
 
@@ -29,7 +29,7 @@
       <% end %>
 
       <% @page.non_conditional_questions.map do |question| %>
-        <div id=<%= question.id + "_div " %><%= display_question_key_div(@page, question) %> >
+        <div id="<%= question.id %>_div" <%= display_question_key_div(@page, question) %>>
           <% if question.read_only? %>
             <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
           <% end %>
@@ -44,11 +44,11 @@
       <%= f.hidden_field :page, value: @page.id %>
       <% if @case_log.form.is_last_question?(@page, @subsection, @case_log) %>
         <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
-      <%else %>
+      <% else %>
         <% if !@page.id.include?("value_check") %>
-          <%= f.govuk_submit "Save and continue", accesskey: "s"  %>
+          <%= f.govuk_submit "Save and continue", accesskey: "s" %>
         <% end %>
-      <%end %>
+      <% end %>
     </div>
   </div>
 <% end %>

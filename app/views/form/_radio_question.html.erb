@@ -1,37 +1,36 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
 
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
-    caption: caption(caption_text, page_header, conditional),
-    legend: legend(question, page_header, conditional),
-    hint: { text: question.hint_text&.html_safe } do %>
+  caption: caption(caption_text, page_header, conditional),
+  legend: legend(question, page_header, conditional),
+  hint: { text: question.hint_text&.html_safe } do %>
 
-    <% question.displayed_answer_options.map do |key, options| %>
-      <% if key.starts_with?("divider") %>
-        <%= f.govuk_radio_divider %>
+  <% question.displayed_answer_options.map do |key, options| %>
+    <% if key.starts_with?("divider") %>
+      <%= f.govuk_radio_divider %>
+    <% else %>
+      <% conditional_question = find_conditional_question(@page, question, key) %>
+      <% if conditional_question.nil? %>
+        <%= f.govuk_radio_button question.id,
+          key,
+          label: { text: options['value'] },
+          hint: { text: options['hint'] },
+          **stimulus_html_attributes(question) %>
       <% else %>
-        <% conditional_question = find_conditional_question(@page, question, key) %>
-        <% if conditional_question.nil? %>
-          <%= f.govuk_radio_button question.id,
-            key,
-            label: { text: options['value'] },
-            hint: { text: options['hint'] },
-            **stimulus_html_attributes(question)
-          %>
-        <% else %>
-          <%= f.govuk_radio_button question.id,
-            key,
-            label: { text: options['value'] },
-            hint: { text: options['hint'] },
-            **stimulus_html_attributes(question) do %>
-              <%= render partial: "#{conditional_question.type}_question", locals: {
-                question: conditional_question,
-                caption_text: caption_text,
-                page_header: page_header,
-                f: f,
-                conditional: true
-              } %>
-          <% end %>
+        <%= f.govuk_radio_button question.id,
+          key,
+          label: { text: options['value'] },
+          hint: { text: options['hint'] },
+          **stimulus_html_attributes(question) do %>
+            <%= render partial: "#{conditional_question.type}_question", locals: {
+              question: conditional_question,
+              caption_text: caption_text,
+              page_header: page_header,
+              f: f,
+              conditional: true
+            } %>
         <% end %>
       <% end %>
     <% end %>
+  <% end %>
 <% end %>

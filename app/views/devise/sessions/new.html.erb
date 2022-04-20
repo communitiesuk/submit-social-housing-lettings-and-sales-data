@@ -19,12 +19,10 @@
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
-        spellcheck: "false"
-      %>
+        spellcheck: "false" %>
 
       <%= f.govuk_password_field :password,
-        autocomplete: "current-password"
-      %>
+        autocomplete: "current-password" %>
 
       <%= f.hidden_field :start, value: request["start"] %>
       <%= f.govuk_submit "Sign in" %>
