@@ -15,5 +15,5 @@ application.register("govukfrontend", GovukfrontendController)
 import NumericQuestionController from "./numeric_question_controller.js"
 application.register("numeric-question", NumericQuestionController)
 
-import FilterController from "./filter_controller.js"
-application.register("filter", FilterController)
+import FilterLayoutController from "./filter_layout_controller.js"
+application.register("filter-layout", FilterLayoutController)

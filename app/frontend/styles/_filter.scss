@@ -61,63 +61,41 @@
     vertical-align: middle;
     width: 14px;
   }
-
-  @include govuk-media-query(desktop) {
-    display: none;
-  }
-}
-
-.app-filter-layout {
-  @include govuk-clearfix;
 }
 
 .app-filter-toggle__button {
   min-width: 128px;
-  @include govuk-media-query(desktop) {
-    display: none !important;
-  }
 }
 
-.app-filter-layout__filter {
-  @include govuk-media-query(desktop) {
-    float: left;
-    min-width: govuk-grid-width("one-quarter");
+.app-filter__group {
+  border-bottom: 1px solid $govuk-border-colour;
+  margin-bottom: govuk-spacing(3);
+  padding-bottom: govuk-spacing(2);
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
-  display: none;
 
-  @include govuk-media-query(desktop) {
-    display: block;
+  .govuk-fieldset__legend {
+    margin-bottom: govuk-spacing(1);
   }
-}
 
-.js-enabled .app-filter-layout__filter {
-  outline: 0 none;
+  .govuk-form-group {
+    margin-bottom: 0;
 
-  @include govuk-media-query($until: desktop) {
-    background-color: govuk-colour("light-grey");
-    bottom: govuk-spacing(1);
-    border: 1px solid govuk-colour("mid-grey");
-    max-width: 310px;
-    min-width: 260px;
-    width: 100%;
-    overflow-y: scroll;
-    position: fixed;
-    right: govuk-spacing(1);
-    top: govuk-spacing(1);
-    z-index: 100;
-
-    &:focus {
-      outline: $govuk-focus-width solid $govuk-focus-colour;
+    &:last-child {
+      margin-bottom: 0;
     }
   }
-}
 
-.app-filter-layout__content {
-  @include govuk-media-query(desktop) {
-    float: right;
-    max-width: calc(
-      #{govuk-grid-width("three-quarters")} - #{govuk-spacing(6)}
-    );
-    width: 100%;
+  .govuk-checkboxes__label,
+  .govuk-radios__label {
+    @include govuk-font(16);
+
+    &::before {
+      background-color: govuk-colour("white");
+    }
   }
 }

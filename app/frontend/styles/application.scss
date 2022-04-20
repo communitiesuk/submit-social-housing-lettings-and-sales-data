@@ -1,9 +1,9 @@
 @function frontend-font-url($filename) {
-  @return url("~assets/fonts/"+$filename);
+  @return url("~assets/fonts/" + $filename);
 }
 
 @function frontend-image-url($filename) {
-  @return url("~assets/images/"+$filename);
+  @return url("~assets/images/" + $filename);
 }
 
 $govuk-font-url-function: frontend-font-url;
@@ -15,6 +15,8 @@ $govuk-global-styles: true;
 @import "accessible-autocomplete";
 @import "button";
 @import "figure";
+@import "filter";
+@import "filter-layout";
 @import "input";
 @import "related-navigation";
 @import "section-skip-link";
@@ -24,7 +26,6 @@ $govuk-global-styles: true;
 @import "template";
 @import "pagination";
 @import "panel";
-@import "filter";
 
 // App utilities
 .app-\!-colour-muted {
