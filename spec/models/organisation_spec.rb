@@ -29,6 +29,16 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
+    context "when the organisation only operates in specific local authorities" do
+      before do
+        FactoryBot.create(:organisation_la, organisation_id: organisation.id)
+      end
+
+      it "has local authorities associated" do
+        expect(organisation.organisation_las.pluck(:ons_code)).to eq(["E07000041"])
+      end
+    end
+
     context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
+ActiveRecord::Schema[7.0].define(version: 202202071123100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -254,6 +254,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
   create_table "logs_exports", force: :cascade do |t|
     t.integer "daily_run_number"
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
+  end
+
+  create_table "organisation_las", force: :cascade do |t|
+    t.bigint "organisation_id"
+    t.string "ons_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_organisation_las_on_organisation_id"
   end
 
   create_table "organisations", force: :cascade do |t|
