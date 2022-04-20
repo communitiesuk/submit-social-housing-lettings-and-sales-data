@@ -150,8 +150,6 @@ module Imports
       attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
 
       case_log = CaseLog.new(attributes)
-      pp attributes
-      pp case_log.send(:mandatory_fields)
       case_log.save!
     end
 
