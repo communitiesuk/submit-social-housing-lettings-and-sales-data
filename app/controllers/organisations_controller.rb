@@ -4,7 +4,7 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_scope!
 
   def index
-    if !current_user.support?
+    unless current_user.support?
       redirect_to user_path(current_user)
     end
   end
@@ -52,6 +52,7 @@ private
 
   def find_resource
     return if current_user.support?
+
     @organisation = Organisation.find(params[:id])
   end
 end

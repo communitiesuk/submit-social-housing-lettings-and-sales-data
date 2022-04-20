@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :authenticate_scope!, except: %i[new]
 
   def index
-    if !current_user.support?
+    unless current_user.support?
       redirect_to user_path(@user)
     end
   end
