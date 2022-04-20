@@ -62,7 +62,7 @@
       <aside>
         <%= govuk_phase_banner(
           tag: { text: 'Beta' },
-          text: "This is a new service – #{govuk_mail_to("submitcoredata@levellingup.gov.uk", "give feedback or report a problem", subject: "Feedback about #{t('service_name')}")}".html_safe
+          text: "This is a new service – help us improve it by <a class=\"govuk-link\" href=\"#{t('feedback_form')}\" rel=\"noreferrer noopener\" target=\"_blank\">giving us your feedback (opens in a new tab)</a>".html_safe
         ) %>
         <%= content_for(:breadcrumbs) %>
         <%= content_for(:before_content) %>
