@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CaseLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
-  let(:managing_organisation) { owning_organisation }
+  let(:different_managing_organisation) { FactoryBot.create(:organisation) }
 
   describe "#form" do
     let(:case_log) { FactoryBot.build(:case_log) }
@@ -33,7 +33,7 @@ RSpec.describe CaseLog do
       let(:case_log) do
         described_class.create(
           owning_organisation:,
-          managing_organisation:,
+          managing_organisation: owning_organisation,
         )
       end
 
@@ -57,7 +57,7 @@ RSpec.describe CaseLog do
     end
 
     it "validates intermediate rent product name" do
-      expect(validator).to receive(:validate_intermediate_rent_product_name)
+      expect(validator).to receive(:validate_irproduct_other)
     end
 
     it "validates other household member details" do
@@ -175,32 +175,31 @@ RSpec.describe CaseLog do
     let(:case_log) { FactoryBot.build(:case_log, earnings: net_income) }
 
     it "returns input income if frequency is already weekly" do
-      case_log.incfreq = 0
+      case_log.incfreq = 1
       expect(case_log.weekly_net_income).to eq(net_income)
     end
 
     it "calculates the correct weekly income from monthly income" do
-      case_log.incfreq = 1
+      case_log.incfreq = 2
       expect(case_log.weekly_net_income).to eq(1154)
     end
 
     it "calculates the correct weekly income from yearly income" do
-      case_log.incfreq = 2
+      case_log.incfreq = 3
       expect(case_log.weekly_net_income).to eq(417)
     end
   end
 
   describe "derived variables" do
-    let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
     let!(:case_log) do
       described_class.create({
-        managing_organisation: organisation,
-        owning_organisation: organisation,
+        managing_organisation: owning_organisation,
+        owning_organisation:,
         postcode_full: "M1 1AE",
         ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
         mrcdate: Time.gm(2021, 5, 4),
-        property_void_date: Time.gm(2021, 3, 3),
+        voiddate: Time.gm(2021, 3, 3),
         net_income_known: 2,
         hhmemb: 7,
         rent_type: 4,
@@ -210,46 +209,23 @@ RSpec.describe CaseLog do
       })
     end
 
-    it "correctly derives and saves partial and full postcodes" do
-      record_from_db = ActiveRecord::Base.connection.execute("select postcode, postcod2 from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["postcode"]).to eq("M1")
-      expect(record_from_db["postcod2"]).to eq("1AE")
-    end
-
-    it "correctly derives and saves partial and full previous postcodes" do
-      record_from_db = ActiveRecord::Base.connection.execute("select ppostc1, ppostc2 from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["ppostc1"]).to eq("M2")
-      expect(record_from_db["ppostc2"]).to eq("2AE")
-    end
-
     it "correctly derives and saves partial and full major repairs date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select mrcday, mrcmonth, mrcyear, mrcdate from case_logs where id=#{case_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
       expect(record_from_db["mrcdate"].month).to eq(5)
       expect(record_from_db["mrcdate"].year).to eq(2021)
-      expect(record_from_db["mrcday"]).to eq(4)
-      expect(record_from_db["mrcmonth"]).to eq(5)
-      expect(record_from_db["mrcyear"]).to eq(2021)
     end
 
     it "correctly derives and saves partial and full major property void date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select vday, vmonth, vyear, property_void_date from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["property_void_date"].day).to eq(3)
-      expect(record_from_db["property_void_date"].month).to eq(3)
-      expect(record_from_db["property_void_date"].year).to eq(2021)
-      expect(record_from_db["vday"]).to eq(3)
-      expect(record_from_db["vmonth"]).to eq(3)
-      expect(record_from_db["vyear"]).to eq(2021)
+      record_from_db = ActiveRecord::Base.connection.execute("select voiddate from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["voiddate"].day).to eq(3)
+      expect(record_from_db["voiddate"].month).to eq(3)
+      expect(record_from_db["voiddate"].year).to eq(2021)
     end
 
     it "correctly derives and saves incref" do
       record_from_db = ActiveRecord::Base.connection.execute("select incref from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["incref"]).to eq(1)
-    end
-
-    it "correctly derives and saves other_hhmemb" do
-      record_from_db = ActiveRecord::Base.connection.execute("select other_hhmemb from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["other_hhmemb"]).to eq(6)
     end
 
     it "correctly derives and saves renttype" do
@@ -258,29 +234,13 @@ RSpec.describe CaseLog do
       expect(record_from_db["renttype"]).to eq(3)
     end
 
-    context "when the owning organisation is a PRP" do
-      it "correctly derives and saves landlord based on owning_organisation provider_type" do
-        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
-        expect(case_log.landlord).to eq(2)
-        expect(record_from_db["landlord"]).to eq(2)
-      end
-    end
-
-    context "when the owning organisation is an LA" do
-      let(:organisation) { FactoryBot.create(:organisation) }
-
-      it "correctly derives and saves landlord based on owning_organisation provider_type" do
-        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
-        expect(case_log.landlord).to eq(1)
-        expect(record_from_db["landlord"]).to eq(1)
-      end
-    end
-
     context "when deriving lettype" do
       context "when the owning organisation is a PRP" do
+        before { case_log.owning_organisation.update!(provider_type: 2) }
+
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 4, needstype: 0)
+            case_log.update!(rent_type: 4, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(10)
             expect(record_from_db["lettype"]).to eq(10)
@@ -298,7 +258,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 2, needstype: 0)
+            case_log.update!(rent_type: 2, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(6)
             expect(record_from_db["lettype"]).to eq(6)
@@ -316,7 +276,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 0, needstype: 0)
+            case_log.update!(rent_type: 0, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(2)
             expect(record_from_db["lettype"]).to eq(2)
@@ -357,17 +317,17 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 70, period: 2)
+            case_log.update!(pscharge: 60, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(35.0)
-            expect(record_from_db["wpschrge"]).to eq(35.0)
+            expect(case_log.wpschrge).to eq(30.0)
+            expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 100, period: 2)
+            case_log.update!(supcharg: 80, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(50.0)
-            expect(record_from_db["wsupchrg"]).to eq(50.0)
+            expect(case_log.wsupchrg).to eq(40.0)
+            expect(record_from_db["wsupchrg"]).to eq(40.0)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -407,18 +367,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 60.12, pscharge: 60.13, scharge: 60.98, brent: 60.97, period: 2)
+            case_log.update!(supcharg: 60.12, pscharge: 50.13, scharge: 60.98, brent: 60.97, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.06)
-            expect(case_log.wpschrge).to eq(30.06)
+            expect(case_log.wpschrge).to eq(25.06)
             expect(case_log.wscharge).to eq(30.49)
             expect(case_log.wrent).to eq(30.49)
-            expect(case_log.wtcharge).to eq(121.1)
+            expect(case_log.wtcharge).to eq(116.1)
             expect(record_from_db["wsupchrg"]).to eq(30.06)
-            expect(record_from_db["wpschrge"]).to eq(30.06)
+            expect(record_from_db["wpschrge"]).to eq(25.06)
             expect(record_from_db["wscharge"]).to eq(30.49)
             expect(record_from_db["wrent"]).to eq(30.49)
-            expect(record_from_db["wtcharge"]).to eq(121.1)
+            expect(record_from_db["wtcharge"]).to eq(116.1)
           end
         end
 
@@ -1055,28 +1015,28 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 1)
+            case_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.12)
-            expect(case_log.wpschrge).to eq(30.13)
+            expect(case_log.wpschrge).to eq(25.13)
             expect(case_log.wscharge).to eq(30.98)
             expect(case_log.wrent).to eq(100.97)
-            expect(case_log.wtcharge).to eq(192.2)
+            expect(case_log.wtcharge).to eq(187.2)
             expect(record_from_db["wsupchrg"]).to eq(30.12)
-            expect(record_from_db["wpschrge"]).to eq(30.13)
+            expect(record_from_db["wpschrge"]).to eq(25.13)
             expect(record_from_db["wscharge"]).to eq(30.98)
             expect(record_from_db["wrent"]).to eq(100.97)
-            expect(record_from_db["wtcharge"]).to eq(192.2)
+            expect(record_from_db["wtcharge"]).to eq(187.2)
           end
         end
       end
 
-      context "when the owning organisation is an LA" do
-        let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+      context "when the owning organisation is a LA" do
+        before { case_log.owning_organisation.update!(provider_type: "LA") }
 
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 4, needstype: 0)
+            case_log.update!(rent_type: 4, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(12)
             expect(record_from_db["lettype"]).to eq(12)
@@ -1094,7 +1054,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is affordable rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 2, needstype: 0)
+            case_log.update!(rent_type: 2, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(8)
             expect(record_from_db["lettype"]).to eq(8)
@@ -1112,7 +1072,7 @@ RSpec.describe CaseLog do
 
         context "when the rent type is social rent and supported housing" do
           it "correctly derives and saves lettype" do
-            case_log.update!(rent_type: 0, needstype: 0)
+            case_log.update!(rent_type: 0, needstype: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select lettype from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.lettype).to eq(4)
             expect(record_from_db["lettype"]).to eq(4)
@@ -1131,13 +1091,10 @@ RSpec.describe CaseLog do
     end
 
     it "correctly derives and saves day, month, year from start date" do
-      record_from_db = ActiveRecord::Base.connection.execute("select day, month, year, startdate from case_logs where id=#{case_log.id}").to_a[0]
+      record_from_db = ActiveRecord::Base.connection.execute("select startdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["startdate"].day).to eq(10)
       expect(record_from_db["startdate"].month).to eq(10)
       expect(record_from_db["startdate"].year).to eq(2021)
-      expect(record_from_db["day"]).to eq(10)
-      expect(record_from_db["month"]).to eq(10)
-      expect(record_from_db["year"]).to eq(2021)
     end
 
     context "when any charge field is set" do
@@ -1152,14 +1109,16 @@ RSpec.describe CaseLog do
       end
     end
 
-    def check_postcode_fields(postcode_field, outcode_field, incode_field)
-      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field}, #{outcode_field}, #{incode_field}  from case_logs where id=#{address_case_log.id}").to_a[0]
+    def check_postcode_fields(postcode_field)
+      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
       expect(address_case_log[postcode_field]).to eq("M11AE")
       expect(record_from_db[postcode_field]).to eq("M11AE")
-      expect(address_case_log[outcode_field]).to eq("M1")
-      expect(record_from_db[outcode_field]).to eq("M1")
-      expect(address_case_log[incode_field]).to eq("1AE")
-      expect(record_from_db[incode_field]).to eq("1AE")
+    end
+
+    def check_previous_postcode_fields(postcode_field)
+      record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
+      expect(address_case_log[postcode_field]).to eq("M11AE")
+      expect(record_from_db[postcode_field]).to eq("M11AE")
     end
     context "when saving addresses" do
       before do
@@ -1169,15 +1128,15 @@ RSpec.describe CaseLog do
 
       let!(:address_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           postcode_known: 1,
           postcode_full: "M1 1AE",
         })
       end
 
       def check_property_postcode_fields
-        check_postcode_fields("postcode_full", "postcode", "postcod2")
+        check_postcode_fields("postcode_full")
       end
 
       it "correctly formats previous postcode" do
@@ -1256,29 +1215,29 @@ RSpec.describe CaseLog do
 
       let!(:address_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           previous_postcode_known: 1,
           ppostcode_full: "M1 1AE",
         })
       end
 
-      def check_previous_postcode_fields
-        check_postcode_fields("ppostcode_full", "ppostc1", "ppostc2")
+      def previous_postcode_fields
+        check_previous_postcode_fields("ppostcode_full")
       end
 
       it "correctly formats previous postcode" do
         address_case_log.update!(ppostcode_full: "M1 1AE")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m1 1ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m11Ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
 
         address_case_log.update!(ppostcode_full: "m11ae")
-        check_previous_postcode_fields
+        previous_postcode_fields
       end
 
       it "correctly infers prevloc" do
@@ -1340,8 +1299,8 @@ RSpec.describe CaseLog do
     context "when saving rent and charges" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           brent: 5.77,
           scharge: 10.01,
           pscharge: 3,
@@ -1358,9 +1317,9 @@ RSpec.describe CaseLog do
     context "when validating household members derived vars" do
       let!(:household_case_log) do
         described_class.create!({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
-          other_hhmemb: 4,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
+          hhmemb: 3,
           relat2: "X",
           relat3: "C",
           relat4: "X",
@@ -1411,10 +1370,10 @@ RSpec.describe CaseLog do
     context "when it is a renewal" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           renewal: 1,
-          year: 2021,
+          startdate: Time.zone.local(2021, 4, 10),
         })
       end
 
@@ -1431,6 +1390,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly derives and saves prevten" do
+        case_log.managing_organisation.update!({ provider_type: "PRP" })
         case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]
@@ -1455,8 +1415,8 @@ RSpec.describe CaseLog do
     context "when answering the household characteristics questions" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           age1_known: 1,
           sex1: "R",
           relat2: "R",
@@ -1474,8 +1434,8 @@ RSpec.describe CaseLog do
     context "when the data provider is filling in household needs" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
         })
       end
 
@@ -1501,9 +1461,9 @@ RSpec.describe CaseLog do
     context "when it is supported housing and a care home charge has been supplied" do
       let!(:case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
-          needstype: 0,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
+          needstype: 2,
         })
       end
 
@@ -1655,16 +1615,16 @@ RSpec.describe CaseLog do
     context "when the data provider is filling in the reason for the property being vacant" do
       let!(:first_let_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           first_time_property_let_as_social_housing: 1,
         })
       end
 
       let!(:relet_case_log) do
         described_class.create({
-          managing_organisation: organisation,
-          owning_organisation: organisation,
+          managing_organisation: owning_organisation,
+          owning_organisation:,
           first_time_property_let_as_social_housing: 0,
         })
       end
@@ -1687,7 +1647,7 @@ RSpec.describe CaseLog do
 
   describe "resetting invalidated fields" do
     context "when a question that has already been answered, no longer has met dependencies" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 1, wchair: 1) }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
 
       it "clears the answer" do
         expect { case_log.update!(preg_occ: nil) }.to change(case_log, :cbl).from(1).to(nil)
@@ -1703,7 +1663,7 @@ RSpec.describe CaseLog do
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
-      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 0, preg_occ: 1, wchair: 1) }
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 0, preg_occ: 2, wchair: 1) }
 
       it "does not clear the value for answers that apply to both pages" do
         expect(case_log.cbl).to eq(0)
@@ -1712,7 +1672,7 @@ RSpec.describe CaseLog do
       it "does clear the value for answers that do not apply for invalidated page" do
         case_log.update!({ wchair: 1, sex2: "F", age2: 33 })
         case_log.update!({ cbl: 1 })
-        case_log.update!({ preg_occ: 0 })
+        case_log.update!({ preg_occ: 1 })
 
         expect(case_log.cbl).to eq(nil)
       end

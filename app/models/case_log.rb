@@ -122,19 +122,23 @@ class CaseLog < ApplicationRecord
   end
 
   def net_income_refused?
+    # 2: Tenant prefers not to say
     net_income_known == 2
   end
 
   def net_income_is_weekly?
-    !!(incfreq && incfreq.zero?)
+    # 1: Weekly
+    !!(incfreq && incfreq == 1)
   end
 
   def net_income_is_monthly?
-    incfreq == 1
+    # 2: Monthly
+    incfreq == 2
   end
 
   def net_income_is_yearly?
-    incfreq == 2
+    # 3: Yearly
+    incfreq == 3
   end
 
   def net_income_soft_validation_triggered?
@@ -142,138 +146,181 @@ class CaseLog < ApplicationRecord
   end
 
   def given_reasonable_preference?
+    # 1: Yes
     reasonpref == 1
   end
 
   def is_renewal?
+    # 1: Yes
     renewal == 1
   end
 
   def is_general_needs?
+    # 1: General Needs
     needstype == 1
   end
 
   def is_supported_housing?
-    !!(needstype && needstype.zero?)
+    # 2: Supported Housing
+    needstype == 2
   end
 
   def has_hbrentshortfall?
-    !!(hbrentshortfall && hbrentshortfall.zero?)
+    # 0: Yes
+    !!hbrentshortfall&.zero?
   end
 
   def postcode_known?
+    # 1: Yes
     postcode_known == 1
   end
 
   def previous_postcode_known?
+    # 1: Yes
     previous_postcode_known == 1
   end
 
   def la_known?
+    # 1: Yes
     la_known == 1
   end
 
   def previous_la_known?
+    # 1: Yes
     previous_la_known == 1
   end
 
   def is_secure_tenancy?
-    tenancy == 3
-  end
-
-  def is_assured_shorthold_tenancy?
+    # 1: Secure (including flexible)
     tenancy == 1
   end
 
+  def is_assured_shorthold_tenancy?
+    # 4: Assured Shorthold
+    tenancy == 4
+  end
+
   def is_internal_transfer?
+    # 1: Internal Transfer
     referral == 1
   end
 
   def is_relet_to_temp_tenant?
-    rsnvac == 2
+    # 9: Re-let to tenant who occupied same property as temporary accommodation
+    rsnvac == 9
   end
 
   def is_bedsit?
-    unittype_gn == 1
+    # 2: Bedsit
+    unittype_gn == 2
   end
 
   def is_shared_housing?
-    [4, 5, 6].include?(unittype_gn)
+    # 4: Shared flat or maisonette
+    # 9: Shared house
+    # 10: Shared bungalow
+    [4, 9, 10].include?(unittype_gn)
   end
 
   def has_first_let_vacancy_reason?
+    # 15: First let of new-build property
+    # 16: First let of conversion, rehabilitation or acquired property
+    # 17: First let of leased property
     [15, 16, 17].include?(rsnvac)
   end
 
   def previous_tenancy_was_temporary?
-    ![4, 5, 16, 21, 22].include?(prevten)
+    # 4: Tied housing or renting with job
+    # 6: Supported housing
+    # 8: Sheltered accomodation
+    # 24: Housed by National Asylum Support Service (prev Home Office)
+    # 25: Other
+    ![4, 6, 8, 24, 25].include?(prevten)
   end
 
   def armed_forces_regular?
-    !!(armedforces && armedforces.zero?)
+    # 1: Yes – the person is a current or former regular
+    !!(armedforces && armedforces == 1)
   end
 
   def armed_forces_no?
-    armedforces == 3
+    # 2: No
+    armedforces == 2
   end
 
   def armed_forces_refused?
-    armedforces == 4
+    # 3: Person prefers not to say / Refused
+    armedforces == 3
   end
 
   def has_pregnancy?
-    !!(preg_occ && preg_occ.zero?)
+    # 1: Yes
+    !!(preg_occ && preg_occ == 1)
   end
 
   def pregnancy_refused?
-    preg_occ == 2
+    # 3: Tenant prefers not to say / Refused
+    preg_occ == 3
   end
 
   def is_assessed_homeless?
+    # 11: Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty
     homeless == 11
   end
 
   def is_other_homeless?
+    # 7: Other homeless – not found statutorily homeless but considered homeless by landlord
     homeless == 7
   end
 
   def is_not_homeless?
+    # 1: No
     homeless == 1
   end
 
   def is_london_rent?
+    # 2: London Affordable Rent
+    # 4: London Living Rent
     rent_type == 2 || rent_type == 4
   end
 
   def previous_tenancy_was_foster_care?
+    # 13: Children's home or foster care
     prevten == 13
   end
 
   def previous_tenancy_was_refuge?
+    # 21: Refuge
     prevten == 21
   end
 
   def is_reason_permanently_decanted?
+    # 1: Permanently decanted from another property owned by this landlord
     reason == 1
   end
 
   def receives_housing_benefit_only?
+    # 1: Housing benefit
     hb == 1
   end
 
   def receives_housing_benefit_and_universal_credit?
+    # 8: Housing benefit and Universal Credit (without housing element)
     hb == 8
   end
 
   def receives_uc_with_housing_element_excl_housing_benefit?
+    # 6: Universal Credit with housing element (excluding housing benefit)
     hb == 6
   end
 
   def receives_no_benefits?
+    # 9: None
     hb == 9
   end
 
   def receives_universal_credit_but_no_housing_benefit?
+    # 7: Universal Credit (without housing element)
     hb == 7
   end
 
@@ -283,22 +330,18 @@ class CaseLog < ApplicationRecord
   end
 
   def benefits_unknown?
+    # 3: Don’t know
     hb == 3
   end
 
-  def this_landlord?
-    landlord == 1
-  end
-
-  def other_landlord?
-    landlord == 2
-  end
-
   def local_housing_referral?
+    # 3: PRP lettings only - Nominated by local housing authority
     referral == 3
   end
 
   def is_prevten_la_general_needs?
+    # 30: Fixed term Local Authority General Needs tenancy
+    # 31: Lifetime Local Authority General Needs tenancy
     [30, 31].any?(prevten)
   end
 
@@ -379,30 +422,10 @@ private
   end
 
   def set_derived_fields!
-    if ppostcode_full.present?
-      self.ppostc1 = UKPostcode.parse(ppostcode_full).outcode
-      self.ppostc2 = UKPostcode.parse(ppostcode_full).incode
-    end
-    if mrcdate.present?
-      self.mrcday = mrcdate.day
-      self.mrcmonth = mrcdate.month
-      self.mrcyear = mrcdate.year
-    end
-    if startdate.present?
-      self.day = startdate.day
-      self.month = startdate.month
-      self.year = startdate.year
-    end
-    if property_void_date.present?
-      self.vday = property_void_date.day
-      self.vmonth = property_void_date.month
-      self.vyear = property_void_date.year
-    end
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
     self.incref = 1 if net_income_refused?
-    self.other_hhmemb = hhmemb - 1 if hhmemb.present?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
     self.totchild = get_totchild
@@ -431,14 +454,14 @@ private
                          weekly_value(tshortfall)
                        end
     self.nocharge = household_charge&.zero? ? 1 : 0
-    self.underoccupation_benefitcap = 3 if renewal == 1 && year == 2021
     self.housingneeds = get_housingneeds
     if is_renewal?
-      self.underoccupation_benefitcap = 2 if year == 2021
+      self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.homeless = 2
       self.referral = 0
       self.layear = 1
       if is_general_needs?
+        # fixed term
         self.prevten = 32 if managing_organisation.provider_type == "PRP"
         self.prevten = 30 if managing_organisation.provider_type == "LA"
       end
@@ -450,47 +473,41 @@ private
         self["ecstat#{idx}"] = nil
       end
     end
-    self.landlord = 1 if owning_organisation.provider_type == "LA"
-    self.landlord = 2 if owning_organisation.provider_type == "PRP"
   end
 
   def process_postcode_changes!
     self.postcode_full = postcode_full.present? ? postcode_full.upcase.gsub(/\s+/, "") : postcode_full
-    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la", "postcode", "postcod2")
+    process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
   end
 
   def process_previous_postcode_changes!
     self.ppostcode_full = ppostcode_full.present? ? ppostcode_full.upcase.gsub(/\s+/, "") : ppostcode_full
-    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc", "ppostc1", "ppostc2")
+    process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc")
   end
 
-  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key, outcode_key, incode_key)
+  def process_postcode(postcode, postcode_known_key, la_inferred_key, la_key)
     return if postcode.blank?
 
     self[postcode_known_key] = 1
     inferred_la = get_inferred_la(postcode)
     self[la_inferred_key] = inferred_la.present?
     self[la_key] = inferred_la if inferred_la.present?
-    self[outcode_key] = UKPostcode.parse(postcode).outcode
-    self[incode_key] = UKPostcode.parse(postcode).incode
   end
 
   def reset_location_fields!
-    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", "postcode", "postcod2", la_known)
+    reset_location(is_la_inferred, "la", "is_la_inferred", "postcode_full", la_known)
   end
 
   def reset_previous_location_fields!
-    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", "ppostc1", "ppostc2", previous_la_known)
+    reset_location(is_previous_la_inferred, "prevloc", "is_previous_la_inferred", "ppostcode_full", previous_la_known)
   end
 
-  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, incode_key, outcode_key, is_la_known)
+  def reset_location(is_inferred, la_key, is_inferred_key, postcode_key, is_la_known)
     if is_inferred || is_la_known != 1
       self[la_key] = nil
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
-    self[incode_key] = nil
-    self[outcode_key] = nil
   end
 
   def get_totelder

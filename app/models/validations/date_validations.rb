@@ -15,16 +15,16 @@ module Validations::DateValidations
   end
 
   def validate_property_void_date(record)
-    if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date - record["property_void_date"].to_date > 3650
-      record.errors.add :property_void_date, I18n.t("validations.property.void_date.ten_years_before_tenancy_start")
+    if record["voiddate"].present? && record["startdate"].present? && record["startdate"].to_date - record["voiddate"].to_date > 3650
+      record.errors.add :voiddate, I18n.t("validations.property.void_date.ten_years_before_tenancy_start")
     end
 
-    if record["property_void_date"].present? && record["startdate"].present? && record["startdate"].to_date < record["property_void_date"].to_date
-      record.errors.add :property_void_date, I18n.t("validations.property.void_date.before_tenancy_start")
+    if record["voiddate"].present? && record["startdate"].present? && record["startdate"].to_date < record["voiddate"].to_date
+      record.errors.add :voiddate, I18n.t("validations.property.void_date.before_tenancy_start")
     end
 
-    if record["property_void_date"].present? && record["mrcdate"].present? && record["mrcdate"].to_date < record["property_void_date"].to_date
-      record.errors.add :property_void_date, I18n.t("validations.property.void_date.after_mrcdate")
+    if record["voiddate"].present? && record["mrcdate"].present? && record["mrcdate"].to_date < record["voiddate"].to_date
+      record.errors.add :voiddate, I18n.t("validations.property.void_date.after_mrcdate")
     end
   end
 

@@ -11,7 +11,7 @@ RSpec.describe InteruptionScreenHelper do
       :in_progress,
       ecstat1: 1,
       earnings: 750,
-      incfreq: 0,
+      incfreq: 1,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )

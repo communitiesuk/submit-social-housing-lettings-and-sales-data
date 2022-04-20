@@ -16,7 +16,7 @@ RSpec.describe CheckAnswersHelper do
     context "when a section has been completed" do
       it "returns that you have answered all the questions" do
         case_log.sex1 = "F"
-        case_log.other_hhmemb = 0
+        case_log.hhmemb = 1
         case_log.propcode = "123"
         case_log.ecstat1 = 200
         case_log.ecstat2 = 9

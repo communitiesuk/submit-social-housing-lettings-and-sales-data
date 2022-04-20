@@ -19,7 +19,7 @@ RSpec.describe "Form Navigation" do
       age1: { type: "numeric", answer: 25, path: "person-1-age" },
       sex1: { type: "radio", answer: "Female", path: "person-1-gender" },
       ecstat1: { type: "radio", answer: 3, path: "person-1-working-situation" },
-      other_hhmemb: { type: "numeric", answer: 2, path: "household-number-of-other-members" },
+      hhmemb: { type: "numeric", answer: 1, path: "household-number-of-members" },
     }
   end
 
@@ -71,7 +71,7 @@ RSpec.describe "Form Navigation" do
         visit("/logs")
         visit("/logs/#{id}/net-income")
         fill_in("case-log-earnings-field", with: 740)
-        choose("case-log-incfreq-0-field", allow_label_click: true)
+        choose("case-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
         click_link(text: "Back")
         click_link(text: "Back")

@@ -24,12 +24,12 @@ RSpec.describe "Form Page Routing" do
     visit("/logs/#{id}/conditional-question")
     # using a question name that is already in the db to avoid
     # having to add a new column to the db for this test
-    choose("case-log-preg-occ-0-field", allow_label_click: true)
+    choose("case-log-preg-occ-1-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-yes-page")
     click_link(text: "Back")
     expect(page).to have_current_path("/logs/#{id}/conditional-question")
-    choose("case-log-preg-occ-1-field", allow_label_click: true)
+    choose("case-log-preg-occ-2-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-no-page")
   end
@@ -40,7 +40,7 @@ RSpec.describe "Form Page Routing" do
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/person-1-working-situation")
     visit("/logs/#{id}/conditional-question")
-    choose("case-log-preg-occ-1-field", allow_label_click: true)
+    choose("case-log-preg-occ-2-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-no-page")
     click_button("Save and continue")

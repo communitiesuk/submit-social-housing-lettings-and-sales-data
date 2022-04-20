@@ -56,7 +56,7 @@ RSpec.describe Form::Page, type: :model do
       end
 
       it "evaluates met conditions correctly" do
-        case_log.incfreq = "Weekly"
+        case_log.incfreq = 1
         expect(page.routed_to?(case_log)).to be true
       end
     end

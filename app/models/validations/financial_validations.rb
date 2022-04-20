@@ -84,46 +84,47 @@ private
 
   CHARGE_MAXIMUMS = {
     scharge: {
-      this_landlord: {
+      private_registered_provider: {
         general_needs: 55,
         supported_housing: 280,
       },
-      other_landlord: {
+      local_authority: {
         general_needs: 45,
         supported_housing: 165,
       },
     },
     pscharge: {
-      this_landlord: {
+      private_registered_provider: {
         general_needs: 30,
         supported_housing: 200,
       },
-      other_landlord: {
+      local_authority: {
         general_needs: 35,
         supported_housing: 75,
       },
     },
     supcharg: {
-      this_landlord: {
+      private_registered_provider: {
         general_needs: 40,
         supported_housing: 465,
       },
-      other_landlord: {
+      local_authority: {
         general_needs: 60,
         supported_housing: 120,
       },
     },
   }.freeze
 
-  LANDLORD_VALUES = { 1 => :this_landlord, 2 => :other_landlord }.freeze
-  NEEDSTYPE_VALUES = { 0 => :supported_housing, 1 => :general_needs }.freeze
+  PROVIDER_TYPE = { 1 => :local_authority, 2 => :private_registered_provider }.freeze
+  NEEDSTYPE_VALUES = { 2 => :supported_housing, 1 => :general_needs }.freeze
 
   def validate_charges(record)
+    provider_type = record.owning_organisation.provider_type_before_type_cast
     %i[scharge pscharge supcharg].each do |charge|
-      maximum = CHARGE_MAXIMUMS.dig(charge, LANDLORD_VALUES[record.landlord], NEEDSTYPE_VALUES[record.needstype])
+      maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])
 
       if maximum.present? && record[:period].present? && record[charge].present? && !weekly_value_in_range(record, charge, 0.0, maximum)
-        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{LANDLORD_VALUES[record.landlord]}.#{NEEDSTYPE_VALUES[record.needstype]}")
+        record.errors.add charge, I18n.t("validations.financial.rent.#{charge}.#{PROVIDER_TYPE[provider_type]}.#{NEEDSTYPE_VALUES[record.needstype]}")
       end
     end
   end

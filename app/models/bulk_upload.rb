@@ -57,7 +57,6 @@ class BulkUpload
   def map_row(row)
     {
       lettype: row[1],
-      landlord: row[2],
       # reg_num_la_core_code: row[3],
       # managementgroup: row[4],
       # schemecode: row[5],
@@ -67,8 +66,7 @@ class BulkUpload
       tenancy: row[9],
       tenancyother: row[10],
       # tenancyduration: row[11],
-      other_hhmemb: other_hhmemb(row),
-      hhmemb: other_hhmemb(row) + 1,
+      hhmemb: hhmemb(row),
       age1: row[12],
       age2: row[13],
       age3: row[14],
@@ -111,7 +109,7 @@ class BulkUpload
       earnings: row[50],
       # increfused: row[51],
       reason: row[52],
-      other_reason_for_leaving_last_settled_home: row[53],
+      reasonother: row[53],
       underoccupation_benefitcap: row[54],
       housingneeds_a: row[55],
       housingneeds_b: row[56],
@@ -121,11 +119,9 @@ class BulkUpload
       housingneeds_h: row[60],
       prevten: row[61],
       prevloc: row[62],
-      # ppostc1: row[63],
-      # ppostc2: row[64],
       # prevpco_unknown: row[65],
       layear: row[66],
-      lawaitlist: row[67],
+      waityear: row[67],
       homeless: row[68],
       reasonpref: row[69],
       rp_homeless: row[70],
@@ -147,15 +143,9 @@ class BulkUpload
       # no_rent_or_charge: row[86],
       hbrentshortfall: row[87],
       tshortfall: row[88],
-      property_void_date: row[89].to_s + row[90].to_s + row[91].to_s,
-      # property_void_date_day: row[89],
-      # property_void_date_month: row[90],
-      # property_void_date_year: row[91],
+      voiddate: row[89].to_s + row[90].to_s + row[91].to_s,
       majorrepairs: row[92].present? ? "1" : nil,
       mrcdate: row[92].to_s + row[93].to_s + row[94].to_s,
-      mrcday: row[92],
-      mrcmonth: row[93],
-      mrcyear: row[94],
       # supported_scheme: row[95],
       startdate: date_time(row[98], row[97], row[96]),
       # startdate_day: row[96],
@@ -170,8 +160,6 @@ class BulkUpload
       property_relet: row[105],
       rsnvac: row[106],
       la: row[107],
-      # postcode: row[108],
-      # postcod2: row[109],
       # row[110] removed
       # row[111] is owning organisation used above
       # username: row[112],
@@ -193,7 +181,7 @@ class BulkUpload
       illness_type_10: row[128],
       # london_affordable: row[129],
       rent_type: row[130],
-      intermediate_rent_product_name: row[131],
+      irproduct_other: row[131],
       # data_protection: row[132],
       sale_or_letting: "letting",
       declaration: 1,
@@ -206,7 +194,7 @@ class BulkUpload
     Time.zone.local("20#{year}", month.to_s, day.to_s)
   end
 
-  def other_hhmemb(row)
-    [13, 14, 15, 16, 17, 18, 19].count { |idx| row[idx].present? }
+  def hhmemb(row)
+    [14, 15, 16, 17, 18, 19, 20].count { |idx| row[idx].present? }
   end
 end

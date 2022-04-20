@@ -43,7 +43,7 @@ RSpec.describe Validations::PropertyValidations do
     context "when number of bedrooms has not been answered" do
       it "does not add an error" do
         record.beds = nil
-        record.unittype_gn = 1
+        record.unittype_gn = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors).to be_empty
       end
@@ -52,7 +52,7 @@ RSpec.describe Validations::PropertyValidations do
     context "when unit type is shared and number of bedrooms has not been answered" do
       it "does not add an error" do
         record.beds = nil
-        record.unittype_gn = 6
+        record.unittype_gn = 10
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors).to be_empty
       end
@@ -72,7 +72,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 2
-        record.unittype_gn = 1
+        record.unittype_gn = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
@@ -84,7 +84,7 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 0
-        record.unittype_gn = 1
+        record.unittype_gn = 2
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_bedroom_bedsit"))
@@ -96,8 +96,8 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 8
-        record.unittype_gn = 5
-        record.other_hhmemb = 2
+        record.unittype_gn = 9
+        record.hhmemb = 3
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
@@ -109,8 +109,8 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error if the number of bedrooms is not between 1 and 7" do
         record.beds = 0
-        record.unittype_gn = 5
-        record.other_hhmemb = 2
+        record.unittype_gn = 9
+        record.hhmemb = 3
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_seven_bedroom_shared"))
@@ -122,8 +122,8 @@ RSpec.describe Validations::PropertyValidations do
 
       it "adds an error" do
         record.beds = 4
-        record.unittype_gn = 5
-        record.other_hhmemb = 0
+        record.unittype_gn = 9
+        record.hhmemb = 1
         property_validator.validate_shared_housing_rooms(record)
         expect(record.errors["unittype_gn"]).to include(match(expected_error))
         expect(record.errors["beds"]).to include(I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared"))
@@ -286,7 +286,7 @@ RSpec.describe Validations::PropertyValidations do
 
         it "validates that the property is not being relet to tenant who occupied as temporary" do
           non_temporary_previous_tenancies.each do |prevten|
-            record.rsnvac = 2
+            record.rsnvac = 9
             record.prevten = prevten
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])
@@ -296,7 +296,7 @@ RSpec.describe Validations::PropertyValidations do
 
         it "validates that the letting source is not a referral" do
           referral_sources.each do |src|
-            record.rsnvac = 2
+            record.rsnvac = 9
             record.referral = src
             property_validator.validate_rsnvac(record)
             expect(record.errors["rsnvac"])

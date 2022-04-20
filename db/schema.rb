@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 202202071123100) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,7 +86,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"
-    t.integer "landlord"
     t.string "ppostcode_full"
     t.integer "rsnvac"
     t.integer "unittype_gn"
@@ -98,20 +97,19 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "benefits"
     t.integer "period"
     t.integer "layear"
-    t.integer "lawaitlist"
+    t.integer "waityear"
     t.string "postcode_full"
     t.integer "reasonpref"
     t.integer "cbl"
     t.integer "chr"
     t.integer "cap"
-    t.string "other_reason_for_leaving_last_settled_home"
+    t.string "reasonother"
     t.integer "housingneeds_a"
     t.integer "housingneeds_b"
     t.integer "housingneeds_c"
     t.integer "housingneeds_f"
     t.integer "housingneeds_g"
     t.integer "housingneeds_h"
-    t.integer "accessibility_requirements_prefer_not_to_say"
     t.integer "illness_type_1"
     t.integer "illness_type_2"
     t.integer "illness_type_3"
@@ -132,7 +130,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
     t.string "sale_or_letting"
-    t.string "intermediate_rent_product_name"
+    t.string "irproduct_other"
     t.string "purchaser_code"
     t.integer "reason"
     t.string "propcode"
@@ -141,16 +139,8 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "prevloc"
     t.integer "hb"
     t.integer "hbrentshortfall"
-    t.string "postcode"
-    t.string "postcod2"
-    t.string "ppostc1"
-    t.string "ppostc2"
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
-    t.integer "mrcday"
-    t.integer "mrcmonth"
-    t.integer "mrcyear"
-    t.integer "other_hhmemb"
     t.integer "incref"
     t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
@@ -158,7 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "first_time_property_let_as_social_housing"
     t.integer "unitletas"
     t.integer "builtype"
-    t.datetime "property_void_date", precision: nil
+    t.datetime "voiddate", precision: nil
     t.bigint "owning_organisation_id"
     t.bigint "managing_organisation_id"
     t.integer "renttype"
@@ -167,9 +157,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.integer "postcode_known"
     t.integer "la_known"
     t.boolean "is_la_inferred"
-    t.integer "day"
-    t.integer "month"
-    t.integer "year"
     t.integer "totchild"
     t.integer "totelder"
     t.integer "totadult"
@@ -219,9 +206,6 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.decimal "wtshortfall", precision: 10, scale: 2
     t.integer "refused"
     t.integer "housingneeds"
-    t.integer "vday"
-    t.integer "vmonth"
-    t.integer "vyear"
     t.decimal "wchchrg", precision: 10, scale: 2
     t.integer "newprop"
     t.string "relat2"
@@ -232,6 +216,9 @@ ActiveRecord::Schema[7.0].define(version: 202202071123100) do
     t.string "relat7"
     t.string "relat8"
     t.integer "rent_value_check"
+    t.integer "old_form_id"
+    t.integer "lar"
+    t.integer "irproduct"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end

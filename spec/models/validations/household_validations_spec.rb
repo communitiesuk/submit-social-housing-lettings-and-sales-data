@@ -58,7 +58,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "pregnancy validations" do
     context "when there are no female tenants" do
       it "validates that pregnancy cannot be yes" do
-        record.preg_occ = 0
+        record.preg_occ = 1
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
@@ -66,7 +66,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "validates that pregnancy cannot be prefer not to say" do
-        record.preg_occ = 2
+        record.preg_occ = 3
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
         expect(record.errors["preg_occ"])
@@ -77,7 +77,7 @@ RSpec.describe Validations::HouseholdValidations do
     context "when there are female tenants" do
       context "but they are older than 50" do
         it "validates that pregnancy cannot be yes" do
-          record.preg_occ = 0
+          record.preg_occ = 1
           record.sex1 = "F"
           record.age1 = 51
           household_validator.validate_pregnancy(record)
@@ -113,7 +113,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "reason for leaving last settled home validations" do
     let(:field) { "validations.other_field_not_required" }
     let(:main_field_label) { "reason" }
-    let(:other_field_label) { "other reason for leaving last settled home" }
+    let(:other_field_label) { "reasonother" }
     let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
 
     context "when reason is other" do
@@ -121,34 +121,34 @@ RSpec.describe Validations::HouseholdValidations do
 
       it "validates that a reason is provided" do
         record.reason = 31
-        record.other_reason_for_leaving_last_settled_home = nil
+        record.reasonother = nil
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+        expect(record.errors["reasonother"])
           .to include(match(expected_error))
       end
 
       it "expects that a reason is provided" do
         record.reason = 31
-        record.other_reason_for_leaving_last_settled_home = "Some unusual reason"
+        record.reasonother = "Some unusual reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+        expect(record.errors["reasonother"]).to be_empty
       end
     end
 
     context "when reason is not other" do
       it "validates that other reason is not provided" do
         record.reason = 18
-        record.other_reason_for_leaving_last_settled_home = "Some other reason"
+        record.reasonother = "Some other reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"])
+        expect(record.errors["reasonother"])
           .to include(match(expected_error))
       end
 
       it "expects that other reason is not provided" do
         record.reason = 18
-        record.other_reason_for_leaving_last_settled_home = nil
+        record.reasonother = nil
         household_validator.validate_reason_for_leaving_last_settled_home(record)
-        expect(record.errors["other_reason_for_leaving_last_settled_home"]).to be_empty
+        expect(record.errors["reasonother"]).to be_empty
       end
     end
 
@@ -197,8 +197,8 @@ RSpec.describe Validations::HouseholdValidations do
           .to be_empty
       end
 
-      it "cannot have `this landlord` as landlord and Housing situation before this letting cannot be LA general needs" do
-        record.landlord = 1
+      it "cannot have a PRP as landlord and Housing situation before this letting cannot be LA general needs" do
+        record.owning_organisation.provider_type = "PRP"
         record.prevten = 30
         record.referral = 1
         household_validator.validate_referral(record)
@@ -217,17 +217,17 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when referral is nominated by a local housing authority" do
-      it "cannot have `other landlord`" do
-        record.landlord = 2
+      it "cannot have a local authority" do
+        record.owning_organisation.provider_type = "LA"
         record.referral = 3
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to include(match(I18n.t("validations.household.referral.prp.local_housing_referral")))
       end
 
-      it "can have `this landlord`" do
+      it "can have a private registered provider" do
+        record.owning_organisation.provider_type = "PRP"
         record.referral = 3
-        record.landlord = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to be_empty
@@ -238,7 +238,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "armed forces validations" do
     context "when the tenant or partner was and is not a member of the armed forces" do
       it "validates that injured in the armed forces is not yes" do
-        record.armedforces = 3
+        record.armedforces = 2
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
@@ -248,7 +248,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant prefers not to say if they were or are in the armed forces" do
       it "validates that injured in the armed forces is not yes" do
-        record.armedforces = 4
+        record.armedforces = 3
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"])
@@ -276,7 +276,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant's partner was or is a member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
-        record.armedforces = 2
+        record.armedforces = 5
         record.reservist = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["reservist"]).to be_empty
@@ -285,7 +285,7 @@ RSpec.describe Validations::HouseholdValidations do
 
     context "when the tenant or partner has left the armed forces" do
       it "validates that they served in the armed forces" do
-        record.armedforces = 3
+        record.armedforces = 2
         record.leftreg = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"])
@@ -293,14 +293,14 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "expects that they served in the armed forces" do
-        record.armedforces = 0
+        record.armedforces = 1
         record.leftreg = 0
         household_validator.validate_armed_forces(record)
         expect(record.errors["leftreg"]).to be_empty
       end
 
       it "expects that they served in the armed forces and may have been injured" do
-        record.armedforces = 0
+        record.armedforces = 1
         record.leftreg = 0
         record.reservist = 0
         household_validator.validate_armed_forces(record)
@@ -462,24 +462,24 @@ RSpec.describe Validations::HouseholdValidations do
         expect(record.errors["age2"]).to be_empty
       end
 
-      it "validates that the number of other household members cannot be less than 0" do
-        record.other_hhmemb = -1
+      it "validates that the number of household members cannot be less than 0" do
+        record.hhmemb = -1
         household_validator.validate_numeric_min_max(record)
-        expect(record.errors["other_hhmemb"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Number of Other Household Members", min: 0, max: 7))
+        expect(record.errors["hhmemb"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Number of Household Members", min: 0, max: 8))
       end
 
-      it "validates that the number of other household members cannot be more than 7" do
-        record.other_hhmemb = 8
+      it "validates that the number of household members cannot be more than 8" do
+        record.hhmemb = 9
         household_validator.validate_numeric_min_max(record)
-        expect(record.errors["other_hhmemb"])
-          .to include(match I18n.t("validations.numeric.valid", field: "Number of Other Household Members", min: 0, max: 7))
+        expect(record.errors["hhmemb"])
+          .to include(match I18n.t("validations.numeric.valid", field: "Number of Household Members", min: 0, max: 8))
       end
 
       it "expects that the number of other household members is between the min and max" do
-        record.other_hhmemb = 5
+        record.hhmemb = 5
         household_validator.validate_numeric_min_max(record)
-        expect(record.errors["other_hhmemb"]).to be_empty
+        expect(record.errors["hhmemb"]).to be_empty
       end
     end
 
@@ -512,7 +512,7 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "condition effects validation" do
     it "validates vision can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_1 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -520,7 +520,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates hearing can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_2 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -528,7 +528,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates mobility can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_3 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -536,7 +536,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates dexterity can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_4 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -544,7 +544,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates learning or understanding or concentrating can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_5 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -552,7 +552,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates memory can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_6 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -560,7 +560,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates mental health can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_7 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -568,7 +568,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates stamina or breathing or fatigue can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_8 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -576,7 +576,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates socially or behaviourally can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_9 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -584,7 +584,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "validates other can't be selected if answer to anyone in household with health condition is not yes" do
-      record.illness = 1
+      record.illness = 2
       record.illness_type_10 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"])
@@ -592,7 +592,7 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     it "expects that an illness can be selected if answer to anyone in household with health condition is yes " do
-      record.illness = 0
+      record.illness = 1
       record.illness_type_1 = 1
       record.illness_type_2 = 1
       record.illness_type_3 = 1
@@ -654,6 +654,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "can be non internal transfer" do
+        record.owning_organisation.provider_type = "PRP"
         record.homeless = 0
         record.referral = 3
         household_validator.validate_referral(record)
@@ -674,6 +675,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "can be non internal transfer" do
+        record.owning_organisation.provider_type = "PRP"
         record.referral = 3
         record.homeless = 1
         household_validator.validate_referral(record)
@@ -697,7 +699,7 @@ RSpec.describe Validations::HouseholdValidations do
   describe "previous housing situation validations" do
     context "when the property is being relet to a previously temporary tenant" do
       it "validates that previous tenancy was temporary" do
-        record.rsnvac = 2
+        record.rsnvac = 9
         record.prevten = 4
         household_validator.validate_previous_housing_situation(record)
         expect(record.errors["prevten"])
