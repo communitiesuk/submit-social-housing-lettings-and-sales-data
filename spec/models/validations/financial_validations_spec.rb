@@ -201,12 +201,11 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
 
-    context "when the landlord is this landlord" do
+    context "when the owning organisation is a private registered provider" do
+      before { record.owning_organisation.provider_type = 2 }
+
       context "when needstype is general needs" do
-        before do
-          record.needstype = 1
-          record.landlord = 1
-        end
+        before { record.needstype = 1 }
 
         [{
           period: { label: "weekly", value: 1 },
@@ -249,7 +248,7 @@ RSpec.describe Validations::FinancialValidations do
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.this_landlord.general_needs"))
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.private_registered_provider.general_needs"))
           end
         end
 
@@ -300,10 +299,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       context "when needstype is supported housing" do
-        before do
-          record.needstype = 2
-          record.landlord = 1
-        end
+        before { record.needstype = 2 }
 
         [{
           period: { label: "weekly", value: 1 },
@@ -346,7 +342,7 @@ RSpec.describe Validations::FinancialValidations do
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.this_landlord.supported_housing"))
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.private_registered_provider.supported_housing"))
           end
         end
 
@@ -397,12 +393,11 @@ RSpec.describe Validations::FinancialValidations do
       end
     end
 
-    context "when the landlord is another RP" do
+    context "when the owning organisation is a local authority" do
+      before { record.owning_organisation.provider_type = 1 }
+
       context "when needstype is general needs" do
-        before do
-          record.needstype = 1
-          record.landlord = 2
-        end
+        before { record.needstype = 1 }
 
         [{
           period: { label: "weekly", value: 1 },
@@ -445,7 +440,7 @@ RSpec.describe Validations::FinancialValidations do
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.other_landlord.general_needs"))
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.local_authority.general_needs"))
           end
         end
 
@@ -496,10 +491,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       context "when needstype is supported housing" do
-        before do
-          record.needstype = 2
-          record.landlord = 2
-        end
+        before { record.needstype = 2 }
 
         [{
           period: { label: "weekly", value: 1 },
@@ -542,7 +534,7 @@ RSpec.describe Validations::FinancialValidations do
             record[test_case[:charge][:field]] = test_case[:charge][:value]
             financial_validator.validate_rent_amount(record)
             expect(record.errors[test_case[:charge][:field]])
-              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.other_landlord.supported_housing"))
+              .to include(match I18n.t("validations.financial.rent.#{test_case[:charge][:field]}.local_authority.supported_housing"))
           end
         end
 

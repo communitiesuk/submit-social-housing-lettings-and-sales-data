@@ -86,7 +86,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"
-    t.integer "landlord"
     t.string "ppostcode_full"
     t.integer "rsnvac"
     t.integer "unittype_gn"

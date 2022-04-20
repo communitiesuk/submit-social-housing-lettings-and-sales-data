@@ -234,25 +234,10 @@ RSpec.describe CaseLog do
       expect(record_from_db["renttype"]).to eq(3)
     end
 
-    context "when the owning and managing organisations are different" do
-      it "correctly derives and saves landlord" do
-        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
-        expect(case_log.landlord).to eq(2)
-        expect(record_from_db["landlord"]).to eq(2)
-      end
-    end
-
-    context "when the owning and managing organisations are the same" do
-      it "correctly derives and saves landlord based on owning_organisation provider_type" do
-        record_from_db = ActiveRecord::Base.connection.execute("select landlord from case_logs where id=#{case_log.id}").to_a[0]
-        expect(case_log.landlord).to eq(1)
-        expect(record_from_db["landlord"]).to eq(1)
-      end
-    end
-
     context "when deriving lettype" do
       context "when the owning organisation is a PRP" do
         before { case_log.owning_organisation.update!(provider_type: 2) }
+
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
             case_log.update!(rent_type: 4, needstype: 2)
@@ -332,17 +317,17 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives and saves weekly personal service charge" do
-            case_log.update!(pscharge: 70, period: 2)
+            case_log.update!(pscharge: 60, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wpschrge from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wpschrge).to eq(35.0)
-            expect(record_from_db["wpschrge"]).to eq(35.0)
+            expect(case_log.wpschrge).to eq(30.0)
+            expect(record_from_db["wpschrge"]).to eq(30.0)
           end
 
           it "correctly derives and saves weekly support charge" do
-            case_log.update!(supcharg: 100, period: 2)
+            case_log.update!(supcharg: 80, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wsupchrg from case_logs where id=#{case_log.id}").to_a[0]
-            expect(case_log.wsupchrg).to eq(50.0)
-            expect(record_from_db["wsupchrg"]).to eq(50.0)
+            expect(case_log.wsupchrg).to eq(40.0)
+            expect(record_from_db["wsupchrg"]).to eq(40.0)
           end
 
           it "correctly derives and saves weekly total charge" do
@@ -382,18 +367,18 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 60.12, pscharge: 60.13, scharge: 60.98, brent: 60.97, period: 2)
+            case_log.update!(supcharg: 60.12, pscharge: 50.13, scharge: 60.98, brent: 60.97, period: 2)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.06)
-            expect(case_log.wpschrge).to eq(30.06)
+            expect(case_log.wpschrge).to eq(25.06)
             expect(case_log.wscharge).to eq(30.49)
             expect(case_log.wrent).to eq(30.49)
-            expect(case_log.wtcharge).to eq(121.1)
+            expect(case_log.wtcharge).to eq(116.1)
             expect(record_from_db["wsupchrg"]).to eq(30.06)
-            expect(record_from_db["wpschrge"]).to eq(30.06)
+            expect(record_from_db["wpschrge"]).to eq(25.06)
             expect(record_from_db["wscharge"]).to eq(30.49)
             expect(record_from_db["wrent"]).to eq(30.49)
-            expect(record_from_db["wtcharge"]).to eq(121.1)
+            expect(record_from_db["wtcharge"]).to eq(116.1)
           end
         end
 
@@ -1030,24 +1015,24 @@ RSpec.describe CaseLog do
           end
 
           it "correctly derives floats" do
-            case_log.update!(supcharg: 30.12, pscharge: 30.13, scharge: 30.98, brent: 100.97, period: 1)
+            case_log.update!(supcharg: 30.12, pscharge: 25.13, scharge: 30.98, brent: 100.97, period: 1)
             record_from_db = ActiveRecord::Base.connection.execute("select wtcharge, wsupchrg, wpschrge, wscharge, wrent from case_logs where id=#{case_log.id}").to_a[0]
             expect(case_log.wsupchrg).to eq(30.12)
-            expect(case_log.wpschrge).to eq(30.13)
+            expect(case_log.wpschrge).to eq(25.13)
             expect(case_log.wscharge).to eq(30.98)
             expect(case_log.wrent).to eq(100.97)
-            expect(case_log.wtcharge).to eq(192.2)
+            expect(case_log.wtcharge).to eq(187.2)
             expect(record_from_db["wsupchrg"]).to eq(30.12)
-            expect(record_from_db["wpschrge"]).to eq(30.13)
+            expect(record_from_db["wpschrge"]).to eq(25.13)
             expect(record_from_db["wscharge"]).to eq(30.98)
             expect(record_from_db["wrent"]).to eq(100.97)
-            expect(record_from_db["wtcharge"]).to eq(192.2)
+            expect(record_from_db["wtcharge"]).to eq(187.2)
           end
         end
       end
 
-      context "when the owning organisation is an LA" do
-        let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+      context "when the owning organisation is a LA" do
+        before { case_log.owning_organisation.update!(provider_type: "LA") }
 
         context "when the rent type is intermediate rent and supported housing" do
           it "correctly derives and saves lettype" do
@@ -1405,6 +1390,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly derives and saves prevten" do
+        case_log.managing_organisation.update!({ provider_type: "PRP" })
         case_log.update!({ needstype: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevten from case_logs where id=#{case_log.id}").to_a[0]

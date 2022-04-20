@@ -57,7 +57,6 @@ class BulkUpload
   def map_row(row)
     {
       lettype: row[1],
-      landlord: row[2],
       # reg_num_la_core_code: row[3],
       # managementgroup: row[4],
       # schemecode: row[5],

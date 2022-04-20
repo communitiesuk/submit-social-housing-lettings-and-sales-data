@@ -2,9 +2,6 @@ FactoryBot.define do
   factory :case_log do
     owning_organisation { FactoryBot.create(:organisation) }
     managing_organisation { FactoryBot.create(:organisation) }
-    trait :same_landlord do
-      managing_organisation { owning_organisation }
-    end
     trait :about_completed do
       renewal { 0 }
       needstype { 1 }
@@ -58,7 +55,6 @@ FactoryBot.define do
       startertenancy { 0 }
       tenancylength { 5 }
       tenancy { 1 }
-      landlord { 1 }
       ppostcode_full { "SE2 6RT" }
       rsnvac { 6 }
       unittype_gn { 7 }

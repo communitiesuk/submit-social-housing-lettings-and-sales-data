@@ -4,7 +4,7 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:record) { FactoryBot.create(:case_log, :same_landlord) }
+  let(:record) { FactoryBot.create(:case_log) }
 
   describe "reasonable preference validations" do
     context "when reasonable preference is homeless" do
@@ -197,8 +197,8 @@ RSpec.describe Validations::HouseholdValidations do
           .to be_empty
       end
 
-      it "cannot have `this landlord` as landlord and Housing situation before this letting cannot be LA general needs" do
-        record.landlord = 1
+      it "cannot have a PRP as landlord and Housing situation before this letting cannot be LA general needs" do
+        record.owning_organisation.provider_type = "PRP"
         record.prevten = 30
         record.referral = 1
         household_validator.validate_referral(record)
@@ -217,17 +217,17 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when referral is nominated by a local housing authority" do
-      it "cannot have `other landlord`" do
-        record.landlord = 2
+      it "cannot have a local authority" do
+        record.owning_organisation.provider_type = "LA"
         record.referral = 3
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to include(match(I18n.t("validations.household.referral.prp.local_housing_referral")))
       end
 
-      it "can have `this landlord`" do
+      it "can have a private registered provider" do
+        record.owning_organisation.provider_type = "PRP"
         record.referral = 3
-        record.landlord = 1
         household_validator.validate_referral(record)
         expect(record.errors["referral"])
           .to be_empty
@@ -654,6 +654,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "can be non internal transfer" do
+        record.owning_organisation.provider_type = "PRP"
         record.homeless = 0
         record.referral = 3
         household_validator.validate_referral(record)
@@ -674,6 +675,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "can be non internal transfer" do
+        record.owning_organisation.provider_type = "PRP"
         record.referral = 3
         record.homeless = 1
         household_validator.validate_referral(record)

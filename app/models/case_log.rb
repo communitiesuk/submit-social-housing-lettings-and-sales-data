@@ -334,16 +334,6 @@ class CaseLog < ApplicationRecord
     hb == 3
   end
 
-  def this_landlord?
-    # 1: This landlord
-    landlord == 1
-  end
-
-  def other_landlord?
-    # 2: Another RP (HA/LA)
-    landlord == 2
-  end
-
   def local_housing_referral?
     # 3: PRP lettings only - Nominated by local housing authority
     referral == 3
@@ -484,11 +474,6 @@ private
       elsif public_send("ecstat#{idx}") == 9 && (public_send("age#{idx}").nil? || public_send("age#{idx}") >= 16)
         self["ecstat#{idx}"] = nil
       end
-    end
-    if owning_organisation == managing_organisation
-      self.landlord = 1
-    else
-      self.landlord = 2
     end
   end
 
