@@ -53,8 +53,8 @@ module Imports
       attributes["tenancylength"] = safe_string_as_integer(xml_doc, "_2cYears")
       attributes["needstype"] = needs_type(xml_doc)
       attributes["lar"] = london_affordable_rent(xml_doc)
-      attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRPRODUCT")
-      attributes["irproduct_other"] = string_or_nil(xml_doc, "IRPRODUCTOTHER")
+      attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRProduct")
+      attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
       attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
       (1..8).each do |index|
@@ -150,6 +150,8 @@ module Imports
       attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
 
       case_log = CaseLog.new(attributes)
+      pp attributes
+      pp case_log.send(:mandatory_fields)
       case_log.save!
     end
 
