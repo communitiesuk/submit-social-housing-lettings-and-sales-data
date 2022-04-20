@@ -43,15 +43,14 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-      logotype: "GOV.UK",
-      service_name: t("service_name"),
+      classes: "app-header",
       service_url: current_user.nil? ? "/" : "/logs",
+      navigation_classes: "govuk-header__navigation--end"
     ) do |component|
+      component.product_name(name: t("service_name"))
       if current_user.nil?
         component.navigation_item(text: "Sign in", href: user_session_path)
       else
-        component.navigation_item(text: "Logs", href: case_logs_path)
-        component.navigation_item(text: "Your organisation", href: "/organisations/#{current_user.organisation.id}")
         component.navigation_item(text: "Your account", href: account_path)
         component.navigation_item(text: "Sign out", href: destroy_user_session_path)
       end

@@ -305,12 +305,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.string "last_sign_in_ip"
     t.integer "role"
     t.string "old_user_id"
+    t.string "phone"
     t.integer "failed_attempts", default: 0
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
     t.boolean "is_dpo", default: false
     t.boolean "is_key_contact", default: false
-    t.string "phone"
     t.integer "second_factor_attempts_count", default: 0
     t.string "encrypted_otp_secret_key"
     t.string "encrypted_otp_secret_key_iv"
