@@ -66,7 +66,26 @@
         <%= content_for(:breadcrumbs) %>
         <%= content_for(:before_content) %>
       </aside>
+    </div>
 
+    <% if !current_user.nil? %>
+      <% if current_user.support? %>
+        <% items = [
+          { name: t("Organisations"), url: "/organisations" },
+          { name: t("Users"), url: "/users" },
+          { name: t("Logs"), url: case_logs_path },
+        ] %>
+      <% else %>
+        <% items = [
+          { name: t("Logs"), url: case_logs_path },
+          { name: t("Users"), url: users_organisation_path(current_user.organisation) },
+          { name: t("About your organisation"), url: "/organisations/#{current_user.organisation.id}" },
+        ] %>
+      <% end %>
+      <%= render partial: "layouts/primary_navigation", locals: {items: items} %>
+    <% end %>
+
+    <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>
           <%= govuk_notification_banner(

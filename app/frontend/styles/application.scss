@@ -23,12 +23,12 @@ $govuk-new-link-styles: true;
 @import "input";
 @import "related-navigation";
 @import "section-skip-link";
-@import "tab-navigation";
 @import "table-group";
 @import "task-list";
 @import "template";
 @import "pagination";
 @import "panel";
+@import "primary-navigation";
 
 // App utilities
 .app-\!-colour-muted {
@@ -52,4 +52,12 @@ $govuk-new-link-styles: true;
   @include govuk-media-query($until: tablet) {
     width: 100%;
   }
+}
+
+.govuk-header__logo {
+  width: 80%;
+}
+
+.govuk-header__content {
+  width: 20%;
 }

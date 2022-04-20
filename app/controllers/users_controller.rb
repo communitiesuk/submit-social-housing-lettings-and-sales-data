@@ -5,6 +5,12 @@ class UsersController < ApplicationController
   before_action :find_resource, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]
 
+  def index
+    if !current_user.support?
+      redirect_to user_path(@user)
+    end
+  end
+
   def update
     if @user.update(user_params)
       if @user == current_user

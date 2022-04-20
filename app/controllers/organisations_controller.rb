@@ -1,7 +1,13 @@
 class OrganisationsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :find_resource
+  before_action :authenticate_user!, except: [:index]
+  before_action :find_resource, except: [:index]
   before_action :authenticate_scope!
+
+  def index
+    if !current_user.support?
+      redirect_to user_path(current_user)
+    end
+  end
 
   def show
     redirect_to details_organisation_path(@organisation)
@@ -41,10 +47,11 @@ private
   end
 
   def authenticate_scope!
-    render_not_found if current_user.organisation != @organisation
+    render_not_found if current_user.organisation != @organisation && !current_user.support?
   end
 
   def find_resource
+    return if current_user.support?
     @organisation = Organisation.find(params[:id])
   end
 end
