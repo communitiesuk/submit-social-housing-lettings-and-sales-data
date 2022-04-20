@@ -339,12 +339,10 @@ class CaseLog < ApplicationRecord
     referral == 3
   end
 
-  def is_prevten_general_needs_tenancy?
+  def is_prevten_la_general_needs?
     # 30: Fixed term Local Authority General Needs tenancy
     # 31: Lifetime Local Authority General Needs tenancy
-    # 32: Fixed term Private Registered Provider General Needs tenancy
-    # 33:  Lifetime Private Registered Provider General Needs tenancy
-    [30, 31, 32, 33].any?(prevten)
+    [30, 31].any?(prevten)
   end
 
   def self.to_csv

@@ -105,7 +105,7 @@ module Validations::HouseholdValidations
       record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
     end
 
-    if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_general_needs_tenancy?
+    if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
       record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
       record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
     end
@@ -124,7 +124,7 @@ module Validations::HouseholdValidations
 private
 
   def household_no_illness?(record)
-    record.illness != 0
+    record.illness != 1
   end
 
   def women_of_child_bearing_age_in_household(record)
