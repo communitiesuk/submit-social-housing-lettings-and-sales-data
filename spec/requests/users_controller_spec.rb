@@ -104,7 +104,9 @@ RSpec.describe UsersController, type: :request do
     describe "title link" do
       it "routes user to the /logs page" do
         get "/", headers:, params: {}
-        expected_link = "href=\"/\">#{I18n.t('service_name')}</a>"
+        follow_redirect!
+        expect(path).to include("/logs")
+        expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
         expect(CGI.unescape_html(response.body)).to include(expected_link)
       end
     end
@@ -1110,8 +1112,9 @@ RSpec.describe UsersController, type: :request do
 
     it "routes user to the /logs page" do
       get "/", headers:, params: {}
-      expected_link = "href=\"/logs\">#{I18n.t('service_name')}</a>"
       follow_redirect!
+      expect(path).to include("/logs")
+      expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
       expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
   end

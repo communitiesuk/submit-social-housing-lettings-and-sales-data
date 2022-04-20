@@ -66,7 +66,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-tab-navigation\""
+            expected_html = "<nav class=\"app-primary-navigation\""
             expect(response.body).to include(expected_html)
           end
 
@@ -107,7 +107,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-tab-navigation\""
+            expected_html = "<nav class=\"app-primary-navigation\""
             expect(response.body).to include(expected_html)
           end
 
@@ -218,7 +218,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows the tab navigation" do
-            expected_html = "<nav class=\"app-tab-navigation\""
+            expected_html = "<nav class=\"app-primary-navigation\""
             expect(response.body).to include(expected_html)
           end
 
