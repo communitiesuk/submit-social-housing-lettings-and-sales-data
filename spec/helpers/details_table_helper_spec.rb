@@ -24,7 +24,7 @@ RSpec.describe DetailsTableHelper do
       end
 
       it "displays the string wrapped in an unordered list with the correct classes" do
-        expect(details).to eq("<ul class=\"govuk-list govuk-list--bullet\"><li>Camden</li>\n<br /><li>Westminster</li>\n<br /><li>Bristol</li></ul>")
+        expect(details).to eq("<ul class=\"govuk-list govuk-list--bullet\"><li>Camden</li><li>Westminster</li><li>Bristol</li></ul>")
       end
     end
   end
