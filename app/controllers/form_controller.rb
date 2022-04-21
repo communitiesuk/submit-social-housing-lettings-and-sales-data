@@ -1,36 +1,26 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: [:submit_form, :review]
-  before_action :find_resource_by_named_id, except: [:submit_form, :review]
+  before_action :find_resource, only: %i[submit_form review]
+  before_action :find_resource_by_named_id, except: %i[submit_form review]
 
   def submit_form
     if @case_log
-      if is_referrer_review?
-        if @case_log.completed?
-          redirect_to(case_logs_path, flash: { notice: "Log #{@case_log.id} has been submitted" })
+      @page = @case_log.form.get_page(params[:case_log][:page])
+      responses_for_page = responses_for_page(@page)
+      if @case_log.update(responses_for_page)
+        session[:errors] = nil
+        if is_referrer_check_answers? && !@case_log.form.next_page(@page, @case_log).to_s.include?("value_check")
+          redirect_to(send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log))
+        elsif @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
+          redirect_to(case_logs_path)
         else
-          @case_log.errors.add :base, "All mandatory fields have not been completed, please refer to section status"
-          session[:review_errors] = @case_log.errors.to_json
-          redirect_to(review_case_log_path)
-        end
-      else
-        @page = @case_log.form.get_page(params[:case_log][:page])
-        responses_for_page = responses_for_page(@page)
-        if @case_log.update(responses_for_page)
-          session[:errors] = nil
-          if is_referrer_check_answers? && !@case_log.form.next_page(@page, @case_log).to_s.include?("value_check")
-            redirect_to(send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log))
-          elsif @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
-            redirect_to(case_logs_path)
-          else
-            redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
-            redirect_to(send(redirect_path, @case_log))
-          end
-        else
-          redirect_path = "case_log_#{@page.id}_path"
-          session[:errors] = @case_log.errors.to_json
+          redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
           redirect_to(send(redirect_path, @case_log))
         end
+      else
+        redirect_path = "case_log_#{@page.id}_path"
+        session[:errors] = @case_log.errors.to_json
+        redirect_to(send(redirect_path, @case_log))
       end
     else
       render_not_found
@@ -38,7 +28,6 @@ class FormController < ApplicationController
   end
 
   def check_answers
-    session[:review_errors] = nil
     if @case_log
       current_url = request.env["PATH_INFO"]
       subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
@@ -50,16 +39,11 @@ class FormController < ApplicationController
 
   def review
     if @case_log
-      if session[:review_errors]
-        JSON(session[:review_errors]).each do |field, messages|
-          messages.each { |message| @case_log.errors.add field.to_sym, message }
-        end
-      end
       render "form/review"
     else
       render_not_found
     end
-  end 
+  end
 
   FormHandler.instance.forms.each do |_key, form|
     form.pages.map do |page|
@@ -126,10 +110,5 @@ private
   def is_referrer_check_answers?
     referrer = request.headers["HTTP_REFERER"].presence || ""
     referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
-  end
-
-  def is_referrer_review?
-    referrer = request.headers["HTTP_REFERER"].presence || ""
-    referrer.present? && referrer.split("/")[-1].present? && referrer.split("/")[-1] == "review"
   end
 end

@@ -5,34 +5,30 @@
   "Review lettings log" => ""
 }) %>
 
-<%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post" do |f| %>
-  <%= f.govuk_error_summary %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-xl">
-        <%= content_for(:title) %>
-      </h1>
-      <% @case_log.form.sections.map do |section|  %>
-        <h2 class="govuk-heading-m"><%= section.label %></h2>
-        <% section.subsections.map do |subsection|  %>
-          <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
-            <div class="x-govuk-summary-card__header">
-              <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
-            </div>
-            <div class="x-govuk-summary-card__body">
-              <dl class="govuk-summary-list">
-                <% subsection.applicable_questions(@case_log).each do |question| %>
-                  <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
-                <% end %>
-              </dl>
-            </div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+    <% @case_log.form.sections.map do |section|  %>
+      <h2 class="govuk-heading-m"><%= section.label %></h2>
+      <% section.subsections.map do |subsection|  %>
+        <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
+          <div class="x-govuk-summary-card__header">
+            <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
           </div>
-        <% end %>
+          <div class="x-govuk-summary-card__body">
+            <dl class="govuk-summary-list">
+              <% subsection.applicable_questions(@case_log).each do |question| %>
+                <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
+              <% end %>
+            </dl>
+          </div>
+        </div>
       <% end %>
-      <div class="govuk-inset-text">
-        You can submit changes to this log until the close of the current collection year, 31 March 2022.
-      </div>
+    <% end %>
+    <div class="govuk-inset-text">
+      You can submit changes to this log until the close of the current collection year, 31 March <%= @case_log.collection_start_year.present? ? @case_log.collection_start_year + 1 : " of current collection end year" %>.
     </div>
   </div>
-  <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
-<% end %>
+</div>

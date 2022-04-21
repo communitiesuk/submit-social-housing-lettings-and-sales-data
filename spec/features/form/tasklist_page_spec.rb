@@ -48,5 +48,5 @@ RSpec.describe "Task List" do
     expect(page).to have_content("Review your answers and submit this log to the Department of Levelling Up, Housing & Communities.")
     click_link(text: "Review lettings log")
     expect(page).to have_current_path("/logs/#{case_log.id}/review")
-  end 
+  end
 end
