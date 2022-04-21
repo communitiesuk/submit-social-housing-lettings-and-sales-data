@@ -31,11 +31,15 @@ RSpec.describe Organisation, type: :model do
 
     context "when the organisation only operates in specific local authorities" do
       before do
-        FactoryBot.create(:organisation_la, organisation_id: organisation.id)
+        FactoryBot.create(:organisation_la, organisation_id: organisation.id, ons_code: "E07000178")
       end
 
       it "has local authorities associated" do
-        expect(organisation.organisation_las.pluck(:ons_code)).to eq(%w[E07000041])
+        expect(organisation.local_authorities).to eq(%w[E07000178])
+      end
+
+      it "maps the ons codes to LA names for display" do
+        expect(organisation.local_authority_names).to eq(%w[Oxford])
       end
     end
 
