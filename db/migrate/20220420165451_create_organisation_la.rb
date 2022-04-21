@@ -6,5 +6,6 @@ class CreateOrganisationLa < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    remove_column :organisations, :local_authorities, :string
   end
 end
