@@ -44,7 +44,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       before do
-        FactoryBot.create(:organisation_la, organisation_id: organisation.id, ons_code: "E07000178")
+        FactoryBot.create(:organisation_la, organisation:, ons_code: "E07000178")
         allow(LocalAuthority).to receive(:ons_code_mappings).and_return(ons_code_mappings)
       end
 
@@ -54,6 +54,17 @@ RSpec.describe Organisation, type: :model do
 
       it "maps the ons codes to LA names for display" do
         expect(organisation.local_authority_names).to eq(%w[Oxford])
+      end
+    end
+
+    context "when the organisation only uses specific rent periods" do
+      before do
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 1)
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
+      end
+
+      it "has rent periods associated" do
+        expect(organisation.organisation_rent_periods.pluck("rent_period")).to eq([1, 2])
       end
     end
 

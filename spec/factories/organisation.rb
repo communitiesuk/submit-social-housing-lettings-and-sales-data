@@ -15,4 +15,11 @@ FactoryBot.define do
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
+
+  factory :organisation_rent_period do
+    organisation
+    rent_period { 1 }
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
+  end
 end

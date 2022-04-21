@@ -1,0 +1,5 @@
+<rent-period:rent-period xmlns:rent-period="dclg:rent-period">
+  <rent-period:id>ebd22326d33e389e9f1bfd546979d2c05f9e68d6</rent-period:id>
+  <rent-period:institution>44026acc7ed5c29516b26f2a5deb639e5e37966d</rent-period:institution>
+  <rent-period:period>1</rent-period:period>
+</rent-period:rent-period>

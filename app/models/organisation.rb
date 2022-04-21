@@ -4,6 +4,7 @@ class Organisation < ApplicationRecord
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
   has_many :organisation_las
+  has_many :organisation_rent_periods
 
   has_paper_trail
 
