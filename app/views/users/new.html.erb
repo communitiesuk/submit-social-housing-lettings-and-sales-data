@@ -25,7 +25,7 @@
         spellcheck: "false",
         value: @resource.email %>
 
-      <%= roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :role,
         roles,
