@@ -35,7 +35,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       it "has local authorities associated" do
-        expect(organisation.organisation_las.pluck(:ons_code)).to eq(["E07000041"])
+        expect(organisation.organisation_las.pluck(:ons_code)).to eq(%w[E07000041])
       end
     end
 

@@ -7,7 +7,7 @@ module Imports
   private
 
     def create_organisation_la(xml_document)
-      xml_doc = xml_document.remove_namespaces!
+      xml_document.remove_namespaces!
       organisation = Organisation.find_by(old_org_id: record_field_value(xml_document, "InstitutionId"))
 
       OrganisationLa.create!(

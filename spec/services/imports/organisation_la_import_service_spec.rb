@@ -28,11 +28,13 @@ RSpec.describe Imports::OrganisationLaImportService do
     end
 
     context "when the organisation does exist" do
-      let!(:organisation) { FactoryBot.create(:organisation, old_org_id:) }
+      before do
+        FactoryBot.create(:organisation, old_org_id:)
+      end
 
       it "successfully create an organisation la record with the expected data" do
         import_service.create_organisation_las("organisation_la_directory")
-        expect(Organisation.find_by(old_org_id:).organisation_las.pluck("ons_code")).to eq(["E07000041"])
+        expect(Organisation.find_by(old_org_id:).organisation_las.pluck("ons_code")).to eq(%w[E07000041])
       end
     end
   end
