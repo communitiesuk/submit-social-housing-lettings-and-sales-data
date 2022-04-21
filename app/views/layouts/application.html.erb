@@ -43,29 +43,45 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-      logotype: "GOV.UK",
-      service_name: t("service_name"),
+      classes: "app-header",
       service_url: current_user.nil? ? "/" : "/logs",
+      navigation_classes: "govuk-header__navigation--end"
     ) do |component|
+      component.product_name(name: t("service_name"))
       if current_user.nil?
         component.navigation_item(text: "Sign in", href: user_session_path)
       else
-        component.navigation_item(text: "Logs", href: case_logs_path)
-        component.navigation_item(text: "Your organisation", href: "/organisations/#{current_user.organisation.id}")
         component.navigation_item(text: "Your account", href: account_path)
         component.navigation_item(text: "Sign out", href: destroy_user_session_path)
       end
     end %>
 
+    <%= govuk_phase_banner(
+      classes: "govuk-width-container",
+      tag: { text: "Beta" },
+      text: "This is a new service – help us improve it by <a class=\"govuk-link\" href=\"#{t('feedback_form')}\" rel=\"noreferrer noopener\" target=\"_blank\">giving us your feedback (opens in a new tab)</a>".html_safe,
+    ) %>
+
+    <% if !current_user.nil? %>
+      <% if current_user.support? %>
+        <% items = [
+          { name: "Organisations", url: "/organisations" },
+          { name: "Users", url: "/users" },
+          { name: "Logs", url: case_logs_path },
+        ] %>
+      <% else %>
+        <% items = [
+          { name: "Logs", url: case_logs_path },
+          { name: "Users", url: users_organisation_path(current_user.organisation) },
+          { name: "About your organisation", url: "/organisations/#{current_user.organisation.id}" },
+        ] %>
+      <% end %>
+      <%= render PrimaryNavigationComponent.new(items:) %>
+    <% end %>
+
     <div class="govuk-width-container">
-      <aside>
-        <%= govuk_phase_banner(
-          tag: { text: "Beta" },
-          text: "This is a new service – help us improve it by <a class=\"govuk-link\" href=\"#{t('feedback_form')}\" rel=\"noreferrer noopener\" target=\"_blank\">giving us your feedback (opens in a new tab)</a>".html_safe,
-        ) %>
-        <%= content_for(:breadcrumbs) %>
-        <%= content_for(:before_content) %>
-      </aside>
+      <%= content_for(:breadcrumbs) %>
+      <%= content_for(:before_content) %>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>

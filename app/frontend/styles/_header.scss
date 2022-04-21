@@ -1,0 +1,23 @@
+.app-header {
+  border-bottom: govuk-spacing(2) solid $govuk-brand-colour;
+
+  .govuk-header__logo {
+    @include govuk-media-query($from: desktop) {
+      width: 60%;
+    }
+
+    @include govuk-media-query($from: 860px) {
+      width: 75%;
+    }
+  }
+
+  .govuk-header__content {
+    @include govuk-media-query($from: desktop) {
+      width: 40%;
+    }
+
+    @include govuk-media-query($from: 860px) {
+      width: 25%;
+    }
+  }
+}
