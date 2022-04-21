@@ -8,4 +8,58 @@ module Validations::LocalAuthorityValidations
       record.errors.add :ppostcode_full, error_message
     end
   end
+
+  def validate_la(record)
+    if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
+      record.errors.add :la, I18n.t("validations.property.la.london_rent")
+      if record.postcode_known? && record.postcode_full.present?
+        record.errors.add :postcode_full, I18n.t("validations.property.la.london_rent_postcode")
+      end
+    end
+
+    if record.la_known? && record.la.blank?
+      record.errors.add :la, I18n.t("validations.property.la.la_known")
+    end
+
+    if record.owning_organisation && record.owning_organisation.local_authorities.present? &&
+        record.la && !record.owning_organisation.local_authorities.include?(record.la)
+      la_name = record.form.get_question("la", record).label_from_value(record.la)
+      org_name = record.owning_organisation.name
+      record.errors.add :la, I18n.t("validations.property.la.la_invalid_for_org", org_name:, la_name:)
+    end
+  end
+
+  LONDON_BOROUGHS = %w[E09000001
+                       E09000002
+                       E09000003
+                       E09000004
+                       E09000005
+                       E09000006
+                       E09000007
+                       E09000008
+                       E09000009
+                       E09000010
+                       E09000011
+                       E09000012
+                       E09000013
+                       E09000014
+                       E09000015
+                       E09000016
+                       E09000017
+                       E09000018
+                       E09000019
+                       E09000020
+                       E09000021
+                       E09000022
+                       E09000023
+                       E09000024
+                       E09000025
+                       E09000026
+                       E09000027
+                       E09000028
+                       E09000029
+                       E09000030
+                       E09000031
+                       E09000032
+                       E09000033].freeze
 end

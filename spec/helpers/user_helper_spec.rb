@@ -135,5 +135,29 @@ RSpec.describe UserHelper do
         end
       end
     end
+
+    context "when the user is a data provider viewing organisation details" do
+      let(:current_user) { FactoryBot.create(:user, :data_provider) }
+
+      it "does not allow changing details" do
+        expect(can_edit_org?(current_user)).to be false
+      end
+    end
+
+    context "when the user is a data coordinator viewing organisation details" do
+      let(:current_user) { FactoryBot.create(:user, :data_coordinator) }
+
+      it "does not allow changing details" do
+        expect(can_edit_org?(current_user)).to be true
+      end
+    end
+
+    context "when the user is a support user viewing organisation details" do
+      let(:current_user) { FactoryBot.create(:user, :support) }
+
+      it "does not allow changing details" do
+        expect(can_edit_org?(current_user)).to be true
+      end
+    end
   end
 end

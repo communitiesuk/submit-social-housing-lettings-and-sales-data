@@ -21,6 +21,15 @@ RSpec.describe FormHandler do
     end
   end
 
+  describe "Current form" do
+    it "returns the latest form by date" do
+      form_handler = described_class.instance
+      form = form_handler.current_form
+      expect(form).to be_a(Form)
+      expect(form.start_date.year).to eq(2022)
+    end
+  end
+
   it "loads the form once at boot time" do
     form_handler = described_class.instance
     expect(Form).not_to receive(:new).with(:any, test_form_name)

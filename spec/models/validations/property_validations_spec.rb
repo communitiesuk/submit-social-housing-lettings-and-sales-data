@@ -147,49 +147,6 @@ RSpec.describe Validations::PropertyValidations do
     end
   end
 
-  describe "#validate_la" do
-    context "when the rent type is London affordable" do
-      let(:expected_error) { I18n.t("validations.property.la.london_rent") }
-
-      it "validates that the local authority is in London" do
-        record.la = "E07000105"
-        record.rent_type = 2
-        property_validator.validate_la(record)
-        expect(record.errors["la"]).to include(match(expected_error))
-        expect(record.errors["postcode_full"]).to be_empty
-      end
-
-      it "expects that the local authority is in London" do
-        record.la = "E09000033"
-        record.rent_type = 2
-        property_validator.validate_la(record)
-        expect(record.errors["la"]).to be_empty
-      end
-
-      context "when the la has been derived from a known postcode" do
-        let(:expected_error) { I18n.t("validations.property.la.london_rent_postcode") }
-
-        it "also adds an error to the postcode field" do
-          record.la = "E07000105"
-          record.rent_type = 2
-          record.postcode_known = 1
-          record.postcode_full = "BN18 7TR"
-          property_validator.validate_la(record)
-          expect(record.errors["postcode_full"]).to include(match(expected_error))
-        end
-      end
-    end
-
-    context "when previous la is known" do
-      it "la has to be provided" do
-        record.la_known = 1
-        property_validator.validate_la(record)
-        expect(record.errors["la"])
-          .to include(match I18n.t("validations.property.la.la_known"))
-      end
-    end
-  end
-
   describe "#validate_unitletas" do
     context "when the property has not been let before" do
       it "validates that no previous let type is provided" do

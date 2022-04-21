@@ -72,6 +72,24 @@ describe "rake core:data_import", type: :task do
     end
   end
 
+  context "when importing organisation local authority data" do
+    let(:type) { "organisation-las" }
+    let(:import_service) { instance_double(Imports::OrganisationLaImportService) }
+    let(:fixture_path) { "spec/fixtures/softwire_imports/organisation_las" }
+
+    before do
+      allow(Imports::OrganisationLaImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates an organisation la from the given XML file" do
+      expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::OrganisationLaImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_organisation_las).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
   it "raises an exception if no parameters are provided" do
     expect { task.invoke }.to raise_error(/Usage/)
   end

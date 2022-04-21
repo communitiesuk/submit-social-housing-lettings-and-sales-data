@@ -11,7 +11,6 @@ org = Organisation.create!(
   address_line1: "2 Marsham Street",
   address_line2: "London",
   postcode: "SW1P 4DF",
-  local_authorities: "None",
   holds_own_stock: false,
   other_stock_owners: "None",
   managing_agents: "None",
