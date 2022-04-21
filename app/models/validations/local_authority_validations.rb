@@ -9,6 +9,26 @@ module Validations::LocalAuthorityValidations
     end
   end
 
+  def validate_la(record)
+    if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
+      record.errors.add :la, I18n.t("validations.property.la.london_rent")
+      if record.postcode_known? && record.postcode_full.present?
+        record.errors.add :postcode_full, I18n.t("validations.property.la.london_rent_postcode")
+      end
+    end
+
+    if record.la_known? && record.la.blank?
+      record.errors.add :la, I18n.t("validations.property.la.la_known")
+    end
+
+    if record.owning_organisation && record.owning_organisation.local_authorities.present? &&
+      record.la && !record.owning_organisation.local_authorities.include?(record.la)
+        la_name = record.form.get_question("la", record).label_from_value(record.la)
+        org_name = record.owning_organisation.name
+        record.errors.add :la, I18n.t("validations.property.la.la_invalid_for_org", org_name:, la_name:)
+    end
+  end
+
   LONDON_BOROUGHS = %w[E09000001
                        E09000002
                        E09000003
@@ -42,16 +62,4 @@ module Validations::LocalAuthorityValidations
                        E09000031
                        E09000032
                        E09000033].freeze
-  def validate_la(record)
-    if record.la.present? && !LONDON_BOROUGHS.include?(record.la) && record.is_london_rent?
-      record.errors.add :la, I18n.t("validations.property.la.london_rent")
-      if record.postcode_known? && record.postcode_full.present?
-        record.errors.add :postcode_full, I18n.t("validations.property.la.london_rent_postcode")
-      end
-    end
-
-    if record.la_known? && record.la.blank?
-      record.errors.add :la, I18n.t("validations.property.la.la_known")
-    end
-  end
 end
