@@ -12,7 +12,7 @@
         <% if can_edit_org?(current_user) && attr[:editable] %>
           <%= summary_list.row do |row| %>
             <% row.key { attr[:name].to_s.humanize } %>
-            <% row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") } %>
+            <% row.value { details_html(attr) } %>
             <% row.action(
               visually_hidden_text: "name",
               href: edit_organisation_path,
@@ -22,7 +22,7 @@
         <% else %>
           <%= summary_list.row do |row| %>
             <% row.key { attr[:name].to_s.humanize } %>
-            <% row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") } %>
+            <% row.value { details_html(attr) } %>
             <% row.action %>
           <% end %>
         <% end %>

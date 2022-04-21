@@ -36,13 +36,17 @@ class Organisation < ApplicationRecord
     !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
   end
 
+  def local_authorities
+    organisation_las.pluck(:ons_code)
+  end
+
   def display_attributes
     [
       { name: "name", value: name, editable: true },
       { name: "address", value: address_string, editable: true },
       { name: "telephone_number", value: phone, editable: true },
       { name: "type", value: "Org type", editable: false },
-      { name: "local_authorities_operated_in", value: local_authorities, editable: false },
+      { name: "local_authorities_operated_in", value: local_authorities, editable: false, format: :bullet },
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
       { name: "managing_agents", value: managing_agents, editable: false },
