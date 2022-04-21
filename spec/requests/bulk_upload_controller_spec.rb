@@ -14,7 +14,7 @@ RSpec.describe BulkUploadController, type: :request do
 
   context "when a user is not signed in" do
     describe "GET #show" do
-      before { get url, headers: headers, params: {} }
+      before { get url, headers:, params: {} }
 
       it "does not let you see the bulk upload page" do
         expect(response).to redirect_to("/account/sign-in")

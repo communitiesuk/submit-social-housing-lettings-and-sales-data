@@ -28,7 +28,7 @@ describe Admin::AdminUsersController, type: :controller do
     let(:params) { { admin_user: { email: "test2@example.com", password: "pAssword1", phone: "07566126368" } } }
 
     it "creates a new admin user" do
-      expect { post :create, session: valid_session, params: params }.to change(AdminUser, :count).by(1)
+      expect { post :create, session: valid_session, params: }.to change(AdminUser, :count).by(1)
     end
 
     it "tracks who created the record" do
@@ -59,7 +59,7 @@ describe Admin::AdminUsersController, type: :controller do
       let(:params) { { id: admin_user.id, admin_user: { email: } } }
 
       before do
-        patch :update, session: valid_session, params: params
+        patch :update, session: valid_session, params:
       end
 
       it "updates the user without needing to input a password" do

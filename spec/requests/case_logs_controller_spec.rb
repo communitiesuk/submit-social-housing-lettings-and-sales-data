@@ -47,7 +47,7 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       before do
-        post "/logs", headers: headers, params: params.to_json
+        post "/logs", headers:, params: params.to_json
       end
 
       it "returns http success" do
@@ -124,7 +124,7 @@ RSpec.describe CaseLogsController, type: :request do
       before do
         RequestHelper.stub_http_requests
         sign_in user
-        post "/logs", headers: headers
+        post "/logs", headers:
       end
 
       it "tracks who created the record" do
@@ -289,7 +289,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when there are less than 20 logs" do
           before do
-            get "/logs", headers: headers, params: {}
+            get "/logs", headers:, params: {}
           end
 
           it "shows a table of logs" do
@@ -342,7 +342,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when on the first page" do
             before do
-              get "/logs", headers: headers, params: {}
+              get "/logs", headers:, params: {}
             end
 
             it "has pagination links" do
@@ -363,7 +363,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when on the second page" do
             before do
-              get "/logs?page=2", headers: headers, params: {}
+              get "/logs?page=2", headers:, params: {}
             end
 
             it "shows the total log count" do
@@ -394,7 +394,7 @@ RSpec.describe CaseLogsController, type: :request do
       let(:id) { completed_case_log.id }
 
       before do
-        get "/logs/#{id}", headers: headers
+        get "/logs/#{id}", headers:
       end
 
       it "returns http success" do
@@ -428,7 +428,7 @@ RSpec.describe CaseLogsController, type: :request do
           context "with case logs that are owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{case_log.id}", headers: headers, params: {}
+              get "/logs/#{case_log.id}", headers:, params: {}
             end
 
             it "shows the tasklist for case logs you have access to" do
@@ -455,7 +455,7 @@ RSpec.describe CaseLogsController, type: :request do
 
             before do
               sign_in user
-              get "/logs/#{section_completed_case_log.id}", headers: headers, params: {}
+              get "/logs/#{section_completed_case_log.id}", headers:, params: {}
             end
 
             it "displays a section status for a case log" do
@@ -468,7 +468,7 @@ RSpec.describe CaseLogsController, type: :request do
           context "with case logs that are not owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{unauthorized_case_log.id}", headers: headers, params: {}
+              get "/logs/#{unauthorized_case_log.id}", headers:, params: {}
             end
 
             it "does not show the tasklist for case logs you don't have access to" do
@@ -548,7 +548,7 @@ RSpec.describe CaseLogsController, type: :request do
                           :completed,
                           owning_organisation: organisation,
                           managing_organisation: organisation)
-        get "/logs", headers: headers, params: {}
+        get "/logs", headers:, params: {}
       end
 
       it "downloads a CSV file with headers" do
@@ -578,7 +578,7 @@ RSpec.describe CaseLogsController, type: :request do
       before do
         sign_in user
         FactoryBot.create_list(:case_log, 26, owning_organisation: organisation)
-        get "/logs", headers: headers, params: {}
+        get "/logs", headers:, params: {}
       end
 
       it "does not paginate, it downloads all the user's logs" do
@@ -598,7 +598,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      patch "/logs/#{id}", headers: headers, params: params.to_json
+      patch "/logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -656,7 +656,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:id) { case_log.id }
 
     before do
-      put "/logs/#{id}", headers: headers, params: params.to_json
+      put "/logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -696,7 +696,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     context "when deleting a case log" do
       before do
-        delete "/logs/#{id}", headers: headers
+        delete "/logs/#{id}", headers:
       end
 
       it "returns http success" do
@@ -730,7 +730,7 @@ RSpec.describe CaseLogsController, type: :request do
       before do
         allow(CaseLog).to receive(:find_by).and_return(case_log)
         allow(case_log).to receive(:delete).and_return(false)
-        delete "/logs/#{id}", headers: headers
+        delete "/logs/#{id}", headers:
       end
 
       it "returns an unprocessable entity 422" do

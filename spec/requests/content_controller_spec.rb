@@ -6,7 +6,7 @@ RSpec.describe ContentController, type: :request do
 
   describe "render privacy notice content page" do
     before do
-      get "/privacy-notice", headers: headers, params: {}
+      get "/privacy-notice", headers:, params: {}
     end
 
     it "returns a 200" do
@@ -20,7 +20,7 @@ RSpec.describe ContentController, type: :request do
 
   describe "render accessibility statement content page" do
     before do
-      get "/accessibility-statement", headers: headers, params: {}
+      get "/accessibility-statement", headers:, params: {}
     end
 
     it "returns a 200" do
@@ -34,7 +34,7 @@ RSpec.describe ContentController, type: :request do
 
   describe "render data sharing agreement" do
     before do
-      get "/data-sharing-agreement", headers: headers, params: {}
+      get "/data-sharing-agreement", headers:, params: {}
     end
 
     it "returns a 200" do

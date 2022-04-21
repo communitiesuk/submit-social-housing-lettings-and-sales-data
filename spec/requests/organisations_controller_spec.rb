@@ -33,7 +33,7 @@ RSpec.describe OrganisationsController, type: :request do
       context "with an organisation that the user belongs to" do
         before do
           sign_in user
-          get "/organisations/#{organisation.id}", headers: headers, params: {}
+          get "/organisations/#{organisation.id}", headers:, params: {}
         end
 
         it "redirects to details" do
@@ -44,7 +44,7 @@ RSpec.describe OrganisationsController, type: :request do
       context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
         before do
           sign_in user
-          get "/organisations/#{unauthorised_organisation.id}", headers: headers, params: {}
+          get "/organisations/#{unauthorised_organisation.id}", headers:, params: {}
         end
 
         it "returns not found 404 from org route" do
@@ -62,7 +62,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           before do
             sign_in user
-            get "/organisations/#{organisation.id}/details", headers: headers, params: {}
+            get "/organisations/#{organisation.id}/details", headers:, params: {}
           end
 
           it "shows the tab navigation" do
@@ -90,7 +90,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
-            get "/organisations/#{unauthorised_organisation.id}/details", headers: headers, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/details", headers:, params: {}
           end
 
           it "returns not found 404 from org details route" do
@@ -103,7 +103,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           before do
             sign_in user
-            get "/organisations/#{organisation.id}/users", headers: headers, params: {}
+            get "/organisations/#{organisation.id}/users", headers:, params: {}
           end
 
           it "shows the tab navigation" do
@@ -130,7 +130,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
-            get "/organisations/#{unauthorised_organisation.id}/users", headers: headers, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/users", headers:, params: {}
           end
 
           it "returns not found 404 from users page" do
@@ -143,7 +143,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           before do
             sign_in user
-            get "/organisations/#{organisation.id}/edit", headers: headers, params: {}
+            get "/organisations/#{organisation.id}/edit", headers:, params: {}
           end
 
           it "shows an edit form" do
@@ -156,7 +156,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user does not belong to" do
           before do
             sign_in user
-            get "/organisations/#{unauthorised_organisation.id}/edit", headers: headers, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/edit", headers:, params: {}
           end
 
           it "returns a 404 not found" do
@@ -169,7 +169,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           before do
             sign_in user
-            patch "/organisations/#{organisation.id}", headers: headers, params: params
+            patch "/organisations/#{organisation.id}", headers:, params:
           end
 
           it "updates the org" do
@@ -197,7 +197,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user does not belong to" do
           before do
             sign_in user
-            patch "/organisations/#{unauthorised_organisation.id}", headers: headers, params: {}
+            patch "/organisations/#{unauthorised_organisation.id}", headers:, params: {}
           end
 
           it "returns a 404 not found" do
@@ -214,7 +214,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that the user belongs to" do
           before do
             sign_in user
-            get "/organisations/#{organisation.id}/details", headers: headers, params: {}
+            get "/organisations/#{organisation.id}/details", headers:, params: {}
           end
 
           it "shows the tab navigation" do
@@ -242,7 +242,7 @@ RSpec.describe OrganisationsController, type: :request do
         context "with an organisation that is not in scope for the user, i.e. that they do not belong to" do
           before do
             sign_in user
-            get "/organisations/#{unauthorised_organisation.id}/details", headers: headers, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/details", headers:, params: {}
           end
 
           it "returns not found 404" do
@@ -254,7 +254,7 @@ RSpec.describe OrganisationsController, type: :request do
       context "when accessing the users tab" do
         before do
           sign_in user
-          get "/organisations/#{organisation.id}/users", headers: headers, params: {}
+          get "/organisations/#{organisation.id}/users", headers:, params: {}
         end
 
         it "returns 200" do
@@ -265,7 +265,7 @@ RSpec.describe OrganisationsController, type: :request do
       describe "#edit" do
         before do
           sign_in user
-          get "/organisations/#{organisation.id}/edit", headers: headers, params: {}
+          get "/organisations/#{organisation.id}/edit", headers:, params: {}
         end
 
         it "redirects to home" do
@@ -276,7 +276,7 @@ RSpec.describe OrganisationsController, type: :request do
       describe "#update" do
         before do
           sign_in user
-          patch "/organisations/#{organisation.id}", headers: headers, params: params
+          patch "/organisations/#{organisation.id}", headers:, params:
         end
 
         it "redirects to home" do
