@@ -162,7 +162,7 @@ module Imports
       attributes.each do |key, value|
         case_log_value = case_log.send(key.to_sym)
         if value != case_log_value
-          differences.push("#{key.to_s} #{value.to_s} #{case_log_value.to_s}")
+          differences.push("#{key} #{value} #{case_log_value}")
         end
       end
       raise "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
@@ -313,9 +313,9 @@ module Imports
       if index > attributes["hhmemb"]
         nil
       elsif attributes["age#{index}_known"] == 1 &&
-        attributes["sex#{index}"] == "R" &&
-        attributes["relat#{index}"] == "R" &&
-        attributes["ecstat#{index}"] == 10
+          attributes["sex#{index}"] == "R" &&
+          attributes["relat#{index}"] == "R" &&
+          attributes["ecstat#{index}"] == 10
         1 # No
       else
         0 # Yes
@@ -422,7 +422,7 @@ module Imports
     end
 
     def first_time_let(rsnvac)
-      if rsnvac == 15 || rsnvac == 16 || rsnvac == 17
+      if [15, 16, 17].include?(rsnvac)
         1
       else
         0
