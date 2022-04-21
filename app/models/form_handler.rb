@@ -10,6 +10,10 @@ class FormHandler
     @forms[form]
   end
 
+  def current_form
+    forms[forms.keys.sort { |a, b| a.to_i <=> b.to_i }.last]
+  end
+
 private
 
   def get_all_forms
