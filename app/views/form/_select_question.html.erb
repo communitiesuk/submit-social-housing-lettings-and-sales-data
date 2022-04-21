@@ -1,7 +1,7 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
 
 <% selected = @case_log.public_send(question.id) || "" %>
-<%= answers = question.displayed_answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
+<% answers = question.displayed_answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
   <%= f.govuk_collection_select question.id.to_sym,
     answers,
     :id,
