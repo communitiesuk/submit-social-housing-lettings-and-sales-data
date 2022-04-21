@@ -139,7 +139,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
         it "triggers an email" do
           expect(notify_client).to receive(:send_email)
-          put "/admin/password", headers: headers, params: params
+          put "/admin/password", headers:, params:
         end
       end
     end
@@ -211,7 +211,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
 
         it "triggers an email" do
           expect(notify_client).to receive(:send_email)
-          put "/account/password", headers: headers, params: params
+          put "/account/password", headers:, params:
         end
       end
     end

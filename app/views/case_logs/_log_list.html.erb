@@ -28,21 +28,21 @@
             <%= govuk_link_to log.id, case_log_path(log) %>
           </th>
           <td class="govuk-table__cell app-!-font-tabular">
-            <%= log.tenant_code? ? log.tenant_code : '–' %>
+            <%= log.tenant_code? ? log.tenant_code : "–" %>
           </td>
           <td class="govuk-table__cell app-!-font-tabular">
-            <%= log.propcode? ? log.propcode : '–' %>
+            <%= log.propcode? ? log.propcode : "–" %>
           </td>
           <td class="govuk-table__cell">
-            <%= log.startdate.present? ? log.startdate.to_formatted_s(:govuk_date) : '–' %>
+            <%= log.startdate.present? ? log.startdate.to_formatted_s(:govuk_date) : "–" %>
           </td>
           <td class="govuk-table__cell">
             <%= log.created_at.to_formatted_s(:govuk_date) %>
           </td>
           <td class="govuk-table__cell">
             <%= govuk_tag(
-              colour: log.status == 'completed' ? 'blue' : 'grey',
-              text: log.status.humanize
+              colour: log.status == "completed" ? "blue" : "grey",
+              text: log.status.humanize,
             ) %>
           </td>
           <% if current_user.support? %>
@@ -59,4 +59,3 @@
     </table>
   </section>
 </figure>
-

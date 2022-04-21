@@ -10,20 +10,28 @@
       <% @organisation.display_attributes.each do |attr| %>
 
         <% if current_user.data_coordinator? && attr[:editable] %>
-          <%= summary_list.row do |row|
-            row.key { attr[:name].to_s.humanize }
-            row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") }
-            row.action(visually_hidden_text: 'name', href: edit_organisation_path, html_attributes: { 'data-qa': "change-#{attr[:name]}" })
-          end %>
+          <%= summary_list.row do |row| %>
+            <% row.key { attr[:name].to_s.humanize } %>
+            <% row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") } %>
+            <% row.action(
+              visually_hidden_text: "name",
+              href: edit_organisation_path,
+              html_attributes: { "data-qa": "change-#{attr[:name]}" },
+            ) %>
+          <% end %>
         <% else %>
-          <%= summary_list.row do |row|
-            row.key { attr[:name].to_s.humanize }
-            row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") }
-            row.action()
-          end %>
+          <%= summary_list.row do |row| %>
+            <% row.key { attr[:name].to_s.humanize } %>
+            <% row.value { simple_format(attr[:value].to_s, {}, wrapper_tag: "div") } %>
+            <% row.action %>
+          <% end %>
         <% end %>
 
       <% end %>
     <% end %>
+  </div>
+
+  <div class="govuk-grid-column-one-third-from-desktop">
+    <%= render partial: "layouts/collection_resources" %>
   </div>
 </div>

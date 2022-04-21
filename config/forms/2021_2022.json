@@ -22,7 +22,7 @@
                     "1": {
                       "value": "General needs"
                     },
-                    "0": {
+                    "2": {
                       "value": "Supported housing"
                     }
                   }
@@ -90,12 +90,12 @@
                     }
                   },
                   "conditional_for": {
-                    "intermediate_rent_product_name": [
+                    "irproduct_other": [
                       5
                     ]
                   }
                 },
-                "intermediate_rent_product_name": {
+                "irproduct_other": {
                   "check_answer_label": "Product name",
                   "header": "Name of rent product",
                   "type": "text"
@@ -587,13 +587,13 @@
                   "type": "radio",
                   "answer_options": {
                     "1": {
-                      "value": "Affordable rent basis"
+                      "value": "Social rent basis"
                     },
                     "2": {
-                      "value": "Intermediate rent basis"
+                      "value": "Affordable rent basis"
                     },
-                    "0": {
-                      "value": "Social rent basis"
+                    "4": {
+                      "value": "Intermediate rent basis"
                     },
                     "divider": {
                       "value": true
@@ -621,39 +621,39 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "13": {
                       "value": "Internal transfer",
                       "hint": "Excluding renewals of a fixed-term tenancy"
                     },
-                    "10": {
+                    "5": {
                       "value": "Previous tenant died with no succession"
                     },
-                    "2": {
+                    "9": {
                       "value": "Re-let to tenant who occupied same property as temporary accommodation"
                     },
-                    "0": {
+                    "14": {
                       "value": "Renewal of fixed-term tenancy"
                     },
-                    "7": {
-                      "value": "Tenant abandoned property"
-                    },
-                    "3": {
+                    "19": {
                       "value": "Tenant involved in a succession downsize"
                     },
-                    "6": {
-                      "value": "Tenant moved to care home"
-                    },
-                    "5": {
-                      "value": "Tenant moved to other social housing provider"
-                    },
-                    "4": {
+                    "8": {
                       "value": "Tenant moved to private sector or other accommodation"
                     },
-                    "9": {
-                      "value": "Tenant was evicted due to anti-social behaviour"
+                    "12": {
+                      "value": "Tenant moved to other social housing provider"
                     },
-                    "8": {
+                    "18": {
+                      "value": "Tenant moved to care home"
+                    },
+                    "6": {
+                      "value": "Tenant abandoned property"
+                    },
+                    "10": {
                       "value": "Tenant was evicted due to rent arrears"
+                    },
+                    "11": {
+                      "value": "Tenant was evicted due to anti-social behaviour"
                     }
                   }
                 }
@@ -675,14 +675,14 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "15": {
-                      "value": "First let of new-build property"
-                    },
                     "16": {
                       "value": "First let of conversion, rehabilitation or acquired property"
                     },
                     "17": {
                       "value": "First let of leased property"
+                    },
+                    "15": {
+                      "value": "First let of new-build property"
                     }
                   }
                 }
@@ -748,28 +748,28 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "2": {
                       "value": "Bedsit"
                     },
-                    "3": {
+                    "8": {
                       "value": "Bungalow"
                     },
-                    "0": {
+                    "1": {
                       "value": "Flat or maisonette"
                     },
-                    "2": {
+                    "7": {
                       "value": "House"
                     },
-                    "6": {
+                    "10": {
                       "value": "Shared bungalow"
                     },
                     "4": {
                       "value": "Shared flat or maisonette"
                     },
-                    "5": {
+                    "9": {
                       "value": "Shared house"
                     },
-                    "7": {
+                    "6": {
                       "value": "Other"
                     }
                   }
@@ -786,10 +786,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "2": {
                       "value": "Converted from previous residential or non-residential property"
                     },
-                    "0": {
+                    "1": {
                       "value": "Purpose built"
                     }
                   }
@@ -806,10 +806,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     }
                   }
@@ -841,7 +841,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_void_date": {
+                "voiddate": {
                   "check_answer_label": "Void or renewal date",
                   "header": "What is the void or renewal date?",
                   "hint_text": "For example, 27 3 2021.",
@@ -863,7 +863,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "property_void_date": {
+                "voiddate": {
                   "check_answer_label": "New-build handover date",
                   "header": "What is the new-build handover date?",
                   "hint_text": "",
@@ -938,10 +938,10 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     }
                   }
@@ -958,25 +958,25 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1002,25 +1002,25 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "2": {
                       "value": "Assured"
                     },
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold"
                     },
-                    "2": {
+                    "5": {
                       "value": "Licence agreement (almshouses only)"
                     },
-                    "3": {
+                    "1": {
                       "value": "Secure (including flexible)"
                     },
-                    "4": {
+                    "3": {
                       "value": "Other"
                     }
                   },
                   "conditional_for": {
                     "tenancyother": [
-                      4
+                      3
                     ]
                   }
                 },
@@ -1053,10 +1053,10 @@
               },
               "depends_on": [
                 {
-                  "tenancy": 3
+                  "tenancy": 1
                 },
                 {
-                  "tenancy": 1
+                  "tenancy": 4
                 }
               ]
             },
@@ -1064,25 +1064,25 @@
               "header": "",
               "description": "",
               "questions": {
-                "letting_in_sheltered_accommodation": {
+                "shelteredaccom": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes – sheltered housing"
                     },
-                    "1": {
+                    "2": {
                       "value": "Yes – extra care housing"
                     },
-                    "2": {
+                    "3": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
@@ -1090,7 +1090,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             }
@@ -1243,7 +1243,7 @@
                     "divider": {
                       "value": true
                     },
-                    "5": {
+                    "17": {
                       "value": "Tenant prefers not to say"
                     }
                   }
@@ -1260,16 +1260,16 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "19": {
                       "value": "Arab"
                     },
-                    "1": {
+                    "16": {
                       "value": "Other ethnic group"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      1
+                      16
                     ]
                   }
                 },
@@ -1295,25 +1295,25 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "10": {
                       "value": "Bangladeshi"
                     },
-                    "1": {
+                    "15": {
                       "value": "Chinese"
                     },
-                    "2": {
+                    "8": {
                       "value": "Indian"
                     },
-                    "3": {
+                    "9": {
                       "value": "Pakistani"
                     },
-                    "4": {
+                    "11": {
                       "value": "Other ethnic group"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      4
+                      11
                     ]
                   }
                 },
@@ -1339,13 +1339,13 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "13": {
                       "value": "African"
                     },
-                    "1": {
+                    "12": {
                       "value": "Caribbean"
                     },
-                    "2": {
+                    "14": {
                       "value": "Any other Black, African or Caribbean background"
                     }
                   },
@@ -1377,19 +1377,22 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "4": {
                       "value": "White and Black Caribbean"
                     },
-                    "1": {
+                    "5": {
                       "value": "White and Black African"
                     },
-                    "2": {
+                    "6": {
+                      "value": "White and Asian"
+                    },
+                    "7": {
                       "value": "Any other Mixed or Multiple ethnic background"
                     }
                   },
                   "conditional_for": {
                     "ethnic_other": [
-                      2
+                      7
                     ]
                   }
                 },
@@ -1415,17 +1418,14 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "English, Welsh, Northern Irish, Scottish or British"
                     },
-                    "1": {
+                    "2": {
                       "value": "Irish"
                     },
-                    "2": {
+                    "18": {
                       "value": "Gypsy or Irish Traveller"
-                    },
-                    "3": {
-                      "value": "Any other White background"
                     }
                   },
                   "conditional_for": {
@@ -1579,25 +1579,25 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 1
+                  "hhmemb": 2
                 },
                 {
-                  "other_hhmemb": 2
+                  "hhmemb": 3
                 },
                 {
-                  "other_hhmemb": 3
+                  "hhmemb": 4
                 },
                 {
-                  "other_hhmemb": 4
+                  "hhmemb": 5
                 },
                 {
-                  "other_hhmemb": 5
+                  "hhmemb": 6
                 },
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -1792,22 +1792,22 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 2
+                  "hhmemb": 3
                 },
                 {
-                  "other_hhmemb": 3
+                  "hhmemb": 4
                 },
                 {
-                  "other_hhmemb": 4
+                  "hhmemb": 5
                 },
                 {
-                  "other_hhmemb": 5
+                  "hhmemb": 6
                 },
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -2002,19 +2002,19 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 3
+                  "hhmemb": 4
                 },
                 {
-                  "other_hhmemb": 4
+                  "hhmemb": 5
                 },
                 {
-                  "other_hhmemb": 5
+                  "hhmemb": 6
                 },
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -2209,16 +2209,16 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 4
+                  "hhmemb": 5
                 },
                 {
-                  "other_hhmemb": 5
+                  "hhmemb": 6
                 },
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -2413,13 +2413,13 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 5
+                  "hhmemb": 6
                 },
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -2614,10 +2614,10 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 6
+                  "hhmemb": 7
                 },
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -2812,7 +2812,7 @@
               },
               "depends_on": [
                 {
-                  "other_hhmemb": 7
+                  "hhmemb": 8
                 }
               ]
             },
@@ -3007,22 +3007,22 @@
                   "type": "radio",
                   "check_answer_label": "Household links to UK armed forces",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes – the person is a current or former regular"
                     },
-                    "1": {
+                    "4": {
                       "value": "Yes – the person is a current or former reserve"
                     },
-                    "2": {
+                    "5": {
                       "value": "Yes – the person is a spouse or civil partner of a UK armed forces member and has been bereaved or separated from them within the last 2 years"
                     },
-                    "3": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "4": {
+                    "3": {
                       "value": "Person prefers not to say"
                     }
                   }
@@ -3034,7 +3034,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": 0
+                  "armedforces": 1
                 }
               ],
               "questions": {
@@ -3068,10 +3068,10 @@
               "description": "",
               "depends_on": [
                 {
-                  "armedforces": 0
+                  "armedforces": 1
                 },
                 {
-                  "armedforces": 1
+                  "armedforces": 4
                 }
               ],
               "questions": {
@@ -3107,16 +3107,16 @@
                   "type": "radio",
                   "check_answer_label": "Anybody in household pregnant",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Tenant prefers not to say"
                     }
                   }
@@ -3168,16 +3168,16 @@
                   "type": "radio",
                   "check_answer_label": "Anybody in household with physical or mental health condition",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "2": {
+                    "3": {
                       "value": "Tenant prefers not to say"
                     }
                   }
@@ -3189,7 +3189,7 @@
               "description": "",
               "depends_on": [
                 {
-                  "illness": 0
+                  "illness": 1
                 }
               ],
               "questions": {
@@ -3299,37 +3299,37 @@
               "header": "",
               "description": "",
               "questions": {
-                "lawaitlist": {
+                "waityear": {
                   "check_answer_label": "Length of time on local authority waiting list",
                   "header": "How long has the household been on the local authority waiting list for the new letting?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Just moved to local authority area"
                     },
-                    "1": {
+                    "2": {
                       "value": "Less than 1 year"
                     },
-                    "2": {
+                    "7": {
                       "value": "1 year but under 2 years"
                     },
-                    "3": {
+                    "8": {
                       "value": "2 years but under 3 years"
                     },
-                    "4": {
+                    "9": {
                       "value": "3 years but under 4 years"
                     },
-                    "5": {
+                    "10": {
                       "value": "4 years but under 5 years"
                     },
-                    "6": {
+                    "5": {
                       "value": "5 years or more"
                     },
                     "divider": {
                       "value": true
                     },
-                    "7": {
+                    "6": {
                       "value": "Don’t know"
                     }
                   }
@@ -3452,18 +3452,15 @@
                     },
                     "28": {
                       "value": "Don’t know"
-                    },
-                    "10000": {
-                      "value": "Tenant prefers not to say"
                     }
                   },
                   "conditional_for": {
-                    "other_reason_for_leaving_last_settled_home": [
-                      31
+                    "reasonother": [
+                      20
                     ]
                   }
                 },
-                "other_reason_for_leaving_last_settled_home": {
+                "reasonother": {
                   "header": "What is the reason?",
                   "hint_text": "",
                   "type": "text"
@@ -3610,7 +3607,7 @@
               "depends_on": [
                 {
                   "renewal": 1,
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             },
@@ -4406,7 +4403,7 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "LA",
-                  "needstype": 0,
+                  "needstype": 2,
                   "renewal": 0
                 }
               ]
@@ -4466,7 +4463,7 @@
               "depends_on": [
                 {
                   "managing_organisation.provider_type": "PRP",
-                  "needstype": 0,
+                  "needstype": 2,
                   "renewal": 0
                 }
               ]
@@ -4535,12 +4532,6 @@
                     {
                       "label": "every week",
                       "depends_on": {
-                        "incfreq": 0
-                      }
-                    },
-                    {
-                      "label": "every month",
-                      "depends_on": {
                         "incfreq": 1
                       }
                     },
@@ -4548,6 +4539,12 @@
                       "label": "every month",
                       "depends_on": {
                         "incfreq": 2
+                      }
+                    },
+                    {
+                      "label": "every year",
+                      "depends_on": {
+                        "incfreq": 3
                       }
                     }
                   ]
@@ -4558,13 +4555,13 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Weekly"
                     },
-                    "1": {
+                    "2": {
                       "value": "Monthly"
                     },
-                    "2": {
+                    "3": {
                       "value": "Yearly"
                     }
                   },
@@ -4626,9 +4623,6 @@
                     },
                     "3": {
                       "value": "Don’t know"
-                    },
-                    "6": {
-                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
@@ -4644,19 +4638,19 @@
                   "hint_text": "This excludes child and housing benefit, council tax support and tax credits.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "All"
                     },
-                    "1": {
+                    "2": {
                       "value": "Some"
                     },
-                    "2": {
+                    "3": {
                       "value": "None"
                     },
                     "divider": {
                       "value": true
                     },
-                    "3": {
+                    "4": {
                       "value": "Don’t know"
                     }
                   }
@@ -4684,7 +4678,7 @@
               },
               "depends_on": [
                 {
-                  "needstype": 0
+                  "needstype": 2
                 }
               ]
             },
@@ -4774,62 +4768,62 @@
               "depends_on": [
                 {
                   "period": 1,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 1,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 5,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 5,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 6,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 6,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 7,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 7,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 8,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 8,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 },
                 {
                   "period": 9,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 9,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4871,12 +4865,12 @@
               "depends_on": [
                 {
                   "period": 2,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 2,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4918,12 +4912,12 @@
               "depends_on": [
                 {
                   "period": 3,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 3,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]
@@ -4965,12 +4959,12 @@
               "depends_on": [
                 {
                   "period": 4,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": 0
                 },
                 {
                   "period": 4,
-                  "needstype": 0,
+                  "needstype": 2,
                   "household_charge": null
                 }
               ]

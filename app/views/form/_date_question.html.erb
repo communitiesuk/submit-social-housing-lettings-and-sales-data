@@ -1,9 +1,8 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
 
 <%= f.govuk_date_field question.id.to_sym,
-    caption: caption(caption_text, page_header, conditional),
-    legend: legend(question, page_header, conditional),
-    hint: { text: question.hint_text&.html_safe },
-    width: 20,
-    **stimulus_html_attributes(question)
-%>
+  caption: caption(caption_text, page_header, conditional),
+  legend: legend(question, page_header, conditional),
+  hint: { text: question.hint_text&.html_safe },
+  width: 20,
+  **stimulus_html_attributes(question) %>

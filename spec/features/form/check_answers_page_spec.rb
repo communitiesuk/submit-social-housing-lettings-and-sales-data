@@ -53,7 +53,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "has question headings based on the subsection" do
       visit("/logs/#{id}/#{subsection}/check-answers")
-      question_labels = ["Tenant code", "Lead tenant’s age", "Lead tenant’s gender identity", "Number of Other Household Members"]
+      question_labels = ["Tenant code", "Lead tenant’s age", "Lead tenant’s gender identity", "Number of Household Members"]
       question_labels.each do |label|
         expect(page).to have_content(label)
       end
@@ -113,7 +113,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays conditional question that were visited" do
       visit("/logs/#{id}/conditional-question")
-      choose("case-log-preg-occ-1-field", allow_label_click: true)
+      choose("case-log-preg-occ-2-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?", "Has the condition not been met?"]
@@ -151,7 +151,7 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: "123",
           age1: 35,
           sex1: "M",
-          other_hhmemb: 0,
+          hhmemb: 1,
         )
       end
 
@@ -164,9 +164,9 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: "123",
           age1: 35,
           sex1: "M",
-          other_hhmemb: 0,
+          hhmemb: 1,
           armedforces: 3,
-          illness: 0,
+          illness: 1,
         )
       end
 
@@ -179,9 +179,9 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: "123",
           age1: 35,
           sex1: "M",
-          other_hhmemb: 0,
+          hhmemb: 1,
           armedforces: 3,
-          illness: 0,
+          illness: 1,
           housingneeds_h: 1,
           la: "E06000014",
           illness_type_1: 1,
@@ -197,7 +197,7 @@ RSpec.describe "Form Check Answers Page" do
           tenant_code: nil,
           age1: nil,
           layear: 2,
-          lawaitlist: 1,
+          waityear: 1,
           postcode_full: "NW1 5TY",
           reason: 4,
           ppostcode_full: "SE2 6RT",

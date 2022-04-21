@@ -1,8 +1,8 @@
 <% content_for :title, "#{subsection.id.humanize} - Check your answers" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Logs" => "/logs",
-  "Log #{@case_log.id.to_s}" => "/logs/" + @case_log.id.to_s,
-  subsection.label => ""
+  "Log #{@case_log.id}" => "/logs/#{@case_log.id}",
+  subsection.label => "",
 }) %>
 
 <div class="govuk-grid-row">
@@ -16,17 +16,17 @@
 
     <dl class="govuk-summary-list">
       <% subsection.applicable_questions(@case_log).each do |question| %>
-        <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
+        <%= render partial: "form/check_answers_table", locals: { question:, case_log: @case_log } %>
       <% end %>
     </dl>
 
     <%= form_with model: @case_log, method: "get" do |f| %>
-      <%= f.govuk_submit 'Save and return to log' do %>
+      <%= f.govuk_submit "Save and return to log" do %>
         <% if @case_log.status == "in_progress" && @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) == false %>
-          <%= govuk_button_link_to 'Save and go to next incomplete section', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
+          <%= govuk_button_link_to "Save and go to next incomplete section", "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
         <% elsif @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) %>
-          <%= govuk_button_link_to 'Save and go to submit', "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
-        <% end%>
+          <%= govuk_button_link_to "Save and go to submit", "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
+        <% end %>
       <% end %>
     <% end %>
   </div>

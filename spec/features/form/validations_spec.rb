@@ -127,7 +127,7 @@ RSpec.describe "validations" do
       it "prompts the user to confirm the value is correct with an interruption screen" do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-0-field", allow_label_click: true)
+        choose("case-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{case_log.id}/net-income-value-check")
         expect(page).to have_content("Net income is outside the expected range based on the lead tenant’s working situation")
@@ -141,7 +141,7 @@ RSpec.describe "validations" do
       it "returns the user to the previous question if they do not confirm the value as correct on the interruption screen" do
         visit("/logs/#{case_log.id}/net-income")
         fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-0-field", allow_label_click: true)
+        choose("case-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
         choose("case-log-net-income-value-check-1-field", allow_label_click: true)
         click_button("Save and continue")

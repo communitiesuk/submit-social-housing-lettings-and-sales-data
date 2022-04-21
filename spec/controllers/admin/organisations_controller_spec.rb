@@ -29,7 +29,7 @@ describe Admin::OrganisationsController, type: :controller do
     let(:params) { { organisation: { name: "DLUHC", provider_type: "LA" } } }
 
     it "creates a organisation" do
-      expect { post :create, session: valid_session, params: params }.to change(Organisation, :count).by(1)
+      expect { post :create, session: valid_session, params: }.to change(Organisation, :count).by(1)
     end
 
     it "tracks who created the record" do
@@ -59,7 +59,7 @@ describe Admin::OrganisationsController, type: :controller do
       let(:params) { { id: organisation.id, organisation: { name: } } }
 
       before do
-        patch :update, session: valid_session, params: params
+        patch :update, session: valid_session, params:
       end
 
       it "updates the organisation" do

@@ -3,28 +3,17 @@
 <h1 class="govuk-heading-l">
   <%= content_for(:title) %>
 </h1>
-<div class="app-filter-layout" data-module="filter-layout" data-module-started="true">
-  <div class="govuk-button-group">
-    <button 
-      aria-expanded="true" 
-      aria-has-popup="true" 
-      class="govuk-button govuk-button--secondary app-filter-toggle__button" 
-      type="button"
-      id="toggle-filter-button"
-      data-controller="filter"
-      data-action="click->filter#toggleFilter"
-      >Show filters
-    </button>
+<div class="app-filter-layout" data-controller="filter-layout">
+  <div class="govuk-button-group app-filter-toggle">
     <%= govuk_button_to "Create a new lettings log", case_logs_path %>
     <%#= govuk_link_to "Upload logs", bulk_upload_case_logs_path %>
   </div>
-  
-  <%= render partial: "log_filters"%>
+
+  <%= render partial: "log_filters" %>
   <% if @case_logs.present? %>
     <div class="app-filter-layout__content">
       <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
-      <%== render partial: 'pagy/nav', locals: { pagy: @pagy, item_name: "logs" } %>
+      <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
     </div>
   <% end %>
 </div>
-

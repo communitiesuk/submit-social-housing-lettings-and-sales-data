@@ -12,70 +12,86 @@
 
     <%= govuk_summary_list do |summary_list| %>
       <%= summary_list.row do |row|
-        row.key { "Name" }
-        row.value { @user.name }
-        if can_edit_names?(@user, current_user)
-          row.action(visually_hidden_text: "name", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-name" })
-        else
-          row.action()
-        end
-      end %>
-
-      <%= summary_list.row() do |row|
-        row.key { "Email address" }
-        row.value { @user.email }
-        if can_edit_emails?(@user, current_user)
-          row.action(visually_hidden_text: "email address", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-email-address" })
-        else
-          row.action()
-        end
-      end %>
+            row.key { "Name" }
+            row.value { @user.name }
+            if can_edit_names?(@user, current_user)
+              row.action(visually_hidden_text: "name", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-name" })
+            else
+              row.action
+            end
+          end %>
 
       <%= summary_list.row do |row|
-        row.key { "Password" }
-        row.value { "••••••••" }
-        if can_edit_password?(@user, current_user)
-          row.action(visually_hidden_text: "password", href: edit_password_account_path, html_attributes: { "data-qa": "change-password" })
-        else
-          row.action()
-        end
-      end %>
+            row.key { "Email address" }
+            row.value { @user.email }
+            if can_edit_emails?(@user, current_user)
+              row.action(visually_hidden_text: "email address", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-email-address" })
+            else
+              row.action
+            end
+          end %>
 
       <%= summary_list.row do |row|
-        row.key { "Organisation" }
-        row.value { @user.organisation.name }
-        row.action()
-      end %>
+            row.key { "Password" }
+            row.value { "••••••••" }
+            if can_edit_password?(@user, current_user)
+              row.action(
+                visually_hidden_text: "password",
+                href: edit_password_account_path,
+                html_attributes: { "data-qa": "change-password" },
+              )
+            else
+              row.action
+            end
+          end %>
 
       <%= summary_list.row do |row|
-        row.key { "Role" }
-        row.value { @user.role.humanize }
-        if can_edit_roles?(@user, current_user)
-          row.action(visually_hidden_text: "role", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-role" })
-        else
-          row.action()
-        end
-      end %>
+            row.key { "Organisation" }
+            row.value { @user.organisation.name }
+            row.action
+          end %>
 
       <%= summary_list.row do |row|
-        row.key { "Data protection officer" }
-        row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
-        if can_edit_dpo?(@user, current_user)
-          row.action(visually_hidden_text: "are #{pronoun(@user, current_user)} a data protection officer?", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-data-protection-officer" })
-        else
-          row.action()
-        end
-      end %>
+            row.key { "Role" }
+            row.value { @user.role.humanize }
+            if can_edit_roles?(@user, current_user)
+              row.action(
+                visually_hidden_text: "role",
+                href: aliased_user_edit(@user, current_user),
+                html_attributes: { "data-qa": "change-role" },
+              )
+            else
+              row.action
+            end
+          end %>
 
       <%= summary_list.row do |row|
-        row.key { "Key contact" }
-        row.value { @user.is_key_contact? ? "Yes" : "No" }
-        if can_edit_key_contact?(@user, current_user)
-          row.action(visually_hidden_text: "are #{pronoun(@user, current_user)} a key contact?", href: aliased_user_edit(@user, current_user), html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-key-contact" })
-        else
-          row.action()
-        end
-      end %>
+            row.key { "Data protection officer" }
+            row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
+            if can_edit_dpo?(@user, current_user)
+              row.action(
+                visually_hidden_text: "are #{pronoun(@user, current_user)} a data protection officer?",
+                href: aliased_user_edit(@user, current_user),
+                html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-data-protection-officer" },
+              )
+            else
+              row.action
+            end
+          end %>
+
+      <%= summary_list.row do |row|
+            row.key { "Key contact" }
+            row.value { @user.is_key_contact? ? "Yes" : "No" }
+            if can_edit_key_contact?(@user, current_user)
+              row.action(
+                visually_hidden_text: "are #{pronoun(@user, current_user)} a key contact?",
+                href: aliased_user_edit(@user, current_user),
+                html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-key-contact" },
+              )
+            else
+              row.action
+            end
+          end %>
     <% end %>
   </div>
 </div>

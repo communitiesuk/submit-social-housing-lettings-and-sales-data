@@ -226,9 +226,9 @@ private
   end
 
   ANSWER_SUFFIX_LABELS = {
-    0 => " every week",
-    1 => " every month",
-    2 => " every year",
+    1 => " every week",
+    2 => " every month",
+    3 => " every year",
   }.freeze
 
   RADIO_YES_VALUE = {
@@ -242,11 +242,11 @@ private
     majorrepairs: [1],
     startertenancy: [0],
     letting_in_sheltered_accommodation: [0, 1],
-    armedforces: [0, 1, 2],
+    armedforces: [1, 4, 5],
     leftreg: [0],
     reservist: [0],
-    preg_occ: [0],
-    illness: [0],
+    preg_occ: [1],
+    illness: [1],
     underoccupation_benefitcap: [4, 5, 6],
     reasonpref: [1],
     net_income_known: [0],
@@ -267,11 +267,11 @@ private
     majorrepairs: [0],
     startertenancy: [1],
     letting_in_sheltered_accommodation: [2],
-    armedforces: [3],
+    armedforces: [2],
     leftreg: [1],
     reservist: [1],
-    preg_occ: [1],
-    illness: [1],
+    preg_occ: [2],
+    illness: [2],
     underoccupation_benefitcap: [2],
     reasonpref: [2],
     net_income_known: [1],
@@ -291,6 +291,7 @@ private
     hb: [5],
     benefits: [3],
     unitletas: [3],
+    illness: [3],
   }.freeze
 
   RADIO_REFUSED_VALUE = {
@@ -318,11 +319,10 @@ private
     ecstat7: [10],
     ecstat8: [10],
     letting_in_sheltered_accommodation: [3],
-    armedforces: [4],
+    armedforces: [3],
     leftreg: [3],
     reservist: [2],
-    preg_occ: [2],
-    illness: [2],
+    preg_occ: [3],
     hb: [6],
   }.freeze
 end

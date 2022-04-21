@@ -16,7 +16,7 @@ RSpec.describe Form, type: :model do
 
     context "when the current page is a value check page" do
       before do
-        case_log.incfreq = 0
+        case_log.incfreq = 1
         case_log.earnings = 140
         case_log.ecstat1 = 1
       end
@@ -39,7 +39,7 @@ RSpec.describe Form, type: :model do
       let!(:page_ids) { subsection.pages.map(&:id) }
 
       before do
-        case_log.preg_occ = 1
+        case_log.preg_occ = 2
       end
 
       it "returns the previous page if the page is routed to" do
@@ -68,7 +68,7 @@ RSpec.describe Form, type: :model do
     end
 
     it "returns a correct page path if there is conditional routing" do
-      case_log["preg_occ"] = 1
+      case_log["preg_occ"] = 2
       expect(form.next_page_redirect_path(previous_conditional_page, case_log)).to eq("case_log_conditional_question_no_page_path")
     end
   end
@@ -102,7 +102,7 @@ RSpec.describe Form, type: :model do
 
       def answer_income_and_benefits(case_log)
         case_log.earnings = 30_000
-        case_log.incfreq = "Yearly"
+        case_log.incfreq = 3
         case_log.benefits = "Some"
         case_log.hb = "Tenant prefers not to say"
       end
@@ -118,7 +118,7 @@ RSpec.describe Form, type: :model do
 
       def answer_local_authority(case_log)
         case_log.layear = "1 year but under 2 years"
-        case_log.lawaitlist = "Less than 1 year"
+        case_log.waityear = "Less than 1 year"
         case_log.postcode_full = "NW1 5TY"
         case_log.reason = "Permanently decanted from another property owned by this landlord"
         case_log.ppostcode_full = "SE2 6RT"
@@ -130,7 +130,7 @@ RSpec.describe Form, type: :model do
         case_log.age1 = 35
         case_log.sex1 = "M"
         case_log.ecstat1 = 0
-        case_log.other_hhmemb = 1
+        case_log.hhmemb = 2
         case_log.relat2 = "P"
         case_log.sex2 = "F"
         case_log.ecstat2 = 1

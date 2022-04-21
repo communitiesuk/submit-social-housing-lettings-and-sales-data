@@ -112,7 +112,7 @@ module Validations::PropertyValidations
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_bedroom_bedsit")
       end
 
-      if record.other_hhmemb&.zero? && record.is_shared_housing? &&
+      if record.hhmemb == 1 && record.is_shared_housing? &&
           !record.beds.to_i.between?(1, 3) && record.beds.present?
         record.errors.add :unittype_gn, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")
         record.errors.add :beds, I18n.t("validations.property.unittype_gn.one_three_bedroom_single_tenant_shared")

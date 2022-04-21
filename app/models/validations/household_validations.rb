@@ -18,7 +18,7 @@ module Validations::HouseholdValidations
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
       record.errors.add :reason, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
-    validate_other_field(record, 31, :reason, :other_reason_for_leaving_last_settled_home)
+    validate_other_field(record, 31, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
@@ -56,7 +56,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_accessibility_requirements(record)
-    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h, record.accessibility_requirements_prefer_not_to_say]
+    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h]
     if all_options.count(1) > 1
       mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
       unless all_options.count(1) == 2 && record.housingneeds_f == 1 && mobility_accessibility_options.any? { |x| x == 1 }
@@ -105,12 +105,12 @@ module Validations::HouseholdValidations
       record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
     end
 
-    if record.is_internal_transfer? && record.this_landlord? && record.is_prevten_la_general_needs?
+    if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
       record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
       record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
     end
 
-    if record.other_landlord? && record.local_housing_referral?
+    if record.owning_organisation.provider_type == "LA" && record.local_housing_referral?
       record.errors.add :referral, I18n.t("validations.household.referral.prp.local_housing_referral")
     end
   end
@@ -124,7 +124,7 @@ module Validations::HouseholdValidations
 private
 
   def household_no_illness?(record)
-    record.illness != 0
+    record.illness != 1
   end
 
   def women_of_child_bearing_age_in_household(record)

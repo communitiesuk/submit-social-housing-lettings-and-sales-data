@@ -1,31 +1,36 @@
 @function frontend-font-url($filename) {
-  @return url("~assets/fonts/"+$filename);
+  @return url("~assets/fonts/" + $filename);
 }
 
 @function frontend-image-url($filename) {
-  @return url("~assets/images/"+$filename);
+  @return url("~assets/images/" + $filename);
 }
 
 $govuk-font-url-function: frontend-font-url;
 $govuk-image-url-function: frontend-image-url;
 $govuk-global-styles: true;
+$govuk-new-link-styles: true;
 
 @import "govuk-frontend-styles";
 @import "govuk-prototype-styles";
 
 @import "accessible-autocomplete";
 @import "button";
+@import "card";
+@import "document-list";
 @import "figure";
+@import "filter";
+@import "filter-layout";
+@import "header";
 @import "input";
 @import "related-navigation";
 @import "section-skip-link";
-@import "tab-navigation";
 @import "table-group";
 @import "task-list";
 @import "template";
 @import "pagination";
 @import "panel";
-@import "filter";
+@import "primary-navigation";
 
 // App utilities
 .app-\!-colour-muted {

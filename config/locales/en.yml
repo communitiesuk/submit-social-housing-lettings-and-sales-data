@@ -93,34 +93,34 @@ en:
       benefits:
         part_or_full_time: "Answer cannot be 'all' for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
       earnings:
-        over_hard_max: "Net income cannot be greater than %{hard_max} given the tenant’s working situation"
-        under_hard_min: "Net income cannot be less than %{hard_min} given the tenant’s working situation"
+        over_hard_max: "Net income cannot be greater than £%{hard_max} per week given the tenant’s working situation"
+        under_hard_min: "Net income cannot be less than £%{hard_min} per week given the tenant’s working situation"
         freq_missing: "Select how often the household receives income"
         earnings_missing: "Enter how much income the household has in total"
       negative_currency: "Enter an amount above 0"
       rent:
         less_than_double_shortfall: "Answer must be more than double the shortfall in basic rent"
         scharge:
-          this_landlord:
-            general_needs: "Service charge must be between £0 and £55 per week if the landlord is the same and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is the same and it is a supported housing letting"
-          other_landlord:
-            general_needs: "Service charge must be between £0 and £45 per week if the landlord is another registered provider and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is another registered provider and it is a supported housing letting"
+          private_registered_provider:
+            general_needs: "Service charge must be between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is a private registered provider and it is a supported housing letting"
+          local_authority:
+            general_needs: "Service charge must be between £0 and £45 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is a local authority and it is a supported housing letting"
         pscharge:
-          this_landlord:
-            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is the same and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is the same and it is a supported housing letting"
-          other_landlord:
-            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is another registered provider and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is another registered provider and it is a supported housing letting"
+          private_registered_provider:
+            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is a private registered provider and it is a supported housing letting"
+          local_authority:
+            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is a local authority and it is a supported housing letting"
         supcharg:
-          this_landlord:
-            general_needs: "Support charge must be between £0 and £40 per week if the landlord is the same and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is the same and it is a supported housing letting"
-          other_landlord:
-            general_needs: "Support charge must be between £0 and £60 per week if the landlord is another registered provider and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is another registered provider and it is a supported housing letting"
+          private_registered_provider:
+            general_needs: "Support charge must be between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is a private registered provider and it is a supported housing letting"
+          local_authority:
+            general_needs: "Support charge must be between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
       brent:
         not_in_range: "Basic rent is outside of the expected range based on the lettings type, local authority and number of bedrooms"
         la:
@@ -183,7 +183,7 @@ en:
         male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
         internal_transfer: "Answer cannot be %{prevten} as you already told us this tenancy is an internal transfer"
         la_general_needs:
-          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it's the same landlord on the tenancy agreement and it is an internal transfer"
+          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it's a private registered provider on the tenancy agreement and it is an internal transfer"
       referral:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
@@ -195,7 +195,7 @@ en:
         la_general_needs:
           internal_transfer: "Answer cannot be internal transfer as you already told us it's the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
         prp:
-          local_housing_referral: "Answer cannot be 'nominated by a local housing authority' as you already told us it's another landlord on the tenancy agreement"
+          local_housing_referral: "Answer cannot be 'nominated by a local housing authority' as you already told us it is a local authority on the tenancy agreement"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"

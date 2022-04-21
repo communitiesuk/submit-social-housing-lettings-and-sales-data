@@ -5,7 +5,7 @@
     <ul class="app-pagination__list">
       <li class="app-pagination__item app-pagination__item--prev">
         <% if pagy.prev %>
-          <a class="app-pagination__link" href=<%= "/logs?page=#{pagy.prev}" %>>
+          <a class="app-pagination__link" href="<%= "/logs?page=#{pagy.prev}" %>">
         <% end %>
           <span class="app-pagination__link-title">
             <svg class="app-pagination__icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17">
@@ -16,16 +16,16 @@
       </li>
       <% pagy.series.each do |item| %>
         <% if item == :gap %>
-          <li class="app-pagination__item app-pagination__item--ellipses">...</li>
+          <li class="app-pagination__item app-pagination__item--ellipses">…</li>
         <% elsif item.is_a?(String) %>
           <li class="app-pagination__item app-pagination__item--current"><span class="govuk-visually-hidden">Page </span><%= item %><span class="govuk-visually-hidden"> (current page) </span></li>
         <% else %>
-          <li class="app-pagination__item"><a class="app-pagination__link" href=<%= "/logs?page=#{item}" %>><span class="govuk-visually-hidden">Page </span><%= item %></a></li>
+          <li class="app-pagination__item"><a class="app-pagination__link" href="<%= "/logs?page=#{item}" %>"><span class="govuk-visually-hidden">Page </span><%= item %></a></li>
         <% end %>
       <% end %>
       <li class="app-pagination__item app-pagination__item--next">
         <% if pagy.next %>
-          <a class="app-pagination__link" href=<%= "/logs?page=#{pagy.next}" %>>
+          <a class="app-pagination__link" href="<%= "/logs?page=#{pagy.next}" %>">
         <% end %>
           Next <span class="govuk-visually-hidden">page</span>
           <span class="app-pagination__link-title">

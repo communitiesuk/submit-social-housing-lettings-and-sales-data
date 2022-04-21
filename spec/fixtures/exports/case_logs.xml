@@ -38,38 +38,36 @@
     <underoccupation_benefitcap>0</underoccupation_benefitcap>
     <leftreg>1</leftreg>
     <reservist>0</reservist>
-    <illness>0</illness>
-    <preg_occ>1</preg_occ>
+    <illness>1</illness>
+    <preg_occ>2</preg_occ>
     <tenancy_code>BZ757</tenancy_code>
     <startertenancy>0</startertenancy>
     <tenancylength>5</tenancylength>
-    <tenancy>3</tenancy>
-    <landlord>1</landlord>
+    <tenancy>1</tenancy>
     <ppostcode_full>SE26RT</ppostcode_full>
-    <rsnvac>7</rsnvac>
-    <unittype_gn>2</unittype_gn>
+    <rsnvac>6</rsnvac>
+    <unittype_gn>7</unittype_gn>
     <beds>3</beds>
     <offered>2</offered>
     <wchair>1</wchair>
     <earnings>68</earnings>
-    <incfreq>0</incfreq>
+    <incfreq>1</incfreq>
     <benefits>1</benefits>
     <period>2</period>
     <layear>2</layear>
-    <lawaitlist>1</lawaitlist>
+    <waityear>1</waityear>
     <postcode_full>NW15TY</postcode_full>
     <reasonpref>1</reasonpref>
     <cbl>1</cbl>
     <chr>1</chr>
     <cap>0</cap>
-    <other_reason_for_leaving_last_settled_home/>
+    <reasonother/>
     <housingneeds_a>1</housingneeds_a>
     <housingneeds_b>0</housingneeds_b>
     <housingneeds_c>0</housingneeds_c>
     <housingneeds_f>0</housingneeds_f>
     <housingneeds_g>0</housingneeds_g>
     <housingneeds_h>0</housingneeds_h>
-    <accessibility_requirements_prefer_not_to_say>0</accessibility_requirements_prefer_not_to_say>
     <illness_type_1>0</illness_type_1>
     <illness_type_2>1</illness_type_2>
     <illness_type_3>0</illness_type_3>
@@ -90,7 +88,7 @@
     <property_owner_organisation>Test</property_owner_organisation>
     <property_manager_organisation>Test</property_manager_organisation>
     <sale_or_letting/>
-    <intermediate_rent_product_name>2</intermediate_rent_product_name>
+    <irproduct_other/>
     <purchaser_code>798794</purchaser_code>
     <reason>4</reason>
     <propcode>123</propcode>
@@ -99,24 +97,16 @@
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
     <hbrentshortfall>0</hbrentshortfall>
-    <postcode>NW1</postcode>
-    <postcod2>5TY</postcod2>
-    <ppostc1>SE2</ppostc1>
-    <ppostc2>6RT</ppostc2>
     <property_relet>0</property_relet>
     <mrcdate>2020-05-05 10:36:49 UTC</mrcdate>
-    <mrcday>5</mrcday>
-    <mrcmonth>5</mrcmonth>
-    <mrcyear>2020</mrcyear>
-    <other_hhmemb>1</other_hhmemb>
     <incref>0</incref>
     <sale_completion_date/>
     <startdate>2022-02-02 10:36:49 UTC</startdate>
-    <armedforces>0</armedforces>
+    <armedforces>1</armedforces>
     <first_time_property_let_as_social_housing/>
     <unitletas>2</unitletas>
     <builtype>1</builtype>
-    <property_void_date>2019-11-03 00:00:00 UTC</property_void_date>
+    <voiddate>2019-11-03 00:00:00 UTC</voiddate>
     <owning_organisation_id>{owning_org_id}</owning_organisation_id>
     <managing_organisation_id>{managing_org_id}</managing_organisation_id>
     <renttype>2</renttype>
@@ -125,9 +115,6 @@
     <postcode_known>1</postcode_known>
     <la_known>1</la_known>
     <is_la_inferred>false</is_la_inferred>
-    <day>2</day>
-    <month>2</month>
-    <year>2022</year>
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
@@ -161,9 +148,6 @@
     <wtshortfall>6.0</wtshortfall>
     <refused>0</refused>
     <housingneeds>1</housingneeds>
-    <vday>3</vday>
-    <vmonth>11</vmonth>
-    <vyear>2019</vyear>
     <wchchrg/>
     <newprop>2</newprop>
     <relat2>P</relat2>
@@ -174,6 +158,9 @@
     <relat7/>
     <relat8/>
     <rent_value_check/>
+    <old_form_id/>
+    <lar/>
+    <irproduct/>
     <providertype>1</providertype>
   </form>
 </forms>
