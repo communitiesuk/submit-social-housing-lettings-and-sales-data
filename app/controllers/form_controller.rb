@@ -48,7 +48,6 @@ class FormController < ApplicationController
   FormHandler.instance.forms.each do |_key, form|
     form.pages.map do |page|
       define_method(page.id) do |_errors = {}|
-        session[:review_errors] = nil
         if @case_log
           if session["errors"]
             JSON(session["errors"]).each do |field, messages|

@@ -309,7 +309,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.integer "failed_attempts", default: 0
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
-    t.string "phone"
     t.boolean "is_dpo", default: false
     t.boolean "is_key_contact", default: false
     t.integer "second_factor_attempts_count", default: 0
