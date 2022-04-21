@@ -9,9 +9,10 @@ RSpec.describe Imports::CaseLogsImportService do
   let(:case_log_file2) { File.open("#{fixture_directory}/#{case_log_id2}.xml") }
   let(:storage_service) { instance_double(StorageService) }
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing users" do
-    subject(:case_log_service) { described_class.new(storage_service) }
+    subject(:case_log_service) { described_class.new(storage_service, logger) }
 
     before do
       # Stub the S3 file listing and download
@@ -27,8 +28,10 @@ RSpec.describe Imports::CaseLogsImportService do
       allow(FormHandler.instance).to receive(:get_form).with(anything).and_return(real_2021_2022_form)
     end
 
-    it "successfully create a case log with the expected data" do
-      case_log_service.create_logs(remote_folder)
+    it "successfully create all case logs" do
+      expect(logger).not_to receive(:error)
+      expect { case_log_service.create_logs(remote_folder) }
+        .to change(CaseLog, :count).by(2)
     end
   end
 end
