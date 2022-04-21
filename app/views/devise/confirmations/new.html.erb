@@ -7,8 +7,7 @@
     label: { text: "Email address" },
     autocomplete: "email",
     spellcheck: "false",
-    value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
-  %>
+    value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
 
   <%= f.govuk_submit "Resend confirmation instructions" %>
 <% end %>

@@ -2,7 +2,7 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: 'Back',
+    text: "Back",
     href: :back,
   ) %>
 <% end %>
@@ -22,8 +22,7 @@
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
-        spellcheck: "false"
-      %>
+        spellcheck: "false" %>
 
       <%= f.govuk_submit "Send email" %>
     </div>

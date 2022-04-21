@@ -1,13 +1,16 @@
 <div class="app-card">
   <h2 class="govuk-heading-s">Collection resources</h2>
 
-  <%= render DocumentListComponent.new(items: [{
-    name: "Lettings log for tenants (2022/23)",
-    href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2022-23%20Lettings%20paper%20form.pdf?download-format=pdf",
-    metadata: "PDF, 654 KB, 4 pages"
-  }, {
-    name: "Lettings log for tenants (2021/22)",
-    href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2021_22%20Lettings%20Log.pdf?download-format=pdf",
-    metadata: "PDF, 302 KB, 3 pages"
-  }]) %>
+  <%= render DocumentListComponent.new(items: [
+    {
+      name: "Lettings log for tenants (2022/23)",
+      href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2022-23%20Lettings%20paper%20form.pdf?download-format=pdf",
+      metadata: "PDF, 654 KB, 4 pages",
+    },
+    {
+      name: "Lettings log for tenants (2021/22)",
+      href: "https://core.communities.gov.uk/public/download/guides-and-manuals/2021_22%20Lettings%20Log.pdf?download-format=pdf",
+      metadata: "PDF, 302 KB, 3 pages",
+    },
+  ]) %>
 </div>

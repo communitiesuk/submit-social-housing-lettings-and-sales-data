@@ -15,7 +15,7 @@
             step="<%= question.step %>"
             type="number"
             name="case_log[tcharge]"
-            for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field"}.join(" ") : "" %>">
+            for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field" }.join(" ") : "" %>">
       <%= case_log[question.id] %></output>
     <span class="govuk-input__suffix"><%= question.suffix %></span>
   </div>

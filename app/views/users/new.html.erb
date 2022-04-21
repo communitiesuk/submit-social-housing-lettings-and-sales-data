@@ -2,7 +2,7 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: 'Back',
+    text: "Back",
     href: :back,
   ) %>
 <% end %>
@@ -17,35 +17,35 @@
       </h1>
 
       <%= f.govuk_text_field :name,
-        autocomplete: "name"
-      %>
+        autocomplete: "name" %>
 
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
         spellcheck: "false",
-        value: @resource.email
-      %>
+        value: @resource.email %>
 
-      <%= roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) }
-        f.govuk_collection_radio_buttons :role, roles, :id, :name, legend: { text: "Role", size: "m" }
-      %>
+      <%= roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :role,
+        roles,
+        :id,
+        :name,
+        legend: { text: "Role", size: "m" } %>
 
       <%= f.govuk_collection_radio_buttons :is_dpo,
         [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
         :id,
         :name,
         inline: true,
-        legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" }
-      %>
+        legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" } %>
 
       <%= f.govuk_collection_radio_buttons :is_key_contact,
         [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
         :id,
         :name,
         inline: true,
-        legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" }
-      %>
+        legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" } %>
 
       <%= f.govuk_submit "Continue" %>
     </div>

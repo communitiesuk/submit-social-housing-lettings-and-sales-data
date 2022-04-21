@@ -4,21 +4,21 @@
     <title><%= browser_title(yield(:title), @pagy, @admin_user, @user, @organisation, @case_log, @resource) %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= tag :meta, name: 'viewport', content: 'width=device-width, initial-scale=1' %>
-    <%= tag :meta, property: 'og:image', content: asset_path('images/govuk-opengraph-image.png') %>
-    <%= tag :meta, name: 'theme-color', content: '#0b0c0c' %>
-    <%= favicon_link_tag asset_path('images/favicon.ico') %>
-    <%= favicon_link_tag asset_path('images/govuk-mask-icon.svg'), rel: 'mask-icon', type: 'image/svg', color: "#0b0c0c" %>
-    <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon.png'), rel: 'apple-touch-icon', type: 'image/png' %>
-    <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-152x152.png'), rel: 'apple-touch-icon', type: 'image/png', size: '152x152' %>
-    <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-167x167.png'), rel: 'apple-touch-icon', type: 'image/png', size: '167x167' %>
-    <%= favicon_link_tag asset_path('images/govuk-apple-touch-icon-180x180.png'), rel: 'apple-touch-icon', type: 'image/png', size: '180x180' %>
+    <%= tag.meta name: "viewport", content: "width=device-width, initial-scale=1" %>
+    <%= tag.meta property: "og:image", content: asset_path("images/govuk-opengraph-image.png") %>
+    <%= tag.meta name: "theme-color", content: "#0b0c0c" %>
+    <%= favicon_link_tag asset_path("images/favicon.ico") %>
+    <%= favicon_link_tag asset_path("images/govuk-mask-icon.svg"), rel: "mask-icon", type: "image/svg", color: "#0b0c0c" %>
+    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon.png"), rel: "apple-touch-icon", type: "image/png" %>
+    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-152x152.png"), rel: "apple-touch-icon", type: "image/png", size: "152x152" %>
+    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-167x167.png"), rel: "apple-touch-icon", type: "image/png", size: "167x167" %>
+    <%= favicon_link_tag asset_path("images/govuk-apple-touch-icon-180x180.png"), rel: "apple-touch-icon", type: "image/png", size: "180x180" %>
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "vendor/html5shiv.min.js" %>
-    <%= javascript_tag do -%>
-      window.html5.elements = 'output';
+    <script>
+      window.html5.elements = "output";
       html5.shivDocument(document);
-    <% end -%>
+    </script>
     <%= javascript_include_tag "vendor/polyfill-output-value.js" %>
     <%= javascript_include_tag "vendor/outerHTML.js" %>
     <%= javascript_include_tag "application", defer: true %>
@@ -37,46 +37,45 @@
 
   <body class="govuk-template__body app-template--wide">
     <script>
-      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+      document.body.className = ((document.body.className) ? document.body.className + " js-enabled" : "js-enabled");
     </script>
 
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-        logotype: 'GOV.UK',
-        service_name: t('service_name'),
-        service_url: current_user.nil? ? "/" : '/logs'
-      ) do |component|
-        if current_user.nil?
-          component.navigation_item(text: 'Sign in', href: user_session_path)
-        elsif
-          component.navigation_item(text: 'Logs', href: case_logs_path)
-          component.navigation_item(text: 'Your organisation', href: "/organisations/#{current_user.organisation.id}")
-          component.navigation_item(text: 'Your account', href: account_path)
-          component.navigation_item(text: 'Sign out', href: destroy_user_session_path)
-        end
+      logotype: "GOV.UK",
+      service_name: t("service_name"),
+      service_url: current_user.nil? ? "/" : "/logs",
+    ) do |component|
+      if current_user.nil?
+        component.navigation_item(text: "Sign in", href: user_session_path)
+      else
+        component.navigation_item(text: "Logs", href: case_logs_path)
+        component.navigation_item(text: "Your organisation", href: "/organisations/#{current_user.organisation.id}")
+        component.navigation_item(text: "Your account", href: account_path)
+        component.navigation_item(text: "Sign out", href: destroy_user_session_path)
       end
-    %>
+    end %>
 
     <div class="govuk-width-container">
       <aside>
         <%= govuk_phase_banner(
-          tag: { text: 'Beta' },
-          text: "This is a new service – help us improve it by <a class=\"govuk-link\" href=\"#{t('feedback_form')}\" rel=\"noreferrer noopener\" target=\"_blank\">giving us your feedback (opens in a new tab)</a>".html_safe
+          tag: { text: "Beta" },
+          text: "This is a new service – help us improve it by <a class=\"govuk-link\" href=\"#{t('feedback_form')}\" rel=\"noreferrer noopener\" target=\"_blank\">giving us your feedback (opens in a new tab)</a>".html_safe,
         ) %>
         <%= content_for(:breadcrumbs) %>
         <%= content_for(:before_content) %>
       </aside>
 
       <main class="govuk-main-wrapper" id="main-content" role="main">
-        <% if flash.notice && !flash.notice.include?('translation missing')  %>
+        <% if flash.notice && !flash.notice.include?("translation missing") %>
           <%= govuk_notification_banner(
-            title_text: 'Success',
+            title_text: "Success",
             success: true, title_heading_level: 3,
-            title_id: "swanky-notifications") do |notification_banner|
-              notification_banner.heading(text: flash.notice)
-            end
-          %>
+            title_id: "swanky-notifications"
+          ) do |notification_banner|
+            notification_banner.heading(text: flash.notice)
+          end %>
         <% end %>
         <%= content_for?(:content) ? yield(:content) : yield %>
       </main>

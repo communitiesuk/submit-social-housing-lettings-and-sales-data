@@ -1,14 +1,13 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
 
 <% selected = @case_log.public_send(question.id) || "" %>
-<%= answers = question.displayed_answer_options.map { |key, value| OpenStruct.new(id: key, name: value) }
- f.govuk_collection_select question.id.to_sym,
+<%= answers = question.displayed_answer_options.map { |key, value| OpenStruct.new(id: key, name: value) } %>
+  <%= f.govuk_collection_select question.id.to_sym,
     answers,
     :id,
     :name,
     caption: caption(caption_text, page_header, conditional),
     label: legend(question, page_header, conditional),
     hint: { text: question.hint_text&.html_safe },
-    options: { disabled: [""], selected: selected },
-    "data-controller": "accessible-autocomplete"
- %>
+    options: { disabled: [""], selected: },
+    "data-controller": "accessible-autocomplete" %>

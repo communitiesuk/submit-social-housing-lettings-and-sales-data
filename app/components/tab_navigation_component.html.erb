@@ -3,11 +3,11 @@
     <% items.each do |item| %>
       <% if item.fetch(:current, false) || current_page?(strip_query(item.fetch(:url))) %>
         <li class="app-tab-navigation__item app-tab-navigation__item--current">
-          <%= govuk_link_to item[:name], item[:url], class: 'app-tab-navigation__link', aria: { current: 'page' } %>
+          <%= govuk_link_to item[:name], item[:url], class: "app-tab-navigation__link", aria: { current: "page" } %>
         </li>
       <% else %>
         <li class="app-tab-navigation__item">
-          <%= govuk_link_to item[:name], item[:url], class: 'app-tab-navigation__link' %>
+          <%= govuk_link_to item[:name], item[:url], class: "app-tab-navigation__link" %>
         </li>
       <% end %>
     <% end %>
