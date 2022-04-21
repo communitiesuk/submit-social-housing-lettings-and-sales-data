@@ -11,7 +11,7 @@ class FormHandler
   end
 
   def current_form
-    forms[forms.keys.sort { |a, b| a.to_i <=> b.to_i }.last]
+    forms[forms.keys.max_by(&:to_i)]
   end
 
 private
