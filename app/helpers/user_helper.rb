@@ -30,4 +30,8 @@ module UserHelper
   def can_edit_key_contact?(_user, current_user)
     current_user.data_coordinator? || current_user.support?
   end
+
+  def can_edit_org?(current_user)
+    current_user.data_coordinator? || current_user.support?
+  end
 end
