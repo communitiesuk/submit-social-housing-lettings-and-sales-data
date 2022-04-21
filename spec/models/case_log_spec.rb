@@ -186,7 +186,7 @@ RSpec.describe CaseLog do
 
     it "calculates the correct weekly income from yearly income" do
       case_log.incfreq = 3
-      expect(case_log.weekly_net_income).to eq(417)
+      expect(case_log.weekly_net_income).to eq(96)
     end
   end
 

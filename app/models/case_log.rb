@@ -100,7 +100,7 @@ class CaseLog < ApplicationRecord
     elsif net_income_is_monthly?
       ((earnings * 12) / 52.0).round(0)
     elsif net_income_is_yearly?
-      (earnings / 12.0).round(0)
+      (earnings / 52.0).round(0)
     end
   end
 
