@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/baarkerlounger/two_factor_authentication.git
-  revision: afb91d5ffabbdb79ca29645749ef625f7e3a76ea
+  revision: 5fa6ba40d90df9c1711d1b5eeff34686dda133a2
   specs:
     two_factor_authentication (2.2.0)
       devise
