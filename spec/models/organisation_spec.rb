@@ -39,7 +39,7 @@ RSpec.describe Organisation, type: :model do
           "E07000178" => "Oxford",
           "E07000114" => "Thanet",
           "E09000033" => "Westminster",
-          "E06000014" => "York"
+          "E06000014" => "York",
         }
       end
 
