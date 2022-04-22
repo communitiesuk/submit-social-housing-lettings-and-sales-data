@@ -44,7 +44,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       before do
-        FactoryBot.create(:organisation_la, organisation_id: organisation.id, ons_code: "E07000178")
+        FactoryBot.create(:organisation_la, organisation:, ons_code: "E07000178")
         allow(LocalAuthority).to receive(:ons_code_mappings).and_return(ons_code_mappings)
       end
 
@@ -54,6 +54,38 @@ RSpec.describe Organisation, type: :model do
 
       it "maps the ons codes to LA names for display" do
         expect(organisation.local_authority_names).to eq(%w[Oxford])
+      end
+    end
+
+    context "when the organisation has not specified which local authorities it operates in" do
+      it "displays `all`" do
+        expect(organisation.local_authority_names).to eq(%w[All])
+      end
+    end
+
+    context "when the organisation only uses specific rent periods" do
+      let(:rent_period_mappings) do
+        { "2" => { "value" => "Weekly for 52 weeks" }, "3" => { "value" => "Every 2 weeks" } }
+      end
+
+      before do
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 3)
+        allow(RentPeriod).to receive(:rent_period_mappings).and_return(rent_period_mappings)
+      end
+
+      it "has rent periods associated" do
+        expect(organisation.rent_periods).to eq([2, 3])
+      end
+
+      it "maps the rent periods to display values" do
+        expect(organisation.rent_period_labels).to eq(["Weekly for 52 weeks", "Every 2 weeks"])
+      end
+    end
+
+    context "when the organisation has not specified which rent periods it uses" do
+      it "displays `all`" do
+        expect(organisation.rent_period_labels).to eq(%w[All])
       end
     end
 

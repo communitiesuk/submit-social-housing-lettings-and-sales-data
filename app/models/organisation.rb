@@ -4,6 +4,7 @@ class Organisation < ApplicationRecord
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
   has_many :organisation_las
+  has_many :organisation_rent_periods
 
   has_paper_trail
 
@@ -37,11 +38,21 @@ class Organisation < ApplicationRecord
   end
 
   def local_authorities
-    organisation_las.pluck(:ons_code).map { |ons_code| ons_code }
+    organisation_las.pluck(:ons_code)
   end
 
   def local_authority_names
-    local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
+    names = local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
+    names.presence || %w[All]
+  end
+
+  def rent_periods
+    organisation_rent_periods.pluck(:rent_period)
+  end
+
+  def rent_period_labels
+    labels = rent_periods.map { |period| RentPeriod.rent_period_mappings[period.to_s]["value"] }
+    labels.presence || %w[All]
   end
 
   def display_attributes
@@ -51,6 +62,7 @@ class Organisation < ApplicationRecord
       { name: "telephone_number", value: phone, editable: true },
       { name: "type", value: "Org type", editable: false },
       { name: "local_authorities_operated_in", value: local_authority_names, editable: false, format: :bullet },
+      { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
       { name: "managing_agents", value: managing_agents, editable: false },

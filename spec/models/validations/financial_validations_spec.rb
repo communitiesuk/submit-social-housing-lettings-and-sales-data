@@ -86,6 +86,28 @@ RSpec.describe Validations::FinancialValidations do
     end
   end
 
+  describe "rent period validations" do
+    let(:organisation) { FactoryBot.create(:organisation) }
+    let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
+
+    before do
+      FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
+    end
+
+    context "when the organisation only uses specific rent periods" do
+      it "validates that the selected rent period is used by the organisation" do
+        record.period = 3
+        financial_validator.validate_rent_period(record)
+        expect(record.errors["period"])
+          .to include(match I18n.t(
+            "validations.financial.rent_period.invalid_for_org",
+            org_name: organisation.name,
+            rent_period: "every 2 weeks",
+          ))
+      end
+    end
+  end
+
   describe "housing benefit rent shortfall validations" do
     context "when shortfall is yes" do
       it "validates that housing benefit is not none" do
@@ -121,7 +143,7 @@ RSpec.describe Validations::FinancialValidations do
     end
   end
 
-  describe "Net income validations" do
+  describe "net income validations" do
     it "validates that the net income is within the expected range for the tenant's employment status" do
       record.earnings = 200
       record.incfreq = 1
