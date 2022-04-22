@@ -23,7 +23,6 @@ RSpec.describe FormController, type: :request do
       :case_log,
       :about_completed,
       status: 1,
-      year: 2021,
       startdate: Time.zone.local(2021, 10, 10),
       owning_organisation: organisation,
       managing_organisation: organisation,

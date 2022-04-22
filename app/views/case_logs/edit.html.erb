@@ -24,6 +24,11 @@
       </p>
     <% elsif @case_log.status == "not_started" %>
       <p class="govuk-body">This log has not been started.</p>
+    <% elsif @case_log.status == "completed" %>
+      <strong class="govuk-tag">Completed</strong>
+      <p class="govuk-body">
+        You can <a class="govuk-link" href="<%="/logs/#{@case_log.id}/review" %>">review and make changes to this log</a> up to 3 months after the end of the current collection year, which closes on 31 March <%= @case_log.collection_start_year.present? ? @case_log.collection_start_year + 1 : "" %>.
+      </p>
     <% end %>
     <%= render "tasklist" %>
   </div>
