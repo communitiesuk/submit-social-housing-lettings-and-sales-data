@@ -69,6 +69,7 @@ en:
       la:
         la_known: "Enter name of local authority"
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
+        postcode_invalid_for_org: "%{org_name} does not operate in %{postcode}"
       rsnvac:
         first_let_not_social: "Reason for vacancy cannot be first let if unit has been previously let as social housing"
         first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"

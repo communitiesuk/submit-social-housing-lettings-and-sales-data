@@ -37,15 +37,6 @@ RSpec.describe Validations::LocalAuthorityValidations do
   end
 
   describe "#validate_la" do
-    context "when the rent type is London affordable" do
-      it "expects that the local authority is in London" do
-        record.la = "E09000033"
-        record.rent_type = 2
-        local_auth_validator.validate_la(record)
-        expect(record.errors["la"]).to be_empty
-      end
-    end
-
     context "when previous la is known" do
       it "la has to be provided" do
         record.la_known = 1
@@ -79,6 +70,24 @@ RSpec.describe Validations::LocalAuthorityValidations do
         record.la = "E07000178"
         local_auth_validator.validate_la(record)
         expect(record.errors["la"]).to be_empty
+      end
+
+      context "when a postcode is given" do
+        before do
+          stub_request(:get, /api.postcodes.io/)
+            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"York\",\"codes\":{\"admin_district\": \"E06000014\"}}}", headers: {})
+        end
+
+        it "validates that it matches a local authority the organisation operates in" do
+          record.postcode_full = "YO10 3RR"
+          record.save
+          expect(record.errors["postcode_known"])
+            .to include(match I18n.t(
+              "validations.property.la.postcode_invalid_for_org",
+              org_name: organisation.name,
+              postcode: "YO103RR",
+            ))
+        end
       end
     end
 
