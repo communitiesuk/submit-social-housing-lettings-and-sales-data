@@ -138,6 +138,8 @@ en:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or 'is this accommodation a care home', or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
       tcharge:
         under_10: "Total charge must be at least £10 per week"
+      rent_period:
+        invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
 
     household:
       reasonpref:

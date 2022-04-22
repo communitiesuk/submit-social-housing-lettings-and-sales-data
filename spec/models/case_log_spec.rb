@@ -125,6 +125,10 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_outstanding_rent_amount)
     end
 
+    it "validates the rent period" do
+      expect(validator).to receive(:validate_rent_period)
+    end
+
     it "validates housing benefit rent shortfall" do
       expect(validator).to receive(:validate_tshortfall)
     end
