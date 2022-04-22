@@ -20,6 +20,8 @@ private
   end
 
   def label_tag(page_header, conditional)
-    page_header.blank? && !conditional ? "h1" : "h2"
+    return "" if conditional
+
+    page_header.blank? ? "h1" : "h2"
   end
 end
