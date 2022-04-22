@@ -69,6 +69,7 @@ RSpec.describe QuestionViewHelper do
 
     context "when viewinng a conditional question" do
       let(:conditional) { true }
+      let(:tag) { "" }
 
       it "returns an options hash with a medium question header" do
         expect(question_view_helper).to eq(legend_options_hash)
