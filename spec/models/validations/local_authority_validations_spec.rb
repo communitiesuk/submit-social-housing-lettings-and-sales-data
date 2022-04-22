@@ -73,19 +73,15 @@ RSpec.describe Validations::LocalAuthorityValidations do
       end
 
       context "when a postcode is given" do
-        before do
-          stub_request(:get, /api.postcodes.io/)
-            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"York\",\"codes\":{\"admin_district\": \"E06000014\"}}}", headers: {})
-        end
-
         it "validates that it matches a local authority the organisation operates in" do
           record.postcode_full = "YO10 3RR"
-          record.save
+          record.la = "E06000014"
+          local_auth_validator.validate_la(record)
           expect(record.errors["postcode_known"])
             .to include(match I18n.t(
               "validations.property.la.postcode_invalid_for_org",
               org_name: organisation.name,
-              postcode: "YO103RR",
+              postcode: "YO10 3RR",
             ))
         end
       end
