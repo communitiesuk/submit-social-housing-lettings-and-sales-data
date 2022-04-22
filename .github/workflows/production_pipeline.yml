@@ -180,5 +180,4 @@ jobs:
         cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
         cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
         cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-        cf set-env $APP_NAME RAILS_LOG_TO_STDOUT true
         cf push $APP_NAME --strategy rolling

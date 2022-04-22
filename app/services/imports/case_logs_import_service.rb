@@ -152,6 +152,16 @@ module Imports
       attributes["is_la_inferred"] = false # Always keep the given LA
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
 
+      unless attributes["brent"].nil? &&
+          attributes["scharge"].nil? &&
+          attributes["pscharge"].nil? &&
+          attributes["supcharg"].nil?
+        attributes["brent"] ||= BigDecimal("0.0")
+        attributes["scharge"] ||= BigDecimal("0.0")
+        attributes["pscharge"] ||= BigDecimal("0.0")
+        attributes["supcharg"] ||= BigDecimal("0.0")
+      end
+
       case_log = CaseLog.new(attributes)
       case_log.save!
       compute_differences(case_log, attributes)
@@ -178,7 +188,7 @@ module Imports
     def safe_string_as_decimal(xml_doc, attribute)
       str = field_value(xml_doc, "xmlns", attribute)
       if str.blank?
-        BigDecimal("0.0")
+        nil
       else
         BigDecimal(str, exception: false)
       end
