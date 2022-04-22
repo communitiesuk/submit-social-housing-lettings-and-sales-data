@@ -58,13 +58,22 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "when the organisation only uses specific rent periods" do
+      let(:rent_period_mappings) do
+        { "2" => { "value" => "Weekly for 52 weeks" }, "3" => { "value" => "Every 2 weeks" } }
+      end
+
       before do
-        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 1)
         FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)
+        FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 3)
+        allow(RentPeriod).to receive(:rent_period_mappings).and_return(rent_period_mappings)
       end
 
       it "has rent periods associated" do
-        expect(organisation.organisation_rent_periods.pluck("rent_period")).to eq([1, 2])
+        expect(organisation.rent_periods).to eq([2, 3])
+      end
+
+      it "maps the rent periods to display values" do
+        expect(organisation.rent_period_labels).to eq(["Weekly for 52 weeks", "Every 2 weeks"])
       end
     end
 
