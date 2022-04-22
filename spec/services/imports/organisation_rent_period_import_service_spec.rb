@@ -6,9 +6,10 @@ RSpec.describe Imports::OrganisationRentPeriodImportService do
   let(:old_id) { "ebd22326d33e389e9f1bfd546979d2c05f9e68d6" }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }
   let(:storage_service) { instance_double(StorageService) }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing data protection confirmations" do
-    subject(:import_service) { described_class.new(storage_service) }
+    subject(:import_service) { described_class.new(storage_service, logger) }
 
     before do
       allow(storage_service)
@@ -22,8 +23,8 @@ RSpec.describe Imports::OrganisationRentPeriodImportService do
 
     context "when the organisation in the import file doesn't exist in the system" do
       it "does not create an organisation rent period record" do
-        expect { import_service.create_organisation_rent_periods("organisation_rent_period_directory") }
-          .to raise_error(ActiveRecord::RecordInvalid, /Organisation must exist/)
+        expect(logger).to receive(:error).with(/Organisation must exist/)
+        import_service.create_organisation_rent_periods("organisation_rent_period_directory")
       end
     end
 
