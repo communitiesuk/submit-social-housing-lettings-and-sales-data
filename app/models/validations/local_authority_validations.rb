@@ -18,7 +18,7 @@ module Validations::LocalAuthorityValidations
         record.la && !record.owning_organisation.local_authorities.include?(record.la)
       la_name = record.form.get_question("la", record).label_from_value(record.la)
       org_name = record.owning_organisation.name
-      postcode = UKPostcode.parse(record.postcode_full)
+      postcode = UKPostcode.parse(record.postcode_full) if record.postcode_full
       record.errors.add :la, I18n.t("validations.property.la.la_invalid_for_org", org_name:, la_name:)
       record.errors.add :postcode_known, I18n.t("validations.property.la.postcode_invalid_for_org", org_name:, postcode:)
     end
