@@ -3328,12 +3328,7 @@
                     }
                   }
                 }
-              },
-              "depends_on": [
-                {
-                  "renewal": 0
-                }
-              ]
+              }
             },
             "time_on_waiting_list": {
               "header": "",
