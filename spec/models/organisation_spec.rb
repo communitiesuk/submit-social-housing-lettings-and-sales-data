@@ -57,6 +57,12 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
+    context "when the organisation has not specified which local authorities it operates in" do
+      it "displays `all`" do
+        expect(organisation.local_authority_names).to eq(%w[All])
+      end
+    end
+
     context "when the organisation only uses specific rent periods" do
       let(:rent_period_mappings) do
         { "2" => { "value" => "Weekly for 52 weeks" }, "3" => { "value" => "Every 2 weeks" } }
@@ -74,6 +80,12 @@ RSpec.describe Organisation, type: :model do
 
       it "maps the rent periods to display values" do
         expect(organisation.rent_period_labels).to eq(["Weekly for 52 weeks", "Every 2 weeks"])
+      end
+    end
+
+    context "when the organisation has not specified which rent periods it uses" do
+      it "displays `all`" do
+        expect(organisation.rent_period_labels).to eq(%w[All])
       end
     end
 

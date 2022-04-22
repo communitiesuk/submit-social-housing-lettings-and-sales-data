@@ -42,7 +42,8 @@ class Organisation < ApplicationRecord
   end
 
   def local_authority_names
-    local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
+    names = local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
+    names.present? ? names : ["All"]
   end
 
   def rent_periods
@@ -50,7 +51,8 @@ class Organisation < ApplicationRecord
   end
 
   def rent_period_labels
-    rent_periods.map { |period| RentPeriod.rent_period_mappings[period.to_s]["value"] }
+    labels = rent_periods.map { |period| RentPeriod.rent_period_mappings[period.to_s]["value"] }
+    labels.present? ? labels : ["All"]
   end
 
   def display_attributes
