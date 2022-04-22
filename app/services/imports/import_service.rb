@@ -13,6 +13,8 @@ module Imports
         file_io = @storage_service.get_file_io(filename)
         xml_document = Nokogiri::XML(file_io)
         send(create_method, xml_document)
+      rescue StandardError => e
+        @logger.error "#{e.class} in #{filename}: #{e.message}"
       end
     end
 

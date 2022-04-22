@@ -6,9 +6,10 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
   let(:old_id) { old_org_id }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }
   let(:storage_service) { instance_double(StorageService) }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing data protection confirmations" do
-    subject(:import_service) { described_class.new(storage_service) }
+    subject(:import_service) { described_class.new(storage_service, logger) }
 
     before do
       allow(storage_service)
@@ -22,8 +23,8 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
 
     context "when the organisation in the import file doesn't exist in the system" do
       it "does not create a data protection confirmation" do
-        expect { import_service.create_data_protection_confirmations("data_protection_directory") }
-          .to raise_error(ActiveRecord::RecordInvalid, /Organisation must exist/)
+        expect(logger).to receive(:error).with(/Organisation must exist/)
+        import_service.create_data_protection_confirmations("data_protection_directory")
       end
     end
 
@@ -73,7 +74,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
           end
 
           it "logs that the record already exists" do
-            expect(Rails.logger).to receive(:warn)
+            expect(logger).to receive(:warn)
             import_service.create_data_protection_confirmations("data_protection_directory")
           end
         end

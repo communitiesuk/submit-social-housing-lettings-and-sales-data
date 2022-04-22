@@ -65,6 +65,7 @@ module Imports
       end
       (2..8).each do |index|
         attributes["relat#{index}"] = relat(xml_doc, index)
+        attributes["details_known_#{index}"] = details_known(index, attributes)
       end
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
@@ -140,17 +141,41 @@ module Imports
       attributes["postcode_full"] = compose_postcode(xml_doc, "POSTCODE", "POSTCOD2")
       attributes["postcode_known"] = attributes["postcode_full"].nil? ? 0 : 1
 
-      # Not specific to our form but required for CDS and can't be inferred
+      # Not specific to our form but required for consistency (present in import)
       attributes["old_form_id"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
+      attributes["created_at"] = Time.zone.parse(field_value(xml_doc, "meta", "created-date"))
+      attributes["updated_at"] = Time.zone.parse(field_value(xml_doc, "meta", "modified-date"))
 
-      # Specific to us
+      # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
       attributes["la_known"] = 1 # Defaulting to Yes (Required)
-      attributes["created_at"] = Date.parse(field_value(xml_doc, "meta", "created-date"))
-      attributes["updated_at"] = Date.parse(field_value(xml_doc, "meta", "modified-date"))
+      attributes["is_la_inferred"] = false # Always keep the given LA
+      attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
+
+      unless attributes["brent"].nil? &&
+          attributes["scharge"].nil? &&
+          attributes["pscharge"].nil? &&
+          attributes["supcharg"].nil?
+        attributes["brent"] ||= BigDecimal("0.0")
+        attributes["scharge"] ||= BigDecimal("0.0")
+        attributes["pscharge"] ||= BigDecimal("0.0")
+        attributes["supcharg"] ||= BigDecimal("0.0")
+      end
 
       case_log = CaseLog.new(attributes)
       case_log.save!
+      compute_differences(case_log, attributes)
+    end
+
+    def compute_differences(case_log, attributes)
+      differences = []
+      attributes.each do |key, value|
+        case_log_value = case_log.send(key.to_sym)
+        if value != case_log_value
+          differences.push("#{key} #{value} #{case_log_value}")
+        end
+      end
+      raise "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
     end
 
     # Safe: A string that represents only an integer (or empty/nil)
@@ -162,7 +187,11 @@ module Imports
     # Safe: A string that represents only a decimal (or empty/nil)
     def safe_string_as_decimal(xml_doc, attribute)
       str = field_value(xml_doc, "xmlns", attribute)
-      BigDecimal(str, exception: false)
+      if str.blank?
+        nil
+      else
+        BigDecimal(str, exception: false)
+      end
     end
 
     # Unsafe: A string that has more than just the integer value
@@ -182,7 +211,7 @@ module Imports
       if day.nil? || month.nil? || year.nil?
         nil
       else
-        Date.new(year, month, day)
+        Time.zone.local(year, month, day)
       end
     end
 
@@ -290,6 +319,19 @@ module Imports
       end
     end
 
+    def details_known(index, attributes)
+      if index > attributes["hhmemb"]
+        nil
+      elsif attributes["age#{index}_known"] == 1 &&
+          attributes["sex#{index}"] == "R" &&
+          attributes["relat#{index}"] == "R" &&
+          attributes["ecstat#{index}"] == 10
+        1 # No
+      else
+        0 # Yes
+      end
+    end
+
     def previous_postcode_known(xml_doc)
       previous_postcode_known = field_value(xml_doc, "xmlns", "Q12bnot")
       if previous_postcode_known == "Temporary or Unknown"
@@ -305,7 +347,7 @@ module Imports
       if outcode_value.blank? || incode_value.blank?
         nil
       else
-        "#{outcode_value} #{incode_value}"
+        "#{outcode_value}#{incode_value}"
       end
     end
 
@@ -383,6 +425,14 @@ module Imports
     def illness_type(xml_doc, index)
       illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
       if illness_type == "Yes"
+        1
+      else
+        0
+      end
+    end
+
+    def first_time_let(rsnvac)
+      if [15, 16, 17].include?(rsnvac)
         1
       else
         0

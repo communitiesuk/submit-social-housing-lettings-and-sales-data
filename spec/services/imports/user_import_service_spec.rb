@@ -6,9 +6,10 @@ RSpec.describe Imports::UserImportService do
   let(:old_org_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
   let(:user_file) { File.open("#{fixture_directory}/#{old_user_id}.xml") }
   let(:storage_service) { instance_double(StorageService) }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing users" do
-    subject(:import_service) { described_class.new(storage_service) }
+    subject(:import_service) { described_class.new(storage_service, logger) }
 
     before do
       allow(storage_service).to receive(:list_files)
@@ -33,8 +34,8 @@ RSpec.describe Imports::UserImportService do
     end
 
     it "refuses to create a user belonging to a non existing organisation" do
-      expect { import_service.create_users("user_directory") }
-        .to raise_error(ActiveRecord::RecordInvalid, /Organisation must exist/)
+      expect(logger).to receive(:error).with(/Organisation must exist/)
+      import_service.create_users("user_directory")
     end
 
     context "when the user is a data coordinator" do
@@ -100,7 +101,7 @@ RSpec.describe Imports::UserImportService do
       end
 
       it "logs that the user already exists" do
-        expect(Rails.logger).to receive(:warn)
+        expect(logger).to receive(:warn)
         import_service.create_users("user_directory")
       end
     end
