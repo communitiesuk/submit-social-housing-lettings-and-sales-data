@@ -13,8 +13,10 @@ import "intersection-observer"
 //
 
 require.context("govuk-frontend/govuk/assets")
-import { initAll } from "govuk-frontend"
+import GOVUKFrontend from "govuk-frontend"
+import GOVUKPrototypeComponents from "govuk-prototype-components"
 import "./styles/application.scss"
 import "./controllers"
 
-initAll()
+GOVUKFrontend.initAll()
+GOVUKPrototypeComponents.initAll()

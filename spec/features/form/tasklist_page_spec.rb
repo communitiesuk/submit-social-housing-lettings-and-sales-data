@@ -12,6 +12,14 @@ RSpec.describe "Task List" do
       managing_organisation: user.organisation,
     )
   end
+  let(:completed_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :completed,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+    )
+  end
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
@@ -41,5 +49,12 @@ RSpec.describe "Task List" do
     answer_all_questions_in_income_subsection(empty_case_log)
     visit("/logs/#{empty_case_log.id}")
     expect(page).to have_link("Skip to next incomplete section", href: /#household-characteristics/)
+  end
+
+  it "has a review section which has a button that allows the data inputter to review the case log" do
+    visit("/logs/#{completed_case_log.id}")
+    expect(page).to have_content("review and make changes to this log")
+    click_link(text: "review and make changes to this log")
+    expect(page).to have_current_path("/logs/#{completed_case_log.id}/review")
   end
 end

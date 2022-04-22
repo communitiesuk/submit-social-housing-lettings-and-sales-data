@@ -1110,6 +1110,21 @@
             }
           ],
           "pages": {
+            "declaration": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "declaration": {
+                  "check_answer_label": "Tenant has seen the privacy notice",
+                  "header": "Department for Levelling Up, Housing & Communities privacy notice ",
+                  "hint_text": "Make sure the tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice before submitting this log",
+                  "type": "checkbox",
+                  "answer_options": {
+                    "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                  }
+                }
+              }
+            },
             "household_members": {
               "header": "",
               "description": "",
@@ -5680,42 +5695,6 @@
                   "hbrentshortfall": 0
                 }
               ]
-            }
-          }
-        }
-      }
-    },
-    "submission": {
-      "label": "Submission",
-      "subsections": {
-        "declaration": {
-          "label": "Declaration",
-          "depends_on": [
-            {
-              "setup": "completed",
-              "household_characteristics": "completed",
-              "household_situation": "completed",
-              "household_needs": "completed",
-              "tenancy_information": "completed",
-              "property_information": "completed",
-              "income_and_benefits": "completed"
-            }
-          ],
-          "pages": {
-            "declaration": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "declaration": {
-                  "check_answer_label": "",
-                  "header": "Submit this lettings log ",
-                  "hint_text": "",
-                  "type": "checkbox",
-                  "answer_options": {
-                    "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
-                  }
-                }
-              }
             }
           }
         }

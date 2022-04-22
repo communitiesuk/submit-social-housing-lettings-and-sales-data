@@ -11,7 +11,8 @@ $govuk-image-url-function: frontend-image-url;
 $govuk-global-styles: true;
 $govuk-new-link-styles: true;
 
-@import "~govuk-frontend/govuk/all";
+@import "govuk-frontend-styles";
+@import "govuk-prototype-styles";
 
 @import "accessible-autocomplete";
 @import "button";

@@ -18,6 +18,24 @@ RSpec.describe FormController, type: :request do
       managing_organisation: other_organisation,
     )
   end
+  let(:setup_complete_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :about_completed,
+      status: 1,
+      startdate: Time.zone.local(2021, 10, 10),
+      owning_organisation: organisation,
+      managing_organisation: organisation,
+    )
+  end
+  let(:completed_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :completed,
+      owning_organisation: organisation,
+      managing_organisation: organisation,
+    )
+  end
   let(:headers) { { "Accept" => "text/html" } }
 
   context "when a user is not signed in" do
@@ -95,6 +113,13 @@ RSpec.describe FormController, type: :request do
         it "routes back to the tasklist page" do
           get "/logs/#{case_log.id}/conditional-question-no-second-page", headers: headers, params: {}
           expect(response).to redirect_to("/logs/#{case_log.id}")
+        end
+      end
+
+      context "when visiting the review page" do
+        it "renders the review page for the case log" do
+          get "/logs/#{setup_complete_case_log.id}/review", headers: headers, params: {}
+          expect(response.body).to match("Review lettings log")
         end
       end
     end

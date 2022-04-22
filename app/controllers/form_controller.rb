@@ -1,7 +1,7 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: [:submit_form]
-  before_action :find_resource_by_named_id, except: [:submit_form]
+  before_action :find_resource, only: %i[submit_form review]
+  before_action :find_resource_by_named_id, except: %i[submit_form review]
 
   def submit_form
     if @case_log
@@ -32,6 +32,14 @@ class FormController < ApplicationController
       current_url = request.env["PATH_INFO"]
       subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection: }
+    else
+      render_not_found
+    end
+  end
+
+  def review
+    if @case_log
+      render "form/review"
     else
       render_not_found
     end
