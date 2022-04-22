@@ -51,8 +51,6 @@ private
   end
 
   def find_resource
-    return if current_user.support?
-
     @organisation = Organisation.find(params[:id])
   end
 end

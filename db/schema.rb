@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_20_165451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -256,6 +256,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
   end
 
+  create_table "organisation_las", force: :cascade do |t|
+    t.bigint "organisation_id"
+    t.string "ons_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_organisation_las_on_organisation_id"
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string "name"
     t.string "phone"
@@ -263,7 +271,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_092231) do
     t.string "address_line1"
     t.string "address_line2"
     t.string "postcode"
-    t.string "local_authorities"
     t.boolean "holds_own_stock"
     t.string "other_stock_owners"
     t.string "managing_agents"

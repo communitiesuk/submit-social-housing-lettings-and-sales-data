@@ -8,4 +8,11 @@ FactoryBot.define do
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
+
+  factory :organisation_la do
+    organisation
+    ons_code { "E07000041" }
+    created_at { Time.zone.now }
+    updated_at { Time.zone.now }
+  end
 end

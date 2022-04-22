@@ -26,7 +26,7 @@ class Form
 
   def get_question(id, case_log)
     all_questions = questions.select { |q| q.id == id.to_s.underscore }
-    routed_question = all_questions.find { |q| q.page.routed_to?(case_log) }
+    routed_question = all_questions.find { |q| q.page.routed_to?(case_log) } if case_log
     routed_question || all_questions[0]
   end
 

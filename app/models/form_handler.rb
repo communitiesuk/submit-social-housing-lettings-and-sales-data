@@ -10,6 +10,10 @@ class FormHandler
     @forms[form]
   end
 
+  def current_form
+    forms[forms.keys.max_by(&:to_i)]
+  end
+
 private
 
   def get_all_forms

@@ -3,6 +3,7 @@ class Organisation < ApplicationRecord
   has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
+  has_many :organisation_las
 
   has_paper_trail
 
@@ -35,13 +36,21 @@ class Organisation < ApplicationRecord
     !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
   end
 
+  def local_authorities
+    organisation_las.pluck(:ons_code).map { |ons_code| ons_code }
+  end
+
+  def local_authority_names
+    local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
+  end
+
   def display_attributes
     [
       { name: "name", value: name, editable: true },
       { name: "address", value: address_string, editable: true },
       { name: "telephone_number", value: phone, editable: true },
       { name: "type", value: "Org type", editable: false },
-      { name: "local_authorities_operated_in", value: local_authorities, editable: false },
+      { name: "local_authorities_operated_in", value: local_authority_names, editable: false, format: :bullet },
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
       { name: "managing_agents", value: managing_agents, editable: false },

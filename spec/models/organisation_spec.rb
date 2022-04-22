@@ -29,6 +29,34 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
+    context "when the organisation only operates in specific local authorities" do
+      let(:ons_code_mappings) do
+        {
+          "" => "Select an option",
+          "E07000223" => "Adur",
+          "E09000023" => "Lewisham",
+          "E08000003" => "Manchester",
+          "E07000178" => "Oxford",
+          "E07000114" => "Thanet",
+          "E09000033" => "Westminster",
+          "E06000014" => "York",
+        }
+      end
+
+      before do
+        FactoryBot.create(:organisation_la, organisation_id: organisation.id, ons_code: "E07000178")
+        allow(LocalAuthority).to receive(:ons_code_mappings).and_return(ons_code_mappings)
+      end
+
+      it "has local authorities associated" do
+        expect(organisation.local_authorities).to eq(%w[E07000178])
+      end
+
+      it "maps the ons codes to LA names for display" do
+        expect(organisation.local_authority_names).to eq(%w[Oxford])
+      end
+    end
+
     context "with case logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
       let!(:owned_case_log) do
