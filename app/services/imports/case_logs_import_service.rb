@@ -96,8 +96,8 @@ module Imports
 
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
-      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc)
       attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
+      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"])
       attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
       attributes["waityear"] = unsafe_string_as_integer(xml_doc, "Q12d")
       attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")
@@ -142,15 +142,17 @@ module Imports
       attributes["postcode_known"] = attributes["postcode_full"].nil? ? 0 : 1
 
       # Not specific to our form but required for consistency (present in import)
-      attributes["old_form_id"] = Integer(field_value(xml_doc, "xmlns", "FORM"))
+      attributes["old_form_id"] = safe_string_as_integer(xml_doc, "FORM")
       attributes["created_at"] = Time.zone.parse(field_value(xml_doc, "meta", "created-date"))
       attributes["updated_at"] = Time.zone.parse(field_value(xml_doc, "meta", "modified-date"))
+      attributes["old_id"] = field_value(xml_doc, "meta", "document-id")
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
       attributes["la_known"] = 1 # Defaulting to Yes (Required)
       attributes["is_la_inferred"] = false # Always keep the given LA
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
+      attributes["declaration"] = 1
 
       unless attributes["brent"].nil? &&
           attributes["scharge"].nil? &&
@@ -163,8 +165,19 @@ module Imports
       end
 
       case_log = CaseLog.new(attributes)
-      case_log.save!
+      save_case_log(case_log, attributes)
       compute_differences(case_log, attributes)
+      check_status_completed(case_log)
+    end
+
+    def save_case_log(case_log, attributes)
+      case_log.save!
+    rescue ActiveRecord::RecordNotUnique
+      unless attributes["old_id"].nil?
+        record = CaseLog.find_by(old_id: attributes["old_id"])
+        @logger.info "Updating case log #{case_log.id} with legacy ID #{attributes['old_id']}"
+        record.update!(attributes)
+      end
     end
 
     def compute_differences(case_log, attributes)
@@ -172,10 +185,16 @@ module Imports
       attributes.each do |key, value|
         case_log_value = case_log.send(key.to_sym)
         if value != case_log_value
-          differences.push("#{key} #{value} #{case_log_value}")
+          differences.push("#{key} #{value.inspect} #{case_log_value.inspect}")
         end
       end
-      raise "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
+      @logger.warn "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
+    end
+
+    def check_status_completed(case_log)
+      unless case_log.status == "completed"
+        @logger.warn "Case log #{case_log.id} is not completed"
+      end
     end
 
     # Safe: A string that represents only an integer (or empty/nil)
@@ -332,10 +351,12 @@ module Imports
       end
     end
 
-    def previous_postcode_known(xml_doc)
+    def previous_postcode_known(xml_doc, previous_postcode)
       previous_postcode_known = field_value(xml_doc, "xmlns", "Q12bnot")
       if previous_postcode_known == "Temporary or Unknown"
         0
+      elsif previous_postcode.nil?
+        nil
       else
         1
       end

@@ -14,7 +14,7 @@ module Imports
         xml_document = Nokogiri::XML(file_io)
         send(create_method, xml_document)
       rescue StandardError => e
-        @logger.error "#{e.class} in #{filename}: #{e.message}"
+        @logger.error "#{e.class} in #{filename}: #{e.message}. Caller: #{e.backtrace.first}"
       end
     end
 
