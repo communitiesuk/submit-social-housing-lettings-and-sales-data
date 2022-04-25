@@ -418,7 +418,10 @@ private
   end
 
   def dynamically_not_required
-    (form.invalidated_questions(self) + form.readonly_questions).map(&:id).uniq
+    la_known_questions = []
+    la_known_questions << "la_known" if postcode_known != 0
+    la_known_questions << "previous_la_known" if previous_postcode_known != 0
+    ((form.invalidated_questions(self) + form.readonly_questions).map(&:id) + la_known_questions).uniq
   end
 
   def set_derived_fields!

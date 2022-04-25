@@ -228,12 +228,6 @@ RSpec.describe "Form Check Answers Page" do
         click_link("Save and go to next incomplete section")
         expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code")
       end
-
-      it "they can click a button to move to the submission section when all sections have been completed", js: true do
-        visit("/logs/#{completed_case_log.id}/local-authority/check-answers")
-        click_link("Save and go to submit")
-        expect(page).to have_current_path("/logs/#{completed_case_log.id}/declaration")
-      end
     end
   end
 end
