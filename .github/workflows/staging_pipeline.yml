@@ -82,6 +82,16 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 16
+
+      - name: Install packages and symlink local dependencies
+        run: |
+          yarn install --immutable --immutable-cache --check-cache
+
       - name: Lint
         run: |
           bundle exec rake lint
