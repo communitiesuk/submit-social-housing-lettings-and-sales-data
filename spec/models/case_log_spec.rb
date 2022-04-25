@@ -1381,10 +1381,10 @@ RSpec.describe CaseLog do
         })
       end
 
-      it "correctly derives and saves layear" do
-        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(1)
-        expect(case_log["layear"]).to eq(1)
+      it "correctly derives and saves waityear" do
+        record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["waityear"]).to eq(1)
+        expect(case_log["waityear"]).to eq(1)
       end
 
       it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
@@ -1703,29 +1703,29 @@ RSpec.describe CaseLog do
     context "when it changes from a renewal to not a renewal" do
       let(:case_log) { FactoryBot.create(:case_log) }
 
-      it "resets inferred layear value" do
+      it "resets inferred waityear value" do
         case_log.update!({ renewal: 1 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(1)
-        expect(case_log["layear"]).to eq(1)
+        record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["waityear"]).to eq(1)
+        expect(case_log["waityear"]).to eq(1)
 
         case_log.update!({ renewal: 0 })
-        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(nil)
-        expect(case_log["layear"]).to eq(nil)
+        record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["waityear"]).to eq(nil)
+        expect(case_log["waityear"]).to eq(nil)
       end
     end
 
     context "when it is not a renewal" do
       let(:case_log) { FactoryBot.create(:case_log) }
 
-      it "saves layear value" do
-        case_log.update!({ renewal: 0, layear: 2 })
+      it "saves waityear value" do
+        case_log.update!({ renewal: 0, waityear: 2 })
 
-        record_from_db = ActiveRecord::Base.connection.execute("select layear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["layear"]).to eq(2)
-        expect(case_log["layear"]).to eq(2)
+        record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["waityear"]).to eq(2)
+        expect(case_log["waityear"]).to eq(2)
       end
     end
   end

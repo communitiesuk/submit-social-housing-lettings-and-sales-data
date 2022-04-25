@@ -396,7 +396,7 @@ private
   end
 
   def reset_derived_questions
-    dependent_questions = { layear: [{ key: :renewal, value: 0 }],
+    dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             homeless: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
                             underoccupation_benefitcap: [{ key: :renewal, value: 0 }] }
@@ -459,7 +459,7 @@ private
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.homeless = 2
       self.referral = 0
-      self.layear = 1
+      self.waityear = 1
       if is_general_needs?
         # fixed term
         self.prevten = 32 if managing_organisation.provider_type == "PRP"

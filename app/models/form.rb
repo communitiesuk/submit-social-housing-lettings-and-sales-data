@@ -58,7 +58,7 @@ class Form
   def next_incomplete_section_redirect_path(subsection, case_log)
     subsection_ids = subsections.map(&:id)
 
-    if case_log.status == "completed" || all_subsections_except_declaration_completed?(case_log)
+    if case_log.status == "completed"
       return first_question_in_last_subsection(subsection_ids)
     end
 
@@ -119,7 +119,7 @@ class Form
 
   def invalidated_page_questions(case_log)
     # we're already treating address fields as a special case and reset their values upon saving a case_log
-    address_questions = %w[postcode_known la previous_postcode_known prevloc postcode_full ppostcode_full]
+    address_questions = %w[postcode_known la_known la previous_postcode_known previous_la_known prevloc postcode_full ppostcode_full]
     invalidated_pages(case_log).flat_map(&:questions).reject { |q| address_questions.include?(q.id) } || []
   end
 
