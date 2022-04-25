@@ -21,11 +21,10 @@
             <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
           </div>
           <div class="x-govuk-summary-card__body">
-            <dl class="govuk-summary-list">
-              <% subsection.applicable_questions(@case_log).each do |question| %>
-                <%= render partial: 'form/check_answers_table', locals: { question: question, case_log: @case_log } %>
-              <% end %>
-            </dl>
+            <%= render partial: 'form/check_answers_summary_list', locals: {
+              subsection:,
+              case_log: @case_log,
+            } %>
           </div>
         </div>
       <% end %>

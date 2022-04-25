@@ -17,11 +17,10 @@
     <% end %>
     <%= display_answered_questions_summary(subsection, @case_log) %>
 
-    <dl class="govuk-summary-list">
-      <% subsection.applicable_questions(@case_log).each do |question| %>
-        <%= render partial: "form/check_answers_table", locals: { question:, case_log: @case_log } %>
-      <% end %>
-    </dl>
+    <%= render partial: 'form/check_answers_summary_list', locals: {
+      subsection:,
+      case_log: @case_log,
+    } %>
 
     <%= form_with model: @case_log, method: "get" do |f| %>
       <%= f.govuk_submit "Save and return to log" do %>

@@ -1,0 +1,18 @@
+<%= govuk_summary_list do |summary_list| %>
+  <% subsection.applicable_questions(@case_log).each do |question| %>
+    <% summary_list.row do |row| %>
+      <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
+      <% row.value do %>
+        <%= get_answer_label(question, @case_log) %><br>
+        <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
+          <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
+        <% end %>
+      <% end %>
+      <% row.action(
+        text: question.action_text(@case_log),
+        href: question.action_href(@case_log, question.page.id),
+        visually_hidden_text: question.check_answer_label.to_s.downcase,
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

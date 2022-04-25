@@ -226,9 +226,14 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "has an update answer link text helper" do
-      expect(question.update_answer_link_name(case_log)).to match(/Answer/)
+      expect(question.action_text(case_log)).to match(/Answer/)
       case_log["incfreq"] = 0
-      expect(question.update_answer_link_name(case_log)).to match(/Change/)
+      expect(question.action_text(case_log)).to match(/Change/)
+    end
+
+    it "has an update answer link href helper" do
+      case_log.id = 1
+      expect(question.action_href(case_log, page.id)).to eq("/logs/1/net-income?referrer=check_answers")
     end
 
     context "when the question has an inferred answer" do
@@ -239,7 +244,7 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "postcode_full" }
 
       it "displays 'change' in the check answers link text" do
-        expect(question.update_answer_link_name(case_log)).to match(/Change/)
+        expect(question.action_text(case_log)).to match(/Change/)
       end
     end
 
