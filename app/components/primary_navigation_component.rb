@@ -5,4 +5,8 @@ class PrimaryNavigationComponent < ViewComponent::Base
     @items = items
     super
   end
+
+  def highlighted_tab?(item, path)
+    item.fetch(:current, false) || item.fetch(:comparable_urls).any? { |url| path.include?(url) }
+  end
 end
