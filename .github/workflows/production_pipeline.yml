@@ -1,4 +1,4 @@
-name: 'Production CI/CD Pipeline'
+name: Production CI/CD Pipeline
 
 on:
   release:
@@ -26,8 +26,8 @@ jobs:
           POSTGRES_DB: data_collector
         ports:
           - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        # tmpfs makes DB faster by using RAM
+        # Needed because the Postgres container does not provide a health check
+        # tmpfs makes database faster by using RAM
         options: >-
           --mount type=tmpfs,destination=/var/lib/postgresql/data
           --health-cmd pg_isready
@@ -47,25 +47,28 @@ jobs:
         id: latestrelease
         run: |
           echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
+
       - name: Checkout tag
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
-      - name: Set up node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
 
-      - name: Create DB
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 16
+
+      - name: Create database
         run: |
           bundle exec rake db:prepare
 
@@ -80,23 +83,25 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+
     steps:
       - name: Get latest release with tag
         id: latestrelease
         run: |
           echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
+
       - name: Checkout tag
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
 
       - name: Rubocop
@@ -106,23 +111,25 @@ jobs:
   audit:
     name: Audit dependencies
     runs-on: ubuntu-latest
+
     steps:
       - name: Get latest release with tag
         id: latestrelease
         run: |
           echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
+
       - name: Confirm release tag
         run: |
           echo ${{ steps.latestrelease.outputs.releasetag }}
+
       - name: Checkout tag
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ steps.latestrelease.outputs.releasetag }}
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
 
       - name: Audit
@@ -131,53 +138,55 @@ jobs:
 
   deploy:
     name: Deploy
-    concurrency: 'production'
-
+    concurrency: "production"
     runs-on: ubuntu-latest
-    environment: 'production'
+    environment: "production"
     needs: [lint, test, audit]
 
     steps:
-    - name: Get latest release with tag
-      id: latestrelease
-      run: |
-        echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
-    - name: Confirm release tag
-      run: |
-        echo ${{ steps.latestrelease.outputs.releasetag }}
-    - name: Checkout tag
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ steps.latestrelease.outputs.releasetag }}
+      - name: Get latest release with tag
+        id: latestrelease
+        run: |
+          echo "::set-output name=releasetag::$(curl -s https://api.github.com/repos/${REPO_URL}/releases/latest | jq '.tag_name' | sed 's/\"//g')"
 
-    - name: Install Cloud Foundry CLI
-      run: |
-        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-        sudo apt-get update
-        sudo apt-get install cf8-cli
-    - name: Deploy
-      env:
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-        CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        APP_NAME: dluhc-core-production
-        GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
-        APP_HOST: ${{ secrets.APP_HOST }}
-        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
-        EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      run: |
-        cf api $CF_API_ENDPOINT
-        cf auth
-        cf target -o $CF_ORG -s $CF_SPACE
-        cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
-        cf set-env $APP_NAME APP_HOST $APP_HOST
-        cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-        cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
-        cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
-        cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-        cf push $APP_NAME --strategy rolling
+      - name: Confirm release tag
+        run: |
+          echo ${{ steps.latestrelease.outputs.releasetag }}
+
+      - name: Checkout tag
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.latestrelease.outputs.releasetag }}
+
+      - name: Install Cloud Foundry CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Deploy
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          APP_NAME: dluhc-core-production
+          GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
+          APP_HOST: ${{ secrets.APP_HOST }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
+          EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
+          cf set-env $APP_NAME APP_HOST $APP_HOST
+          cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+          cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
+          cf push $APP_NAME --strategy rolling
