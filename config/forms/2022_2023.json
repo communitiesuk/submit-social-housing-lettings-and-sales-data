@@ -196,7 +196,16 @@
                   "header": "Do you know what local authority the property is located in?",
                   "hint_text": "",
                   "type": "radio",
-                  "hidden_in_check_answers": true,
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "la_known": 0
+                      },
+                      {
+                        "la_known": 1
+                      }
+                    ]
+                  },
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -1224,8 +1233,12 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      { "age1_known": 0 },
-                      { "age1_known": 1 }
+                      {
+                        "age1_known": 0
+                      },
+                      {
+                        "age1_known": 1
+                      }
                     ]
                   }
                 },
@@ -1717,7 +1730,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age2_known": 0
+                      },
+                      {
+                        "age2_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age2": {
                   "header": "Age",
@@ -1828,7 +1850,10 @@
               "depends_on": [
                 {
                   "details_known_2": 0,
-                  "age2": { "operator": ">", "operand": 15 }
+                  "age2": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -1927,7 +1952,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age3_known": 0
+                      },
+                      {
+                        "age3_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age3": {
                   "header": "Age",
@@ -2038,7 +2072,10 @@
               "depends_on": [
                 {
                   "details_known_3": 0,
-                  "age3": { "operator": ">", "operand": 15 }
+                  "age3": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -2134,7 +2171,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age4_known": 0
+                      },
+                      {
+                        "age4_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age4": {
                   "header": "Age",
@@ -2245,7 +2291,10 @@
               "depends_on": [
                 {
                   "details_known_4": 0,
-                  "age4": { "operator": ">", "operand": 15 }
+                  "age4": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -2338,7 +2387,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age5_known": 0
+                      },
+                      {
+                        "age5_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age5": {
                   "header": "Age",
@@ -2449,7 +2507,10 @@
               "depends_on": [
                 {
                   "details_known_5": 0,
-                  "age5": { "operator": ">", "operand": 15 }
+                  "age5": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -2539,7 +2600,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age6_known": 0
+                      },
+                      {
+                        "age6_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age6": {
                   "header": "Age",
@@ -2650,7 +2720,10 @@
               "depends_on": [
                 {
                   "details_known_6": 0,
-                  "age6": { "operator": ">", "operand": 15 }
+                  "age6": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -2737,7 +2810,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age7_known": 0
+                      },
+                      {
+                        "age7_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age7": {
                   "header": "Age",
@@ -2848,7 +2930,10 @@
               "depends_on": [
                 {
                   "details_known_7": 0,
-                  "age7": { "operator": ">", "operand": 15 }
+                  "age7": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             },
@@ -2932,7 +3017,16 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "age8_known": 0
+                      },
+                      {
+                        "age8_known": 1
+                      }
+                    ]
+                  }
                 },
                 "age8": {
                   "header": "Age",
@@ -3043,7 +3137,10 @@
               "depends_on": [
                 {
                   "details_known_8": 0,
-                  "age8": { "operator": ">", "operand": 15 }
+                  "age8": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 }
               ]
             }
@@ -3752,7 +3849,16 @@
                       1
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "previous_postcode_known": 0
+                      },
+                      {
+                        "previous_postcode_known": 1
+                      }
+                    ]
+                  }
                 },
                 "ppostcode_full": {
                   "check_answer_label": "Postcode of household’s last settled accommodation",
@@ -3783,7 +3889,16 @@
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
-                  "hidden_in_check_answers": true,
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "previous_la_known": 0
+                      },
+                      {
+                        "previous_la_known": 1
+                      }
+                    ]
+                  },
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -4625,11 +4740,18 @@
               }
             },
             "net_income_value_check": {
-              "depends_on": [{ "net_income_soft_validation_triggered?": true }],
+              "depends_on": [
+                {
+                  "net_income_soft_validation_triggered?": true
+                }
+              ],
               "title_text": "Net income is outside the expected range based on the lead tenant’s working situation",
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
-                "argument": {"ecstat1": "question", "earnings": "question"}
+                "argument": {
+                  "ecstat1": "question",
+                  "earnings": "question"
+                }
               },
               "questions": {
                 "net_income_value_check": {
@@ -4639,10 +4761,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -5617,10 +5739,18 @@
               ]
             },
             "min_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_min_range?": true }],
+              "depends_on": [
+                {
+                  "rent_in_soft_min_range?": true
+                }
+              ],
               "informative_text": {
                 "translation": "soft_validations.rent.min.hint_text",
-                "argument": {"la": "question", "soft_min_for_period": "method", "brent":"question"}
+                "argument": {
+                  "la": "question",
+                  "soft_min_for_period": "method",
+                  "brent": "question"
+                }
               },
               "questions": {
                 "rent_value_check": {
@@ -5630,20 +5760,28 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "max_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_max_range?": true }],
+              "depends_on": [
+                {
+                  "rent_in_soft_max_range?": true
+                }
+              ],
               "informative_text": {
                 "translation": "soft_validations.rent.max.hint_text",
-                "argument": {"la": "question", "soft_max_for_period": "method", "brent":"question"}
+                "argument": {
+                  "la": "question",
+                  "soft_max_for_period": "method",
+                  "brent": "question"
+                }
               },
               "questions": {
                 "rent_value_check": {
@@ -5653,10 +5791,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
