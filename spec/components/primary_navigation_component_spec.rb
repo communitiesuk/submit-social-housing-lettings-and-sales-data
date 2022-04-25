@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe PrimaryNavigationComponent, type: :component do
   let(:items) do
-    [{ name: "Organisations", url: "#", current: true },
-     { name: "Users", url: "#" },
-     { name: "Logs ", url: "#" }]
+    [{ name: "Organisations", url: "#", current: true, comparable_urls: [] },
+     { name: "Users", url: "#", comparable_urls: [] },
+     { name: "Logs ", url: "#", comparable_urls: [] }]
   end
 
   context "when the item is 'current' in nav tabs" do
