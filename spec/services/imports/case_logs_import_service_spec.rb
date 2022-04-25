@@ -33,6 +33,7 @@ RSpec.describe Imports::CaseLogsImportService do
     it "successfully create all case logs" do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
+      expect(logger).not_to receive(:info)
       expect { case_log_service.create_logs(remote_folder) }
         .to change(CaseLog, :count).by(2)
     end
