@@ -86,15 +86,18 @@ class Form::Question
     end
   end
 
-  def update_answer_link_name(case_log)
-    link_type = if has_inferred_check_answers_value?(case_log)
-                  "Change"
-                elsif type == "checkbox"
-                  answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } ? "Change" : "Answer"
-                else
-                  case_log[id].blank? ? "Answer" : "Change"
-                end
-    "#{link_type}<span class=\"govuk-visually-hidden\"> #{check_answer_label.to_s.downcase}</span>".html_safe
+  def action_text(case_log)
+    if has_inferred_check_answers_value?(case_log)
+      "Change"
+    elsif type == "checkbox"
+      answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } ? "Change" : "Answer"
+    else
+      case_log[id].blank? ? "Answer" : "Change"
+    end
+  end
+
+  def action_href(case_log, page_id)
+    "/logs/#{case_log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
   end
 
   def completed?(case_log)

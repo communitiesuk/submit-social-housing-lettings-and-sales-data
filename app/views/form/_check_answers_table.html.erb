@@ -1,14 +1,14 @@
-<div class="govuk-summary-list__row">
-  <dt class="govuk-summary-list__key">
-    <%= question.check_answer_label.to_s.presence || question.header.to_s %>
-  </dt>
-  <dd class="govuk-summary-list__value">
+<% summary_list.row do |row| %>
+  <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
+  <% row.value do %>
     <%= get_answer_label(question, @case_log) %><br>
     <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
-      <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span><br>
+      <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
     <% end %>
-  </dd>
-  <dd class="govuk-summary-list__actions">
-    <%= govuk_link_to(question.update_answer_link_name(@case_log), "/logs/#{@case_log.id}/#{question.page.id.to_s.dasherize}?referrer=check_answers").html_safe %>
-  </dd>
-</div>
+  <% end %>
+  <% row.action(
+    text: question.action_text(@case_log),
+    href: question.action_href(@case_log, question.page.id),
+    visually_hidden_text: question.check_answer_label.to_s.downcase,
+  ) %>
+<% end %>
