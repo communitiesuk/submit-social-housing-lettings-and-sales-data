@@ -108,6 +108,24 @@ describe "rake core:data_import", type: :task do
     end
   end
 
+  context "when importing case logs" do
+    let(:type) { "case-logs" }
+    let(:import_service) { instance_double(Imports::CaseLogsImportService) }
+    let(:fixture_path) { "spec/fixtures/softwire_imports/case_logs" }
+
+    before do
+      allow(Imports::CaseLogsImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates case logs from the given XML file" do
+      expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::CaseLogsImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_logs).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
   it "raises an exception if no parameters are provided" do
     expect { task.invoke }.to raise_error(/Usage/)
   end
