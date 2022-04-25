@@ -11,8 +11,6 @@ class FormController < ApplicationController
         session[:errors] = nil
         if is_referrer_check_answers? && !@case_log.form.next_page(@page, @case_log).to_s.include?("value_check")
           redirect_to(send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log))
-        elsif @case_log.form.is_last_question?(@page, @case_log.form.subsection_for_page(@page), @case_log)
-          redirect_to(case_logs_path)
         else
           redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
           redirect_to(send(redirect_path, @case_log))
