@@ -18,11 +18,6 @@
   margin: 0 0 govuk-spacing(1);
 }
 
-.app-document-list__item-metadata {
-  padding: 0;
-  margin: 0;
-}
-
 .app-document-list__item-description {
   @include govuk-font($size: 16);
   margin: govuk-spacing(1) 0;
@@ -32,35 +27,5 @@
   @include govuk-font($size: 16);
   color: $govuk-secondary-text-colour;
   margin: 0;
-}
-.app-document-list {
-  list-style: none;
   padding: 0;
-}
-
-.app-document-list__item {
-  margin-bottom: govuk-spacing(4);
-
-  &:last-child {
-    border-bottom: 0;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-}
-
-.app-document-list__item-title {
-  @include govuk-font($size: 16, $weight: "bold");
-  margin: 0 0 govuk-spacing(1);
-}
-
-.app-document-list__item-description {
-  @include govuk-font($size: 16);
-  margin: govuk-spacing(1) 0;
-}
-
-.app-document-list__item-metadata {
-  @include govuk-font($size: 16);
-  color: $govuk-secondary-text-colour;
-  padding: 0;
-  margin: 0;
 }
