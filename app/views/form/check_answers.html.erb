@@ -13,9 +13,7 @@
     </h1>
 
     <% if subsection.id == "setup" && subsection.status(@case_log) == :completed %>
-      <div class="govuk-inset-text">
-        Changing these answers might remove answers you've already given in other sections.
-      </div>
+      <%= govuk_inset_text(text: "Changing these answers might remove answers you’ve already given in other sections.") %>
     <% end %>
     <%= display_answered_questions_summary(subsection, @case_log) %>
 
