@@ -140,11 +140,6 @@ class Form
     questions.select { |q| q.type == "numeric" }
   end
 
-  def is_last_question?(page, subsection, case_log)
-    subsection_ids = subsections.map(&:id)
-    subsection.id == subsection_ids[subsection_ids.length - 1] && next_page(page, case_log) == :check_answers
-  end
-
   def previous_page(page_ids, page_index, case_log)
     prev_page = get_page(page_ids[page_index - 1])
     return prev_page.id if prev_page.routed_to?(case_log)

@@ -154,17 +154,8 @@ RSpec.describe "validations" do
     context "when tenant has not seen the privacy notice" do
       it "shows a warning" do
         visit("/logs/#{completed_without_declaration.id}/declaration")
-        click_button("Submit lettings log")
+        click_button("Save and continue")
         expect(page).to have_content("You must show the DLUHC privacy notice to the tenant")
-      end
-    end
-
-    context "when tenant has seen the privacy notice" do
-      it "the log can be submitted" do
-        completed_without_declaration.update!({ declaration: 1 })
-        visit("/logs/#{completed_without_declaration.id}/declaration")
-        click_button("Submit lettings log")
-        expect(page).to have_current_path("/logs")
       end
     end
   end

@@ -42,12 +42,8 @@
       <% end %>
 
       <%= f.hidden_field :page, value: @page.id %>
-      <% if @case_log.form.is_last_question?(@page, @subsection, @case_log) %>
-        <%= f.govuk_submit "Submit lettings log", accesskey: "s" %>
-      <% else %>
-        <% if !@page.id.include?("value_check") %>
-          <%= f.govuk_submit "Save and continue", accesskey: "s" %>
-        <% end %>
+      <% if !@page.id.include?("value_check") %>
+        <%= f.govuk_submit "Save and continue", accesskey: "s" %>
       <% end %>
     </div>
   </div>
