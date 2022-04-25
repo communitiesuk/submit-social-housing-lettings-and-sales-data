@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe PrimaryNavigationComponent, type: :component do
   let(:items) do
-    [{ name: "Organisations", url: "#", current: true },
-     { name: "Users", url: "#" },
-     { name: "Logs ", url: "#" }]
+    [{ name: "Organisations", url: "/organisations", current: true, comparable_urls: ["/organisations", "/something-else"] },
+     { name: "Users", url: "/users", comparable_urls: ["/users"] },
+     { name: "Logs ", url: "/logs", comparable_urls: ["/logs"] }]
   end
 
   context "when the item is 'current' in nav tabs" do
@@ -12,6 +12,16 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
       result = render_inline(described_class.new(items:))
 
       expect(result.css('.app-primary-navigation__link[aria-current="page"]').text).to include("Organisations")
+    end
+  end
+
+  context "when the current page is sub-page" do
+    it "highlights the correct tab" do
+      navigation_panel = described_class.new(items:)
+
+      expect(navigation_panel).to be_highlighted_tab(items[0], "/something-else")
+      expect(navigation_panel).not_to be_highlighted_tab(items[1], "/something-else")
+      expect(navigation_panel).not_to be_highlighted_tab(items[2], "/something-else")
     end
   end
 
