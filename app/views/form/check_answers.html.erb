@@ -27,10 +27,8 @@
 
     <%= form_with model: @case_log, method: "get" do |f| %>
       <%= f.govuk_submit "Save and return to log" do %>
-        <% if @case_log.status == "in_progress" && @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) == false %>
+        <% if @case_log.status == "in_progress" %>
           <%= govuk_button_link_to "Save and go to next incomplete section", "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
-        <% elsif @case_log.status == "completed" || @case_log.form.all_subsections_except_declaration_completed?(@case_log) %>
-          <%= govuk_button_link_to "Save and go to submit", "/logs/#{@case_log.id}/#{@case_log.form.next_incomplete_section_redirect_path(subsection, @case_log)}", secondary: true %>
         <% end %>
       <% end %>
     <% end %>
