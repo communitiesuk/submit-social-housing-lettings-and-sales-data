@@ -82,9 +82,9 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Rubocop
+      - name: Lint
         run: |
-          bundle exec rubocop
+          bundle exec rake lint
 
   audit:
     name: Audit dependencies
