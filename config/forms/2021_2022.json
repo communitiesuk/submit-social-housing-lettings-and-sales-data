@@ -196,7 +196,12 @@
                   "header": "Do you know what local authority the property is located in?",
                   "hint_text": "",
                   "type": "radio",
-                  "hidden_in_check_answers": true,
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "la_known": 0 },
+                      { "la_known": 1 }
+                    ]
+                  },
                   "answer_options": {
                     "1": {
                       "value": "Yes"
@@ -1697,7 +1702,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age2_known": 0 },
+                      { "age2_known": 1 }
+                    ]
+                  }
                 },
                 "age2": {
                   "header": "Age",
@@ -1907,7 +1917,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age3_known": 0 },
+                      { "age3_known": 1 }
+                    ]
+                  }
                 },
                 "age3": {
                   "header": "Age",
@@ -2114,7 +2129,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age4_known": 0 },
+                      { "age4_known": 1 }
+                    ]
+                  }
                 },
                 "age4": {
                   "header": "Age",
@@ -2318,7 +2338,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age5_known": 0 },
+                      { "age5_known": 1 }
+                    ]
+                  }
                 },
                 "age5": {
                   "header": "Age",
@@ -2519,7 +2544,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age6_known": 0 },
+                      { "age6_known": 1 }
+                    ]
+                  }
                 },
                 "age6": {
                   "header": "Age",
@@ -2717,7 +2747,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age7_known": 0 },
+                      { "age7_known": 1 }
+                    ]
+                  }
                 },
                 "age7": {
                   "header": "Age",
@@ -2912,7 +2947,12 @@
                       0
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "age8_known": 0 },
+                      { "age8_known": 1 }
+                    ]
+                  }
                 },
                 "age8": {
                   "header": "Age",
@@ -3732,7 +3772,12 @@
                       1
                     ]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "previous_postcode_known": 0 },
+                      { "previous_postcode_known": 1 }
+                    ]
+                  }
                 },
                 "ppostcode_full": {
                   "check_answer_label": "Postcode of household’s last settled accommodation",
@@ -3763,7 +3808,12 @@
                   "header": "Do you know the local authority of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
-                  "hidden_in_check_answers": true,
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      { "previous_la_known": 0 },
+                      { "previous_la_known": 1 }
+                    ]
+                  },
                   "answer_options": {
                     "1": {
                       "value": "Yes"
