@@ -1114,7 +1114,6 @@
     },
     "household": {
       "label": "About the household",
-      "description": "Make sure the tenant has seen <a class=\"govuk-link\" href=\"/privacy-notice\">the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice</a> before completing this section.",
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
@@ -1125,16 +1124,18 @@
           ],
           "pages": {
             "declaration": {
-              "header": "",
+              "header": "Department for Levelling Up, Housing & Communities privacy notice",
               "description": "",
               "questions": {
                 "declaration": {
+                  "header": "",
+                  "guidance_partial": "privacy_notice",
                   "check_answer_label": "Tenant has seen the privacy notice",
-                  "header": "Department for Levelling Up, Housing & Communities privacy notice ",
-                  "hint_text": "Make sure the tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice before submitting this log",
                   "type": "checkbox",
                   "answer_options": {
-                    "declaration": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
+                    "declaration": {
+                      "value": "The tenant has seen the DLUHC privacy notice"
+                    }
                   }
                 }
               }
