@@ -191,34 +191,9 @@
               "header": "",
               "description": "",
               "questions": {
-                "la_known": {
-                  "check_answer_label": "Do you know what local authority the property is located in?",
-                  "header": "Do you know what local authority the property is located in?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "hidden_in_check_answers": {
-                    "depends_on": [
-                      { "la_known": 0 },
-                      { "la_known": 1 }
-                    ]
-                  },
-                  "answer_options": {
-                    "1": {
-                      "value": "Yes"
-                    },
-                    "0": {
-                      "value": "No"
-                    }
-                  },
-                  "conditional_for": {
-                    "la": [
-                      1
-                    ]
-                  }
-                },
                 "la": {
                   "check_answer_label": "Local Authority",
-                  "header": "Select a local authority",
+                  "header": "What is the local authority of the property?",
                   "hint_text": "",
                   "type": "select",
                   "answer_options": {
@@ -539,12 +514,6 @@
                     "E07000128": "Wyre",
                     "E07000239": "Wyre Forest",
                     "E06000014": "York"
-                  },
-                  "inferred_check_answers_value": {
-                    "condition": {
-                      "la_known": 0
-                    },
-                    "value": "Not known"
                   }
                 }
               },

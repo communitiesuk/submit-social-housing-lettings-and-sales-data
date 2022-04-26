@@ -151,7 +151,7 @@ RSpec.describe Form::Question, type: :model do
     let(:section_id) { "household" }
     let(:subsection_id) { "household_needs" }
     let(:page_id) { "accessible_select" }
-    let(:question_id) { "la" }
+    let(:question_id) { "prevloc" }
 
     it "can map value from label" do
       expect(question.value_from_label("Manchester")).to eq("E08000003")

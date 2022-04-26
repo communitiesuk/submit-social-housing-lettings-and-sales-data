@@ -302,7 +302,7 @@
               },
               "accessible_select": {
                 "questions": {
-                  "la": {
+                  "prevloc": {
                     "header": "Select options",
                     "hint_text": "Type ahead to filter the options",
                     "type": "select",
@@ -321,8 +321,8 @@
                 },
                 "depends_on": [
                   {
-                    "la_known": 1,
-                    "is_la_inferred": false
+                    "previous_la_known": 1,
+                    "is_previous_la_inferred": false
                   }
                 ]
               },
@@ -369,6 +369,31 @@
           "property_information": {
             "label": "Property information",
             "pages": {
+              "accessible_select_too": {
+                "questions": {
+                  "la": {
+                    "header": "Select options",
+                    "hint_text": "Type ahead to filter the options",
+                    "type": "select",
+                    "check_answer_label": "Accessible Select",
+                    "answer_options": {
+                      "" : "Select an option",
+                      "E07000223": "Adur",
+                      "E09000023": "Lewisham",
+                      "E08000003": "Manchester",
+                      "E07000178": "Oxford",
+                      "E07000114": "Thanet",
+                      "E09000033": "Westminster",
+                      "E06000014": "York"
+                    }
+                  }
+                },
+                "depends_on": [
+                  {
+                    "is_la_inferred": false
+                  }
+                ]
+              },
               "property_postcode": {
                 "header": "",
                 "description": "",
@@ -411,7 +436,7 @@
                 "header": "",
                 "description": "",
                 "questions": {
-                  "la_known": {
+                  "previous_la_known": {
                     "check_answer_label": "Do you know what local authority the property is located in?",
                     "header": "Do you know what local authority the property is located in?",
                     "hint_text": "",

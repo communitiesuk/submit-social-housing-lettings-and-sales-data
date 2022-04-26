@@ -10,10 +10,6 @@ module Validations::LocalAuthorityValidations
   end
 
   def validate_la(record)
-    if record.la_known? && record.la.blank?
-      record.errors.add :la, I18n.t("validations.property.la.la_known")
-    end
-
     if record.owning_organisation && record.owning_organisation.local_authorities.present? &&
         record.la && !record.owning_organisation.local_authorities.include?(record.la)
       la_name = record.form.get_question("la", record).label_from_value(record.la)

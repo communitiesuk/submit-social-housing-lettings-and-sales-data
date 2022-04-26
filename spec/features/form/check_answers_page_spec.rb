@@ -17,9 +17,9 @@ RSpec.describe "Form Check Answers Page" do
   let(:empty_case_log) do
     FactoryBot.create(
       :case_log,
-      la_known: 1,
-      la: "E09000033",
-      is_la_inferred: false,
+      previous_la_known: 1,
+      prevloc: "E09000033",
+      is_previous_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )

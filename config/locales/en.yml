@@ -67,7 +67,6 @@ en:
       offered:
         relet_number: "Number of times the property has been re-let must be between 0 and 20"
       la:
-        la_known: "Enter name of local authority"
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
         postcode_invalid_for_org: "Postcode must be in an area covered by %{org_name}"
       rsnvac:

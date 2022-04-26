@@ -494,12 +494,10 @@ RSpec.describe CaseLogsController, type: :request do
         sign_in user
       end
 
-      it "shows the inferred postcode" do
+      it "shows the inferred la" do
         case_log = FactoryBot.create(:case_log,
                                      owning_organisation: organisation,
                                      managing_organisation: organisation,
-                                     la_known: 1,
-                                     is_la_inferred: true,
                                      postcode_known: 1,
                                      postcode_full: "PO5 3TE")
         id = case_log.id

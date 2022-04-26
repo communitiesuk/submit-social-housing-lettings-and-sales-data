@@ -149,7 +149,6 @@ module Imports
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
-      attributes["la_known"] = 1 # Defaulting to Yes (Required)
       attributes["is_la_inferred"] = false # Always keep the given LA
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)

@@ -37,15 +37,6 @@ RSpec.describe Validations::LocalAuthorityValidations do
   end
 
   describe "#validate_la" do
-    context "when previous la is known" do
-      it "la has to be provided" do
-        record.la_known = 1
-        local_auth_validator.validate_la(record)
-        expect(record.errors["la"])
-          .to include(match I18n.t("validations.property.la.la_known"))
-      end
-    end
-
     context "when the organisation only operates in specific local authorities" do
       let(:organisation) { FactoryBot.create(:organisation) }
       let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
