@@ -91,7 +91,7 @@ module Imports
 
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
       (1..10).each do |index|
-        attributes["illness_type_#{index}"] = illness_type(xml_doc, index)
+        attributes["illness_type_#{index}"] = illness_type(xml_doc, index, attributes["illness"])
       end
 
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
@@ -442,11 +442,11 @@ module Imports
       end
     end
 
-    def illness_type(xml_doc, index)
+    def illness_type(xml_doc, index, illness)
       illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
-      if illness_type == "Yes"
+      if illness_type == "Yes" && illness == "Yes"
         1
-      else
+      elsif illness == "Yes"
         0
       end
     end

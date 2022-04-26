@@ -1664,6 +1664,14 @@ RSpec.describe CaseLog do
           expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :tenant_code).from("test").to(nil)
         end
       end
+
+      context "when the question type has answer options" do
+        let(:case_log) { FactoryBot.create(:case_log, :in_progress, illness: 1, illness_type_1: 1) }
+
+        it "clears the answer" do
+          expect { case_log.update!(illness: 0) }.to change(case_log, :illness_type_1).from(1).to(nil)
+        end
+      end
     end
 
     context "with two pages having the same question key, only one's dependency is met" do
