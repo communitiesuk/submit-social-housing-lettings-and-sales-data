@@ -1195,7 +1195,7 @@ RSpec.describe CaseLog do
 
       it "changes the LA if property postcode changes from not known to known and provided" do
         address_case_log.update!({ postcode_known: 0 })
-        address_case_log.update!({ la_known: 1, la: "E09000033" })
+        address_case_log.update!({ la: "E09000033" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["postcode_full"]).to eq(nil)
