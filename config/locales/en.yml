@@ -154,30 +154,30 @@ en:
         question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they're a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they're not a current or former regular"
       preg_occ:
-        no_female: "You must answer 'no' as there are no female tenants aged 16-50 in the property"
+        no_female: "You must answer 'no' as there are no females aged 16-50 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
-        retired_over_70: "Answer cannot be over 70 as tenant %{person_num} has economic status that is not 'retired'"
-        child_under_16_relat: "Answer cannot be under 16 as tenant %{person_num} is not a child of the lead tenant"
-        child_under_16: "Answer cannot be under 16 as tenant's %{person_num} working situation is not 'child under 16'"
-        child_over_16: "Answer cannot be over 16 as tenant's %{person_num} working situation is 'child under 16'"
-        student_16_19: "Answer cannot be between 16 and 19 as tenant %{person_num} is a child of the lead tenant but is not a full-time student"
+        retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not 'retired'"
+        child_under_16_relat: "Answer cannot be under 16 as person %{person_num} is not a child of the lead tenant"
+        child_under_16: "Answer cannot be under 16 as person's %{person_num} working situation is not 'child under 16'"
+        child_over_16: "Answer cannot be over 16 as person's %{person_num} working situation is 'child under 16'"
+        student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         lead:
           over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
       ecstat:
-        retired_over_70: "Tenant %{person_num} must be retired if over 70"
-        child_under_16: "Tenant's %{person_num} working situation must be 'child under 16' as you told us they're under 16"
-        child_over_16: "Answer cannot be 'child under 16' as you told us the tenant %{person_num} is older than 16"
-        student_16_19: "Tenant's %{person_num} working situation must be full-time student or prefers not to say as you told us they're between 16 and 19."
+        retired_over_70: "Person %{person_num} must be retired if over 70"
+        child_under_16: "Person's %{person_num} working situation must be 'child under 16' as you told us they're under 16"
+        child_over_16: "Answer cannot be 'child under 16' as you told us the person %{person_num} is older than 16"
+        student_16_19: "Person's %{person_num} working situation must be full-time student or prefers not to say as you told us they're between 16 and 19."
         retired_male: "Answer cannot be 'retired' as male tenant is under 65"
         retired_female: "Answer cannot be 'retired' as female tenant is under 60"
       relat:
-        child_under_16: "Tenant %{person_num}’s relationship to tenant 1 must be 'child' as you told us they're under 16"
+        child_under_16: "Person's %{person_num}’s relationship to tenant 1 must be 'child' as you told us they're under 16"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: "Answer cannot be 'child' as you told us the tenant %{person_num} is between 16 and 19 and is not a full-time student"
+        student_16_19: "Answer cannot be 'child' as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
       housingneeds_a:
-        one_or_two_choices: "You can only select option or 'other disabled access needs' plus 'wheelchair-accessible housing', 'wheelchair access to essential rooms' or 'level access housing'"
+        one_or_two_choices: "You can only select one option or 'other disabled access needs' plus 'wheelchair-accessible housing', 'wheelchair access to essential rooms' or 'level access housing'"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be children's home or foster care as the lead tenant is 20 or older"
