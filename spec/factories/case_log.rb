@@ -115,7 +115,7 @@ FactoryBot.define do
       la { "E09000003" }
       prevloc { "E07000105" }
       hb { 6 }
-      hbrentshortfall { 0 }
+      hbrentshortfall { 1 }
       tshortfall { 12 }
       property_relet { 0 }
       mrcdate { Time.utc(2020, 5, 0o5, 10, 36, 49) }

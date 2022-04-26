@@ -28,6 +28,9 @@ RSpec.describe Imports::CaseLogsImportService do
                                   .and_return(open_file(fixture_directory, case_log_id2), open_file(fixture_directory, case_log_id2))
       # Stub the form handler to use the real form
       allow(FormHandler.instance).to receive(:get_form).with(anything).and_return(real_2021_2022_form)
+
+      WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
+             .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
     end
 
     it "successfully create all case logs" do

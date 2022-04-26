@@ -5672,11 +5672,14 @@
                   "hint_text": "Also known as the ‘outstanding amount’.",
                   "type": "radio",
                   "answer_options": {
-                    "0": {
+                    "1": {
                       "value": "Yes"
                     },
-                    "1": {
+                    "2": {
                       "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -5735,19 +5738,19 @@
               "depends_on": [
                 {
                   "hb": 1,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 },
                 {
                   "hb": 6,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 },
                 {
                   "hb": 7,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 },
                 {
                   "hb": 8,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 }
               ]
             }

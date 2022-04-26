@@ -166,8 +166,8 @@ class CaseLog < ApplicationRecord
   end
 
   def has_hbrentshortfall?
-    # 0: Yes
-    !!hbrentshortfall&.zero?
+    # 1: Yes
+    hbrentshortfall == 1
   end
 
   def postcode_known?

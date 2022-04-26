@@ -149,10 +149,11 @@ module Imports
 
       # Required for our form invalidated questions (not present in import)
       attributes["previous_la_known"] = attributes["prevloc"].nil? ? 0 : 1
-      attributes["is_la_inferred"] = false # Always keep the given LA
+      attributes["is_la_inferred"] = attributes["postcode_full"].present?
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
 
+      # Set charges to 0 if others are partially populated
       unless attributes["brent"].nil? &&
           attributes["scharge"].nil? &&
           attributes["pscharge"].nil? &&
@@ -163,10 +164,18 @@ module Imports
         attributes["supcharg"] ||= BigDecimal("0.0")
       end
 
+      # Handles confidential schemes
+      if attributes["postcode_full"] == "******"
+        attributes["postcode_known"] = 0
+        attributes["postcode_full"] = nil
+      end
+
+      previous_status = field_value(xml_doc, "meta", "status")
+
       case_log = CaseLog.new(attributes)
       save_case_log(case_log, attributes)
       compute_differences(case_log, attributes)
-      check_status_completed(case_log)
+      check_status_completed(case_log, previous_status)
     end
 
     def save_case_log(case_log, attributes)
@@ -190,8 +199,8 @@ module Imports
       @logger.warn "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
     end
 
-    def check_status_completed(case_log)
-      unless case_log.status == "completed"
+    def check_status_completed(case_log, previous_status)
+      if previous_status.include?("submitted") && case_log.status != "completed"
         @logger.warn "Case log #{case_log.id} is not completed"
       end
     end
@@ -338,7 +347,7 @@ module Imports
     end
 
     def details_known(index, attributes)
-      return nil if attributes["hhmemb"].present? && index > attributes["hhmemb"]
+      return nil if attributes["hhmemb"].nil? || index > attributes["hhmemb"]
 
       if attributes["age#{index}_known"] == 1 &&
           attributes["sex#{index}"] == "R" &&

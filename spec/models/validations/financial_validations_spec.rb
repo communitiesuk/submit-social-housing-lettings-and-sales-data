@@ -68,7 +68,7 @@ RSpec.describe Validations::FinancialValidations do
   describe "outstanding rent amount validations" do
     context "when outstanding rent or charges is no" do
       it "validates that no shortfall is provided" do
-        record.hbrentshortfall = 1
+        record.hbrentshortfall = 2
         record.tshortfall = 99
         financial_validator.validate_outstanding_rent_amount(record)
         expect(record.errors["tshortfall"])
@@ -78,7 +78,7 @@ RSpec.describe Validations::FinancialValidations do
 
     context "when outstanding rent or charges is yes" do
       it "expects that a shortfall is provided" do
-        record.hbrentshortfall = 0
+        record.hbrentshortfall = 1
         record.tshortfall = 99
         financial_validator.validate_outstanding_rent_amount(record)
         expect(record.errors["tshortfall"]).to be_empty
@@ -111,7 +111,7 @@ RSpec.describe Validations::FinancialValidations do
   describe "housing benefit rent shortfall validations" do
     context "when shortfall is yes" do
       it "validates that housing benefit is not none" do
-        record.hbrentshortfall = 0
+        record.hbrentshortfall = 1
         record.hb = 9
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
@@ -119,7 +119,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "validates that housing benefit is not don't know" do
-        record.hbrentshortfall = 0
+        record.hbrentshortfall = 1
         record.hb = 3
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
@@ -127,7 +127,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "validates that housing benefit is not Universal Credit without housing benefit" do
-        record.hbrentshortfall = 0
+        record.hbrentshortfall = 1
         record.hb = 7
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"])
@@ -135,7 +135,7 @@ RSpec.describe Validations::FinancialValidations do
       end
 
       it "validates that housing benefit is provided" do
-        record.hbrentshortfall = 0
+        record.hbrentshortfall = 1
         record.hb = 1
         financial_validator.validate_tshortfall(record)
         expect(record.errors["tshortfall"]).to be_empty
@@ -212,7 +212,7 @@ RSpec.describe Validations::FinancialValidations do
   describe "rent and charges validations" do
     context "when shortfall amount is provided" do
       it "validates that basic rent is no less than double the shortfall" do
-        record.hbrentshortfall = 1
+        record.hbrentshortfall = 2
         record.tshortfall = 99.50
         record.brent = 198
         financial_validator.validate_rent_amount(record)
