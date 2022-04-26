@@ -4,4 +4,8 @@
   background-color: govuk-colour("light-grey");
   display: block;
   position: relative;
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }
