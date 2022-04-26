@@ -1145,11 +1145,11 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
-                      "value": "Yes – sheltered housing"
-                    },
                     "2": {
                       "value": "Yes – extra care housing"
+                    },
+                    "1": {
+                      "value": "Yes - specialist retirement housing"
                     },
                     "3": {
                       "value": "No"
