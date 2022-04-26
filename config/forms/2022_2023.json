@@ -4679,22 +4679,19 @@
                       "value": "Housing benefit"
                     },
                     "6": {
-                      "value": "Universal Credit with housing element (excluding housing benefit)"
-                    },
-                    "8": {
-                      "value": "Housing benefit and Universal Credit (without housing element)"
-                    },
-                    "7": {
-                      "value": "Universal Credit (without housing element)"
+                      "value": "Universal Credit housing element"
                     },
                     "9": {
-                      "value": "None"
+                      "value": "Neither"
                     },
                     "divider": {
                       "value": true
                     },
                     "3": {
                       "value": "Don’t know"
+                    },
+                    "10": {
+                      "value": "Tenant prefers not to say"
                     }
                   }
                 }
