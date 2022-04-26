@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_21_140410) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_25_143130) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -219,7 +219,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_21_140410) do
     t.integer "old_form_id"
     t.integer "lar"
     t.integer "irproduct"
+    t.string "old_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
+    t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
   end
 
