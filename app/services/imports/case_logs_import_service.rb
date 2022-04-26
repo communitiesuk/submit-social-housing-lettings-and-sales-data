@@ -139,7 +139,7 @@ module Imports
 
       attributes["la"] = string_or_nil(xml_doc, "Q28ONS")
       attributes["postcode_full"] = compose_postcode(xml_doc, "POSTCODE", "POSTCOD2")
-      attributes["postcode_known"] = attributes["postcode_full"].nil? ? 0 : 1
+      attributes["postcode_known"] = postcode_known(attributes)
 
       # Not specific to our form but required for consistency (present in import)
       attributes["old_form_id"] = safe_string_as_integer(xml_doc, "FORM")
@@ -148,7 +148,7 @@ module Imports
       attributes["old_id"] = field_value(xml_doc, "meta", "document-id")
 
       # Required for our form invalidated questions (not present in import)
-      attributes["previous_la_known"] = 1 # Defaulting to Yes (Required)
+      attributes["previous_la_known"] = attributes["prevloc"].nil? ? 0 : 1
       attributes["is_la_inferred"] = false # Always keep the given LA
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
@@ -327,7 +327,7 @@ module Imports
     end
 
     def age_known(xml_doc, index, hhmemb)
-      return nil if index > hhmemb
+      return nil if hhmemb.present? && index > hhmemb
 
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
       if age_refused == "AGE_REFUSED"
@@ -338,9 +338,9 @@ module Imports
     end
 
     def details_known(index, attributes)
-      if index > attributes["hhmemb"]
-        nil
-      elsif attributes["age#{index}_known"] == 1 &&
+      return nil if attributes["hhmemb"].present? && index > attributes["hhmemb"]
+
+      if attributes["age#{index}_known"] == 1 &&
           attributes["sex#{index}"] == "R" &&
           attributes["relat#{index}"] == "R" &&
           attributes["ecstat#{index}"] == 10
@@ -462,6 +462,16 @@ module Imports
     def declaration(xml_doc)
       declaration = string_or_nil(xml_doc, "Qdp")
       if declaration == "Yes"
+        1
+      end
+    end
+
+    def postcode_known(attributes)
+      if attributes["postcode_full"].nil? && attributes["la"].nil?
+        nil
+      elsif attributes["postcode_full"].nil?
+        0 # Assumes we selected No in the form since the LA is present
+      else
         1
       end
     end
