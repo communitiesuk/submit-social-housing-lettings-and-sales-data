@@ -1,9 +1,9 @@
-name: 'Staging CI/CD Pipeline'
+name: Staging CI/CD Pipeline
 
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -25,14 +25,15 @@ jobs:
           POSTGRES_DB: data_collector
         ports:
           - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        # tmpfs makes DB faster by using RAM
+        # Needed because the Postgres container does not provide a health check
+        # tmpfs makes database faster by using RAM
         options: >-
           --mount type=tmpfs,destination=/var/lib/postgresql/data
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     env:
       RAILS_ENV: test
       GEMFILE_RUBY_VERSION: 3.1.1
@@ -43,23 +44,24 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
-      - name: Set up node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
 
-      - name: Create DB
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 16
+
+      - name: Create database
         run: |
           bundle exec rake db:prepare
 
-      - name: Compile Assets
+      - name: Compile assets
         run: |
           bundle exec rake assets:precompile
 
@@ -70,14 +72,14 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
 
       - name: Rubocop
@@ -87,14 +89,14 @@ jobs:
   audit:
     name: Audit dependencies
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
 
       - name: Audit
@@ -103,49 +105,49 @@ jobs:
 
   deploy:
     name: Deploy
-    concurrency: 'staging'
-
+    concurrency: staging
     runs-on: ubuntu-latest
-    environment: 'staging'
+    environment: staging
     if: github.ref == 'refs/heads/main'
     needs: [lint, test, audit]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install Cloud Foundry CLI
-      run: |
-        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-        echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-        sudo apt-get update
-        sudo apt-get install cf8-cli
-    - name: Deploy
-      env:
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-        CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        API_USER: ${{ secrets.API_USER }}
-        API_KEY: ${{ secrets.API_KEY }}
-        APP_NAME: dluhc-core-staging
-        GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
-        APP_HOST: ${{ secrets.APP_HOST }}
-        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
-        EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
-        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      run: |
-        cf api $CF_API_ENDPOINT
-        cf auth
-        cf target -o $CF_ORG -s $CF_SPACE
-        cf set-env $APP_NAME API_USER $API_USER
-        cf set-env $APP_NAME API_KEY $API_KEY
-        cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
-        cf set-env $APP_NAME APP_HOST $APP_HOST
-        cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
-        cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
-        cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
-        cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
-        cf push $APP_NAME --strategy rolling
+      - name: Install Cloud Foundry CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf8-cli
+
+      - name: Deploy
+        env:
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+          CF_API_ENDPOINT: ${{ secrets.CF_API_ENDPOINT }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          API_USER: ${{ secrets.API_USER }}
+          API_KEY: ${{ secrets.API_KEY }}
+          APP_NAME: dluhc-core-staging
+          GOVUK_NOTIFY_API_KEY: ${{ secrets.GOVUK_NOTIFY_API_KEY }}
+          APP_HOST: ${{ secrets.APP_HOST }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
+          EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          cf api $CF_API_ENDPOINT
+          cf auth
+          cf target -o $CF_ORG -s $CF_SPACE
+          cf set-env $APP_NAME API_USER $API_USER
+          cf set-env $APP_NAME API_KEY $API_KEY
+          cf set-env $APP_NAME GOVUK_NOTIFY_API_KEY $GOVUK_NOTIFY_API_KEY
+          cf set-env $APP_NAME APP_HOST $APP_HOST
+          cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
+          cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
+          cf push $APP_NAME --strategy rolling
