@@ -1,15 +1,15 @@
-<ul class="app-document-list">
+<dl class="app-document-list">
   <% items.each do |item| %>
-    <li class="app-document-list__item">
-      <h3 class="app-document-list__item-title">
+    <div class="app-document-list__item">
+      <dt class="app-document-list__item-title">
         <%= govuk_link_to item[:name], item[:href] %>
-      </h3>
+      </dt>
       <% if item[:description] %>
-        <p class="app-document-list__item-description"><%= item[:description] %></p>
+        <dd class="app-document-list__item-description"><%= item[:description] %></dd>
       <% end %>
       <% if item[:metadata] %>
-        <p class="app-document-list__item-metadata"><%= item[:metadata] %></p>
+        <dd class="app-document-list__item-metadata"><%= item[:metadata] %></dd>
       <% end %>
-    </li>
+    </div>
   <% end %>
-</ul>
+</dl>
