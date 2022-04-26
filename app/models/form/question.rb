@@ -254,7 +254,7 @@ private
     net_income_known: [0],
     household_charge: [0],
     is_carehome: [1],
-    rent_shortfall: [0],
+    hbrentshortfall: [1],
     net_income_value_check: [0],
   }.freeze
 
@@ -278,7 +278,7 @@ private
     net_income_known: [1],
     household_charge: [1],
     is_carehome: [0],
-    rent_shortfall: [1],
+    hbrentshortfall: [2],
     net_income_value_check: [1],
   }.freeze
 
@@ -286,7 +286,7 @@ private
     letting_in_sheltered_accommodation: [3],
     underoccupation_benefitcap: [3],
     reasonpref: [3],
-    rent_shortfall: [1],
+    hbrentshortfall: [3],
     layear: [7],
     reason_for_leaving_last_settled_home: [32],
     hb: [5],
