@@ -383,7 +383,13 @@ private
       if %w[radio checkbox].include?(question.type)
         enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
         current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(public_send(question.id).to_s) : false
-        public_send("#{question.id}=", nil) if !current_answer_option_valid && respond_to?(question.id.to_s)
+        if !current_answer_option_valid && respond_to?(question.id.to_s)
+          public_send("#{question.id}=", nil)
+        else
+          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
+            public_send("#{invalid_answer_option}=", nil) if respond_to?(invalid_answer_option)
+          end
+        end
       else
         public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
       end

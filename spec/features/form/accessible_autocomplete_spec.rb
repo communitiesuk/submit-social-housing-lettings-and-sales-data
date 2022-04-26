@@ -10,6 +10,7 @@ RSpec.describe "Accessible Automcomplete" do
       :in_progress,
       previous_la_known: 1,
       prevloc: "E09000033",
+      illness: 1,
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
