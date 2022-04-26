@@ -3709,10 +3709,7 @@
                   "type": "radio",
                   "answer_options": {
                     "11": {
-                      "value": "Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty"
-                    },
-                    "7": {
-                      "value": "Other homeless – not found statutorily homeless but considered homeless by landlord"
+                      "value": "Assessed by a local authority as homeless"
                     },
                     "1": {
                       "value": "No"
