@@ -1027,17 +1027,20 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
-                      "value": "Assured"
+                    "1": {
+                      "value": "Assured Shorthold Tenancy (AST) - Fixed term"
                     },
-                    "4": {
-                      "value": "Assured Shorthold"
+                    "6": {
+                      "value": "Secure - fixed term"
+                    },
+                    "2": {
+                      "value": "Assured - lifetime"
+                    },
+                    "7": {
+                      "value": "Secure - lifetime"
                     },
                     "5": {
-                      "value": "Licence agreement (almshouses only)"
-                    },
-                    "1": {
-                      "value": "Secure (including flexible)"
+                      "value": "Licence agreement"
                     },
                     "3": {
                       "value": "Other"
@@ -1071,17 +1074,20 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "2": {
-                      "value": "Assured"
+                    "1": {
+                      "value": "Assured Shorthold Tenancy (AST) - Fixed term"
                     },
-                    "4": {
-                      "value": "Assured Shorthold"
+                    "6": {
+                      "value": "Secure - fixed term"
+                    },
+                    "2": {
+                      "value": "Assured - lifetime"
+                    },
+                    "7": {
+                      "value": "Secure - lifetime"
                     },
                     "5": {
-                      "value": "Licence agreement (almshouses only)"
-                    },
-                    "1": {
-                      "value": "Secure (including flexible)"
+                      "value": "Licence agreement"
                     },
                     "3": {
                       "value": "Other"
@@ -1125,7 +1131,7 @@
                   "tenancy": 1
                 },
                 {
-                  "tenancy": 4
+                  "tenancy": 6
                 }
               ]
             },
