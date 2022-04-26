@@ -261,7 +261,7 @@ private
   RADIO_NO_VALUE = {
     renewal: [0],
     postcode_known: [0],
-    previous_postcode_known: [0],,
+    previous_postcode_known: [0],
     previous_la_known: [0],
     first_time_property_let_as_social_housing: [0],
     wchair: [0],
