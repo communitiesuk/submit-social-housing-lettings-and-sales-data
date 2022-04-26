@@ -1535,53 +1535,17 @@
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
-                      "value": "UK national resident in UK"
-                    },
-                    "2": {
-                      "value": "UK national returning from residence overseas"
-                    },
-                    "14": {
-                      "value": "Bulgarian"
-                    },
-                    "16": {
-                      "value": "Croatian"
-                    },
-                    "3": {
-                      "value": "Czech"
-                    },
-                    "4": {
-                      "value": "Estonian"
+                    "18": {
+                      "value": "United Kingdom"
                     },
                     "17": {
-                      "value": "Irish"
+                      "value": "Republic of Ireland"
                     },
-                    "5": {
-                      "value": "Hungarian"
-                    },
-                    "6": {
-                      "value": "Latvian"
-                    },
-                    "7": {
-                      "value": "Lithuanian"
-                    },
-                    "8": {
-                      "value": "Polish"
-                    },
-                    "15": {
-                      "value": "Romanian"
-                    },
-                    "9": {
-                      "value": "Slovakian"
-                    },
-                    "10": {
-                      "value": "Slovenian"
-                    },
-                    "11": {
-                      "value": "From another European Economic Area (EEA) country"
+                    "19": {
+                      "value": "European Economic Area (EEA) country, excluding Ireland"
                     },
                     "12": {
-                      "value": "From any other country"
+                      "value": "Other"
                     },
                     "divider": true,
                     "13": {
