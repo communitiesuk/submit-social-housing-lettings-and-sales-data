@@ -3698,43 +3698,6 @@
                 }
               ]
             },
-            "under_occupation_benefit_cap": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "underoccupation_benefitcap": {
-                  "check_answer_label": "Removal of spare room subsidy or benefit cap",
-                  "header": "Was the reason for leaving a direct result of the removal of the spare room subsidy or benefit cap introduced from 2013?",
-                  "hint_text": "",
-                  "type": "radio",
-                  "answer_options": {
-                    "4": {
-                      "value": "Yes – removal of the spare room subsidy"
-                    },
-                    "5": {
-                      "value": "Yes – benefit cap"
-                    },
-                    "6": {
-                      "value": "Yes – both"
-                    },
-                    "2": {
-                      "value": "No"
-                    },
-                    "divider": {
-                      "value": true
-                    },
-                    "3": {
-                      "value": "Don’t know"
-                    }
-                  }
-                }
-              },
-              "depends_on": [
-                {
-                  "renewal": 0
-                }
-              ]
-            },
             "homelessness": {
               "header": "",
               "description": "",
