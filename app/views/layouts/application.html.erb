@@ -45,7 +45,7 @@
     <%= govuk_header(
       classes: "app-header",
       service_url: current_user.nil? ? "/" : "/logs",
-      navigation_classes: "govuk-header__navigation--end"
+      navigation_classes: "govuk-header__navigation--end",
     ) do |component|
       component.product_name(name: t("service_name"))
       if current_user.nil?
@@ -68,14 +68,14 @@
       <% if current_user.support? %>
         <% items = [
           { name: "Organisations", url: "/organisations", comparable_urls: ["/details", "/organisations"] },
-          { name: "Users", url: "/users",  comparable_urls: ["/users", "/account"] },
-          { name: "Logs", url: case_logs_path,  comparable_urls: ["/logs"] },
+          { name: "Users", url: "/users", comparable_urls: ["/users", "/account"] },
+          { name: "Logs", url: case_logs_path, comparable_urls: ["/logs"] },
         ] %>
       <% else %>
         <% items = [
-          { name: "Logs", url: case_logs_path, comparable_urls: ["/logs"]  },
-          { name: "Users", url: users_organisation_path(current_user.organisation), comparable_urls: ["/users", "/account"]  },
-          { name: "About your organisation", url: "/organisations/#{current_user.organisation.id}", comparable_urls: ["/details"]  },
+          { name: "Logs", url: case_logs_path, comparable_urls: ["/logs"] },
+          { name: "Users", url: users_organisation_path(current_user.organisation), comparable_urls: ["/users", "/account"] },
+          { name: "About your organisation", url: "/organisations/#{current_user.organisation.id}", comparable_urls: ["/details"] },
         ] %>
       <% end %>
       <%= render PrimaryNavigationComponent.new(items:) %>

@@ -37,7 +37,9 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "are-you-es5": "^2.1.2"
+    "are-you-es5": "^2.1.2",
+    "stylelint": "^14.7.1",
+    "stylelint-config-gds": "^0.2.0"
   },
   "browserslist": {
     "production": [
@@ -50,6 +52,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "stylelint": {
+    "extends": "stylelint-config-gds/scss"
   },
   "scripts": {
     "build": "webpack --config webpack.config.js"

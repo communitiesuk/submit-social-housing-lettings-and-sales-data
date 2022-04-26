@@ -17,7 +17,7 @@
     <% end %>
     <%= display_answered_questions_summary(subsection, @case_log) %>
 
-    <%= render partial: 'form/check_answers_summary_list', locals: {
+    <%= render partial: "form/check_answers_summary_list", locals: {
       subsection:,
       case_log: @case_log,
     } %>

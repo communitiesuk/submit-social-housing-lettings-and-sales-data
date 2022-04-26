@@ -34,6 +34,7 @@ $govuk-new-link-styles: true;
 
 // App utilities
 .app-\!-colour-muted {
+  // stylelint-disable declaration-no-important
   color: $govuk-secondary-text-colour !important;
 }
 

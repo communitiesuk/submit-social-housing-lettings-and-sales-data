@@ -83,7 +83,6 @@ group :development do
   gem "rubocop-govuk", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
-  gem "scss_lint-govuk"
 end
 
 group :test do

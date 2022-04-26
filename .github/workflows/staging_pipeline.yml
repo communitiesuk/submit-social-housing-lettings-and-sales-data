@@ -82,9 +82,19 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Rubocop
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 16
+
+      - name: Install packages and symlink local dependencies
         run: |
-          bundle exec rubocop
+          yarn install --immutable --immutable-cache --check-cache
+
+      - name: Lint
+        run: |
+          bundle exec rake lint
 
   audit:
     name: Audit dependencies
