@@ -32,6 +32,7 @@ class CaseLog < ApplicationRecord
 
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, class_name: "Organisation"
+  belongs_to :created_by, class_name: "User"
 
   scope :for_organisation, ->(org) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_status, ->(status, _user = nil) { where status: }
@@ -45,7 +46,7 @@ class CaseLog < ApplicationRecord
 
   scope :filter_by_user, lambda { |selected_user, user|
                            if !selected_user.include?("all") && user.present?
-                             where(id: PaperTrail::Version.where(item_type: "CaseLog", event: "create", whodunnit: user.to_global_id.uri.to_s).map(&:item_id))
+                             where(created_by: user)
                            end
                          }
 

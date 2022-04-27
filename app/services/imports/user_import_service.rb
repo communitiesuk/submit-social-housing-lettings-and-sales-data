@@ -14,13 +14,19 @@ module Imports
       organisation = Organisation.find_by(old_org_id: user_field_value(xml_document, "institution"))
       old_user_id = user_field_value(xml_document, "id")
       name = user_field_value(xml_document, "full-name")
-      email = user_field_value(xml_document, "email")
+      email = user_field_value(xml_document, "email").downcase.strip
+      deleted = user_field_value(xml_document, "deleted")
+      date_deactivated = user_field_value(xml_document, "date-deactivated")
+
       if User.find_by(old_user_id:, organisation:)
         @logger.warn("User #{name} with old user id #{old_user_id} is already present, skipping.")
+      elsif deleted == "true" || date_deactivated.present?
+        @logger.warn("User #{name} with old user id #{old_user_id} is deleted or deactivated, skipping.")
       elsif (user = User.find_by(email:, organisation:))
         is_dpo = user.is_data_protection_officer? || is_dpo?(user_field_value(xml_document, "user-type"))
         role = highest_role(user.role, role(user_field_value(xml_document, "user-type")))
         user.update!(role:, is_dpo:)
+        @logger.info("Found duplicated email, updating user #{user.id} with role #{role} and is_dpo #{is_dpo}")
       else
         User.create!(
           email:,

@@ -172,6 +172,11 @@ module Imports
 
       previous_status = field_value(xml_doc, "meta", "status")
 
+      owner_id = field_value(xml_doc, "meta", "owner-user-id")
+      if owner_id.present?
+        attributes["created_by"] = User.find_by(old_id: owner_id)
+      end
+
       case_log = CaseLog.new(attributes)
       save_case_log(case_log, attributes)
       compute_differences(case_log, attributes)
