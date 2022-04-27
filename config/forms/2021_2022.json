@@ -1789,6 +1789,10 @@
                 {
                   "details_known_2": 0,
                   "age2": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_2": 0,
+                  "age2": null
                 }
               ]
             },
@@ -2004,6 +2008,10 @@
                 {
                   "details_known_3": 0,
                   "age3": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_3": 0,
+                  "age3": null
                 }
               ]
             },
@@ -2216,6 +2224,10 @@
                 {
                   "details_known_4": 0,
                   "age4": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_4": 0,
+                  "age4": null
                 }
               ]
             },
@@ -2425,6 +2437,10 @@
                 {
                   "details_known_5": 0,
                   "age5": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_5": 0,
+                  "age5": null
                 }
               ]
             },
@@ -2631,6 +2647,10 @@
                 {
                   "details_known_6": 0,
                   "age6": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_6": 0,
+                  "age6": null
                 }
               ]
             },
@@ -2834,6 +2854,10 @@
                 {
                   "details_known_7": 0,
                   "age7": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_7": 0,
+                  "age7": null
                 }
               ]
             },
@@ -3034,6 +3058,10 @@
                 {
                   "details_known_8": 0,
                   "age8": { "operator": ">", "operand": 15 }
+                },
+                {
+                  "details_known_8": 0,
+                  "age8": null
                 }
               ]
             }
