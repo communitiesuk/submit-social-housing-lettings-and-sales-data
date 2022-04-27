@@ -4539,12 +4539,13 @@
           ],
           "pages": {
             "income_known": {
-              "header": "",
+              "header": "Household’s combined income after tax",
               "description": "",
               "questions": {
                 "net_income_known": {
                   "check_answer_label": "Do you know the household’s combined income?",
-                  "header": "Do you know the household’s combined income?",
+                  "header": "Do you know the household’s combined income after tax?",
+                  "guidance_partial": "what_counts_as_income",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -4570,7 +4571,7 @@
                   "net_income_known": 0
                 }
               ],
-              "header": "Household’s combined income after tax",
+              "header": "Total household income",
               "description": "",
               "questions": {
                 "earnings": {
