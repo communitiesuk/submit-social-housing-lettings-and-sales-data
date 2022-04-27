@@ -13,7 +13,7 @@
             <% row.key { attr[:name].to_s.humanize } %>
             <% row.value { details_html(attr) } %>
             <% row.action(
-              visually_hidden_text: "name",
+              visually_hidden_text: attr[:name].to_s.humanize.downcase,
               href: edit_organisation_path,
               html_attributes: { "data-qa": "change-#{attr[:name]}" },
             ) %>
