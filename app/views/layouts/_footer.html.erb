@@ -2,25 +2,32 @@
   <%= footer.meta do %>
     <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
       <h2 class="govuk-heading-m">Get help with this service</h2>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third-from-desktop">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Online helpdesk</h3>
+          <p class="govuk-body govuk-!-font-size-16">
+            <%= govuk_link_to("CORE helpdesk (opens in a new tab)", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21", class: "govuk-footer__link", rel: "noreferrer noopener", target: "_blank") %>
+          </p>
+        </div>
 
-      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Online helpdesk</h3>
-      <p class="govuk-body govuk-!-font-size-16">
-        <%= govuk_link_to("CORE helpdesk (opens in a new tab)", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21", class: "govuk-footer__link", rel: "noreferrer noopener", target: "_blank") %>
-      </p>
+        <div class="govuk-grid-column-one-third-from-desktop">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Telephone</h3>
+          <ul class="govuk-list govuk-!-font-size-16">
+            <li>0333 202 5084</li>
+            <li>Monday to Friday, 9am to 5:30pm<br>(except public holidays)</li>
+          </ul>
+        </div>
 
-      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Telephone</h3>
-      <ul class="govuk-list govuk-!-font-size-16">
-        <li>Telephone: 0333 202 5084</li>
-        <li>Monday to Friday, 9am to 5:30pm (except public holidays)</li>
-      </ul>
-
-      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Email</h3>
-      <ul class="govuk-list govuk-!-font-size-16 govuk-!-margin-bottom-0">
-        <li>
-          <%= govuk_mail_to("submitcoredata@levellingup.gov.uk", class: "govuk-footer__link") %>
-        </li>
-        <li class="govuk-!-margin-bottom-0">We aim to respond within 2 working days</li>
-      </ul>
+        <div class="govuk-grid-column-one-third-from-desktop">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Email</h3>
+          <ul class="govuk-list govuk-!-font-size-16 govuk-!-margin-bottom-0">
+            <li>
+              <%= govuk_mail_to("submitcoredata@levellingup.gov.uk", class: "govuk-footer__link") %>
+            </li>
+            <li class="govuk-!-margin-bottom-0">We aim to respond within 2 working&nbsp;days</li>
+          </ul>
+        </div>
+      </div>
 
       <h2 class="govuk-visually-hidden">Helpful links</h2>
       <ul class="govuk-footer__inline-list govuk-!-margin-top-6 govuk-!-margin-bottom-0">
