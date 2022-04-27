@@ -137,8 +137,7 @@ private
 
   def set_session_filters
     new_filters = session[:case_logs_filters].present? ? JSON.parse(session[:case_logs_filters]) : {}
-    %i[status years].each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
-    new_filters[:user] = [params[:user]] if params[:user].present?
+    current_user.case_logs_filters.each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
 
     session[:case_logs_filters] = new_filters.to_json
   end
