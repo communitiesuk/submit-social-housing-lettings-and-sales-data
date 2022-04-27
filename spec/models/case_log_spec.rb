@@ -1897,10 +1897,19 @@ RSpec.describe CaseLog do
       let(:organisation_1) { FactoryBot.create(:organisation) }
       let(:organisation_2) { FactoryBot.create(:organisation) }
       let(:organisation_3) { FactoryBot.create(:organisation) }
-      let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1) }
-      let!(:case_log_2) { FactoryBot.create(:case_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2) }
-      let!(:case_log_3) { FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1) }
-      let!(:case_log_4) { FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2) }
+
+      before do
+        FactoryBot.create(:case_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+      end
+
+      it "filters by given organisation id" do
+        expect(described_class.filter_by_organisation([organisation_1.id]).count).to eq(3)
+        expect(described_class.filter_by_organisation([organisation_1.id, organisation_2.id]).count).to eq(4)
+        expect(described_class.filter_by_organisation([organisation_3.id]).count).to eq(0)
+      end
 
       it "filters by given organisation" do
         expect(described_class.filter_by_organisation([organisation_1]).count).to eq(3)
