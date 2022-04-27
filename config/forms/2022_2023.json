@@ -942,7 +942,7 @@
             }
           ],
           "pages": {
-            "joint_tenancy": {
+            "joint": {
               "header": "",
               "description": "",
               "questions": {
