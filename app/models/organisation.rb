@@ -33,10 +33,6 @@ class Organisation < ApplicationRecord
     %i[address_line1 address_line2 postcode].map { |field| public_send(field) }.join("\n")
   end
 
-  def data_protection_confirmed?
-    !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
-  end
-
   def local_authorities
     organisation_las.pluck(:ons_code)
   end
@@ -55,6 +51,14 @@ class Organisation < ApplicationRecord
     labels.presence || %w[All]
   end
 
+  def data_protection_confirmed?
+    !!data_protection_confirmations.order(created_at: :desc).first&.confirmed
+  end
+
+  def data_protection_agreement_string
+    data_protection_confirmed? ? "Accepted" : "Not accepted"
+  end
+
   def display_attributes
     [
       { name: "name", value: name, editable: true },
@@ -66,7 +70,7 @@ class Organisation < ApplicationRecord
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
       { name: "managing_agents", value: managing_agents, editable: false },
-      { name: "has_signed_data_protection_agreement?", value: data_protection_confirmed?.to_s.humanize, editable: false },
+      { name: "data_protection_agreement", value: data_protection_agreement_string, editable: false },
     ]
   end
 end
