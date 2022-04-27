@@ -7,10 +7,10 @@
     %>
     <% if option[:conditional_filter] %>
       <%= render partial: "filters/#{option[:conditional_filter][:type]}_filter", locals: {
-        f: f,
+        f:,
         collection: Organisation.all,
         category: "organisation",
-        secondary: true
+        secondary: true,
       } %>
     <% end %>
   <% end %>
