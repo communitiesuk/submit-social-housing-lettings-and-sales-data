@@ -11,7 +11,15 @@
         <%= render partial: "filters/checkbox_filter", locals: { f: f, options: status_filters, label: "Status", category: "status" } %>
         <%= render partial: "filters/radio_filter", locals: { f: f, options: all_or_yours, label: "Logs", category: "user", } %>
         <% if @current_user.support? %>
-          <%= render partial: "filters/checkbox_filter", locals: { f: f, options: {"all": "All", "yours": "Yours"}, label: "Organisation", category: "organisation" } %>
+          <%= render partial: "filters/radio_filter", locals: {
+            f: f,
+            options: {
+              "all": { label: "All" },
+              "specific_org": { label: "Specific organisation", conditional_filter: { type: "select", label: "Organisation", category: "organisation" } }
+            },
+            label: "Organisation",
+            category: "organisation"
+          } %>
         <% end %>
         <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>
       <% end %>

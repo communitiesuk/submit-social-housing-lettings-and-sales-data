@@ -14,4 +14,10 @@ module FiltersHelper
     CaseLog.statuses.keys.map { |status| statuses[status] = status.humanize }
     statuses
   end
+
+  def selected_option(filter)
+    return false unless session[:case_logs_filters]
+
+    JSON.parse(session[:case_logs_filters])[filter]
+  end
 end

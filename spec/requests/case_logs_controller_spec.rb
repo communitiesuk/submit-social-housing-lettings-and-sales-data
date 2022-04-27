@@ -186,6 +186,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when filtering" do
           context "with status filter" do
+            let(:organisation_2) { FactoryBot.create(:organisation) }
             let!(:in_progress_case_log) do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
@@ -193,7 +194,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
             let!(:completed_case_log) do
               FactoryBot.create(:case_log, :completed,
-                                owning_organisation: organisation,
+                                owning_organisation: organisation_2,
                                 managing_organisation: organisation)
             end
 
@@ -207,6 +208,12 @@ RSpec.describe CaseLogsController, type: :request do
               get "/logs?status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(in_progress_case_log.id.to_s)
               expect(page).not_to have_link(completed_case_log.id.to_s)
+            end
+
+            it "filters on organisation" do
+              get "/logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
+              expect(page).to have_link(completed_case_log.id.to_s)
+              expect(page).not_to have_link(in_progress_case_log.id.to_s)
             end
 
             it "does not reset the filters" do

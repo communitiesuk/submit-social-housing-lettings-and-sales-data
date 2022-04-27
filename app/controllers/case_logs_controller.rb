@@ -126,7 +126,7 @@ private
     if session[:case_logs_filters].present?
       filters = JSON.parse(session[:case_logs_filters])
       filters.each do |category, values|
-        next if values.reject(&:empty?).blank?
+        next if Array(values).reject(&:empty?).blank?
 
         query = query.public_send("filter_by_#{category}", values, current_user)
       end
