@@ -1083,7 +1083,7 @@
                 "tenancylength": {
                   "check_answer_label": "Length of fixed-term tenancy",
                   "header": "What is the length of the fixed-term tenancy to the nearest year?",
-                  "hint_text": "",
+                  "hint_text": "Don’t include the starter or introductory period.",
                   "type": "numeric",
                   "min": 0,
                   "max": 150,
