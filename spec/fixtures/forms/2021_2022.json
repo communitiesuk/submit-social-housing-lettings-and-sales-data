@@ -761,6 +761,7 @@
                     "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
                     "type": "numeric",
                     "min": 0,
+                    "max": 300,
                     "step": 1,
                     "width": 4,
                     "fields-to-add": [
