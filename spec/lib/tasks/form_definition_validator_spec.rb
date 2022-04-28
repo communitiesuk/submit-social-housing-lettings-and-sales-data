@@ -12,7 +12,7 @@ RSpec.describe "form_definition" do
     end
 
     it "runs the validate task for each form definition in the project" do
-      expect(Rake::Task["form_definition:validate"]).to receive(:invoke).exactly(4).times
+      expect(Rake::Task["form_definition:validate"]).to receive(:invoke).exactly(5).times
       task.invoke
     end
   end
