@@ -1790,6 +1790,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_2": 0,
+                  "age2": null
                 }
               ]
             },
@@ -2012,6 +2016,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_3": 0,
+                  "age3": null
                 }
               ]
             },
@@ -2231,6 +2239,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_4": 0,
+                  "age4": null
                 }
               ]
             },
@@ -2447,6 +2459,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_5": 0,
+                  "age5": null
                 }
               ]
             },
@@ -2660,6 +2676,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_6": 0,
+                  "age6": null
                 }
               ]
             },
@@ -2870,6 +2890,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_7": 0,
+                  "age7": null
                 }
               ]
             },
@@ -3077,6 +3101,10 @@
                     "operator": ">",
                     "operand": 15
                   }
+                },
+                {
+                  "details_known_8": 0,
+                  "age8": null
                 }
               ]
             }
