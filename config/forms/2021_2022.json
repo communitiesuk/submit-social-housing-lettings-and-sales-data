@@ -4264,7 +4264,7 @@
                 "reasonable_preference_reason": {
                   "check_answer_label": "Reason for reasonable preference",
                   "header": "Why was the household given ‘reasonable preference’?",
-                  "hint_text": "Select all that apply",
+                  "hint_text": "Select all that apply.",
                   "type": "checkbox",
                   "answer_options": {
                     "rp_homeless": {

@@ -227,16 +227,16 @@ en:
 
   soft_validations:
     net_income:
-      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong></p><p>The household income you have entered is <strong>%{earnings}</strong></p>"
+      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong>.</p><p>The household income you have entered is <strong>%{earnings}</strong>.</p>"
       in_soft_min_range:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
       min:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}</p>"
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}.</p>"
       max:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}</p>"
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>"
   devise:
     two_factor_authentication:
       success: "Two-factor authentication successful"

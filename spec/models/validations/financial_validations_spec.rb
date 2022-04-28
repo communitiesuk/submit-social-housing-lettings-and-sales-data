@@ -47,7 +47,7 @@ RSpec.describe Validations::FinancialValidations do
         expect(record.errors["benefits"]).to be_empty
       end
 
-      it "validates that the tenant's partner is not in full time employment" do
+      it "validates that the tenant’s partner is not in full time employment" do
         record.benefits = 0
         record.ecstat2 = 0
         record.relat2 = "P"
@@ -55,7 +55,7 @@ RSpec.describe Validations::FinancialValidations do
         expect(record.errors["benefits"]).to include(match I18n.t("validations.financial.benefits.part_or_full_time"))
       end
 
-      it "expects that the tenant's partner is not in full-time or part-time employment" do
+      it "expects that the tenant’s partner is not in full-time or part-time employment" do
         record.benefits = 0
         record.ecstat2 = 4
         record.relat2 = "P"
@@ -144,7 +144,7 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "net income validations" do
-    it "validates that the net income is within the expected range for the tenant's employment status" do
+    it "validates that the net income is within the expected range for the tenant’s employment status" do
       record.earnings = 200
       record.incfreq = 1
       record.ecstat1 = 1
