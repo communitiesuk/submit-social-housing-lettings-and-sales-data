@@ -46,7 +46,7 @@ RSpec.describe QuestionViewHelper do
 
     let(:question) { OpenStruct.new(header: "Some question header") }
     let(:size) { "m" }
-    let(:tag) { "h2" }
+    let(:tag) { "div" }
     let(:legend_options_hash) do
       { text: "Some question header".html_safe, size:, tag: }
     end

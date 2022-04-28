@@ -22,6 +22,6 @@ private
   def label_tag(page_header, conditional)
     return "" if conditional
 
-    page_header.blank? ? "h1" : "h2"
+    page_header.blank? ? "h1" : "div"
   end
 end
