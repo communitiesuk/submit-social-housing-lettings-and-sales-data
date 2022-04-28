@@ -31,6 +31,9 @@ RSpec.describe Imports::CaseLogsImportService do
 
       WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
              .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
+      
+      FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" )
+      FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f" )
     end
 
     it "successfully create all case logs" do

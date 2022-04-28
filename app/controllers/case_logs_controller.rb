@@ -104,10 +104,12 @@ private
     {
       "owning_organisation_id" => current_user.organisation.id,
       "managing_organisation_id" => current_user.organisation.id,
+      "created_by_id" => current_user.id
     }
   end
 
   def api_case_log_params
+
     return {} unless params[:case_log]
 
     permitted = params.require(:case_log).permit(CaseLog.editable_fields)

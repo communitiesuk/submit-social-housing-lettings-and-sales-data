@@ -36,7 +36,7 @@ describe Admin::CaseLogsController, type: :controller do
         "case_log": {
           "owning_organisation_id": owning_organisation.id,
           "managing_organisation_id": managing_organisation.id,
-          "created_by": user,
+          "created_by_id": user.id,
         },
       }
     end

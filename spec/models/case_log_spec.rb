@@ -3,11 +3,12 @@ require "rails_helper"
 RSpec.describe CaseLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
+  let(:created_by_user) { FactoryBot.create(:user) }
 
   describe "#form" do
-    let(:case_log) { FactoryBot.build(:case_log) }
-    let(:case_log_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2022, 1, 1)) }
-    let(:case_log_year_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2023, 5, 1)) }
+    let(:case_log) { FactoryBot.build(:case_log, created_by: created_by_user) }
+    let(:case_log_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
+    let(:case_log_year_2) { FactoryBot.build(:case_log, startdate: Time.zone.local(2023, 5, 1), created_by: created_by_user) }
 
     it "has returns the correct form based on the start date" do
       expect(case_log.form_name).to be_nil
@@ -19,7 +20,7 @@ RSpec.describe CaseLog do
     end
 
     context "when a date outside the collection window is passed" do
-      let(:case_log) { FactoryBot.build(:case_log, startdate: Time.zone.local(2015, 1, 1)) }
+      let(:case_log) { FactoryBot.build(:case_log, startdate: Time.zone.local(2015, 1, 1), created_by: created_by_user) }
 
       it "returns the first form" do
         expect(case_log.form).to be_a(Form)
@@ -34,6 +35,7 @@ RSpec.describe CaseLog do
         described_class.create(
           owning_organisation:,
           managing_organisation: owning_organisation,
+          created_by: created_by_user,
         )
       end
 
@@ -45,7 +47,7 @@ RSpec.describe CaseLog do
   end
 
   describe "#update" do
-    let(:case_log) { FactoryBot.create(:case_log) }
+    let(:case_log) { FactoryBot.create(:case_log, created_by: created_by_user) }
     let(:validator) { case_log._validators[nil].first }
 
     after do
@@ -199,6 +201,7 @@ RSpec.describe CaseLog do
       described_class.create({
         managing_organisation: owning_organisation,
         owning_organisation:,
+        created_by: created_by_user,
         postcode_full: "M1 1AE",
         ppostcode_full: "M2 2AE",
         startdate: Time.gm(2021, 10, 10),
@@ -1134,6 +1137,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           postcode_known: 1,
           postcode_full: "M1 1AE",
         })
@@ -1221,6 +1225,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           previous_postcode_known: 1,
           ppostcode_full: "M1 1AE",
         })
@@ -1305,6 +1310,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           brent: 5.77,
           scharge: 10.01,
           pscharge: 3,
@@ -1323,6 +1329,7 @@ RSpec.describe CaseLog do
         described_class.create!({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           hhmemb: 3,
           relat2: "X",
           relat3: "C",
@@ -1376,6 +1383,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
         })
@@ -1421,6 +1429,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           age1_known: 1,
           sex1: "R",
           relat2: "R",
@@ -1440,6 +1449,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
         })
       end
 
@@ -1467,6 +1477,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           needstype: 2,
         })
       end
@@ -1621,6 +1632,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           first_time_property_let_as_social_housing: 1,
         })
       end
@@ -1629,6 +1641,7 @@ RSpec.describe CaseLog do
         described_class.create({
           managing_organisation: owning_organisation,
           owning_organisation:,
+          created_by: created_by_user,
           first_time_property_let_as_social_housing: 0,
         })
       end
@@ -1799,8 +1812,8 @@ RSpec.describe CaseLog do
   end
 
   describe "scopes" do
-    let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3)) }
-    let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3)) }
+    let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
+    let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
@@ -1839,23 +1852,22 @@ RSpec.describe CaseLog do
     end
 
     context "when filtering by user" do
-      let!(:user) { FactoryBot.create(:user) }
 
       before do
-        PaperTrail::Version.find_by(item_id: case_log_1.id, event: "create").update!(whodunnit: user.to_global_id.uri.to_s)
-        PaperTrail::Version.find_by(item_id: case_log_2.id, event: "create").update!(whodunnit: user.to_global_id.uri.to_s)
+        PaperTrail::Version.find_by(item_id: case_log_1.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)
+        PaperTrail::Version.find_by(item_id: case_log_2.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)
       end
 
       it "allows filtering on current user" do
-        expect(described_class.filter_by_user(%w[yours], user).count).to eq(2)
+        expect(described_class.filter_by_user(%w[yours], created_by_user).count).to eq(2)
       end
 
       it "returns all logs when all logs selected" do
-        expect(described_class.filter_by_user(%w[all], user).count).to eq(3)
+        expect(described_class.filter_by_user(%w[all], created_by_user).count).to eq(3)
       end
 
       it "returns all logs when all and your users selected" do
-        expect(described_class.filter_by_user(%w[all yours], user).count).to eq(3)
+        expect(described_class.filter_by_user(%w[all yours], created_by_user).count).to eq(3)
       end
     end
   end

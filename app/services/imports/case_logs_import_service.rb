@@ -172,9 +172,9 @@ module Imports
 
       previous_status = field_value(xml_doc, "meta", "status")
 
-      owner_id = field_value(xml_doc, "meta", "owner-user-id")
+      owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
       if owner_id.present?
-        attributes["created_by"] = User.find_by(old_id: owner_id)
+        attributes["created_by"] = User.find_by(old_user_id: owner_id)
       end
 
       case_log = CaseLog.new(attributes)

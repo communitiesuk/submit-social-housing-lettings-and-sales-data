@@ -10,6 +10,7 @@ RSpec.describe "Form Navigation" do
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:id) { case_log.id }
