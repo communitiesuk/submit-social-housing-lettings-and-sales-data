@@ -103,6 +103,7 @@ FactoryBot.define do
       tenancyother { nil }
       net_income_value_check { nil }
       net_income_known { 1 }
+      previous_la_known { 1 }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
       renewal { 0 }
