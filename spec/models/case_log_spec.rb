@@ -1852,7 +1852,6 @@ RSpec.describe CaseLog do
     end
 
     context "when filtering by user" do
-
       before do
         PaperTrail::Version.find_by(item_id: case_log_1.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)
         PaperTrail::Version.find_by(item_id: case_log_2.id, event: "create").update!(whodunnit: created_by_user.to_global_id.uri.to_s)

@@ -4,7 +4,7 @@ FactoryBot.define do
     name { "Danny Rojas" }
     password { "pAssword1" }
     organisation
-    role { "data_provider" } 
+    role { "data_provider" }
     old_user_id { 2 }
     trait :data_coordinator do
       role { "data_coordinator" }
