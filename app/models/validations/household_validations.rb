@@ -18,7 +18,7 @@ module Validations::HouseholdValidations
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
       record.errors.add :reason, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
-    validate_other_field(record, 31, :reason, :reasonother)
+    validate_other_field(record, 20, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
