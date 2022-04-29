@@ -122,7 +122,7 @@ private
   end
 
   def filtered_case_logs
-    query = CaseLog.for_organisation(current_user.organisation)
+    query = current_user.case_logs
     if session[:case_logs_filters].present?
       filters = JSON.parse(session[:case_logs_filters])
       filters.each do |category, values|
@@ -131,7 +131,7 @@ private
         query = query.public_send("filter_by_#{category}", values, current_user)
       end
     end
-    query.all.includes(:owning_organisation, :managing_organisation)
+    current_user.support? ? query.all.includes(:owning_organisation, :managing_organisation) : query
   end
 
   def set_session_filters
