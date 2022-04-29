@@ -274,7 +274,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when the tenant's partner was or is a member of the armed forces" do
+    context "when the tenant’s partner was or is a member of the armed forces" do
       it "expects that injured in the armed forces can be yes" do
         record.armedforces = 5
         record.reservist = 0
@@ -374,7 +374,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
     end
 
-    context "when the household contains a tenant's child between the ages of 16 and 19" do
+    context "when the household contains a tenant’s child between the ages of 16 and 19" do
       it "validates that person's economic status must be full time student or refused" do
         record.age2 = 17
         record.relat2 = "C"

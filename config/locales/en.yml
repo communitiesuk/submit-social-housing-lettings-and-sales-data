@@ -88,9 +88,9 @@ en:
         outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges"
         more_than_rent: "Answer must be less than half of the basic rent amount"
       hbrentshortfall:
-        outstanding_no_benefits: "Answer cannot be 'yes' to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you're not sure"
+        outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
       benefits:
-        part_or_full_time: "Answer cannot be 'all' for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
+        part_or_full_time: "Answer cannot be ‘all’ for income from Universal Credit, state pensions or benefits if the tenant or their partner works part-time or full-time"
       earnings:
         over_hard_max: "Net income cannot be greater than £%{hard_max} per week given the tenant’s working situation"
         under_hard_min: "Net income cannot be less than £%{hard_min} per week given the tenant’s working situation"
@@ -133,7 +133,7 @@ en:
         period:
           not_in_range: "Basic rent is outside of the expected range based on this period"
       charges:
-        complete_1_of_3: "Answer either the ‘household rent and charges’ question or 'is this accommodation a care home', or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
+        complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
       tcharge:
         under_10: "Total charge must be at least £10 per week"
       rent_period:
@@ -143,48 +143,48 @@ en:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
-        reason_required: "If reasonable preference is 'yes', a reason must be given"
-        reason_not_required: "If reasonable preference is 'no', no reason should be given"
+        reason_required: "If reasonable preference is ‘yes’, a reason must be given"
+        reason_not_required: "If reasonable preference is ‘no’, no reason should be given"
       underoccupation_benefitcap:
-        dont_know_required: "Answer must be 'don’t know' as you told us you don't know the tenant’s main reason for leaving"
+        dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving"
       reservist:
         injury_required: "You must answer whether the person was seriously injured or ill as a result of serving in the UK armed forces"
         injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say"
       leftreg:
-        question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they're a current or former regular"
-        question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they're not a current or former regular"
+        question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
+        question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
       preg_occ:
-        no_female: "You must answer 'no' as there are no females aged 16-50 in the household"
+        no_female: "You must answer ‘no’ as there are no females aged 16-50 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
-        retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not 'retired'"
+        retired_over_70: "Answer cannot be over 70 as person %{person_num} has economic status that is not ‘retired’"
         child_under_16_relat: "Answer cannot be under 16 as person %{person_num} is not a child of the lead tenant"
-        child_under_16: "Answer cannot be under 16 as person's %{person_num} working situation is not 'child under 16'"
-        child_over_16: "Answer cannot be over 16 as person's %{person_num} working situation is 'child under 16'"
+        child_under_16: "Answer cannot be under 16 as person’s %{person_num} working situation is not ‘child under 16’"
+        child_over_16: "Answer cannot be over 16 as person’s %{person_num} working situation is ‘child under 16‘"
         student_16_19: "Answer cannot be between 16 and 19 as person %{person_num} is a child of the lead tenant but is not a full-time student"
         lead:
-          over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children's home or foster care"
+          over_20: "Lead tenant must be under 20 as you told us that their housing situation immediately before this letting was a children’s home or foster care"
       ecstat:
         retired_over_70: "Person %{person_num} must be retired if over 70"
-        child_under_16: "Person's %{person_num} working situation must be 'child under 16' as you told us they're under 16"
-        child_over_16: "Answer cannot be 'child under 16' as you told us the person %{person_num} is older than 16"
-        student_16_19: "Person's %{person_num} working situation must be full-time student or prefers not to say as you told us they're between 16 and 19."
-        retired_male: "Answer cannot be 'retired' as male tenant is under 65"
-        retired_female: "Answer cannot be 'retired' as female tenant is under 60"
+        child_under_16: "Person’s %{person_num} working situation must be ’child under 16‘ as you told us they’re under 16"
+        child_over_16: "Answer cannot be ‘child under 16’ as you told us the person %{person_num} is older than 16"
+        student_16_19: "Person’s %{person_num} working situation must be full-time student or prefers not to say as you told us they’re between 16 and 19."
+        retired_male: "Answer cannot be ‘retired’ as male tenant is under 65"
+        retired_female: "Answer cannot be ‘retired’ as female tenant is under 60"
       relat:
-        child_under_16: "Person's %{person_num}’s relationship to tenant 1 must be 'child' as you told us they're under 16"
+        child_under_16: "Person’s %{person_num}’s relationship to tenant 1 must be ‘child’ as you told us they’re under 16"
         one_partner: "Number of partners cannot be greater than 1"
-        student_16_19: "Answer cannot be 'child' as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
+        student_16_19: "Answer cannot be ‘child’ as you told us the person %{person_num} is between 16 and 19 and is not a full-time student"
       housingneeds_a:
-        one_or_two_choices: "You can only select one option or 'other disabled access needs' plus 'wheelchair-accessible housing', 'wheelchair access to essential rooms' or 'level access housing'"
+        one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       prevten:
         non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
-        over_20_foster_care: "Answer cannot be children's home or foster care as the lead tenant is 20 or older"
+        over_20_foster_care: "Answer cannot be children’s home or foster care as the lead tenant is 20 or older"
         male_refuge: "Answer cannot be refuge as the lead tenant identifies as male"
         internal_transfer: "Answer cannot be %{prevten} as you already told us this tenancy is an internal transfer"
         la_general_needs:
-          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it's a private registered provider on the tenancy agreement and it is an internal transfer"
+          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it’s a private registered provider on the tenancy agreement and it is an internal transfer"
       referral:
         secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
         rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
@@ -194,9 +194,9 @@ en:
         prevten_invalid: "Answer cannot be internal transfer as you already told us the household situation immediately before this letting was %{prevten}"
         reason_permanently_decanted: "Answer must be internal transfer as you already told us the tenant was permanently decanted from another property owned by this landlord"
         la_general_needs:
-          internal_transfer: "Answer cannot be internal transfer as you already told us it's the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
+          internal_transfer: "Answer cannot be internal transfer as you already told us it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
         prp:
-          local_housing_referral: "Answer cannot be 'nominated by a local housing authority' as you already told us it is a local authority on the tenancy agreement"
+          local_housing_referral: "Answer cannot be ‘nominated by a local housing authority’ as you already told us it is a local authority on the tenancy agreement"
       homeless:
         assessed:
           internal_transfer: "Answer cannot be assessed as homeless as you already told us this tenancy is an internal transfer"
@@ -206,11 +206,11 @@ en:
           not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
       previous_la_known: "Enter name of local authority"
       gender:
-        retired_male: "Answer cannot be 'male' as tenant is under 65 and retired"
-        retired_female: "Answer cannot be 'female' as tenant is under 60 and retired"
-        male_refuge: "Answer cannot be 'male' as you told us their housing situation immediately before this letting was a refuge"
+        retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
+        retired_female: "Answer cannot be ‘female’ as tenant is under 60 and retired"
+        male_refuge: "Answer cannot be ‘male’ as you told us their housing situation immediately before this letting was a refuge"
       reason:
-        not_internal_transfer: "Answer cannot be 'permanently decanted from another property owned by this landlord' as you told us the source of referral for this tenancy was not an internal transfer"
+        not_internal_transfer: "Answer cannot be ‘permanently decanted from another property owned by this landlord’ as you told us the source of referral for this tenancy was not an internal transfer"
       condition_effects:
         no_choices: "You cannot answer this question as you told us nobody in the household has a physical or mental health condition (or other illness) expected to last 12 months or more"
 
@@ -227,16 +227,16 @@ en:
 
   soft_validations:
     net_income:
-      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong></p><p>The household income you have entered is <strong>%{earnings}</strong></p>"
+      hint_text: "<p>You told us the lead tenant’s working situation is: <strong>%{ecstat1}</strong>.</p><p>The household income you have entered is <strong>%{earnings}</strong>.</p>"
       in_soft_min_range:
         message: "Net income is lower than expected based on the lead tenant’s working situation. Are you sure this is correct?"
       in_soft_max_range:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
       min:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}</p>"
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}.</p>"
       max:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}</p>"
+        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>"
   devise:
     two_factor_authentication:
       success: "Two-factor authentication successful"
