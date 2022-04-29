@@ -41,7 +41,7 @@ en:
     numeric:
       valid: "%{field} must be between %{min} and %{max}"
     date:
-      invalid_date: "Please enter a valid date"
+      invalid_date: "Enter a date in the correct format, for example 1 9 2022"
       outside_collection_window: "Date must be within the current collection windows"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     email:
