@@ -149,7 +149,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
-        tenant_code: "LC783"
+        tenant_code: "LC783",
       )
     end
     let!(:unauthorized_case_log) do
@@ -157,7 +157,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: other_organisation,
         managing_organisation: other_organisation,
-        tenant_code: "UA984"
+        tenant_code: "UA984",
       )
     end
 
