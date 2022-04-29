@@ -818,7 +818,7 @@
                 "voiddate": {
                   "check_answer_label": "Void or renewal date",
                   "header": "What is the void or renewal date?",
-                  "hint_text": "For example, 27 3 2021.",
+                  "hint_text": "For example, 1 9 2022.",
                   "type": "date"
                 }
               },
@@ -917,7 +917,7 @@
                 "mrcdate": {
                   "check_answer_label": "Completion date of repairs",
                   "header": "When were the repairs completed?",
-                  "hint_text": "For example, 27 3 2021.",
+                  "hint_text": "For example, 1 9 2022.",
                   "type": "date"
                 }
               },
