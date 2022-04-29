@@ -1,4 +1,4 @@
-<% content_for :title, current_user == @user ? "Your account" : "#{@user.name}’s account" %>
+<% content_for :title, current_user == @user ? "Your account" : "#{@user.name.presence || @user.email}’s account" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,7 +9,6 @@
     <h2 class="govuk-heading-m">
       Personal details
     </h2>
-
     <%= govuk_summary_list do |summary_list| %>
       <%= summary_list.row do |row|
             row.key { "Name" }

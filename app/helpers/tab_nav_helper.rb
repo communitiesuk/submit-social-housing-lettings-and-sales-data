@@ -2,7 +2,8 @@ module TabNavHelper
   include GovukLinkHelper
 
   def user_cell(user)
-    [govuk_link_to(user.name, user, class: "govuk-!-font-weight-bold"), user.email].join("\n")
+    link_text = user.name.presence || user.email
+    [govuk_link_to(link_text, user, class: "govuk-!-font-weight-bold"), user.email].join("\n")
   end
 
   def org_cell(user)

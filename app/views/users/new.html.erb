@@ -17,7 +17,8 @@
       </h1>
 
       <%= f.govuk_text_field :name,
-        autocomplete: "name" %>
+        autocomplete: "name",
+        label: { text: "Name (optional)" } %>
 
       <%= f.govuk_email_field :email,
         label: { text: "Email address" },
