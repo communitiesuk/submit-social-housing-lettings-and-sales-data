@@ -428,7 +428,7 @@ module Imports
         4
       when 17
         # Refused
-        5
+        17
       end
     end
 
