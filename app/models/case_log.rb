@@ -320,6 +320,10 @@ class CaseLog < ApplicationRecord
     hb == 7
   end
 
+  def ethnic_refused?
+    ethnic_group == 17
+  end
+
   def receives_housing_related_benefits?
     receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||
       receives_housing_benefit_and_universal_credit?
@@ -435,6 +439,7 @@ private
     self.totelder = get_totelder
     self.totadult = get_totadult
     self.refused = get_refused
+    self.ethnic = 17 if ethnic_refused?
     if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
       self.brent ||= 0
       self.scharge ||= 0

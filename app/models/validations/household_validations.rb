@@ -18,7 +18,7 @@ module Validations::HouseholdValidations
       record.errors.add :underoccupation_benefitcap, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
       record.errors.add :reason, I18n.t("validations.household.underoccupation_benefitcap.dont_know_required")
     end
-    validate_other_field(record, 31, :reason, :reasonother)
+    validate_other_field(record, 20, :reason, :reasonother)
 
     if record.is_reason_permanently_decanted? && record.referral.present? && !record.is_internal_transfer?
       record.errors.add :referral, I18n.t("validations.household.referral.reason_permanently_decanted")
@@ -87,6 +87,22 @@ module Validations::HouseholdValidations
       record.errors.add :sex1, I18n.t("validations.household.gender.male_refuge")
     end
 
+    # 3  Private Sector Tenancy
+    # 4  Tied housing or rented with job
+    # 7  Direct access hostel
+    # 9  Residential care home
+    # 10 Hospital
+    # 13 Children's home / Foster Care
+    # 14 Bed and breakfast
+    # 19 Rough Sleeping
+    # 21 Refuge
+    # 23 Mobile home / Caravan
+    # 24 Home Office Asylum Support
+    # 25 Other
+    # 26 Owner Occupation
+    # 27 Owner occupation (low-cost home ownership)
+    # 28 Living with Friends or Family
+    # 29 Prison / Approved Probation Hostel
     if record.is_internal_transfer? && [3, 4, 7, 9, 10, 13, 14, 19, 21, 23, 24, 25, 26, 27, 28, 29].include?(record.prevten)
       label = record.form.get_question("prevten", record).present? ? record.form.get_question("prevten", record).label_from_value(record.prevten) : ""
       record.errors.add :prevten, I18n.t("validations.household.prevten.internal_transfer", prevten: label)

@@ -201,7 +201,7 @@ module Imports
           differences.push("#{key} #{value.inspect} #{case_log_value.inspect}")
         end
       end
-      @logger.warn "Differences found when saving log #{case_log.id}: #{differences}" unless differences.empty?
+      @logger.warn "Differences found when saving log #{case_log.old_id}: #{differences}" unless differences.empty?
     end
 
     def check_status_completed(case_log, previous_status)
@@ -428,7 +428,7 @@ module Imports
         4
       when 17
         # Refused
-        5
+        17
       end
     end
 

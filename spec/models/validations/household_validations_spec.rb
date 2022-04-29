@@ -120,7 +120,7 @@ RSpec.describe Validations::HouseholdValidations do
       let(:field) { "validations.other_field_missing" }
 
       it "validates that a reason is provided" do
-        record.reason = 31
+        record.reason = 20
         record.reasonother = nil
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reasonother"])
@@ -128,7 +128,7 @@ RSpec.describe Validations::HouseholdValidations do
       end
 
       it "expects that a reason is provided" do
-        record.reason = 31
+        record.reason = 20
         record.reasonother = "Some unusual reason"
         household_validator.validate_reason_for_leaving_last_settled_home(record)
         expect(record.errors["reasonother"]).to be_empty
