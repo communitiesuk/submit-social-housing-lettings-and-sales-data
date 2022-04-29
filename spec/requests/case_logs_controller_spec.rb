@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe CaseLogsController, type: :request do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:managing_organisation) { owning_organisation }
+  let(:user) { FactoryBot.create(:user) }
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -38,6 +39,7 @@ RSpec.describe CaseLogsController, type: :request do
         {
           "owning_organisation_id": owning_organisation.id,
           "managing_organisation_id": managing_organisation.id,
+          "created_by_id": user.id,
           "tenant_code": tenant_code,
           "age1": age1,
           "postcode_full": postcode_full,
@@ -90,6 +92,7 @@ RSpec.describe CaseLogsController, type: :request do
             "case_log" => {
               "owning_organisation_id" => owning_organisation.id,
               "managing_organisation_id" => managing_organisation.id,
+              "created_by_id" => user.id,
             },
           }
         end

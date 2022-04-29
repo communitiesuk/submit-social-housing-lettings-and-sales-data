@@ -172,6 +172,11 @@ module Imports
 
       previous_status = field_value(xml_doc, "meta", "status")
 
+      owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
+      if owner_id.present?
+        attributes["created_by"] = User.find_by(old_user_id: owner_id)
+      end
+
       case_log = CaseLog.new(attributes)
       save_case_log(case_log, attributes)
       compute_differences(case_log, attributes)
@@ -361,7 +366,7 @@ module Imports
 
     def previous_postcode_known(xml_doc, previous_postcode)
       previous_postcode_known = string_or_nil(xml_doc, "Q12bnot")
-      if previous_postcode_known == "Temporary or Unknown"
+      if previous_postcode_known == "Temporary_or_Unknown"
         0
       elsif previous_postcode.nil?
         nil

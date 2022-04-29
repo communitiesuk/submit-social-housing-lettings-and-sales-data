@@ -17,6 +17,7 @@ RSpec.describe Imports::UserImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("user_directory/#{old_user_id}.xml")
                                   .and_return(user_file)
+      allow(logger).to receive(:info)
     end
 
     it "successfully create a user with the expected data" do

@@ -32,6 +32,7 @@ class BulkUpload
         case_log = CaseLog.create!(
           owning_organisation: current_user.organisation,
           managing_organisation: current_user.organisation,
+          created_by: current_user,
         )
         map_row(row).each do |attr_key, attr_val|
           update = case_log.update(attr_key => attr_val)

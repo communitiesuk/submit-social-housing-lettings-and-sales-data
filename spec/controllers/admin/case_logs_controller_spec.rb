@@ -11,6 +11,7 @@ describe Admin::CaseLogsController, type: :controller do
   let(:resource_title) { "Logs" }
   let(:valid_session) { {} }
   let(:admin_user) { FactoryBot.create(:admin_user) }
+  let(:user) { FactoryBot.create(:user) }
 
   describe "Get case logs" do
     let!(:case_log) { FactoryBot.create(:case_log, :in_progress) }
@@ -35,6 +36,7 @@ describe Admin::CaseLogsController, type: :controller do
         "case_log": {
           "owning_organisation_id": owning_organisation.id,
           "managing_organisation_id": managing_organisation.id,
+          "created_by_id": user.id,
         },
       }
     end

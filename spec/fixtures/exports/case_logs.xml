@@ -162,6 +162,7 @@
     <irproduct/>
     <old_id/>
     <joint/>
+    <created_by_id>{created_by_id}</created_by_id>
     <providertype>1</providertype>
   </form>
 </forms>
