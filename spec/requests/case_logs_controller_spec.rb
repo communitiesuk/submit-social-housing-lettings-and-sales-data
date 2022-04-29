@@ -149,6 +149,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
+        tenant_code: "LC783"
       )
     end
     let!(:unauthorized_case_log) do
@@ -156,6 +157,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: other_organisation,
         managing_organisation: other_organisation,
+        tenant_code: "UA984"
       )
     end
 
@@ -174,6 +176,12 @@ RSpec.describe CaseLogsController, type: :request do
           get "/logs", headers: headers, params: {}
           expect(page).to have_content("Owning organisation")
           expect(page).to have_content("Managing organisation")
+        end
+
+        it "shows case logs for all organisations" do
+          get "/logs", headers: headers, params: {}
+          expect(page).to have_content("LC783")
+          expect(page).to have_content("UA984")
         end
 
         context "when filtering" do
@@ -440,7 +448,8 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "displays a section status for a case log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 8
+              assert_select ".govuk-tag", text: /Not started/, count: 7
+              assert_select ".govuk-tag", text: /In progress/, count: 1
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
