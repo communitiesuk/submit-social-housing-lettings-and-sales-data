@@ -11,11 +11,10 @@
         <% section.subsections.map do |subsection| %>
           <% subsection_status = subsection.status(@case_log) %>
           <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
+            <span class="app-task-list__task-name" id="<%= subsection.id.dasherize %>">
               <%= subsection_link(subsection, @case_log) %>
             </span>
-            <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>"
-                    id="<%= subsection.id.dasherize %>">
+            <strong class="govuk-tag app-task-list__tag <%= TasklistHelper::STYLES[subsection_status] %>">
               <%= TasklistHelper::STATUSES[subsection_status] %>
             </strong>
           </li>
