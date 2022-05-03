@@ -58,7 +58,7 @@ module Imports
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRProduct")
       attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
-      attributes["hhmemb"] = household_members(xml_doc, attributes, previous_status)
+      attributes["hhmemb"] = household_members(xml_doc, previous_status)
       (1..8).each do |index|
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
         attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
@@ -490,12 +490,17 @@ module Imports
       end
     end
 
-    def household_members(xml_doc, _attributes, previous_status)
+    def household_members(xml_doc, previous_status)
       hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
-      if previous_status.include?("submitted")
-        return safe_string_as_integer(xml_doc, "TOTADULT").to_i + safe_string_as_integer(xml_doc, "TCHILD").to_i if hhmemb.nil?
+      if previous_status.include?("submitted") && hhmemb.nil?
+        hhmemb = people_with_details(xml_doc).count
+        return nil if hhmemb.zero?
       end
       hhmemb
+    end
+
+    def people_with_details(xml_doc)
+      ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Age")]).compact
     end
   end
 end
