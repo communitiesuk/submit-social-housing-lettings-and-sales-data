@@ -490,9 +490,10 @@ module Imports
       end
     end
 
-    def household_members(xml_doc, attributes)
+    def household_members(xml_doc, _attributes)
       hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
       return safe_string_as_integer(xml_doc, "TOTADULT") + safe_string_as_integer(xml_doc, "TCHILD") if hhmemb.nil?
+
       hhmemb
     end
   end
