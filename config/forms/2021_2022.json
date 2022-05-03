@@ -979,7 +979,7 @@
                       "value": "Assured Shorthold"
                     },
                     "5": {
-                      "value": "Licence agreement (almshouses only)"
+                      "value": "Licence agreement"
                     },
                     "1": {
                       "value": "Secure (including flexible)"
@@ -1023,7 +1023,7 @@
                       "value": "Assured Shorthold"
                     },
                     "5": {
-                      "value": "Licence agreement (almshouses only)"
+                      "value": "Licence agreement"
                     },
                     "1": {
                       "value": "Secure (including flexible)"
@@ -1621,8 +1621,8 @@
               "description": "",
               "questions": {
                 "relat2": {
-                  "check_answer_label": "Person 2’s relationship to lead tenant",
-                  "header": "What is person 2’s relationship to lead tenant",
+                  "check_answer_label": "Person 2’s relationship to the lead tenant",
+                  "header": "What is person 2’s relationship to the lead tenant??",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1840,8 +1840,8 @@
               "description": "",
               "questions": {
                 "relat3": {
-                  "check_answer_label": "Person 3’s relationship to lead tenant",
-                  "header": "What is person 3’s relationship to lead tenant",
+                  "check_answer_label": "Person 3’s relationship to the lead tenant",
+                  "header": "What is person 3’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2056,8 +2056,8 @@
               "description": "",
               "questions": {
                 "relat4": {
-                  "check_answer_label": "Person 4’s relationship to lead tenant",
-                  "header": "What is person 4’s relationship to lead tenant",
+                  "check_answer_label": "Person 4’s relationship to the lead tenant",
+                  "header": "What is person 4’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2269,8 +2269,8 @@
               "description": "",
               "questions": {
                 "relat5": {
-                  "check_answer_label": "Person 5’s relationship to lead tenant",
-                  "header": "What is person 5’s relationship to lead tenant",
+                  "check_answer_label": "Person 5’s relationship to the lead tenant",
+                  "header": "What is person 5’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2479,8 +2479,8 @@
               "description": "",
               "questions": {
                 "relat6": {
-                  "check_answer_label": "Person 6’s relationship to lead tenant",
-                  "header": "What is person 6’s relationship to lead tenant",
+                  "check_answer_label": "Person 6’s relationship to the lead tenant",
+                  "header": "What is person 6’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2686,8 +2686,8 @@
               "description": "",
               "questions": {
                 "relat7": {
-                  "check_answer_label": "Person 7’s relationship to lead tenant",
-                  "header": "What is person 7’s relationship to lead tenant",
+                  "check_answer_label": "Person 7’s relationship to the lead tenant",
+                  "header": "What is person 7’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2890,8 +2890,8 @@
               "description": "",
               "questions": {
                 "relat8": {
-                  "check_answer_label": "Person 8’s relationship to lead tenant",
-                  "header": "What is person 8’s relationship to lead tenant",
+                  "check_answer_label": "Person 8’s relationship to the lead tenant",
+                  "header": "What is person 8’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
