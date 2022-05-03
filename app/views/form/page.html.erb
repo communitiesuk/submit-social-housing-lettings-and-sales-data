@@ -43,7 +43,7 @@
 
       <%= f.hidden_field :page, value: @page.id %>
       <% if !@page.id.include?("value_check") %>
-        <%= f.govuk_submit "Save and continue", accesskey: "s" %>
+        <%= f.govuk_submit "Save and continue" %>
       <% end %>
     </div>
   </div>
