@@ -56,7 +56,7 @@ module Imports
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRProduct")
       attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
-      attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
+      attributes["hhmemb"] = household_members(xml_doc, attributes)
       (1..8).each do |index|
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
         attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
@@ -488,6 +488,12 @@ module Imports
       else
         1
       end
+    end
+
+    def household_members(xml_doc, attributes)
+      hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
+      return safe_string_as_integer(xml_doc, "TOTADULT") + safe_string_as_integer(xml_doc, "TCHILD") if hhmemb.nil?
+      hhmemb
     end
   end
 end
