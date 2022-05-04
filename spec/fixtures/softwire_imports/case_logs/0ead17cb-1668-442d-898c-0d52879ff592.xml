@@ -48,8 +48,8 @@
     <_2cYears/>
   </Group>
   <Group>
-    <P1Age override-field="">23</P1Age>
-    <P1AR/>
+    <P1Age override-field=""/>
+    <P1AR>Age_Refused</P1AR>
     <P1Sex override-field="">Female</P1Sex>
     <P1Eco>6) Not Seeking Work</P1Eco>
     <P1Eth>17 Refused</P1Eth>
