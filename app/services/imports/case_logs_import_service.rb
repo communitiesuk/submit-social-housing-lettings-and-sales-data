@@ -342,9 +342,10 @@ module Imports
 
     def age_known(xml_doc, index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
+
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
       if age_refused.present?
-        if age_refused.upcase == "AGE_REFUSED"
+        if age_refused.casecmp("AGE_REFUSED").zero?
           return 1 # No
         else
           return 0 # Yes
