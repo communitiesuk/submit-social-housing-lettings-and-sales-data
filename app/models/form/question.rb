@@ -80,9 +80,9 @@ class Form::Question
     false
   end
 
-  def displayed_answer_options
+  def displayed_answer_options(case_log)
     answer_options.select do |_key, val|
-      !val.is_a?(Hash) || !val["derived"]
+      !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], case_log)
     end
   end
 
@@ -168,7 +168,7 @@ private
 
   def selected_answer_option_is_derived?(case_log)
     selected_option = answer_options&.dig(case_log[id].to_s.presence)
-    selected_option.is_a?(Hash) && selected_option["derived"]
+    selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], case_log)
   end
 
   def has_inferred_display_value?(case_log)
