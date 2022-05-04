@@ -125,6 +125,7 @@ module Imports
       attributes["tcharge"] = safe_string_as_decimal(xml_doc, "Q18av")
 
       attributes["hbrentshortfall"] = unsafe_string_as_integer(xml_doc, "Q18d")
+      attributes["tshortfall"] = safe_string_as_decimal(xml_doc, "Q18dyes")
 
       attributes["voiddate"] = compose_date(xml_doc, "VDAY", "VMONTH", "VYEAR")
       attributes["mrcdate"] = compose_date(xml_doc, "MRCDAY", "MRCMONTH", "MRCYEAR")
