@@ -342,13 +342,15 @@ module Imports
 
     def age_known(xml_doc, index, hhmemb)
       return nil if hhmemb.present? && index > hhmemb
-
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
-      if age_refused == "AGE_REFUSED"
-        1 # No
-      else
-        0 # Yes
+      if age_refused.present?
+        if age_refused.upcase == "AGE_REFUSED"
+          return 1 # No
+        else
+          return 0 # Yes
+        end
       end
+      0
     end
 
     def details_known(index, attributes)
@@ -500,7 +502,7 @@ module Imports
     end
 
     def people_with_details(xml_doc)
-      ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Age")]).compact
+      ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Sex")]).compact
     end
   end
 end
