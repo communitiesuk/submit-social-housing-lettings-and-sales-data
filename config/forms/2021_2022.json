@@ -1622,7 +1622,7 @@
               "questions": {
                 "relat2": {
                   "check_answer_label": "Person 2’s relationship to the lead tenant",
-                  "header": "What is person 2’s relationship to the lead tenant??",
+                  "header": "What is person 2’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
