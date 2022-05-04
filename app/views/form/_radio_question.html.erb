@@ -5,7 +5,7 @@
   legend: legend(question, page_header, conditional),
   hint: { text: question.hint_text&.html_safe } do %>
 
-  <% question.displayed_answer_options.map do |key, options| %>
+  <% question.displayed_answer_options(@case_log).map do |key, options| %>
     <% if key.starts_with?("divider") %>
       <%= f.govuk_radio_divider %>
     <% else %>

@@ -1367,7 +1367,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets economic status when age changes from under 16" do
-        household_case_log.update!(age7: 17)
+        household_case_log.update!(age7_known: 0, age7: 17)
         record_from_db = ActiveRecord::Base.connection.execute("select ecstat7 from case_logs where id=#{household_case_log.id}").to_a[0]
         expect(record_from_db["ecstat7"]).to eq(nil)
       end

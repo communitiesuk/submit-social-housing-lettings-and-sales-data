@@ -1771,7 +1771,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age2_known": 1 },
+                        { "age2": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -1990,7 +1993,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age3_known": 1 },
+                        { "age3": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -2206,7 +2212,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age4_known": 1 },
+                        { "age4": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -2419,7 +2428,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age5_known": 1 },
+                        { "age5": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -2629,7 +2641,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age6_known": 1 },
+                        { "age6": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -2836,7 +2851,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age7_known": 1 },
+                        { "age7": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
@@ -3040,7 +3058,10 @@
                     },
                     "9": {
                       "value": "Child under 16",
-                      "derived": true
+                      "depends_on": [
+                        { "age8_known": 1 },
+                        { "age8": { "operator": "<", "operand": 16 } }
+                      ]
                     },
                     "0": {
                       "value": "Other"
