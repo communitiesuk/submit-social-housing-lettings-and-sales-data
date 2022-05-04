@@ -609,7 +609,8 @@ private
   end
 
   def all_fields_completed?
-    mandatory_fields.none? { |field| public_send(field).nil? if respond_to?(field) }
+    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
+    subsection_statuses == [:completed]
   end
 
   def all_fields_nil?
