@@ -105,15 +105,15 @@ module Imports
       attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")
 
       attributes["reasonpref"] = unsafe_string_as_integer(xml_doc, "Q14a")
-      attributes["rp_homeless"] = unsafe_string_as_integer(xml_doc, "Q14b1")
-      attributes["rp_insan_unsat"] = unsafe_string_as_integer(xml_doc, "Q14b2")
-      attributes["rp_medwel"] = unsafe_string_as_integer(xml_doc, "Q14b3")
-      attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4")
-      attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5")
+      attributes["rp_homeless"] = unsafe_string_as_integer(xml_doc, "Q14b1").present? ? 1 : nil
+      attributes["rp_insan_unsat"] = unsafe_string_as_integer(xml_doc, "Q14b2").present? ? 1 : nil
+      attributes["rp_medwel"] = unsafe_string_as_integer(xml_doc, "Q14b3").present? ? 1 : nil
+      attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4").present? ? 1 : nil
+      attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5").present? ? 1 : nil
 
-      attributes["cbl"] = unsafe_string_as_integer(xml_doc, "Q15CBL")
-      attributes["chr"] = unsafe_string_as_integer(xml_doc, "Q15CHR")
-      attributes["cap"] = unsafe_string_as_integer(xml_doc, "Q15CAP")
+      attributes["cbl"] = unsafe_string_as_integer(xml_doc, "Q15CBL").present? ? 1 : nil
+      attributes["chr"] = unsafe_string_as_integer(xml_doc, "Q15CHR").present? ? 1 : nil
+      attributes["cap"] = unsafe_string_as_integer(xml_doc, "Q15CAP").present? ? 1 : nil
 
       attributes["referral"] = unsafe_string_as_integer(xml_doc, "Q16")
       attributes["period"] = unsafe_string_as_integer(xml_doc, "Q17")
@@ -459,9 +459,9 @@ module Imports
 
     def illness_type(xml_doc, index, illness)
       illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
-      if illness_type == "Yes" && illness == "Yes"
+      if illness_type == "Yes" && illness == 1
         1
-      elsif illness == "Yes"
+      elsif illness == 1
         0
       end
     end
