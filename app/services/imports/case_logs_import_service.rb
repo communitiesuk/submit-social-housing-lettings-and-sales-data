@@ -458,9 +458,9 @@ module Imports
 
     def illness_type(xml_doc, index, illness)
       illness_type = string_or_nil(xml_doc, "Q10ib-#{index}")
-      if illness_type == "Yes" && illness == "Yes"
+      if illness_type == "Yes" && illness == 1
         1
-      elsif illness == "Yes"
+      elsif illness == 1
         0
       end
     end
