@@ -146,4 +146,27 @@ class Form
 
     previous_page(page_ids, page_index - 1, case_log)
   end
+
+  def send_chain(arr, case_log)
+    Array(arr).inject(case_log) { |o, a| o.public_send(*a) }
+  end
+
+  def depends_on_met(depends_on, case_log)
+    return true unless depends_on
+
+    depends_on.any? do |conditions_set|
+      conditions_set.all? do |question, value|
+        if value.is_a?(Hash) && value.key?("operator")
+          operator = value["operator"]
+          operand = value["operand"]
+          case_log[question]&.send(operator, operand)
+        else
+          parts = question.split(".")
+          case_log_value = send_chain(parts, case_log)
+
+          value.nil? ? case_log_value == value : !case_log_value.nil? && case_log_value == value
+        end
+      end
+    end
+  end
 end

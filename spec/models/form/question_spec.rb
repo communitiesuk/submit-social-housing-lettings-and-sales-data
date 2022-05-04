@@ -118,7 +118,7 @@ RSpec.describe Form::Question, type: :model do
 
     context "when answer options do not include derived options" do
       it "displays all answer options" do
-        expect(question.displayed_answer_options).to match(question.answer_options)
+        expect(question.displayed_answer_options(case_log)).to match(question.answer_options)
       end
     end
 
@@ -132,7 +132,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       it "does not include those options in the displayed options" do
-        expect(question.displayed_answer_options).to match(expected_answer_options)
+        expect(question.displayed_answer_options(case_log)).to match(expected_answer_options)
       end
 
       it "can still map the value label" do
