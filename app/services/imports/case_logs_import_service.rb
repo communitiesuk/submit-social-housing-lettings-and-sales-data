@@ -42,6 +42,8 @@ module Imports
     def create_log(xml_doc)
       attributes = {}
 
+      previous_status = field_value(xml_doc, "meta", "status")
+
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
@@ -56,7 +58,7 @@ module Imports
       attributes["irproduct"] = unsafe_string_as_integer(xml_doc, "IRProduct")
       attributes["irproduct_other"] = string_or_nil(xml_doc, "IRProductOther")
       attributes["rent_type"] = rent_type(xml_doc, attributes["lar"], attributes["irproduct"])
-      attributes["hhmemb"] = safe_string_as_integer(xml_doc, "HHMEMB")
+      attributes["hhmemb"] = household_members(xml_doc, previous_status)
       (1..8).each do |index|
         attributes["age#{index}"] = safe_string_as_integer(xml_doc, "P#{index}Age")
         attributes["age#{index}_known"] = age_known(xml_doc, index, attributes["hhmemb"])
@@ -169,8 +171,6 @@ module Imports
         attributes["postcode_known"] = 0
         attributes["postcode_full"] = nil
       end
-
-      previous_status = field_value(xml_doc, "meta", "status")
 
       owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
       if owner_id.present?
@@ -488,6 +488,19 @@ module Imports
       else
         1
       end
+    end
+
+    def household_members(xml_doc, previous_status)
+      hhmemb = safe_string_as_integer(xml_doc, "HHMEMB")
+      if previous_status.include?("submitted") && hhmemb.nil?
+        hhmemb = people_with_details(xml_doc).count
+        return nil if hhmemb.zero?
+      end
+      hhmemb
+    end
+
+    def people_with_details(xml_doc)
+      ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Age")]).compact
     end
   end
 end
