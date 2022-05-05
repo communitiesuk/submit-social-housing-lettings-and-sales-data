@@ -475,12 +475,16 @@ private
       end
     end
     (2..8).each do |idx|
-      if public_send("age#{idx}") && public_send("age#{idx}") < 16
+      if age_under_16?(idx)
         self["ecstat#{idx}"] = 9
-      elsif public_send("ecstat#{idx}") == 9 && (public_send("age#{idx}").nil? || public_send("age#{idx}") >= 16) && age_known?(idx)
+      elsif public_send("ecstat#{idx}") == 9 && age_known?(idx)
         self["ecstat#{idx}"] = nil
       end
     end
+  end
+
+  def age_under_16?(person_num)
+    public_send("age#{person_num}") && public_send("age#{person_num}") < 16
   end
 
   def age_known?(person_num)
