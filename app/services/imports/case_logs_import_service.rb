@@ -516,7 +516,7 @@ module Imports
 
     def tshortfall(xml_doc, attributes)
       shortfall = safe_string_as_decimal(xml_doc, "Q18dyes")
-      return 0 if shortfall.blank? && attributes["hbrentshortfall"] == 1
+      return 0 if shortfall.blank? && attributes["hbrentshortfall"] == 1 && overridden?(xml_doc, "xmlns", "Q18dyes")
 
       shortfall
     end
