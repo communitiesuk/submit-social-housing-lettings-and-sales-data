@@ -65,9 +65,7 @@ class Form::Question
 
   def hidden_in_check_answers?(case_log)
     if hidden_in_check_answers.is_a?(Hash)
-      hidden_in_check_answers["depends_on"].any? do |hsh|
-        hsh.all? { |key, value| case_log[key] == value }
-      end
+      form.depends_on_met(hidden_in_check_answers["depends_on"], case_log)
     else
       hidden_in_check_answers
     end
