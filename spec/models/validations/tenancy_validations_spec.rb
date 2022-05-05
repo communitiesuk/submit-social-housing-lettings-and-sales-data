@@ -165,6 +165,7 @@ RSpec.describe Validations::TenancyValidations do
         record.joint = 2
         tenancy_validator.validate_joint_tenancy(record)
         expect(record.errors["joint"]).to be_empty
+        expect(record.errors["hhmemb"]).to be_empty
       end
     end
   end
