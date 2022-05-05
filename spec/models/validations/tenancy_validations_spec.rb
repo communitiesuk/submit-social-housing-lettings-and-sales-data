@@ -157,6 +157,7 @@ RSpec.describe Validations::TenancyValidations do
         record.joint = 1
         tenancy_validator.validate_joint_tenancy(record)
         expect(record.errors["joint"]).to include(match(expected_error))
+        expect(record.errors["hhmemb"]).to include(match(expected_error))
       end
 
       it "does not display an error if the data inputter says the letting is not a joint tenancy" do
