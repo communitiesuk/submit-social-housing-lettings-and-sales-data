@@ -1281,17 +1281,7 @@
                     "16": {
                       "value": "Other ethnic group"
                     }
-                  },
-                  "conditional_for": {
-                    "ethnic_other": [
-                      16
-                    ]
                   }
-                },
-                "ethnic_other": {
-                  "header": "How would the lead tenant describe their background? (optional)",
-                  "hint_text": "",
-                  "type": "text"
                 }
               },
               "depends_on": [
@@ -1323,19 +1313,9 @@
                       "value": "Pakistani"
                     },
                     "11": {
-                      "value": "Other ethnic group"
+                      "value": "Any other Asian or Asian British background"
                     }
-                  },
-                  "conditional_for": {
-                    "ethnic_other": [
-                      11
-                    ]
                   }
-                },
-                "ethnic_other": {
-                  "header": "How would the lead tenant describe their background? (optional)",
-                  "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
-                  "type": "text"
                 }
               },
               "depends_on": [
@@ -1363,17 +1343,7 @@
                     "14": {
                       "value": "Any other Black, African or Caribbean background"
                     }
-                  },
-                  "conditional_for": {
-                    "ethnic_other": [
-                      2
-                    ]
                   }
-                },
-                "ethnic_other": {
-                  "header": "How would the lead tenant describe their background? (optional)",
-                  "hint_text": "",
-                  "type": "text"
                 }
               },
               "depends_on": [
@@ -1404,17 +1374,7 @@
                     "7": {
                       "value": "Any other Mixed or Multiple ethnic background"
                     }
-                  },
-                  "conditional_for": {
-                    "ethnic_other": [
-                      7
-                    ]
                   }
-                },
-                "ethnic_other": {
-                  "header": "How would the lead tenant describe their background? (optional)",
-                  "hint_text": "",
-                  "type": "text"
                 }
               },
               "depends_on": [
@@ -1441,18 +1401,11 @@
                     },
                     "18": {
                       "value": "Gypsy or Irish Traveller"
+                    },
+                    "3": {
+                      "value": "Any other White background"
                     }
-                  },
-                  "conditional_for": {
-                    "ethnic_other": [
-                      3
-                    ]
                   }
-                },
-                "ethnic_other": {
-                  "header": "How would the lead tenant describe their background? (optional)",
-                  "hint_text": "",
-                  "type": "text"
                 }
               },
               "depends_on": [
