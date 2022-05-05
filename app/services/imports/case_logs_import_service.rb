@@ -204,7 +204,7 @@ module Imports
       attributes.each do |key, value|
         case_log_value = case_log.send(key.to_sym)
         next if key == "majorrepairs"
-        
+
         if value != case_log_value
           differences.push("#{key} #{value.inspect} #{case_log_value.inspect}")
         end
