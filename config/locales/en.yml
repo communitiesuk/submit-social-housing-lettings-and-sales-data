@@ -221,6 +221,7 @@ en:
         secure: "Secure (including flexible) should be between 2 and 99 years or not specified"
       internal_transfer: "Answer must be secure tenancy as you already told us this tenancy is an internal transfer"
       cannot_be_internal_transfer: "Answer cannot be internal transfer as you already told us this is not a secure tenancy"
+      not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
 
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."

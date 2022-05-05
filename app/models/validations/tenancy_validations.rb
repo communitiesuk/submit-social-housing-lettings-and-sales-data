@@ -32,4 +32,10 @@ module Validations::TenancyValidations
   def validate_other_tenancy_type(record)
     validate_other_field(record, 3, :tenancy, :tenancyother)
   end
+
+  def validate_joint_tenancy(record)
+    if record.hhmemb == 1 && record.joint != 2
+      record.errors.add :joint, I18n.t("validations.tenancy.not_joint")
+    end
+  end
 end
