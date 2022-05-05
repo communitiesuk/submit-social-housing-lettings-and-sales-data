@@ -34,7 +34,7 @@ module Validations::TenancyValidations
   end
 
   def validate_joint_tenancy(record)
-    if record.hhmemb == 1 && record.joint != 2
+    if record.hhmemb == 1 && record.joint != 2 && record.collection_start_year == 2022
       record.errors.add :joint, I18n.t("validations.tenancy.not_joint")
     end
   end

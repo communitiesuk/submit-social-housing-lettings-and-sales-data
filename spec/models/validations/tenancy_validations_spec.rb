@@ -149,6 +149,7 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
+      let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 5, 1)) }
       let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
 
       it "displays an error if the data inputter says the letting is a joint tenancy" do
