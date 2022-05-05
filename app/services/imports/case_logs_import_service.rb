@@ -129,6 +129,7 @@ module Imports
 
       attributes["voiddate"] = compose_date(xml_doc, "VDAY", "VMONTH", "VYEAR")
       attributes["mrcdate"] = compose_date(xml_doc, "MRCDAY", "MRCMONTH", "MRCYEAR")
+      attributes["majorrepairs"] = attributes["mrcdate"].present? ? 1 : nil
 
       attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
