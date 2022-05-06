@@ -1,0 +1,31 @@
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <table class="govuk-table">
+    <caption id="<%= title.dasherize %>" class="govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4">
+      <span class="govuk-!-margin-right-4">
+        <strong><%= pagy.count %></strong> total <%= title.downcase %>
+      </span>
+    </caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col">Name</th>
+        <th class="govuk-table__header" scope="col">Registration number</th>
+        <th class="govuk-table__header" scope="col">Type</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      <% organisations.map do |organisation| %>
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">
+          <%= govuk_link_to organisation.name, organisation_path(organisation) %>
+        </th>
+        <td class="govuk-table__cell app-!-font-tabular">
+          <%= organisation.id %>
+        </td>
+        <td class="govuk-table__cell app-!-font-tabular">
+          <%= organisation.provider_type %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
