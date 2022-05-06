@@ -99,7 +99,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
       attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
-      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"])
+      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"])
       attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
       attributes["waityear"] = unsafe_string_as_integer(xml_doc, "Q12d")
       attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")
@@ -375,9 +375,9 @@ module Imports
       end
     end
 
-    def previous_postcode_known(xml_doc, previous_postcode)
+    def previous_postcode_known(xml_doc, previous_postcode, prevloc)
       previous_postcode_known = string_or_nil(xml_doc, "Q12bnot")
-      if previous_postcode_known == "Temporary_or_Unknown"
+      if previous_postcode_known == "Temporary_or_Unknown" || (previous_postcode.nil? && prevloc.present?)
         0
       elsif previous_postcode.nil?
         nil
@@ -386,10 +386,11 @@ module Imports
       end
     end
 
+    POSTCODE_REGEXP = Validations::PropertyValidations::POSTCODE_REGEXP
     def compose_postcode(xml_doc, outcode, incode)
       outcode_value = string_or_nil(xml_doc, outcode)
       incode_value = string_or_nil(xml_doc, incode)
-      if outcode_value.nil? || incode_value.nil?
+      if outcode_value.nil? || incode_value.nil? || !"#{outcode_value}#{incode_value}".match(POSTCODE_REGEXP)
         nil
       else
         "#{outcode_value}#{incode_value}"
