@@ -95,6 +95,7 @@ module Imports
       (1..10).each do |index|
         attributes["illness_type_#{index}"] = illness_type(xml_doc, index, attributes["illness"])
       end
+      attributes["illness_type_0"] = 1 if (1..10).all? { |idx| attributes["illness_type_#{idx}"].nil? || attributes["illness_type_#{idx}"].zero? }
 
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
@@ -203,13 +204,17 @@ module Imports
       differences = []
       attributes.each do |key, value|
         case_log_value = case_log.send(key.to_sym)
-        next if key == "majorrepairs"
+        next if fields_not_present_in_softwire_data.include?(key)
 
         if value != case_log_value
           differences.push("#{key} #{value.inspect} #{case_log_value.inspect}")
         end
       end
       @logger.warn "Differences found when saving log #{case_log.old_id}: #{differences}" unless differences.empty?
+    end
+
+    def fields_not_present_in_softwire_data
+      %w[majorrepairs illness_type_0]
     end
 
     def check_status_completed(case_log, previous_status)
