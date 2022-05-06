@@ -9,6 +9,19 @@ RSpec.describe FiltersHelper do
       end
     end
 
+    context "when the filter is the user filter but session filters is empty" do
+      before do
+        session[:case_logs_filters] = {}.to_json
+      end
+
+      context "when looking at the all value" do
+        it "returns true if no filters have been set yet" do
+          expect(filter_selected?("user", :all)).to be_truthy
+          expect(filter_selected?("user", :yours)).to be_falsey
+        end
+      end
+    end
+
     context "when one filter is selected" do
       before do
         session[:case_logs_filters] = { "status": "in_progress" }.to_json
