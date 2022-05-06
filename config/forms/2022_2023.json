@@ -946,7 +946,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "joint_tenancy": {
+                "joint": {
                   "check_answer_label": "Is this a joint tenancy?",
                   "header": "Is this a joint tenancy?",
                   "hint_text": "For example, 27 3 2021.",
