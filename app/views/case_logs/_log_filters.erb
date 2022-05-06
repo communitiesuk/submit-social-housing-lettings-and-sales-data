@@ -6,9 +6,10 @@
     <div class="app-filter__content">
       <%= form_with url: "/logs", html: { method: :get } do |f| %>
         <% years = {"2021": "2021/22", "2022": "2022/23"} %>
+        <% @all_or_yours = {"all": "All", "yours": "Yours"} %>
         <%= render partial: "filters/checkbox_filter", locals: { f: f, options: years, label: "Collection year", category: "years" } %>
         <%= render partial: "filters/checkbox_filter", locals: { f: f, options: status_filters, label: "Status", category: "status" } %>
-        <%= render partial: "filters/radio_filter", locals: { f: f, options: {"all": "All", "yours": "Yours"}, label: "Logs", category: "user" } %>
+        <%= render partial: "filters/radio_filter", locals: { f: f, options: @all_or_yours, label: "Logs", category: "user", } %>
         <%= f.govuk_submit "Apply filters", class: "govuk-!-margin-bottom-0" %>
       <% end %>
     </div>
