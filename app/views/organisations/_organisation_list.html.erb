@@ -16,7 +16,7 @@
       <% organisations.map do |organisation| %>
       <tr class="govuk-table__row">
         <th class="govuk-table__header" scope="row">
-          <%= govuk_link_to organisation.name, organisation_path(organisation) %>
+          <%= govuk_link_to organisation.name, "organisations/#{organisation.id}/logs" %>
         </th>
         <td class="govuk-table__cell app-!-font-tabular">
           <%= organisation.id %>
