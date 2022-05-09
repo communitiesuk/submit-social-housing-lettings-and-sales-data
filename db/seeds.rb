@@ -6,7 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-org = Organisation.create!(
+# rubocop:disable Rails/Output
+org = Organisation.find_or_create_by!(
   name: "DLUHC",
   address_line1: "2 Marsham Street",
   address_line2: "London",
@@ -15,19 +16,43 @@ org = Organisation.create!(
   other_stock_owners: "None",
   managing_agents: "None",
   provider_type: "LA",
-)
-User.create!(
-  email: "test@example.com",
-  password: "password",
-  organisation: org,
-  role: "data_provider",
-)
+) do
+  info = "Seeded DLUHC Organisation"
+  if Rails.env.development?
+    pp info
+  else
+    Rails.logger.info info
+  end
+end
 
-User.create!(
-  email: "coordinator@example.com",
-  password: "password",
-  organisation: org,
-  role: "data_coordinator",
-)
+if Rails.env.development? && User.count.zero?
+  User.create!(
+    email: "provider@example.com",
+    organisation: org,
+    role: "data_provider",
+  )
 
-AdminUser.create!(email: "admin@example.com", password: "password", phone: "000000000")
+  User.create!(
+    email: "coordinator@example.com",
+    password: "password",
+    organisation: org,
+    role: "data_coordinator",
+  )
+
+  User.create!(
+    email: "support@example.com",
+    password: "password",
+    organisation: org,
+    role: "support",
+  )
+
+  pp "Seeded 3 dummy users"
+end
+
+if LaRentRange.count.zero?
+  Dir.glob("config/rent_range_data/*.csv").each do |path|
+    start_year = File.basename(path, ".csv")
+    Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
+  end
+end
+# rubocop:enable Rails/Output
