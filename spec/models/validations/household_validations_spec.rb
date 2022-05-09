@@ -643,14 +643,12 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "referral validations" do
     context "when homelessness is assessed" do
-      it "cannot be internal transfer" do
+      it "can be internal transfer" do
         record.homeless = 11
         record.referral = 1
         household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to include(match I18n.t("validations.household.referral.assessed_homeless"))
-        expect(record.errors["homeless"])
-          .to include(match I18n.t("validations.household.homeless.assessed.internal_transfer"))
+        expect(record.errors["referral"]).to be_empty
+        expect(record.errors["homeless"]).to be_empty
       end
 
       it "can be non internal transfer" do
@@ -668,10 +666,8 @@ RSpec.describe Validations::HouseholdValidations do
         record.referral = 1
         record.homeless = 7
         household_validator.validate_referral(record)
-        expect(record.errors["referral"])
-          .to include(match I18n.t("validations.household.referral.other_homeless"))
-        expect(record.errors["homeless"])
-          .to include(match I18n.t("validations.household.homeless.other.internal_transfer"))
+        expect(record.errors["referral"]).to be_empty
+        expect(record.errors["homeless"]).to be_empty
       end
 
       it "can be non internal transfer" do
