@@ -549,5 +549,28 @@ RSpec.describe "User Features" do
         end
       end
     end
+    context "when the user is logged in as a support user" do
+      let!(:support_user) { FactoryBot.create(:user, :support) }
+      
+      before do 
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
+        visit("/logs")
+        fill_in("user[email]", with: support_user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        fill_in("code", with: otp)
+        click_button("Submit")
+      end
+  
+      it "they should see organisations instead of your organisations in the navigation bar" do
+        visit("/organisations")
+        expect(page).to have_selector("h1", text: "Organisations")
+      end
+
+      it "they should see all organisations listed in the organisations page" do
+        visit("/organisations")
+        expect(page).to have_css('#all-organisations-table')
+      end
+    end
   end
 end
