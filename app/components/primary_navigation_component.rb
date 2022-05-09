@@ -5,4 +5,8 @@ class PrimaryNavigationComponent < ViewComponent::Base
     @items = items
     super
   end
+
+  def highlighted_tab?(item, _path)
+    item[:current]
+  end
 end
