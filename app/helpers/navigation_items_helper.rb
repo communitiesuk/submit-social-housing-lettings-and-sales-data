@@ -1,43 +1,33 @@
 module NavigationItemsHelper
   NavigationItem = Struct.new(:text, :href, :current, :classes)
 
-  def primary_items(current_user, user)
+  def primary_items(path, current_user)
     if current_user.support?
       [
-        NavigationItem.new("Organisations", organisations_path, organisation_current?),
-        NavigationItem.new("Users", users_path, users_current?(current_user, user)),
-        NavigationItem.new("Logs", case_logs_path, logs_current?),
+        NavigationItem.new("Organisations", organisations_path, organisation_current?(path)),
+        NavigationItem.new("Users", "/users", users_current?(path)),
+        NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
       ]
     else
       [
-        NavigationItem.new("Logs", case_logs_path, logs_current?),
-        NavigationItem.new("Users", users_organisation_path(current_user.organisation), users_current?(current_user, user)),
-        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", organisation_current?),
+        NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
+        NavigationItem.new("Users", users_organisation_path(current_user.organisation), users_current?(path)),
+        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", organisation_current?(path)),
       ]
     end
   end
 
 private
 
-  def current?(current_controller, controllers)
-    current_controller.controller_name.in?(Array.wrap(controllers))
+  def logs_current?(path)
+    path.include?("/logs")
   end
 
-  def current_action?(current_controller, action)
-    current_controller.action_name == action
+  def users_current?(path)
+    path.include?("/users")
   end
 
-  def logs_current?
-    current?(controller, %w[case_logs form])
-  end
-
-  def users_current?(current_user, user)
-    return false if current_user == user
-
-    current?(controller, %w[users]) || current_action?(controller, "users")
-  end
-
-  def organisation_current?
-    current?(controller, %w[organisations]) && !current_action?(controller, "users")
+  def organisation_current?(path)
+    path.include?("/organisations") && !path.include?("/users")
   end
 end
