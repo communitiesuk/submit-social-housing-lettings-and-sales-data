@@ -198,6 +198,38 @@ RSpec.describe "User Features" do
   context "when signed in as a data coordinator" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
 
+    context "when viewing users" do
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        click_link("Users")
+      end
+
+      it "highlights the users navigation tab" do
+        expect(page).to have_css('[aria-current="page"]', text: "Users")
+        expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
+      end
+    end
+
+    context "when viewing your organisation details" do
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        click_link("About your organisation")
+      end
+
+      it "highlights the users navigation tab" do
+        expect(page).to have_css('[aria-current="page"]', text: "About your organisation")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Users")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
+      end
+    end
+
     context "when viewing your account" do
       before do
         visit("/logs")
@@ -211,6 +243,11 @@ RSpec.describe "User Features" do
         expect(page).to have_link("Your account")
         click_link("Your account")
         expect(page).to have_current_path("/account")
+      end
+
+      it "does not highlight the users navigation tab" do
+        visit("/account")
+        expect(page).not_to have_css('[aria-current="page"]', text: "Users")
       end
 
       it "can navigate to change your password page from main account page" do
