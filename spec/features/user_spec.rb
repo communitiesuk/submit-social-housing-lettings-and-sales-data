@@ -551,9 +551,9 @@ RSpec.describe "User Features" do
     end
     context "when the user is logged in as a support user" do
       let!(:support_user) { FactoryBot.create(:user, :support) }
-      
-      before do 
-        50.times { FactoryBot.create(:organisation) }
+
+      before do
+        FactoryBot.create_list(:organisation, 50)
         allow(SecureRandom).to receive(:random_number).and_return(otp)
         visit("/logs")
         fill_in("user[email]", with: support_user.email)
@@ -562,7 +562,7 @@ RSpec.describe "User Features" do
         fill_in("code", with: otp)
         click_button("Submit")
       end
-  
+
       it "they should see organisations instead of your organisations in the navigation bar" do
         visit("/organisations")
         expect(page).to have_selector("h1", text: "Organisations")
@@ -570,8 +570,8 @@ RSpec.describe "User Features" do
 
       it "they should see all organisations listed in the organisations page, with pagination" do
         visit("/organisations")
-        expect(page).to have_css('#all-organisations-table')
-        expect(page).to have_css('.app-pagination__link')
+        expect(page).to have_css("#all-organisations-table")
+        expect(page).to have_css(".app-pagination__link")
       end
     end
   end
