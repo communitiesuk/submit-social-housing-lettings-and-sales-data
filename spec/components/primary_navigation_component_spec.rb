@@ -2,9 +2,11 @@ require "rails_helper"
 
 RSpec.describe PrimaryNavigationComponent, type: :component do
   let(:items) do
-    [{ text: "Organisations", href: "/organisations", current: true },
-     { text: "Users", href: "/users", current: false },
-     { text: "Logs ", href: "/logs", current: false }]
+    [
+      NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
+      NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+      NavigationItemsHelper::NavigationItem.new("Logs ", "/logs", false),
+    ]
   end
 
   context "when the item is 'current' in nav tabs" do
