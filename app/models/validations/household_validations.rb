@@ -111,16 +111,6 @@ module Validations::HouseholdValidations
   end
 
   def validate_referral(record)
-    if record.is_internal_transfer? && record.is_assessed_homeless?
-      record.errors.add :referral, I18n.t("validations.household.referral.assessed_homeless")
-      record.errors.add :homeless, I18n.t("validations.household.homeless.assessed.internal_transfer")
-    end
-
-    if record.is_internal_transfer? && record.is_other_homeless?
-      record.errors.add :referral, I18n.t("validations.household.referral.other_homeless")
-      record.errors.add :homeless, I18n.t("validations.household.homeless.other.internal_transfer")
-    end
-
     if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
       record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
       record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
