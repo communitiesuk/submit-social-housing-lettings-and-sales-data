@@ -168,6 +168,14 @@ RSpec.describe Validations::TenancyValidations do
         expect(record.errors["joint"]).to be_empty
         expect(record.errors["hhmemb"]).to be_empty
       end
+
+      it "does not display an error if the data inputter has given the household members but not input if it is a joint tenancy" do
+        record.hhmemb = 1
+        record.joint = nil
+        tenancy_validator.validate_joint_tenancy(record)
+        expect(record.errors["joint"]).to be_empty
+        expect(record.errors["hhmemb"]).to be_empty
+      end
     end
   end
 end
