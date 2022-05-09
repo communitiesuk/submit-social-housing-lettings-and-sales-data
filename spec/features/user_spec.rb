@@ -553,6 +553,7 @@ RSpec.describe "User Features" do
       let!(:support_user) { FactoryBot.create(:user, :support) }
       
       before do 
+        50.times { FactoryBot.create(:organisation) }
         allow(SecureRandom).to receive(:random_number).and_return(otp)
         visit("/logs")
         fill_in("user[email]", with: support_user.email)
@@ -567,9 +568,10 @@ RSpec.describe "User Features" do
         expect(page).to have_selector("h1", text: "Organisations")
       end
 
-      it "they should see all organisations listed in the organisations page" do
+      it "they should see all organisations listed in the organisations page, with pagination" do
         visit("/organisations")
         expect(page).to have_css('#all-organisations-table')
+        expect(page).to have_css('.app-pagination__link')
       end
     end
   end
