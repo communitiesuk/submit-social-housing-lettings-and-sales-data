@@ -20,7 +20,7 @@ private
     forms = {}
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
-        form_name = form_path.sub(".json", "").split("/")[-1]
+        form_name = File.basename(form_path, ".json")
         forms[form_name] = Form.new(form_path, form_name)
       end
     end
