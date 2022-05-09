@@ -49,7 +49,7 @@ if Rails.env.development? && User.count.zero?
   pp "Seeded 3 dummy users"
 end
 
-if LaRentRange.count.zero?
+if LaRentRange.count.zero? && !Rails.env.test?
   Dir.glob("config/rent_range_data/*.csv").each do |path|
     start_year = File.basename(path, ".csv")
     Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
