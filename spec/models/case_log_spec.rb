@@ -1771,6 +1771,32 @@ RSpec.describe CaseLog do
     end
   end
 
+  describe "tshortfall_unknown?" do
+    context "when tshortfall is nil" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: nil) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be false
+      end
+    end
+
+    context "when tshortfall is No" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: 1) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be true
+      end
+    end
+
+    context "when tshortfall is Yes" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: 0) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be false
+      end
+    end
+  end
+
   describe "paper trail" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 

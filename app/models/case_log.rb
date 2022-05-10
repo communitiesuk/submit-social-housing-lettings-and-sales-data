@@ -186,8 +186,8 @@ class CaseLog < ApplicationRecord
     previous_la_known == 1
   end
 
-  def tshortfall_known?
-    !!(tshortfall_known && tshortfall_known.zero?)
+  def tshortfall_unknown?
+    tshortfall_known == 1
   end
 
   def is_secure_tenancy?
@@ -433,7 +433,7 @@ private
 
   def dynamically_not_required
     previous_la_known_field = postcode_known? ? %w[previous_la_known] : []
-    tshortfall_field = tshortfall_known? ? [] : %w[tshortfall]
+    tshortfall_field = tshortfall_unknown? ? %w[tshortfall] : []
     previous_la_known_field + tshortfall_field
   end
 
