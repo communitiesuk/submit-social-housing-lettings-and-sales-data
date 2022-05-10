@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_10_091620) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_10_134721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -339,6 +339,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_10_091620) do
     t.string "direct_otp"
     t.datetime "direct_otp_sent_at", precision: nil
     t.datetime "totp_timestamp", precision: nil
+    t.boolean "active", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
