@@ -1671,6 +1671,17 @@ RSpec.describe CaseLog do
     end
   end
 
+  describe "optional fields" do
+    let(:case_log) { FactoryBot.create(:case_log) }
+
+    context "when tshortfall is marked as not known" do
+      it "makes tshortfall optional" do
+        case_log.update!({ tshortfall: nil, tshortfall_known: 1 })
+        expect(case_log.optional_fields).to include("tshortfall")
+      end
+    end
+  end
+
   describe "resetting invalidated fields" do
     context "when a question that has already been answered, no longer has met dependencies" do
       let(:case_log) { FactoryBot.create(:case_log, :in_progress, cbl: 1, preg_occ: 2, wchair: 1) }
