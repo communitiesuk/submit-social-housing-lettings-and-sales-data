@@ -28,6 +28,7 @@ end
 if Rails.env.development? && User.count.zero?
   User.create!(
     email: "provider@example.com",
+    password: "password",
     organisation: org,
     role: "data_provider",
   )
