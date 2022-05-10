@@ -23,7 +23,7 @@ describe "rake onboarding_emails:send", type: task do
       expect(notify_client).to receive(:send_email).with(
         {
           email_address: user.email,
-          template_id: User::BETA_ONBOARDING_TEMPLATE_ID,
+          template_id: "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd",
           personalisation: {
             name: user.name,
             link: "http://localhost:3000/account/password/edit?reset_password_token=#{reset_password_token}",

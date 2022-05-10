@@ -1,5 +1,3 @@
-include Rails.application.routes.url_helpers
-
 namespace :onboarding_emails do
   desc "Send onboarding emails to private beta users"
   task :send, %i[organisation_id host] => :environment do |_task, args|
@@ -12,7 +10,7 @@ namespace :onboarding_emails do
     raise "Organisation #{organisation_id} does not exist" unless organisation
 
     organisation.users.each do |user|
-      return unless URI::MailTo::EMAIL_REGEXP.match?(user.email)
+      next unless URI::MailTo::EMAIL_REGEXP.match?(user.email)
 
       onboarding_template_id = "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd".freeze
       token = user.send(:set_reset_password_token)
