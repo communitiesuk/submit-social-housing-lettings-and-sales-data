@@ -5717,6 +5717,29 @@
                 }
               ]
             },
+            "outstanding_amount_known": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "tshortfall_known": {
+                  "check_answer_label": "",
+                  "header": "",
+                  "hint_text": "",
+                  "hidden_in_check_answers": true,
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "derived": true,
+              "depends_on": [false]
+            },
             "outstanding_amount": {
               "header": "",
               "description": "",

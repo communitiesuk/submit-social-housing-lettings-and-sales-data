@@ -1660,6 +1660,26 @@ RSpec.describe CaseLog do
         expect(relet_case_log["newprop"]).to eq(2)
       end
     end
+
+    context "when a total shortfall is provided" do
+      it "derives that tshortfall is known" do
+        case_log.update!({ tshortfall: 10 })
+        record_from_db = ActiveRecord::Base.connection.execute("select tshortfall_known from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["tshortfall_known"]).to eq(0)
+        expect(case_log["tshortfall_known"]).to eq(0)
+      end
+    end
+  end
+
+  describe "optional fields" do
+    let(:case_log) { FactoryBot.create(:case_log) }
+
+    context "when tshortfall is marked as not known" do
+      it "makes tshortfall optional" do
+        case_log.update!({ tshortfall: nil, tshortfall_known: 1 })
+        expect(case_log.optional_fields).to include("tshortfall")
+      end
+    end
   end
 
   describe "resetting invalidated fields" do
@@ -1747,6 +1767,32 @@ RSpec.describe CaseLog do
         record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
         expect(record_from_db["waityear"]).to eq(2)
         expect(case_log["waityear"]).to eq(2)
+      end
+    end
+  end
+
+  describe "tshortfall_unknown?" do
+    context "when tshortfall is nil" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: nil) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be false
+      end
+    end
+
+    context "when tshortfall is No" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: 1) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be true
+      end
+    end
+
+    context "when tshortfall is Yes" do
+      let(:case_log) { FactoryBot.create(:case_log, :in_progress, tshortfall_known: 0) }
+
+      it "returns false" do
+        expect(case_log.tshortfall_unknown?).to be false
       end
     end
   end

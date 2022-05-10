@@ -186,6 +186,10 @@ class CaseLog < ApplicationRecord
     previous_la_known == 1
   end
 
+  def tshortfall_unknown?
+    tshortfall_known == 1
+  end
+
   def is_secure_tenancy?
     # 1: Secure (including flexible)
     tenancy == 1
@@ -367,6 +371,10 @@ class CaseLog < ApplicationRecord
     "#{soft_value_for_period(soft_max)} #{SUFFIX_FROM_PERIOD[period].presence || 'every week'}"
   end
 
+  def optional_fields
+    OPTIONAL_FIELDS + dynamically_not_required
+  end
+
 private
 
   PIO = Postcodes::IO.new
@@ -425,7 +433,8 @@ private
 
   def dynamically_not_required
     previous_la_known_field = postcode_known? ? %w[previous_la_known] : []
-    ((form.invalidated_questions(self) + form.readonly_questions).map(&:id) + previous_la_known_field).uniq
+    tshortfall_field = tshortfall_unknown? ? %w[tshortfall] : []
+    previous_la_known_field + tshortfall_field
   end
 
   def set_derived_fields!
@@ -458,6 +467,7 @@ private
       end
     end
     self.has_benefits = get_has_benefits
+    self.tshortfall_known = 0 if tshortfall
     self.wtshortfall = if tshortfall && receives_housing_related_benefits?
                          weekly_value(tshortfall)
                        end
@@ -622,13 +632,9 @@ private
   end
 
   def all_fields_nil?
-    init_fields = %w[owning_organisation_id managing_organisation_id]
-    fields = mandatory_fields.difference(init_fields)
-    fields.none? { |field| public_send(field).present? if respond_to?(field) }
-  end
-
-  def mandatory_fields
-    form.questions.map(&:id).difference(OPTIONAL_FIELDS, dynamically_not_required)
+    not_started_statuses = %i[not_started cannot_start_yet]
+    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
+    subsection_statuses.all? { |status| not_started_statuses.include?(status) }
   end
 
   def age_refused?
