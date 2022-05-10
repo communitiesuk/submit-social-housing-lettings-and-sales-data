@@ -18,6 +18,8 @@ module Exports
       field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
     end
 
+    LOG_ID_OFFSET = 300_000_000_000
+
   private
 
     def save_export_run
@@ -71,6 +73,7 @@ module Exports
             next
           else
             value = case_log.read_attribute_before_type_cast(key)
+            value += LOG_ID_OFFSET if key == "id"
             form << doc.create_element(key, value)
           end
         end
