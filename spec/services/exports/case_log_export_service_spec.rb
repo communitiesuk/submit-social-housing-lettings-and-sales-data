@@ -13,7 +13,7 @@ RSpec.describe Exports::CaseLogExportService do
   let(:case_log) { FactoryBot.create(:case_log, :completed) }
 
   def replace_entity_ids(export_template)
-    export_template.sub!(/\{id\}/, case_log["id"].to_s)
+    export_template.sub!(/\{id\}/, (case_log["id"] + Exports::CaseLogExportService::LOG_ID_OFFSET).to_s)
     export_template.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
     export_template.sub!(/\{managing_org_id\}/, case_log["managing_organisation_id"].to_s)
     export_template.sub!(/\{created_by_id\}/, case_log["created_by_id"].to_s)
