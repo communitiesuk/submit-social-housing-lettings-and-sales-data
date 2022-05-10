@@ -17,7 +17,7 @@ describe "rake onboarding_emails:send", type: task do
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(notify_client).to receive(:send_email).and_return(true)
     allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
-    allow(ENV).to receive(:[]).with("APP_HOST").and_return("http://localhost:3000")
+    allow(user).to receive(:host).and_return("http://localhost:3000")
   end
 
   context "when onboarding a new organisation to private beta" do

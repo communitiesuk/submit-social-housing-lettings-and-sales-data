@@ -83,11 +83,15 @@ class User < ApplicationRecord
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
 
+  def host
+    ENV["APP_HOST"]
+  end
+
   def send_beta_onboarding_email
     return unless URI::MailTo::EMAIL_REGEXP.match?(email)
 
     template_id = BETA_ONBOARDING_TEMPLATE_ID
-    url = edit_user_password_url({ host: ENV["APP_HOST"] })
+    url = edit_user_password_url({ host: })
     token = Devise.token_generator.generate(User, :reset_password_token)
     personalisation = { name: name || email, link: "#{url}?reset_password_token=#{token}" }
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
