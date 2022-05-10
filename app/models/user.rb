@@ -67,6 +67,7 @@ class User < ApplicationRecord
   MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
   RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
   SET_PASSWORD_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
+  BETA_ONBOARDING_TEMPLATE_ID = "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd".freeze
 
   def reset_password_notify_template
     last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
@@ -79,6 +80,16 @@ class User < ApplicationRecord
   def send_two_factor_authentication_code(code)
     template_id = MFA_TEMPLATE_ID
     personalisation = { otp: code }
+    DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
+  end
+
+  def send_beta_onboarding_email
+    return unless URI::MailTo::EMAIL_REGEXP.match?(email)
+
+    template_id = BETA_ONBOARDING_TEMPLATE_ID
+    url = edit_user_password_url({ host: ENV["APP_HOST"] })
+    token = Devise.token_generator.generate(User, :reset_password_token)
+    personalisation = { name: name || email, link: "#{url}?reset_password_token=#{token}" }
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
 
