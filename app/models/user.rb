@@ -83,12 +83,8 @@ class User < ApplicationRecord
     DeviseNotifyMailer.new.send_email(email, template_id, personalisation)
   end
 
-  def host
-    ENV["APP_HOST"]
-  end
-
-  def send_beta_onboarding_email
-    return unless URI::MailTo::EMAIL_REGEXP.match?(email)
+  def send_beta_onboarding_email(host)
+    return unless URI::MailTo::EMAIL_REGEXP.match?(email) && host
 
     template_id = BETA_ONBOARDING_TEMPLATE_ID
     url = edit_user_password_url({ host: })
