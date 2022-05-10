@@ -190,5 +190,13 @@ RSpec.describe Form, type: :model do
         expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
       end
     end
+
+    context "when a page is marked as `derived`" do
+      let(:case_log) { FactoryBot.build(:case_log, :in_progress, startdate: Time.utc(2023, 2, 2, 10, 36, 49)) }
+
+      it "does not count it's questions as invalidated" do
+        expect(form.enabled_page_questions(case_log).map(&:id).uniq).to include("tshortfall_known")
+      end
+    end
   end
 end
