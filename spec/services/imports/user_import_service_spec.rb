@@ -32,6 +32,7 @@ RSpec.describe Imports::UserImportService do
       expect(user).to be_data_provider
       expect(user.organisation.old_org_id).to eq(old_org_id)
       expect(user.is_key_contact?).to be false
+      expect(user.active).to be true
     end
 
     it "refuses to create a user belonging to a non existing organisation" do
@@ -152,6 +153,15 @@ RSpec.describe Imports::UserImportService do
         it "does not create a new record" do
           expect { import_service.create_users("user_directory") }
             .not_to change(User, :count)
+        end
+      end
+
+      context "when the user was deactivated in the old system" do
+        let(:old_user_id) { "9ed81a262215a1634f0809effa683e38924d8bcb" }
+
+        it "marks them as not active" do
+          import_service.create_users("user_directory")
+          expect(User.find_by(old_user_id:).active).to be false
         end
       end
     end

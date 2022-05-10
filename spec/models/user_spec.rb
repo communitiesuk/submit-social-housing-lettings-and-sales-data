@@ -65,6 +65,10 @@ RSpec.describe User, type: :model do
         .to change { user.reload.is_data_protection_officer? }.from(false).to(true)
     end
 
+    it "is active by default" do
+      expect(user.active).to be true
+    end
+
     it "does not require 2FA" do
       expect(user.need_two_factor_authentication?(nil)).to be false
     end
