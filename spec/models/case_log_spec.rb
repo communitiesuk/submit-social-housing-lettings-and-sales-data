@@ -1660,6 +1660,15 @@ RSpec.describe CaseLog do
         expect(relet_case_log["newprop"]).to eq(2)
       end
     end
+
+    context "when a total shortfall is provided" do
+      it "derives that tshortfall is known" do
+        case_log.update!({ tshortfall: 10 })
+        record_from_db = ActiveRecord::Base.connection.execute("select tshortfall_known from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["tshortfall_known"]).to eq(0)
+        expect(case_log["tshortfall_known"]).to eq(0)
+      end
+    end
   end
 
   describe "resetting invalidated fields" do

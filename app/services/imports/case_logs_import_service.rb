@@ -125,8 +125,9 @@ module Imports
       attributes["supcharg"] = safe_string_as_decimal(xml_doc, "Q18aiv")
       attributes["tcharge"] = safe_string_as_decimal(xml_doc, "Q18av")
 
+      attributes["hbrentshortfall"] = unsafe_string_as_integer(xml_doc, "Q18d")
       attributes["tshortfall"] = safe_string_as_decimal(xml_doc, "Q18dyes")
-      attributes["hbrentshortfall"] = hbshortfall(xml_doc, attributes)
+      attributes["tshortfall_known"] = tshortfall_known?(xml_doc, attributes)
 
       attributes["voiddate"] = compose_date(xml_doc, "VDAY", "VMONTH", "VYEAR")
       attributes["mrcdate"] = compose_date(xml_doc, "MRCDAY", "MRCMONTH", "MRCYEAR")
@@ -214,7 +215,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0]
+      %w[majorrepairs illness_type_0 tshortfall_known]
     end
 
     def check_status_completed(case_log, previous_status)
@@ -520,14 +521,11 @@ module Imports
       ((2..8).map { |x| string_or_nil(xml_doc, "P#{x}Rel") } + [string_or_nil(xml_doc, "P1Sex")]).compact
     end
 
-    def hbshortfall(xml_doc, attributes)
-      shortfall = unsafe_string_as_integer(xml_doc, "Q18d")
-      if attributes["tshortfall"].blank? && shortfall == 1 && overridden?(xml_doc, "xmlns", "Q18dyes")
-        # If they have said there is a shortfall but then not entered one, and that has been
-        # manually overridden we instead infer that they actually didn't know whether there is a shortfall.
-        3
+    def tshortfall_known?(xml_doc, attributes)
+      if attributes["tshortfall"].blank? && attributes["hbrentshortfall"] == 1 && overridden?(xml_doc, "xmlns", "Q18dyes")
+        1
       else
-        shortfall
+        0
       end
     end
   end

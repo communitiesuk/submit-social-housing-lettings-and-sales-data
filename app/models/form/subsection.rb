@@ -31,7 +31,7 @@ class Form::Subsection
     end
 
     qs = applicable_questions(case_log)
-    qs_optional_removed = qs.reject { |q| CaseLog::OPTIONAL_FIELDS.include?(q.id) }
+    qs_optional_removed = qs.reject { |q| case_log.optional_fields.include?(q.id) }
     return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
     return :completed if qs_optional_removed.all? { |question| question.completed?(case_log) }
 
