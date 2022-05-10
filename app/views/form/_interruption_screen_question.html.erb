@@ -1,8 +1,8 @@
 <%= govuk_panel(
-  title_text:,
+  title_text: I18n.t(title_text),
   classes: "app-panel--interruption",
 ) do %>
-  <%= display_informative_text(informative_text, case_log) %>
+  <p class="govuk-panel__body"><%= display_informative_text(informative_text, case_log) %></p>
   <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
     legend: { text: question.header },
     hint: { text: question.hint_text&.html_safe } do %>
