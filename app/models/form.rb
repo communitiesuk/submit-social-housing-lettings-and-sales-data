@@ -124,8 +124,8 @@ class Form
   end
 
   def enabled_page_questions(case_log)
-    pages_that_are_routed_to = pages.select { |p| p.routed_to?(case_log) }
-    pages_that_are_routed_to.flat_map(&:questions) || []
+    pages_that_are_routed_to_or_derived = pages.select { |p| p.routed_to?(case_log) || p.derived }
+    pages_that_are_routed_to_or_derived.flat_map(&:questions) || []
   end
 
   def invalidated_conditional_questions(case_log)
@@ -155,6 +155,8 @@ class Form
     return true unless depends_on
 
     depends_on.any? do |conditions_set|
+      return false unless conditions_set
+
       conditions_set.all? do |question, value|
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
