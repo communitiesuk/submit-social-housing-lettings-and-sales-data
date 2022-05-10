@@ -16,12 +16,11 @@ module Imports
       name = user_field_value(xml_document, "full-name")
       email = user_field_value(xml_document, "email").downcase.strip
       deleted = user_field_value(xml_document, "deleted")
-      date_deactivated = user_field_value(xml_document, "date-deactivated")
 
       if User.find_by(old_user_id:, organisation:)
         @logger.warn("User #{name} with old user id #{old_user_id} is already present, skipping.")
-      elsif deleted == "true" || date_deactivated.present?
-        @logger.warn("User #{name} with old user id #{old_user_id} is deleted or deactivated, skipping.")
+      elsif deleted == "true"
+        @logger.warn("User #{name} with old user id #{old_user_id} is deleted, skipping.")
       elsif (user = User.find_by(email:, organisation:))
         is_dpo = user.is_data_protection_officer? || is_dpo?(user_field_value(xml_document, "user-type"))
         role = highest_role(user.role, role(user_field_value(xml_document, "user-type")))
@@ -38,6 +37,7 @@ module Imports
           role: role(user_field_value(xml_document, "user-type")),
           is_dpo: is_dpo?(user_field_value(xml_document, "user-type")),
           is_key_contact: is_key_contact?(user_field_value(xml_document, "contact-priority-id")),
+          active: user_field_value(xml_document, "active"),
         )
       end
     end

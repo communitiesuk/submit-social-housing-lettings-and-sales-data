@@ -1,0 +1,13 @@
+<user:user xmlns:user="dclg:user">
+  <user:id>9ed81a262215a1634f0809effa683e38924d8bcb</user:id>
+  <user:password>xxx</user:password>
+  <user:full-name>John Doe</user:full-name>
+  <user:user-name>john.doe</user:user-name>
+  <user:institution>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</user:institution>
+  <user:email>john.doe2@gov.uk</user:email>
+  <user:user-type>Data Provider</user:user-type>
+  <user:active>false</user:active>
+  <user:deleted>false</user:deleted>
+  <user:contact-priority-id>None</user:contact-priority-id>
+  <user:telephone-no>02012345678</user:telephone-no>
+</user:user>
