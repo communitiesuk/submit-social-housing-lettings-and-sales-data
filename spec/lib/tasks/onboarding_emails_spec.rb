@@ -12,7 +12,6 @@ describe "rake onboarding_emails:send", type: task do
 
     before do
       Rake.application.rake_require("tasks/onboarding_emails")
-      Rake::Task.define_task(:environment)
       task.reenable
       allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
       allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)

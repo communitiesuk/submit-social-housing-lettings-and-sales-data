@@ -11,6 +11,14 @@ namespace :onboarding_emails do
     organisation = Organisation.find(organisation_id)
     raise "Organisation #{organisation_id} does not exist" unless organisation
 
-    organisation.users.each { |user| user.send_beta_onboarding_email(host) }
+    organisation.users.each do |user|
+      return unless URI::MailTo::EMAIL_REGEXP.match?(user.email)
+
+      onboarding_template_id = "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd".freeze
+      token = user.send(:set_reset_password_token)
+      url = "#{host}/account/password/edit?reset_password_token=#{token}"
+      personalisation = { name: user.name || user.email, link: url }
+      DeviseNotifyMailer.new.send_email(user.email, onboarding_template_id, personalisation)
+    end
   end
 end
