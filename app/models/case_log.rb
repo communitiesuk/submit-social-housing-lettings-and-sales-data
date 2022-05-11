@@ -383,11 +383,12 @@ class CaseLog < ApplicationRecord
   end
 
   def retirement_age_for_person(person_num)
-    gender = public_send("sex#{person_num}".to_sym) 
+    gender = public_send("sex#{person_num}".to_sym)
     return unless gender
+
     RETIREMENT_AGES[gender]
   end
-  
+
 private
 
   PIO = Postcodes::IO.new

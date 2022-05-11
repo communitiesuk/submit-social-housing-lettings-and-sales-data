@@ -69,6 +69,7 @@ private
     economic_status = public_send("ecstat#{person_num}")
     gender = public_send("sex#{person_num}")
     return unless age && economic_status && gender
+
     %w[M X].include?(gender) && !tenant_is_retired?(economic_status) && age > 67 ||
       gender == "F" && !tenant_is_retired?(economic_status) && age > 60
   end
