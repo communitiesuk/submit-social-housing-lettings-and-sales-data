@@ -165,6 +165,7 @@
     <created_by_id>{created_by_id}</created_by_id>
     <illness_type_0/>
     <tshortfall_known>0</tshortfall_known>
+    <shelteredaccom/>
     <providertype>1</providertype>
   </form>
 </forms>
