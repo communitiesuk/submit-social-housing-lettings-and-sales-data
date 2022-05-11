@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_10_134721) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_11_114334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -223,6 +223,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_10_134721) do
     t.bigint "created_by_id"
     t.integer "illness_type_0"
     t.integer "tshortfall_known"
+    t.integer "shelteredaccom"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
