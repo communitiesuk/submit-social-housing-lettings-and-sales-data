@@ -1922,4 +1922,38 @@ RSpec.describe CaseLog do
       end
     end
   end
+
+  describe "#retirement_age_for_person" do
+    context "when a person gender is Male" do
+      let(:case_log) { FactoryBot.build(:case_log, sex1: "M") }
+
+      it "returns the expected retirement age" do
+        expect(case_log.retirement_age_for_person_1).to eq(67)
+      end
+    end
+
+    context "when a person gender is Female" do
+      let(:case_log) { FactoryBot.build(:case_log, sex2: "F") }
+
+      it "returns the expected retirement age" do
+        expect(case_log.retirement_age_for_person_2).to eq(60)
+      end
+    end
+
+    context "when a person gender is Non-Binary" do
+      let(:case_log) { FactoryBot.build(:case_log, sex3: "X") }
+
+      it "returns the expected retirement age" do
+        expect(case_log.retirement_age_for_person_3).to eq(67)
+      end
+    end
+
+    context "when the person gender is not set" do
+      let(:case_log) { FactoryBot.build(:case_log) }
+
+      it "returns nil" do
+        expect(case_log.retirement_age_for_person_3).to be_nil
+      end
+    end
+  end
 end
