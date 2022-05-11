@@ -9,14 +9,18 @@ describe "rake onboarding_emails:send", type: task do
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:devise_notify_mailer) { DeviseNotifyMailer.new }
     let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
+    let(:host) { "http://localhost:3000" }
 
     before do
       Rake.application.rake_require("tasks/onboarding_emails")
+      Rake::Task.define_task(:environment)
       task.reenable
       allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
       allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
       allow(notify_client).to receive(:send_email).and_return(true)
       allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
+      allow(ENV).to receive(:[])
+      allow(ENV).to receive(:[]).with("APP_HOST").and_return(host)
     end
 
     it "can send the onboarding emails" do
@@ -26,12 +30,12 @@ describe "rake onboarding_emails:send", type: task do
           template_id: "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd",
           personalisation: {
             name: user.name,
-            link: "http://localhost:3000/account/password/edit?reset_password_token=#{reset_password_token}",
+            link: "#{host}/account/password/edit?reset_password_token=#{reset_password_token}",
           },
         },
       )
 
-      task.invoke(user.organisation.id, "http://localhost:3000")
+      task.invoke(user.organisation.id)
     end
   end
 end

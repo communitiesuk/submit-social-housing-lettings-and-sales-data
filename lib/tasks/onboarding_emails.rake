@@ -1,10 +1,10 @@
 namespace :onboarding_emails do
   desc "Send onboarding emails to private beta users"
-  task :send, %i[organisation_id host] => :environment do |_task, args|
+  task :send, %i[organisation_id] => :environment do |_task, args|
     organisation_id = args[:organisation_id]
-    host = args[:host]
+    host = ENV["APP_HOST"]
     raise "Organisation id must be provided" unless organisation_id
-    raise "host must be provided" unless host
+    raise "Host is not set" unless host
 
     organisation = Organisation.find(organisation_id)
     raise "Organisation #{organisation_id} does not exist" unless organisation
