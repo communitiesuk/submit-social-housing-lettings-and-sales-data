@@ -2097,7 +2097,6 @@
                   }
                 }
               },
-
               "depends_on": [
                 {
                   "details_known_3": 0,
@@ -5184,10 +5183,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -6191,10 +6190,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -6230,10 +6229,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
