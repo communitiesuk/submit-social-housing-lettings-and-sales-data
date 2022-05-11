@@ -131,6 +131,7 @@ private
         query = query.public_send("filter_by_#{category}", values, current_user)
       end
     end
+    query = query.order(created_at: :desc)
     current_user.support? ? query.all.includes(:owning_organisation, :managing_organisation) : query
   end
 
