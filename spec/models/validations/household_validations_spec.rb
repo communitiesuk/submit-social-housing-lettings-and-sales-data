@@ -428,7 +428,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the household contains a retired male" do
-
       it "expects that person is over 65" do
         record.age2 = 66
         record.sex2 = "M"
