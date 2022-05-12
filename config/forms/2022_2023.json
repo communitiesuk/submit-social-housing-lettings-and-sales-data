@@ -5784,19 +5784,11 @@
               "depends_on": [
                 {
                   "hb": 1,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 },
                 {
                   "hb": 6,
-                  "hbrentshortfall": 0
-                },
-                {
-                  "hb": 7,
-                  "hbrentshortfall": 0
-                },
-                {
-                  "hb": 8,
-                  "hbrentshortfall": 0
+                  "hbrentshortfall": 1
                 }
               ]
             }
