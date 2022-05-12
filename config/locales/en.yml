@@ -243,11 +243,11 @@ en:
         hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>"
     retirement:
       min:
-        title: "Age is below the expected range based on the person being retired"
-        hint_text: "This person cannot be retired as you told us they're %{gender} and under %{age}"
+        title: "You told us this person is under %{age} and retired"
+        hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
       max:
-        title: "Age is above the expected range based on the person not being retired"
-        hint_text: "This person must be retired as you told us they're %{gender} and over %{age}"
+        title: "You told us this person is %{age} or over and not retired"
+        hint_text: "The minimum expected retirement age for %{gender} in England is %{age}"
 
   devise:
     two_factor_authentication:
@@ -262,3 +262,6 @@ en:
 
   test:
     one_argument: "This is based on the tenant’s work situation: %{ecstat1}"
+    title_text:
+      no_argument: "Some test text"
+      one_argument: "You said this: %{ecstat1}"

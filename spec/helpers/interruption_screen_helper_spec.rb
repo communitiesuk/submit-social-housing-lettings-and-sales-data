@@ -96,4 +96,31 @@ RSpec.describe InterruptionScreenHelper do
       end
     end
   end
+
+  describe "display_title_text" do
+    context "when title text has no arguments" do
+      it "returns the correct title text" do
+        title_text = "test.title_text.no_argument"
+        expect(display_title_text(title_text, case_log))
+          .to eq(I18n.t("test.title_text.no_argument"))
+      end
+    end
+    
+    context "when title text has arguments" do
+      it "returns the correct title text" do
+        title_text = {
+          "translation" => "test.title_text.one_argument",
+          "arguments" => [
+            {
+              "key" => "ecstat1",
+              "label" => true,
+              "i18n_template" => "ecstat1",
+            },
+          ],
+        }
+        expect(display_title_text(title_text, case_log))
+          .to eq(I18n.t("test.title_text.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
+      end
+    end 
+  end
 end

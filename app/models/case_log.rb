@@ -380,6 +380,10 @@ class CaseLog < ApplicationRecord
     define_method("retirement_age_for_person_#{person_num}") do
       retirement_age_for_person(person_num)
     end
+
+    define_method("plural_gender_for_person_#{person_num}") do
+      plural_gender_for_person(person_num)
+    end
   end
 
   def retirement_age_for_person(person_num)
@@ -388,6 +392,17 @@ class CaseLog < ApplicationRecord
 
     RETIREMENT_AGES[gender]
   end
+
+  def plural_gender_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+    if gender == "M" || gender == "X"
+      return "men and non-binary people"
+    elsif gender == "F"
+      return "women"
+    end
+  end
+
 
 private
 

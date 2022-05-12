@@ -1525,12 +1525,19 @@
             },
             "lead_tenant_under_retirement_value_check": {
               "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_1",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex1",
-                  "label": true,
+                  "key": "plural_gender_for_person_1",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -1543,7 +1550,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -1558,12 +1565,19 @@
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [{ "person_1_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_1",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex1",
-                  "label": true,
+                  "key": "plural_gender_for_person_1",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -1576,7 +1590,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -1821,14 +1835,21 @@
                 }
               ]
             },
-             "person_2_under_retirement_value_check": {
+            "person_2_under_retirement_value_check": {
               "depends_on": [{ "person_2_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_2",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex2",
-                  "label": true,
+                  "key": "plural_gender_for_person_2",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -1841,7 +1862,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -1856,12 +1877,19 @@
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [{ "person_2_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_2",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex2",
-                  "label": true,
+                  "key": "plural_gender_for_person_2",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -1874,7 +1902,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2118,12 +2146,19 @@
             },
             "person_3_under_retirement_value_check": {
               "depends_on": [{ "person_3_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_3",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex3",
-                  "label": true,
+                  "key": "plural_gender_for_person_3",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2136,7 +2171,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2151,12 +2186,19 @@
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [{ "person_3_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_3",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex3",
-                  "label": true,
+                  "key": "plural_gender_for_person_3",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2169,7 +2211,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2410,12 +2452,19 @@
             },
             "person_4_under_retirement_value_check": {
               "depends_on": [{ "person_4_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_4",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex4",
-                  "label": true,
+                  "key": "plural_gender_for_person_4",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2428,7 +2477,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2443,12 +2492,19 @@
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [{ "person_4_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_4",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex4",
-                  "label": true,
+                  "key": "plural_gender_for_person_4",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2461,7 +2517,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2699,12 +2755,19 @@
             },
             "person_5_under_retirement_value_check": {
               "depends_on": [{ "person_5_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_5",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex5",
-                  "label": true,
+                  "key": "plural_gender_for_person_5",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2717,7 +2780,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2732,12 +2795,19 @@
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [{ "person_5_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_5",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex5",
-                  "label": true,
+                  "key": "plural_gender_for_person_5",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -2750,7 +2820,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2985,12 +3055,19 @@
             },
             "person_6_under_retirement_value_check": {
               "depends_on": [{ "person_6_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_6",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex6",
-                  "label": true,
+                  "key": "plural_gender_for_person_6",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3003,7 +3080,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3018,12 +3095,19 @@
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [{ "person_6_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_6",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex6",
-                  "label": true,
+                  "key": "plural_gender_for_person_6",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3036,7 +3120,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3048,7 +3132,7 @@
                   }
                 }
               }
-            },   
+            },
             "person_7_known": {
               "header": "You’ve given us the details for 7 people in the household",
               "description": "",
@@ -3268,12 +3352,19 @@
             },
             "person_7_under_retirement_value_check": {
               "depends_on": [{ "person_7_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_7",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex7",
-                  "label": true,
+                  "key": "plural_gender_for_person_7",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3286,7 +3377,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3301,12 +3392,19 @@
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [{ "person_7_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_7",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex7",
-                  "label": true,
+                  "key": "plural_gender_for_person_7",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3319,7 +3417,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3548,12 +3646,19 @@
             },
             "person_8_under_retirement_value_check": {
               "depends_on": [{ "person_8_retired_under_soft_min_age?": true }],
-              "title_text": "soft_validations.retirement.min.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.min.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_8",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
                 "arguments": [{
-                  "key": "sex8",
-                  "label": true,
+                  "key": "plural_gender_for_person_8",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3566,7 +3671,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3581,12 +3686,19 @@
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [{ "person_8_not_retired_over_soft_max_age?": true }],
-              "title_text": "soft_validations.retirement.max.title",
+              "title_text": {
+                "translation": "soft_validations.retirement.max.title",
+                "arguments": [{
+                  "key": "retirement_age_for_person_8",
+                  "label": false,
+                  "i18n_template": "age"
+                }]
+              },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
                 "arguments": [{
-                  "key": "sex8",
-                  "label": true,
+                  "key": "plural_gender_for_person_8",
+                  "label": false,
                   "i18n_template": "gender"
                 },
                 {
@@ -3599,7 +3711,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this is correct?",
+                  "header": "Are you sure this person isn’t retired??",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
