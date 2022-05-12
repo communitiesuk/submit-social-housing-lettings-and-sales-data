@@ -18,9 +18,10 @@
 
       <p class="govuk-body">Enter your email address to get a new invitation link.</p>
 
-      <%= f.govuk_email_field :email,
+      <%= f.govuk_text_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
+        inputmode: "email",
         spellcheck: "false",
         value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
 

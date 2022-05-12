@@ -19,9 +19,10 @@
       <p class="govuk-body">Enter the email address you used to create your account.</p>
       <p class="govuk-body">We’ll email you a link to reset your password. This link will expire in 3 hours.</p>
 
-      <%= f.govuk_email_field :email,
+      <%= f.govuk_text_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
+        inputmode: "email",
         spellcheck: "false" %>
 
       <%= f.govuk_submit "Send email" %>

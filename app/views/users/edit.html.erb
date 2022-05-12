@@ -20,9 +20,10 @@
         label: { text: "Name", size: "m" },
         autocomplete: "name" %>
 
-      <%= f.govuk_email_field :email,
-        label: { text: "Email address", size: "m" },
+      <%= f.govuk_text_field :email,
+        label: { text: "Email address" },
         autocomplete: "email",
+        inputmode: "email",
         spellcheck: "false" %>
 
       <% if current_user.data_coordinator? || current_user.support? %>

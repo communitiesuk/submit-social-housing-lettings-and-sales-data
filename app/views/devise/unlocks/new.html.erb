@@ -3,9 +3,10 @@
 <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <%= f.govuk_email_field :email,
+  <%= f.govuk_text_field :email,
     label: { text: "Email address" },
     autocomplete: "email",
+    inputmode: "email",
     spellcheck: "false" %>
 
   <%= f.govuk_submit "Resend unlock instructions" %>
