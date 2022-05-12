@@ -36,7 +36,7 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("<p>You told us the lead tenant’s working situation is: <strong>full-time – 30 hours or more</strong>.</p><p>The household income you have entered is <strong>£750.00 every week</strong>.</p>")
+          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase, earnings: case_log.form.get_question("earnings", case_log).answer_label(case_log)))
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("This is based on the tenant’s work situation: full-time – 30 hours or more")
+          .to eq(I18n.t("test.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
       end
     end
 
@@ -75,7 +75,7 @@ RSpec.describe InterruptionScreenHelper do
           ],
         }
         expect(display_informative_text(informative_text, case_log))
-          .to eq("This is based on the tenant’s work situation: full-time – 30 hours or more")
+          .to eq(I18n.t("test.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
       end
     end
 
