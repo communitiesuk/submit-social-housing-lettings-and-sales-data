@@ -105,7 +105,7 @@ RSpec.describe InterruptionScreenHelper do
           .to eq(I18n.t("test.title_text.no_argument"))
       end
     end
-    
+
     context "when title text has arguments" do
       it "returns the correct title text" do
         title_text = {
@@ -121,6 +121,6 @@ RSpec.describe InterruptionScreenHelper do
         expect(display_title_text(title_text, case_log))
           .to eq(I18n.t("test.title_text.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
       end
-    end 
+    end
   end
 end

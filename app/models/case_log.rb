@@ -396,13 +396,13 @@ class CaseLog < ApplicationRecord
   def plural_gender_for_person(person_num)
     gender = public_send("sex#{person_num}".to_sym)
     return unless gender
-    if gender == "M" || gender == "X"
-      return "men and non-binary people"
+
+    if %w[M X].include?(gender)
+      "men and non-binary people"
     elsif gender == "F"
-      return "women"
+      "women"
     end
   end
-
 
 private
 
