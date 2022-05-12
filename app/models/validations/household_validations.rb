@@ -45,7 +45,6 @@ module Validations::HouseholdValidations
     (2..8).each do |n|
       validate_person_age_matches_economic_status(record, n)
       validate_person_age_matches_relationship(record, n)
-      # validate_person_age_and_gender_match_economic_status(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
     end
     validate_partner_count(record)
