@@ -309,8 +309,8 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "only shows case logs for your organisation" do
-            expected_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{case_log.id}\">#{case_log.id}</a>"
-            unauthorized_case_row_log = "<a class=\"govuk-link\" href=\"/logs/#{unauthorized_case_log.id}\">#{unauthorized_case_log.id}</a>"
+            expected_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{case_log.id}"
+            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{unauthorized_case_log.id}"
             expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
             expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
           end
