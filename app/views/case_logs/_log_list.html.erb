@@ -24,7 +24,9 @@
       <% case_logs.map do |log| %>
       <tr class="govuk-table__row">
         <th class="govuk-table__header" scope="row">
-          <%= govuk_link_to log.id, case_log_path(log) %>
+          <%= govuk_link_to case_log_path(log) do %>
+            <span class="govuk-visually-hidden">Log </span><%= log.id %>
+          <% end %>
         </th>
         <td class="govuk-table__cell app-!-font-tabular">
           <%= log.tenant_code? ? log.tenant_code : "–" %>
