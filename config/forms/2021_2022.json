@@ -1614,6 +1614,7 @@
               "description": "",
               "questions": {
                 "details_known_2": {
+                  "check_answer_label": "Details known for person 2",
                   "header": "Do you know details for person 2?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -1919,6 +1920,7 @@
               "description": "",
               "questions": {
                 "details_known_3": {
+                  "check_answer_label": "Details known for person 3",
                   "header": "Do you know details for person 3?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -2221,6 +2223,7 @@
               "description": "",
               "questions": {
                 "details_known_4": {
+                  "check_answer_label": "Details known for person 4",
                   "header": "Do you know details for person 4?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -2520,6 +2523,7 @@
               "description": "",
               "questions": {
                 "details_known_5": {
+                  "check_answer_label": "Details known for person 5",
                   "header": "Do you know details for person 5?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -2816,6 +2820,7 @@
               "description": "",
               "questions": {
                 "details_known_6": {
+                  "check_answer_label": "Details known for person 6",
                   "header": "Do you know details for person 6?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -3109,6 +3114,7 @@
               "description": "",
               "questions": {
                 "details_known_7": {
+                  "check_answer_label": "Details known for person 7",
                   "header": "Do you know details for person 7?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -3399,6 +3405,7 @@
               "description": "",
               "questions": {
                 "details_known_8": {
+                  "check_answer_label": "Details known for person 8",
                   "header": "Do you know details for person 8?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
