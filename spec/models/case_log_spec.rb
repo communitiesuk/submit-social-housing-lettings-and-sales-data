@@ -210,10 +210,15 @@ RSpec.describe CaseLog do
         net_income_known: 2,
         hhmemb: 7,
         rent_type: 4,
-        needstype: 1,
         hb: 1,
         hbrentshortfall: 1,
       })
+    end
+
+    it "derives that all forms are general needs" do
+      record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
+      expect(record_from_db["needstype"]).to eq(1)
+      expect(case_log["needstype"]).to eq(1)
     end
 
     it "correctly derives and saves partial and full major repairs date" do
@@ -1127,6 +1132,7 @@ RSpec.describe CaseLog do
       expect(address_case_log[postcode_field]).to eq("M11AE")
       expect(record_from_db[postcode_field]).to eq("M11AE")
     end
+
     context "when saving addresses" do
       before do
         stub_request(:get, /api.postcodes.io/)
