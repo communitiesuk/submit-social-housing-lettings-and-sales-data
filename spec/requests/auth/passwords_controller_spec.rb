@@ -106,7 +106,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
         it "shows an error" do
           put "/admin/password", headers: headers, params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content("doesn't match Password")
+          expect(page).to have_content("doesn’t match new password")
         end
       end
 
@@ -178,7 +178,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
         it "shows an error" do
           put "/account/password", headers: headers, params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content("doesn't match Password")
+          expect(page).to have_content("doesn’t match new password")
         end
       end
 
