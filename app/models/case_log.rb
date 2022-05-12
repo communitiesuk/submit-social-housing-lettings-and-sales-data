@@ -438,6 +438,8 @@ private
   end
 
   def set_derived_fields!
+    # TODO: Remove once we support supported housing logs
+    self.needstype = 1 unless needstype
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
