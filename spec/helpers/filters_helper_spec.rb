@@ -16,8 +16,8 @@ RSpec.describe FiltersHelper do
 
       context "when looking at the all value" do
         it "returns true if no filters have been set yet" do
-          expect(filter_selected?("user", :all)).to be_truthy
-          expect(filter_selected?("user", :yours)).to be_falsey
+          expect(filter_selected?("user", :all)).to be true
+          expect(filter_selected?("user", :yours)).to be false
         end
       end
     end
@@ -28,11 +28,33 @@ RSpec.describe FiltersHelper do
       end
 
       it "returns false for non selected filters" do
-        expect(filter_selected?("status", "completed")).to be_falsey
+        expect(filter_selected?("status", "completed")).to be false
       end
 
       it "returns true for selected filter" do
-        expect(filter_selected?("status", "in_progress")).to be_truthy
+        expect(filter_selected?("status", "in_progress")).to be true
+      end
+    end
+
+    context "when support user is using the organisation filter" do
+      before do
+        session[:case_logs_filters] = { "organisation": "1" }.to_json
+      end
+
+      it "returns true for the parent organisation_select filter" do
+        expect(filter_selected?("organisation_select", :specific_org)).to be true
+        expect(filter_selected?("organisation_select", :all)).to be false
+      end
+    end
+
+    context "when support user has not set the organisation_select filter" do
+      before do
+        session[:case_logs_filters] = {}.to_json
+      end
+      
+      it "defaults to all organisations" do
+        expect(filter_selected?("organisation_select", :all)).to be true
+        expect(filter_selected?("organisation_select", :specific_org)).to be false
       end
     end
   end
