@@ -1,0 +1,33 @@
+<% content_for :title, "Your organisation (Users)" %>
+
+<% content_for :tab_title do %>
+  <%= "Users" %>
+<% end %>
+
+<% if current_user.data_coordinator? || current_user.support? %>
+  <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
+<% end %>
+<%= govuk_table do |table| %>
+  <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
+    <span class="govuk-!-margin-right-4">
+      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
+    </span>
+  <% end %>
+  <%= table.head do |head| %>
+    <%= head.row do |row| %>
+      <% row.cell(header: true, text: "Name and email adress") %>
+      <% row.cell(header: true, text: "Organisation and role") %>
+      <% row.cell(header: true, text: "Last logged in") %>
+    <% end %>
+  <% end %>
+  <% @users.each do |user| %>
+    <%= table.body do |body| %>
+      <%= body.row do |row| %>
+        <% row.cell(text: simple_format(user_cell(user), {}, wrapper_tag: "div")) %>
+        <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
+        <% row.cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>

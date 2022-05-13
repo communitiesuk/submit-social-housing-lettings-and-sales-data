@@ -338,6 +338,18 @@ RSpec.describe UsersController, type: :request do
     let(:user) { FactoryBot.create(:user, :data_coordinator) }
     let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
 
+    describe "#index" do
+      before do
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "redirects to the organisation user path" do
+        follow_redirect!
+        expect(path).to match("/organisations/#{user.organisation.id}/users")
+      end
+    end
+
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
@@ -696,6 +708,28 @@ RSpec.describe UsersController, type: :request do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
     end
 
+    describe "#index" do
+      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
+      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+
+      before do
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "shows all active users" do
+        expect(page).to have_content(user.name)
+        expect(page).to have_content(other_user.name)
+        expect(page).not_to have_content(inactive_user.name)
+        expect(page).to have_content(other_org_user.name)
+      end
+
+      it "shows the pagination count" do
+        expect(page).to have_content("3 total users")
+      end
+    end
+
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
@@ -1041,12 +1075,15 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#create" do
+      let(:organisation) { FactoryBot.create(:organisation) }
+      let(:email) { "new_user@example.com" }
       let(:params) do
         {
           "user": {
             name: "new user",
-            email: "new_user@example.com",
+            email:,
             role: "data_coordinator",
+            organisation_id: organisation.id,
           },
         }
       end
@@ -1060,9 +1097,14 @@ RSpec.describe UsersController, type: :request do
         expect { request }.to change(User, :count).by(1)
       end
 
-      it "redirects back to organisation users page" do
+      it "adds the user to the correct organisation" do
         request
-        expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
+        expect(User.find_by(email:).organisation).to eq(organisation)
+      end
+
+      it "redirects back to users page" do
+        request
+        expect(response).to redirect_to("/users")
       end
 
       context "when the email is already taken" do
@@ -1102,6 +1144,11 @@ RSpec.describe UsersController, type: :request do
       it "can assign support role to the new user" do
         get "/users/new"
         expect(page).to have_field("user-role-support-field")
+      end
+
+      it "can assign organisation to the new user" do
+        get "/users/new"
+        expect(page).to have_field("user-organisation-id-field")
       end
     end
   end

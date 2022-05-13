@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include Pagy::Backend
   include Devise::Controllers::SignInOut
   include Helpers::Email
   before_action :authenticate_user!
@@ -6,10 +7,12 @@ class UsersController < ApplicationController
   before_action :authenticate_scope!, except: %i[new]
 
   def index
-    unless current_user.support?
-      redirect_to user_path(@user)
-    end
+    redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
+
+    @pagy, @users = pagy(User.all.where(active: true))
   end
+
+  def show; end
 
   def update
     if @user.update(user_params)
@@ -49,7 +52,7 @@ class UsersController < ApplicationController
       user = User.create(user_params.merge(org_params).merge(password_params))
       if user.persisted?
         user.send_reset_password_instructions
-        redirect_to users_organisation_path(current_user.organisation)
+        redirect_to created_user_redirect_path
       else
         @resource.errors.add :email, I18n.t("validations.email.taken")
         render :new, status: :unprocessable_entity
@@ -81,6 +84,8 @@ private
   end
 
   def org_params
+    return {} if current_user.support?
+
     { organisation: current_user.organisation }
   end
 
@@ -91,8 +96,18 @@ private
       else
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
       end
-    elsif current_user.data_coordinator? || current_user.support?
+    elsif current_user.data_coordinator?
       params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
+    elsif current_user.support?
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id)
+    end
+  end
+
+  def created_user_redirect_path
+    if current_user.support?
+      users_path
+    else
+      users_organisation_path(current_user.organisation)
     end
   end
 

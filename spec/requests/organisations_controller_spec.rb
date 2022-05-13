@@ -101,6 +101,10 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when accessing the users tab" do
         context "with an organisation that the user belongs to" do
+          let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
+          let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
+          let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+
           before do
             sign_in user
             get "/organisations/#{organisation.id}/users", headers:, params: {}
@@ -124,6 +128,17 @@ RSpec.describe OrganisationsController, type: :request do
           it "has a hidden header title" do
             expected_html = "<h2 class=\"govuk-visually-hidden\">  Users"
             expect(response.body).to include(expected_html)
+          end
+
+          it "shows only active users in the current user's organisation" do
+            expect(page).to have_content(user.name)
+            expect(page).to have_content(other_user.name)
+            expect(page).not_to have_content(inactive_user.name)
+            expect(page).not_to have_content(other_org_user.name)
+          end
+
+          it "shows the pagination count" do
+            expect(page).to have_content("2 total users")
           end
         end
 

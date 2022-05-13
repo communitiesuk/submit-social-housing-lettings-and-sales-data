@@ -26,6 +26,19 @@
         spellcheck: "false",
         value: @resource.email %>
 
+      <% if current_user.support? %>
+        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+        <% answer_options = null_option + organisations %>
+
+          <%= f.govuk_collection_select :organisation_id,
+            answer_options,
+            :id,
+            :name,
+            label: { text: "Organisation", size: "m" },
+            options: { disabled: [""], selected: "" } %>
+      <% end %>
+
       <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :role,
