@@ -1556,7 +1556,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -1861,7 +1861,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2163,7 +2163,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2462,7 +2462,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -2758,7 +2758,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3051,7 +3051,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3341,7 +3341,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -3628,7 +3628,7 @@
                 "retirement_value_check": {
                   "check_answer_label": "Retirement age soft validation",
                   "hidden_in_check_answers": true,
-                  "header": "Are you sure this person isn’t retired?",
+                  "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
