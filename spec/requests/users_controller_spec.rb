@@ -1071,12 +1071,15 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#create" do
+      let(:organisation) { FactoryBot.create(:organisation) }
+      let(:email) { "new_user@example.com" }
       let(:params) do
         {
           "user": {
             name: "new user",
-            email: "new_user@example.com",
+            email:,
             role: "data_coordinator",
+            organisation_id: organisation.id,
           },
         }
       end
@@ -1090,9 +1093,14 @@ RSpec.describe UsersController, type: :request do
         expect { request }.to change(User, :count).by(1)
       end
 
-      it "redirects back to organisation users page" do
+      it "adds the user to the correct organisation" do
         request
-        expect(response).to redirect_to("/organisations/#{user.organisation.id}/users")
+        expect(User.find_by(email:).organisation).to eq(organisation)
+      end
+
+      it "redirects back to users page" do
+        request
+        expect(response).to redirect_to("/users")
       end
 
       context "when the email is already taken" do
@@ -1132,6 +1140,11 @@ RSpec.describe UsersController, type: :request do
       it "can assign support role to the new user" do
         get "/users/new"
         expect(page).to have_field("user-role-support-field")
+      end
+
+      it "can assign organisation to the new user" do
+        get "/users/new"
+        expect(page).to have_field("user-organisation-id-field")
       end
     end
   end
