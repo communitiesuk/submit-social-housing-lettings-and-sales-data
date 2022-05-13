@@ -724,6 +724,10 @@ RSpec.describe UsersController, type: :request do
         expect(page).not_to have_content(inactive_user.name)
         expect(page).to have_content(other_org_user.name)
       end
+
+      it "shows the pagination count" do
+        expect(page).to have_content("3 total users")
+      end
     end
 
     describe "#show" do

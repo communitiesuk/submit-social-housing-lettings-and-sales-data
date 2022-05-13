@@ -1,10 +1,13 @@
 class OrganisationsController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
   before_action :authenticate_scope!
 
   def index
-    @organisations = current_user.support? ? Organisation.all : @user.organisation
+    redirect_to organisation_path(current_user.organisation) unless current_user.support?
+
+    @pagy, @organisations = pagy(Organisation.all)
   end
 
   def show
@@ -12,7 +15,7 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @users = @organisation.users.where(active: true)
+    @pagy, @users = pagy(@organisation.users.where(active: true))
     render "users/index"
   end
 

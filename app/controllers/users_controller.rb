@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include Pagy::Backend
   include Devise::Controllers::SignInOut
   include Helpers::Email
   before_action :authenticate_user!
@@ -8,7 +9,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    @users = User.all.where(active: true)
+    @pagy, @users = pagy(User.all.where(active: true))
   end
 
   def show; end

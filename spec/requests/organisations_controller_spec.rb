@@ -136,6 +136,10 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).not_to have_content(inactive_user.name)
             expect(page).not_to have_content(other_org_user.name)
           end
+
+          it "shows the pagination count" do
+            expect(page).to have_content("2 total users")
+          end
         end
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do

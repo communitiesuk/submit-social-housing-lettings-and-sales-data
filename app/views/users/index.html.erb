@@ -8,6 +8,11 @@
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>
 <%= govuk_table do |table| %>
+  <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
+    <span class="govuk-!-margin-right-4">
+      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
+    </span>
+  <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>
       <% row.cell(header: true, text: "Name and email adress") %>
@@ -25,3 +30,4 @@
     <% end %>
   <% end %>
 <% end %>
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>
