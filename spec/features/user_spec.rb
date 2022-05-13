@@ -581,7 +581,7 @@ RSpec.describe "User Features" do
       end
 
       context "when the support user is on the organisations list page" do
-        it "they can click on an organisation to see their logs page", js: true do
+        it "they can click on an organisation to see their logs page" do
           visit("/organisations")
           click_link("Test3")
           expect(page).to have_selector("a", text: "#{case_log.id}")

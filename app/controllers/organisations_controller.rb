@@ -45,7 +45,7 @@ class OrganisationsController < ApplicationController
   def logs
     if current_user.support?
       @pagy, @case_logs = pagy(CaseLog.all.where(owning_organisation_id: @organisation.id))
-      redirect_to "/logs"
+      render "logs", layout: "application"
     end
   end
 
