@@ -51,7 +51,7 @@ RSpec.describe FiltersHelper do
       before do
         session[:case_logs_filters] = {}.to_json
       end
-      
+
       it "defaults to all organisations" do
         expect(filter_selected?("organisation_select", :all)).to be true
         expect(filter_selected?("organisation_select", :specific_org)).to be false

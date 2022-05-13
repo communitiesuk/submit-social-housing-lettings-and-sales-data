@@ -351,6 +351,24 @@ RSpec.describe CaseLogsController, type: :request do
           it "shows the download csv link" do
             expect(page).to have_link("Download (CSV)", href: "/logs.csv")
           end
+
+          it "does not show the organisation filter" do
+            expect(page).not_to have_field("organisation-field")
+          end
+        end
+
+        context "when the user is a customer support user" do
+          let(:user) { FactoryBot.create(:user, :support) }
+
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
+            get "/logs", headers:, params: {}
+          end
+
+          it "does show the organisation filter" do
+            expect(page).to have_field("organisation-field")
+          end
         end
 
         context "when there are more than 20 logs" do
