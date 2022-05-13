@@ -57,8 +57,10 @@ en:
   errors:
     messages:
       already_confirmed: "has already been confirmed. Sign in."
+      blank: "can’t be blank"
+      confirmation: "doesn’t match new password"
       confirmation_period_expired: "needs to be confirmed within %{period}. Request a new account."
-      expired: "has expired. Request a new token."
+      expired: "Token has expired. Request a new token."
       not_found: "was not found"
       not_locked: "has not been locked"
       not_saved:
