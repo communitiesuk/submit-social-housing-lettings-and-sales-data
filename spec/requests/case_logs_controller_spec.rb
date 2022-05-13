@@ -363,10 +363,10 @@ RSpec.describe CaseLogsController, type: :request do
           let(:org_2) { FactoryBot.create(:organisation) }
           let(:tenant_code_1) { "TC5638" }
           let(:tenant_code_2) { "TC8745" }
-          let!(:case_log_org_1) { FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenant_code: tenant_code_1) }
-          let!(:case_log_org_2) { FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenant_code: tenant_code_2) }
 
           before do
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenant_code: tenant_code_1)
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenant_code: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
           end
