@@ -38,4 +38,39 @@ module Validations::SoftValidations
     rent_range = LaRentRange.find_by(start_year: collection_start_year, la:, beds:, lettype:)
     rent_range.present? && weekly_value(brent).between?(rent_range.soft_max, rent_range.hard_max)
   end
+
+  (1..8).each do |person_num|
+    define_method("person_#{person_num}_retired_under_soft_min_age?") do
+      retired_under_soft_min_age?(person_num)
+    end
+    define_method("person_#{person_num}_not_retired_over_soft_max_age?") do
+      not_retired_over_soft_max_age?(person_num)
+    end
+  end
+
+private
+
+  def tenant_is_retired?(economic_status)
+    economic_status == 5
+  end
+
+  def retired_under_soft_min_age?(person_num)
+    age = public_send("age#{person_num}")
+    economic_status = public_send("ecstat#{person_num}")
+    gender = public_send("sex#{person_num}")
+    return unless age && economic_status && gender
+
+    %w[M X].include?(gender) && tenant_is_retired?(economic_status) && age < 67 ||
+      gender == "F" && tenant_is_retired?(economic_status) && age < 60
+  end
+
+  def not_retired_over_soft_max_age?(person_num)
+    age = public_send("age#{person_num}")
+    economic_status = public_send("ecstat#{person_num}")
+    gender = public_send("sex#{person_num}")
+    return unless age && economic_status && gender
+
+    %w[M X].include?(gender) && !tenant_is_retired?(economic_status) && age > 67 ||
+      gender == "F" && !tenant_is_retired?(economic_status) && age > 60
+  end
 end

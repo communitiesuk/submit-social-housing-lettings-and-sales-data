@@ -410,16 +410,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the household contains a person over 70" do
-      it "validates that person must be retired" do
-        record.age2 = 71
-        record.ecstat2 = 1
-        household_validator.validate_household_number_of_other_members(record)
-        expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.retired_over_70", person_num: 2))
-        expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.retired_over_70", person_num: 2))
-      end
-
       it "expects that person under 70 does not need to be retired" do
         record.age2 = 50
         record.ecstat2 = 1
@@ -438,19 +428,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the household contains a retired male" do
-      it "validates that person must be over 65" do
-        record.age2 = 64
-        record.sex2 = "M"
-        record.ecstat2 = 5
-        household_validator.validate_household_number_of_other_members(record)
-        expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.retired_male"))
-        expect(record.errors["sex2"])
-          .to include(match I18n.t("validations.household.gender.retired_male"))
-        expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.retired_male"))
-      end
-
       it "expects that person is over 65" do
         record.age2 = 66
         record.sex2 = "M"
@@ -484,19 +461,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
 
     context "when the household contains a retired female" do
-      it "validates that person must be over 60" do
-        record.age2 = 59
-        record.sex2 = "F"
-        record.ecstat2 = 5
-        household_validator.validate_household_number_of_other_members(record)
-        expect(record.errors["age2"])
-          .to include(match I18n.t("validations.household.age.retired_female"))
-        expect(record.errors["sex2"])
-          .to include(match I18n.t("validations.household.gender.retired_female"))
-        expect(record.errors["ecstat2"])
-          .to include(match I18n.t("validations.household.ecstat.retired_female"))
-      end
-
       it "expects that person is over 60" do
         record.age2 = 61
         record.sex2 = "F"
