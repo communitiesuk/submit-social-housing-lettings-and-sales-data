@@ -359,15 +359,35 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when the user is a customer support user" do
           let(:user) { FactoryBot.create(:user, :support) }
+          let(:org_1) { FactoryBot.create(:organisation) }
+          let(:org_2) { FactoryBot.create(:organisation) }
+          let(:tenant_code_1) { "TC5638" }
+          let(:tenant_code_2) { "TC8745" }
+          let!(:case_log_org_1) { FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenant_code: tenant_code_1) }
+          let!(:case_log_org_2) { FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenant_code: tenant_code_2) }
 
           before do
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
-            get "/logs", headers:, params: {}
           end
 
           it "does show the organisation filter" do
+            get "/logs", headers:, params: {}
             expect(page).to have_field("organisation-field")
+          end
+
+          it "shows all logs by default" do
+            get "/logs", headers:, params: {}
+            expect(page).to have_content(tenant_code_1)
+            expect(page).to have_content(tenant_code_2)
+          end
+
+          context "when filtering by organisation" do
+            it "only show the selected organisations logs" do
+              get "/logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
+              expect(page).to have_content(tenant_code_1)
+              expect(page).not_to have_content(tenant_code_2)
+            end
           end
         end
 
