@@ -247,7 +247,7 @@ en:
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
       max:
         title: "You told us this person is %{age} or over and not retired"
-        hint_text: "The minimum expected retirement age for %{gender} in England is %{age}"
+        hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
 
   devise:
     two_factor_authentication:
