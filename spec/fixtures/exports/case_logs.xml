@@ -120,7 +120,6 @@
     <net_income_known>1</net_income_known>
     <nocharge>0</nocharge>
     <is_carehome>0</is_carehome>
-    <letting_in_sheltered_accommodation>0</letting_in_sheltered_accommodation>
     <household_charge/>
     <referral/>
     <brent>200.0</brent>
@@ -165,7 +164,7 @@
     <created_by_id>{created_by_id}</created_by_id>
     <illness_type_0/>
     <tshortfall_known>0</tshortfall_known>
-    <shelteredaccom/>
+    <shelteredaccom>0</shelteredaccom>
     <retirement_value_check/>
     <providertype>1</providertype>
   </form>

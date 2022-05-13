@@ -132,7 +132,7 @@
     "has_benefits": 1,
     "household_charge": 0,
     "is_carehome": 1,
-    "letting_in_sheltered_accommodation": 0,
+    "shelteredaccom": 0,
     "declaration": 1,
     "referral": 1
   }

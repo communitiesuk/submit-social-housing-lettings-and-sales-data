@@ -1102,7 +1102,7 @@
                 }
               ]
             },
-            "letting_in_sheltered_accommodation": {
+            "shelteredaccom": {
               "header": "",
               "description": "",
               "questions": {
