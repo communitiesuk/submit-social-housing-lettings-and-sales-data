@@ -45,7 +45,6 @@ module Validations::HouseholdValidations
     (2..8).each do |n|
       validate_person_age_matches_economic_status(record, n)
       validate_person_age_matches_relationship(record, n)
-      validate_person_age_and_gender_match_economic_status(record, n)
       validate_person_age_and_relationship_matches_economic_status(record, n)
     end
     validate_partner_count(record)
@@ -146,10 +145,6 @@ private
     economic_status = record.public_send("ecstat#{person_num}")
     return unless age && economic_status
 
-    if age > 70 && !tenant_is_retired?(economic_status)
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_over_70", person_num:)
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_over_70", person_num:)
-    end
     if age < 16 && !tenant_is_economic_child?(economic_status)
       record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.child_under_16", person_num:)
       record.errors.add "age#{person_num}", I18n.t("validations.household.age.child_under_16", person_num:)
@@ -184,33 +179,11 @@ private
     end
   end
 
-  def validate_person_age_and_gender_match_economic_status(record, person_num)
-    age = record.public_send("age#{person_num}")
-    gender = record.public_send("sex#{person_num}")
-    economic_status = record.public_send("ecstat#{person_num}")
-    return unless age && economic_status && gender
-
-    if gender == "M" && tenant_is_retired?(economic_status) && age < 65
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_male")
-      record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_male")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_male")
-    end
-    if gender == "F" && tenant_is_retired?(economic_status) && age < 60
-      record.errors.add "age#{person_num}", I18n.t("validations.household.age.retired_female")
-      record.errors.add "sex#{person_num}", I18n.t("validations.household.gender.retired_female")
-      record.errors.add "ecstat#{person_num}", I18n.t("validations.household.ecstat.retired_female")
-    end
-  end
-
   def validate_partner_count(record)
     partner_count = (2..8).count { |n| tenant_is_partner?(record["relat#{n}"]) }
     if partner_count > 1
       record.errors.add :base, I18n.t("validations.household.relat.one_partner")
     end
-  end
-
-  def tenant_is_retired?(economic_status)
-    economic_status == 5
   end
 
   def tenant_is_economic_child?(economic_status)

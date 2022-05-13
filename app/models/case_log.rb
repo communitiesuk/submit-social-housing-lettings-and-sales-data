@@ -58,6 +58,7 @@ class CaseLog < ApplicationRecord
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
+  RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
   enum status: STATUS
 
   def form
@@ -373,6 +374,34 @@ class CaseLog < ApplicationRecord
 
   def optional_fields
     OPTIONAL_FIELDS + dynamically_not_required
+  end
+
+  (1..8).each do |person_num|
+    define_method("retirement_age_for_person_#{person_num}") do
+      retirement_age_for_person(person_num)
+    end
+
+    define_method("plural_gender_for_person_#{person_num}") do
+      plural_gender_for_person(person_num)
+    end
+  end
+
+  def retirement_age_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    RETIREMENT_AGES[gender]
+  end
+
+  def plural_gender_for_person(person_num)
+    gender = public_send("sex#{person_num}".to_sym)
+    return unless gender
+
+    if %w[M X].include?(gender)
+      "men and non-binary people"
+    elsif gender == "F"
+      "women"
+    end
   end
 
 private
