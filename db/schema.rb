@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_11_114334) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_13_123456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -162,7 +162,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_11_114334) do
     t.integer "net_income_known"
     t.integer "nocharge"
     t.integer "is_carehome"
-    t.integer "letting_in_sheltered_accommodation"
     t.integer "household_charge"
     t.integer "referral"
     t.decimal "brent", precision: 10, scale: 2
