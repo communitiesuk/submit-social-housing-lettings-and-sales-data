@@ -4,9 +4,7 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_scope!
 
   def index
-    unless current_user.support?
-      redirect_to user_path(current_user)
-    end
+    @organisations = current_user.support? ? Organisation.all : @user.organisation
   end
 
   def show
@@ -14,7 +12,8 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    render "users"
+    @users = @organisation.users.where(active: true)
+    render "users/index"
   end
 
   def details

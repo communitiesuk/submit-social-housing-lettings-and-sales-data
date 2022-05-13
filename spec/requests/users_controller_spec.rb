@@ -338,6 +338,18 @@ RSpec.describe UsersController, type: :request do
     let(:user) { FactoryBot.create(:user, :data_coordinator) }
     let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
 
+    describe "#index" do
+      before do
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "redirects to the organisation user path" do
+        follow_redirect!
+        expect(path).to match("/organisations/#{user.organisation.id}/users")
+      end
+    end
+
     describe "#show" do
       context "when the current user matches the user ID" do
         before do
@@ -694,6 +706,24 @@ RSpec.describe UsersController, type: :request do
 
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+    end
+
+    describe "#index" do
+      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
+      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+
+      before do
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "shows all active users" do
+        expect(page).to have_content(user.name)
+        expect(page).to have_content(other_user.name)
+        expect(page).not_to have_content(inactive_user.name)
+        expect(page).to have_content(other_org_user.name)
+      end
     end
 
     describe "#show" do

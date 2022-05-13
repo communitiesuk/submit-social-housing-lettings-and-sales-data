@@ -6,10 +6,12 @@ class UsersController < ApplicationController
   before_action :authenticate_scope!, except: %i[new]
 
   def index
-    unless current_user.support?
-      redirect_to user_path(@user)
-    end
+    redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
+
+    @users = User.all.where(active: true)
   end
+
+  def show; end
 
   def update
     if @user.update(user_params)
