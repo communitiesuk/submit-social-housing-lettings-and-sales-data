@@ -241,7 +241,7 @@ private
     wchair: [1],
     majorrepairs: [1],
     startertenancy: [0],
-    letting_in_sheltered_accommodation: [0, 1],
+    shelteredaccom: [0, 1],
     armedforces: [1, 4, 5],
     leftreg: [0],
     reservist: [0],
@@ -265,7 +265,7 @@ private
     wchair: [0],
     majorrepairs: [0],
     startertenancy: [1],
-    letting_in_sheltered_accommodation: [2],
+    shelteredaccom: [2],
     armedforces: [2],
     leftreg: [1],
     reservist: [1],
@@ -281,7 +281,7 @@ private
   }.freeze
 
   RADIO_DONT_KNOW_VALUE = {
-    letting_in_sheltered_accommodation: [3],
+    shelteredaccom: [3],
     underoccupation_benefitcap: [3],
     reasonpref: [3],
     hbrentshortfall: [3],
@@ -317,7 +317,7 @@ private
     ecstat6: [10],
     ecstat7: [10],
     ecstat8: [10],
-    letting_in_sheltered_accommodation: [3],
+    shelteredaccom: [3],
     armedforces: [3],
     leftreg: [3],
     reservist: [2],

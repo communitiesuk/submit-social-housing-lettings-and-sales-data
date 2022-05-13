@@ -129,7 +129,7 @@ FactoryBot.define do
       unitletas { 2 }
       has_benefits { 1 }
       is_carehome { 0 }
-      letting_in_sheltered_accommodation { 0 }
+      shelteredaccom { 0 }
       declaration { 1 }
     end
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
