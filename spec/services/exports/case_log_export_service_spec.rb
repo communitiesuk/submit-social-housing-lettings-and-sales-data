@@ -46,8 +46,14 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and case logs are available for export" do
+      let!(:time_now) { Time.now }
       before do
+        Timecop.freeze(time_now)
         case_log
+      end
+
+      after do
+        LogsExport.destroy_all
       end
 
       it "generates an XML export file with the expected filename" do
@@ -62,6 +68,30 @@ RSpec.describe Exports::CaseLogExportService do
 
         export_service.export_case_logs
         expect(actual_content).to eq(expected_content)
+      end
+
+      it "creates a logs export record in a database with correct time" do
+        export_service.export_case_logs
+        records_from_db = ActiveRecord::Base.connection.execute("select started_at, id from logs_exports ").to_a
+        expect(records_from_db[0]["started_at"]).to eq(time_now)
+        expect(records_from_db.count).to eq(1)
+      end
+
+      it "gets the logs for correct timeframe" do
+        start_time = Time.zone.local(2022, 4, 13, 2, 2, 2)
+        export = LogsExport.new(started_at: start_time, daily_run_number: 1)
+        export.save!
+        params = { from: start_time, to: time_now, status: CaseLog.statuses[:completed] }
+        expect(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to and status = :status", params).and_return([])
+        export_service.export_case_logs
+      end
+
+      context "when this is the first export" do
+        it "gets the logs for the timeframe up until the current time" do
+          params = { to: time_now, status: CaseLog.statuses[:completed] }
+          expect(CaseLog).to receive(:where).with("updated_at <= :to and status = :status", params).and_return([])
+          export_service.export_case_logs
+        end
       end
     end
 

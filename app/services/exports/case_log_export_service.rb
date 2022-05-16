@@ -6,8 +6,9 @@ module Exports
     end
 
     def export_case_logs
-      case_logs = retrieve_case_logs
-      export = save_export_run
+      current_time = Time.zone.now
+      case_logs = retrieve_case_logs(current_time)
+      export = save_export_run(current_time)
       write_master_manifest(export)
       write_export_data(case_logs)
     end
@@ -22,13 +23,14 @@ module Exports
 
   private
 
-    def save_export_run
+    def save_export_run(current_time)
       today = Time.zone.today
       last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
       last_daily_run_number = 0 if last_daily_run_number.nil?
 
       export = LogsExport.new
       export.daily_run_number = last_daily_run_number + 1
+      export.started_at = current_time
       export.save!
       export
     end
@@ -49,9 +51,15 @@ module Exports
       @storage_service.write_file(file_path, string_io)
     end
 
-    def retrieve_case_logs
-      params = { from: Time.current.beginning_of_day, to: Time.current, status: CaseLog.statuses[:completed] }
-      CaseLog.where("updated_at >= :from and updated_at <= :to and status = :status", params)
+    def retrieve_case_logs(current_time)
+      recent_export = LogsExport.order("started_at").last
+      if recent_export
+        params = { from: recent_export.started_at, to: current_time, status: CaseLog.statuses[:completed] }
+        CaseLog.where("updated_at >= :from and updated_at <= :to and status = :status", params)
+      else
+        params = { to: current_time, status: CaseLog.statuses[:completed] }
+        CaseLog.where("updated_at <= :to and status = :status", params)
+      end
     end
 
     def build_manifest_csv_io
