@@ -1095,10 +1095,13 @@
               },
               "depends_on": [
                 {
-                  "tenancy": 1
+                  "tenancy": 4
                 },
                 {
                   "tenancy": 6
+                },
+                {
+                  "tenancy": 3
                 }
               ]
             },
