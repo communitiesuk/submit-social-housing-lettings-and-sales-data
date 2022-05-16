@@ -98,4 +98,19 @@
       background-color: govuk-colour("white");
     }
   }
+
+  .autocomplete__input {
+    @include govuk-font(16);
+    background-color: govuk-colour("white");
+  }
+
+  .autocomplete__wrapper {
+    @include govuk-media-query(wide) {
+      max-width: 20ex;
+    }
+  }
+
+  .autocomplete__option {
+    @include govuk-font(16);
+  }
 }

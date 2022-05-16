@@ -1893,6 +1893,31 @@ RSpec.describe CaseLog do
       end
     end
 
+    context "when filtering by organisation" do
+      let(:organisation_1) { FactoryBot.create(:organisation) }
+      let(:organisation_2) { FactoryBot.create(:organisation) }
+      let(:organisation_3) { FactoryBot.create(:organisation) }
+
+      before do
+        FactoryBot.create(:case_log, :in_progress, owning_organisation: organisation_1, managing_organisation: organisation_1)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_1, managing_organisation: organisation_2)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_1)
+        FactoryBot.create(:case_log, :completed, owning_organisation: organisation_2, managing_organisation: organisation_2)
+      end
+
+      it "filters by given organisation id" do
+        expect(described_class.filter_by_organisation([organisation_1.id]).count).to eq(3)
+        expect(described_class.filter_by_organisation([organisation_1.id, organisation_2.id]).count).to eq(4)
+        expect(described_class.filter_by_organisation([organisation_3.id]).count).to eq(0)
+      end
+
+      it "filters by given organisation" do
+        expect(described_class.filter_by_organisation([organisation_1]).count).to eq(3)
+        expect(described_class.filter_by_organisation([organisation_1, organisation_2]).count).to eq(4)
+        expect(described_class.filter_by_organisation([organisation_3]).count).to eq(0)
+      end
+    end
+
     context "when filtering on status" do
       it "allows filtering on a single status" do
         expect(described_class.filter_by_status(%w[in_progress]).count).to eq(2)

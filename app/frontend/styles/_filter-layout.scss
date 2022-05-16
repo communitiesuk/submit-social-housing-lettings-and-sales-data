@@ -3,7 +3,7 @@
 }
 
 .app-filter-layout__filter {
-  @include govuk-media-query(desktop) {
+  @include govuk-media-query(wide) {
     float: left;
     min-width: govuk-grid-width("one-quarter");
   }
@@ -12,7 +12,7 @@
 .js-enabled .app-filter-layout__filter {
   outline: 0 none;
 
-  @include govuk-media-query($until: desktop) {
+  @include govuk-media-query($until: wide) {
     background-color: govuk-colour("light-grey");
     bottom: govuk-spacing(1);
     border: 1px solid govuk-colour("mid-grey");
@@ -32,7 +32,7 @@
 }
 
 .app-filter-layout__content {
-  @include govuk-media-query(desktop) {
+  @include govuk-media-query(wide) {
     float: right;
     max-width: calc(#{govuk-grid-width("three-quarters")} - #{govuk-spacing(6)});
     width: 100%;

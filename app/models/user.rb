@@ -36,7 +36,7 @@ class User < ApplicationRecord
     if support?
       CaseLog.all
     else
-      CaseLog.for_organisation(organisation)
+      CaseLog.filter_by_organisation(organisation)
     end
   end
 
@@ -87,5 +87,13 @@ class User < ApplicationRecord
     return ROLES if support?
 
     ROLES.except(:support)
+  end
+
+  def case_logs_filters
+    if support?
+      %i[status years user organisation]
+    else
+      %i[status years user]
+    end
   end
 end
