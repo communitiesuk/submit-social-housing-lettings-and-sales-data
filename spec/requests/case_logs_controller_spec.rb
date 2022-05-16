@@ -232,6 +232,7 @@ RSpec.describe CaseLogsController, type: :request do
                                 owning_organisation: organisation,
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
+                                tenancy: 6,
                                 managing_organisation: organisation)
             end
 
@@ -260,6 +261,7 @@ RSpec.describe CaseLogsController, type: :request do
                                 owning_organisation: organisation,
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
+                                tenancy: 6,
                                 managing_organisation: organisation)
             end
             let!(:case_log_2022_in_progress) do
@@ -267,6 +269,7 @@ RSpec.describe CaseLogsController, type: :request do
                                 owning_organisation: organisation,
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
+                                tenancy: 6,
                                 managing_organisation: organisation)
             end
 

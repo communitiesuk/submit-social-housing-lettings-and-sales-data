@@ -4,7 +4,7 @@ RSpec.describe Validations::TenancyValidations do
   subject(:tenancy_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 5, 1)) }
 
   describe "fixed term tenancy validations" do
     context "when fixed term tenancy" do
@@ -62,44 +62,134 @@ RSpec.describe Validations::TenancyValidations do
         end
       end
 
-      context "when type of tenancy is secure" do
-        let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+      context "when the collection start year is before 2022" do
+        context "when type of tenancy is secure" do
+          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
 
-        before { record.tenancy = 1 }
+          before { record.tenancy = 1 }
 
-        context "when tenancy length is greater than 1" do
-          it "adds an error" do
-            record.tenancylength = 1
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to include(match(expected_error))
-            expect(record.errors["tenancy"]).to include(match(expected_error))
+          context "when tenancy length is greater than 1" do
+            it "adds an error" do
+              record.tenancylength = 1
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is less than 100" do
+            it "adds an error" do
+              record.tenancylength = 100
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is between 2-99" do
+            it "does not add an error" do
+              record.tenancylength = 3
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
+          end
+
+          context "when tenancy length has not been answered" do
+            it "does not add an error" do
+              record.tenancylength = nil
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
+          end
+        end
+      end
+
+      context "when the collection start year is 2022 or later" do
+        let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 5, 1)) }
+
+        context "when type of tenancy is Secure - fixed term" do
+          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
+
+          before { record.tenancy = 6 }
+
+          context "when tenancy length is greater than 1" do
+            it "adds an error" do
+              record.tenancylength = 1
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is less than 100" do
+            it "adds an error" do
+              record.tenancylength = 100
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is between 2-99" do
+            it "does not add an error" do
+              record.tenancylength = 3
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
+          end
+
+          context "when tenancy length has not been answered" do
+            it "does not add an error" do
+              record.tenancylength = nil
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
           end
         end
 
-        context "when tenancy length is less than 100" do
-          it "adds an error" do
-            record.tenancylength = 100
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to include(match(expected_error))
-            expect(record.errors["tenancy"]).to include(match(expected_error))
-          end
-        end
+        context "when type of tenancy is Secure - lifetime" do
+          let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
 
-        context "when tenancy length is between 2-99" do
-          it "does not add an error" do
-            record.tenancylength = 3
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to be_empty
-            expect(record.errors["tenancy"]).to be_empty
-          end
-        end
+          before { record.tenancy = 7 }
 
-        context "when tenancy length has not been answered" do
-          it "does not add an error" do
-            record.tenancylength = nil
-            tenancy_validator.validate_fixed_term_tenancy(record)
-            expect(record.errors["tenancylength"]).to be_empty
-            expect(record.errors["tenancy"]).to be_empty
+          context "when tenancy length is greater than 1" do
+            it "adds an error" do
+              record.tenancylength = 1
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is less than 100" do
+            it "adds an error" do
+              record.tenancylength = 100
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to include(match(expected_error))
+              expect(record.errors["tenancy"]).to include(match(expected_error))
+            end
+          end
+
+          context "when tenancy length is between 2-99" do
+            it "does not add an error" do
+              record.tenancylength = 3
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
+          end
+
+          context "when tenancy length has not been answered" do
+            it "does not add an error" do
+              record.tenancylength = nil
+              tenancy_validator.validate_fixed_term_tenancy(record)
+              expect(record.errors["tenancylength"]).to be_empty
+              expect(record.errors["tenancy"]).to be_empty
+            end
           end
         end
       end
