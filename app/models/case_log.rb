@@ -192,10 +192,13 @@ class CaseLog < ApplicationRecord
   end
 
   def is_secure_tenancy?
+    return unless collection_start_year
+
     # 1: Secure (including flexible)
     if collection_start_year < 2022
       tenancy == 1
     else
+      # 6: Secure - fixed term, 7: Secure - lifetime
       [6, 7].include?(tenancy)
     end
   end
