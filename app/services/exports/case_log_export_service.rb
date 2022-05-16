@@ -25,10 +25,13 @@ module Exports
     def save_export_run
       today = Time.zone.today
       last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
-      last_daily_run_number = 0 if last_daily_run_number.nil?
 
       export = LogsExport.new
-      export.daily_run_number = last_daily_run_number + 1
+      if last_daily_run_number.nil?
+        export.daily_run_number = 1
+      else
+        export.daily_run_number = last_daily_run_number + 1
+      end
       export.save!
       export
     end
@@ -38,7 +41,7 @@ module Exports
       increment_number = export.daily_run_number.to_s.rjust(4, "0")
       month = today.month.to_s.rjust(2, "0")
       day = today.day.to_s.rjust(2, "0")
-      file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
+      file_path = "Manifest_#{today.year}-#{month}-#{day}_#{increment_number}.csv"
       string_io = build_manifest_csv_io
       @storage_service.write_file(file_path, string_io)
     end
@@ -50,6 +53,7 @@ module Exports
     end
 
     def retrieve_case_logs
+      # All logs from previous (successful) start time to current start time (not current) [ignore status]
       params = { from: Time.current.beginning_of_day, to: Time.current, status: CaseLog.statuses[:completed] }
       CaseLog.where("updated_at >= :from and updated_at <= :to and status = :status", params)
     end
