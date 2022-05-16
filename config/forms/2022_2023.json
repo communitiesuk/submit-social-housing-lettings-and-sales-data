@@ -994,7 +994,7 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold Tenancy (AST) - Fixed term"
                     },
                     "6": {
@@ -1041,7 +1041,7 @@
                   "hint_text": "This is also known as an ‘introductory period’.",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
+                    "4": {
                       "value": "Assured Shorthold Tenancy (AST) - Fixed term"
                     },
                     "6": {
@@ -6297,7 +6297,7 @@
                   "label": true,
                   "i18n_template": "la"
                 },
-                { 
+                {
                   "key": "soft_min_for_period",
                   "label": false,
                   "i18n_template": "soft_min_for_period"
@@ -6336,7 +6336,7 @@
                     "label": true,
                     "i18n_template": "la"
                   },
-                  { 
+                  {
                     "key": "soft_max_for_period",
                     "label": false,
                     "i18n_template": "soft_max_for_period"
