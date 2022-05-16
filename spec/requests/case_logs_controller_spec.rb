@@ -186,6 +186,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when filtering" do
           context "with status filter" do
+            let(:organisation_2) { FactoryBot.create(:organisation) }
             let!(:in_progress_case_log) do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
@@ -193,7 +194,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
             let!(:completed_case_log) do
               FactoryBot.create(:case_log, :completed,
-                                owning_organisation: organisation,
+                                owning_organisation: organisation_2,
                                 managing_organisation: organisation)
             end
 
@@ -207,6 +208,12 @@ RSpec.describe CaseLogsController, type: :request do
               get "/logs?status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(in_progress_case_log.id.to_s)
               expect(page).not_to have_link(completed_case_log.id.to_s)
+            end
+
+            it "filters on organisation" do
+              get "/logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
+              expect(page).to have_link(completed_case_log.id.to_s)
+              expect(page).not_to have_link(in_progress_case_log.id.to_s)
             end
 
             it "does not reset the filters" do
@@ -343,6 +350,44 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows the download csv link" do
             expect(page).to have_link("Download (CSV)", href: "/logs.csv")
+          end
+
+          it "does not show the organisation filter" do
+            expect(page).not_to have_field("organisation-field")
+          end
+        end
+
+        context "when the user is a customer support user" do
+          let(:user) { FactoryBot.create(:user, :support) }
+          let(:org_1) { FactoryBot.create(:organisation) }
+          let(:org_2) { FactoryBot.create(:organisation) }
+          let(:tenant_code_1) { "TC5638" }
+          let(:tenant_code_2) { "TC8745" }
+
+          before do
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenant_code: tenant_code_1)
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenant_code: tenant_code_2)
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            sign_in user
+          end
+
+          it "does show the organisation filter" do
+            get "/logs", headers:, params: {}
+            expect(page).to have_field("organisation-field")
+          end
+
+          it "shows all logs by default" do
+            get "/logs", headers:, params: {}
+            expect(page).to have_content(tenant_code_1)
+            expect(page).to have_content(tenant_code_2)
+          end
+
+          context "when filtering by organisation" do
+            it "only show the selected organisations logs" do
+              get "/logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
+              expect(page).to have_content(tenant_code_1)
+              expect(page).not_to have_content(tenant_code_2)
+            end
           end
         end
 

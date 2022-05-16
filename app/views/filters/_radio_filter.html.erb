@@ -1,8 +1,18 @@
 <%= f.govuk_radio_buttons_fieldset category.to_sym, legend: { text: label, size: "s" }, small: true, form_group: { classes: "app-filter__group" } do %>
-    <% options.map do |key, option| %>
-        <%= f.govuk_radio_button category, key.to_s,
-        label: { text: option },
-        checked: filter_selected?(category, key),
-        size: "s" %>
+  <% options.map do |key, option| %>
+    <%= f.govuk_radio_button category, key.to_s,
+      label: { text: option[:label] },
+      checked: filter_selected?(category, key),
+      size: "s" do %>
+        <% if option[:conditional_filter] %>
+          <%= render partial: "filters/#{option[:conditional_filter][:type]}_filter", locals: {
+            f:,
+            collection: option[:conditional_filter][:options],
+            category: option[:conditional_filter][:category],
+            label: option[:conditional_filter][:label],
+            secondary: true,
+          } %>
+      <% end %>
     <% end %>
+  <% end %>
 <% end %>

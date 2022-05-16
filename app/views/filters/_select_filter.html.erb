@@ -1,0 +1,7 @@
+<%= f.govuk_collection_select category.to_sym,
+    collection,
+    :id,
+    :name,
+    label: { hidden: secondary },
+    options: { disabled: [""], selected: selected_option(category) },
+    "data-controller": "accessible-autocomplete" %>
