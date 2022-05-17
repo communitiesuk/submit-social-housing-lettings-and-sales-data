@@ -12,8 +12,6 @@ module Exports
       write_master_manifest(export)
       write_export_data(case_logs)
       export.save!
-    rescue StandardError => e
-      @logger.error "#{e.class}: #{e.message}. Caller: #{e.backtrace.first}"
     end
 
     def is_omitted_field?(field_name)

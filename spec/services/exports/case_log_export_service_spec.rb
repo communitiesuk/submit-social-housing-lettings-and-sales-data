@@ -46,7 +46,7 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and case logs are available for export" do
-      let!(:time_now) { Time.zone.now }
+      let(:time_now) { Time.zone.now }
 
       before do
         Timecop.freeze(time_now)
@@ -83,14 +83,14 @@ RSpec.describe Exports::CaseLogExportService do
         export = LogsExport.new(started_at: start_time, daily_run_number: 1)
         export.save!
         params = { from: start_time, to: time_now }
-        allow(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to", params).and_return([])
+        allow(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to", params).once.and_return([])
         export_service.export_case_logs
       end
 
       context "when this is the first export" do
         it "gets the logs for the timeframe up until the current time" do
           params = { to: time_now }
-          allow(CaseLog).to receive(:where).with("updated_at <= :to", params).and_return([])
+          allow(CaseLog).to receive(:where).with("updated_at <= :to", params).once.and_return([])
           export_service.export_case_logs
         end
       end
@@ -113,7 +113,7 @@ RSpec.describe Exports::CaseLogExportService do
         export = LogsExport.new
         allow(LogsExport).to receive(:new).and_return(export)
         expect(export).not_to receive(:save!)
-        export_service.export_case_logs
+        expect { export_service.export_case_logs }.to raise_error(StandardError)
       end
     end
   end
