@@ -951,7 +951,7 @@
                 "joint": {
                   "check_answer_label": "Is this a joint tenancy?",
                   "header": "Is this a joint tenancy?",
-                  "hint_text": "For example, 27 3 2021.",
+                  "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "1": {
@@ -959,6 +959,9 @@
                     },
                     "2": {
                       "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -6297,7 +6300,7 @@
                   "label": true,
                   "i18n_template": "la"
                 },
-                { 
+                {
                   "key": "soft_min_for_period",
                   "label": false,
                   "i18n_template": "soft_min_for_period"
@@ -6336,7 +6339,7 @@
                     "label": true,
                     "i18n_template": "la"
                   },
-                  { 
+                  {
                     "key": "soft_max_for_period",
                     "label": false,
                     "i18n_template": "soft_max_for_period"
