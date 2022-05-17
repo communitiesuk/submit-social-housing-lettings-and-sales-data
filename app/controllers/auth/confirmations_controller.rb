@@ -7,18 +7,16 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
 
     if resource.errors.empty?
       set_flash_message!(:notice, :confirmed)
-      token = resource.send(:set_reset_password_token)
-      base = public_send("edit_#{resource_class.name.underscore}_password_url")
-      url = "#{base}?reset_password_token=#{token}"
-      redirect_to url
+      if resource.sign_in_count.zero?
+        token = resource.send(:set_reset_password_token)
+        base = public_send("edit_#{resource_class.name.underscore}_password_url")
+        url = "#{base}?reset_password_token=#{token}"
+        redirect_to url
+      else
+        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+      end
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
-  end
-
-protected
-
-  def after_confirmation_path_for(resource_name, resource)
-    edit_user_password_path(email: resource.email)
   end
 end
