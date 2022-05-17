@@ -951,7 +951,7 @@
                 "joint": {
                   "check_answer_label": "Is this a joint tenancy?",
                   "header": "Is this a joint tenancy?",
-                  "hint_text": "For example, 27 3 2021.",
+                  "hint_text": "",
                   "type": "radio",
                   "answer_options": {
                     "1": {
@@ -959,6 +959,9 @@
                     },
                     "2": {
                       "value": "No"
+                    },
+                    "3": {
+                      "value": "Don’t know"
                     }
                   }
                 }
