@@ -7,7 +7,7 @@ RSpec.describe Exports::CaseLogExportService do
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
   let(:expected_manifest_filename) { "manifest.xml" }
-  let(:case_log) { FactoryBot.create(:case_log, :completed) }
+  let!(:case_log) { FactoryBot.create(:case_log, :completed) }
 
   def replace_entity_ids(export_template)
     export_template.sub!(/\{id\}/, (case_log["id"] + Exports::CaseLogExportService::LOG_ID_OFFSET).to_s)
@@ -22,8 +22,6 @@ RSpec.describe Exports::CaseLogExportService do
 
   context "when exporting daily case logs" do
     subject(:export_service) { described_class.new(storage_service) }
-
-    let!(:case_log) { FactoryBot.create(:case_log, :completed) }
 
     before do
       Timecop.freeze(2022, 5, 1)
