@@ -54,11 +54,11 @@ module Exports
     def retrieve_case_logs(current_time)
       recent_export = LogsExport.order("started_at").last
       if recent_export
-        params = { from: recent_export.started_at, to: current_time, status: CaseLog.statuses[:completed] }
-        CaseLog.where("updated_at >= :from and updated_at <= :to and status = :status", params)
+        params = { from: recent_export.started_at, to: current_time }
+        CaseLog.where("updated_at >= :from and updated_at <= :to", params)
       else
-        params = { to: current_time, status: CaseLog.statuses[:completed] }
-        CaseLog.where("updated_at <= :to and status = :status", params)
+        params = { to: current_time }
+        CaseLog.where("updated_at <= :to", params)
       end
     end
 
