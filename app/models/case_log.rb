@@ -191,9 +191,20 @@ class CaseLog < ApplicationRecord
     tshortfall_known == 1
   end
 
+  def is_fixed_term_tenancy?
+    [4, 6].include?(tenancy)
+  end
+
   def is_secure_tenancy?
+    return unless collection_start_year
+
     # 1: Secure (including flexible)
-    tenancy == 1
+    if collection_start_year < 2022
+      tenancy == 1
+    else
+      # 6: Secure - fixed term, 7: Secure - lifetime
+      [6, 7].include?(tenancy)
+    end
   end
 
   def is_assured_shorthold_tenancy?
@@ -461,9 +472,19 @@ private
   end
 
   def dynamically_not_required
-    previous_la_known_field = postcode_known? ? %w[previous_la_known] : []
-    tshortfall_field = tshortfall_unknown? ? %w[tshortfall] : []
-    previous_la_known_field + tshortfall_field
+    not_required = []
+    not_required << "previous_la_known" if postcode_known?
+    not_required << "tshortfall" if tshortfall_unknown?
+    not_required << "tenancylength" if tenancylength_optional?
+
+    not_required
+  end
+
+  def tenancylength_optional?
+    return false unless collection_start_year
+    return true if collection_start_year < 2022
+
+    collection_start_year >= 2022 && !is_fixed_term_tenancy?
   end
 
   def set_derived_fields!
