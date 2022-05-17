@@ -14,7 +14,7 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def personalisation(record, token, url)
-    personalisation = {
+    {
       name: record.name || record.email,
       email: record.email,
       organisation: record.respond_to?(:organisation) ? record.organisation.name : "",
@@ -28,7 +28,7 @@ class DeviseNotifyMailer < Devise::Mailer
     send_email(
       record.email,
       record.reset_password_notify_template,
-      personalisation(record, token, url)
+      personalisation(record, token, url),
     )
   end
 
@@ -37,7 +37,7 @@ class DeviseNotifyMailer < Devise::Mailer
     send_email(
       record.email,
       record.confirmable_template,
-      personalisation(record, token, url)
+      personalisation(record, token, url),
     )
   end
 
