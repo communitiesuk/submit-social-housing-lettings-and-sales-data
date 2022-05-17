@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Exports::CaseLogExportService do
   let(:storage_service) { instance_double(StorageService) }
-  let(:export_filepath) { "spec/fixtures/exports/case_logs.xml" }
-  let(:export_file) { File.open(export_filepath, "r:UTF-8") }
+  let(:export_file) { File.open("spec/fixtures/exports/case_logs.xml", "r:UTF-8") }
+  let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:case_log) { FactoryBot.create(:case_log, :completed) }
 
@@ -12,6 +12,10 @@ RSpec.describe Exports::CaseLogExportService do
     export_template.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
     export_template.sub!(/\{managing_org_id\}/, case_log["managing_organisation_id"].to_s)
     export_template.sub!(/\{created_by_id\}/, case_log["created_by_id"].to_s)
+  end
+
+  def replace_record_number(export_template, record_number)
+    export_template.sub!(/\{recno\}/, record_number.to_s)
   end
 
   context "when exporting daily case logs" do
@@ -43,10 +47,19 @@ RSpec.describe Exports::CaseLogExportService do
     context "and one case log is available for export" do
       let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
       let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc001.xml" }
+      let(:expected_manifest_filename) { "manifest.xml" }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
+        export_service.export_case_logs
+      end
 
+      it "generates an XML manifest file with the expected filename within the ZIP file" do
+        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
+          expect(entry).not_to be_nil
+          expect(entry.name).to eq(expected_manifest_filename)
+        end
         export_service.export_case_logs
       end
 
@@ -56,6 +69,17 @@ RSpec.describe Exports::CaseLogExportService do
           expect(entry).not_to be_nil
           expect(entry.name).to eq(expected_data_filename)
         end
+        export_service.export_case_logs
+      end
+
+      it "generates an XML manifest file with the expected content within the ZIP file" do
+        expected_content = replace_record_number(local_manifest_file.read, 1)
+        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
+
         export_service.export_case_logs
       end
 
@@ -72,7 +96,7 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and multiple case logs are available for export" do
-      let!(:case_log_2) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 4, 1)) }
+      before { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 4, 1)) }
 
       context "when case logs are across multiple quarters" do
         it "generates multiple ZIP export files with the expected filenames" do
@@ -86,6 +110,7 @@ RSpec.describe Exports::CaseLogExportService do
 
     context "and a previous export has run the same day" do
       let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
+
       before do
         export_service.export_case_logs
       end

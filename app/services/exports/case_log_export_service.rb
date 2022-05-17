@@ -4,7 +4,7 @@ module Exports
       0 => "jan_mar",
       1 => "apr_jun",
       2 => "jul_sep",
-      3 => "oct_dec"
+      3 => "oct_dec",
     }.freeze
 
     LOG_ID_OFFSET = 300_000_000_000
@@ -19,7 +19,7 @@ module Exports
       case_logs = retrieve_case_logs
       daily_run_number = get_next_run_number
       write_master_manifest(daily_run_number)
-      write_export_data(case_logs)
+      write_export_archive(case_logs)
 
       export = LogsExport.new(daily_run_number:)
       export.save!
@@ -63,12 +63,12 @@ module Exports
       "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
-    def write_export_data(case_logs)
+    def write_export_archive(case_logs)
       # Order case logs per archive
       case_logs_per_archive = {}
       case_logs.each do |case_log|
         archive = get_archive_name(case_log, 1, 1)
-        if case_logs_per_archive.has_key?(archive)
+        if case_logs_per_archive.key?(archive)
           case_logs_per_archive[archive] << case_log
         else
           case_logs_per_archive[archive] = [case_log]
@@ -77,9 +77,11 @@ module Exports
 
       # Write all archives
       case_logs_per_archive.each do |archive, case_logs_to_export|
-        xml = build_export_xml(case_logs_to_export)
+        data_xml = build_export_xml(case_logs_to_export)
+        manifest_xml = build_manifest_xml(case_logs_to_export.count)
         zip_io = Zip::File.open_buffer(StringIO.new)
-        zip_io.add("#{archive}.xml", xml)
+        zip_io.add("#{archive}.xml", data_xml)
+        zip_io.add("manifest.xml", manifest_xml)
         @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
       end
     end
@@ -94,6 +96,22 @@ module Exports
         csv << headers
       end
       StringIO.new(csv_string)
+    end
+
+    def xml_doc_to_temp_file(xml_doc)
+      file = Tempfile.new
+      xml_doc.write_xml_to(file, encoding: "UTF-8")
+      file.rewind
+      file
+    end
+
+    def build_manifest_xml(record_number)
+      doc = Nokogiri::XML("<report/>")
+      doc.at("report") << doc.create_element("form-data-summary")
+      doc.at("form-data-summary") << doc.create_element("records")
+      doc.at("records") << doc.create_element("count-of-records", record_number)
+
+      xml_doc_to_temp_file(doc)
     end
 
     def build_export_xml(case_logs)
@@ -114,10 +132,7 @@ module Exports
         form << doc.create_element("providertype", case_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
       end
 
-      file = Tempfile.new
-      doc.write_xml_to(file, encoding: "UTF-8")
-      file.rewind
-      file
+      xml_doc_to_temp_file(doc)
     end
   end
 end
