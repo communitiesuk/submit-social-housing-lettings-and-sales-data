@@ -57,7 +57,7 @@ en:
   errors:
     messages:
       already_confirmed: "Email has already been confirmed. Sign in."
-      blank: "Email can’t be blank"
+      blank: "can’t be blank"
       confirmation: "Password confirmation doesn’t match new password"
       confirmation_period_expired: "Email needs to be confirmed within %{period}. Request a new account."
       expired: "Token has expired. Request a new token."
