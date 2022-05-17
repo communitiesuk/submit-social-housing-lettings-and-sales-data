@@ -99,7 +99,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter case logs by user, year and status" do
-        expect(user.case_logs_filters).to eq(%i[status years user])
+        expect(user.case_logs_filters).to eq(%w[status years user])
       end
     end
 
@@ -125,7 +125,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter case logs by user, year, status and organisation" do
-        expect(user.case_logs_filters).to eq(%i[status years user organisation])
+        expect(user.case_logs_filters).to eq(%w[status years user organisation])
       end
     end
   end

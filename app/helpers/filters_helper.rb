@@ -4,7 +4,7 @@ module FiltersHelper
 
     selected_filters = JSON.parse(session[:case_logs_filters])
     return true if selected_filters.blank? && filter == "user" && value == :all
-    return true if selected_filters.blank? && filter == "organisation_select" && value == :all
+    return true if !selected_filters.key?("organisation") && filter == "organisation_select" && value == :all
     return true if selected_filters["organisation"].present? && filter == "organisation_select" && value == :specific_org
     return false if selected_filters[filter].blank?
 
