@@ -10,14 +10,6 @@ RSpec.describe Imports::CaseLogsImportService do
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
   let(:logger) { instance_double(ActiveSupport::Logger) }
-  let(:notify_client) { instance_double(Notifications::Client) }
-  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
-
-  before do
-    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
-    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
-    allow(notify_client).to receive(:send_email).and_return(true)
-  end
 
   context "when importing users" do
     subject(:case_log_service) { described_class.new(storage_service, logger) }
