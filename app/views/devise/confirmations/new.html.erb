@@ -1,15 +1,32 @@
-<h2>Resend confirmation instructions</h2>
+<% content_for :title, "Resend invitation link" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: :back,
+  ) %>
+<% end %>
 
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
 
-  <%= f.govuk_email_field :email,
-    label: { text: "Email address" },
-    autocomplete: "email",
-    spellcheck: "false",
-    value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
 
-  <%= f.govuk_submit "Resend confirmation instructions" %>
+      <p class="govuk-body">Enter your email address to get a new invitation link.</p>
+
+      <%= f.govuk_email_field :email,
+        label: { text: "Email address" },
+        autocomplete: "email",
+        spellcheck: "false",
+        value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+
+      <%= f.govuk_submit "Send email" %>
+    </div>
+  </div>
 <% end %>
 
 <%= render "devise/shared/links" %>

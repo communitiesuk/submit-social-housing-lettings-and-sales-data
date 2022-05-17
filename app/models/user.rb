@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :timeoutable and :omniauthable
+  # :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :validatable,
-         :trackable, :lockable, :two_factor_authenticatable
+         :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation
@@ -66,10 +66,14 @@ class User < ApplicationRecord
 
   MFA_TEMPLATE_ID = "6bdf5ee1-8e01-4be1-b1f9-747061d8a24c".freeze
   RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
-  SET_PASSWORD_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
+  CONFIRMABLE_TEMPLATE_ID   = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
 
   def reset_password_notify_template
-    last_sign_in_at ? RESET_PASSWORD_TEMPLATE_ID : SET_PASSWORD_TEMPLATE_ID
+    RESET_PASSWORD_TEMPLATE_ID
+  end
+
+  def confirmable_template
+    CONFIRMABLE_TEMPLATE_ID
   end
 
   def need_two_factor_authentication?(_request)
