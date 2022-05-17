@@ -24,6 +24,7 @@ class Auth::PasswordsController < Devise::PasswordsController
 
   def edit
     super
+    @confirmation = params["confirmation"]
     render "devise/passwords/reset_password"
   end
 

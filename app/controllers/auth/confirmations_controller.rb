@@ -8,9 +8,7 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
       set_flash_message!(:notice, :confirmed)
       if resource.sign_in_count.zero?
         token = resource.send(:set_reset_password_token)
-        base = public_send("edit_#{resource_class.name.underscore}_password_url")
-        url = "#{base}?reset_password_token=#{token}"
-        redirect_to url
+        redirect_to controller: "auth/passwords", action: "edit", reset_password_token: token, confirmation: true
       else
         respond_with_navigational(resource) { redirect_to after_confirmation_path_for(resource_name, resource) }
       end

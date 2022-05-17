@@ -5,7 +5,7 @@ RSpec.describe "User Features" do
   include Helpers
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
-  let(:set_password_template_id) { User::SET_PASSWORD_TEMPLATE_ID }
+  let(:set_password_template_id) { User::CONFIRMABLE_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:reset_password_token) { "MCDH5y6Km-U7CFPgAMVS" }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
