@@ -63,56 +63,25 @@ module Exports
       "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
-# { key (archive_filename) => Zip::File}
-# { key (archive_filename) => [1,5,6,7,90]
-
-# iterate over case logs (in startdate order)
-# generate the XML file when we got all logs (calendar years + quarter) 1zip with 1xml
-# take array case logs => 1 XML file
-# categorise things
-# 1. order them first, select active category, detect change in category 
-# 2. categorise everything first, then generate file per category
-
     def write_export_data(case_logs)
-      previous_archive = nil
-      case_logs_to_export = []
-
-      # First element: add list
-      # Same archive: add list
-      # Different: write file (clear list) + add list
-      # Last element:  add list + write file
-
-      # each loop add list
-      # except different archive, write file before
-      # finally write file at the end
-      
-
+      # Order case logs per archive
+      case_logs_per_archive = {}
       case_logs.each do |case_log|
-        current_archive = get_archive_name(case_log, 1, 1)
-        if previous_archive.present? && previous_archive != current_archive
-          xml_file = export_logs(case_logs_to_export)
-          case_logs_to_export = []
-        end
-        case_logs_to_export << case_log
-        previous_archive = current_archive
-      end
-
-      # Write last archive
-      xml_file = export_logs(case_logs_to_export)
-
-      zip_filenames = []
-      case_logs.each do |case_log|
-        archive_filename = get_archive_name(case_log, 1, 1)
-        unless zip_filenames.include?(archive_filename)
-          zip_io = Zip::File.open_buffer(StringIO.new)
-          zip_io.add("#{archive_filename}.xml", Tempfile.new)
-          @storage_service.write_file("#{archive_filename}.zip", zip_io.write_buffer)
+        archive = get_archive_name(case_log, 1, 1)
+        if case_logs_per_archive.has_key?(archive)
+          case_logs_per_archive[archive] << case_log
+        else
+          case_logs_per_archive[archive] = [case_log]
         end
       end
 
-      string_io = build_export_xml_io(case_logs)
-      file_path = "#{get_folder_name}/#{get_file_name}.xml"
-      @storage_service.write_file(file_path, string_io)
+      # Write all archives
+      case_logs_per_archive.each do |archive, case_logs_to_export|
+        xml = build_export_xml(case_logs_to_export)
+        zip_io = Zip::File.open_buffer(StringIO.new)
+        zip_io.add("#{archive}.xml", xml)
+        @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
+      end
     end
 
     def retrieve_case_logs
@@ -127,7 +96,7 @@ module Exports
       StringIO.new(csv_string)
     end
 
-    def build_export_xml_io(case_logs)
+    def build_export_xml(case_logs)
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
@@ -144,23 +113,11 @@ module Exports
         end
         form << doc.create_element("providertype", case_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
       end
-      doc.write_xml_to(StringIO.new, encoding: "UTF-8")
-    end
 
-    def get_folder_name
-      "core_#{day_as_string}"
-    end
-
-    def get_file_name
-      "dat_core_#{day_as_string}_#{increment_as_string}"
-    end
-
-    def day_as_string
-      Time.current.strftime("%Y_%m_%d")
-    end
-
-    def increment_as_string(increment = 1)
-      sprintf("%04d", increment)
+      file = Tempfile.new
+      doc.write_xml_to(file, encoding: "UTF-8")
+      file.rewind
+      file
     end
   end
 end
