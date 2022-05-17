@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   devise_for :users, {
     path: :account,
     controllers: {
-      confirmations: "auth/confirmations",
+      confirmations: "devise/confirmations",
       passwords: "auth/passwords",
       sessions: "auth/sessions",
       two_factor_authentication: "auth/two_factor_authentication",
