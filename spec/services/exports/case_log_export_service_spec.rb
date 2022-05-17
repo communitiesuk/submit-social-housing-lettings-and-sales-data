@@ -5,6 +5,8 @@ RSpec.describe Exports::CaseLogExportService do
   let(:export_file) { File.open("spec/fixtures/exports/case_logs.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
+  let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
+  let(:expected_manifest_filename) { "manifest.xml" }
   let(:case_log) { FactoryBot.create(:case_log, :completed) }
 
   def replace_entity_ids(export_template)
@@ -45,9 +47,7 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and one case log is available for export" do
-      let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
       let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc001.xml" }
-      let(:expected_manifest_filename) { "manifest.xml" }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -95,7 +95,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
     end
 
-    context "and multiple case logs are available for export" do
+    context "and multiple case logs are available for export on different periods" do
       before { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 4, 1)) }
 
       context "when case logs are across multiple quarters" do
@@ -105,6 +105,21 @@ RSpec.describe Exports::CaseLogExportService do
 
           export_service.export_case_logs
         end
+      end
+    end
+
+    context "and multiple case logs are available for export on same periods" do
+      before { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20)) }
+
+      it "generates an XML manifest file with the expected content within the ZIP file" do
+        expected_content = replace_record_number(local_manifest_file.read, 2)
+        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
+
+        export_service.export_case_logs
       end
     end
 
