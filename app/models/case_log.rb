@@ -191,6 +191,10 @@ class CaseLog < ApplicationRecord
     tshortfall_known == 1
   end
 
+  def is_fixed_term_tenancy?
+    [4, 6].include?(tenancy)
+  end
+
   def is_secure_tenancy?
     return unless collection_start_year
 
@@ -480,7 +484,7 @@ private
     return false unless collection_start_year
     return true if collection_start_year < 2022
 
-    collection_start_year >= 2022 && ![4, 6].include?(tenancy)
+    collection_start_year >= 2022 && !is_fixed_term_tenancy?
   end
 
   def set_derived_fields!
