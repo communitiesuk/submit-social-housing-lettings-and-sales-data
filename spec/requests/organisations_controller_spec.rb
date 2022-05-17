@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe OrganisationsController, type: :request do
   let(:organisation) { user.organisation }
-  let(:unauthorised_organisation) { FactoryBot.create(:organisation) }
+  let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
@@ -297,6 +297,18 @@ RSpec.describe OrganisationsController, type: :request do
         it "redirects to home" do
           expect(response).to have_http_status(:unauthorized)
         end
+      end
+    end
+
+    context "with a data provider user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/organisations"
+      end
+      it "shows all organisations" do
+        expect(page).to have_content("2 total organisations")
       end
     end
   end

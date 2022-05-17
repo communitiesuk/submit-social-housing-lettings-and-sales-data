@@ -584,6 +584,7 @@ RSpec.describe "User Features" do
         it "they can click on an organisation to see their logs page" do
           visit("/organisations")
           click_link("Test3")
+          expect(page).to have_content("1 total logs")
           expect(page).to have_selector("a", text: "#{case_log.id}")
           visit("/organisations")
           click_link("Test5")
