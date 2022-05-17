@@ -11,6 +11,9 @@ module Exports
       export = save_export_run(current_time)
       write_master_manifest(export)
       write_export_data(case_logs)
+      export.save!
+    rescue StandardError => e
+      @logger.error "#{e.class}: #{e.message}. Caller: #{e.backtrace.first}"
     end
 
     def is_omitted_field?(field_name)
@@ -31,7 +34,6 @@ module Exports
       export = LogsExport.new
       export.daily_run_number = last_daily_run_number + 1
       export.started_at = current_time
-      export.save!
       export
     end
 

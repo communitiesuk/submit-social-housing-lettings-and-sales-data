@@ -83,14 +83,14 @@ RSpec.describe Exports::CaseLogExportService do
         export = LogsExport.new(started_at: start_time, daily_run_number: 1)
         export.save!
         params = { from: start_time, to: time_now }
-        expect(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to", params).and_return([])
+        allow(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to", params).and_return([])
         export_service.export_case_logs
       end
 
       context "when this is the first export" do
         it "gets the logs for the timeframe up until the current time" do
           params = { to: time_now }
-          expect(CaseLog).to receive(:where).with("updated_at <= :to", params).and_return([])
+          allow(CaseLog).to receive(:where).with("updated_at <= :to", params).and_return([])
           export_service.export_case_logs
         end
       end
@@ -103,6 +103,16 @@ RSpec.describe Exports::CaseLogExportService do
 
       it "increments the master manifest number by 1" do
         expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename2, any_args)
+        export_service.export_case_logs
+      end
+    end
+
+    context "when export has an error" do
+      it "does not save a record in the database" do
+        allow(storage_service).to receive(:write_file).and_raise(StandardError.new("This is an exception"))
+        export = LogsExport.new
+        allow(LogsExport).to receive(:new).and_return(export)
+        expect(export).not_to receive(:save!)
         export_service.export_case_logs
       end
     end
