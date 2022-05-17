@@ -15,6 +15,7 @@ FactoryBot.define do
     trait :support do
       role { "support" }
     end
+    confirmed_at { Time.zone.now }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
   end
