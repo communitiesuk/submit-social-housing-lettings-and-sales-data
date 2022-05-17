@@ -42,7 +42,7 @@ RSpec.describe Exports::CaseLogExportService do
 
     context "and one case log is available for export" do
       let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
-      let(:expected_data_filename) { "core_2022_02_08/dat_core_2022_02_08_0001.xml" }
+      let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc001.xml" }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -52,19 +52,22 @@ RSpec.describe Exports::CaseLogExportService do
 
       it "generates an XML export file with the expected filename within the ZIP file" do
         allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
-          pp Zip::File.open_buffer(content).entries
-          expect(content).to eq("Manifest_2022_05_01_0001.csv")
+          entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+          expect(entry).not_to be_nil
+          expect(entry.name).to eq(expected_data_filename)
         end
         export_service.export_case_logs
       end
 
-      it "generates an XML export file with the expected content" do
-        actual_content = nil
+      it "generates an XML export file with the expected content within the ZIP file" do
         expected_content = replace_entity_ids(export_file.read)
-        allow(storage_service).to receive(:write_file).with(expected_data_filename, any_args) { |_, arg2| actual_content = arg2&.string }
+        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+          entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+          expect(entry).not_to be_nil
+          expect(entry.get_input_stream.read).to eq(expected_content)
+        end
 
         export_service.export_case_logs
-        expect(actual_content).to eq(expected_content)
       end
     end
 

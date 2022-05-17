@@ -54,23 +54,59 @@ module Exports
       @storage_service.write_file(file_path, string_io)
     end
 
-    def get_zip_naming(case_log, base_number, increment)
+    def get_archive_name(case_log, base_number, increment)
       collection_start = case_log.collection_start_year
       month = case_log.startdate.month
       quarter = QUARTERS[(month - 1) / 3]
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(3, '0')}"
-      "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}.zip"
+      "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
+# { key (archive_filename) => Zip::File}
+# { key (archive_filename) => [1,5,6,7,90]
+
+# iterate over case logs (in startdate order)
+# generate the XML file when we got all logs (calendar years + quarter) 1zip with 1xml
+# take array case logs => 1 XML file
+# categorise things
+# 1. order them first, select active category, detect change in category 
+# 2. categorise everything first, then generate file per category
+
     def write_export_data(case_logs)
+      previous_archive = nil
+      case_logs_to_export = []
+
+      # First element: add list
+      # Same archive: add list
+      # Different: write file (clear list) + add list
+      # Last element:  add list + write file
+
+      # each loop add list
+      # except different archive, write file before
+      # finally write file at the end
+      
+
+      case_logs.each do |case_log|
+        current_archive = get_archive_name(case_log, 1, 1)
+        if previous_archive.present? && previous_archive != current_archive
+          xml_file = export_logs(case_logs_to_export)
+          case_logs_to_export = []
+        end
+        case_logs_to_export << case_log
+        previous_archive = current_archive
+      end
+
+      # Write last archive
+      xml_file = export_logs(case_logs_to_export)
+
       zip_filenames = []
       case_logs.each do |case_log|
-        zip_filename= get_zip_naming(case_log, 1, 1)
-        unless zip_filenames.include?(zip_filename)
+        archive_filename = get_archive_name(case_log, 1, 1)
+        unless zip_filenames.include?(archive_filename)
           zip_io = Zip::File.open_buffer(StringIO.new)
-          zip_io.add("my_file", Tempfile.new)
-          @storage_service.write_file(zip_filename, zip_io.write_buffer)
+          zip_io.add("#{archive_filename}.xml", Tempfile.new)
+          @storage_service.write_file("#{archive_filename}.zip", zip_io.write_buffer)
         end
       end
 
