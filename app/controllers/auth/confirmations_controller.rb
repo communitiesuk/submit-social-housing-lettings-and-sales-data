@@ -5,7 +5,6 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
     yield resource if block_given?
 
     if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
       if resource.sign_in_count.zero?
         token = resource.send(:set_reset_password_token)
         redirect_to controller: "auth/passwords", action: "edit", reset_password_token: token, confirmation: true

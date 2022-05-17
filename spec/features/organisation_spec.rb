@@ -13,7 +13,7 @@ RSpec.describe "User Features" do
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
-    allow(Devise.token_generator).to receive(:generate).and_return(confirmation_token)
+    allow(Devise).to receive(:friendly_token).and_return(confirmation_token)
     allow(notify_client).to receive(:send_email).and_return(true)
     sign_in user
   end

@@ -86,7 +86,7 @@ class User < ApplicationRecord
   end
 
   def skip_confirmation!
-    !user.active?
+    !active?
   end
 
   def need_two_factor_authentication?(_request)
