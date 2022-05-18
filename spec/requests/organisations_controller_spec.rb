@@ -317,15 +317,12 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "when there are more than 20 organisations" do
-      before do
-        FactoryBot.create_list(:organisation, 25)
-      end
-
       let(:support_user) { FactoryBot.create(:user, :support) }
 
       let(:total_organisations_count) { Organisation.all.count }
 
       before do
+        FactoryBot.create_list(:organisation, 25)
         allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in support_user
         get "/organisations"
@@ -345,6 +342,16 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "has pagination in the title" do
           expect(page).to have_title("Organisations (page 1 of 2)")
+        end
+      end
+
+      context "when on the second page" do
+        before do
+          get "/organisations?page=2", headers:, params: {}
+        end
+
+        it "shows the total organisations count" do
+          expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations")
         end
       end
     end
