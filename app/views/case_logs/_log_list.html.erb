@@ -41,10 +41,7 @@
           <%= log.created_at.to_formatted_s(:govuk_date) %>
         </td>
         <td class="govuk-table__cell">
-          <%= govuk_tag(
-            colour: log.status == "completed" ? "blue" : "grey",
-            text: log.status.humanize,
-          ) %>
+          <%= status_tag(log.status) %>
         </td>
         <% if current_user.support? %>
           <td class="govuk-table__cell">
