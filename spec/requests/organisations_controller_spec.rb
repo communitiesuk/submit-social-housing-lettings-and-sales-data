@@ -353,6 +353,21 @@ RSpec.describe OrganisationsController, type: :request do
         it "shows the total organisations count" do
           expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations")
         end
+
+        it "has pagination links" do
+          expect(page).to have_content("Previous")
+          expect(page).to have_link("Previous")
+          expect(page).to have_content("Next")
+          expect(page).not_to have_link("Next")
+        end
+
+        it "shows which logs are being shown on the current page" do
+          expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>#{total_organisations_count}</b> of <b>#{total_organisations_count}</b> organisations")
+        end
+
+        it "has pagination in the title" do
+          expect(page).to have_title("Organisations (page 2 of 2)")
+        end
       end
     end
   end
