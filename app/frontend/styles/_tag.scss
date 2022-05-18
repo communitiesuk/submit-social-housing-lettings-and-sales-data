@@ -1,0 +1,7 @@
+.app-tag--small {
+  @include govuk-font(14, $weight: bold);
+  padding-top: 2px;
+  padding-right: 6px;
+  padding-bottom: 2px;
+  padding-left: 6px;
+}

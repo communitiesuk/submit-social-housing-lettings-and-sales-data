@@ -1,4 +1,4 @@
-<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name}’s personal details" %>
+<% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name.presence || 'this user'}’s personal details" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
@@ -17,10 +17,11 @@
       </h1>
 
       <%= f.govuk_text_field :name,
+        label: { text: "Name", size: "m" },
         autocomplete: "name" %>
 
       <%= f.govuk_email_field :email,
-        label: { text: "Email address" },
+        label: { text: "Email address", size: "m" },
         autocomplete: "email",
         spellcheck: "false" %>
 
@@ -34,18 +35,17 @@
           legend: { text: "Role", size: "m" } %>
 
         <%= f.govuk_collection_radio_buttons :is_dpo,
-          [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+          [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
           :id,
           :name,
-          inline: true,
-          legend: { text: "Are #{pronoun(@user, current_user)} a data protection officer?", size: "m" } %>
+          legend: { text: "Are #{pronoun(@user, current_user)} the organisation’s data protection officer?", size: "m" } %>
 
         <%= f.govuk_collection_radio_buttons :is_key_contact,
-          [OpenStruct.new(id: false, name: "No"), OpenStruct.new(id: true, name: "Yes")],
+          [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
           :id,
           :name,
-          inline: true,
-          legend: { text: "Are #{pronoun(@user, current_user)} a key contact?", size: "m" } %>
+          legend: { text: "Are #{pronoun(@user, current_user)} a key contact for this service?", size: "m" },
+          hint: { text: "This is a person responsible for sharing information about social housing lettings and sales data within the organisation." } %>
       <% end %>
 
       <%= f.govuk_submit "Save changes" %>
