@@ -10,6 +10,17 @@ class UsersController < ApplicationController
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
     @pagy, @users = pagy(User.all.where(active: true))
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        if current_user.support?
+          send_data @users.to_csv, filename: "users-#{Time.zone.now}.csv"
+        else
+          head :unauthorized
+        end
+      end
+    end
   end
 
   def show; end

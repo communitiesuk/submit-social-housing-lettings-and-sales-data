@@ -12,6 +12,9 @@
     <span class="govuk-!-margin-right-4">
       <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
     </span>
+    <% if current_user.support? %>
+      <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
+    <% end %>
   <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>
