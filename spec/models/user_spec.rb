@@ -76,7 +76,7 @@ RSpec.describe User, type: :model do
     it "is confirmable" do
       allow(DeviseNotifyMailer).to receive(:confirmation_instructions).and_return(OpenStruct.new(deliver: true))
       expect(DeviseNotifyMailer).to receive(:confirmation_instructions).once
-      User.create!(
+      described_class.create!(
         name: "unconfirmed_user",
         email: "unconfirmed_user@example.com",
         password: "password123",
