@@ -6,6 +6,9 @@ import { application } from "./application"
 import AccessibleAutocompleteController from "./accessible_autocomplete_controller.js"
 application.register("accessible-autocomplete", AccessibleAutocompleteController)
 
+import ConditionalFilterController from "./conditional_filter_controller.js"
+application.register("conditional-filter", ConditionalFilterController)
+
 import ConditionalQuestionController from "./conditional_question_controller.js"
 application.register("conditional-question", ConditionalQuestionController)
 
