@@ -20,8 +20,8 @@ module Exports
       case_logs = retrieve_case_logs(current_time)
       export = build_export_run(current_time)
       daily_run = get_daily_run_number
-      archive_list = write_export_archive(case_logs)
-      write_master_manifest(daily_run, archive_list)
+      archive_datetimes = write_export_archive(case_logs)
+      write_master_manifest(daily_run, archive_datetimes)
       export.save!
     end
 
@@ -38,8 +38,8 @@ module Exports
       LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
     end
 
-    def build_export_run(current_time, full_update = false)
-      if LogsExport.count == 0
+    def build_export_run(current_time, full_update: false)
+      if LogsExport.count.zero?
         return LogsExport.new(started_at: current_time)
       end
 
@@ -56,13 +56,13 @@ module Exports
       LogsExport.new(started_at: current_time, base_number:, increment_number:)
     end
 
-    def write_master_manifest(daily_run, archive_list)
+    def write_master_manifest(daily_run, archive_datetimes)
       today = Time.zone.today
       increment_number = daily_run.to_s.rjust(4, "0")
       month = today.month.to_s.rjust(2, "0")
       day = today.day.to_s.rjust(2, "0")
       file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
-      string_io = build_manifest_csv_io
+      string_io = build_manifest_csv_io(archive_datetimes)
       @storage_service.write_file(file_path, string_io)
     end
 
@@ -88,6 +88,7 @@ module Exports
       end
 
       # Write all archives
+      archive_datetimes = {}
       case_logs_per_archive.each do |archive, case_logs_to_export|
         manifest_xml = build_manifest_xml(case_logs_to_export.count)
         zip_io = Zip::File.open_buffer(StringIO.new)
@@ -102,9 +103,10 @@ module Exports
         end
 
         @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
+        archive_datetimes[archive] = Time.zone.now
       end
 
-      case_logs_per_archive.keys
+      archive_datetimes
     end
 
     def retrieve_case_logs(current_time)
@@ -118,10 +120,13 @@ module Exports
       end
     end
 
-    def build_manifest_csv_io
+    def build_manifest_csv_io(archive_datetimes)
       headers = ["zip-name", "date-time zipped folder generated", "zip-file-uri"]
       csv_string = CSV.generate do |csv|
         csv << headers
+        archive_datetimes.each do |archive, datetime|
+          csv << [archive, datetime, "#{archive}.zip"]
+        end
       end
       StringIO.new(csv_string)
     end

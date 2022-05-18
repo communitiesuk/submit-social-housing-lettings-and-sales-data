@@ -11,9 +11,7 @@ RSpec.describe Exports::CaseLogExportService do
   let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc0001.zip" }
   let(:expected_manifest_filename) { "manifest.xml" }
 
-  let!(:case_log) { FactoryBot.create(:case_log, :completed) }
-
-  def replace_entity_ids(export_template)
+  def replace_entity_ids(case_log, export_template)
     export_template.sub!(/\{id\}/, (case_log["id"] + Exports::CaseLogExportService::LOG_ID_OFFSET).to_s)
     export_template.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
     export_template.sub!(/\{managing_org_id\}/, case_log["managing_organisation_id"].to_s)
@@ -51,6 +49,7 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and one case log is available for export" do
+      let!(:case_log) { FactoryBot.create(:case_log, :completed) }
       let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc0001_pt001.xml" }
 
       it "generates a ZIP export file with the expected filename" do
@@ -88,7 +87,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
 
       it "generates an XML export file with the expected content within the ZIP file" do
-        expected_content = replace_entity_ids(export_file.read)
+        expected_content = replace_entity_ids(case_log, export_file.read)
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil
@@ -101,7 +100,11 @@ RSpec.describe Exports::CaseLogExportService do
 
     context "and multiple case logs are available for export on different periods" do
       let(:expected_zip_filename2) { "core_2022_2023_apr_jun_f0001_inc0001.zip" }
-      before { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 4, 1)) }
+
+      before do
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 2, 1))
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 4, 1))
+      end
 
       context "when case logs are across multiple quarters" do
         it "generates multiple ZIP export files with the expected filenames" do
@@ -114,7 +117,10 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and multiple case logs are available for export on same periods" do
-      before { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20)) }
+      before do
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20))
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20))
+      end
 
       it "generates an XML manifest file with the expected content within the ZIP file" do
         expected_content = replace_record_number(local_manifest_file.read, 2)
