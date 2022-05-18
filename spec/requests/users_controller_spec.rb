@@ -782,7 +782,7 @@ RSpec.describe UsersController, type: :request do
 
       it "downloads organisation names rather than ids" do
         csv = CSV.parse(response.body)
-        expect(csv.second[3]).to eq("#{user.organisation.name}")
+        expect(csv.second[3]).to eq(user.organisation.name.to_s)
       end
     end
 

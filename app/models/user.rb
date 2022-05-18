@@ -97,9 +97,7 @@ class User < ApplicationRecord
     end
   end
 
-  def organisation_name
-    organisation.name
-  end
+  delegate :name, to: :organisation, prefix: true
 
   def self.download_attributes
     %w[id email name organisation_name role old_user_id is_dpo is_key_contact active sign_in_count last_sign_in_at]
@@ -110,7 +108,7 @@ class User < ApplicationRecord
       csv << download_attributes
 
       all.find_each do |record|
-        csv << self.download_attributes.map { |attr| record.public_send(attr) }
+        csv << download_attributes.map { |attr| record.public_send(attr) }
       end
     end
   end

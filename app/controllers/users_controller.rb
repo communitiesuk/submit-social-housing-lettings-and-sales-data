@@ -15,7 +15,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
-          send_data @users.to_csv, filename: "users-#{Time.zone.now}.csv"
+          send_data User.all.where(active: true).to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
         end
