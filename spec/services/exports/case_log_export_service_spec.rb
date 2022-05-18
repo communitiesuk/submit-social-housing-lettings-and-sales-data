@@ -2,11 +2,15 @@ require "rails_helper"
 
 RSpec.describe Exports::CaseLogExportService do
   let(:storage_service) { instance_double(StorageService) }
+
   let(:export_file) { File.open("spec/fixtures/exports/case_logs.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
+
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
+  let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
   let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc001.zip" }
   let(:expected_manifest_filename) { "manifest.xml" }
+
   let!(:case_log) { FactoryBot.create(:case_log, :completed) }
 
   def replace_entity_ids(export_template)
@@ -23,8 +27,10 @@ RSpec.describe Exports::CaseLogExportService do
   context "when exporting daily case logs" do
     subject(:export_service) { described_class.new(storage_service) }
 
+    let(:start_time) { Time.zone.local(2022, 5, 1) }
+
     before do
-      Timecop.freeze(2022, 5, 1)
+      Timecop.freeze(start_time)
       allow(storage_service).to receive(:write_file)
     end
 
@@ -46,16 +52,6 @@ RSpec.describe Exports::CaseLogExportService do
 
     context "and one case log is available for export" do
       let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc001.xml" }
-      let(:time_now) { Time.zone.now }
-
-      before do
-        Timecop.freeze(time_now)
-        case_log
-      end
-
-      after do
-        LogsExport.destroy_all
-      end
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -63,7 +59,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
 
       it "generates an XML manifest file with the expected filename within the ZIP file" do
-        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
           expect(entry.name).to eq(expected_manifest_filename)
@@ -72,7 +68,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
 
       it "generates an XML export file with the expected filename within the ZIP file" do
-        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil
           expect(entry.name).to eq(expected_data_filename)
@@ -82,7 +78,7 @@ RSpec.describe Exports::CaseLogExportService do
 
       it "generates an XML manifest file with the expected content within the ZIP file" do
         expected_content = replace_record_number(local_manifest_file.read, 1)
-        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_manifest_filename)
           expect(entry).not_to be_nil
           expect(entry.get_input_stream.read).to eq(expected_content)
@@ -93,7 +89,7 @@ RSpec.describe Exports::CaseLogExportService do
 
       it "generates an XML export file with the expected content within the ZIP file" do
         expected_content = replace_entity_ids(export_file.read)
-        allow(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+        expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
           entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
           expect(entry).not_to be_nil
           expect(entry.get_input_stream.read).to eq(expected_content)
@@ -131,33 +127,38 @@ RSpec.describe Exports::CaseLogExportService do
       end
 
       it "creates a logs export record in a database with correct time" do
-        export_service.export_case_logs
-        records_from_db = ActiveRecord::Base.connection.execute("select started_at, id from logs_exports ").to_a
-        expect(records_from_db[0]["started_at"]).to eq(time_now)
-        expect(records_from_db.count).to eq(1)
+        expect { export_service.export_case_logs }
+          .to change(LogsExport, :count).by(1)
+        expect(LogsExport.last.started_at).to eq(start_time)
       end
 
-      it "gets the logs for correct timeframe" do
-        start_time = Time.zone.local(2022, 4, 13, 2, 2, 2)
-        export = LogsExport.new(started_at: start_time, daily_run_number: 1)
-        export.save!
-        params = { from: start_time, to: time_now }
-        allow(CaseLog).to receive(:where).with("updated_at >= :from and updated_at <= :to", params).once.and_return([])
-        export_service.export_case_logs
+      context "when this is the first export (full)" do
+        it "records a ZIP archive in the master manifest (existing case logs)" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_filename, any_args) do |_, csv_content|
+            csv = CSV.parse(csv_content, headers: true)
+            expect(csv&.count).to eq(1)
+          end
+
+          export_service.export_case_logs
+        end
       end
 
-      context "when this is the first export" do
-        it "gets the logs for the timeframe up until the current time" do
-          params = { to: time_now }
-          allow(CaseLog).to receive(:where).with("updated_at <= :to", params).once.and_return([])
+      context "when this is an partial export" do
+        it "does not add any entry in the master manifest (no case logs)" do
+          start_time = Time.zone.local(2022, 4, 1)
+          LogsExport.new(started_at: start_time, daily_run_number: 1).save!
+
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args) do |_, csv_content|
+            csv = CSV.parse(csv_content, headers: true)
+            expect(csv&.count).to eq(0)
+          end
+
           export_service.export_case_logs
         end
       end
     end
 
     context "and a previous export has run the same day" do
-      let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
-
       before do
         export_service.export_case_logs
       end
