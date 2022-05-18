@@ -69,4 +69,16 @@ RSpec.describe FiltersHelper do
       end
     end
   end
+
+  describe "#selected_option" do
+    before do
+      session[:case_logs_filters] = {}.to_json
+    end
+
+    context "when nothing has been selected" do
+      it "returns an empty string" do
+        expect(selected_option("organisation")).to eq("")
+      end
+    end
+  end
 end

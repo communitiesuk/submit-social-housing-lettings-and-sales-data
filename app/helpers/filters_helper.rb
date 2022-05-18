@@ -20,6 +20,6 @@ module FiltersHelper
   def selected_option(filter)
     return false unless session[:case_logs_filters]
 
-    JSON.parse(session[:case_logs_filters])[filter]
+    JSON.parse(session[:case_logs_filters])[filter] || ""
   end
 end
