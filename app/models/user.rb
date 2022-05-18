@@ -91,9 +91,9 @@ class User < ApplicationRecord
 
   def case_logs_filters
     if support?
-      %i[status years user organisation]
+      %w[status years user organisation]
     else
-      %i[status years user]
+      %w[status years user]
     end
   end
 end

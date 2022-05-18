@@ -57,5 +57,28 @@ RSpec.describe FiltersHelper do
         expect(filter_selected?("organisation_select", :specific_org)).to be false
       end
     end
+
+    context "when the specific organisation filter is not set" do
+      before do
+        session[:case_logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
+      end
+
+      it "marks the all options as checked" do
+        expect(filter_selected?("organisation_select", :all)).to be true
+        expect(filter_selected?("organisation_select", :specific_org)).to be false
+      end
+    end
+  end
+
+  describe "#selected_option" do
+    before do
+      session[:case_logs_filters] = {}.to_json
+    end
+
+    context "when nothing has been selected" do
+      it "returns an empty string" do
+        expect(selected_option("organisation")).to eq("")
+      end
+    end
   end
 end
