@@ -5,6 +5,7 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+  let(:user) { FactoryBot.create(:user, :data_provider, sign_in_count: 0, confirmed_at: nil) }
 
   before do
     allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
@@ -13,8 +14,6 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
   end
 
   context "when a confirmation link is clicked by a new user" do
-    let(:user) { FactoryBot.create(:user, :data_provider, sign_in_count: 0, confirmed_at: nil) }
-
     before do
       user.send_confirmation_instructions
       get "/account/confirmation?confirmation_token=#{user.confirmation_token}"
@@ -27,6 +26,23 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
     it "redirects to the set password page" do
       follow_redirect!
       expect(page).to have_content(I18n.t("user.create_password"))
+    end
+  end
+
+  context "when the token has expired" do
+    let(:period) { Devise::TimeInflector.time_ago_in_words(User.confirm_within.ago) }
+
+    before do
+      user.send_confirmation_instructions
+      allow(User).to receive(:find_first_by_auth_conditions).and_return(user)
+      allow(user).to receive(:confirmation_period_expired?).and_return(true)
+      get "/account/confirmation?confirmation_token=#{user.confirmation_token}"
+    end
+
+    it "shows the Resend Invitation page" do
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_content(I18n.t("errors.messages.confirmation_period_expired", period:))
+      expect(page).to have_content("Resend invitation link")
     end
   end
 end
