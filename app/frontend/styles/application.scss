@@ -11,6 +11,14 @@ $govuk-image-url-function: frontend-image-url;
 $govuk-global-styles: true;
 $govuk-new-link-styles: true;
 
+// Add additional breakpoint named `wide`
+$govuk-breakpoints: (
+  mobile:  320px,
+  tablet:  641px,
+  desktop: 769px,
+  wide: 921px,
+);
+
 @import "govuk-frontend-styles";
 @import "govuk-prototype-styles";
 

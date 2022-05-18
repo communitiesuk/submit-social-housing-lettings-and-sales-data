@@ -15,15 +15,12 @@ module Exports
     end
 
     def export_case_logs
-      # Case log data is already ordered by startdate
-      case_logs = retrieve_case_logs
-      daily_run_number = get_next_run_number
-      write_master_manifest(daily_run_number)
+      current_time = Time.zone.now
+      case_logs = retrieve_case_logs(current_time)
+      export = build_export_run(current_time)
+      write_master_manifest(export.daily_run_number)
       write_export_archive(case_logs)
-
-      export = LogsExport.new(daily_run_number:)
       export.save!
-      export
     end
 
     def is_omitted_field?(field_name)
@@ -34,14 +31,15 @@ module Exports
 
   private
 
-    def get_next_run_number
+    def build_export_run(current_time)
       today = Time.zone.today
       last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
-      if last_daily_run_number.nil?
-        1
-      else
-        last_daily_run_number + 1
-      end
+      last_daily_run_number = 0 if last_daily_run_number.nil?
+
+      export = LogsExport.new
+      export.daily_run_number = last_daily_run_number + 1
+      export.started_at = current_time
+      export
     end
 
     def write_master_manifest(daily_run_number)
@@ -86,8 +84,15 @@ module Exports
       end
     end
 
-    def retrieve_case_logs
-      CaseLog.all
+    def retrieve_case_logs(current_time)
+      recent_export = LogsExport.order("started_at").last
+      if recent_export
+        params = { from: recent_export.started_at, to: current_time }
+        CaseLog.where("updated_at >= :from and updated_at <= :to", params)
+      else
+        params = { to: current_time }
+        CaseLog.where("updated_at <= :to", params)
+      end
     end
 
     def build_manifest_csv_io

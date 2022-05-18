@@ -126,7 +126,7 @@ private
     if session[:case_logs_filters].present?
       filters = JSON.parse(session[:case_logs_filters])
       filters.each do |category, values|
-        next if values.reject(&:empty?).blank?
+        next if Array(values).reject(&:empty?).blank?
 
         query = query.public_send("filter_by_#{category}", values, current_user)
       end
@@ -137,8 +137,7 @@ private
 
   def set_session_filters
     new_filters = session[:case_logs_filters].present? ? JSON.parse(session[:case_logs_filters]) : {}
-    %i[status years].each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
-    new_filters[:user] = [params[:user]] if params[:user].present?
+    current_user.case_logs_filters.each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
 
     session[:case_logs_filters] = new_filters.to_json
   end

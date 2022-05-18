@@ -18,7 +18,7 @@ class Organisation < ApplicationRecord
   validates :provider_type, presence: true
 
   def case_logs
-    CaseLog.for_organisation(self)
+    CaseLog.filter_by_organisation(self)
   end
 
   def completed_case_logs
