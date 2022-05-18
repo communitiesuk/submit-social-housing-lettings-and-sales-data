@@ -300,15 +300,19 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
 
-    context "with a data provider user" do
+    context "with a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
+
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         get "/organisations"
       end
+
       it "shows all organisations" do
         expect(page).to have_content("2 total organisations")
+        expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/logs"
+        expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
       end
     end
   end

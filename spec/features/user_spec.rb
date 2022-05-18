@@ -585,10 +585,10 @@ RSpec.describe "User Features" do
           visit("/organisations")
           click_link("Test3")
           expect(page).to have_content("1 total logs")
-          expect(page).to have_selector("a", text: "#{case_log.id}")
+          expect(page).to have_selector("a", text: case_log.id.to_s)
           visit("/organisations")
           click_link("Test5")
-          expect(page).not_to have_selector("a", text: "#{case_log.id}")
+          expect(page).not_to have_selector("a", text: case_log.id.to_s)
         end
       end
     end
