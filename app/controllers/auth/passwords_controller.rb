@@ -11,7 +11,7 @@ class Auth::PasswordsController < Devise::PasswordsController
       resource.errors.add :email, I18n.t("validations.email.invalid")
       render "devise/passwords/new", status: :unprocessable_entity
     else
-      render "devise/confirmations/reset"
+      render "devise/passwords/reset_resend_confirmation"
     end
   end
 
