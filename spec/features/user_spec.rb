@@ -524,5 +524,30 @@ RSpec.describe "User Features" do
         click_button("Send email")
       end
     end
+
+    context "when viewing logs" do
+      context "when filtering by organisation and then switching back to all organisations", js: true do
+        let!(:organisation) { FactoryBot.create(:organisation, name: "Filtered Org") }
+
+        before do
+          allow(SecureRandom).to receive(:random_number).and_return(otp)
+          click_button("Sign in")
+          fill_in("code", with: otp)
+          click_button("Submit")
+        end
+
+        it "clears the previously selected organisation value" do
+          visit("/logs")
+          choose("organisation-select-specific-org-field", allow_label_click: true)
+          expect(page).to have_field("organisation-field", with: "")
+          find("#organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
+          click_button("Apply filters")
+          expect(page).to have_current_path("/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=specific_org&organisation=#{organisation.id}")
+          choose("organisation-select-all-field", allow_label_click: true)
+          click_button("Apply filters")
+          expect(page).to have_current_path("/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all")
+        end
+      end
+    end
   end
 end

@@ -392,6 +392,14 @@ RSpec.describe CaseLogsController, type: :request do
               expect(page).not_to have_content(tenant_code_2)
             end
           end
+
+          context "when the support user has filtered by organisation, then switches back to all organisations" do
+            it "shows all organisations" do
+              get "http://localhost:3000/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all&organisation=#{org_1.id}", headers:, params: {}
+              expect(page).to have_content(tenant_code_1)
+              expect(page).to have_content(tenant_code_2)
+            end
+          end
         end
 
         context "when there are more than 20 logs" do
