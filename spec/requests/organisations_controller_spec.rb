@@ -315,5 +315,33 @@ RSpec.describe OrganisationsController, type: :request do
         expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
       end
     end
+
+    context "when there are more than 20 organisations" do
+      before do
+        FactoryBot.create_list(:organisation, 25)
+      end
+
+      let(:support_user) { FactoryBot.create(:user, :support) }
+
+      let(:total_organisations_count) { Organisation.all.count }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in support_user
+        get "/organisations"
+      end
+
+      context "when on the first page" do
+        it "has pagination links" do
+          expect(page).to have_content("Previous")
+          expect(page).not_to have_link("Previous")
+          expect(page).to have_content("Next")
+          expect(page).to have_link("Next")
+        end
+
+        it "shows which organisations are being shown on the current page" do
+          expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{total_organisations_count}</b> organisations")
+        end
+    end
   end
 end
