@@ -11,7 +11,7 @@
 <% end %>
 
 <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= govuk_link_to "Didn’t receive confirmation instructions?", new_confirmation_path(resource_name) %><br>
+  <p class="govuk-body"><%= govuk_link_to "Get a new invitation link", new_confirmation_path(resource_name) %> if it’s expired.</p>
 <% end %>
 
 <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
