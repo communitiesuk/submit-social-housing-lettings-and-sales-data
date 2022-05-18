@@ -1,20 +1,6 @@
 module TasklistHelper
   include GovukLinkHelper
 
-  STATUSES = {
-    not_started: "Not started",
-    cannot_start_yet: "Cannot start yet",
-    completed: "Completed",
-    in_progress: "In progress",
-  }.freeze
-
-  STYLES = {
-    not_started: "govuk-tag--grey",
-    cannot_start_yet: "govuk-tag--grey",
-    completed: "",
-    in_progress: "govuk-tag--blue",
-  }.freeze
-
   def get_next_incomplete_section(case_log)
     case_log.form.subsections.find { |subsection| subsection.is_incomplete?(case_log) }
   end
