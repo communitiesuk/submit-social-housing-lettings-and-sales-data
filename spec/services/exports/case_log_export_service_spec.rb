@@ -116,9 +116,9 @@ RSpec.describe Exports::CaseLogExportService do
       end
     end
 
-    context "and multiple case logs are available for export on same periods" do
+    context "and multiple case logs are available for export on same quarter" do
       before do
-        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20))
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 2, 1))
         FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 3, 20))
       end
 
@@ -151,30 +151,54 @@ RSpec.describe Exports::CaseLogExportService do
       end
 
       context "when this is a second export (partial)" do
-        it "does not add any entry in the master manifest (no case logs)" do
+        before do
           start_time = Time.zone.local(2022, 4, 1)
           LogsExport.new(started_at: start_time).save!
+        end
 
+        it "does not add any entry in the master manifest (no case logs)" do
           expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args) do |_, csv_content|
             csv = CSV.parse(csv_content, headers: true)
             expect(csv&.count).to eq(0)
           end
-
           export_service.export_case_logs
         end
       end
     end
 
-    context "and a previous export has run the same day" do
-      before { export_service.export_case_logs }
+    context "and a previous export has run the same day with logs" do
+      before do
+        FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 2, 1))
+        export_service.export_case_logs
+      end
 
       it "increments the master manifest number by 1" do
         expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args)
         export_service.export_case_logs
       end
+
+      context "and we trigger another full update" do
+        it "increments the base number" do
+          export_service.export_case_logs(full_update: true)
+          expect(LogsExport.last.base_number).to eq(2)
+        end
+
+        it "resets the increment number" do
+          export_service.export_case_logs(full_update: true)
+          expect(LogsExport.last.increment_number).to eq(1)
+        end
+
+        it "records a ZIP archive in the master manifest (existing case logs)" do
+          expect(storage_service).to receive(:write_file).with(expected_master_manifest_rerun, any_args) do |_, csv_content|
+            csv = CSV.parse(csv_content, headers: true)
+            expect(csv&.count).to be > 0
+          end
+          export_service.export_case_logs(full_update: true)
+        end
+      end
     end
 
-    context "when export has an error" do
+    context "and the export has an error" do
       before { allow(storage_service).to receive(:write_file).and_raise(StandardError.new("This is an exception")) }
 
       it "does not save a record in the database" do

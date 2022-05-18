@@ -15,10 +15,10 @@ module Exports
       @logger = logger
     end
 
-    def export_case_logs
-      current_time = Time.zone.now
-      case_logs = retrieve_case_logs(current_time)
-      export = build_export_run(current_time)
+    def export_case_logs(full_update: false)
+      start_time = Time.zone.now
+      case_logs = retrieve_case_logs(start_time, full_update)
+      export = build_export_run(start_time, full_update)
       daily_run = get_daily_run_number
       archive_datetimes = write_export_archive(case_logs)
       write_master_manifest(daily_run, archive_datetimes)
@@ -38,7 +38,7 @@ module Exports
       LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
     end
 
-    def build_export_run(current_time, full_update: false)
+    def build_export_run(current_time, full_update)
       if LogsExport.count.zero?
         return LogsExport.new(started_at: current_time)
       end
@@ -109,13 +109,13 @@ module Exports
       archive_datetimes
     end
 
-    def retrieve_case_logs(current_time)
+    def retrieve_case_logs(start_time, full_update)
       recent_export = LogsExport.order("started_at").last
-      if recent_export
-        params = { from: recent_export.started_at, to: current_time }
+      if !full_update && recent_export
+        params = { from: recent_export.started_at, to: start_time }
         CaseLog.where("updated_at >= :from and updated_at <= :to", params)
       else
-        params = { to: current_time }
+        params = { to: start_time }
         CaseLog.where("updated_at <= :to", params)
       end
     end
