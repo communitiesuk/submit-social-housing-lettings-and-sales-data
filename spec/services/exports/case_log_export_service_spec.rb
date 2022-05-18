@@ -195,6 +195,11 @@ RSpec.describe Exports::CaseLogExportService do
           end
           export_service.export_case_logs(full_update: true)
         end
+
+        it "generates a ZIP export file with the expected filename" do
+          expect(storage_service).to receive(:write_file).with("core_2021_2022_jan_mar_f0002_inc0001.zip", any_args)
+          export_service.export_case_logs(full_update: true)
+        end
       end
     end
 

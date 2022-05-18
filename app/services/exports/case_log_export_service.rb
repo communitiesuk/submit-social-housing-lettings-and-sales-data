@@ -20,7 +20,7 @@ module Exports
       case_logs = retrieve_case_logs(start_time, full_update)
       export = build_export_run(start_time, full_update)
       daily_run = get_daily_run_number
-      archive_datetimes = write_export_archive(case_logs)
+      archive_datetimes = write_export_archive(export, case_logs)
       write_master_manifest(daily_run, archive_datetimes)
       export.save!
     end
@@ -67,6 +67,8 @@ module Exports
     end
 
     def get_archive_name(case_log, base_number, increment)
+      return unless case_log.startdate
+
       collection_start = case_log.collection_start_year
       month = case_log.startdate.month
       quarter = QUARTERS[(month - 1) / 3]
@@ -75,11 +77,13 @@ module Exports
       "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
-    def write_export_archive(case_logs)
+    def write_export_archive(export, case_logs)
       # Order case logs per archive
       case_logs_per_archive = {}
       case_logs.each do |case_log|
-        archive = get_archive_name(case_log, 1, 1)
+        archive = get_archive_name(case_log, export.base_number, export.increment_number)
+        next unless archive
+
         if case_logs_per_archive.key?(archive)
           case_logs_per_archive[archive] << case_log
         else
