@@ -8,6 +8,7 @@ module Exports
     }.freeze
 
     LOG_ID_OFFSET = 300_000_000_000
+    MAX_XML_RECORDS = 10_000
 
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
@@ -18,8 +19,9 @@ module Exports
       current_time = Time.zone.now
       case_logs = retrieve_case_logs(current_time)
       export = build_export_run(current_time)
-      write_master_manifest(export.daily_run_number)
-      write_export_archive(case_logs)
+      daily_run = get_daily_run_number
+      archive_list = write_export_archive(case_logs)
+      write_master_manifest(daily_run, archive_list)
       export.save!
     end
 
@@ -31,20 +33,32 @@ module Exports
 
   private
 
-    def build_export_run(current_time)
+    def get_daily_run_number
       today = Time.zone.today
-      last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
-      last_daily_run_number = 0 if last_daily_run_number.nil?
-
-      export = LogsExport.new
-      export.daily_run_number = last_daily_run_number + 1
-      export.started_at = current_time
-      export
+      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
     end
 
-    def write_master_manifest(daily_run_number)
+    def build_export_run(current_time, full_update = false)
+      if LogsExport.count == 0
+        return LogsExport.new(started_at: current_time)
+      end
+
+      base_number = LogsExport.maximum(:base_number)
+      increment_number = LogsExport.where(base_number:).maximum(:increment_number)
+
+      if full_update
+        base_number += 1
+        increment_number = 1
+      else
+        increment_number += 1
+      end
+
+      LogsExport.new(started_at: current_time, base_number:, increment_number:)
+    end
+
+    def write_master_manifest(daily_run, archive_list)
       today = Time.zone.today
-      increment_number = daily_run_number.to_s.rjust(4, "0")
+      increment_number = daily_run.to_s.rjust(4, "0")
       month = today.month.to_s.rjust(2, "0")
       day = today.day.to_s.rjust(2, "0")
       file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
@@ -57,7 +71,7 @@ module Exports
       month = case_log.startdate.month
       quarter = QUARTERS[(month - 1) / 3]
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
-      increment_str = "inc#{increment.to_s.rjust(3, '0')}"
+      increment_str = "inc#{increment.to_s.rjust(4, '0')}"
       "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
@@ -75,13 +89,22 @@ module Exports
 
       # Write all archives
       case_logs_per_archive.each do |archive, case_logs_to_export|
-        data_xml = build_export_xml(case_logs_to_export)
         manifest_xml = build_manifest_xml(case_logs_to_export.count)
         zip_io = Zip::File.open_buffer(StringIO.new)
-        zip_io.add("#{archive}.xml", data_xml)
         zip_io.add("manifest.xml", manifest_xml)
+
+        part_number = 1
+        case_logs_to_export.each_slice(MAX_XML_RECORDS) do |case_logs_slice|
+          data_xml = build_export_xml(case_logs_slice)
+          part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
+          zip_io.add("#{archive}_#{part_number_str}.xml", data_xml)
+          part_number += 1
+        end
+
         @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
       end
+
+      case_logs_per_archive.keys
     end
 
     def retrieve_case_logs(current_time)
