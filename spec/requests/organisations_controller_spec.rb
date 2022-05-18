@@ -326,7 +326,7 @@ RSpec.describe OrganisationsController, type: :request do
       let(:total_organisations_count) { Organisation.all.count }
 
       before do
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in support_user
         get "/organisations"
       end
@@ -342,6 +342,11 @@ RSpec.describe OrganisationsController, type: :request do
         it "shows which organisations are being shown on the current page" do
           expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{total_organisations_count}</b> organisations")
         end
+
+        it "has pagination in the title" do
+          expect(page).to have_title("Organisations (page 1 of 2)")
+        end
+      end
     end
   end
 end
