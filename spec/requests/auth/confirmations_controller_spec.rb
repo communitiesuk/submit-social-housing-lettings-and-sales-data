@@ -39,10 +39,8 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
       get "/account/confirmation?confirmation_token=#{user.confirmation_token}"
     end
 
-    it "shows the Resend Invitation page" do
-      expect(page).to have_selector("#error-summary-title")
-      expect(page).to have_content(I18n.t("errors.messages.confirmation_period_expired", period:))
-      expect(page).to have_content("Resend invitation link")
+    it "shows the error page" do
+      expect(page).to have_content("Your invitation link has expired")
     end
   end
 end
