@@ -23,7 +23,22 @@
   <% @users.each do |user| %>
     <%= table.body do |body| %>
       <%= body.row do |row| %>
-        <% row.cell(text: simple_format(user_cell(user), {}, wrapper_tag: "div")) %>
+        <% row.cell do %>
+          <%= simple_format(user_cell(user), {}, wrapper_tag: "span") %>
+          <% if user.is_data_protection_officer? || user.is_key_contact? %>
+            <br>
+          <% end %>
+          <%= user.is_data_protection_officer? ? govuk_tag(
+            classes: "app-tag--small",
+            colour: "turquoise",
+            text: "Data protection officer",
+          ) : "" %>
+          <%= user.is_key_contact? ? govuk_tag(
+            classes: "app-tag--small",
+            colour: "turquoise",
+            text: "Key contact",
+          ) : "" %>
+        <% end %>
         <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
         <% row.cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date)) %>
       <% end %>
