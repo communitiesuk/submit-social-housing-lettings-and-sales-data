@@ -1,16 +1,27 @@
 module Exports
   class CaseLogExportService
+    QUARTERS = {
+      0 => "jan_mar",
+      1 => "apr_jun",
+      2 => "jul_sep",
+      3 => "oct_dec",
+    }.freeze
+
+    LOG_ID_OFFSET = 300_000_000_000
+    MAX_XML_RECORDS = 10_000
+
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
       @logger = logger
     end
 
-    def export_case_logs
-      current_time = Time.zone.now
-      case_logs = retrieve_case_logs(current_time)
-      export = save_export_run(current_time)
-      write_master_manifest(export)
-      write_export_data(case_logs)
+    def export_case_logs(full_update: false)
+      start_time = Time.zone.now
+      case_logs = retrieve_case_logs(start_time, full_update)
+      export = build_export_run(start_time, full_update)
+      daily_run = get_daily_run_number
+      archive_datetimes = write_export_archive(export, case_logs)
+      write_master_manifest(daily_run, archive_datetimes)
       export.save!
     end
 
@@ -20,57 +31,127 @@ module Exports
       field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
     end
 
-    LOG_ID_OFFSET = 300_000_000_000
-
   private
 
-    def save_export_run(current_time)
+    def get_daily_run_number
       today = Time.zone.today
-      last_daily_run_number = LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).maximum(:daily_run_number)
-      last_daily_run_number = 0 if last_daily_run_number.nil?
-
-      export = LogsExport.new
-      export.daily_run_number = last_daily_run_number + 1
-      export.started_at = current_time
-      export
+      LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
     end
 
-    def write_master_manifest(export)
+    def build_export_run(current_time, full_update)
+      if LogsExport.count.zero?
+        return LogsExport.new(started_at: current_time)
+      end
+
+      base_number = LogsExport.maximum(:base_number)
+      increment_number = LogsExport.where(base_number:).maximum(:increment_number)
+
+      if full_update
+        base_number += 1
+        increment_number = 1
+      else
+        increment_number += 1
+      end
+
+      LogsExport.new(started_at: current_time, base_number:, increment_number:)
+    end
+
+    def write_master_manifest(daily_run, archive_datetimes)
       today = Time.zone.today
-      increment_number = export.daily_run_number.to_s.rjust(4, "0")
+      increment_number = daily_run.to_s.rjust(4, "0")
       month = today.month.to_s.rjust(2, "0")
       day = today.day.to_s.rjust(2, "0")
       file_path = "Manifest_#{today.year}_#{month}_#{day}_#{increment_number}.csv"
-      string_io = build_manifest_csv_io
+      string_io = build_manifest_csv_io(archive_datetimes)
       @storage_service.write_file(file_path, string_io)
     end
 
-    def write_export_data(case_logs)
-      string_io = build_export_xml_io(case_logs)
-      file_path = "#{get_folder_name}/#{get_file_name}.xml"
-      @storage_service.write_file(file_path, string_io)
+    def get_archive_name(case_log, base_number, increment)
+      return unless case_log.startdate
+
+      collection_start = case_log.collection_start_year
+      month = case_log.startdate.month
+      quarter = QUARTERS[(month - 1) / 3]
+      base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
+      increment_str = "inc#{increment.to_s.rjust(4, '0')}"
+      "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
-    def retrieve_case_logs(current_time)
+    def write_export_archive(export, case_logs)
+      # Order case logs per archive
+      case_logs_per_archive = {}
+      case_logs.each do |case_log|
+        archive = get_archive_name(case_log, export.base_number, export.increment_number)
+        next unless archive
+
+        if case_logs_per_archive.key?(archive)
+          case_logs_per_archive[archive] << case_log
+        else
+          case_logs_per_archive[archive] = [case_log]
+        end
+      end
+
+      # Write all archives
+      archive_datetimes = {}
+      case_logs_per_archive.each do |archive, case_logs_to_export|
+        manifest_xml = build_manifest_xml(case_logs_to_export.count)
+        zip_io = Zip::File.open_buffer(StringIO.new)
+        zip_io.add("manifest.xml", manifest_xml)
+
+        part_number = 1
+        case_logs_to_export.each_slice(MAX_XML_RECORDS) do |case_logs_slice|
+          data_xml = build_export_xml(case_logs_slice)
+          part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
+          zip_io.add("#{archive}_#{part_number_str}.xml", data_xml)
+          part_number += 1
+        end
+
+        @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
+        archive_datetimes[archive] = Time.zone.now
+      end
+
+      archive_datetimes
+    end
+
+    def retrieve_case_logs(start_time, full_update)
       recent_export = LogsExport.order("started_at").last
-      if recent_export
-        params = { from: recent_export.started_at, to: current_time }
+      if !full_update && recent_export
+        params = { from: recent_export.started_at, to: start_time }
         CaseLog.where("updated_at >= :from and updated_at <= :to", params)
       else
-        params = { to: current_time }
+        params = { to: start_time }
         CaseLog.where("updated_at <= :to", params)
       end
     end
 
-    def build_manifest_csv_io
+    def build_manifest_csv_io(archive_datetimes)
       headers = ["zip-name", "date-time zipped folder generated", "zip-file-uri"]
       csv_string = CSV.generate do |csv|
         csv << headers
+        archive_datetimes.each do |archive, datetime|
+          csv << [archive, datetime, "#{archive}.zip"]
+        end
       end
       StringIO.new(csv_string)
     end
 
-    def build_export_xml_io(case_logs)
+    def xml_doc_to_temp_file(xml_doc)
+      file = Tempfile.new
+      xml_doc.write_xml_to(file, encoding: "UTF-8")
+      file.rewind
+      file
+    end
+
+    def build_manifest_xml(record_number)
+      doc = Nokogiri::XML("<report/>")
+      doc.at("report") << doc.create_element("form-data-summary")
+      doc.at("form-data-summary") << doc.create_element("records")
+      doc.at("records") << doc.create_element("count-of-records", record_number)
+
+      xml_doc_to_temp_file(doc)
+    end
+
+    def build_export_xml(case_logs)
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
@@ -87,23 +168,8 @@ module Exports
         end
         form << doc.create_element("providertype", case_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
       end
-      doc.write_xml_to(StringIO.new, encoding: "UTF-8")
-    end
 
-    def get_folder_name
-      "core_#{day_as_string}"
-    end
-
-    def get_file_name
-      "dat_core_#{day_as_string}_#{increment_as_string}"
-    end
-
-    def day_as_string
-      Time.current.strftime("%Y_%m_%d")
-    end
-
-    def increment_as_string(increment = 1)
-      sprintf("%04d", increment)
+      xml_doc_to_temp_file(doc)
     end
   end
 end
