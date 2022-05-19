@@ -366,14 +366,19 @@ RSpec.describe OrganisationsController, type: :request do
       context "when viewing a specific organisation" do
         let(:number_of_org1_case_logs) { 2 }
         let(:number_of_org2_case_logs) { 4 }
+
         before do
           FactoryBot.create_list(:case_log, number_of_org1_case_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
           FactoryBot.create_list(:case_log, number_of_org2_case_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
-        end
-        
-        it "only shows logs for that organisation" do
-          get "/organisations/#{organisation.id}/logs", headers:, params: {}
 
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+        end
+
+        it "displays the name of the organisation in the header" do
+          expect(CGI.unescape_html(response.body)).to match("<span class=\"govuk-caption-l\">#{organisation.name}</span>")
+        end
+
+        it "only shows logs for that organisation" do
           expect(page).to have_content("#{number_of_org1_case_logs} total logs")
           organisation.case_logs.map(&:id).each do |case_log_id|
             expect(page).to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
