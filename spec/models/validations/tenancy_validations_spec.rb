@@ -198,8 +198,9 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "tenancy type validations" do
     let(:field) { "validations.other_field_missing" }
-    let(:main_field_label) { "tenancy" }
-    let(:other_field_label) { "tenancyother" }
+    let(:main_field_label) { "tenancy type" }
+    let(:other_field) { "tenancyother" }
+    let(:other_field_label) { "other tenancy type" }
     let(:expected_error) { I18n.t(field, main_field_label:, other_field_label:) }
 
     context "when tenancy type is other" do
@@ -208,13 +209,13 @@ RSpec.describe Validations::TenancyValidations do
       it "validates that other tenancy type is provided" do
         record.tenancyother = nil
         tenancy_validator.validate_other_tenancy_type(record)
-        expect(record.errors[other_field_label]).to include(match(expected_error))
+        expect(record.errors[other_field]).to include(match(expected_error))
       end
 
       it "expects that other tenancy type is provided" do
         record.tenancyother = "Some other tenancy type"
         tenancy_validator.validate_other_tenancy_type(record)
-        expect(record.errors[other_field_label]).to be_empty
+        expect(record.errors[other_field]).to be_empty
       end
     end
 
@@ -225,14 +226,14 @@ RSpec.describe Validations::TenancyValidations do
         record.tenancy = 2
         record.tenancyother = "Some other tenancy type"
         tenancy_validator.validate_other_tenancy_type(record)
-        expect(record.errors[other_field_label]).to include(match(expected_error))
+        expect(record.errors[other_field]).to include(match(expected_error))
       end
 
       it "expects that other tenancy type is not provided" do
         record.tenancy = 1
         record.tenancyother = nil
         tenancy_validator.validate_other_tenancy_type(record)
-        expect(record.errors[other_field_label]).to be_empty
+        expect(record.errors[other_field]).to be_empty
       end
     end
   end

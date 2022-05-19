@@ -30,7 +30,7 @@ module Validations::TenancyValidations
   end
 
   def validate_other_tenancy_type(record)
-    validate_other_field(record, 3, :tenancy, :tenancyother)
+    validate_other_field(record, 3, :tenancy, :tenancyother, "tenancy type", "other tenancy type")
   end
 
   def validate_joint_tenancy(record)
