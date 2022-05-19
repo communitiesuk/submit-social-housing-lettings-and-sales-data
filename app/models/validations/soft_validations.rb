@@ -54,6 +54,10 @@ private
     economic_status == 5
   end
 
+  def tenant_prefers_not_to_say?(economic_status)
+    economic_status == 10
+  end
+
   def retired_under_soft_min_age?(person_num)
     age = public_send("age#{person_num}")
     economic_status = public_send("ecstat#{person_num}")
@@ -68,9 +72,10 @@ private
     age = public_send("age#{person_num}")
     economic_status = public_send("ecstat#{person_num}")
     gender = public_send("sex#{person_num}")
+    tenant_retired_or_prefers_not_say = tenant_is_retired?(economic_status) || tenant_prefers_not_to_say?(economic_status)
     return unless age && economic_status && gender
 
-    %w[M X].include?(gender) && !tenant_is_retired?(economic_status) && age > 67 ||
-      gender == "F" && !tenant_is_retired?(economic_status) && age > 60
+    %w[M X].include?(gender) && !tenant_retired_or_prefers_not_say && age > 67 ||
+      gender == "F" && !tenant_retired_or_prefers_not_say && age > 60
   end
 end
