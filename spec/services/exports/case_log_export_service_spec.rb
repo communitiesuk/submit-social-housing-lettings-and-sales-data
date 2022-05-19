@@ -203,7 +203,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
     end
 
-    context "and a previous export has run the having no case logs" do
+    context "and a previous export has run having no case logs" do
       before { export_service.export_case_logs }
 
       it "doesn't increment the manifest number by 1" do
