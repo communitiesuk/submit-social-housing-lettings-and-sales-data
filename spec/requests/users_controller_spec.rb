@@ -358,10 +358,6 @@ RSpec.describe UsersController, type: :request do
       let(:headers) { { "Accept" => "text/csv" } }
       let(:user) { FactoryBot.create(:user) }
 
-      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
-      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
-
       before do
         sign_in user
         get "/users", headers:, params: {}
@@ -760,11 +756,8 @@ RSpec.describe UsersController, type: :request do
       let(:headers) { { "Accept" => "text/csv" } }
       let(:user) { FactoryBot.create(:user, :support) }
 
-      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
-      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
-
       before do
+        FactoryBot.create_list(:user, 25)
         sign_in user
         get "/users", headers:, params: {}
       end
@@ -777,7 +770,7 @@ RSpec.describe UsersController, type: :request do
 
       it "downloads all users" do
         csv = CSV.parse(response.body)
-        expect(csv.count).to eq(4)
+        expect(csv.count).to eq(27)
       end
 
       it "downloads organisation names rather than ids" do
