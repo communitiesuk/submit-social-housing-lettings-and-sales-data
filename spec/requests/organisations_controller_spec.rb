@@ -349,11 +349,11 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "with a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
+      let(:support_user) { FactoryBot.create(:user, :support) }
 
       before do
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in user
+        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in support_user
         get "/organisations"
       end
 
@@ -361,6 +361,28 @@ RSpec.describe OrganisationsController, type: :request do
         expect(page).to have_content("2 total organisations")
         expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/logs"
         expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
+      end
+
+      context "when viewing a specific organisation" do
+        let(:number_of_org1_case_logs) { 2 }
+        let(:number_of_org2_case_logs) { 4 }
+        before do
+          FactoryBot.create_list(:case_log, number_of_org1_case_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
+          FactoryBot.create_list(:case_log, number_of_org2_case_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+        end
+        
+        it "only shows logs for that organisation" do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+
+          expect(page).to have_content("#{number_of_org1_case_logs} total logs")
+          organisation.case_logs.map(&:id).each do |case_log_id|
+            expect(page).to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+          end
+
+          unauthorised_organisation.case_logs.map(&:id).each do |case_log_id|
+            expect(page).not_to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+          end
+        end
       end
     end
 
