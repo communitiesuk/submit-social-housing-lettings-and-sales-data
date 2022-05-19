@@ -24,7 +24,7 @@ class FormController < ApplicationController
     else
       render_not_found
     end
-    transaction.finish
+    transaction.finish if transaction
   end
 
   def check_answers
