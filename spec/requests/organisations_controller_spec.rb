@@ -58,10 +58,13 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "with a data coordinator user" do
+      before do
+        sign_in user
+      end
+
       context "when we access the details tab" do
         context "with an organisation that the user belongs to" do
           before do
-            sign_in user
             get "/organisations/#{organisation.id}/details", headers:, params: {}
           end
 
@@ -89,7 +92,6 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "with organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
-            sign_in user
             get "/organisations/#{unauthorised_organisation.id}/details", headers:, params: {}
           end
 
@@ -106,7 +108,6 @@ RSpec.describe OrganisationsController, type: :request do
           let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
 
           before do
-            sign_in user
             get "/organisations/#{organisation.id}/users", headers:, params: {}
           end
 
@@ -144,7 +145,6 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "with an organisation that are not in scope for the user, i.e. that they do not belong to" do
           before do
-            sign_in user
             get "/organisations/#{unauthorised_organisation.id}/users", headers:, params: {}
           end
 
@@ -157,7 +157,6 @@ RSpec.describe OrganisationsController, type: :request do
       describe "#edit" do
         context "with an organisation that the user belongs to" do
           before do
-            sign_in user
             get "/organisations/#{organisation.id}/edit", headers:, params: {}
           end
 
@@ -170,12 +169,15 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "with an organisation that the user does not belong to" do
           before do
-            sign_in user
             get "/organisations/#{unauthorised_organisation.id}/edit", headers:, params: {}
           end
 
           it "returns a 404 not found" do
             expect(response).to have_http_status(:not_found)
+          end
+
+          it "shows the 404 view" do
+            expect(page).to have_content("Page not found")
           end
         end
       end
@@ -183,7 +185,6 @@ RSpec.describe OrganisationsController, type: :request do
       describe "#update" do
         context "with an organisation that the user belongs to" do
           before do
-            sign_in user
             patch "/organisations/#{organisation.id}", headers:, params:
           end
 
@@ -211,7 +212,6 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "with an organisation that the user does not belong to" do
           before do
-            sign_in user
             patch "/organisations/#{unauthorised_organisation.id}", headers:, params: {}
           end
 
@@ -220,15 +220,42 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
       end
+
+      context "when viewing logs for other organisation" do
+        before do
+          get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
+        end
+
+        it "returns not found 404 from org details route" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "shows the 404 view" do
+          expect(page).to have_content("Page not found")
+        end
+      end
+
+      context "when viewing logs for your organisation" do
+        before do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+        end
+
+        it "redirects to /logs page" do
+          expect(response).to redirect_to("/logs")
+        end
+      end
     end
 
     context "with a data provider user" do
       let(:user) { FactoryBot.create(:user) }
 
+      before do
+        sign_in user
+      end
+
       context "when accessing the details tab" do
         context "with an organisation that the user belongs to" do
           before do
-            sign_in user
             get "/organisations/#{organisation.id}/details", headers:, params: {}
           end
 
@@ -268,7 +295,6 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when accessing the users tab" do
         before do
-          sign_in user
           get "/organisations/#{organisation.id}/users", headers:, params: {}
         end
 
@@ -279,7 +305,6 @@ RSpec.describe OrganisationsController, type: :request do
 
       describe "#edit" do
         before do
-          sign_in user
           get "/organisations/#{organisation.id}/edit", headers:, params: {}
         end
 
@@ -290,12 +315,35 @@ RSpec.describe OrganisationsController, type: :request do
 
       describe "#update" do
         before do
-          sign_in user
           patch "/organisations/#{organisation.id}", headers:, params:
         end
 
         it "redirects to home" do
           expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "when viewing logs for other organisation" do
+        before do
+          get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
+        end
+
+        it "returns not found 404 from org details route" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "shows the 404 view" do
+          expect(page).to have_content("Page not found")
+        end
+      end
+
+      context "when viewing logs for your organisation" do
+        before do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+        end
+
+        it "redirects to /logs page" do
+          expect(response).to redirect_to("/logs")
         end
       end
     end
