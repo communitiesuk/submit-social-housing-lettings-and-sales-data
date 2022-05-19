@@ -960,6 +960,9 @@
                     "2": {
                       "value": "No"
                     },
+                    "divider": {
+                      "value": "true"
+                    },
                     "3": {
                       "value": "Don’t know"
                     }
@@ -998,16 +1001,16 @@
                   "type": "radio",
                   "answer_options": {
                     "4": {
-                      "value": "Assured Shorthold Tenancy (AST) - Fixed term"
+                      "value": "Assured Shorthold Tenancy (AST) – Fixed term"
                     },
                     "6": {
-                      "value": "Secure - fixed term"
+                      "value": "Secure – fixed term"
                     },
                     "2": {
-                      "value": "Assured - lifetime"
+                      "value": "Assured – lifetime"
                     },
                     "7": {
-                      "value": "Secure - lifetime"
+                      "value": "Secure – lifetime"
                     },
                     "5": {
                       "value": "Licence agreement"
@@ -1045,16 +1048,16 @@
                   "type": "radio",
                   "answer_options": {
                     "4": {
-                      "value": "Assured Shorthold Tenancy (AST) - Fixed term"
+                      "value": "Assured Shorthold Tenancy (AST) – Fixed term"
                     },
                     "6": {
-                      "value": "Secure - fixed term"
+                      "value": "Secure – fixed term"
                     },
                     "2": {
-                      "value": "Assured - lifetime"
+                      "value": "Assured – lifetime"
                     },
                     "7": {
-                      "value": "Secure - lifetime"
+                      "value": "Secure – lifetime"
                     },
                     "5": {
                       "value": "Licence agreement"
@@ -1122,7 +1125,7 @@
                       "value": "Yes – extra care housing"
                     },
                     "1": {
-                      "value": "Yes - specialist retirement housing"
+                      "value": "Yes – specialist retirement housing"
                     },
                     "3": {
                       "value": "No"
