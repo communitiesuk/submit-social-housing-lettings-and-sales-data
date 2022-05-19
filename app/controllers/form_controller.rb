@@ -4,7 +4,6 @@ class FormController < ApplicationController
   before_action :find_resource_by_named_id, except: %i[submit_form review]
 
   def submit_form
-    transaction = Sentry.start_transaction(op: "submit_form")
     if @case_log
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
@@ -24,7 +23,6 @@ class FormController < ApplicationController
     else
       render_not_found
     end
-    transaction.finish if transaction
   end
 
   def check_answers
