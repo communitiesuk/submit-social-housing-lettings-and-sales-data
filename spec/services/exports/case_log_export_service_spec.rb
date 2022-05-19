@@ -166,7 +166,7 @@ RSpec.describe Exports::CaseLogExportService do
       end
     end
 
-    context "and a previous export has run the same day with logs" do
+    context "and a previous export has run the same day having case logs" do
       before do
         FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 2, 1))
         export_service.export_case_logs
@@ -200,6 +200,16 @@ RSpec.describe Exports::CaseLogExportService do
           expect(storage_service).to receive(:write_file).with("core_2021_2022_jan_mar_f0002_inc0001.zip", any_args)
           export_service.export_case_logs(full_update: true)
         end
+      end
+    end
+
+    context "and a previous export has run the having no case logs" do
+      before { export_service.export_case_logs }
+
+      it "doesn't increment the manifest number by 1" do
+        export_service.export_case_logs
+
+        expect(LogsExport.last.increment_number).to eq(1)
       end
     end
 
