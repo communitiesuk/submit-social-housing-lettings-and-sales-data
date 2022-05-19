@@ -18,10 +18,10 @@ module Exports
     def export_case_logs(full_update: false)
       start_time = Time.zone.now
       case_logs = retrieve_case_logs(start_time, full_update)
-      empty_export = case_logs.empty?
-      export = build_export_run(start_time, full_update, empty_export)
+      export = build_export_run(start_time, full_update)
       daily_run = get_daily_run_number
       archive_datetimes = write_export_archive(export, case_logs)
+      export.empty_export = archive_datetimes.empty?
       write_master_manifest(daily_run, archive_datetimes)
       export.save!
     end
@@ -39,11 +39,11 @@ module Exports
       LogsExport.where(created_at: today.beginning_of_day..today.end_of_day).count + 1
     end
 
-    def build_export_run(current_time, full_update, empty_export)
+    def build_export_run(current_time, full_update)
       previous_exports_with_data = LogsExport.where(empty_export: false)
 
       if previous_exports_with_data.empty?
-        return LogsExport.new(started_at: current_time, empty_export:)
+        return LogsExport.new(started_at: current_time)
       end
 
       base_number = previous_exports_with_data.maximum(:base_number)
@@ -56,7 +56,7 @@ module Exports
         increment_number += 1
       end
 
-      LogsExport.new(started_at: current_time, base_number:, increment_number:, empty_export:)
+      LogsExport.new(started_at: current_time, base_number:, increment_number:)
     end
 
     def write_master_manifest(daily_run, archive_datetimes)
