@@ -73,6 +73,18 @@ RSpec.describe User, type: :model do
       expect(user.need_two_factor_authentication?(nil)).to be false
     end
 
+    it "is confirmable" do
+      allow(DeviseNotifyMailer).to receive(:confirmation_instructions).and_return(OpenStruct.new(deliver: true))
+      expect(DeviseNotifyMailer).to receive(:confirmation_instructions).once
+      described_class.create!(
+        name: "unconfirmed_user",
+        email: "unconfirmed_user@example.com",
+        password: "password123",
+        organisation: other_organisation,
+        role: "data_provider",
+      )
+    end
+
     context "when the user is a data provider" do
       it "cannot assign roles" do
         expect(user.assignable_roles).to eq({})

@@ -343,6 +343,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_18_115438) do
     t.datetime "direct_otp_sent_at", precision: nil
     t.datetime "totp_timestamp", precision: nil
     t.boolean "active", default: true
+    t.string "confirmation_token"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"

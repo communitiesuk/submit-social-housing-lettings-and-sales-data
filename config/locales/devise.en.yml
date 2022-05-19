@@ -56,10 +56,10 @@ en:
       unlocked: "Your account has been successfully unlocked. Sign in to continue."
   errors:
     messages:
-      already_confirmed: "has already been confirmed. Sign in."
+      already_confirmed: "Email has already been confirmed. Sign in."
       blank: "can’t be blank"
-      confirmation: "doesn’t match new password"
-      confirmation_period_expired: "needs to be confirmed within %{period}. Request a new account."
+      confirmation: "Password confirmation doesn’t match new password"
+      confirmation_period_expired: "Email needs to be confirmed within %{period}. Request a new link below."
       expired: "Token has expired. Request a new token."
       not_found: "was not found"
       not_locked: "has not been locked"

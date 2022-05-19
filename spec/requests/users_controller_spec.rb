@@ -255,7 +255,7 @@ RSpec.describe UsersController, type: :request do
 
           it "allows changing email but not dpo or key_contact" do
             user.reload
-            expect(user.email).to eq(new_email)
+            expect(user.unconfirmed_email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be false
             expect(user.is_key_contact?).to be false
           end
@@ -539,7 +539,7 @@ RSpec.describe UsersController, type: :request do
 
           it "allows changing email and dpo" do
             user.reload
-            expect(user.email).to eq(new_email)
+            expect(user.unconfirmed_email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
             expect(user.is_key_contact?).to be true
           end
@@ -586,7 +586,7 @@ RSpec.describe UsersController, type: :request do
             it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
-              expect(other_user.email).to eq(new_email)
+              expect(other_user.unconfirmed_email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
               expect(other_user.is_key_contact?).to be true
             end
@@ -971,7 +971,7 @@ RSpec.describe UsersController, type: :request do
 
           it "allows changing email and dpo" do
             user.reload
-            expect(user.email).to eq(new_email)
+            expect(user.unconfirmed_email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
             expect(user.is_key_contact?).to be true
           end
@@ -1018,7 +1018,7 @@ RSpec.describe UsersController, type: :request do
             it "allows changing email, dpo, key_contact" do
               patch "/users/#{other_user.id}", headers: headers, params: params
               other_user.reload
-              expect(other_user.email).to eq(new_email)
+              expect(other_user.unconfirmed_email).to eq(new_email)
               expect(other_user.is_data_protection_officer?).to be true
               expect(other_user.is_key_contact?).to be true
             end
@@ -1075,7 +1075,7 @@ RSpec.describe UsersController, type: :request do
               it "allows changing email, dpo, key_contact" do
                 patch "/users/#{other_user.id}", headers: headers, params: params
                 other_user.reload
-                expect(other_user.email).to eq(new_email)
+                expect(other_user.unconfirmed_email).to eq(new_email)
                 expect(other_user.is_data_protection_officer?).to be true
                 expect(other_user.is_key_contact?).to be true
               end

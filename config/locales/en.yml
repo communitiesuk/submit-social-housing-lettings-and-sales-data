@@ -34,6 +34,9 @@ en:
   feedback_form: "https://forms.office.com/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqC4YDsCJ3llAvEZelBFBLUBURFVUTzFDTUJPQlM4M0laTE5DTlNFSjJBQi4u"
   organisation:
     updated: "Organisation details updated"
+  user:
+    create_password: "Create a password to finish setting up your account"
+    reset_password: "Reset your password"
 
   validations:
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
