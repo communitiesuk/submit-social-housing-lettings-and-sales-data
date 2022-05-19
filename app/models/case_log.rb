@@ -74,6 +74,10 @@ class CaseLog < ApplicationRecord
     @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
   end
 
+  def reset_start_year!
+    @start_year = nil
+  end
+
   def form_name
     return unless startdate
 
