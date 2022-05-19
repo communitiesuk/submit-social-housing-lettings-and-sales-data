@@ -9,13 +9,13 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    @pagy, @users = pagy(User.all.where(active: true))
+    @pagy, @users = pagy(User.all.where(active: true).includes(:organisation))
 
     respond_to do |format|
       format.html
       format.csv do
         if current_user.support?
-          send_data User.all.where(active: true).to_csv, filename: "users-#{Time.zone.now}.csv"
+          send_data User.all.where(active: true).includes(:organisation).to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
         end
