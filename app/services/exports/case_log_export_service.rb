@@ -95,18 +95,21 @@ module Exports
       archive_datetimes = {}
       case_logs_per_archive.each do |archive, case_logs_to_export|
         manifest_xml = build_manifest_xml(case_logs_to_export.count)
-        zip_io = Zip::File.open_buffer(StringIO.new)
-        zip_io.add("manifest.xml", manifest_xml)
+        zip_file = Zip::File.open_buffer(StringIO.new)
+        zip_file.add("manifest.xml", manifest_xml)
 
         part_number = 1
         case_logs_to_export.each_slice(MAX_XML_RECORDS) do |case_logs_slice|
           data_xml = build_export_xml(case_logs_slice)
           part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
-          zip_io.add("#{archive}_#{part_number_str}.xml", data_xml)
+          zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
           part_number += 1
         end
 
-        @storage_service.write_file("#{archive}.zip", zip_io.write_buffer)
+        # Required by S3 to avoid Aws::S3::Errors::BadDigest
+        zip_io = zip_file.write_buffer
+        zip_io.rewind
+        @storage_service.write_file("#{archive}.zip", zip_io)
         archive_datetimes[archive] = Time.zone.now
       end
 
