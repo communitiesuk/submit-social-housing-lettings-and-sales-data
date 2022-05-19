@@ -348,6 +348,24 @@ RSpec.describe UsersController, type: :request do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/users")
       end
+
+      it "does not show the download csv link" do
+        expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
+      end
+    end
+
+    describe "CSV download" do
+      let(:headers) { { "Accept" => "text/csv" } }
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "returns 401 unauthorized" do
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
 
     describe "#show" do
@@ -727,6 +745,37 @@ RSpec.describe UsersController, type: :request do
 
       it "shows the pagination count" do
         expect(page).to have_content("3 total users")
+      end
+
+      it "shows the download csv link" do
+        expect(page).to have_link("Download (CSV)", href: "/users.csv")
+      end
+    end
+
+    describe "CSV download" do
+      let(:headers) { { "Accept" => "text/csv" } }
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      before do
+        FactoryBot.create_list(:user, 25)
+        sign_in user
+        get "/users", headers:, params: {}
+      end
+
+      it "downloads a CSV file with headers" do
+        csv = CSV.parse(response.body)
+        expect(csv.first.second).to eq("email")
+        expect(csv.second.first).to eq(user.id.to_s)
+      end
+
+      it "downloads all users" do
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(27)
+      end
+
+      it "downloads organisation names rather than ids" do
+        csv = CSV.parse(response.body)
+        expect(csv.second[3]).to eq(user.organisation.name.to_s)
       end
     end
 
