@@ -87,7 +87,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
       it "renders the user edit password view" do
         _raw, enc = Devise.token_generator.generate(AdminUser, :reset_password_token)
         get "/admin/password/edit?reset_password_token=#{enc}"
-        expect(page).to have_css("h1", text: "Reset your password")
+        expect(page).to have_css("h1", text: I18n.t("user.reset_password"))
       end
 
       context "when passwords entered don't match" do

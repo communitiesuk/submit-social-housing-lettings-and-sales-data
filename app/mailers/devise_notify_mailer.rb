@@ -13,21 +13,34 @@ class DeviseNotifyMailer < Devise::Mailer
     )
   end
 
-  def reset_password_instructions(record, token, _opts = {})
-    url = public_send("edit_#{record.class.name.underscore}_password_url")
-    personalisation = {
+  def personalisation(record, token, url)
+    {
       name: record.name || record.email,
       email: record.email,
       organisation: record.respond_to?(:organisation) ? record.organisation.name : "",
-      link: "#{url}?reset_password_token=#{token}",
+      link: "#{url}#{token}",
     }
-    send_email(record.email, record.reset_password_notify_template, personalisation)
   end
 
-  # def confirmation_instructions(record, token, _opts = {})
-  #   super
-  # end
-  #
+  def reset_password_instructions(record, token, _opts = {})
+    base = public_send("edit_#{record.class.name.underscore}_password_url")
+    url = "#{base}?reset_password_token="
+    send_email(
+      record.email,
+      record.reset_password_notify_template,
+      personalisation(record, token, url),
+    )
+  end
+
+  def confirmation_instructions(record, token, _opts = {})
+    url = "#{user_confirmation_url}?confirmation_token="
+    send_email(
+      record.email,
+      record.confirmable_template,
+      personalisation(record, token, url),
+    )
+  end
+
   # def unlock_instructions(record, token, opts = {})
   #   super
   # end

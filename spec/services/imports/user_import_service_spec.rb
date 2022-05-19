@@ -7,6 +7,14 @@ RSpec.describe Imports::UserImportService do
   let(:user_file) { File.open("#{fixture_directory}/#{old_user_id}.xml") }
   let(:storage_service) { instance_double(StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
+  let(:notify_client) { instance_double(Notifications::Client) }
+  let(:devise_notify_mailer) { DeviseNotifyMailer.new }
+
+  before do
+    allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
+    allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
+    allow(notify_client).to receive(:send_email).and_return(true)
+  end
 
   context "when importing users" do
     subject(:import_service) { described_class.new(storage_service, logger) }

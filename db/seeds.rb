@@ -31,6 +31,7 @@ if Rails.env.development? && User.count.zero?
     password: "password",
     organisation: org,
     role: "data_provider",
+    confirmed_at: Time.zone.now,
   )
 
   User.create!(
@@ -38,6 +39,7 @@ if Rails.env.development? && User.count.zero?
     password: "password",
     organisation: org,
     role: "data_coordinator",
+    confirmed_at: Time.zone.now,
   )
 
   User.create!(
@@ -45,6 +47,7 @@ if Rails.env.development? && User.count.zero?
     password: "password",
     organisation: org,
     role: "support",
+    confirmed_at: Time.zone.now,
   )
 
   pp "Seeded 3 dummy users"

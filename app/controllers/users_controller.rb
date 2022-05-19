@@ -62,7 +62,6 @@ class UsersController < ApplicationController
     else
       user = User.create(user_params.merge(org_params).merge(password_params))
       if user.persisted?
-        user.send_reset_password_instructions
         redirect_to created_user_redirect_path
       else
         @resource.errors.add :email, I18n.t("validations.email.taken")
