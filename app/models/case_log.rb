@@ -66,10 +66,13 @@ class CaseLog < ApplicationRecord
   end
 
   def collection_start_year
+    transaction = Sentry.start_transaction(op: "collection_start_year")
     return unless startdate
 
     window_end_date = Time.zone.local(startdate.year, 4, 1)
-    startdate < window_end_date ? startdate.year - 1 : startdate.year
+    start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+    transaction.finish if transaction
+    start_year
   end
 
   def form_name
