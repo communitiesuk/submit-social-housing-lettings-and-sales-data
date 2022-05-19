@@ -433,7 +433,6 @@ RSpec.describe Validations::HouseholdValidations do
         record.sex2 = "M"
         record.ecstat2 = 5
         household_validator.validate_household_number_of_other_members(record)
-        household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
         expect(record.errors["sex2"]).to be_empty
         expect(record.errors["age2"]).to be_empty
@@ -465,7 +464,6 @@ RSpec.describe Validations::HouseholdValidations do
         record.age2 = 61
         record.sex2 = "F"
         record.ecstat2 = 5
-        household_validator.validate_household_number_of_other_members(record)
         household_validator.validate_household_number_of_other_members(record)
         expect(record.errors["ecstat2"]).to be_empty
         expect(record.errors["sex2"]).to be_empty

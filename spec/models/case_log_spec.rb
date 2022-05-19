@@ -1955,6 +1955,10 @@ RSpec.describe CaseLog do
       it "returns the expected retirement age" do
         expect(case_log.retirement_age_for_person_1).to eq(67)
       end
+
+      it "returns the expected plural" do
+        expect(case_log.plural_gender_for_person_1).to eq("male and non-binary people")
+      end
     end
 
     context "when a person gender is Female" do
@@ -1962,6 +1966,10 @@ RSpec.describe CaseLog do
 
       it "returns the expected retirement age" do
         expect(case_log.retirement_age_for_person_2).to eq(60)
+      end
+
+      it "returns the expected plural" do
+        expect(case_log.plural_gender_for_person_2).to eq("females")
       end
     end
 
@@ -1971,6 +1979,10 @@ RSpec.describe CaseLog do
       it "returns the expected retirement age" do
         expect(case_log.retirement_age_for_person_3).to eq(67)
       end
+
+      it "returns the expected plural" do
+        expect(case_log.plural_gender_for_person_3).to eq("male and non-binary people")
+      end
     end
 
     context "when the person gender is not set" do
@@ -1978,6 +1990,10 @@ RSpec.describe CaseLog do
 
       it "returns nil" do
         expect(case_log.retirement_age_for_person_3).to be_nil
+      end
+
+      it "returns the expected plural" do
+        expect(case_log.plural_gender_for_person_3).to be_nil
       end
     end
   end

@@ -409,9 +409,9 @@ class CaseLog < ApplicationRecord
     return unless gender
 
     if %w[M X].include?(gender)
-      "men and non-binary people"
+      "male and non-binary people"
     elsif gender == "F"
-      "women"
+      "females"
     end
   end
 
