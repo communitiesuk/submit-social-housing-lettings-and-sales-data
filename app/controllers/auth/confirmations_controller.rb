@@ -13,6 +13,8 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
       end
     elsif resource.errors.map(&:type).include?(:confirmation_period_expired)
       render "devise/confirmations/expired"
+    elsif resource.errors.map(&:type).include?(:already_confirmed)
+      redirect_to user_session_path
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity) { render :new }
     end
