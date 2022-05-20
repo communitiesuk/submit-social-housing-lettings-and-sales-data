@@ -403,6 +403,25 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_content("About this organisation")
         end
       end
+
+      context "when viewing a specific organisation details" do
+        before do
+          get "/organisations/#{organisation.id}/details", headers:, params: {}
+        end
+
+        it "displays the name of the organisation" do
+          expect(page).to have_content(organisation.name)
+        end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("About this organisation")
+        end
+
+        it "allows to edit the organisation details" do
+          expect(page).to have_link("Change", count: 10)
+        end
+      end
     end
 
     context "when there are more than 20 organisations" do
