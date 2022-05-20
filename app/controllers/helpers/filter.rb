@@ -13,9 +13,9 @@ module Helpers::Filter
     current_user.support? ? logs.all.includes(:owning_organisation, :managing_organisation) : logs
   end
 
-  def set_session_filters(specific_org = false)
+  def set_session_filters(specific_org: false)
     new_filters = session[:case_logs_filters].present? ? JSON.parse(session[:case_logs_filters]) : {}
-    current_user.case_logs_filters(specific_org).each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
+    current_user.case_logs_filters(specific_org:).each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
     new_filters = new_filters.except("organisation") if params["organisation_select"] == "all"
 
     session[:case_logs_filters] = new_filters.to_json

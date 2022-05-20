@@ -106,7 +106,7 @@ RSpec.describe "User Features" do
         end
         check("years-2021-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/logs?years[]=&years[]=2021&status[]=&user=all&organisation_select=all&organisation=")
+        expect(page).to have_current_path("/organisations/#{org_id}/logs?years[]=&years[]=2021&status[]=&user=all")
         expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
       end
     end

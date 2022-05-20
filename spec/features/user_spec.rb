@@ -549,49 +549,5 @@ RSpec.describe "User Features" do
         end
       end
     end
-
-    context "when the user is logged in as a support user" do
-      let!(:support_user) { FactoryBot.create(:user, :support) }
-      let!(:test_org_1) { FactoryBot.create(:organisation, name: "Test1") }
-      let!(:test_org_2) { FactoryBot.create(:organisation, name: "Test2") }
-      let!(:test_org_3) { FactoryBot.create(:organisation, name: "Test3") }
-      let!(:test_org_4) { FactoryBot.create(:organisation, name: "Test4") }
-      let!(:test_org_5) { FactoryBot.create(:organisation, name: "Test5") }
-      let!(:case_log) { FactoryBot.create(:case_log, owning_organisation_id: test_org_3.id, managing_organisation_id: test_org_3.id) }
-
-      before do
-        FactoryBot.create_list(:organisation, 50)
-        allow(SecureRandom).to receive(:random_number).and_return(otp)
-        visit("/logs")
-        fill_in("user[email]", with: support_user.email)
-        fill_in("user[password]", with: "pAssword1")
-        click_button("Sign in")
-        fill_in("code", with: otp)
-        click_button("Submit")
-      end
-
-      it "they should see organisations instead of your organisations in the navigation bar" do
-        visit("/organisations")
-        expect(page).to have_selector("h1", text: "Organisations")
-      end
-
-      it "they should see all organisations listed in the organisations page, with pagination" do
-        visit("/organisations")
-        expect(page).to have_css("#all-organisations-table")
-        expect(page).to have_css(".app-pagination__link")
-      end
-
-      context "when the support user is on the organisations list page" do
-        it "they can click on an organisation to see their logs page" do
-          visit("/organisations")
-          click_link("Test3")
-          expect(page).to have_content("1 total logs")
-          expect(page).to have_selector("a", text: case_log.id.to_s)
-          visit("/organisations")
-          click_link("Test5")
-          expect(page).not_to have_selector("a", text: case_log.id.to_s)
-        end
-      end
-    end
   end
 end
