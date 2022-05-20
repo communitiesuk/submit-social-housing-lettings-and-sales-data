@@ -91,6 +91,7 @@ class User < ApplicationRecord
 
   def need_two_factor_authentication?(_request)
     return false if Rails.env.development?
+
     support?
   end
 
