@@ -21,13 +21,23 @@ describe "rake core:data_export", type: task do
     allow(ENV).to receive(:[]).with("EXPORT_PAAS_INSTANCE").and_return(paas_instance)
   end
 
-  context "when exporting case logs" do
-    it "starts the export process" do
+  context "when exporting case logs with no parameters" do
+    it "starts the XML export process" do
       expect(StorageService).to receive(:new).with(paas_config_service, paas_instance)
       expect(Exports::CaseLogExportService).to receive(:new).with(storage_service)
-      expect(export_service).to receive(:export_case_logs)
+      expect(export_service).to receive(:export_xml_case_logs)
 
       task.invoke
+    end
+  end
+
+  context "when exporting case logs with CSV format" do
+    it "starts the CSV export process" do
+      expect(StorageService).to receive(:new).with(paas_config_service, paas_instance)
+      expect(Exports::CaseLogExportService).to receive(:new).with(storage_service)
+      expect(export_service).to receive(:export_csv_case_logs)
+
+      task.invoke("CSV", "false")
     end
   end
 end
