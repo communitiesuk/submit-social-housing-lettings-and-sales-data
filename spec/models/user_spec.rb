@@ -139,15 +139,15 @@ RSpec.describe User, type: :model do
       it "can filter case logs by user, year, status and organisation" do
         expect(user.case_logs_filters).to eq(%w[status years user organisation])
       end
+    end
 
-      context "when the user is in development environment" do
-        before do
-          allow(Rails.env).to receive(:development?).and_return(true)
-        end
+    context "when the user is in development environment" do
+      before do
+        allow(Rails.env).to receive(:development?).and_return(true)
+      end
 
-        it "doesn't require 2FA" do
-          expect(user.need_two_factor_authentication?(nil)).to be false
-        end
+      it "doesn't require 2FA" do
+        expect(user.need_two_factor_authentication?(nil)).to be false
       end
     end
   end
