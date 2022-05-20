@@ -18,9 +18,14 @@ class Form::Page
   delegate :form, to: :subsection
 
   def routed_to?(case_log)
-    return true unless depends_on || subsection.depends_on
+    transaction = Sentry.get_current_scope&.get_transaction
+    span = transaction&.start_child(op: :routed_to?)
 
-    subsection.enabled?(case_log) && form.depends_on_met(depends_on, case_log)
+    return true unless depends_on || subsection.depends_on
+    routed_to = subsection.enabled?(case_log) && form.depends_on_met(depends_on, case_log)
+
+    span&.finish
+    routed_to
   end
 
   def non_conditional_questions

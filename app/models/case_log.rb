@@ -66,10 +66,16 @@ class CaseLog < ApplicationRecord
   end
 
   def collection_start_year
+    transaction = Sentry.get_current_scope&.get_transaction
+    span = transaction&.start_child(op: :routed_to?)
+
     return unless startdate
 
     window_end_date = Time.zone.local(startdate.year, 4, 1)
-    startdate < window_end_date ? startdate.year - 1 : startdate.year
+    start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+
+    span&.finish
+    start_year
   end
 
   def form_name
