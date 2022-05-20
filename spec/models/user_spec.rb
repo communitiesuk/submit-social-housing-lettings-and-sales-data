@@ -142,6 +142,8 @@ RSpec.describe User, type: :model do
     end
 
     context "when the user is in development environment" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
       before do
         allow(Rails.env).to receive(:development?).and_return(true)
       end
