@@ -22,7 +22,7 @@ class CaseLog < ApplicationRecord
   has_paper_trail
 
   validates_with CaseLogValidator
-  before_validation :reset_start_year!, if: :startdate_changed?
+  before_validation :recalculate_start_year!, if: :startdate_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_invalidated_dependent_fields!
@@ -74,8 +74,9 @@ class CaseLog < ApplicationRecord
     @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
   end
 
-  def reset_start_year!
+  def recalculate_start_year!
     @start_year = nil
+    collection_start_year
   end
 
   def form_name
