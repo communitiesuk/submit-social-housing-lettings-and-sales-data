@@ -397,6 +397,11 @@ RSpec.describe OrganisationsController, type: :request do
         it "does not have specific organisation filter" do
           expect(page).not_to have_content("Specific organisation")
         end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("About this organisation")
+        end
       end
     end
 

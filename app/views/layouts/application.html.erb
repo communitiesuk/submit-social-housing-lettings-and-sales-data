@@ -65,8 +65,9 @@
     ) %>
 
     <% if !current_user.nil? %>
-      <%= render PrimaryNavigationComponent.new(
+      <%= render NavigationComponent.new(
         items: primary_items(request.path, current_user),
+        level: "primary"
       ) %>
     <% end %>
 

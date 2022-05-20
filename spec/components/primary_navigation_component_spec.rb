@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PrimaryNavigationComponent, type: :component do
+RSpec.describe NavigationComponent, type: :component do
   let(:items) do
     [
       NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
