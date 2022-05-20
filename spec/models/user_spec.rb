@@ -120,7 +120,7 @@ RSpec.describe User, type: :model do
       let!(:other_orgs_log) { FactoryBot.create(:case_log) }
 
       it "has access to logs from all organisations" do
-        expect(user.case_logs.to_a).to eq([owned_case_log, managed_case_log, other_orgs_log])
+        expect(user.case_logs.to_a).to match_array([owned_case_log, managed_case_log, other_orgs_log])
       end
 
       it "requires 2FA" do
