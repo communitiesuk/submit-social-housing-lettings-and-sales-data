@@ -1,5 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
+  include Helpers::Filter
+
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
   before_action :authenticate_scope!
@@ -43,8 +45,11 @@ class OrganisationsController < ApplicationController
   end
 
   def logs
+    set_session_filters
+
     if current_user.support?
-      @pagy, @case_logs = pagy(CaseLog.all.where(owning_organisation_id: @organisation.id))
+      organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
+      @pagy, @case_logs = pagy(filtered_case_logs(organisation_logs))
       render "logs", layout: "application"
     else
       redirect_to(case_logs_path)
