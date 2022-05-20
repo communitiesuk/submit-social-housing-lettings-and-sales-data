@@ -549,6 +549,7 @@ RSpec.describe "User Features" do
         end
       end
     end
+
     context "when the user is logged in as a support user" do
       let!(:support_user) { FactoryBot.create(:user, :support) }
       let!(:test_org_1) { FactoryBot.create(:organisation, name: "Test1") }

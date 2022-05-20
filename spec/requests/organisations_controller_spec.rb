@@ -349,11 +349,11 @@ RSpec.describe OrganisationsController, type: :request do
     end
 
     context "with a support user" do
-      let(:support_user) { FactoryBot.create(:user, :support) }
+      let(:user) { FactoryBot.create(:user, :support) }
 
       before do
-        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in support_user
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
         get "/organisations"
       end
 
@@ -387,6 +387,15 @@ RSpec.describe OrganisationsController, type: :request do
           unauthorised_organisation.case_logs.map(&:id).each do |case_log_id|
             expect(page).not_to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
           end
+        end
+
+        it "has filters" do
+          expect(page).to have_content("Filters")
+          expect(page).to have_content("Collection year")
+        end
+
+        it "does not have specific organisation filter" do
+          expect(page).not_to have_content("Specific organisation")
         end
       end
     end

@@ -45,7 +45,7 @@ class OrganisationsController < ApplicationController
   end
 
   def logs
-    set_session_filters
+    set_session_filters(true)
 
     if current_user.support?
       organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
