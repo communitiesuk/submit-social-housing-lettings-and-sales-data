@@ -146,7 +146,7 @@ RSpec.describe User, type: :model do
         allow(Rails.env).to receive(:development?).and_return(true)
       end
 
-      it "doesn't require 2FA" do
+      it "does not require 2FA" do
         expect(user.need_two_factor_authentication?(nil)).to be false
       end
     end
