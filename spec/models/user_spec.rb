@@ -140,6 +140,18 @@ RSpec.describe User, type: :model do
         expect(user.case_logs_filters).to eq(%w[status years user organisation])
       end
     end
+
+    context "when the user is in development environment" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      before do
+        allow(Rails.env).to receive(:development?).and_return(true)
+      end
+
+      it "does not require 2FA" do
+        expect(user.need_two_factor_authentication?(nil)).to be false
+      end
+    end
   end
 
   describe "paper trail" do
