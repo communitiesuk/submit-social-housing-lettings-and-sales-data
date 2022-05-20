@@ -15,7 +15,14 @@ module Exports
       @logger = logger
     end
 
-    def export_case_logs(full_update: false)
+    def export_csv_case_logs
+      time_str = Time.zone.now.strftime("%F").underscore
+      case_logs = retrieve_case_logs(Time.zone.now, true)
+      csv_io = build_export_csv(case_logs)
+      @storage_service.write_file("export_#{time_str}.csv", csv_io)
+    end
+
+    def export_xml_case_logs(full_update: false)
       start_time = Time.zone.now
       case_logs = retrieve_case_logs(start_time, full_update)
       export = build_export_run(start_time, full_update)
@@ -24,12 +31,6 @@ module Exports
       export.empty_export = archive_datetimes.empty?
       write_master_manifest(daily_run, archive_datetimes)
       export.save!
-    end
-
-    def is_omitted_field?(field_name)
-      omitted_attrs = %w[ethnic_group]
-      pattern_age = /age\d_known/
-      field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
     end
 
   private
@@ -157,18 +158,56 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
+    def apply_cds_transformation!(attribute_hash)
+      # OLD_CORE FORM ID support
+      attribute_hash["form"] = attribute_hash["old_form_id"]
+      attribute_hash["newform"] = attribute_hash["id"] + LOG_ID_OFFSET
+      # Age refused
+      (1..8).each do |index|
+        attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
+      end
+    end
+
+    def filter_keys!(attributes)
+      attributes.reject! { |attribute| is_omitted_field?(attribute) }
+    end
+
+    def is_omitted_field?(field_name)
+      omitted_attrs = %w[id old_form_id old_id ethnic_group]
+      pattern_age = /age\d_known/
+      field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
+    end
+
+    def build_export_csv(case_logs)
+      csv_io = CSV.generate do |csv|
+        attribute_keys = nil
+        case_logs.each do |case_log|
+          attribute_hash = case_log.attributes_before_type_cast
+          apply_cds_transformation!(attribute_hash)
+          if attribute_keys.nil?
+            attribute_keys = attribute_hash.keys
+            filter_keys!(attribute_keys)
+            csv << attribute_keys
+          end
+          csv << attribute_keys.map { |attribute_key| attribute_hash[attribute_key] }
+        end
+      end
+
+      StringIO.new(csv_io)
+    end
+
     def build_export_xml(case_logs)
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
+        attribute_hash = case_log.attributes_before_type_cast
+        apply_cds_transformation!(attribute_hash)
         form = doc.create_element("form")
         doc.at("forms") << form
-        case_log.attributes.each do |key, _|
+        attribute_hash.each do |key, value|
           if is_omitted_field?(key)
             next
           else
-            value = case_log.read_attribute_before_type_cast(key)
-            value += LOG_ID_OFFSET if key == "id"
             form << doc.create_element(key, value)
           end
         end
