@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <forms>
   <form>
-    <id>{id}</id>
     <status>2</status>
     <created_at>2022-02-08 16:52:15 UTC</created_at>
     <updated_at>2022-02-08 16:52:15 UTC</updated_at>
@@ -156,16 +155,16 @@
     <relat7/>
     <relat8/>
     <rent_value_check/>
-    <old_form_id/>
     <lar/>
     <irproduct/>
-    <old_id/>
     <joint/>
     <created_by_id>{created_by_id}</created_by_id>
     <illness_type_0/>
     <tshortfall_known>0</tshortfall_known>
     <shelteredaccom>0</shelteredaccom>
     <retirement_value_check/>
+    <form/>
+    <newform>{id}</newform>
     <providertype>1</providertype>
   </form>
 </forms>
