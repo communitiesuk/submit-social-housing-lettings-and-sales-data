@@ -43,4 +43,23 @@ RSpec.describe Auth::ConfirmationsController, type: :request do
       expect(page).to have_content("Your invitation link has expired")
     end
   end
+
+  context "when the user has already been confirmed" do
+    let(:user) { FactoryBot.create(:user, :data_provider, sign_in_count: 0, confirmed_at: Time.zone.now) }
+
+    before do
+      user.send_confirmation_instructions
+      get "/account/confirmation?confirmation_token=#{user.confirmation_token}"
+    end
+
+    it "redirects to the login page" do
+      follow_redirect!
+      expect(page).to have_content("Sign in to your account to submit CORE data")
+    end
+
+    it "does not show an error message" do
+      follow_redirect!
+      expect(page).not_to have_selector("#error-summary-title")
+    end
+  end
 end
