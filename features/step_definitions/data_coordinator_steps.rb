@@ -45,3 +45,19 @@ Then("the no links in navigation bar are highlighted") do
   expect(page).not_to have_css('[aria-current="page"]', text: "Users")
   expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
 end
+
+When("I click to change my password") do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When("I fill in new password and confirmation") do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When("I click to update my password") do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then("my password should be updated") do
+  pending # Write code here that turns the phrase above into concrete actions
+end
