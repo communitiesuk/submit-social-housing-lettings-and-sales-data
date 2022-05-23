@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe OrganisationsController, type: :request do
-  let(:organisation) { user.organisation }
+  let!(:organisation) { user.organisation }
   let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
