@@ -21,10 +21,10 @@
           <%= govuk_link_to organisation.name, "organisations/#{organisation.id}/logs" %>
         </th>
         <td class="govuk-table__cell app-!-font-tabular">
-          <%= organisation.id %>
+          <%= organisation.housing_registration_no %>
         </td>
         <td class="govuk-table__cell app-!-font-tabular">
-          <%= organisation.provider_type %>
+          <%= display_provider_type(organisation.provider_type) %>
         </td>
       </tr>
       <% end %>

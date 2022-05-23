@@ -8,4 +8,9 @@ module OrganisationHelper
       current_organisation.name
     end
   end
+
+  DISPLAY_PROVIDER_TYPE = { "LA": "Local authority", "PRP": "Private registered provider" }.freeze
+  def display_provider_type(provider_type)
+    DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
+  end
 end
