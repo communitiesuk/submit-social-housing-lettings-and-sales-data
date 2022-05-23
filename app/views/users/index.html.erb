@@ -29,8 +29,8 @@
 <%= govuk_table do |table| %>
   <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
     <span class="govuk-!-margin-right-4">
-      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
-    </span>
+      <strong><span style="font-weight: normal"> Matches </span><%= @pagy.count %><span style="font-weight: normal"> of </span><%= User.count%> <span style="font-weight: normal"> total users</strong> </span>
+      </span>
     <% if current_user.support? %>
       <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
     <% end %>

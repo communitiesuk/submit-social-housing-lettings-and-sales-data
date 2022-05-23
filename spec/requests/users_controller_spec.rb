@@ -811,7 +811,7 @@ RSpec.describe UsersController, type: :request do
               expect(page).not_to have_content(other_org_user.name)
             end
           end
-        end
+        
 
         context "when our search term matches an email" do
           let(:search_param) { "other_org@other_example.com" }
@@ -823,8 +823,24 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_content(other_org_user.name)
           end
         end
+        
+
+        context "when our search term matches an email and a name" do
+          let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
+          let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+          let(:search_param) { "joe" } 
+          
+          it "returns any results including joe" do
+            expect(page).to have_content(other_user.name)
+            expect(page).not_to have_content(inactive_user.name)
+            expect(page).to have_content(other_org_user.name)
+            expect(page).not_to have_content(user.name)
+          end
+        end
       end
     end
+  end
+    
 
     describe "CSV download" do
       let(:headers) { { "Accept" => "text/csv" } }
