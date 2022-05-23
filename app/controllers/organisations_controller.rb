@@ -1,5 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
+  include Modules::CaseLogsFilter
+
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
   before_action :authenticate_scope!
@@ -24,7 +26,7 @@ class OrganisationsController < ApplicationController
   end
 
   def edit
-    if current_user.data_coordinator?
+    if current_user.data_coordinator? || current_user.support?
       render "edit", layout: "application"
     else
       head :unauthorized
@@ -32,13 +34,25 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    if current_user.data_coordinator?
+    if current_user.data_coordinator? || current_user.support?
       if @organisation.update(org_params)
         flash[:notice] = I18n.t("organisation.updated")
         redirect_to details_organisation_path(@organisation)
       end
     else
       head :unauthorized
+    end
+  end
+
+  def logs
+    if current_user.support?
+      set_session_filters(specific_org: true)
+
+      organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
+      @pagy, @case_logs = pagy(filtered_case_logs(organisation_logs))
+      render "logs", layout: "application"
+    else
+      redirect_to(case_logs_path)
     end
   end
 

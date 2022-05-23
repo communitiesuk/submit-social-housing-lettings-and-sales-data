@@ -1,1 +1,2 @@
-
+<%= render partial: "organisation_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy } %>
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>

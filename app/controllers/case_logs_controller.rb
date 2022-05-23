@@ -1,5 +1,6 @@
 class CaseLogsController < ApplicationController
   include Pagy::Backend
+  include Modules::CaseLogsFilter
 
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
@@ -9,12 +10,12 @@ class CaseLogsController < ApplicationController
   def index
     set_session_filters
 
-    @pagy, @case_logs = pagy(filtered_case_logs)
+    @pagy, @case_logs = pagy(filtered_case_logs(current_user.case_logs))
 
     respond_to do |format|
       format.html
       format.csv do
-        send_data filtered_case_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
+        send_data filtered_case_logs(current_user.case_logs).to_csv, filename: "logs-#{Time.zone.now}.csv"
       end
     end
   end
@@ -119,28 +120,5 @@ private
 
   def find_resource
     @case_log = CaseLog.find_by(id: params[:id])
-  end
-
-  def filtered_case_logs
-    query = current_user.case_logs
-    if session[:case_logs_filters].present?
-      filters = JSON.parse(session[:case_logs_filters])
-      filters.each do |category, values|
-        next if Array(values).reject(&:empty?).blank?
-        next if category == "organisation" && params["organisation_select"] == "all"
-
-        query = query.public_send("filter_by_#{category}", values, current_user)
-      end
-    end
-    query = query.order(created_at: :desc)
-    current_user.support? ? query.all.includes(:owning_organisation, :managing_organisation) : query
-  end
-
-  def set_session_filters
-    new_filters = session[:case_logs_filters].present? ? JSON.parse(session[:case_logs_filters]) : {}
-    current_user.case_logs_filters.each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
-    new_filters = new_filters.except("organisation") if params["organisation_select"] == "all"
-
-    session[:case_logs_filters] = new_filters.to_json
   end
 end
