@@ -78,9 +78,9 @@ class UsersController < ApplicationController
 private
 
   def filtered_users
-    if search_param = params["user-search-field"]
+    if (search_param = params["user-search-field"])
       User.search_by(search_param)
-    else 
+    else
       User.all
     end.filter_by_active
   end
