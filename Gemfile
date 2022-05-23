@@ -88,6 +88,8 @@ end
 group :test do
   gem "capybara", require: false
   gem "capybara-lockstep"
+  gem "cucumber-rails", require: false
+  gem "database_cleaner"
   gem "factory_bot_rails"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
