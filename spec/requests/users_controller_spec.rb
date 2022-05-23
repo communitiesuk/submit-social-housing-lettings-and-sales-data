@@ -335,8 +335,8 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a data coordinator" do
-    let(:user) { FactoryBot.create(:user, :data_coordinator) }
-    let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name") }
+    let(:user) { FactoryBot.create(:user, :data_coordinator, email: "coordinator@example.com") }
+    let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
 
     describe "#index" do
       before do
@@ -364,7 +364,8 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when our search string matches case" do
-          let (:search_param){"filter"}
+          let(:search_param) { "filter" }
+
           it "returns only matching results" do
             expect(page).not_to have_content(user.name)
             expect(page).to have_content(other_user.name)
@@ -372,7 +373,8 @@ RSpec.describe UsersController, type: :request do
         end
 
         context "when we need case insensitive search" do
-          let (:search_param){"Filter"}
+          let(:search_param) { "Filter" }
+
           it "returns only matching results" do
             expect(page).not_to have_content(user.name)
             expect(page).to have_content(other_user.name)
@@ -754,9 +756,9 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#index" do
-      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
-      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
+      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "other_org@other_example.com") }
 
       before do
         sign_in user
@@ -787,23 +789,38 @@ RSpec.describe UsersController, type: :request do
           get "/users?user-search-field=#{search_param}"
         end
 
-        context "when our search string matches case" do
-          let (:search_param){"Danny"}
-          it "returns only matching results" do
-            expect(page).to have_content(user.name)
-            expect(page).not_to have_content(other_user.name)
-            expect(page).not_to have_content(inactive_user.name)
-            expect(page).not_to have_content(other_org_user.name)
+        context "when our search term matches a name" do
+          context "when our search string matches case" do
+            let(:search_param) { "Danny" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(user.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+            end
+          end
+
+          context "when we need case insensitive search" do
+            let(:search_param) { "danny" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(user.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+            end
           end
         end
 
-        context "when we need case insensitive search" do
-          let (:search_param){"danny"}
-          it "returns only matching results" do
-            expect(page).to have_content(user.name)
+        context "when our search term matches an email" do
+          let(:search_param) { "other_org@other_example.com" }
+
+          it "returns only matching result" do
+            expect(page).not_to have_content(user.name)
             expect(page).not_to have_content(other_user.name)
             expect(page).not_to have_content(inactive_user.name)
-            expect(page).not_to have_content(other_org_user.name)
+            expect(page).to have_content(other_org_user.name)
           end
         end
       end
