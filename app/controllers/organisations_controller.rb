@@ -34,7 +34,7 @@ class OrganisationsController < ApplicationController
   end
 
   def update
-    if current_user.data_coordinator?
+    if current_user.data_coordinator? || current_user.support?
       if @organisation.update(org_params)
         flash[:notice] = I18n.t("organisation.updated")
         redirect_to details_organisation_path(@organisation)
