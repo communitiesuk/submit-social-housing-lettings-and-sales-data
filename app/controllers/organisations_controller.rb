@@ -1,6 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
   include Modules::CaseLogsFilter
+  include Modules::UsersFilter
 
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
@@ -17,7 +18,7 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users)
+    @pagy, @users = pagy(filtered_users(@organisation.users))
     render "users/index"
   end
 
@@ -57,14 +58,6 @@ class OrganisationsController < ApplicationController
   end
 
 private
-
-  def filtered_users
-    if (search_param = params["user-search-field"])
-      User.search_by(search_param)
-    else
-      User.all
-    end.filter_by_active.includes(:organisation)
-  end
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone)

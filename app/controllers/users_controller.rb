@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   include Pagy::Backend
   include Devise::Controllers::SignInOut
   include Helpers::Email
+  include Modules::UsersFilter
   before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]
@@ -9,7 +10,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    @pagy, @users = pagy(filtered_users)
+    @pagy, @users = pagy(filtered_users(User.all))
 
     respond_to do |format|
       format.html
@@ -76,14 +77,6 @@ class UsersController < ApplicationController
   end
 
 private
-
-  def filtered_users
-    if (search_param = params["user-search-field"])
-      User.search_by(search_param)
-    else
-      User.all
-    end.filter_by_active.includes(:organisation)
-  end
 
   def format_error_messages
     errors = @user.errors.to_hash
