@@ -45,15 +45,13 @@ class OrganisationsController < ApplicationController
   end
 
   def logs
+    redirect_to(case_logs_path) unless current_user.support?
+
     set_session_filters(specific_org: true)
 
-    if current_user.support?
-      organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
-      @pagy, @case_logs = pagy(filtered_case_logs(organisation_logs))
-      render "logs", layout: "application"
-    else
-      redirect_to(case_logs_path)
-    end
+    organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
+    @pagy, @case_logs = pagy(filtered_case_logs(organisation_logs))
+    render "logs", layout: "application"
   end
 
 private
