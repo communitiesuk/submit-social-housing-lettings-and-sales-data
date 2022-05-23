@@ -757,14 +757,27 @@ RSpec.describe UsersController, type: :request do
 
       context "when a search parameter is passed" do
         before do
-          get "/users?user-search-field=Danny"
+          get "/users?user-search-field=#{search_param}"
         end
 
-        it "returns only matching results" do
-          expect(page).to have_content(user.name)
-          expect(page).not_to have_content(other_user.name)
-          expect(page).not_to have_content(inactive_user.name)
-          expect(page).not_to have_content(other_org_user.name)
+        context "when our search string matches case" do
+          let (:search_param){"Danny"}
+          it "returns only matching results" do
+            expect(page).to have_content(user.name)
+            expect(page).not_to have_content(other_user.name)
+            expect(page).not_to have_content(inactive_user.name)
+            expect(page).not_to have_content(other_org_user.name)
+          end
+        end
+
+        context "when we need case insensitive search" do
+          let (:search_param){"danny"}
+          it "returns only matching results" do
+            expect(page).to have_content(user.name)
+            expect(page).not_to have_content(other_user.name)
+            expect(page).not_to have_content(inactive_user.name)
+            expect(page).not_to have_content(other_org_user.name)
+          end
         end
       end
     end

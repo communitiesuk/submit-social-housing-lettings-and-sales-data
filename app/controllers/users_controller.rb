@@ -80,7 +80,7 @@ private
   def filtered_users
     search_param = params["user-search-field"]
     if search_param
-      User.where("name LIKE ?", "%#{search_param}%").where(active: true).includes(:organisation)
+      User.where("name ILIKE ?", "%#{search_param}%").where(active: true).includes(:organisation)
     else
       User.all.where(active: true).includes(:organisation)
     end
