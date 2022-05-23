@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe OrganisationsController, type: :request do
-  let!(:organisation) { user.organisation }
+  let(:organisation) { user.organisation }
   let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
@@ -358,9 +358,9 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       it "shows all organisations" do
-        expect(page).to have_content("2 total organisations")
         expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/logs"
         expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
+        expect(page).to have_content("2 total organisations")
       end
 
       context "when viewing a specific organisation" do
