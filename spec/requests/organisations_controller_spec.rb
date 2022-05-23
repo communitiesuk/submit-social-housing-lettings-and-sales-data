@@ -358,9 +358,10 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       it "shows all organisations" do
+        total_number_of_orgs = Organisation.all.count
         expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/logs"
         expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
-        expect(page).to have_content("2 total organisations")
+        expect(page).to have_content("#{total_number_of_orgs} total organisations")
       end
 
       context "when viewing a specific organisation" do
