@@ -1,6 +1,8 @@
+require_relative "./modules/case_logs_filter"
+
 class OrganisationsController < ApplicationController
   include Pagy::Backend
-  include Helpers::Filter
+  include CaseLogsFilter
 
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]

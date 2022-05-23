@@ -1,6 +1,8 @@
+require_relative "./modules/case_logs_filter"
+
 class CaseLogsController < ApplicationController
   include Pagy::Backend
-  include Helpers::Filter
+  include CaseLogsFilter
 
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?

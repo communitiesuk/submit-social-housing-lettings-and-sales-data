@@ -1,4 +1,4 @@
-module Helpers::Filter
+module CaseLogsFilter
   def filtered_case_logs(logs)
     if session[:case_logs_filters].present?
       filters = JSON.parse(session[:case_logs_filters])

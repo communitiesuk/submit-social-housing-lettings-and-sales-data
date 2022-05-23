@@ -459,7 +459,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "shows the total organisations count" do
-          expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations")
+          expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong><span style=\"font-weight: normal\"> total organisations</span>")
         end
 
         it "has pagination links" do
