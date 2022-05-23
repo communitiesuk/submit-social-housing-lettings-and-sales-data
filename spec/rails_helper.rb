@@ -9,6 +9,8 @@ require "capybara/rspec"
 require "selenium-webdriver"
 require "view_component/test_helpers"
 
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 Capybara.register_driver :headless do |app|
   options = Selenium::WebDriver::Firefox::Options.new
   options.add_argument("--headless")
