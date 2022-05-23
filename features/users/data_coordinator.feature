@@ -8,8 +8,13 @@ Feature: Data Coordinator Features
     Then I see information about those users
     And the user navigation bar is highlighted
   
-  @wip
   Scenario: Viewing your organisation details
-    When I visit the About your organisation page
+    When I visit the about your organisation page
     Then I see information about your organisation
     And the about your organisation navigation bar is highlighted
+
+  @wip
+  Scenario: Viewing your account
+    When I visit the your account page
+    Then I see information about my account
+    And the no links in navigation bar are highlighted
