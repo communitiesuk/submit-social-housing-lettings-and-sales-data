@@ -80,4 +80,35 @@ RSpec.describe "User Features" do
       end
     end
   end
+
+  context "when user is support user" do
+    context "when viewing logs for specific organisation" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let(:number_of_case_logs) { 4 }
+      let(:first_log) { organisation.case_logs.first }
+      let(:otp) { "999111" }
+
+      before do
+        FactoryBot.create_list(:case_log, number_of_case_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
+        first_log.update!(startdate: Time.utc(2022, 6, 2, 10, 36, 49))
+        allow(SecureRandom).to receive(:random_number).and_return(otp)
+        click_link("Sign out")
+        sign_in user
+        fill_in("code", with: otp)
+        click_button("Submit")
+        visit("/organisations/#{org_id}/logs")
+      end
+
+      it "can filter case logs" do
+        expect(page).to have_content("#{number_of_case_logs} total logs")
+        organisation.case_logs.map(&:id).each do |case_log_id|
+          expect(page).to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+        end
+        check("years-2021-field")
+        click_button("Apply filters")
+        expect(page).to have_current_path("/organisations/#{org_id}/logs?years[]=&years[]=2021&status[]=&user=all")
+        expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
+      end
+    end
+  end
 end

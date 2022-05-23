@@ -5,6 +5,15 @@
 <% end %>
 
 <div class="govuk-grid-row">
+
+<% if current_user.support? %>
+  <div class="govuk-!-margin-bottom-4">
+    <%= render NavigationComponent.new(
+        items: secondary_items(request.path, @organisation.id),
+        level: "sub",
+      ) %>
+  </div>
+<% end %>
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= govuk_summary_list do |summary_list| %>
       <% @organisation.display_attributes.each do |attr| %>
