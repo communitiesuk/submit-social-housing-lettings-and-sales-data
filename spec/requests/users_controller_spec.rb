@@ -613,7 +613,7 @@ RSpec.describe UsersController, type: :request do
 
             it "does update other values" do
               expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+                .to change { other_user.reload.name }.from(other_user.name).to("new name")
             end
           end
         end
@@ -1045,7 +1045,7 @@ RSpec.describe UsersController, type: :request do
 
             it "does update other values" do
               expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+                .to change { other_user.reload.name }.from(other_user.name).to("new name")
             end
           end
         end
@@ -1102,7 +1102,7 @@ RSpec.describe UsersController, type: :request do
 
               it "does update other values" do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
-                  .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+                  .to change { other_user.reload.name }.from(other_user.name).to("new name")
               end
             end
           end

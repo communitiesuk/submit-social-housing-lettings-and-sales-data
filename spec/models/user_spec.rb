@@ -155,7 +155,8 @@ RSpec.describe User, type: :model do
   end
 
   describe "paper trail" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:previous_name) { "Previous Name" }
+    let(:user) { FactoryBot.create(:user, name: previous_name) }
 
     it "creates a record of changes to a log" do
       expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)
@@ -163,7 +164,7 @@ RSpec.describe User, type: :model do
 
     it "allows case logs to be restored to a previous version" do
       user.update!(name: "new test name")
-      expect(user.paper_trail.previous_version.name).to eq("Danny Rojas")
+      expect(user.paper_trail.previous_version.name).to eq(previous_name)
     end
 
     it "signing in does not create a new version" do
