@@ -76,9 +76,13 @@ jobs:
         run: |
           bundle exec rake assets:precompile
 
-      - name: Run tests
+      - name: Run rspec tests
         run: |
           bundle exec rspec
+
+      - name: Run cucumber tests
+        run: |
+          bundle exec cucumber
 
   lint:
     name: Lint
