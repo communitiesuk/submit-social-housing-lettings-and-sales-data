@@ -419,7 +419,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "allows to edit the organisation details" do
-          expect(page).to have_link("Change", count: 10)
+          expect(page).to have_link("Change", count: 3)
         end
       end
     end

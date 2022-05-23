@@ -1,33 +1,28 @@
 <% content_for :title, title %>
 
-<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
-  <table id="all-organisations-table" class="govuk-table">
-    <caption id="<%= title.dasherize %>" class="govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4">
-      <span class="govuk-!-margin-right-4">
-        <strong><%= pagy.count %></strong> total <%= title.downcase %>
-      </span>
-    </caption>
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col">Name</th>
-        <th class="govuk-table__header" scope="col">Registration number</th>
-        <th class="govuk-table__header" scope="col">Type</th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <% organisations.map do |organisation| %>
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="row">
-          <%= govuk_link_to organisation.name, "organisations/#{organisation.id}/logs" %>
-        </th>
-        <td class="govuk-table__cell app-!-font-tabular">
-          <%= organisation.housing_registration_no %>
-        </td>
-        <td class="govuk-table__cell app-!-font-tabular">
-          <%= display_provider_type(organisation.provider_type) %>
-        </td>
-      </tr>
+<%= govuk_table do |table| %>
+  <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
+    <span class="govuk-!-margin-right-4">
+      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total <%= title.downcase %></span>
+    </span>
+  <% end %>
+  <%= table.head do |head| %>
+    <%= head.row do |row| %>
+      <% row.cell(header: true, text: "Name") %>
+      <% row.cell(header: true, text: "Registration number") %>
+      <% row.cell(header: true, text: "Type") %>
+    <% end %>
+  <% end %>
+  <% @organisations.each do |organisation| %>
+    <%= table.body do |body| %>
+      <%= body.row do |row| %>
+        <% row.cell do %>
+          <%= govuk_link_to(organisation.name, "organisations/#{organisation.id}/logs", class: "govuk-!-font-weight-bold") %>
+        <% end %>
+        <% row.cell(text: organisation.housing_registration_no) %>
+        <% row.cell(text: display_provider_type(organisation.provider_type)) %>
       <% end %>
-    </tbody>
-  </table>
-</section>
+    <% end %>
+  <% end %>
+<% end %>
+
