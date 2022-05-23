@@ -750,6 +750,23 @@ RSpec.describe UsersController, type: :request do
       it "shows the download csv link" do
         expect(page).to have_link("Download (CSV)", href: "/users.csv")
       end
+
+      it "shows a search bar" do
+        expect(page).to have_field("user-search-field", type: "search")
+      end
+
+      context "when a search parameter is passed" do
+        before do
+          get "/users?user-search-field=Danny"
+        end
+
+        it "returns only matching results" do
+          expect(page).to have_content(user.name)
+          expect(page).not_to have_content(other_user.name)
+          expect(page).not_to have_content(inactive_user.name)
+          expect(page).not_to have_content(other_org_user.name)
+        end
+      end
     end
 
     describe "CSV download" do

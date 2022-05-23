@@ -1,0 +1,24 @@
+.app-search {
+    @include govuk-responsive-margin(6, "bottom");
+    display: flex;
+    align-items: end;
+  }
+  
+  .app-search__form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  .app-search__input {
+    background-image: url("data:image/svg+xml,%3Csvg class='app-search__icon' width='20' height='20' viewBox='0 0 27 27' fill='none' xmlns='http://www.w3.org/2000/svg' aria-hidden='true' focusable='false'%3E%3Ccircle cx='12.0161' cy='11.0161' r='8.51613' stroke='currentColor' stroke-width='3'%3E%3C/circle%3E%3Cline x1='17.8668' y1='17.3587' x2='26.4475' y2='25.9393' stroke='currentColor' stroke-width='3'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 1em 1em;
+    background-position: 7px center;
+    padding-left: govuk-spacing(6);
+  }
+  
+  .app-search__button {
+    margin-left: govuk-spacing(1);
+    margin-bottom: 2px;
+    width: auto;
+  }
