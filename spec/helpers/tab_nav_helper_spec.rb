@@ -6,7 +6,7 @@ RSpec.describe TabNavHelper do
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
-      expected_html = "<a class=\"govuk-link govuk-!-font-weight-bold\" href=\"/users\">Danny Rojas</a>\n#{user.email}"
+      expected_html = "<a class=\"govuk-link govuk-!-font-weight-bold\" href=\"/users\">#{user.name}</a>\n#{user.email}"
       expect(user_cell(user)).to match(expected_html)
     end
   end
