@@ -16,7 +16,7 @@
       Search by name or email address
     </label>
 
-    <input class="govuk-input app-search__input" id="user-search-field" name="user-search-field" type="search">
+    <input class="govuk-input app-search__input" id="user-search-field" name="user-search-field" type="search" autocomplete="off">
   </div>
 
   <button class="govuk-button app-search__button undefined" data-module="govuk-button">
@@ -29,7 +29,7 @@
 <%= govuk_table do |table| %>
   <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
     <span class="govuk-!-margin-right-4">
-      <strong><span style="font-weight: normal"> Matches </span><%= @pagy.count %><span style="font-weight: normal"> of </span><%= User.count%> <span style="font-weight: normal"> total users</strong> </span>
+      <strong><span style="font-weight: normal"> Matches </span><%= @pagy.count %><span style="font-weight: normal"> of </span><%= User.count %> <span style="font-weight: normal"> total users</strong> </span>
       </span>
     <% if current_user.support? %>
       <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
