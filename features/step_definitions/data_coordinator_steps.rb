@@ -47,17 +47,19 @@ Then("the no links in navigation bar are highlighted") do
 end
 
 When("I click to change my password") do
-  pending # Write code here that turns the phrase above into concrete actions
+  find('[data-qa="change-password"]').click
 end
 
 When("I fill in new password and confirmation") do
-  pending # Write code here that turns the phrase above into concrete actions
+  fill_in("user[password]", with: "Password123!")
+  fill_in("user[password_confirmation]", with: "Password123!")
 end
 
 When("I click to update my password") do
-  pending # Write code here that turns the phrase above into concrete actions
+  click_button("Update")
 end
 
 Then("my password should be updated") do
-  pending # Write code here that turns the phrase above into concrete actions
+  expect(page).to have_current_path("/account")
+  expect(User.find(@user.id).valid_password?("Password123!")).to be true
 end

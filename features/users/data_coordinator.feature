@@ -18,7 +18,6 @@ Feature: Data Coordinator Features
     Then I see information about my account
     And the no links in navigation bar are highlighted
 
-  @wip
   Scenario: Changing your password
     When I visit the your account page
     And I click to change my password
