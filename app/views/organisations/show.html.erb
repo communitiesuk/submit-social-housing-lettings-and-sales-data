@@ -15,7 +15,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= govuk_summary_list do |summary_list| %>
       <% @organisation.display_attributes.each do |attr| %>
-        <% if can_edit_org?(current_user) && attr[:editable] || current_user.support? %>
+        <% if can_edit_org?(current_user) && attr[:editable] %>
           <%= summary_list.row do |row| %>
             <% row.key { attr[:name].to_s.humanize } %>
             <% row.value { details_html(attr) } %>
