@@ -30,3 +30,18 @@ end
 Then("the about your organisation navigation bar is highlighted") do
   expect(page).to have_css('[aria-current="page"]', text: "About your organisation")
 end
+
+When("I visit the your account page") do
+  click_link("Your account")
+end
+
+Then("I see information about my account") do
+  expect(page.body).to have_content @user.name
+  expect(page.body).to have_content @user.email
+  expect(page.body).to have_content @user.organisation.name
+end
+
+Then("the no links in navigation bar are highlighted") do
+  expect(page).not_to have_css('[aria-current="page"]', text: "Users")
+  expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
+end
