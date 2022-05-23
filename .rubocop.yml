@@ -17,6 +17,7 @@ AllCops:
     - 'config/application.rb'
     - 'config/puma.rb'
     - 'vendor/**/*'
+    - 'lib/tasks/cucumber.rake'
 
 Style/Documentation:
   Enabled: false
