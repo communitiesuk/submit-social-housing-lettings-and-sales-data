@@ -1,4 +1,5 @@
 Given('There is a user in the database') do
+  @user = create :user
 end
 
 When('I visit the sign in page') do
