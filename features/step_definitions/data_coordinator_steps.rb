@@ -35,6 +35,10 @@ When("I visit the your account page") do
   click_link("Your account")
 end
 
+When("I visit the about your organisation page") do
+  click_link("About your organisation")
+end
+
 Then("I see information about my account") do
   expect(page.body).to have_content @user.name
   expect(page.body).to have_content @user.email
