@@ -336,7 +336,7 @@ RSpec.describe UsersController, type: :request do
 
   context "when user is signed in as a data coordinator" do
     let(:user) { FactoryBot.create(:user, :data_coordinator) }
-    let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+    let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name") }
 
     describe "#index" do
       before do
@@ -351,6 +351,33 @@ RSpec.describe UsersController, type: :request do
 
       it "does not show the download csv link" do
         expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
+      end
+
+      it "shows a search bar" do
+        follow_redirect!
+        expect(page).to have_field("user-search-field", type: "search")
+      end
+
+      context "when a search parameter is passed" do
+        before do
+          get "/organisations/#{user.organisation.id}/users?user-search-field=#{search_param}"
+        end
+
+        context "when our search string matches case" do
+          let (:search_param){"filter"}
+          it "returns only matching results" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user.name)
+          end
+        end
+
+        context "when we need case insensitive search" do
+          let (:search_param){"Filter"}
+          it "returns only matching results" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user.name)
+          end
+        end
       end
     end
 
@@ -613,7 +640,7 @@ RSpec.describe UsersController, type: :request do
 
             it "does update other values" do
               expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+                .to change { other_user.reload.name }.from("filter name").to("new name")
             end
           end
         end

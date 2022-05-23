@@ -8,7 +8,8 @@
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>
 
-<%= form_with model: @user, url: users_path(), method: "get", local: true do |f| %>
+<% path = current_user.support? ? users_path : users_organisation_path(current_user.organisation) %>
+<%= form_with model: @user, url: path, method: "get", local: true do |f| %>
 <div class="app-search govuk-!-margin-bottom-4">
   <div class="govuk-form-group app-search__form-group">
     <label class="govuk-label govuk-!-margin-bottom-2" for="user-search-field">
