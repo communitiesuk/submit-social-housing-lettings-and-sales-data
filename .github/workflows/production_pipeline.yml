@@ -82,7 +82,7 @@ jobs:
 
       - name: Run cucumber tests
         run: |
-          bundle exec cucumber
+          bundle exec cucumber --publish-quiet
 
   lint:
     name: Lint
