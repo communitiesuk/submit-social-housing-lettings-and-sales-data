@@ -19,6 +19,7 @@ class OrganisationsController < ApplicationController
 
   def users
     @pagy, @users = pagy(filtered_users(@organisation.users))
+    @searched = params["user-search-field"].present?
     render "users/index"
   end
 
