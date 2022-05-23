@@ -4,17 +4,16 @@
   border-bottom: 1px solid $govuk-border-colour;
 }
 
-.app-primary-navigation{
+.app-primary-navigation {
   background-color: govuk-colour("light-grey");
 }
-
 
 .govuk-phase-banner + .app-primary-navigation,
 .app-sub-navigation {
   margin-top: -1px;
 }
 
-.app-primary-navigation__list, 
+.app-primary-navigation__list,
 .app-sub-navigation__list {
   @include govuk-clearfix;
   left: govuk-spacing(-3);
@@ -50,7 +49,7 @@
   }
 }
 
-.app-primary-navigation__item--align-right, 
+.app-primary-navigation__item--align-right,
 .app-sub-navigation__item--align-right {
   @include govuk-media-query($from: tablet) {
     float: right;
