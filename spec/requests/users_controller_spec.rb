@@ -341,24 +341,33 @@ RSpec.describe UsersController, type: :request do
     describe "#index" do
       before do
         sign_in user
-        get "/users", headers:, params: {}
       end
 
-      it "redirects to the organisation user path" do
-        follow_redirect!
-        expect(path).to match("/organisations/#{user.organisation.id}/users")
-      end
+      context "when there are no url params" do
+        before do
+          get "/users", headers:, params: {}
+        end
 
-      it "does not show the download csv link" do
-        expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
-      end
+        it "redirects to the organisation user path" do
+          follow_redirect!
+          expect(path).to match("/organisations/#{user.organisation.id}/users")
+        end
 
-      it "shows a search bar" do
-        follow_redirect!
-        expect(page).to have_field("user-search-field", type: "search")
+        it "does not show the download csv link" do
+          expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
+        end
+
+        it "shows a search bar" do
+          follow_redirect!
+          expect(page).to have_field("user-search-field", type: "search")
+        end
       end
 
       context "when a search parameter is passed" do
+        let!(:other_user_2) { FactoryBot.create(:user, name: "Stock name", organisation: user.organisation, name: "joe", email: "other@example.com") }
+        let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
+        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+
         before do
           get "/organisations/#{user.organisation.id}/users?user-search-field=#{search_param}"
         end
@@ -378,6 +387,30 @@ RSpec.describe UsersController, type: :request do
           it "returns only matching results" do
             expect(page).not_to have_content(user.name)
             expect(page).to have_content(other_user.name)
+          end
+        end
+
+        context "when our search term matches an email" do
+          let(:search_param) { "other@example.com" }
+
+          it "returns only matching result within the same organisation" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user_2.name)
+            expect(page).not_to have_content(other_user.name)
+            expect(page).not_to have_content(other_user_3.name)
+            expect(page).not_to have_content(other_org_user.name)
+          end
+
+          context "when our search term matches an email and a name" do
+            let(:search_param) { "joe" }
+
+            it "returns any results including joe within the same organisation" do
+              expect(page).to have_content(other_user_2.name)
+              expect(page).to have_content(other_user_3.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+              expect(page).not_to have_content(user.name)
+            end
           end
         end
       end
