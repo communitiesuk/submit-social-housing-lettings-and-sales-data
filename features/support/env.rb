@@ -1,4 +1,4 @@
-require 'cucumber/rails'
+require "cucumber/rails"
 require "capybara-screenshot/cucumber"
 
 ActionController::Base.allow_rescue = false
