@@ -26,7 +26,7 @@ class OrganisationsController < ApplicationController
   end
 
   def edit
-    if current_user.data_coordinator?
+    if current_user.data_coordinator? || current_user.support?
       render "edit", layout: "application"
     else
       head :unauthorized
