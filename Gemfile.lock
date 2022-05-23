@@ -151,8 +151,12 @@ GEM
       capybara (>= 2.0)
       ruby2_keywords
       selenium-webdriver (>= 3)
+    capybara-screenshot (1.0.26)
+      capybara (>= 1.0, < 4)
+      launchy
     chartkick (4.1.3)
     childprocess (4.1.0)
+    cliver (0.3.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
     crack (0.4.5)
@@ -196,6 +200,9 @@ GEM
     cucumber-wire (6.2.1)
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
+    cuprite (0.13)
+      capybara (>= 2.1, < 4)
+      ferrum (~> 0.11.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -226,6 +233,11 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    ferrum (0.11)
+      addressable (~> 2.5)
+      cliver (~> 0.3)
+      concurrent-ruby (~> 1.1)
+      websocket-driver (>= 0.6, < 0.8)
     ffi (1.15.5)
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
@@ -279,6 +291,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    launchy (2.5.0)
+      addressable (~> 2.7)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -526,8 +540,10 @@ DEPENDENCIES
   byebug
   capybara
   capybara-lockstep
+  capybara-screenshot
   chartkick
   cucumber-rails
+  cuprite
   database_cleaner
   devise!
   dotenv-rails

@@ -87,8 +87,10 @@ end
 
 group :test do
   gem "capybara", require: false
+  gem "capybara-screenshot"
   gem "capybara-lockstep"
   gem "cucumber-rails", require: false
+  gem "cuprite"
   gem "database_cleaner"
   gem "factory_bot_rails"
   gem "rspec-rails", require: false
