@@ -13,7 +13,7 @@ Then("I see information about those users") do
   end
 end
 
-Then('the user navigation bar is highlighted') do
+Then("the user navigation bar is highlighted") do
   expect(page).to have_css('[aria-current="page"]', text: "Users")
   expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
   expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
