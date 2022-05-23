@@ -12,3 +12,9 @@ Then("I see information about those users") do
     expect(page.body).to have_content user.email
   end
 end
+
+Then('the user navigation bar is highlighted') do
+  expect(page).to have_css('[aria-current="page"]', text: "Users")
+  expect(page).not_to have_css('[aria-current="page"]', text: "About your organisation")
+  expect(page).not_to have_css('[aria-current="page"]', text: "Logs")
+end

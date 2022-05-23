@@ -4,5 +4,6 @@ Feature: Data Coordinator Features
 
   Scenario: Viewing users
     Given there are multiple users in the same organization
-    And I visit the users page
+    When I visit the users page
     Then I see information about those users
+    And the user navigation bar is highlighted
