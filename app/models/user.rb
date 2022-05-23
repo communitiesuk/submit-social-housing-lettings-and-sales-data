@@ -32,6 +32,9 @@ class User < ApplicationRecord
 
   enum role: ROLES
 
+  scope :filter_by_name, ->(name) { name.present? ? where("name ILIKE ?", "%#{name}%") : User.all }
+  scope :filter_by_active, ->() { where(active: true) }
+
   def case_logs
     if support?
       CaseLog.all

@@ -17,7 +17,7 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users)
+    @pagy, @users = pagy(User.filter_by_name(params["user-search-field"]).filter_by_active)
     render "users/index"
   end
 
@@ -57,15 +57,6 @@ class OrganisationsController < ApplicationController
   end
 
 private
-
-  def filtered_users
-    search_param = params["user-search-field"]
-    if search_param
-      User.where("name ILIKE ?", "%#{search_param}%").where(active: true)
-    else
-      User.all.where(active: true)
-    end
-  end
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone)

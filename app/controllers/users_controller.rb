@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    @pagy, @users = pagy(filtered_users)
+    @pagy, @users = pagy(User.filter_by_name(params["user-search-field"]).filter_by_active)
 
     respond_to do |format|
       format.html
@@ -76,15 +76,6 @@ class UsersController < ApplicationController
   end
 
 private
-
-  def filtered_users
-    search_param = params["user-search-field"]
-    if search_param
-      User.where("name ILIKE ?", "%#{search_param}%").where(active: true).includes(:organisation)
-    else
-      User.all.where(active: true).includes(:organisation)
-    end
-  end
 
   def format_error_messages
     errors = @user.errors.to_hash
