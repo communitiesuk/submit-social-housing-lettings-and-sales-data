@@ -364,7 +364,7 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when a search parameter is passed" do
-        let!(:other_user_2) { FactoryBot.create(:user, name: "Stock name", organisation: user.organisation, name: "joe", email: "other@example.com") }
+        let!(:other_user_2) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
         let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
         let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
 
