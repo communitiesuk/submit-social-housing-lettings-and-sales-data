@@ -82,7 +82,7 @@ private
       User.search_by(search_param)
     else
       User.all
-    end.filter_by_active
+    end.filter_by_active.includes(:organisation)
   end
 
   def format_error_messages
