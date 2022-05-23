@@ -379,6 +379,10 @@ RSpec.describe UsersController, type: :request do
             expect(page).not_to have_content(user.name)
             expect(page).to have_content(other_user.name)
           end
+
+          it "updates the table caption" do
+            expect(page).to have_content("Matches 1 of 5  total users")
+          end
         end
 
         context "when we need case insensitive search" do
@@ -410,6 +414,10 @@ RSpec.describe UsersController, type: :request do
               expect(page).not_to have_content(other_user.name)
               expect(page).not_to have_content(other_org_user.name)
               expect(page).not_to have_content(user.name)
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 2 of 5  total users")
             end
           end
         end
@@ -832,6 +840,10 @@ RSpec.describe UsersController, type: :request do
               expect(page).not_to have_content(inactive_user.name)
               expect(page).not_to have_content(other_org_user.name)
             end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 1 of 4  total users")
+            end
           end
 
           context "when we need case insensitive search" do
@@ -866,6 +878,10 @@ RSpec.describe UsersController, type: :request do
               expect(page).not_to have_content(inactive_user.name)
               expect(page).to have_content(other_org_user.name)
               expect(page).not_to have_content(user.name)
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 2 of 4  total users")
             end
           end
         end
