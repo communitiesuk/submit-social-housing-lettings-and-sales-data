@@ -68,7 +68,7 @@ RSpec.describe Imports::CaseLogsImportService do
     end
   end
 
-  context "when import a specific log" do
+  context "when importing a specific log" do
     let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:case_log_file) { open_file(fixture_directory, case_log_id) }
 
