@@ -6,6 +6,8 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def send_email(email, template_id, personalisation)
+    return true if intercept_send?(email)
+
     notify_client.send_email(
       email_address: email,
       template_id:,
@@ -39,6 +41,15 @@ class DeviseNotifyMailer < Devise::Mailer
       record.confirmable_template,
       personalisation(record, token, url),
     )
+  end
+
+  def intercept_send?(email)
+    email_domain = email.split("@").last.downcase
+    !(Rails.env.production? || Rails.env.test?) && email_allowlist.exclude?(email_domain)
+  end
+
+  def email_allowlist
+    Rails.application.credentials[:email_allowlist]
   end
 
   # def unlock_instructions(record, token, opts = {})
