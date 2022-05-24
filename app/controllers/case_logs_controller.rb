@@ -12,6 +12,12 @@ class CaseLogsController < ApplicationController
 
     @pagy, @case_logs = pagy(filtered_case_logs(current_user.case_logs))
 
+    search_param = params["search-field"]
+
+    if search_param
+      @pagy, @case_logs = pagy(@case_logs.search_by(search_param))
+    end
+
     respond_to do |format|
       format.html
       format.csv do

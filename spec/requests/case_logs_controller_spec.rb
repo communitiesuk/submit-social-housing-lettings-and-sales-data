@@ -187,7 +187,7 @@ RSpec.describe CaseLogsController, type: :request do
         context "with a search bar" do
           let!(:logs) { FactoryBot.create_list(:case_log, 5) }
 
-          it "shows case logs mathing the search word" do
+          it "shows case logs matching the search word" do
             get "/logs?search-field=#{logs.first.id}", headers: headers, params: {}
             expect(page).to have_content(logs.first.id)
             expect(page).not_to have_content(logs.last.id)

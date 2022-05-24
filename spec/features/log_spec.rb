@@ -22,7 +22,7 @@ RSpec.describe "Log Features" do
         end
 
         it "displays log matching the search" do
-          fill_in("search-field", with: log.id )
+          fill_in("search-field", with: log.id)
           click_button("Search")
 
           expect(page).to have_content(log.id)
