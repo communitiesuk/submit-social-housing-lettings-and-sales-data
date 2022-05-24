@@ -8,7 +8,7 @@
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>
 
-<%= render SearchComponent.new(current_user:, label: "Search by name or email address", value: @searched) %>
+<%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>
 
 <%= govuk_table do |table| %>
   <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>

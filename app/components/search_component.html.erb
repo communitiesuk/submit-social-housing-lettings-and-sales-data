@@ -1,16 +1,17 @@
 <%= form_with model: @user, url: path(current_user), method: "get", local: true do |f| %>
-<div class="app-search govuk-!-margin-bottom-4">
-  <div class="govuk-form-group app-search__form-group">
-    <label class="govuk-label govuk-!-margin-bottom-2" for="search-field">
-      <%= label %>
-    </label>
+  <div class="app-search govuk-!-margin-bottom-4">
+    <div class="govuk-form-group app-search__form-group">
+      <%= f.govuk_text_field :search,
+        label: { text: search_label },
+        type: "search",
+        value:,
+        autocomplete: "off",
+        class: "app-search__input" %>
+    </div>
 
-    <input class="govuk-input app-search__input" id="search-field" name="search-field" type="search" autocomplete="off" value="<%= value %>">
+    <button class="govuk-button app-search__button undefined" data-module="govuk-button">
+      Search
+    </button>
+
   </div>
-
-  <button class="govuk-button app-search__button undefined" data-module="govuk-button">
-    Search
-  </button>
-
-</div>
 <% end %>
