@@ -7,10 +7,17 @@
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>
+
+<%= render SearchComponent.new(current_user:, label: "Search by name or email address") %>
+
 <%= govuk_table do |table| %>
   <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
     <span class="govuk-!-margin-right-4">
-      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
+      <% if @searched %>
+        <strong><span style="font-weight: normal"> Matches </span><%= @pagy.count %><span style="font-weight: normal"> of </span><%= User.count %> <span style="font-weight: normal"> total users</strong></span>
+      <% else %>
+        <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total users</span>
+      <% end %>
     </span>
     <% if current_user.support? %>
       <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
