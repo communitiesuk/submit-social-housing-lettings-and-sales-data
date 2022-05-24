@@ -381,7 +381,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("Matches 1 of 5  total users")
+            expect(page).to have_content("Matches 1 of 5 total users.")
           end
         end
 
@@ -417,7 +417,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 2 of 5  total users")
+              expect(page).to have_content("Matches 2 of 5 total users.")
             end
           end
         end
@@ -842,7 +842,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 1 of 4  total users")
+              expect(page).to have_content("Matches 1 of 4 total users.")
             end
           end
 
@@ -881,7 +881,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 2 of 4  total users")
+              expect(page).to have_content("Matches 2 of 4 total users.")
             end
           end
         end
