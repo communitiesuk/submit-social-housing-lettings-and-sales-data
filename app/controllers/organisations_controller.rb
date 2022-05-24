@@ -55,7 +55,17 @@ class OrganisationsController < ApplicationController
       set_session_filters(specific_org: true)
 
       organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
-      @pagy, @case_logs = pagy(filtered_case_logs(organisation_logs))
+
+      @pagy, @case_logs = pagy(
+        filtered_case_logs(
+          filtered_collection(
+            organisation_logs, search_term
+          ),
+        ),
+      )
+      @searched = search_term.presence
+      @total_count = organisation_logs.size
+
       render "logs", layout: "application"
     else
       redirect_to(case_logs_path)

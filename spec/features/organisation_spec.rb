@@ -84,12 +84,13 @@ RSpec.describe "User Features" do
   context "when user is support user" do
     context "when viewing logs for specific organisation" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:number_of_case_logs) { 4 }
       let(:first_log) { organisation.case_logs.first }
       let(:otp) { "999111" }
+      let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
+      let!(:other_logs) { FactoryBot.create_list(:case_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
+      let(:number_of_case_logs) { CaseLog.count }
 
       before do
-        FactoryBot.create_list(:case_log, number_of_case_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
         first_log.update!(startdate: Time.utc(2022, 6, 2, 10, 36, 49))
         allow(SecureRandom).to receive(:random_number).and_return(otp)
         click_link("Sign out")
@@ -97,6 +98,48 @@ RSpec.describe "User Features" do
         fill_in("code", with: otp)
         click_button("Submit")
         visit("/organisations/#{org_id}/logs")
+      end
+
+      context "when searching for specific logs" do
+        it "displays the logs belonging to the same organisation" do
+          expect(page).to have_content(log_to_search.id)
+          other_logs.each do |log|
+            expect(page).to have_content(log.id)
+          end
+        end
+
+        context "when I search for a specific log" do
+          it "there is a search bar with a message and search button for logs" do
+            expect(page).to have_field("search")
+            expect(page).to have_content("Search by log ID, tenant code, property reference or postcode")
+            expect(page).to have_button("Search")
+          end
+
+          context "when I fill in search information and press the search button" do
+            before do
+              fill_in("search", with: log_to_search.id)
+              click_button("Search")
+            end
+
+            it "displays log matching the log ID" do
+              expect(page).to have_content(log_to_search.id)
+              other_logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+            end
+
+            context "when I want to clear results" do
+              it "there is link to clear the search results" do
+                expect(page).to have_link("Clear search")
+              end
+
+              it "displays the logs belonging to the same organisation after I clear the search result after I clear the search resultss" do
+                click_link("Clear search")
+                expect(page).to have_content(log_to_search.id)
+              end
+            end
+          end
+        end
       end
 
       it "can filter case logs" do

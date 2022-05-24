@@ -1871,6 +1871,102 @@ RSpec.describe CaseLog do
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
     end
 
+    context "when searching logs" do
+      let!(:case_log_to_search) { FactoryBot.create(:case_log, :completed) }
+
+      before do
+        FactoryBot.create_list(:case_log, 5, :completed)
+      end
+
+      describe "#filter_by_id" do
+        it "allows searching by a log ID" do
+          result = described_class.filter_by_id(case_log_to_search.id.to_s)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+      end
+
+      describe "#filter_by_tenant_code" do
+        it "allows searching by a Tenant Code" do
+          result = described_class.filter_by_tenant_code(case_log_to_search.tenant_code)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when tenant_code has lower case letters" do
+          let(:matching_tenant_code_lower_case) { case_log_to_search.tenant_code.downcase }
+
+          it "allows searching by a Tenant Code" do
+            result = described_class.filter_by_tenant_code(matching_tenant_code_lower_case)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
+      end
+
+      describe "#filter_by_propcode" do
+        it "allows searching by a Property Reference" do
+          result = described_class.filter_by_propcode(case_log_to_search.propcode)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when propcode has lower case letters" do
+          let(:matching_propcode_lower_case) { case_log_to_search.propcode.downcase }
+
+          it "allows searching by a Property Reference" do
+            result = described_class.filter_by_propcode(matching_propcode_lower_case)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
+      end
+
+      describe "#filter_by_postcode" do
+        it "allows searching by a Property Postcode" do
+          result = described_class.filter_by_postcode(case_log_to_search.postcode_full)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+      end
+
+      describe "#search_by" do
+        it "allows searching using ID" do
+          result = described_class.search_by(case_log_to_search.id.to_s)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        it "allows searching using tenancy code" do
+          result = described_class.search_by(case_log_to_search.tenant_code)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        it "allows searching by a Property Reference" do
+          result = described_class.search_by(case_log_to_search.propcode)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        it "allows searching by a Property Postcode" do
+          result = described_class.search_by(case_log_to_search.postcode_full)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when postcode has spaces and lower case letters" do
+          let(:matching_postcode_lower_case_with_spaces) { case_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
+      end
+    end
+
     context "when filtering by year" do
       it "allows filtering on a single year" do
         expect(described_class.filter_by_years(%w[2021]).count).to eq(2)

@@ -1,35 +1,37 @@
-<%= govuk_table do |table| %>
-  <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-    <% if searched.present? %>
-      <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total organisations. <%= govuk_link_to("Clear search", request.path) %>
-    <% else %>
-      <strong><%= pagy.count %></strong> total organisations.
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <% if searched.present? %>
+        <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total organisations. <%= govuk_link_to("Clear search", request.path) %>
+      <% else %>
+        <strong><%= pagy.count %></strong> total organisations.
+      <% end %>
     <% end %>
-  <% end %>
-  <%= table.head do |head| %>
-    <%= head.row do |row| %>
-      <% row.cell(header: true, text: "Name", html_attributes: {
-        scope: "col",
-      }) %>
-      <% row.cell(header: true, text: "Registration number", html_attributes: {
-        scope: "col",
-      }) %>
-      <% row.cell(header: true, text: "Type", html_attributes: {
-        scope: "col",
-      }) %>
+    <%= table.head do |head| %>
+      <%= head.row do |row| %>
+        <% row.cell(header: true, text: "Name", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Registration number", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Type", html_attributes: {
+          scope: "col",
+        }) %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% @organisations.each do |organisation| %>
-    <%= table.body do |body| %>
-      <%= body.row do |row| %>
-        <% row.cell(header: true, html_attributes: {
-          scope: "row",
-        }) do %>
-          <%= govuk_link_to(organisation.name, "organisations/#{organisation.id}/logs") %>
+    <% @organisations.each do |organisation| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(header: true, html_attributes: {
+            scope: "row",
+          }) do %>
+            <%= govuk_link_to(organisation.name, "organisations/#{organisation.id}/logs") %>
+          <% end %>
+          <% row.cell(text: organisation.housing_registration_no) %>
+          <% row.cell(text: organisation.display_provider_type) %>
         <% end %>
-        <% row.cell(text: organisation.housing_registration_no) %>
-        <% row.cell(text: organisation.display_provider_type) %>
       <% end %>
     <% end %>
   <% end %>
-<% end %>
+</section>

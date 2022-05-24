@@ -8,7 +8,7 @@ RSpec.describe CaseLogsController, type: :request do
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
     ActionController::HttpAuthentication::Basic
-                        .encode_credentials(api_username, api_password)
+      .encode_credentials(api_username, api_password)
   end
 
   let(:headers) do
@@ -184,6 +184,17 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("UA984")
         end
 
+        context "when there are no logs in the database" do
+          before do
+            CaseLog.destroy_all
+          end
+
+          it "page has correct title" do
+            get "/logs", headers: headers, params: {}
+            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+          end
+        end
+
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
@@ -308,6 +319,110 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).not_to have_content("Managing organisation")
         end
 
+        context "when using a search query" do
+          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
+          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+
+          it "has search results in the title" do
+            get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            expect(page).to have_content("Logs (search results for ‘#{log_to_search.id}’) - Submit social housing and sales data (CORE) - GOV.UK")
+          end
+
+          it "shows case logs matching the id" do
+            get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            expect(page).to have_content(log_to_search.id)
+            logs.each do |log|
+              expect(page).not_to have_content(log.id)
+            end
+          end
+
+          it "shows case logs matching the tenant code" do
+            get "/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
+            expect(page).to have_content(log_to_search.id)
+            logs.each do |log|
+              expect(page).not_to have_content(log.id)
+            end
+          end
+
+          it "shows case logs matching the property reference" do
+            get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
+            expect(page).to have_content(log_to_search.id)
+            logs.each do |log|
+              expect(page).not_to have_content(log.id)
+            end
+          end
+
+          it "shows case logs matching the property postcode" do
+            get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+            expect(page).to have_content(log_to_search.id)
+            logs.each do |log|
+              expect(page).not_to have_content(log.id)
+            end
+          end
+
+          context "when more than one results with matching postcode" do
+            let!(:matching_postcode_log) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
+
+            it "displays all matching logs" do
+              get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+              expect(page).to have_content(log_to_search.id)
+              expect(page).to have_content(matching_postcode_log.id)
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+            end
+          end
+
+          context "when there are more than 1 page of search results" do
+            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: "XX1 1YY") }
+
+            it "has title with pagination details for page 1" do
+              get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
+              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+            end
+
+            it "has title with pagination details for page 2" do
+              get "/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
+              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+            end
+          end
+
+          context "when search query doesn't match any logs" do
+            it "doesn't display any logs" do
+              get "/logs?search=foobar", headers:, params: {}
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+              expect(page).not_to have_content(log_to_search.id)
+            end
+          end
+
+          context "when search query is empty" do
+            it "doesn't display any logs" do
+              get "/logs?search=", headers:, params: {}
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+              expect(page).not_to have_content(log_to_search.id)
+            end
+          end
+
+          context "when search and filter is present" do
+            let(:matching_postcode) { log_to_search.postcode_full }
+            let(:matching_status) { "in_progress" }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
+
+            it "shows only logs matching both search and filters" do
+              get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
+              expect(page).to have_content(log_matching_filter_and_search.id)
+              expect(page).not_to have_content(log_to_search.id)
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+            end
+          end
+        end
+
         context "when there are less than 20 logs" do
           before do
             get "/logs", headers:, params: {}
@@ -348,7 +463,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs")
+            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
           end
 
           it "shows the download csv link" do
@@ -424,7 +539,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 1 of 2)")
+              expect(page).to have_title("Logs (page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -449,7 +564,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 2 of 2)")
+              expect(page).to have_title("Logs (page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
           end
         end
