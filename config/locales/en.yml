@@ -157,7 +157,7 @@ en:
         question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
       preg_occ:
-        no_female: "You must answer ‘no’ as there are no females aged 11-65 in the household"
+        no_female: "You must answer ‘no’ as there are no women aged 11-65 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
