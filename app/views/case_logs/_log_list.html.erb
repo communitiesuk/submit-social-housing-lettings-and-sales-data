@@ -1,58 +1,70 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
-  <table class="govuk-table">
-    <caption id="<%= title.dasherize %>" class="govuk-!-font-size-19 govuk-!-font-weight-regular">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular], id: title.dasherize) do |caption| %>
       <span class="govuk-!-margin-right-4">
         <strong><%= pagy.count %></strong> total <%= title.downcase %>
       </span>
       <%= govuk_link_to "Download (CSV)", "/logs.csv", type: "text/csv" %>
-    </caption>
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col">Log</th>
-        <th class="govuk-table__header" scope="col">Tenant</th>
-        <th class="govuk-table__header" scope="col">Property</th>
-        <th class="govuk-table__header" scope="col">Tenancy starts</th>
-        <th class="govuk-table__header" scope="col">Log created</th>
-        <th class="govuk-table__header" scope="col">Status</th>
+    <% end %>
+    <%= table.head do |head| %>
+      <%= head.row do |row| %>
+        <% row.cell(header: true, text: "Log", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Tenant", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Property", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Tenancy starts", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Log created", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Log Status", html_attributes: {
+          scope: "col",
+        }) %>
         <% if current_user.support? %>
-          <th class="govuk-table__header" scope="col">Owning organisation</th>
-          <th class="govuk-table__header" scope="col">Managing organisation</th>
+          <% row.cell(header: true, text: "Owning organisation", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Managing organisation", html_attributes: {
+            scope: "col",
+          }) %>
         <% end %>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      <% case_logs.map do |log| %>
-      <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="row">
-          <%= govuk_link_to case_log_path(log) do %>
-            <span class="govuk-visually-hidden">Log </span><%= log.id %>
-          <% end %>
-        </th>
-        <td class="govuk-table__cell app-!-font-tabular">
-          <%= log.tenant_code? ? log.tenant_code : "–" %>
-        </td>
-        <td class="govuk-table__cell app-!-font-tabular">
-          <%= log.propcode? ? log.propcode : "–" %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= log.startdate.present? ? log.startdate.to_formatted_s(:govuk_date) : "–" %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= log.created_at.to_formatted_s(:govuk_date) %>
-        </td>
-        <td class="govuk-table__cell">
-          <%= status_tag(log.status) %>
-        </td>
-        <% if current_user.support? %>
-          <td class="govuk-table__cell">
-            <%= log.owning_organisation.name %>
-          </td>
-          <td class="govuk-table__cell">
-            <%= log.managing_organisation.name %>
-        </td>
-        <% end %>
-      </tr>
       <% end %>
-    </tbody>
-  </table>
+    <% end %>
+    <%= table.body do |body| %>
+      <% case_logs.map do |log| %>
+        <%= body.row do |row| %>
+          <% row.cell(header: true, html_attributes: {
+            scope: "row",
+          }) do %>
+            <%= govuk_link_to case_log_path(log) do %>
+              <span class="govuk-visually-hidden">Log </span><%= log.id %>
+            <% end %>
+          <% end %>
+          <% row.cell(
+            text: log.tenant_code? ? log.tenant_code : "–",
+            classes: "app-!-font-tabular",
+          ) %>
+          <% row.cell(
+            text: log.propcode? ? log.propcode : "–",
+            classes: "app-!-font-tabular",
+          ) %>
+          <% row.cell(text: log.startdate.present? ? log.startdate.to_formatted_s(:govuk_date) : "–") %>
+          <% row.cell(text: log.created_at.to_formatted_s(:govuk_date)) %>
+          <% row.cell do %>
+            <%= status_tag(log.status) %>
+          <% end %>
+          <% if current_user.support? %>
+            <% row.cell(text: log.owning_organisation.name) %>
+            <% row.cell(text: log.managing_organisation.name) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 </section>
