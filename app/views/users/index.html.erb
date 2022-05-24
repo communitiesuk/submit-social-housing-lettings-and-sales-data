@@ -8,23 +8,7 @@
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>
 
-<% path = current_user.support? ? users_path : users_organisation_path(current_user.organisation) %>
-<%= form_with model: @user, url: path, method: "get", local: true do |f| %>
-<div class="app-search govuk-!-margin-bottom-4">
-  <div class="govuk-form-group app-search__form-group">
-    <label class="govuk-label govuk-!-margin-bottom-2" for="user-search-field">
-      Search by name or email address
-    </label>
-
-    <input class="govuk-input app-search__input" id="user-search-field" name="user-search-field" type="search" autocomplete="off">
-  </div>
-
-  <button class="govuk-button app-search__button undefined" data-module="govuk-button">
-    Search
-  </button>
-
-</div>
-<% end %>
+<%= render SearchComponent.new(current_user:, label: "Search by name or email address") %>
 
 <%= govuk_table do |table| %>
   <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
