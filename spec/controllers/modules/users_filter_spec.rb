@@ -2,13 +2,14 @@ require "rails_helper"
 
 RSpec.describe Modules::UsersFilter do
   describe "filtered_users" do
+    subject(:instance) { Class.new.include(described_class).new }
+
     before do
       FactoryBot.create_list(:user, 5)
       FactoryBot.create(:user, name: "Joe Blogg")
       FactoryBot.create(:user, name: "Tom Blogg", active: false)
     end
 
-    subject(:instance) { Class.new.include(described_class).new }
     let(:user_list) { User.all }
 
     context "when given a search term" do
