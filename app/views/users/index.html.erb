@@ -25,15 +25,23 @@
   <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>
-      <% row.cell(header: true, text: "Name and email adress") %>
-      <% row.cell(header: true, text: "Organisation and role") %>
-      <% row.cell(header: true, text: "Last logged in") %>
+      <% row.cell(header: true, text: "Name and email adress", html_attributes: {
+        scope: "col",
+      }) %>
+      <% row.cell(header: true, text: "Organisation and role", html_attributes: {
+        scope: "col",
+      }) %>
+      <% row.cell(header: true, text: "Last logged in", html_attributes: {
+        scope: "col",
+      }) %>
     <% end %>
   <% end %>
   <% @users.each do |user| %>
     <%= table.body do |body| %>
       <%= body.row do |row| %>
-        <% row.cell do %>
+        <% row.cell(header: true, html_attributes: {
+          scope: "row",
+        }) do %>
           <%= simple_format(user_cell(user), {}, wrapper_tag: "span") %>
           <% if user.is_data_protection_officer? || user.is_key_contact? %>
             <br>
