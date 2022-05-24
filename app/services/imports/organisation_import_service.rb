@@ -8,7 +8,7 @@ module Imports
 
     PROVIDER_TYPE = {
       "HOUSING-ASSOCIATION" => Organisation.provider_types[:PRP],
-      "LOCAL-AUTHORITY" => Organisation.provider_types[:LA]
+      "LOCAL-AUTHORITY" => Organisation.provider_types[:LA],
     }.freeze
 
     def create_organisation(xml_document)
