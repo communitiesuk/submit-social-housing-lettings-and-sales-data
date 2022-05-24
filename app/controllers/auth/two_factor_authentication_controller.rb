@@ -22,4 +22,12 @@ private
       render :show, status: :unprocessable_entity
     end
   end
+
+  def after_two_factor_success_path_for(resource)
+    if resource.is_a?(User) && resource.support?
+      "/organisations"
+    else
+      super
+    end
+  end
 end

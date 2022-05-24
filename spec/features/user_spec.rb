@@ -399,6 +399,16 @@ RSpec.describe "User Features" do
         )
         click_button("Sign in")
       end
+
+      it "the admin user is redirected to the organisations list page on successful sign in" do
+        visit("/account/sign-in")
+        fill_in("user[email]", with: support_user.email)
+        fill_in("user[password]", with: support_user.password)
+        click_button("Sign in")
+        fill_in("code", with: otp)
+        click_button("Submit")
+        expect(page).to have_current_path("/organisations")
+      end
     end
 
     context "with a valid 2FA code" do
