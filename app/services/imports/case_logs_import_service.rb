@@ -138,6 +138,8 @@ module Imports
                                      0
                                    end
 
+      apply_date_consistency!(attributes)
+
       attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
@@ -309,11 +311,8 @@ module Imports
     def find_organisation_id(xml_doc, id_field)
       old_visible_id = unsafe_string_as_integer(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
-      # Quick hack: should be removed when all organisations are imported
-      # Will fail in the future if the organisation is missing
-      if organisation.nil?
-        raise "Organisation not found with legacy ID #{old_visible_id}"
-      end
+      raise "Organisation not found with legacy ID #{old_visible_id}" if organisation.nil?
+
       organisation.id
     end
 
@@ -517,6 +516,12 @@ module Imports
         1
       else
         0
+      end
+    end
+
+    def apply_date_consistency!(attributes)
+      if attributes["voiddate"] > attributes["startdate"]
+        attributes.delete("voiddate")
       end
     end
   end
