@@ -4,8 +4,8 @@ RSpec.describe "Log Features" do
   context "Searching for specific logs" do
     context "I am logged in" do
       let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
-      let!(:log) { FactoryBot.create(:case_log) }
-      let!(:unwanted_logs) { FactoryBot.create_list(:case_log, 4) }
+      let!(:log) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+      let!(:unwanted_logs) { FactoryBot.create_list(:case_log, 4, owning_organisation: user.organisation) }
 
       before do
         visit("/logs")
@@ -24,7 +24,6 @@ RSpec.describe "Log Features" do
         it "displays log matching the search" do
           fill_in("search-field", with: log.id)
           click_button("Search")
-
           expect(page).to have_content(log.id)
           expect(page).not_to have_content(unwanted_logs.first.id)
         end
