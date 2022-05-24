@@ -34,7 +34,6 @@ RSpec.describe "Log Features" do
 
         context "using log tenancy_code" do
           it "it displays log matching the tenancy code" do
-            visit("/logs")
             fill_in("search-field", with: log_to_search.tenancy_code)
             click_button("Search")
             expect(page).to have_content(log_to_search.id)
