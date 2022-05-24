@@ -8,7 +8,7 @@ RSpec.describe CaseLogsController, type: :request do
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
     ActionController::HttpAuthentication::Basic
-                        .encode_credentials(api_username, api_password)
+      .encode_credentials(api_username, api_password)
   end
 
   let(:headers) do
@@ -182,6 +182,16 @@ RSpec.describe CaseLogsController, type: :request do
           get "/logs", headers: headers, params: {}
           expect(page).to have_content("LC783")
           expect(page).to have_content("UA984")
+        end
+
+        context "with a search bar" do
+          let!(:logs) { FactoryBot.create_list(:case_log, 5) }
+
+          it "shows case logs mathing the search word" do
+            get "/logs?search-field=#{logs.first.id}", headers: headers, params: {}
+            expect(page).to have_content(logs.first.id)
+            expect(page).not_to have_content(logs.last.id)
+          end
         end
 
         context "when filtering" do
