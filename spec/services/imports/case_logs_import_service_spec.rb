@@ -88,5 +88,18 @@ RSpec.describe Imports::CaseLogsImportService do
         expect(case_log.voiddate).to be_nil
       end
     end
+
+    context "and the organisation legacy ID does not exist" do
+      let(:case_log_xml) do
+        xml_doc = Nokogiri::XML(case_log_file)
+        xml_doc.at_xpath("//xmlns:OWNINGORGID").content = 99999
+        xml_doc
+      end
+
+      it "raises an exception" do
+        expect { case_log_service.send(:create_log, case_log_xml) }
+          .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
   end
 end
