@@ -3,11 +3,11 @@ module TabNavHelper
 
   def user_cell(user)
     link_text = user.name.presence || user.email
-    [govuk_link_to(link_text, user, class: "govuk-!-font-weight-bold"), user.email].join("\n")
+    [govuk_link_to(link_text, user), "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"].join("\n")
   end
 
   def org_cell(user)
-    role = "<span class='app-!-colour-muted'>#{user.role.to_s.humanize}</span>"
+    role = "<span class=\"app-!-colour-muted\">#{user.role.to_s.humanize}</span>"
     [user.organisation.name, role].join("\n")
   end
 
