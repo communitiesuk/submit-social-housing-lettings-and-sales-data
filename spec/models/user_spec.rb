@@ -185,4 +185,33 @@ RSpec.describe User, type: :model do
       }.not_to change(user.versions, :count)
     end
   end
+
+  describe "scopes" do
+    before do
+      FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com")
+      FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com")
+      FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com")
+    end
+
+    context "when searching by name" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by_name("Joe").count).to eq(1)
+        expect(described_class.search_by_name("joe").count).to eq(1)
+      end
+    end
+
+    context "when searching by email" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by_email("Example").count).to eq(2)
+        expect(described_class.search_by_email("example").count).to eq(2)
+      end
+    end
+
+    context "when searching by all searchable field" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by("Smith").count).to eq(2)
+        expect(described_class.search_by("smith").count).to eq(2)
+      end
+    end
+  end
 end

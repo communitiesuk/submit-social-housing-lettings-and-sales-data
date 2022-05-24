@@ -1,6 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
   include Modules::CaseLogsFilter
+  include Modules::UsersFilter
 
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
@@ -17,7 +18,8 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(@organisation.users.where(active: true))
+    @pagy, @users = pagy(filtered_users(@organisation.users))
+    @searched = params["search-field"].present?
     render "users/index"
   end
 

@@ -32,6 +32,11 @@ class User < ApplicationRecord
 
   enum role: ROLES
 
+  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by_email, ->(email) { where("email ILIKE ?", "%#{email}%") }
+  scope :filter_by_active, -> { where(active: true) }
+  scope :search_by, ->(param) { search_by_name(param).or(search_by_email(param)) }
+
   def case_logs
     if support?
       CaseLog.all

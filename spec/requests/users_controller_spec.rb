@@ -335,22 +335,92 @@ RSpec.describe UsersController, type: :request do
   end
 
   context "when user is signed in as a data coordinator" do
-    let(:user) { FactoryBot.create(:user, :data_coordinator) }
-    let(:other_user) { FactoryBot.create(:user, organisation: user.organisation) }
+    let(:user) { FactoryBot.create(:user, :data_coordinator, email: "coordinator@example.com") }
+    let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "filter name", email: "filter@example.com") }
 
     describe "#index" do
       before do
         sign_in user
-        get "/users", headers:, params: {}
       end
 
-      it "redirects to the organisation user path" do
-        follow_redirect!
-        expect(path).to match("/organisations/#{user.organisation.id}/users")
+      context "when there are no url params" do
+        before do
+          get "/users", headers:, params: {}
+        end
+
+        it "redirects to the organisation user path" do
+          follow_redirect!
+          expect(path).to match("/organisations/#{user.organisation.id}/users")
+        end
+
+        it "does not show the download csv link" do
+          expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
+        end
+
+        it "shows a search bar" do
+          follow_redirect!
+          expect(page).to have_field("search-field", type: "search")
+        end
       end
 
-      it "does not show the download csv link" do
-        expect(page).not_to have_link("Download (CSV)", href: "/users.csv")
+      context "when a search parameter is passed" do
+        let!(:other_user_2) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
+        let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
+        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+
+        before do
+          get "/organisations/#{user.organisation.id}/users?search-field=#{search_param}"
+        end
+
+        context "when our search string matches case" do
+          let(:search_param) { "filter" }
+
+          it "returns only matching results" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user.name)
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("Matches 1 of 5  total users")
+          end
+        end
+
+        context "when we need case insensitive search" do
+          let(:search_param) { "Filter" }
+
+          it "returns only matching results" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user.name)
+          end
+        end
+
+        context "when our search term matches an email" do
+          let(:search_param) { "other@example.com" }
+
+          it "returns only matching result within the same organisation" do
+            expect(page).not_to have_content(user.name)
+            expect(page).to have_content(other_user_2.name)
+            expect(page).not_to have_content(other_user.name)
+            expect(page).not_to have_content(other_user_3.name)
+            expect(page).not_to have_content(other_org_user.name)
+          end
+
+          context "when our search term matches an email and a name" do
+            let(:search_param) { "joe" }
+
+            it "returns any results including joe within the same organisation" do
+              expect(page).to have_content(other_user_2.name)
+              expect(page).to have_content(other_user_3.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+              expect(page).not_to have_content(user.name)
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 2 of 5  total users")
+            end
+          end
+        end
       end
     end
 
@@ -613,7 +683,7 @@ RSpec.describe UsersController, type: :request do
 
             it "does update other values" do
               expect { patch "/users/#{other_user.id}", headers:, params: }
-                .to change { other_user.reload.name }.from("Danny Rojas").to("new name")
+                .to change { other_user.reload.name }.from("filter name").to("new name")
             end
           end
         end
@@ -727,9 +797,9 @@ RSpec.describe UsersController, type: :request do
     end
 
     describe "#index" do
-      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2") }
-      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4") }
+      let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
+      let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "other_org@other_example.com") }
 
       before do
         sign_in user
@@ -749,6 +819,72 @@ RSpec.describe UsersController, type: :request do
 
       it "shows the download csv link" do
         expect(page).to have_link("Download (CSV)", href: "/users.csv")
+      end
+
+      it "shows a search bar" do
+        expect(page).to have_field("search-field", type: "search")
+      end
+
+      context "when a search parameter is passed" do
+        before do
+          get "/users?search-field=#{search_param}"
+        end
+
+        context "when our search term matches a name" do
+          context "when our search string matches case" do
+            let(:search_param) { "Danny" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(user.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 1 of 4  total users")
+            end
+          end
+
+          context "when we need case insensitive search" do
+            let(:search_param) { "danny" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(user.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).not_to have_content(other_org_user.name)
+            end
+          end
+
+          context "when our search term matches an email" do
+            let(:search_param) { "other_org@other_example.com" }
+
+            it "returns only matching result" do
+              expect(page).not_to have_content(user.name)
+              expect(page).not_to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).to have_content(other_org_user.name)
+            end
+          end
+
+          context "when our search term matches an email and a name" do
+            let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
+            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+            let(:search_param) { "joe" }
+
+            it "returns any results including joe" do
+              expect(page).to have_content(other_user.name)
+              expect(page).not_to have_content(inactive_user.name)
+              expect(page).to have_content(other_org_user.name)
+              expect(page).not_to have_content(user.name)
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("Matches 2 of 4  total users")
+            end
+          end
+        end
       end
     end
 
