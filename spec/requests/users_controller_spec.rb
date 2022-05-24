@@ -359,7 +359,7 @@ RSpec.describe UsersController, type: :request do
 
         it "shows a search bar" do
           follow_redirect!
-          expect(page).to have_field("search-field", type: "search")
+          expect(page).to have_field("search", type: "search")
         end
       end
 
@@ -369,7 +369,7 @@ RSpec.describe UsersController, type: :request do
         let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
 
         before do
-          get "/organisations/#{user.organisation.id}/users?search-field=#{search_param}"
+          get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
         end
 
         context "when our search string matches case" do
@@ -381,7 +381,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("Matches 1 of 5 total users.")
+            expect(page).to have_content("1 user found matching ‘filter’ of 5 total users.")
           end
         end
 
@@ -417,7 +417,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 2 of 5 total users.")
+              expect(page).to have_content("2 users found matching ‘joe’ of 5 total users.")
             end
           end
         end
@@ -822,12 +822,12 @@ RSpec.describe UsersController, type: :request do
       end
 
       it "shows a search bar" do
-        expect(page).to have_field("search-field", type: "search")
+        expect(page).to have_field("search", type: "search")
       end
 
       context "when a search parameter is passed" do
         before do
-          get "/users?search-field=#{search_param}"
+          get "/users?search=#{search_param}"
         end
 
         context "when our search term matches a name" do
@@ -842,7 +842,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 1 of 4 total users.")
+              expect(page).to have_content("1 user found matching ‘Danny’ of 4 total users.")
             end
           end
 
@@ -881,7 +881,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("Matches 2 of 4 total users.")
+              expect(page).to have_content("2 users found matching ‘joe’ of 4 total users.")
             end
           end
         end
