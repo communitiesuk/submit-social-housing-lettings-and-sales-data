@@ -17,6 +17,7 @@ RSpec.describe "Log Features" do
       context "I can search for a specific log" do
         it "there is a search bar for logs" do
           expect(page).to have_field("search-field")
+          expect(page).to have_content("Search by log ID, tenant code, property reference or postcode")
         end
       end
     end

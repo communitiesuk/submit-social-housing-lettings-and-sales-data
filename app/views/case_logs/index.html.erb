@@ -4,7 +4,7 @@
   <%= content_for(:title) %>
 </h1>
 
-<%= render SearchComponent.new(current_user:, label: "Search by name or email address") %>
+<%= render SearchComponent.new(current_user:, label: "Search by log ID, tenant code, property reference or postcode") %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
