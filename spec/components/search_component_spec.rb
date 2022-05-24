@@ -4,7 +4,7 @@ RSpec.describe SearchComponent, type: :component do
   let(:current_user) { FactoryBot.create(:user, :support) }
   let(:label) { "Search by name or email address" }
   let(:page) { Capybara::Node::Simple.new(rendered_component) }
-  
+
   before do
     render_inline(described_class.new(current_user:, label:))
   end
