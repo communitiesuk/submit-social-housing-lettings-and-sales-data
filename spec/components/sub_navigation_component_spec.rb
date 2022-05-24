@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PrimaryNavigationComponent, type: :component do
+RSpec.describe SubNavigationComponent, type: :component do
   let(:items) do
     [
       NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
@@ -10,15 +10,15 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
   end
 
   context "when the item is 'current' in nav items" do
-    it "then that item appears as selected" do
+    it "then that tab appears as selected" do
       result = render_inline(described_class.new(items:))
 
-      expect(result.css('.app-primary-navigation__link[aria-current="page"]').text).to include("Organisations")
+      expect(result.css('.app-sub-navigation__link[aria-current="page"]').text).to include("Organisations")
     end
   end
 
   context "when the current page is sub-page" do
-    it "highlights the correct item" do
+    it "highlights the correct tab" do
       navigation_panel = described_class.new(items:)
 
       expect(navigation_panel).to be_highlighted_item(items[0], "/something-else")
