@@ -1,5 +1,5 @@
 module Modules::UsersFilter
-  def filtered_users(base_collection, search_term=nil)
+  def filtered_users(base_collection, search_term = nil)
     if search_term.present?
       base_collection.search_by(search_term)
     else
