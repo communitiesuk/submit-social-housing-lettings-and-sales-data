@@ -92,7 +92,7 @@ RSpec.describe Imports::CaseLogsImportService do
     context "and the organisation legacy ID does not exist" do
       let(:case_log_xml) do
         xml_doc = Nokogiri::XML(case_log_file)
-        xml_doc.at_xpath("//xmlns:OWNINGORGID").content = 99999
+        xml_doc.at_xpath("//xmlns:OWNINGORGID").content = 99_999
         xml_doc
       end
 
