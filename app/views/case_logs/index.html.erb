@@ -3,6 +3,9 @@
 <h1 class="govuk-heading-l">
   <%= content_for(:title) %>
 </h1>
+
+<%= render SearchComponent.new(current_user:, label: "Search by name or email address") %>
+
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
     <%= govuk_button_to "Create a new lettings log", case_logs_path %>
