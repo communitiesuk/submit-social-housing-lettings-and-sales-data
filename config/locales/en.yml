@@ -250,6 +250,10 @@ en:
       max:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
+    pregnancy:
+      title: "You told us somebody in the household is pregnant"
+      no_females: "You also told us there are no women living at the property."
+      females_not_in_soft_age_range: "You also told us that any women living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
 
   devise:
     two_factor_authentication:

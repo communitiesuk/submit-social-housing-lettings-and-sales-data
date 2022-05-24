@@ -48,7 +48,23 @@ module Validations::SoftValidations
     end
   end
 
+  def no_females_in_the_household?
+    (1..8).none? do |n|
+      public_send("sex#{n}") == "F"
+    end && preg_occ == 1
+  end
+
+  def female_in_pregnant_household_in_soft_validation_range?
+    (females_in_age_range(11, 15) || females_in_age_range(51, 65)) && !females_in_age_range(16, 50)
+  end
+
 private
+
+  def females_in_age_range(min, max)
+    (1..8).any? do |n|
+      public_send("sex#{n}") == "F" && public_send("age#{n}").present? && public_send("age#{n}").between?(min, max)
+    end
+  end
 
   def tenant_is_retired?(economic_status)
     economic_status == 5

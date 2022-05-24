@@ -164,4 +164,35 @@ RSpec.describe Validations::SoftValidations do
       end
     end
   end
+
+  describe "pregnancy soft validations" do
+    context "when there are no female tenants" do
+      it "shows the interruption screen" do
+        record.update!(age1: 43, sex1: "M", preg_occ: 1)
+        expect(record.no_females_in_the_household?).to be true
+      end
+    end
+
+    context "when female tenants are in 11-16 age range" do
+      it "shows the interruption screen" do
+        record.update!(age3: 14, sex3: "F", preg_occ: 1)
+        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
+      end
+    end
+
+    context "when female tenants are in 50-65 age range" do
+      it "shows the interruption screen" do
+        record.update!(age1: 54, sex1: "F", preg_occ: 1)
+        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be true
+      end
+    end
+
+    context "when female tenants are outside or soft validation ranges" do
+      it "does not show the interruption screen" do
+        record.update!(age1: 44, sex1: "F", preg_occ: 1)
+        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+        expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+      end
+    end
+  end
 end
