@@ -192,7 +192,17 @@ RSpec.describe CaseLogsController, type: :request do
             expect(page).to have_content(logs.first.id)
             expect(page).not_to have_content(logs.last.id)
           end
+
+          context "no match is found" do
+            it "shows case logs matching the search word" do
+              get "/logs?search-field=777", headers: headers, params: {}
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+            end
+          end
         end
+      
 
         context "when filtering" do
           context "with status filter" do

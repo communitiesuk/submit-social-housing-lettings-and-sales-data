@@ -32,7 +32,7 @@ RSpec.describe "Log Features" do
           end
         end
 
-        context "using log tenancy_code" do
+        context "using log tenancy code" do
           it "it displays log matching the tenancy code" do
             fill_in("search-field", with: log_to_search.tenancy_code)
             click_button("Search")
