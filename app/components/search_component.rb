@@ -1,9 +1,10 @@
 class SearchComponent < ViewComponent::Base
-  attr_reader :current_user, :label
+  attr_reader :current_user, :label, :value
 
-  def initialize(current_user:, label:)
+  def initialize(current_user:, label:, value: nil)
     @current_user = current_user
     @label = label
+    @value = value
     super
   end
 
