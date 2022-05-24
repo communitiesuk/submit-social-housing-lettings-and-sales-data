@@ -61,6 +61,7 @@
   @include govuk-link-style-no-visited-state;
   @include govuk-link-style-no-underline;
   @include govuk-typography-weight-bold;
+  position: relative;
 
   // Extend the touch area of the link to the list
   &:after {
