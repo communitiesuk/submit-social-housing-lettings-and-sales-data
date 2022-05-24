@@ -1,0 +1,16 @@
+<%= form_with model: @case_logs, url: "/logs", method: "get", local: true do |f| %>
+<div class="app-search govuk-!-margin-bottom-4">
+  <div class="govuk-form-group app-search__form-group">
+    <label class="govuk-label govuk-!-margin-bottom-2" for="search-field">
+      <%= label %>
+    </label>
+
+    <input class="govuk-input app-search__input" id="search-field" name="search-field" type="search" autocomplete="off">
+  </div>
+
+  <button class="govuk-button app-search__button undefined" data-module="govuk-button">
+    Search
+  </button>
+
+</div>
+<% end %>
