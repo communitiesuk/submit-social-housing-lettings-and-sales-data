@@ -47,8 +47,8 @@ module Imports
       # Required fields for status complete or logic to work
       # Note: order matters when we derive from previous values (attributes parameter)
       attributes["startdate"] = compose_date(xml_doc, "DAY", "MONTH", "YEAR")
-      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID", "OWNINGORGNAME", "HCNUM")
-      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID", "MANINGORGNAME", "MANHCNUM")
+      attributes["owning_organisation_id"] = find_organisation_id(xml_doc, "OWNINGORGID")
+      attributes["managing_organisation_id"] = find_organisation_id(xml_doc, "MANINGORGID")
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
@@ -306,23 +306,13 @@ module Imports
       end
     end
 
-    def find_organisation_id(xml_doc, id_field, name_field, reg_field)
+    def find_organisation_id(xml_doc, id_field)
       old_visible_id = unsafe_string_as_integer(xml_doc, id_field)
       organisation = Organisation.find_by(old_visible_id:)
       # Quick hack: should be removed when all organisations are imported
       # Will fail in the future if the organisation is missing
       if organisation.nil?
-        organisation = Organisation.new
-        organisation.old_visible_id = old_visible_id
-        let_type = unsafe_string_as_integer(xml_doc, "landlord")
-        organisation.provider_type = if let_type == PRP_LA[:local_authority]
-                                       1
-                                     else
-                                       2
-                                     end
-        organisation.name = string_or_nil(xml_doc, name_field)
-        organisation.housing_registration_no = string_or_nil(xml_doc, reg_field)
-        organisation.save!
+        raise "Organisation not found with legacy ID #{old_visible_id}"
       end
       organisation.id
     end

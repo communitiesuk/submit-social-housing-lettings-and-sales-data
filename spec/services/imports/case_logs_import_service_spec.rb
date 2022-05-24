@@ -40,6 +40,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
       FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa")
       FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f")
+      FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP")
     end
 
     it "successfully create all case logs" do

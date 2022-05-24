@@ -3,8 +3,8 @@
     <meta:form-name>2021-CORE-IR-GN</meta:form-name>
     <meta:document-id>166fc004-392e-47a8-acb8-1c018734882b</meta:document-id>
     <meta:owner-user-id>e29c492473446dca4d50224f2bb7cf965a261d6f</meta:owner-user-id>
-    <meta:owner-institution-id>26139d1be7a44ebb1af23d3f8882c14025e9903c</meta:owner-institution-id>
-    <meta:managing-institution-id>26139d1be7a44ebb1af23d3f8882c14025e9903c</meta:managing-institution-id>
+    <meta:owner-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:owner-institution-id>
+    <meta:managing-institution-id>7c5bd5fb549c09a2c55d7cb90d7ba84927e64618</meta:managing-institution-id>
     <meta:created-date>2022-04-12T14:10:59.953121Z</meta:created-date>
     <meta:modified-date>2022-04-12T14:10:59.953121Z</meta:modified-date>
     <meta:status>submitted-valid</meta:status>
@@ -411,13 +411,13 @@
     <PLOACODE/>
     <OACODE/>
     <GOVREG>E12000008</GOVREG>
-    <OWNINGORGID>107138</OWNINGORGID>
-    <OWNINGORGNAME>1 Test</OWNINGORGNAME>
-    <MANINGORGNAME>1 Test</MANINGORGNAME>
+    <OWNINGORGID>1</OWNINGORGID>
+    <OWNINGORGNAME>DLUHC</OWNINGORGNAME>
+    <MANINGORGNAME>DLUHC</MANINGORGNAME>
     <HCNUM>655</HCNUM>
     <MANHCNUM>655</MANHCNUM>
     <LAHA/>
-    <MANINGORGID>107138</MANINGORGID>
+    <MANINGORGID>1</MANINGORGID>
     <HBTYPE1/>
     <HBTYPE2/>
     <HBTYPE3/>
