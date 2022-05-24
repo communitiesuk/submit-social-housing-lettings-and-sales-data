@@ -1,4 +1,8 @@
-<% title = "Your organisation (Users)" %>
+<% if @searched.present? %>
+  <% search_title = " (search results for ‘#{@searched})’" %>
+<% end %>
+<% title = "Your organisation (Users)#{search_title}" %>
+
 <% content_for :title, title %>
 
 <% content_for :tab_title do %>
