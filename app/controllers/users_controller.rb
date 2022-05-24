@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
     @pagy, @users = pagy(filtered_users(User.all))
-    @searched = params["search-field"].present?
+    @searched = params["search-field"].presence
 
     respond_to do |format|
       format.html

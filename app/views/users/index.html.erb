@@ -14,7 +14,8 @@
   <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
     <span class="govuk-!-margin-right-4">
       <% if @searched %>
-        Matches <strong><%= @pagy.count %></strong> of <strong><%= User.count %></strong> total users.
+        <% item_label = @pagy.count > 1 ? "users" : "user" %>
+        <strong><%= @pagy.count %></strong> <%= item_label %> found matching ‘<%= @searched %>’ of <strong><%= User.count %></strong> total users.
       <% else %>
         <strong><%= @pagy.count %></strong> total users.
       <% end %>
