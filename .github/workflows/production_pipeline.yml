@@ -41,6 +41,7 @@ jobs:
       DB_DATABASE: data_collector
       DB_USERNAME: postgres
       DB_PASSWORD: password
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
     steps:
       - name: Get latest release with tag

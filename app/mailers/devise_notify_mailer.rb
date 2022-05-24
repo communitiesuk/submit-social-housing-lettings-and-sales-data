@@ -52,7 +52,6 @@ class DeviseNotifyMailer < Devise::Mailer
     Rails.application.credentials[:email_allowlist]
   end
 
-
   # def unlock_instructions(record, token, opts = {})
   #   super
   # end
