@@ -1,0 +1,54 @@
+<%= govuk_table do |table| %>
+  <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+    <span class="govuk-!-margin-right-4">
+      <% if searched %>
+        <% item_label = pagy.count > 1 ? "users" : "user" %>
+        <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= User.count %></strong> total users. <%= govuk_link_to("Clear search", request.path) %>
+      <% else %>
+        <strong><%= pagy.count %></strong> total users.
+      <% end %>
+    </span>
+    <% if current_user.support? %>
+      <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
+    <% end %>
+  <% end %>
+  <%= table.head do |head| %>
+    <%= head.row do |row| %>
+      <% row.cell(header: true, text: "Name and email adress", html_attributes: {
+        scope: "col",
+      }) %>
+      <% row.cell(header: true, text: "Organisation and role", html_attributes: {
+        scope: "col",
+      }) %>
+      <% row.cell(header: true, text: "Last logged in", html_attributes: {
+        scope: "col",
+      }) %>
+    <% end %>
+  <% end %>
+  <% users.each do |user| %>
+    <%= table.body do |body| %>
+      <%= body.row do |row| %>
+        <% row.cell(header: true, html_attributes: {
+          scope: "row",
+        }) do %>
+          <%= simple_format(user_cell(user), {}, wrapper_tag: "span") %>
+          <% if user.is_data_protection_officer? || user.is_key_contact? %>
+            <br>
+          <% end %>
+          <%= user.is_data_protection_officer? ? govuk_tag(
+            classes: "app-tag--small",
+            colour: "turquoise",
+            text: "Data protection officer",
+          ) : "" %>
+          <%= user.is_key_contact? ? govuk_tag(
+            classes: "app-tag--small",
+            colour: "turquoise",
+            text: "Key contact",
+          ) : "" %>
+        <% end %>
+        <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
+        <% row.cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date)) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
