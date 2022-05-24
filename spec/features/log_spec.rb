@@ -5,8 +5,8 @@ RSpec.describe "Log Features" do
     context "I am logged in and there are logs in the database" do
       let!(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
       let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, tenancy_code: "111") }
-      let!(:same_orgsanisation_log) { FactoryBot.create(:case_log, owning_organisation: user.organisation, tenancy_code: "222") }
-      let!(:another_orgsanisation_log) { FactoryBot.create(:case_log, tenancy_code: "333") }
+      let!(:same_organisation_log) { FactoryBot.create(:case_log, owning_organisation: user.organisation, tenancy_code: "222") }
+      let!(:another_organisation_log) { FactoryBot.create(:case_log, tenancy_code: "333") }
 
       before do
         visit("/logs")
@@ -27,8 +27,8 @@ RSpec.describe "Log Features" do
             fill_in("search-field", with: log_to_search.id)
             click_button("Search")
             expect(page).to have_content(log_to_search.id)
-            expect(page).not_to have_content(same_orgsanisation_log.id)
-            expect(page).not_to have_content(another_orgsanisation_log.id)
+            expect(page).not_to have_content(same_organisation_log.id)
+            expect(page).not_to have_content(another_organisation_log.id)
           end
         end
 
@@ -37,8 +37,8 @@ RSpec.describe "Log Features" do
             fill_in("search-field", with: log_to_search.tenancy_code)
             click_button("Search")
             expect(page).to have_content(log_to_search.id)
-            expect(page).not_to have_content(same_orgsanisation_log.id)
-            expect(page).not_to have_content(another_orgsanisation_log.id)
+            expect(page).not_to have_content(same_organisation_log.id)
+            expect(page).not_to have_content(another_organisation_log.id)
           end
         end
       end
