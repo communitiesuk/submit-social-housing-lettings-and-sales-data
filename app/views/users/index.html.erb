@@ -11,12 +11,12 @@
 <%= render SearchComponent.new(current_user:, label: "Search by name or email address") %>
 
 <%= govuk_table do |table| %>
-  <%= table.caption(classes: %w[app-table__caption]) do |caption| %>
+  <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
     <span class="govuk-!-margin-right-4">
       <% if @searched %>
-        <strong>Matches <%= @pagy.count %> of <%= User.count %>  total users</strong>
+        Matches <strong><%= @pagy.count %></strong> of <strong><%= User.count %></strong> total users.
       <% else %>
-        <strong><%= @pagy.count %></strong> total users
+        <strong><%= @pagy.count %></strong> total users.
       <% end %>
     </span>
     <% if current_user.support? %>

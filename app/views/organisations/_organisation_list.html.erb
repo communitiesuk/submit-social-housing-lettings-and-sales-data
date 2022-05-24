@@ -1,10 +1,8 @@
 <% content_for :title, title %>
 
 <%= govuk_table do |table| %>
-  <%= table.caption(size: "s", classes: %w[govuk-!-text-align-left govuk-!-margin-top-4 govuk-!-margin-bottom-4]) do |caption| %>
-    <span class="govuk-!-margin-right-4">
-      <strong><%= @pagy.count %></strong><span style="font-weight: normal"> total <%= title.downcase %></span>
-    </span>
+  <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+    <strong><%= @pagy.count %></strong> total <%= title.downcase %>.
   <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>
