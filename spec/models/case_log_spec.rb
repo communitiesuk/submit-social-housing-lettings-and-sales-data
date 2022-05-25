@@ -1996,5 +1996,13 @@ RSpec.describe CaseLog do
         expect(case_log.plural_gender_for_person_3).to be_nil
       end
     end
+
+    context "when a postcode contains unicode characters" do
+      let(:case_log) { FactoryBot.build(:case_log, postcode_full: "SR81LS\u00A0") }
+
+      it "triggers a validation error" do
+        expect { case_log.save! }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
+      end
+    end
   end
 end

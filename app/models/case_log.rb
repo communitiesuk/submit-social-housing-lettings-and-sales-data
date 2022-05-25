@@ -561,12 +561,12 @@ private
   end
 
   def process_postcode_changes!
-    self.postcode_full = postcode_full.present? ? postcode_full.upcase.gsub(/\s+/, "") : postcode_full
+    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
   end
 
   def process_previous_postcode_changes!
-    self.ppostcode_full = ppostcode_full.present? ? ppostcode_full.upcase.gsub(/\s+/, "") : ppostcode_full
+    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
     process_postcode(ppostcode_full, "previous_postcode_known", "is_previous_la_inferred", "prevloc")
   end
 
@@ -621,9 +621,14 @@ private
   end
 
   def get_inferred_la(postcode)
+    # Avoid network calls when postcode is invalid
+    return unless postcode.match(Validations::PropertyValidations::POSTCODE_REGEXP)
+
     postcode_lookup = nil
     begin
-      Timeout.timeout(5) { postcode_lookup = PIO.lookup(postcode) }
+      # URI encoding only supports ASCII characters
+      ascii_postcode = postcode.encode("ASCII", "UTF-8", invalid: :replace, undef: :replace, replace: "")
+      Timeout.timeout(5) { postcode_lookup = PIO.lookup(ascii_postcode) }
     rescue Timeout::Error
       Rails.logger.warn("Postcodes.io lookup timed out")
     end
@@ -717,5 +722,9 @@ private
     return "" unless value && num_of_weeks
 
     (value * 52 / num_of_weeks).round(2)
+  end
+
+  def upcase_and_remove_whitespace(string)
+    string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 end
