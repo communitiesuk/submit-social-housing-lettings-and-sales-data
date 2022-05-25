@@ -309,38 +309,37 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "using a search bar" do
-          let(:log_1) { FactoryBot.create(:case_log, tenancy_code: "111", owning_organisation: user.organisation) }
-          let(:log_2) { FactoryBot.create(:case_log, tenancy_code: "222", owning_organisation: user.organisation) }
-          let(:log_3) { FactoryBot.create(:case_log, tenancy_code: "333", owning_organisation: user.organisation) }
+          let(:logs)  { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
 
           it "shows case logs matching the id" do
-            get "/logs?search-field=#{log_1.id}", headers: headers, params: {}
-            expect(page).to have_content(log_1.id)
-            expect(page).not_to have_content(log_3.id)
+            get "/logs?search-field=#{logs[0].id}", headers: headers, params: {}
+            expect(page).to have_content(logs[0].id)
+            expect(page).not_to have_content(logs[1].id)
+            expect(page).not_to have_content(logs[2].id)
           end
 
           it "shows case logs matching the tenancy code" do
-            get "/logs?search-field=#{log_1.tenancy_code}", headers: headers, params: {}
-            expect(page).to have_content(log_1.id)
-            expect(page).not_to have_content(log_2.id)
-            expect(page).not_to have_content(log_3.id)
+            get "/logs?search-field=#{logs[0].tenancy_code}", headers: headers, params: {}
+            expect(page).to have_content(logs[0].id)
+            expect(page).not_to have_content(logs[1].id)
+            expect(page).not_to have_content(logs[2].id)
           end
 
           context "search query doesn't match any logs" do
             it "doesn't display any logs" do
               get "/logs?search-field=foobar", headers: headers, params: {}
-              expect(page).not_to have_content(log_1.id)
-              expect(page).not_to have_content(log_2.id)
-              expect(page).not_to have_content(log_3.id)
+              expect(page).not_to have_content(logs[0].id)
+              expect(page).not_to have_content(logs[1].id)
+              expect(page).not_to have_content(logs[2].id)
             end
           end
 
           context "search query is empty" do
             it "doesn't display any logs" do
               get "/logs?search-field=", headers: headers, params: {}
-              expect(page).not_to have_content(log_1.id)
-              expect(page).not_to have_content(log_2.id)
-              expect(page).not_to have_content(log_3.id)
+              expect(page).not_to have_content(logs[0].id)
+              expect(page).not_to have_content(logs[1].id)
+              expect(page).not_to have_content(logs[2].id)
             end
           end
         end

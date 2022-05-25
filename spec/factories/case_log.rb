@@ -52,7 +52,7 @@ FactoryBot.define do
       reservist { 0 }
       illness { 1 }
       preg_occ { 2 }
-      tenancy_code { "BZ757" }
+      tenancy_code { Faker::Alphanumeric.alphanumeric(number: 10) }
       startertenancy { 0 }
       tenancylength { 5 }
       tenancy { 1 }
