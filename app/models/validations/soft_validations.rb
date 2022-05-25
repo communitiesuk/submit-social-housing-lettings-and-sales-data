@@ -48,21 +48,37 @@ module Validations::SoftValidations
     end
   end
 
-  def no_females_in_the_household?
-    (1..8).none? do |n|
-      public_send("sex#{n}") == "F"
-    end && preg_occ == 1
+  def no_females_in_a_pregnant_household?
+    !females_in_the_household? && all_tenants_age_and_gender_information_completed? && preg_occ == 1
   end
 
   def female_in_pregnant_household_in_soft_validation_range?
-    (females_in_age_range(11, 15) || females_in_age_range(51, 65)) && !females_in_age_range(16, 50)
+    all_tenants_age_and_gender_information_completed? && (females_in_age_range(11, 15) || females_in_age_range(51, 65)) && !females_in_age_range(16, 50) && preg_occ == 1
+  end
+
+  def all_tenants_age_and_gender_information_completed?
+    (1..hhmemb).all? do |n|
+      public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known")
+    end
   end
 
 private
 
+  def details_known_or_lead_tenant?(tenant_number)
+    return true if tenant_number == 1
+
+    public_send("details_known_#{tenant_number}").zero?
+  end
+
   def females_in_age_range(min, max)
-    (1..8).any? do |n|
+    (1..hhmemb).any? do |n|
       public_send("sex#{n}") == "F" && public_send("age#{n}").present? && public_send("age#{n}").between?(min, max)
+    end
+  end
+
+  def females_in_the_household?
+    (1..hhmemb).any? do |n|
+      public_send("sex#{n}") == "F" || public_send("sex#{n}").nil?
     end
   end
 
