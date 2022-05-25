@@ -1888,6 +1888,13 @@ RSpec.describe CaseLog do
         end
       end
 
+      context "#search_by_propcode" do
+        it "allows searching by a Property Reference" do
+          expect(described_class.search_by_propcode(case_log_2.propcode).count).to eq(1)
+          expect(described_class.search_by_propcode(case_log_2.propcode).first.id).to eq case_log_2.id
+        end
+      end
+
       context "#search_by" do
         it "allows searching using ID" do
           expect(described_class.search_by(case_log_1.id).count).to eq(1)
