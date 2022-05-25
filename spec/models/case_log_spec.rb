@@ -1871,27 +1871,33 @@ RSpec.describe CaseLog do
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
     end
 
-    context "when searching by" do
+    context "searching scopes" do
       let!(:case_log_3) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
-      it "allows searching by a log ID" do
-        expect(described_class.search_by_id(case_log_1.id).count).to eq(1)
-        expect(described_class.search_by_id(case_log_1.id).first.id).to eq case_log_1.id
+      context "#search_by_id" do
+        it "allows uearching by a log ID" do
+          expect(described_class.search_by_id(case_log_1.id).count).to eq(1)
+          expect(described_class.search_by_id(case_log_1.id).first.id).to eq case_log_1.id
+        end
       end
 
-      it "allows searching by a Tenancy Code" do
-        expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).count).to eq(1)
-        expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+      context "#search_by_tenancy_code" do
+        it "allows searching by a Tenancy Code" do
+          expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).count).to eq(1)
+          expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+        end
       end
 
-      it "allows searching either by ID or tenancy code using ID" do
-        expect(described_class.search_by(case_log_1.id).count).to eq(1)
-        expect(described_class.search_by(case_log_1.id).first.id).to eq case_log_1.id
-      end
+      context "#search_by" do
+        it "allows searching using ID" do
+          expect(described_class.search_by(case_log_1.id).count).to eq(1)
+          expect(described_class.search_by(case_log_1.id).first.id).to eq case_log_1.id
+        end
 
-      it "allows searching either by ID or tenancy code using tenancy code" do
-        expect(described_class.search_by(case_log_2.tenancy_code).count).to eq(1)
-        expect(described_class.search_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+        it "allows searching using tenancy code" do
+          expect(described_class.search_by(case_log_2.tenancy_code).count).to eq(1)
+          expect(described_class.search_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+        end
       end
     end
 
