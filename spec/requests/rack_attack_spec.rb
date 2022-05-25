@@ -12,11 +12,8 @@ describe "Rack::Attack" do
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }
 
   let(:params) { { user: { email: } } }
-  let(:admin_params) { { admin_user: { email: admin_email } } }
   let(:user) { FactoryBot.create(:user) }
-  let(:admin_user) { FactoryBot.create(:admin_user) }
   let(:email) { user.email }
-  let(:admin_email) { admin_user.email }
 
   before do
     Rack::Attack.enabled = true
@@ -40,15 +37,6 @@ describe "Rack::Attack" do
         last_response = response
         expect(last_response.status).to eq(200)
       end
-
-      it "does not throttle for an admin user" do
-        under_limit.times do
-          post "/admin/password", params: admin_params
-          follow_redirect!
-        end
-        last_response = response
-        expect(last_response.status).to eq(200)
-      end
     end
 
     context "when the number of requests is at the throttle limit" do
@@ -60,41 +48,12 @@ describe "Rack::Attack" do
         last_response = response
         expect(last_response.status).to eq(200)
       end
-
-      it "does not throttle for an admin user" do
-        limit.times do
-          post "/admin/password", params: admin_params
-          follow_redirect!
-        end
-        last_response = response
-        expect(last_response.status).to eq(200)
-      end
-
-      it "does not throttle if both endpoints are hit" do
-        limit.times do
-          post "/account/password", params: params
-          follow_redirect!
-          post "/admin/password", params: admin_params
-          follow_redirect!
-        end
-        last_response = response
-        expect(last_response.status).to eq(200)
-      end
     end
 
     context "when the number of requests is over the throttle limit" do
       it "throttles for a regular user" do
         over_limit.times do
           post "/account/password", params: params
-          follow_redirect!
-        end
-        last_response = response
-        expect(last_response.status).to eq(429)
-      end
-
-      it "throttles for an admin user" do
-        over_limit.times do
-          post "/admin/password", params: admin_params
           follow_redirect!
         end
         last_response = response
