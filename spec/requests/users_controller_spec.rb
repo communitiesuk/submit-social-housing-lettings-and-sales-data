@@ -842,7 +842,11 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 user found matching ‘Danny’ of 4 total users.")
+              expect(page).to have_content("1 user found matching ‘#{search_param}’ of 4 total users.")
+            end
+
+            it "includes the search term in the CSV download link" do
+              expect(page).to have_link("Download (CSV)", href: "/users.csv?search=#{search_param}")
             end
           end
 
@@ -895,23 +899,40 @@ RSpec.describe UsersController, type: :request do
       before do
         FactoryBot.create_list(:user, 25)
         sign_in user
-        get "/users", headers:, params: {}
       end
 
-      it "downloads a CSV file with headers" do
-        csv = CSV.parse(response.body)
-        expect(csv.first.second).to eq("email")
-        expect(csv.second.first).to eq(user.id.to_s)
+      context "when there is no search param" do
+        before do
+          get "/users", headers:, params: {}
+        end
+
+        it "downloads a CSV file with headers" do
+          csv = CSV.parse(response.body)
+          expect(csv.first.second).to eq("email")
+          expect(csv.second.first).to eq(user.id.to_s)
+        end
+
+        it "downloads all users" do
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(27)
+        end
+
+        it "downloads organisation names rather than ids" do
+          csv = CSV.parse(response.body)
+          expect(csv.second[3]).to eq(user.organisation.name.to_s)
+        end
       end
 
-      it "downloads all users" do
-        csv = CSV.parse(response.body)
-        expect(csv.count).to eq(27)
-      end
+      context "when there is a search param" do
+        before do
+          FactoryBot.create(:user, name: "Unusual name")
+          get "/users?search=unusual", headers:, params: {}
+        end
 
-      it "downloads organisation names rather than ids" do
-        csv = CSV.parse(response.body)
-        expect(csv.second[3]).to eq(user.organisation.name.to_s)
+        it "downloads only the matching records" do
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(2)
+        end
       end
     end
 

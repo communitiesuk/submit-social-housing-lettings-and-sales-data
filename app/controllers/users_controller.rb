@@ -11,7 +11,8 @@ class UsersController < ApplicationController
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
     all_users = User.all
-    @pagy, @users = pagy(filtered_users(all_users, search_term))
+    filtered_users = filtered_users(all_users, search_term)
+    @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
     @total_count = all_users.size
 
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
-          send_data User.all.where(active: true).includes(:organisation).to_csv, filename: "users-#{Time.zone.now}.csv"
+          send_data filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
         end
