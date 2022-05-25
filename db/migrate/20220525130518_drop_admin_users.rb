@@ -29,8 +29,8 @@ class DropAdminUsers < ActiveRecord::Migration[7.0]
       t.integer "failed_attempts", default: 0
       t.string "unlock_token"
       t.datetime "locked_at", precision: nil
-      t.index ["encrypted_otp_secret_key"], name: "index_admin_users_on_encrypted_otp_secret_key", unique: true
-      t.index ["unlock_token"], name: "index_admin_users_on_unlock_token", unique: true
+      t.index %w[encrypted_otp_secret_key], name: "index_admin_users_on_encrypted_otp_secret_key", unique: true
+      t.index %w[unlock_token], name: "index_admin_users_on_unlock_token", unique: true
     end
   end
 end
