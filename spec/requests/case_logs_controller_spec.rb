@@ -325,6 +325,13 @@ RSpec.describe CaseLogsController, type: :request do
             expect(page).not_to have_content(logs[2].id)
           end
 
+          it "shows case logs matching the property reference" do
+            get "/logs?search-field=#{logs[0].propcode}", headers: headers, params: {}
+            expect(page).to have_content(logs[0].id)
+            expect(page).not_to have_content(logs[1].id)
+            expect(page).not_to have_content(logs[2].id)
+          end
+
           context "search query doesn't match any logs" do
             it "doesn't display any logs" do
               get "/logs?search-field=foobar", headers: headers, params: {}

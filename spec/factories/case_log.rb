@@ -112,7 +112,7 @@ FactoryBot.define do
       needstype { 1 }
       purchaser_code { 798_794 }
       reason { 4 }
-      propcode { "123" }
+      propcode { Faker::Alphanumeric.alphanumeric(number: 10) }
       majorrepairs { 1 }
       la { "E09000003" }
       prevloc { "E07000105" }
