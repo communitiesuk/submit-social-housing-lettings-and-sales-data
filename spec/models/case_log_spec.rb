@@ -1895,6 +1895,13 @@ RSpec.describe CaseLog do
         end
       end
 
+      context "#search_by_postcode" do
+        it "allows searching by a Property Postcode" do
+          expect(described_class.search_by_postcode(case_log_2.postcode_full).count).to eq(1)
+          expect(described_class.search_by_postcode(case_log_2.postcode_full).first.id).to eq case_log_2.id
+        end
+      end
+
       context "#search_by" do
         it "allows searching using ID" do
           expect(described_class.search_by(case_log_1.id).count).to eq(1)
@@ -1909,6 +1916,20 @@ RSpec.describe CaseLog do
         it "allows searching by a Property Reference" do
           expect(described_class.search_by(case_log_2.propcode).count).to eq(1)
           expect(described_class.search_by(case_log_2.propcode).first.id).to eq case_log_2.id
+        end
+
+        it "allows searching by a Property Postcode" do
+          expect(described_class.search_by(case_log_2.postcode_full).count).to eq(1)
+          expect(described_class.search_by(case_log_2.postcode_full).first.id).to eq case_log_2.id
+        end
+
+        context "postcode has spaces and lower case letters" do
+          let(:matching_postcode_lower_case_with_spaces) { case_log_2.postcode_full..downcase.chars.insert(3, " ").join }
+
+          it "allows searching by a Property Postcode" do
+            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).count).to eq(1)
+            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).first.id).to eq case_log_2.id
+          end
         end
       end
     end
