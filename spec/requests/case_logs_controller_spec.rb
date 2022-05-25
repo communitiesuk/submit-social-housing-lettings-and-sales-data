@@ -332,6 +332,15 @@ RSpec.describe CaseLogsController, type: :request do
             expect(page).not_to have_content(logs[2].id)
           end
 
+          context "matching postcode" do
+            it "shows case logs matching the post code" do
+              get "/logs?search-field=#{logs[1].postcode_full}", headers: headers, params: {}
+              expect(page).not_to have_content(logs[0].id)
+              expect(page).to have_content(logs[1].id)
+              expect(page).not_to have_content(logs[2].id)
+            end
+          end
+
           context "search query doesn't match any logs" do
             it "doesn't display any logs" do
               get "/logs?search-field=foobar", headers: headers, params: {}
