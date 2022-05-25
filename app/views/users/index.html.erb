@@ -1,10 +1,7 @@
+<% item_label = @pagy.count > 1 ? "users" : "user" %>
 <% if @searched.present? %>
-  <% item_label = @pagy.count > 1 ? "users" : "user" %>
-  <% total_user_count = User.all.count %>
-  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{total_user_count} total users)" %>
+  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total users)" %>
 <% else %>
-  <% item_label = "" %>
-  <% total_user_count = nil %>
   <% title = "Your organisation (Users)" %>
 <% end %>
 
@@ -22,5 +19,5 @@
 
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
 
-<%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_user_count: } %>
+<%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>
