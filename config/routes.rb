@@ -1,28 +1,5 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
-  devise_for :admin_users, {
-    path: :admin,
-    controllers: {
-      sessions: "auth/sessions",
-      passwords: "auth/passwords",
-      unlocks: "active_admin/devise/unlocks",
-      registrations: "active_admin/devise/registrations",
-      confirmations: "active_admin/devise/confirmations",
-      two_factor_authentication: "auth/two_factor_authentication",
-    },
-    path_names: {
-      sign_in: "sign-in",
-      sign_out: "sign-out",
-      two_factor_authentication: "two-factor-authentication",
-      two_factor_authentication_resend_code: "resend-code",
-    },
-    sign_out_via: %i[get],
-  }
-
-  devise_scope :admin_user do
-    get "admin/two-factor-authentication/resend", to: "auth/two_factor_authentication#show_resend", as: "admin_user_two_factor_authentication_resend"
-  end
-
   devise_for :users, {
     path: :account,
     controllers: {
@@ -47,8 +24,6 @@ Rails.application.routes.draw do
   end
 
   get "/health", to: ->(_) { [204, {}, [nil]] }
-
-  ActiveAdmin.routes(self)
 
   root to: "start#index"
 
