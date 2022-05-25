@@ -4,6 +4,7 @@ FactoryBot.define do
     address_line1 { "2 Marsham Street" }
     address_line2 { "London" }
     provider_type { "LA" }
+    housing_registration_no { "1234" }
     postcode { "SW1P 4DF" }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
