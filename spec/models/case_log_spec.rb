@@ -1871,6 +1871,12 @@ RSpec.describe CaseLog do
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
     end
 
+    context "when searching by" do
+      it "allows searching by a log ID" do
+        expect(described_class.search_by_id(case_log_1.id).count).to eq(1)
+      end
+    end
+
     context "when filtering by year" do
       it "allows filtering on a single year" do
         expect(described_class.filter_by_years(%w[2021]).count).to eq(2)
