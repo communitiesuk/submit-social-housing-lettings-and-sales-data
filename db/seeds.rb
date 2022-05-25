@@ -7,56 +7,58 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # rubocop:disable Rails/Output
-org = Organisation.find_or_create_by!(
-  name: "DLUHC",
-  address_line1: "2 Marsham Street",
-  address_line2: "London",
-  postcode: "SW1P 4DF",
-  holds_own_stock: false,
-  other_stock_owners: "None",
-  managing_agents: "None",
-  provider_type: "LA",
-) do
-  info = "Seeded DLUHC Organisation"
-  if Rails.env.development?
-    pp info
-  else
-    Rails.logger.info info
+unless Rails.env.test?
+  org = Organisation.find_or_create_by!(
+    name: "DLUHC",
+    address_line1: "2 Marsham Street",
+    address_line2: "London",
+    postcode: "SW1P 4DF",
+    holds_own_stock: false,
+    other_stock_owners: "None",
+    managing_agents: "None",
+    provider_type: "LA",
+  ) do
+    info = "Seeded DLUHC Organisation"
+    if Rails.env.development?
+      pp info
+    else
+      Rails.logger.info info
+    end
   end
-end
 
-if Rails.env.development? && User.count.zero?
-  User.create!(
-    email: "provider@example.com",
-    password: "password",
-    organisation: org,
-    role: "data_provider",
-    confirmed_at: Time.zone.now,
-  )
+  if Rails.env.development? && User.count.zero?
+    User.create!(
+      email: "provider@example.com",
+      password: "password",
+      organisation: org,
+      role: "data_provider",
+      confirmed_at: Time.zone.now,
+    )
 
-  User.create!(
-    email: "coordinator@example.com",
-    password: "password",
-    organisation: org,
-    role: "data_coordinator",
-    confirmed_at: Time.zone.now,
-  )
+    User.create!(
+      email: "coordinator@example.com",
+      password: "password",
+      organisation: org,
+      role: "data_coordinator",
+      confirmed_at: Time.zone.now,
+    )
 
-  User.create!(
-    email: "support@example.com",
-    password: "password",
-    organisation: org,
-    role: "support",
-    confirmed_at: Time.zone.now,
-  )
+    User.create!(
+      email: "support@example.com",
+      password: "password",
+      organisation: org,
+      role: "support",
+      confirmed_at: Time.zone.now,
+    )
 
-  pp "Seeded 3 dummy users"
-end
+    pp "Seeded 3 dummy users"
+  end
 
-if LaRentRange.count.zero? && !Rails.env.test?
-  Dir.glob("config/rent_range_data/*.csv").each do |path|
-    start_year = File.basename(path, ".csv")
-    Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
+  if LaRentRange.count.zero?
+    Dir.glob("config/rent_range_data/*.csv").each do |path|
+      start_year = File.basename(path, ".csv")
+      Rake::Task["data_import:rent_ranges"].invoke(start_year, path)
+    end
   end
 end
 # rubocop:enable Rails/Output

@@ -6,6 +6,9 @@ class Organisation < ApplicationRecord
   has_many :organisation_las
   has_many :organisation_rent_periods
 
+  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by, ->(param) { search_by_name(param) }
+
   has_paper_trail
 
   PROVIDER_TYPE = {

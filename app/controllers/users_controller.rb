@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include Pagy::Backend
   include Devise::Controllers::SignInOut
   include Helpers::Email
-  include Modules::UsersFilter
+  include Modules::SearchFilter
   before_action :authenticate_user!
   before_action :find_resource, except: %i[new create]
   before_action :authenticate_scope!, except: %i[new]
@@ -10,8 +10,10 @@ class UsersController < ApplicationController
   def index
     redirect_to users_organisation_path(current_user.organisation) unless current_user.support?
 
-    @pagy, @users = pagy(filtered_users(User.all, params["search"]))
-    @searched = params["search"].presence
+    all_users = User.all
+    @pagy, @users = pagy(filtered_users(all_users, search_term))
+    @searched = search_term.presence
+    @total_count = all_users.size
 
     respond_to do |format|
       format.html
@@ -89,6 +91,10 @@ private
 
   def format_error_message(attribute, message)
     [attribute.to_s.humanize.capitalize, message].join(" ")
+  end
+
+  def search_term
+    params["search"]
   end
 
   def password_params

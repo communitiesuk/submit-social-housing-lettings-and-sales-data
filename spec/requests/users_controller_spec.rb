@@ -381,7 +381,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           it "updates the table caption" do
-            expect(page).to have_content("1 user found matching ‘filter’ of 5 total users.")
+            expect(page).to have_content("1 user found matching ‘filter’ of 4 total users.")
           end
         end
 
@@ -417,7 +417,7 @@ RSpec.describe UsersController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("2 users found matching ‘joe’ of 5 total users.")
+              expect(page).to have_content("2 users found matching ‘joe’ of 4 total users.")
             end
           end
         end

@@ -138,4 +138,25 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.paper_trail.previous_version.name).to eq("DLUHC")
     end
   end
+
+  describe "scopes" do
+    before do
+      FactoryBot.create(:organisation, name: "Joe Bloggs")
+      FactoryBot.create(:organisation, name: "Tom Smith")
+    end
+
+    context "when searching by name" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by_name("Joe").count).to eq(1)
+        expect(described_class.search_by_name("joe").count).to eq(1)
+      end
+    end
+
+    context "when searching by all searchable field" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by("Joe").count).to eq(1)
+        expect(described_class.search_by("joe").count).to eq(1)
+      end
+    end
+  end
 end
