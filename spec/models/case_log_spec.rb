@@ -1876,12 +1876,22 @@ RSpec.describe CaseLog do
 
       it "allows searching by a log ID" do
         expect(described_class.search_by_id(case_log_1.id).count).to eq(1)
-        expect(described_class.search_by_id(case_log_1).first.id).to eq case_log_1.id
+        expect(described_class.search_by_id(case_log_1.id).first.id).to eq case_log_1.id
       end
 
       it "allows searching by a Tenancy Code" do
         expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).count).to eq(1)
-        expect(described_class.search_by_id(case_log_2).first.id).to eq case_log_2.id
+        expect(described_class.search_by_tenancy_code(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+      end
+
+      it "allows searching either by ID or tenancy code using ID" do
+        expect(described_class.search_by(case_log_1.id).count).to eq(1)
+        expect(described_class.search_by(case_log_1.id).first.id).to eq case_log_1.id
+      end
+
+      it "allows searching either by ID or tenancy code using tenancy code" do
+        expect(described_class.search_by(case_log_2.tenancy_code).count).to eq(1)
+        expect(described_class.search_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
       end
     end
 
