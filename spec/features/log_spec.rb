@@ -11,7 +11,7 @@ RSpec.describe "Log Features" do
       before do
         visit("/logs")
         fill_in("user[email]", with: user.email)
-        fill_in("user[password]", with: "pAssword1")
+        fill_in("user[password]", with: user.password)
         click_button("Sign in")
       end
 
