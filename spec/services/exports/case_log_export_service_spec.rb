@@ -47,7 +47,7 @@ RSpec.describe Exports::CaseLogExportService do
     end
 
     context "and one case log is available for export" do
-      let!(:case_log) { FactoryBot.create(:case_log, :completed, tenancy_code: "BZ757", propcode: "123") }
+      let!(:case_log) { FactoryBot.create(:case_log, :completed, tenancy_code: "BZ757", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY") }
       let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc0001_pt001.xml" }
 
       it "generates a ZIP export file with the expected filename" do

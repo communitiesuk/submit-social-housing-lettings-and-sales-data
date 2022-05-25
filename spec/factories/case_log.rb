@@ -12,8 +12,8 @@ FactoryBot.define do
     trait :in_progress do
       status { 1 }
       tenant_code { "TH356" }
-      postcode_full { "PO5 3TE" }
-      ppostcode_full { "SW2 6HI" }
+      postcode_full { Faker::Address.postcode }
+      ppostcode_full { Faker::Address.postcode }
       age1 { 17 }
       age2 { 19 }
     end
@@ -56,7 +56,7 @@ FactoryBot.define do
       startertenancy { 0 }
       tenancylength { 5 }
       tenancy { 1 }
-      ppostcode_full { "SE2 6RT" }
+      ppostcode_full { Faker::Address.postcode }
       rsnvac { 6 }
       unittype_gn { 7 }
       beds { 3 }
@@ -74,7 +74,7 @@ FactoryBot.define do
       tcharge { 325 }
       layear { 2 }
       waityear { 1 }
-      postcode_full { "NW1 5TY" }
+      postcode_full { Faker::Address.postcode }
       reasonpref { 1 }
       cbl { 1 }
       chr { 1 }
