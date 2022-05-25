@@ -138,8 +138,6 @@ module Imports
                                      0
                                    end
 
-      apply_date_consistency!(attributes)
-
       attributes["offered"] = safe_string_as_integer(xml_doc, "Q20")
       attributes["propcode"] = string_or_nil(xml_doc, "Q21a")
       attributes["beds"] = safe_string_as_integer(xml_doc, "Q22")
@@ -187,6 +185,9 @@ module Imports
       if owner_id.present?
         attributes["created_by"] = User.find_by(old_user_id: owner_id)
       end
+
+      apply_date_consistency!(attributes)
+      apply_household_consistency!(attributes)
 
       case_log = CaseLog.new(attributes)
       save_case_log(case_log, attributes)
@@ -522,6 +523,16 @@ module Imports
     def apply_date_consistency!(attributes)
       if attributes["voiddate"] > attributes["startdate"]
         attributes.delete("voiddate")
+      end
+    end
+
+    def apply_household_consistency!(attributes)
+      (2..8).each do |index|
+        next if attributes["age#{index}"].nil?
+
+        if attributes["age#{index}"] < 16 && attributes["relat#{index}"] == "R"
+          attributes["relat#{index}"] = "C"
+        end
       end
     end
   end
