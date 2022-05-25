@@ -308,7 +308,7 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).not_to have_content("Managing organisation")
         end
 
-        context "using a search bar" do
+        context "using a search query" do
           let(:logs)  { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
 
           it "shows case logs matching the id" do
