@@ -1,2 +1,15 @@
-<%= render partial: "organisation_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy } %>
+<% item_label = @pagy.count > 1 ? "organisations" : "organisation" %>
+<% if @searched.present? %>
+  <% title = "Organisations (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total organisations)" %>
+<% else %>
+  <% title = "Organisations" %>
+<% end %>
+
+<% content_for :title, title %>
+
+<%= render SearchComponent.new(current_user:, search_label: "Search by organisation name", value: @searched) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+
+<%= render partial: "organisation_list", locals: { organisations: @organisations, title: "Organisations", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "organisations" } %>

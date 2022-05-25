@@ -9,6 +9,16 @@ class SearchComponent < ViewComponent::Base
   end
 
   def path(current_user)
+    if request.path.include?("users")
+      user_path(current_user)
+    elsif request.path.include?("organisations")
+      organisations_path
+    end
+  end
+
+private
+
+  def user_path(current_user)
     current_user.support? ? users_path : users_organisation_path(current_user.organisation)
   end
 end

@@ -364,6 +364,10 @@ RSpec.describe OrganisationsController, type: :request do
         expect(page).to have_content("#{total_number_of_orgs} total organisations")
       end
 
+      it "shows a search bar" do
+        expect(page).to have_field("search", type: "search")
+      end
+
       context "when viewing a specific organisation" do
         let(:number_of_org1_case_logs) { 2 }
         let(:number_of_org2_case_logs) { 4 }
@@ -476,6 +480,38 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "has pagination in the title" do
           expect(page).to have_title("Organisations (page 2 of 2)")
+        end
+      end
+
+      context "when searching" do
+        let!(:searched_organisation) { FactoryBot.create(:organisation, name: "Unusual name") }
+        let!(:other_organisation) { FactoryBot.create(:organisation, name: "Some other name") }
+        let(:search_param) { "Unusual" }
+
+        before do
+          get "/organisations?search=#{search_param}"
+        end
+
+        it "returns matching results" do
+          expect(page).to have_content(searched_organisation.name)
+          expect(page).not_to have_content(other_organisation.name)
+        end
+
+        it "updates the table caption" do
+          expect(page).to have_content("1 organisation found matching ‘#{search_param}’ of 29 total organisations.")
+        end
+
+        context "when the search term matches more than 1 result" do
+          let(:search_param) { "name" }
+
+          it "returns matching results" do
+            expect(page).to have_content(searched_organisation.name)
+            expect(page).to have_content(other_organisation.name)
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("2 organisations found matching ‘#{search_param}’ of 29 total organisations.")
+          end
         end
       end
     end

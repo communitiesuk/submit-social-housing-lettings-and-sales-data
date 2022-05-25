@@ -2,7 +2,11 @@
 
 <%= govuk_table do |table| %>
   <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-    <strong><%= @pagy.count %></strong> total <%= title.downcase %>.
+    <% if searched.present? %>
+      <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total organisations. <%= govuk_link_to("Clear search", request.path) %>
+    <% else %>
+      <strong><%= pagy.count %></strong> total organisations.
+    <% end %>
   <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>

@@ -1,7 +1,7 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
   include Modules::CaseLogsFilter
-  include Modules::UsersFilter
+  include Modules::SearchFilter
 
   before_action :authenticate_user!, except: [:index]
   before_action :find_resource, except: [:index]
@@ -10,7 +10,10 @@ class OrganisationsController < ApplicationController
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
 
-    @pagy, @organisations = pagy(Organisation.all)
+    all_organisations = Organisation.all
+    @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
+    @searched = search_term.presence
+    @total_count = all_organisations.size
   end
 
   def show
@@ -18,8 +21,9 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users(@organisation.users, params["search"]))
-    @searched = params["search"].presence
+    @pagy, @users = pagy(filtered_users(@organisation.users, search_term))
+    @searched = search_term.presence
+    @total_count = @organisation.users.size
     render "users/index"
   end
 
@@ -62,6 +66,10 @@ private
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone)
+  end
+
+  def search_term
+    params["search"]
   end
 
   def authenticate_scope!
