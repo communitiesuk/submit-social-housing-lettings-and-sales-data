@@ -309,9 +309,9 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "using a search bar" do
-          let!(:log_1) { FactoryBot.create(:case_log, tenancy_code: "111", owning_organisation: user.organisation) }
-          let!(:log_2) { FactoryBot.create(:case_log, tenancy_code: "222", owning_organisation: user.organisation) }
-          let!(:log_3) { FactoryBot.create(:case_log, tenancy_code: "333", owning_organisation: user.organisation) }
+          let(:log_1) { FactoryBot.create(:case_log, tenancy_code: "111", owning_organisation: user.organisation) }
+          let(:log_2) { FactoryBot.create(:case_log, tenancy_code: "222", owning_organisation: user.organisation) }
+          let(:log_3) { FactoryBot.create(:case_log, tenancy_code: "333", owning_organisation: user.organisation) }
 
           it "shows case logs matching the id" do
             get "/logs?search-field=#{log_1.id}", headers: headers, params: {}
