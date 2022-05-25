@@ -22,24 +22,12 @@ RSpec.describe "Log Features" do
           expect(page).to have_button("Search")
         end
 
-        context "using log ID" do
-          it "it displays log matching the log ID" do
-            fill_in("search-field", with: log_to_search.id)
-            click_button("Search")
-            expect(page).to have_content(log_to_search.id)
-            expect(page).not_to have_content(same_organisation_log.id)
-            expect(page).not_to have_content(another_organisation_log.id)
-          end
-        end
-
-        context "using log tenancy code" do
-          it "it displays log matching the tenancy code" do
-            fill_in("search-field", with: log_to_search.tenancy_code)
-            click_button("Search")
-            expect(page).to have_content(log_to_search.id)
-            expect(page).not_to have_content(same_organisation_log.id)
-            expect(page).not_to have_content(another_organisation_log.id)
-          end
+        it "it displays log matching the log ID" do
+          fill_in("search-field", with: log_to_search.id)
+          click_button("Search")
+          expect(page).to have_content(log_to_search.id)
+          expect(page).not_to have_content(same_organisation_log.id)
+          expect(page).not_to have_content(another_organisation_log.id)
         end
       end
     end
