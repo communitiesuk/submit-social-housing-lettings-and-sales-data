@@ -71,34 +71,54 @@ RSpec.describe Imports::CaseLogsImportService do
   context "when importing a specific log" do
     let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:case_log_file) { open_file(fixture_directory, case_log_id) }
+    let(:case_log_xml) { Nokogiri::XML(case_log_file) }
 
     context "and the void date is after the start date" do
-      let(:case_log_xml) do
-        xml_doc = Nokogiri::XML(case_log_file)
-        xml_doc.at_xpath("//xmlns:VYEAR").content = 2023
-        xml_doc
-      end
+      before { case_log_xml.at_xpath("//xmlns:VYEAR").content = 2023 }
 
       it "does not import the voiddate" do
         allow(logger).to receive(:warn).with(/is not completed/)
         case_log_service.send(:create_log, case_log_xml)
 
         case_log = CaseLog.where(old_id: case_log_id).first
-        expect(case_log).not_to be_nil
-        expect(case_log.voiddate).to be_nil
+        expect(case_log&.voiddate).to be_nil
       end
     end
 
     context "and the organisation legacy ID does not exist" do
-      let(:case_log_xml) do
-        xml_doc = Nokogiri::XML(case_log_file)
-        xml_doc.at_xpath("//xmlns:OWNINGORGID").content = 99_999
-        xml_doc
-      end
+      before { case_log_xml.at_xpath("//xmlns:OWNINGORGID").content = 99_999 }
 
       it "raises an exception" do
         expect { case_log_service.send(:create_log, case_log_xml) }
           .to raise_error(RuntimeError, "Organisation not found with legacy ID 99999")
+      end
+    end
+
+    context "and a person is under 16" do
+      before { case_log_xml.at_xpath("//xmlns:P2Age").content = 14 }
+
+      context "when the economic status is set to refuse" do
+        before { case_log_xml.at_xpath("//xmlns:P2Eco").content = "10) Refused" }
+
+        it "sets the economic status to child under 16" do
+          # The update is done when calculating derived variables
+          allow(logger).to receive(:warn).with(/Differences found when saving log/)
+          case_log_service.send(:create_log, case_log_xml)
+
+          case_log = CaseLog.where(old_id: case_log_id).first
+          expect(case_log&.ecstat2).to be(9)
+        end
+      end
+
+      context "when the relationship to lead tenant is set to refuse" do
+        before { case_log_xml.at_xpath("//xmlns:P2Rel").content = "Refused" }
+
+        it "sets the relationship to lead tenant to child" do
+          case_log_service.send(:create_log, case_log_xml)
+
+          case_log = CaseLog.where(old_id: case_log_id).first
+          expect(case_log&.relat2).to eq("C")
+        end
       end
     end
   end
