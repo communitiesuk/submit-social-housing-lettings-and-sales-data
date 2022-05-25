@@ -8,7 +8,8 @@
       <% end %>
     </span>
     <% if current_user.support? %>
-      <%= govuk_link_to "Download (CSV)", "/users.csv", type: "text/csv" %>
+      <% query = searched.present? ? "?search=#{searched}" : nil %>
+      <%= govuk_link_to "Download (CSV)", "/users.csv#{query}", type: "text/csv" %>
     <% end %>
   <% end %>
   <%= table.head do |head| %>
