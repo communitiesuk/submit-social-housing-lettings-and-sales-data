@@ -13,10 +13,6 @@ module.exports = {
   entry: {
     application: [
       "./app/frontend/application.js",
-    ],
-    active_admin: [
-      './app/frontend/active_admin.js',
-      './app/frontend/styles/active_admin.scss'
     ]
   },
   module: {
