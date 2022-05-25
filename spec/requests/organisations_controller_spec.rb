@@ -501,6 +501,10 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_content("1 organisation found matching ‘#{search_param}’ of 29 total organisations.")
         end
 
+        it "has search in the title" do
+          expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’ of 29 total organisations) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        end
+
         context "when the search term matches more than 1 result" do
           let(:search_param) { "name" }
 
@@ -511,6 +515,18 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "updates the table caption" do
             expect(page).to have_content("2 organisations found matching ‘#{search_param}’ of 29 total organisations.")
+          end
+
+          it "has search in the title" do
+            expect(page).to have_title("Organisations (2 organisations matching ‘#{search_param}’ of 29 total organisations) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+        end
+
+        context "when search results require pagination" do
+          let(:search_param) { "DLUHC" }
+
+          it "has search and pagination in the title" do
+            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’ of 29 total organisations) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
