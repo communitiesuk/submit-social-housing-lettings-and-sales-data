@@ -184,34 +184,6 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("UA984")
         end
 
-        context "with a search bar" do
-          let!(:log_1) { FactoryBot.create(:case_log, tenancy_code: "111") }
-          let!(:log_2) { FactoryBot.create(:case_log, tenancy_code: "222") }
-          let!(:log_3) { FactoryBot.create(:case_log, tenancy_code: "333") }
-
-          it "shows case logs matching the id" do
-            get "/logs?search-field=#{log_1.id}", headers: headers, params: {}
-            expect(page).to have_content(log_2.id)
-            expect(page).not_to have_content(log_3.id)
-          end
-
-          it "shows case logs matching the tenancy code" do
-            get "/logs?search-field=#{logs.first.id}", headers: headers, params: {}
-            expect(page).to have_content(logs.first.id)
-            expect(page).not_to have_content(logs.last.id)
-          end
-
-          context "no match is found" do
-            it "shows case logs matching the search word" do
-              get "/logs?search-field=777", headers: headers, params: {}
-              logs.each do |log|
-                expect(page).not_to have_content(log.id)
-              end
-            end
-          end
-        end
-      
-
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
@@ -334,6 +306,43 @@ RSpec.describe CaseLogsController, type: :request do
           get "/logs", headers: headers, params: {}
           expect(page).not_to have_content("Owning organisation")
           expect(page).not_to have_content("Managing organisation")
+        end
+
+        context "using a search bar" do
+          let!(:log_1) { FactoryBot.create(:case_log, tenancy_code: "111", owning_organisation: user.organisation) }
+          let!(:log_2) { FactoryBot.create(:case_log, tenancy_code: "222", owning_organisation: user.organisation) }
+          let!(:log_3) { FactoryBot.create(:case_log, tenancy_code: "333", owning_organisation: user.organisation) }
+
+          it "shows case logs matching the id" do
+            get "/logs?search-field=#{log_1.id}", headers: headers, params: {}
+            expect(page).to have_content(log_1.id)
+            expect(page).not_to have_content(log_3.id)
+          end
+
+          it "shows case logs matching the tenancy code" do
+            get "/logs?search-field=#{log_1.tenancy_code}", headers: headers, params: {}
+            expect(page).to have_content(log_1.id)
+            expect(page).not_to have_content(log_2.id)
+            expect(page).not_to have_content(log_3.id)
+          end
+
+          context "search query doesn't match any logs" do
+            it "doesn't display any logs" do
+              get "/logs?search-field=foobar", headers: headers, params: {}
+              expect(page).not_to have_content(log_1.id)
+              expect(page).not_to have_content(log_2.id)
+              expect(page).not_to have_content(log_3.id)
+            end
+          end
+
+          context "search query is empty" do
+            it "doesn't display any logs" do
+              get "/logs?search-field=", headers: headers, params: {}
+              expect(page).not_to have_content(log_1.id)
+              expect(page).not_to have_content(log_2.id)
+              expect(page).not_to have_content(log_3.id)
+            end
+          end
         end
 
         context "when there are less than 20 logs" do
