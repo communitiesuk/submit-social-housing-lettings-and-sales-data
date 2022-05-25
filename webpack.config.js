@@ -64,12 +64,6 @@ module.exports = {
         { from: "app/frontend/vendor/outerHTML.js", to: "vendor" },
         { from: "app/frontend/vendor/polyfill-output-value.js", to: "vendor" }
       ],
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      jquery: 'jquery',
-      'window.jQuery': 'jquery'
     })
   ]
 }
