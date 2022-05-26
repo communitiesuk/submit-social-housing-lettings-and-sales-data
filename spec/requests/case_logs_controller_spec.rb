@@ -184,6 +184,17 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("UA984")
         end
 
+        context "when there are no logs in the database" do
+          before do
+            CaseLog.destroy_all
+          end
+
+          it "page has correct title" do
+            get "/logs", headers: headers, params: {}
+            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+          end
+        end
+
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
@@ -433,7 +444,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs")
+            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
           end
 
           it "shows the download csv link" do
