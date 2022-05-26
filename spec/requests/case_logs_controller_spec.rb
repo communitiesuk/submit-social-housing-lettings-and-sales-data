@@ -343,7 +343,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when search query doesn't match any logs" do
             it "doesn't display any logs" do
-              get "/logs?search-field=foobar", headers: headers, params: {}
+              get "/logs?search-field=foobar", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
@@ -352,7 +352,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when search query is empty" do
             it "doesn't display any logs" do
-              get "/logs?search-field=", headers: headers, params: {}
+              get "/logs?search-field=", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
@@ -361,11 +361,11 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when search and filter is present" do
             let(:matching_postcode) { logs[0].postcode_full }
-            let(:matching_log) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
+            let!(:matching_log) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
             let(:matching_status) { matching_log.status }
 
             it "shows only logs matching both search and filters" do
-              get "/logs?search-field=#{matching_postcode}&status[]=matching_status", headers: headers, params: {}
+              get "/logs?search-field=#{matching_postcode}&status[]=in_progress", headers: headers, params: {}
               expect(page).to have_content(matching_log.id)
               logs.each do |log|
                 expect(page).not_to have_content(log.id)

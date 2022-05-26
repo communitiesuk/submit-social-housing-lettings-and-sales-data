@@ -1902,34 +1902,34 @@ RSpec.describe CaseLog do
         end
       end
 
-      describe "#filter_by" do
+      describe "#search_by" do
         it "allows searching using ID" do
-          expect(described_class.filter_by(case_log_1.id.to_s).count).to eq(1)
-          expect(described_class.filter_by(case_log_1.id.to_s).first.id).to eq case_log_1.id
+          expect(described_class.search_by(case_log_1.id.to_s).count).to eq(1)
+          expect(described_class.search_by(case_log_1.id.to_s).first.id).to eq case_log_1.id
         end
 
         it "allows searching using tenancy code" do
-          expect(described_class.filter_by(case_log_2.tenancy_code).count).to eq(1)
-          expect(described_class.filter_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+          expect(described_class.search_by(case_log_2.tenancy_code).count).to eq(1)
+          expect(described_class.search_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
         end
 
         it "allows searching by a Property Reference" do
-          expect(described_class.filter_by(case_log_2.propcode).count).to eq(1)
-          expect(described_class.filter_by(case_log_2.propcode).first.id).to eq case_log_2.id
+          expect(described_class.search_by(case_log_2.propcode).count).to eq(1)
+          expect(described_class.search_by(case_log_2.propcode).first.id).to eq case_log_2.id
         end
 
         it "allows searching by a Property Postcode" do
-          expect(described_class.filter_by(case_log_1.postcode_full).count).to eq(2)
-          expect(described_class.filter_by(case_log_1.postcode_full).first.id).to eq case_log_1.id
-          expect(described_class.filter_by(case_log_1.postcode_full).last.id).to eq case_log_3.id
+          expect(described_class.search_by(case_log_1.postcode_full).count).to eq(2)
+          expect(described_class.search_by(case_log_1.postcode_full).first.id).to eq case_log_1.id
+          expect(described_class.search_by(case_log_1.postcode_full).last.id).to eq case_log_3.id
         end
 
         context "when postcode has spaces and lower case letters" do
           let(:matching_postcode_lower_case_with_spaces) { case_log_2.postcode_full.downcase.chars.insert(3, " ").join }
 
           it "allows searching by a Property Postcode" do
-            expect(described_class.filter_by(matching_postcode_lower_case_with_spaces).count).to eq(1)
-            expect(described_class.filter_by(matching_postcode_lower_case_with_spaces).first.id).to eq case_log_2.id
+            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).count).to eq(1)
+            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).first.id).to eq case_log_2.id
           end
         end
       end

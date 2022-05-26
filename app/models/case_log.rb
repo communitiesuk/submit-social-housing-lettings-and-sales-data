@@ -55,7 +55,7 @@ class CaseLog < ApplicationRecord
   scope :filter_by_tenancy_code, ->(code) { where(tenancy_code: code) }
   scope :filter_by_propcode, ->(code) { where(propcode: code) }
   scope :filter_by_postcode, ->(code) { where(postcode_full: code) }
-  scope :filter_by, lambda { |param|
+  scope :search_by, lambda { |param|
                       filter_by_id(param)
                                 .or(filter_by_tenancy_code(param))
                                 .or(filter_by_propcode(param))

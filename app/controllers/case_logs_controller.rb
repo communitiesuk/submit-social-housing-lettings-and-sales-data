@@ -1,6 +1,7 @@
 class CaseLogsController < ApplicationController
   include Pagy::Backend
   include Modules::CaseLogsFilter
+  include Modules::SearchFilter
 
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
@@ -10,13 +11,7 @@ class CaseLogsController < ApplicationController
   def index
     set_session_filters
 
-    @pagy, @case_logs = pagy(filtered_case_logs(current_user.case_logs))
-
-    search_param = params["search-field"]
-
-    if search_param
-      @pagy, @case_logs = pagy(@case_logs.filter_by(search_param))
-    end
+    @pagy, @case_logs = pagy(filtered_case_logs(filtered_collection(current_user.case_logs, params["search-field"])))
 
     respond_to do |format|
       format.html
