@@ -150,17 +150,18 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
-    def apply_cds_transformation(case_log)
+    def apply_cds_transformation(case_log, export_mode)
       attribute_hash = case_log.attributes_before_type_cast
-
       attribute_hash["form"] = attribute_hash["old_form_id"] || (attribute_hash["id"] + LOG_ID_OFFSET)
 
-      # Changes specific to collection start year
-      if case_log.collection_start_year == 2021
-        attribute_hash.delete("joint")
-      end
-      if case_log.collection_start_year == 2022
-        attribute_hash.delete("underoccupation_benefitcap")
+      # We can't have a variable number of columns in CSV
+      unless export_mode == EXPORT_MODE[:csv]
+        case case_log.collection_start_year
+        when 2021
+          attribute_hash.delete("joint")
+        when 2022
+          attribute_hash.delete("underoccupation_benefitcap")
+        end
       end
 
       # Organisation fields
@@ -205,7 +206,7 @@ module Exports
       csv_io = CSV.generate do |csv|
         attribute_keys = nil
         case_logs.each do |case_log|
-          attribute_hash = apply_cds_transformation(case_log)
+          attribute_hash = apply_cds_transformation(case_log, EXPORT_MODE[:csv])
           if attribute_keys.nil?
             attribute_keys = attribute_hash.keys
             filter_keys!(attribute_keys)
@@ -222,7 +223,7 @@ module Exports
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
-        attribute_hash = apply_cds_transformation(case_log)
+        attribute_hash = apply_cds_transformation(case_log, EXPORT_MODE[:xml])
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
