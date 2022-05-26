@@ -11,13 +11,17 @@ class CaseLogsController < ApplicationController
   def index
     set_session_filters
 
+    all_logs = current_user.case_logs
+
     @pagy, @case_logs = pagy(
       filtered_case_logs(
         filtered_collection(
-          current_user.case_logs, params["search-field"]
+          all_logs, search_term
         ),
       ),
     )
+    @searched = search_term.presence
+    @total_count = all_logs.size
 
     respond_to do |format|
       format.html
@@ -91,6 +95,10 @@ class CaseLogsController < ApplicationController
 private
 
   API_ACTIONS = %w[create show update destroy].freeze
+
+  def search_term
+    params["search"]
+  end
 
   def json_api_request?
     API_ACTIONS.include?(request["action"]) && request.format.json?

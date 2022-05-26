@@ -13,6 +13,8 @@ class SearchComponent < ViewComponent::Base
       user_path(current_user)
     elsif request.path.include?("organisations")
       organisations_path
+    elsif request.path.include?("logs")
+      case_logs_path
     end
   end
 
