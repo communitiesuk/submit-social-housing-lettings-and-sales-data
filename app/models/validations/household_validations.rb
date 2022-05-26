@@ -36,7 +36,7 @@ module Validations::HouseholdValidations
   end
 
   def validate_pregnancy(record)
-    if (record.has_pregnancy? || record.pregnancy_refused?) && !women_of_child_bearing_age_in_household(record)
+    if (record.has_pregnancy? || record.pregnancy_refused?) && women_in_household(record) && !women_of_child_bearing_age_in_household(record)
       record.errors.add :preg_occ, I18n.t("validations.household.preg_occ.no_female")
     end
   end
@@ -136,7 +136,13 @@ private
     (1..8).any? do |n|
       next if record["sex#{n}"].nil? || record["age#{n}"].nil?
 
-      (record["sex#{n}"]) == "F" && record["age#{n}"] >= 16 && record["age#{n}"] <= 50
+      (record["sex#{n}"]) == "F" && record["age#{n}"] >= 11 && record["age#{n}"] <= 65
+    end
+  end
+
+  def women_in_household(record)
+    (1..8).any? do |n|
+      record["sex#{n}"] == "F"
     end
   end
 
