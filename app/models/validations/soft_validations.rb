@@ -58,7 +58,7 @@ module Validations::SoftValidations
 
   def all_tenants_age_and_gender_information_completed?
     (1..hhmemb).all? do |n|
-      public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known").zero?
+      public_send("sex#{n}").present? && public_send("age#{n}").present? && details_known_or_lead_tenant?(n) && public_send("age#{n}_known").present? && public_send("age#{n}_known").zero?
     end
   end
 
