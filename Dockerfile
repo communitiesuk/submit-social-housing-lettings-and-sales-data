@@ -16,7 +16,7 @@ RUN apk add --no-cache build-base yarn postgresql-dev git
 
 # Install bundler to run bundle exec
 # This should be the same version as the Gemfile.lock
-RUN gem install bundler:2.3.7 --no-document
+RUN gem install bundler:2.3.14 --no-document
 
 # Install gems defined in Gemfile
 COPY .ruby-version Gemfile Gemfile.lock /app/
