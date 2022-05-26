@@ -30,7 +30,7 @@ RSpec.describe Imports::CaseLogsImportService do
            .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
   end
 
-  context "when importing users" do
+  context "when importing case logs" do
     let(:remote_folder) { "case_logs" }
     let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:case_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
