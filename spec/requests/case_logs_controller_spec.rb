@@ -312,21 +312,21 @@ RSpec.describe CaseLogsController, type: :request do
           let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
 
           it "shows case logs matching the id" do
-            get "/logs?search-field=#{logs[0].id}", headers: headers, params: {}
+            get "/logs?search=#{logs[0].id}", headers: headers, params: {}
             expect(page).to have_content(logs[0].id)
             expect(page).not_to have_content(logs[1].id)
             expect(page).not_to have_content(logs[2].id)
           end
 
           it "shows case logs matching the tenancy code" do
-            get "/logs?search-field=#{logs[0].tenancy_code}", headers: headers, params: {}
+            get "/logs?search=#{logs[0].tenancy_code}", headers: headers, params: {}
             expect(page).to have_content(logs[0].id)
             expect(page).not_to have_content(logs[1].id)
             expect(page).not_to have_content(logs[2].id)
           end
 
           it "shows case logs matching the property reference" do
-            get "/logs?search-field=#{logs[0].propcode}", headers: headers, params: {}
+            get "/logs?search=#{logs[0].propcode}", headers: headers, params: {}
             expect(page).to have_content(logs[0].id)
             expect(page).not_to have_content(logs[1].id)
             expect(page).not_to have_content(logs[2].id)
@@ -334,7 +334,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when matching postcode" do
             it "shows case logs matching the post code" do
-              get "/logs?search-field=#{logs[1].postcode_full}", headers: headers, params: {}
+              get "/logs?search=#{logs[1].postcode_full}", headers: headers, params: {}
               expect(page).not_to have_content(logs[0].id)
               expect(page).to have_content(logs[1].id)
               expect(page).not_to have_content(logs[2].id)
@@ -343,7 +343,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when search query doesn't match any logs" do
             it "doesn't display any logs" do
-              get "/logs?search-field=foobar", headers:, params: {}
+              get "/logs?search=foobar", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
@@ -352,7 +352,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when search query is empty" do
             it "doesn't display any logs" do
-              get "/logs?search-field=", headers:, params: {}
+              get "/logs?search=", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
@@ -365,7 +365,7 @@ RSpec.describe CaseLogsController, type: :request do
             let(:matching_status) { matching_log.status }
 
             it "shows only logs matching both search and filters" do
-              get "/logs?search-field=#{matching_postcode}&status[]=in_progress", headers: headers, params: {}
+              get "/logs?search=#{matching_postcode}&status[]=in_progress", headers: headers, params: {}
               expect(page).to have_content(matching_log.id)
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
