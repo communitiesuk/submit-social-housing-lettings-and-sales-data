@@ -37,10 +37,10 @@ RSpec.describe FormController, type: :request do
       managing_organisation: organisation,
     )
   end
-  let(:in_progress_case_log) do
+  let(:case_log_2022) do
     FactoryBot.create(
       :case_log,
-      :in_progress,
+      startdate: Time.zone.local(2022, 12, 1),
       owning_organisation: organisation,
       managing_organisation: organisation,
     )
@@ -112,9 +112,9 @@ RSpec.describe FormController, type: :request do
 
         context "when no other sections are enabled" do
           before do
-            allow(in_progress_case_log.form).to receive(:next_incomplete_section_redirect_path).and_return("error")
-            get "/logs/#{in_progress_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+            get "/logs/#{case_log_2022.id}/setup/check-answers", headers: headers, params: {}
           end
+
           it "does not show Save and go to next incomplete section button" do
             expect(page).not_to have_content("Save and go to next incomplete section")
           end

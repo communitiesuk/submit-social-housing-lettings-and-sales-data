@@ -118,7 +118,12 @@
                 "derived": true,
                 "depends_on": [false]
               }
-            }
+            },
+            "depends_on": [
+              {
+                "setup": "completed"
+              }
+            ]
           }
         }
       }
