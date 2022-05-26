@@ -157,7 +157,7 @@ en:
         question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
       preg_occ:
-        no_female: "You must answer ‘no’ as there are no women aged 11-65 in the household"
+        no_female: "You must answer ‘no’ as there are no female tenants aged 11-65 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
@@ -252,8 +252,8 @@ en:
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
     pregnancy:
       title: "You told us somebody in the household is pregnant"
-      no_females: "You also told us there are no women living at the property."
-      females_not_in_soft_age_range: "You also told us that any women living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
+      no_females: "You also told us there are no female tenants living at the property."
+      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
 
   devise:
     two_factor_authentication:
