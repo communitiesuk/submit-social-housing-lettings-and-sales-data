@@ -490,7 +490,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 1 of 2)")
+              expect(page).to have_title("Logs (page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -515,7 +515,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 2 of 2)")
+              expect(page).to have_title("Logs (page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
           end
         end
