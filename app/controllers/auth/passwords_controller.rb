@@ -62,12 +62,8 @@ protected
     resource.need_two_factor_authentication?(request) ? :updated_2FA : :updated
   end
 
-  def resource_class_name
-    resource_class.name.underscore
-  end
-
   def after_sending_reset_password_instructions_path_for(_resource)
-    account_password_reset_confirmation_path(email: params.dig(resource_class_name, "email"))
+    account_password_reset_confirmation_path(email: params.dig("user", "email"))
   end
 
   def after_resetting_password_path_for(resource)
