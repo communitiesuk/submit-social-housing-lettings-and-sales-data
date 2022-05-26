@@ -342,6 +342,43 @@ RSpec.describe FormController, type: :request do
         end
       end
 
+      context "when coming from check answers page" do
+        context "and navigating to an interruption screen" do
+          let(:interrupt_params) do
+            {
+              id: completed_case_log.id,
+              case_log: {
+                page: "net_income_value_check",
+                net_income_value_check: value,
+              },
+            }
+          end
+          let(:referrer) { "/logs/#{completed_case_log.id}/net-income-value-check?referrer=check_answers" }
+
+          before do
+            completed_case_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?§
+            allow(completed_case_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
+            post "/logs/#{completed_case_log.id}/form", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
+          end
+
+          context "when yes is answered" do
+            let(:value) { 0 }
+
+            it "redirects back to check answers if 'yes' is selected" do
+              expect(response).to redirect_to("/logs/#{completed_case_log.id}/income-and-benefits/check-answers")
+            end
+          end
+
+          context "when no is answered" do
+            let(:value) { 1 }
+
+            it "redirects to the previous question if 'no' is selected" do
+              expect(response).to redirect_to("/logs/#{completed_case_log.id}/net-income?referrer=check_answers")
+            end
+          end
+        end
+      end
+
       context "with case logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
         let(:other_organisation) { FactoryBot.create(:organisation) }

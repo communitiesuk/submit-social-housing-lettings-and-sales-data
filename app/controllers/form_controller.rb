@@ -9,12 +9,7 @@ class FormController < ApplicationController
       responses_for_page = responses_for_page(@page)
       if @case_log.update(responses_for_page)
         session[:errors] = nil
-        if is_referrer_check_answers? && !@case_log.form.next_page(@page, @case_log).to_s.include?("value_check")
-          redirect_to(send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log))
-        else
-          redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
-          redirect_to(send(redirect_path, @case_log))
-        end
+        redirect_to(successful_redirect_path)
       else
         redirect_path = "case_log_#{@page.id}_path"
         session[:errors] = @case_log.errors.to_json
@@ -107,5 +102,21 @@ private
   def is_referrer_check_answers?
     referrer = request.headers["HTTP_REFERER"].presence || ""
     referrer.present? && CGI.parse(referrer.split("?")[-1]).present? && CGI.parse(referrer.split("?")[-1])["referrer"][0] == "check_answers"
+  end
+
+  def successful_redirect_path
+    if is_referrer_check_answers?
+      page_ids = @case_log.form.subsection_for_page(@page).pages.map(&:id)
+      page_index = page_ids.index(@page.id)
+      next_page = @case_log.form.next_page(@page, @case_log)
+      previous_page = @case_log.form.previous_page(page_ids, page_index, @case_log)
+      if next_page.to_s.include?("value_check") || next_page == previous_page
+        return "/logs/#{@case_log.id}/#{next_page.dasherize}?referrer=check_answers"
+      else
+        return send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log)
+      end
+    end
+    redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
+    send(redirect_path, @case_log)
   end
 end
