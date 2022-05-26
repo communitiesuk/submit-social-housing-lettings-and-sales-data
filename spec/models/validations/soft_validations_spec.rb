@@ -187,7 +187,7 @@ RSpec.describe Validations::SoftValidations do
       end
     end
 
-    context "when female tenants are outside or soft validation ranges" do
+    context "when female tenants are outside of soft validation ranges" do
       it "does not show the interruption screen" do
         record.update!(age1: 44, sex1: "F", preg_occ: 1, hhmemb: 1)
         expect(record.no_females_in_a_pregnant_household?).to be false
