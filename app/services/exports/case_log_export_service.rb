@@ -1,14 +1,6 @@
 module Exports
   class CaseLogExportService
-    QUARTERS = {
-      0 => "jan_mar",
-      1 => "apr_jun",
-      2 => "jul_sep",
-      3 => "oct_dec",
-    }.freeze
-
-    LOG_ID_OFFSET = 300_000_000_000
-    MAX_XML_RECORDS = 10_000
+    include Exports::CaseLogExportConstants
 
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
@@ -158,14 +150,43 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
-    def apply_cds_transformation!(attribute_hash)
-      # OLD_CORE FORM ID support
-      attribute_hash["form"] = attribute_hash["old_form_id"]
-      attribute_hash["newform"] = attribute_hash["id"] + LOG_ID_OFFSET
+    def apply_cds_transformation(case_log)
+      attribute_hash = case_log.attributes_before_type_cast
+
+      attribute_hash["form"] = attribute_hash["old_form_id"] || (attribute_hash["id"] + LOG_ID_OFFSET)
+
+      # Changes specific to collection start year
+      if case_log.collection_start_year == 2021
+        attribute_hash.delete("joint")
+      end
+      if case_log.collection_start_year == 2022
+        attribute_hash.delete("underoccupation_benefitcap")
+      end
+
+      # Organisation fields
+      if case_log.owning_organisation.present?
+        attribute_hash["owningorgid"] = case_log.owning_organisation.old_visible_id || (case_log.owning_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["owningorgname"] = case_log.owning_organisation.name
+        attribute_hash["hcnum"] = case_log.owning_organisation.housing_registration_no
+      end
+      if case_log.managing_organisation.present?
+        attribute_hash["maningorgid"] = case_log.managing_organisation.old_visible_id || (case_log.managing_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["maningorgname"] = case_log.managing_organisation.name
+        attribute_hash["manhcnum"] = case_log.managing_organisation.housing_registration_no
+      end
+
+      # Mapping which would require a change in our data model
+      attribute_hash["createddate"] = attribute_hash["created_at"]
+      attribute_hash["uploaddate"] = attribute_hash["updated_at"]
+      attribute_hash["tenancycode"] = attribute_hash["tenancy_code"]
+      attribute_hash["ppcodenk"] = attribute_hash["previous_postcode_known"]
+
       # Age refused
       (1..8).each do |index|
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
       end
+
+      attribute_hash
     end
 
     def filter_keys!(attributes)
@@ -173,17 +194,18 @@ module Exports
     end
 
     def is_omitted_field?(field_name)
-      omitted_attrs = %w[id old_form_id old_id ethnic_group]
       pattern_age = /age\d_known/
-      field_name.starts_with?("details_known_") || pattern_age.match(field_name) || omitted_attrs.include?(field_name) ? true : false
+      details_known_prefix = "details_known_"
+      field_name.starts_with?(details_known_prefix) ||
+        pattern_age.match(field_name) ||
+        !EXPORT_FIELDS.include?(field_name)
     end
 
     def build_export_csv(case_logs)
       csv_io = CSV.generate do |csv|
         attribute_keys = nil
         case_logs.each do |case_log|
-          attribute_hash = case_log.attributes_before_type_cast
-          apply_cds_transformation!(attribute_hash)
+          attribute_hash = apply_cds_transformation(case_log)
           if attribute_keys.nil?
             attribute_keys = attribute_hash.keys
             filter_keys!(attribute_keys)
@@ -200,8 +222,7 @@ module Exports
       doc = Nokogiri::XML("<forms/>")
 
       case_logs.each do |case_log|
-        attribute_hash = case_log.attributes_before_type_cast
-        apply_cds_transformation!(attribute_hash)
+        attribute_hash = apply_cds_transformation(case_log)
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
