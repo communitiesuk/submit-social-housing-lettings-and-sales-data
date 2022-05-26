@@ -371,8 +371,6 @@ RSpec.describe CaseLogsController, type: :request do
                 expect(page).not_to have_content(log.id)
               end
             end
-
-            context "when search query and filters are both present and  results matching"
           end
         end
 
