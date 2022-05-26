@@ -2,6 +2,11 @@ module Exports::CaseLogExportConstants
   MAX_XML_RECORDS = 10_000
   LOG_ID_OFFSET = 300_000_000_000
 
+  EXPORT_MODE = {
+    xml: 1,
+    csv: 2,
+  }.freeze
+
   QUARTERS = {
     0 => "jan_mar",
     1 => "apr_jun",
