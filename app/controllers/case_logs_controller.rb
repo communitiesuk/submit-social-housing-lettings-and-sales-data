@@ -11,7 +11,13 @@ class CaseLogsController < ApplicationController
   def index
     set_session_filters
 
-    @pagy, @case_logs = pagy(filtered_case_logs(filtered_collection(current_user.case_logs, params["search-field"])))
+    @pagy, @case_logs = pagy(
+      filtered_case_logs(
+        filtered_collection(
+          current_user.case_logs, params["search-field"]
+        ),
+      ),
+    )
 
     respond_to do |format|
       format.html
