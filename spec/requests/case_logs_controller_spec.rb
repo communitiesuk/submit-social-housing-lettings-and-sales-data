@@ -332,7 +332,7 @@ RSpec.describe CaseLogsController, type: :request do
             expect(page).not_to have_content(logs[2].id)
           end
 
-          it "it has search results in the title" do
+          it "has search results in the title" do
             get "/logs?search=#{logs[0].id}", headers: headers, params: {}
             expect(page).to have_content("Logs (search results for ‘#{logs[0].id}’) - Submit social housing and sales data (CORE) - GOV.UK")
           end
@@ -340,12 +340,12 @@ RSpec.describe CaseLogsController, type: :request do
           context "when there are more than 1 page of search results" do
             let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: "XX1 1YY") }
 
-            it "it has title with pagination details for page 1" do
+            it "has title with pagination details for page 1" do
               get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
               expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
 
-            it "it has title with pagination details for page 2" do
+            it "has title with pagination details for page 2" do
               get "/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
               expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
             end
