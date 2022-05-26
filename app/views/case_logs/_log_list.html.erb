@@ -1,11 +1,13 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular], id: title.dasherize) do |caption| %>
+    <span class="govuk-!-margin-right-4">
       <% if searched.present? %>
         <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total <%= title.downcase %>. <%= govuk_link_to("Clear search", request.path) %>
       <% else %>
         <strong><%= pagy.count %></strong> total <%= title.downcase %>
       <% end %>
+      </span>
       <%= govuk_link_to "Download (CSV)", "/logs.csv", type: "text/csv" %>
     <% end %>
     <%= table.head do |head| %>
