@@ -157,7 +157,7 @@ en:
         question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
       preg_occ:
-        no_female: "You must answer ‘no’ as there are no females aged 16-50 in the household"
+        no_female: "You must answer ‘no’ as there are no female tenants aged 11-65 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
@@ -227,7 +227,6 @@ en:
       not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
       joint_more_than_one_member: "There must be more than one person in the household as you've told us this is a joint tenancy"
 
-
     declaration:
       missing: "You must show the DLUHC privacy notice to the tenant before you can submit this log."
 
@@ -241,9 +240,9 @@ en:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
       min:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}.</p>"
+        hint_text: '<h1 class="govuk-heading-l app-panel--interruption">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}.</p>'
       max:
-        hint_text: "<h1 class=\"govuk-heading-l app-panel--interruption\">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>"
+        hint_text: '<h1 class="govuk-heading-l app-panel--interruption">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>'
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
@@ -251,6 +250,10 @@ en:
       max:
         title: "You told us this person is %{age} or over and not retired"
         hint_text: "The minimum expected retirement age for %{gender} in England is %{age}."
+    pregnancy:
+      title: "You told us somebody in the household is pregnant"
+      no_females: "You also told us there are no female tenants living at the property."
+      females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
 
   devise:
     two_factor_authentication:

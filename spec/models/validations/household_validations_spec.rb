@@ -57,40 +57,38 @@ RSpec.describe Validations::HouseholdValidations do
 
   describe "pregnancy validations" do
     context "when there are no female tenants" do
-      it "validates that pregnancy cannot be yes" do
+      it "validates that pregnancy can be yes" do
         record.preg_occ = 1
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
-        expect(record.errors["preg_occ"])
-          .to include(match I18n.t("validations.household.preg_occ.no_female"))
+        expect(record.errors["preg_occ"]).to be_empty
       end
 
-      it "validates that pregnancy cannot be prefer not to say" do
+      it "validates that pregnancy can be prefer not to say" do
         record.preg_occ = 3
         record.sex1 = "M"
         household_validator.validate_pregnancy(record)
-        expect(record.errors["preg_occ"])
-          .to include(match I18n.t("validations.household.preg_occ.no_female"))
+        expect(record.errors["preg_occ"]).to be_empty
       end
     end
 
     context "when there are female tenants" do
-      context "but they are older than 50" do
+      context "but they are older than 65" do
         it "validates that pregnancy cannot be yes" do
           record.preg_occ = 1
           record.sex1 = "F"
-          record.age1 = 51
+          record.age1 = 66
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"])
             .to include(match I18n.t("validations.household.preg_occ.no_female"))
         end
       end
 
-      context "and they are the lead tenant and under 51" do
+      context "and they are the lead tenant and under 65" do
         it "pregnancy can be yes" do
-          record.preg_occ = 0
+          record.preg_occ = 1
           record.sex1 = "F"
-          record.age1 = 32
+          record.age1 = 64
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"]).to be_empty
         end
@@ -98,13 +96,26 @@ RSpec.describe Validations::HouseholdValidations do
 
       context "and they are another household member and under 51" do
         it "pregnancy can be yes" do
-          record.preg_occ = 0
+          record.preg_occ = 1
           record.sex1 = "M"
           record.age1 = 25
           record.sex3 = "F"
-          record.age3 = 32
+          record.age3 = 64
           household_validator.validate_pregnancy(record)
           expect(record.errors["preg_occ"]).to be_empty
+        end
+      end
+
+      context "and they are another household member and under 11" do
+        it "pregnancy can be yes" do
+          record.preg_occ = 1
+          record.sex1 = "M"
+          record.age1 = 25
+          record.sex3 = "F"
+          record.age3 = 10
+          household_validator.validate_pregnancy(record)
+          expect(record.errors["preg_occ"])
+          .to include(match I18n.t("validations.household.preg_occ.no_female"))
         end
       end
     end

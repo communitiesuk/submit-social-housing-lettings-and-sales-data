@@ -92,9 +92,7 @@
                     }
                   },
                   "conditional_for": {
-                    "irproduct_other": [
-                      5
-                    ]
+                    "irproduct_other": [5]
                   }
                 },
                 "irproduct_other": {
@@ -163,9 +161,7 @@
                     }
                   },
                   "conditional_for": {
-                    "postcode_full": [
-                      1
-                    ]
+                    "postcode_full": [1]
                   },
                   "hidden_in_check_answers": true
                 },
@@ -911,9 +907,7 @@
                     }
                   },
                   "conditional_for": {
-                    "mrcdate": [
-                      1
-                    ]
+                    "mrcdate": [1]
                   }
                 },
                 "mrcdate": {
@@ -1020,9 +1014,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      3
-                    ]
+                    "tenancyother": [3]
                   }
                 },
                 "tenancyother": {
@@ -1067,9 +1059,7 @@
                     }
                   },
                   "conditional_for": {
-                    "tenancyother": [
-                      3
-                    ]
+                    "tenancyother": [3]
                   }
                 },
                 "tenancyother": {
@@ -1193,6 +1183,88 @@
                 }
               }
             },
+            "no_females_pregnant_household_lead_hhmemb_value_check": {
+              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "lead_tenant_age": {
               "header": "",
               "description": "",
@@ -1210,9 +1282,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age1": [
-                      0
-                    ]
+                    "age1": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -1242,6 +1312,88 @@
                 }
               }
             },
+            "no_females_pregnant_household_lead_age_value_check": {
+              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "lead_tenant_gender_identity": {
               "header": "",
               "description": "",
@@ -1266,6 +1418,88 @@
                     },
                     "R": {
                       "value": "Tenant prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "no_females_pregnant_household_lead_value_check": {
+              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
                     }
                   }
                 }
@@ -1536,24 +1770,28 @@
               "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_1",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_1",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_1",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_1",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_1",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_1",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -1563,37 +1801,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "lead_tenant_over_retirement_value_check": {
-              "depends_on": [{ "person_1_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_1_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_1",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_1",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_1",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_1",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_1",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_1",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -1603,10 +1847,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -1707,9 +1951,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age2": [
-                      0
-                    ]
+                    "age2": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -1744,6 +1986,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_2_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age2_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_2_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age2_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_2_gender_identity": {
               "header": "",
               "description": "",
@@ -1777,6 +2104,94 @@
                   "details_known_2": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_2_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_2": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_2_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_2": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_2_working_situation": {
               "header": "",
@@ -1849,24 +2264,28 @@
               "depends_on": [{ "person_2_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_2",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_2",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_2",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_2",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_2",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_2",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -1876,37 +2295,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_2_over_retirement_value_check": {
-              "depends_on": [{ "person_2_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_2_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_2",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_2",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_2",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_2",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_2",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_2",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -1916,10 +2341,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -2017,9 +2442,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age3": [
-                      0
-                    ]
+                    "age3": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2054,6 +2477,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_3_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age3_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age3_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_3_gender_identity": {
               "header": "",
               "description": "",
@@ -2087,6 +2595,94 @@
                   "details_known_3": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_3_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_3": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_3": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_3_working_situation": {
               "header": "",
@@ -2159,24 +2755,28 @@
               "depends_on": [{ "person_3_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_3",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_3",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_3",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_3",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_3",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_3",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2186,37 +2786,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_3_over_retirement_value_check": {
-              "depends_on": [{ "person_3_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_3_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_3",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_3",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_3",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_3",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_3",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_3",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2226,10 +2832,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -2324,9 +2930,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age4": [
-                      0
-                    ]
+                    "age4": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2361,6 +2965,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_4_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age4_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age4_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_4_gender_identity": {
               "header": "",
               "description": "",
@@ -2394,6 +3083,94 @@
                   "details_known_4": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_4_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_4": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_4": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_4_working_situation": {
               "header": "",
@@ -2466,24 +3243,28 @@
               "depends_on": [{ "person_4_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_4",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_4",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_4",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_4",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_4",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_4",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2493,37 +3274,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_4_over_retirement_value_check": {
-              "depends_on": [{ "person_4_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_4_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_4",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_4",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_4",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_4",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_4",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_4",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2533,10 +3320,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -2628,9 +3415,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age5": [
-                      0
-                    ]
+                    "age5": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2665,6 +3450,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_5_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age5_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age5_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_5_gender_identity": {
               "header": "",
               "description": "",
@@ -2698,6 +3568,94 @@
                   "details_known_5": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_5_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_5": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_5": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_5_working_situation": {
               "header": "",
@@ -2770,24 +3728,28 @@
               "depends_on": [{ "person_5_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_5",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_5",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_5",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_5",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_5",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_5",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2797,37 +3759,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_5_over_retirement_value_check": {
-              "depends_on": [{ "person_5_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_5_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_5",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_5",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_5",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_5",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_5",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_5",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -2837,10 +3805,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -2929,9 +3897,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age6": [
-                      0
-                    ]
+                    "age6": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -2966,6 +3932,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_6_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age6_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age6_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_6_gender_identity": {
               "header": "",
               "description": "",
@@ -2999,6 +4050,94 @@
                   "details_known_6": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_6_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_6": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_6": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_6_working_situation": {
               "header": "",
@@ -3071,24 +4210,28 @@
               "depends_on": [{ "person_6_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_6",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_6",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_6",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_6",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_6",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_6",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3098,37 +4241,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_6_over_retirement_value_check": {
-              "depends_on": [{ "person_6_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_6_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_6",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_6",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_6",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_6",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_6",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_6",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3138,10 +4287,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -3227,9 +4376,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age7": [
-                      0
-                    ]
+                    "age7": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3264,6 +4411,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_7_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age7_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age7_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_7_gender_identity": {
               "header": "",
               "description": "",
@@ -3297,6 +4529,94 @@
                   "details_known_7": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_7_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_7": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_7": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_7_working_situation": {
               "header": "",
@@ -3369,24 +4689,28 @@
               "depends_on": [{ "person_7_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_7",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_7",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_7",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_7",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_7",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_7",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3396,37 +4720,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_7_over_retirement_value_check": {
-              "depends_on": [{ "person_7_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_7_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_7",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_7",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_7",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_7",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_7",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_7",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3436,10 +4766,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -3522,9 +4852,7 @@
                     }
                   },
                   "conditional_for": {
-                    "age8": [
-                      0
-                    ]
+                    "age8": [0]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -3559,6 +4887,91 @@
                 }
               ]
             },
+            "no_females_pregnant_household_person_8_age_value_check": {
+              "depends_on": [
+                { "no_females_in_a_pregnant_household?": true, "age8_known": 0 }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "age8_known": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "person_8_gender_identity": {
               "header": "",
               "description": "",
@@ -3592,6 +5005,94 @@
                   "details_known_8": 0
                 }
               ]
+            },
+            "no_females_pregnant_household_person_8_value_check": {
+              "depends_on": [
+                {
+                  "no_females_in_a_pregnant_household?": true,
+                  "details_known_8": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true,
+                  "details_known_8": 0
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             },
             "person_8_working_situation": {
               "header": "",
@@ -3664,24 +5165,28 @@
               "depends_on": [{ "person_8_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_8",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_8",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.min.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_8",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_8",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_8",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_8",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3691,37 +5196,43 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
               }
             },
             "person_8_over_retirement_value_check": {
-              "depends_on": [{ "person_8_not_retired_over_soft_max_age?": true }],
+              "depends_on": [
+                { "person_8_not_retired_over_soft_max_age?": true }
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
-                "arguments": [{
-                  "key": "retirement_age_for_person_8",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "retirement_age_for_person_8",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "informative_text": {
                 "translation": "soft_validations.retirement.max.hint_text",
-                "arguments": [{
-                  "key": "plural_gender_for_person_8",
-                  "label": false,
-                  "i18n_template": "gender"
-                },
-                {
-                  "key": "retirement_age_for_person_8",
-                  "label": false,
-                  "i18n_template": "age"
-                }]
+                "arguments": [
+                  {
+                    "key": "plural_gender_for_person_8",
+                    "label": false,
+                    "i18n_template": "gender"
+                  },
+                  {
+                    "key": "retirement_age_for_person_8",
+                    "label": false,
+                    "i18n_template": "age"
+                  }
+                ]
               },
               "questions": {
                 "retirement_value_check": {
@@ -3731,10 +5242,10 @@
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
-                      "value":"Yes"
+                      "value": "Yes"
                     },
                     "1": {
-                      "value":"No"
+                      "value": "No"
                     }
                   }
                 }
@@ -3871,6 +5382,88 @@
                     },
                     "3": {
                       "value": "Tenant prefers not to say"
+                    }
+                  }
+                }
+              }
+            },
+            "no_females_pregnant_household_value_check": {
+              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.no_females",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
+            "females_in_soft_age_range_in_pregnant_household_value_check": {
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
+              "title_text": {
+                "translation": "soft_validations.pregnancy.title",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "informative_text": {
+                "translation": "soft_validations.pregnancy.females_not_in_soft_age_range",
+                "arguments": [
+                  {
+                    "key": "sex1",
+                    "label": true,
+                    "i18n_template": "sex1"
+                  }
+                ]
+              },
+              "questions": {
+                "pregnancy_value_check": {
+                  "check_answer_label": "Pregnancy soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
                     }
                   }
                 }
@@ -4206,9 +5799,7 @@
                     }
                   },
                   "conditional_for": {
-                    "reasonother": [
-                      20
-                    ]
+                    "reasonother": [20]
                   }
                 },
                 "reasonother": {
@@ -4404,9 +5995,7 @@
                     }
                   },
                   "conditional_for": {
-                    "ppostcode_full": [
-                      1
-                    ]
+                    "ppostcode_full": [1]
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
@@ -4467,9 +6056,7 @@
                     }
                   },
                   "conditional_for": {
-                    "prevloc": [
-                      1
-                    ]
+                    "prevloc": [1]
                   }
                 },
                 "prevloc": {
@@ -5304,15 +6891,18 @@
               "title_text": "soft_validations.net_income.title_text",
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
-                "arguments": [{
-                  "key": "ecstat1",
-                  "label": true,
-                  "i18n_template": "ecstat1"
-                },
-                {"key": "earnings",
-                  "label": true,
-                  "i18n_template": "earnings"
-                }]
+                "arguments": [
+                  {
+                    "key": "ecstat1",
+                    "label": true,
+                    "i18n_template": "ecstat1"
+                  },
+                  {
+                    "key": "earnings",
+                    "label": true,
+                    "i18n_template": "earnings"
+                  }
+                ]
               },
               "questions": {
                 "net_income_value_check": {
@@ -5484,9 +7074,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -5581,9 +7169,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -5628,9 +7214,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -5675,9 +7259,7 @@
                     }
                   },
                   "conditional_for": {
-                    "chcharge": [
-                      1
-                    ]
+                    "chcharge": [1]
                   }
                 },
                 "chcharge": {
@@ -5718,12 +7300,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5737,12 +7314,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5756,12 +7328,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5775,12 +7342,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every week",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5796,12 +7358,7 @@
                   "suffix": " every week",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -5941,12 +7498,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5960,12 +7512,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5979,12 +7526,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -5998,12 +7540,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 2 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6019,12 +7556,7 @@
                   "suffix": " every 2 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -6064,12 +7596,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6083,12 +7610,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6102,12 +7624,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6121,12 +7638,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every 4 weeks",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6142,12 +7654,7 @@
                   "suffix": " every 4 weeks",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -6187,12 +7694,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6206,12 +7708,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6225,12 +7722,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6244,12 +7736,7 @@
                   "width": 5,
                   "prefix": "£",
                   "suffix": " every month",
-                  "fields-to-add": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ],
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
                   "result-field": "tcharge",
                   "hidden_in_check_answers": true
                 },
@@ -6265,12 +7752,7 @@
                   "suffix": " every month",
                   "readonly": true,
                   "requires_js": true,
-                  "fields_added": [
-                    "brent",
-                    "scharge",
-                    "pscharge",
-                    "supcharg"
-                  ]
+                  "fields_added": ["brent", "scharge", "pscharge", "supcharg"]
                 }
               },
               "depends_on": [
@@ -6301,22 +7783,22 @@
               "informative_text": {
                 "translation": "soft_validations.rent.min.hint_text",
                 "arguments": [
-                {
-                  "key": "la",
-                  "label": true,
-                  "i18n_template": "la"
-                },
-                {
-                  "key": "soft_min_for_period",
-                  "label": false,
-                  "i18n_template": "soft_min_for_period"
-                },
-                {
-                  "key":"brent",
-                  "label": true,
-                  "i18n_template": "brent"
-                }
-              ]
+                  {
+                    "key": "la",
+                    "label": true,
+                    "i18n_template": "la"
+                  },
+                  {
+                    "key": "soft_min_for_period",
+                    "label": false,
+                    "i18n_template": "soft_min_for_period"
+                  },
+                  {
+                    "key": "brent",
+                    "label": true,
+                    "i18n_template": "brent"
+                  }
+                ]
               },
               "questions": {
                 "rent_value_check": {
@@ -6351,11 +7833,11 @@
                     "i18n_template": "soft_max_for_period"
                   },
                   {
-                    "key":"brent",
+                    "key": "brent",
                     "label": true,
                     "i18n_template": "brent"
-                }
-              ]
+                  }
+                ]
               },
               "questions": {
                 "rent_value_check": {
