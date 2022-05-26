@@ -308,8 +308,8 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).not_to have_content("Managing organisation")
         end
 
-        context "using a search query" do
-          let(:logs)  { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
+        context "when using a search query" do
+          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
 
           it "shows case logs matching the id" do
             get "/logs?search-field=#{logs[0].id}", headers: headers, params: {}
@@ -332,7 +332,7 @@ RSpec.describe CaseLogsController, type: :request do
             expect(page).not_to have_content(logs[2].id)
           end
 
-          context "matching postcode" do
+          context "when matching postcode" do
             it "shows case logs matching the post code" do
               get "/logs?search-field=#{logs[1].postcode_full}", headers: headers, params: {}
               expect(page).not_to have_content(logs[0].id)
@@ -341,7 +341,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "search query doesn't match any logs" do
+          context "when search query doesn't match any logs" do
             it "doesn't display any logs" do
               get "/logs?search-field=foobar", headers: headers, params: {}
               expect(page).not_to have_content(logs[0].id)
@@ -350,7 +350,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "search query is empty" do
+          context "when search query is empty" do
             it "doesn't display any logs" do
               get "/logs?search-field=", headers: headers, params: {}
               expect(page).not_to have_content(logs[0].id)

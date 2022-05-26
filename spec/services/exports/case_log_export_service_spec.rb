@@ -226,7 +226,7 @@ RSpec.describe Exports::CaseLogExportService do
     let(:csv_export_file) { File.open("spec/fixtures/exports/case_logs.csv", "r:UTF-8") }
     let(:expected_csv_filename) { "export_2022_05_01.csv" }
 
-    let(:case_log) { FactoryBot.create(:case_log, :completed, tenancy_code: "BZ757", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY" ) }
+    let(:case_log) { FactoryBot.create(:case_log, :completed, tenancy_code: "BZ757", propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY") }
 
     it "generates an CSV export file with the expected content" do
       expected_content = replace_entity_ids(case_log, csv_export_file.read)
