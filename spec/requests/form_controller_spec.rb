@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe FormController, type: :request do
+  let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   let(:other_organisation) { FactoryBot.create(:organisation) }
@@ -32,6 +33,14 @@ RSpec.describe FormController, type: :request do
     FactoryBot.create(
       :case_log,
       :completed,
+      owning_organisation: organisation,
+      managing_organisation: organisation,
+    )
+  end
+  let(:in_progress_case_log) do
+    FactoryBot.create(
+      :case_log,
+      :in_progress,
       owning_organisation: organisation,
       managing_organisation: organisation,
     )
@@ -98,6 +107,16 @@ RSpec.describe FormController, type: :request do
           it "does not show a check answers for case logs you don't have access to" do
             get "/logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when no other sections are enabled" do
+          before do
+            allow(in_progress_case_log.form).to receive(:next_incomplete_section_redirect_path).and_return("error")
+            get "/logs/#{in_progress_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+          end
+          it "does not show Save and go to next incomplete section button" do
+            expect(page).not_to have_content("Save and go to next incomplete section")
           end
         end
       end
