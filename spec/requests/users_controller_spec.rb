@@ -686,6 +686,36 @@ RSpec.describe UsersController, type: :request do
                 .to change { other_user.reload.name }.from("filter name").to("new name")
             end
           end
+
+          context "when the data coordinator edits the user" do
+            let(:params) do
+              {
+                id: other_user.id, user: { active: value }
+              }
+            end
+
+            context "and tries to deactivate the user" do
+              let(:value) { false }
+
+              it "marks user as deactivated" do
+                expect { patch "/users/#{other_user.id}", headers:, params: }
+                  .to change { other_user.reload.active }.from(true).to(false)
+              end
+            end
+
+            context "and tries to activate deactivated user" do
+              let(:value) { true }
+
+              before do
+                other_user.update!(active: false)
+              end
+
+              it "marks user as active" do
+                expect { patch "/users/#{other_user.id}", headers:, params: }
+                  .to change { other_user.reload.active }.from(false).to(true)
+              end
+            end
+          end
         end
 
         context "when the current user does not match the user ID" do

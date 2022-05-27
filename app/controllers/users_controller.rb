@@ -116,9 +116,9 @@ private
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
       end
     elsif current_user.data_coordinator?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :active)
     elsif current_user.support?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active)
     end
   end
 
