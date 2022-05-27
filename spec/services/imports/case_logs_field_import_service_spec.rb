@@ -44,6 +44,8 @@ RSpec.describe Imports::CaseLogsFieldImportService do
     end
 
     context "and the case log was previously imported" do
+      let(:case_log) { CaseLog.find_by(old_id: case_log_id) }
+
       before do
         Imports::CaseLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
         case_log_file.rewind
@@ -51,24 +53,23 @@ RSpec.describe Imports::CaseLogsFieldImportService do
 
       it "logs that the tenant_code already has a value and does not update the case_log" do
         expect(logger).to receive(:info).with(/Case Log \d+ has a value for tenant_code, skipping update/)
-
-        import_service.send(:update_field, field, remote_folder)
-        case_log = CaseLog.find_by(old_id: case_log_id)
-        expect(case_log.tenant_code).not_to eq(nil)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .not_to(change { case_log.reload.tenant_code })
       end
     end
 
     context "and the case log was previously imported with empty fields" do
+      let(:case_log) { CaseLog.find_by(old_id: case_log_id) }
+
       before do
         Imports::CaseLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
         case_log_file.rewind
-        CaseLog.find_by(old_id: case_log_id).update_column("tenant_code", nil)
+        case_log.update!(tenant_code: nil)
       end
 
       it "updates the case_log" do
-        import_service.send(:update_field, field, remote_folder)
-        case_log = CaseLog.find_by(old_id: case_log_id)
-        expect(case_log.tenant_code).not_to eq(nil)
+        expect { import_service.send(:update_field, field, remote_folder) }
+          .to(change { case_log.reload.tenant_code })
       end
     end
   end
