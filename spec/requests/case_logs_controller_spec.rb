@@ -336,8 +336,8 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          it "shows case logs matching the tenancy code" do
-            get "/logs?search=#{log_to_search.tenancy_code}", headers: headers, params: {}
+          it "shows case logs matching the tenant code" do
+            get "/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
             expect(page).to have_content(log_to_search.id)
             logs.each do |log|
               expect(page).not_to have_content(log.id)

@@ -11,7 +11,7 @@ FactoryBot.define do
     end
     trait :in_progress do
       status { 1 }
-      tenant_code { "TH356" }
+      tenant_code { Faker::Alphanumeric.alphanumeric(number: 10) }
       postcode_full { Faker::Address.postcode }
       ppostcode_full { Faker::Address.postcode }
       age1 { 17 }
@@ -24,7 +24,7 @@ FactoryBot.define do
       incfreq { 1 }
     end
     trait :conditional_section_complete do
-      tenant_code { "TH356" }
+      tenant_code { Faker::Alphanumeric.alphanumeric(number: 10) }
       age1 { 34 }
       sex1 { "M" }
       ethnic { 2 }
@@ -34,7 +34,7 @@ FactoryBot.define do
     end
     trait :completed do
       status { 2 }
-      tenant_code { "BZ737" }
+      tenant_code { Faker::Alphanumeric.alphanumeric(number: 10) }
       age1 { 35 }
       sex1 { "F" }
       ethnic { 2 }

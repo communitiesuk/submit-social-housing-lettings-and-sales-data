@@ -1886,9 +1886,9 @@ RSpec.describe CaseLog do
         end
       end
 
-      describe "#filter_by_tenancy_code" do
-        it "allows searching by a Tenancy Code" do
-          result = described_class.filter_by_tenancy_code(case_log_to_search.tenancy_code)
+      describe "#filter_by_tenant_code" do
+        it "allows searching by a Tenant Code" do
+          result = described_class.filter_by_tenant_code(case_log_to_search.tenant_code)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
@@ -1918,7 +1918,7 @@ RSpec.describe CaseLog do
         end
 
         it "allows searching using tenancy code" do
-          result = described_class.search_by(case_log_to_search.tenancy_code)
+          result = described_class.search_by(case_log_to_search.tenant_code)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
