@@ -28,7 +28,7 @@
           <%= govuk_link_to(organisation.name, "organisations/#{organisation.id}/logs") %>
         <% end %>
         <% row.cell(text: organisation.housing_registration_no) %>
-        <% row.cell(text: display_provider_type(organisation.provider_type)) %>
+        <% row.cell(text: organisation.display_provider_type) %>
       <% end %>
     <% end %>
   <% end %>
