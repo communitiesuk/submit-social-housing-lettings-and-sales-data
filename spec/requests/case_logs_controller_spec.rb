@@ -393,6 +393,7 @@ RSpec.describe CaseLogsController, type: :request do
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
+              expect(page).not_to have_content(log_to_search.id)
             end
           end
 
@@ -402,17 +403,19 @@ RSpec.describe CaseLogsController, type: :request do
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
+              expect(page).not_to have_content(log_to_search.id)
             end
           end
 
           context "when search and filter is present" do
-            let(:matching_postcode) { logs[0].postcode_full }
-            let!(:matching_log) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
-            let(:matching_status) { matching_log.status }
+            let(:matching_postcode) { log_to_search.postcode_full }
+            let(:matching_status) { "in_progress" }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
 
             it "shows only logs matching both search and filters" do
-              get "/logs?search=#{matching_postcode}&status[]=in_progress", headers: headers, params: {}
-              expect(page).to have_content(matching_log.id)
+              get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
+              expect(page).to have_content(log_matching_filter_and_search.id)
+              expect(page).not_to have_content(log_to_search.id)
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
               end
