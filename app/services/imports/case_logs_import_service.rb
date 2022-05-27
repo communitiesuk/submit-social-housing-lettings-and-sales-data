@@ -2,8 +2,8 @@ module Imports
   class CaseLogsImportService < ImportService
     def create_logs(folder)
       import_from(folder, :create_log)
-      if @logs_with_discrepancies.count > 0
-        @logger.warn("The following case logs had status discrepancies: [#{@logs_with_discrepancies.join(", ")}]")
+      if @logs_with_discrepancies.count.positive?
+        @logger.warn("The following case logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
       end
     end
 

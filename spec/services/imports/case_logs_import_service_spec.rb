@@ -72,7 +72,7 @@ RSpec.describe Imports::CaseLogsImportService do
       let(:case_log_id5) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
       let(:case_log_file) { open_file(fixture_directory, case_log_id4) }
       let(:case_log_xml) { Nokogiri::XML(case_log_file) }
-      
+
       before do
         allow(storage_service).to receive(:get_file_io)
           .with("#{remote_folder}/#{case_log_id4}.xml")
@@ -83,8 +83,8 @@ RSpec.describe Imports::CaseLogsImportService do
       end
 
       it "the logger logs a warning with the case log's old id/filename" do
-        expect(logger).to receive(:warn).with(/is not completed/).exactly(1).times
-        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id4} is incomplete but status should be complete/).exactly(1).times
+        expect(logger).to receive(:warn).with(/is not completed/).once
+        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id4} is incomplete but status should be complete/).once
 
         case_log_service.send(:create_log, case_log_xml)
       end
@@ -94,11 +94,11 @@ RSpec.describe Imports::CaseLogsImportService do
                                   .and_return(%W[#{remote_folder}/#{case_log_id4}.xml #{remote_folder}/#{case_log_id5}.xml])
         allow(logger).to receive(:warn).with(/is not completed/)
         allow(logger).to receive(:warn).with(/is incomplete but status should be complete/)
-        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/).exactly(1).times
-        
+        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/).once
+
         case_log_service.create_logs(remote_folder)
-      end 
-    end 
+      end
+    end
   end
 
   context "when importing a specific log" do
@@ -112,7 +112,7 @@ RSpec.describe Imports::CaseLogsImportService do
       it "does not import the voiddate" do
         allow(logger).to receive(:warn).with(/is not completed/)
         allow(logger).to receive(:warn).with(/Case log with old id:#{case_log_id} is incomplete but status should be complete/)
-        
+
         case_log_service.send(:create_log, case_log_xml)
 
         case_log = CaseLog.where(old_id: case_log_id).first
