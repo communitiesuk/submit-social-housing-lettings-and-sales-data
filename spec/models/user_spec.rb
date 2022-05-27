@@ -85,6 +85,18 @@ RSpec.describe User, type: :model do
       )
     end
 
+    it "does not send a confirmation email to inactive users" do
+      expect(DeviseNotifyMailer).not_to receive(:confirmation_instructions)
+      described_class.create!(
+        name: "unconfirmed_user",
+        email: "unconfirmed_user@example.com",
+        password: "password123",
+        organisation: other_organisation,
+        role: "data_provider",
+        active: false,
+      )
+    end
+
     context "when the user is a data provider" do
       it "cannot assign roles" do
         expect(user.assignable_roles).to eq({})
