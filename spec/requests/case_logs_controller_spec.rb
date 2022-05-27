@@ -330,7 +330,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows case logs matching the id" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id.to_s)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_content(log.id.to_s)
             end
@@ -752,6 +752,12 @@ RSpec.describe CaseLogsController, type: :request do
         get "/logs?status[]=completed", headers:, params: {}
         csv = CSV.parse(response.body)
         expect(csv.count).to eq(2)
+      end
+
+      it "dowloads searched logs" do
+        get "/logs?search=#{case_log.id}", headers:, params: {}
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(1)
       end
     end
 
