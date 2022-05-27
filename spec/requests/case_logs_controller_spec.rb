@@ -757,7 +757,31 @@ RSpec.describe CaseLogsController, type: :request do
       it "dowloads searched logs" do
         get "/logs?search=#{case_log.id}", headers:, params: {}
         csv = CSV.parse(response.body)
-        expect(csv.count).to eq(1)
+        expect(csv.count).to eq(2)
+      end
+
+      context "both filter and search applied" do
+        let!(:case_log) do
+          FactoryBot.create(
+            :case_log,
+            :completed,
+            postcode_full: "XX1 1TG",
+            owning_organisation: organisation
+          )
+        end
+
+        before do
+          FactoryBot.create(:case_log,
+                            :in_progress,
+                            postcode_full: case_log.postcode_full,
+                            owning_organisation: organisation
+                           )
+        end
+        it "dowloads logs matching both csv and filter logs" do
+          get "/logs?status[]=completed&search=#{case_log.postcode_full}", headers:, params: {}
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(2)
+        end
       end
     end
 
