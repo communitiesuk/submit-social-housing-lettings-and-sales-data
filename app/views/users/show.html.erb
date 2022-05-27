@@ -5,6 +5,9 @@
     <h1 class="govuk-heading-l">
       <%= content_for(:title) %>
     </h1>
+    <% if can_toggle_active?(@user, current_user) %>
+      <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
+    <% end %>
 
     <h2 class="govuk-heading-m">
       Personal details

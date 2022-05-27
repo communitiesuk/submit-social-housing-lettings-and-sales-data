@@ -34,4 +34,8 @@ module UserHelper
   def can_edit_org?(current_user)
     current_user.data_coordinator? || current_user.support?
   end
+
+  def can_toggle_active?(user, current_user)
+    current_user != user && (current_user.support? || current_user.data_coordinator?)
+  end
 end
