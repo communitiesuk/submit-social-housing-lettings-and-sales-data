@@ -15,7 +15,7 @@ RSpec.describe "Log Features" do
         click_button("Sign in")
       end
 
-      it "I see logs belonging to the same organisation" do
+      it "it displays the logs belonging to the same organisation" do
         expect(page).to have_content(log_to_search.id)
         expect(page).to have_content(same_organisation_log.id)
         expect(page).not_to have_content(another_organisation_log.id)
@@ -45,7 +45,7 @@ RSpec.describe "Log Features" do
               expect(page).to have_link("Clear search")
             end
 
-            it "I see logs belonging to the same organisation" do
+            it "it displays the logs belonging to the same organisation after I clear the search results" do
               click_link("Clear search")
               expect(page).to have_content(log_to_search.id)
               expect(page).to have_content(same_organisation_log.id)
