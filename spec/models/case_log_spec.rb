@@ -1892,6 +1892,16 @@ RSpec.describe CaseLog do
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
+
+        context "when tenant_code has lower case letters" do
+          let(:matching_tenant_code_lower_case) { case_log_to_search.tenant_code.downcase }
+
+          it "allows searching by a Tenant Code" do
+            result = described_class.filter_by_tenant_code(matching_tenant_code_lower_case)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
       end
 
       describe "#filter_by_propcode" do
@@ -1899,6 +1909,16 @@ RSpec.describe CaseLog do
           result = described_class.filter_by_propcode(case_log_to_search.propcode)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when propcode has lower case letters" do
+          let(:matching_propcode_lower_case) { case_log_to_search.propcode.downcase }
+
+          it "allows searching by a Property Reference" do
+            result = described_class.filter_by_propcode(matching_propcode_lower_case)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
         end
       end
 
