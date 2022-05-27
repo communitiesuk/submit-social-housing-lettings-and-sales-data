@@ -10,7 +10,7 @@ class OrganisationsController < ApplicationController
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
 
-    all_organisations = Organisation.all
+    all_organisations = Organisation.order(:name)
     @pagy, @organisations = pagy(filtered_collection(all_organisations, search_term))
     @searched = search_term.presence
     @total_count = all_organisations.size
@@ -21,7 +21,7 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users(@organisation.users, search_term))
+    @pagy, @users = pagy(filtered_users(@organisation.users.sorted_by_organisation_and_role, search_term))
     @searched = search_term.presence
     @total_count = @organisation.users.size
     render "users/index"
