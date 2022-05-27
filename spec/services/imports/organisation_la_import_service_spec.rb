@@ -8,7 +8,7 @@ RSpec.describe Imports::OrganisationLaImportService do
   let(:storage_service) { instance_double(StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  context "when importing data protection confirmations" do
+  context "when importing organisation las" do
     subject(:import_service) { described_class.new(storage_service, logger) }
 
     before do
