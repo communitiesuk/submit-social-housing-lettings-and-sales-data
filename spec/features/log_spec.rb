@@ -4,9 +4,9 @@ RSpec.describe "Log Features" do
   context "when searching for specific logs" do
     context "when I am logged in and there are logs in the database" do
       let(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
-      let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, tenancy_code: "111") }
-      let!(:same_organisation_log) { FactoryBot.create(:case_log, owning_organisation: user.organisation, tenancy_code: "222") }
-      let!(:another_organisation_log) { FactoryBot.create(:case_log, tenancy_code: "333") }
+      let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+      let!(:same_organisation_log) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+      let!(:another_organisation_log) { FactoryBot.create(:case_log) }
 
       before do
         visit("/logs")
