@@ -122,9 +122,9 @@ RSpec.describe "User Features" do
             end
 
             it "displays log matching the log ID" do
-              expect(page).to have_content(log_to_search.id)
+              expect(page).to have_link(log_to_search.id.to_s)
               other_logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
             end
 
@@ -135,7 +135,7 @@ RSpec.describe "User Features" do
 
               it "displays the logs belonging to the same organisation after I clear the search result after I clear the search resultss" do
                 click_link("Clear search")
-                expect(page).to have_content(log_to_search.id)
+                expect(page).to have_link(log_to_search.id.to_s)
               end
             end
           end
