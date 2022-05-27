@@ -1872,8 +1872,11 @@ RSpec.describe CaseLog do
     end
 
     context "when searching logs" do
-      let!(:case_logs) { FactoryBot.create_list(:case_log, 5, :completed) }
       let!(:case_log_to_search) { FactoryBot.create(:case_log, :completed) }
+
+      before do
+        FactoryBot.create_list(:case_log, 5, :completed)
+      end
 
       describe "#filter_by_id" do
         it "allows searching by a log ID" do
