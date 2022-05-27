@@ -16,9 +16,9 @@ RSpec.describe "Log Features" do
       end
 
       it "displays the logs belonging to the same organisation" do
-        expect(page).to have_content(log_to_search.id)
-        expect(page).to have_content(same_organisation_log.id)
-        expect(page).not_to have_content(another_organisation_log.id)
+        expect(page).to have_link(log_to_search.id.to_s)
+        expect(page).to have_link(same_organisation_log.id.to_s)
+        expect(page).not_to have_link(another_organisation_log.id.to_s)
       end
 
       context "when I search for a specific log" do
@@ -35,9 +35,9 @@ RSpec.describe "Log Features" do
           end
 
           it "displays log matching the log ID" do
-            expect(page).to have_content(log_to_search.id)
-            expect(page).not_to have_content(same_organisation_log.id)
-            expect(page).not_to have_content(another_organisation_log.id)
+            expect(page).to have_link(log_to_search.id.to_s)
+            expect(page).not_to have_link(same_organisation_log.id.to_s)
+            expect(page).not_to have_link(another_organisation_log.id.to_s)
           end
 
           context "when I want to clear results" do
@@ -45,11 +45,11 @@ RSpec.describe "Log Features" do
               expect(page).to have_link("Clear search")
             end
 
-            it "displays the logs belonging to the same organisation after I clear the search result after I clear the search resultss" do
+            it "displays the logs belonging to the same organisation after I clear the search results" do
               click_link("Clear search")
-              expect(page).to have_content(log_to_search.id)
-              expect(page).to have_content(same_organisation_log.id)
-              expect(page).not_to have_content(another_organisation_log.id)
+              expect(page).to have_link(log_to_search.id.to_s)
+              expect(page).to have_link(same_organisation_log.id.to_s)
+              expect(page).not_to have_link(another_organisation_log.id.to_s)
             end
           end
         end

@@ -330,33 +330,33 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows case logs matching the id" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_content(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_content(log.id.to_s)
             end
           end
 
           it "shows case logs matching the tenant code" do
             get "/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
           it "shows case logs matching the property reference" do
             get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_content(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
           it "shows case logs matching the property postcode" do
             get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
@@ -365,10 +365,10 @@ RSpec.describe CaseLogsController, type: :request do
 
             it "displays all matching logs" do
               get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
-              expect(page).to have_content(log_to_search.id)
+              expect(page).to have_link(log_to_search.id.to_s)
               expect(page).to have_content(matching_postcode_log.id)
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
             end
           end
@@ -391,9 +391,9 @@ RSpec.describe CaseLogsController, type: :request do
             it "doesn't display any logs" do
               get "/logs?search=foobar", headers:, params: {}
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
-              expect(page).not_to have_content(log_to_search.id)
+              expect(page).not_to have_link(log_to_search.id.to_s)
             end
           end
 
@@ -401,9 +401,9 @@ RSpec.describe CaseLogsController, type: :request do
             it "doesn't display any logs" do
               get "/logs?search=", headers:, params: {}
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
-              expect(page).not_to have_content(log_to_search.id)
+              expect(page).not_to have_link(log_to_search.id.to_s)
             end
           end
 
@@ -414,10 +414,10 @@ RSpec.describe CaseLogsController, type: :request do
 
             it "shows only logs matching both search and filters" do
               get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
-              expect(page).to have_content(log_matching_filter_and_search.id)
-              expect(page).not_to have_content(log_to_search.id)
+              expect(page).to have_link(log_matching_filter_and_search.id.to_s)
+              expect(page).not_to have_link(log_to_search.id.to_s)
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
             end
           end
