@@ -12,20 +12,15 @@ module Imports
   private
 
     def update_tenant_code(xml_doc)
-      update_string_value(xml_doc, "_2bTenCode", "tenant_code")
-    end
-
-    def update_string_value(xml_doc, src_field, dest_field)
       old_id = field_value(xml_doc, "meta", "document-id")
       record = CaseLog.find_by(old_id:)
 
       if record.present?
-        tenant_code = string_or_nil(xml_doc, src_field)
-        current_value = record.read_attribute(dest_field)
-        if tenant_code.present? && current_value.blank?
-          record.update_column(dest_field, tenant_code)
+        tenant_code = string_or_nil(xml_doc, "_2bTenCode")
+        if tenant_code.present? && record.tenant_code.blank?
+          record.update!(tenant_code:)
         else
-          @logger.info("Case Log #{record.id} has a value for #{dest_field}, skipping update")
+          @logger.info("Case Log #{record.id} has a value for tenant_code, skipping update")
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
