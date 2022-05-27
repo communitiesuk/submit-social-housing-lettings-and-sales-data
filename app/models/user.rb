@@ -90,8 +90,10 @@ class User < ApplicationRecord
     old_user_id.present?
   end
 
-  def skip_confirmation!
-    !active?
+  def send_confirmation_instructions
+    return unless active?
+
+    super
   end
 
   def need_two_factor_authentication?(_request)
