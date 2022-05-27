@@ -52,9 +52,9 @@ class CaseLog < ApplicationRecord
                          }
 
   scope :filter_by_id, ->(id) { where(id:) }
-  scope :filter_by_tenant_code, ->(code) { where("lower(tenant_code) = ?", code.downcase) }
-  scope :filter_by_propcode, ->(code) { where("lower(propcode) = ?", code.downcase) }
-  scope :filter_by_postcode, ->(code) { where(postcode_full: code.upcase.gsub(/\s+/, "")) }
+  scope :filter_by_tenant_code, ->(tenant_code) { where("lower(tenant_code) ILIKE ?", "%#{tenant_code.downcase}%") }
+  scope :filter_by_propcode, ->(propcode) { where("lower(propcode) ILIKE ?", "%#{propcode.downcase}%") }
+  scope :filter_by_postcode, ->(postcode_full) { where("lower(postcode_full) ILIKE ?", "%#{postcode_full.upcase.gsub(/\s+/, "")}%") }
   scope :search_by, lambda { |param|
                       filter_by_id(param)
                                 .or(filter_by_tenant_code(param))
