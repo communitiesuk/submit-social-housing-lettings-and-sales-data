@@ -5,6 +5,7 @@ module Imports
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
       @logger = logger
+      @logs_with_discrepancies = []
     end
 
     def import_from(folder, create_method)

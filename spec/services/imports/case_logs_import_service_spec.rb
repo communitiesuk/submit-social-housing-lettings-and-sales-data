@@ -69,6 +69,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
     context "when there are status discrepancies" do
       let(:case_log_id4) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
+      let(:case_log_id5) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
       let(:case_log_file) { open_file(fixture_directory, case_log_id4) }
       let(:case_log_xml) { Nokogiri::XML(case_log_file) }
       
@@ -76,6 +77,9 @@ RSpec.describe Imports::CaseLogsImportService do
         allow(storage_service).to receive(:get_file_io)
           .with("#{remote_folder}/#{case_log_id4}.xml")
           .and_return(open_file(fixture_directory, case_log_id4), open_file(fixture_directory, case_log_id4))
+        allow(storage_service).to receive(:get_file_io)
+          .with("#{remote_folder}/#{case_log_id5}.xml")
+          .and_return(open_file(fixture_directory, case_log_id5), open_file(fixture_directory, case_log_id5))
       end
 
       it "the logger logs a warning with the case log's old id/filename" do
@@ -84,6 +88,16 @@ RSpec.describe Imports::CaseLogsImportService do
 
         case_log_service.send(:create_log, case_log_xml)
       end
+
+      it "on completion the ids of all logs with status discrepancies are logged in a warning" do
+        allow(storage_service).to receive(:list_files)
+                                  .and_return(%W[#{remote_folder}/#{case_log_id4}.xml #{remote_folder}/#{case_log_id5}.xml])
+        allow(logger).to receive(:warn).with(/is not completed/)
+        allow(logger).to receive(:warn).with(/is incomplete but status should be complete/)
+        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/).exactly(1).times
+        
+        case_log_service.create_logs(remote_folder)
+      end 
     end 
   end
 
