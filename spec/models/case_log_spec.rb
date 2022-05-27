@@ -1863,73 +1863,82 @@ RSpec.describe CaseLog do
     end
   end
 
-  describe "Searching scopes" do
-    let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3), created_by: created_by_user, postcode_full: "XX12YY") }
+  describe "scopes" do
+    let!(:case_log_1) { FactoryBot.create(:case_log, :in_progress, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
     let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
     end
 
-    context "when searching scopes" do
-      let!(:case_log_3) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user, postcode_full: "XX12YY") }
+    context "when searching logs" do
+      let!(:case_logs) { FactoryBot.create_list(:case_log, 5, :completed) }
+      let!(:case_log_to_search) { FactoryBot.create(:case_log, :completed) }
 
       describe "#filter_by_id" do
         it "allows searching by a log ID" do
-          expect(described_class.filter_by_id(case_log_1.id.to_s).count).to eq(1)
-          expect(described_class.filter_by_id(case_log_1.id.to_s).first.id).to eq case_log_1.id
+          result = described_class.filter_by_id(case_log_to_search.id.to_s)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
       end
 
       describe "#filter_by_tenancy_code" do
         it "allows searching by a Tenancy Code" do
-          expect(described_class.filter_by_tenancy_code(case_log_2.tenancy_code).count).to eq(1)
-          expect(described_class.filter_by_tenancy_code(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+          result = described_class.filter_by_tenancy_code(case_log_to_search.tenancy_code)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
       end
 
       describe "#filter_by_propcode" do
         it "allows searching by a Property Reference" do
-          expect(described_class.filter_by_propcode(case_log_2.propcode).count).to eq(1)
-          expect(described_class.filter_by_propcode(case_log_2.propcode).first.id).to eq case_log_2.id
+          result = described_class.filter_by_propcode(case_log_to_search.propcode)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
       end
 
       describe "#filter_by_postcode" do
         it "allows searching by a Property Postcode" do
-          expect(described_class.filter_by_postcode(case_log_2.postcode_full).count).to eq(1)
-          expect(described_class.filter_by_postcode(case_log_2.postcode_full).first.id).to eq case_log_2.id
+          result = described_class.filter_by_postcode(case_log_to_search.postcode_full)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
       end
 
       describe "#search_by" do
         it "allows searching using ID" do
-          expect(described_class.search_by(case_log_1.id.to_s).count).to eq(1)
-          expect(described_class.search_by(case_log_1.id.to_s).first.id).to eq case_log_1.id
+          result = described_class.search_by(case_log_to_search.id.to_s)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
 
         it "allows searching using tenancy code" do
-          expect(described_class.search_by(case_log_2.tenancy_code).count).to eq(1)
-          expect(described_class.search_by(case_log_2.tenancy_code).first.id).to eq case_log_2.id
+          result = described_class.search_by(case_log_to_search.tenancy_code)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
 
         it "allows searching by a Property Reference" do
-          expect(described_class.search_by(case_log_2.propcode).count).to eq(1)
-          expect(described_class.search_by(case_log_2.propcode).first.id).to eq case_log_2.id
+          result = described_class.search_by(case_log_to_search.propcode)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
 
         it "allows searching by a Property Postcode" do
-          expect(described_class.search_by(case_log_1.postcode_full).count).to eq(2)
-          expect(described_class.search_by(case_log_1.postcode_full).first.id).to eq case_log_1.id
-          expect(described_class.search_by(case_log_1.postcode_full).last.id).to eq case_log_3.id
+          result = described_class.search_by(case_log_to_search.postcode_full)
+          expect(result.count).to eq(1)
+          expect(result.first.id).to eq case_log_to_search.id
         end
 
         context "when postcode has spaces and lower case letters" do
-          let(:matching_postcode_lower_case_with_spaces) { case_log_2.postcode_full.downcase.chars.insert(3, " ").join }
+          let(:matching_postcode_lower_case_with_spaces) { case_log_to_search.postcode_full.downcase.chars.insert(3, " ").join }
 
           it "allows searching by a Property Postcode" do
-            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).count).to eq(1)
-            expect(described_class.search_by(matching_postcode_lower_case_with_spaces).first.id).to eq case_log_2.id
+            result = described_class.search_by(matching_postcode_lower_case_with_spaces)
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
           end
         end
       end
