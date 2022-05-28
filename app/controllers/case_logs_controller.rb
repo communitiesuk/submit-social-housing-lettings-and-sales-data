@@ -12,11 +12,9 @@ class CaseLogsController < ApplicationController
     set_session_filters
 
     all_logs = current_user.case_logs
-
     unpaginated_filtered_logs = filtered_case_logs(filtered_collection(all_logs, search_term))
 
     @pagy, @case_logs = pagy(unpaginated_filtered_logs)
-
     @searched = search_term.presence
     @total_count = all_logs.size
 
