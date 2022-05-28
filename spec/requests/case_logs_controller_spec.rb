@@ -761,20 +761,13 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       context "when both filter and search applied" do
+        let(:postcode) { "XX1 1TG" }
         let!(:case_log) do
-          FactoryBot.create(
-            :case_log,
-            :completed,
-            postcode_full: "XX1 1TG",
-            owning_organisation: organisation,
-          )
+          FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation)
         end
 
         before do
-          FactoryBot.create(:case_log,
-                            :in_progress,
-                            postcode_full: case_log.postcode_full,
-                            owning_organisation: organisation)
+          FactoryBot.create(:case_log, :in_progress, postcode_full: postcode, owning_organisation: organisation)
         end
 
         it "dowloads logs matching both csv and filter logs" do
