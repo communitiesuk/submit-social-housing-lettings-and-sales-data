@@ -35,9 +35,6 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
-  resources :users do
-  end
-
   get "/users/:id/deactivate", to: "users#deactivate"
   get "/users/:id/reactivate", to: "users#reactivate"
 
