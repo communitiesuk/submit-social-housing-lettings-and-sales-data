@@ -416,33 +416,33 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "shows case logs matching the id" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
           it "shows case logs matching the tenant code" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
           it "shows case logs matching the property reference" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
           it "shows case logs matching the property postcode" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
@@ -451,10 +451,10 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "displays all matching logs" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
-              expect(page).to have_content(log_to_search.id)
-              expect(page).to have_content(matching_postcode_log.id)
+              expect(page).to have_link(log_to_search.id.to_s)
+              expect(page).to have_link(matching_postcode_log.id.to_s)
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
             end
           end
@@ -479,9 +479,9 @@ RSpec.describe OrganisationsController, type: :request do
             it "doesn't display any logs" do
               get "/organisations/#{organisation.id}/logs?search=foobar", headers:, params: {}
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
-              expect(page).not_to have_content(log_to_search.id)
+              expect(page).not_to have_link(log_to_search.id.to_s)
             end
           end
 
@@ -489,9 +489,9 @@ RSpec.describe OrganisationsController, type: :request do
             it "doesn't display any logs" do
               get "/organisations/#{organisation.id}/logs?search=", headers:, params: {}
               logs.each do |log|
-                expect(page).not_to have_content(log.id)
+                expect(page).not_to have_link(log.id.to_s)
               end
-              expect(page).not_to have_content(log_to_search.id)
+              expect(page).not_to have_link(log_to_search.id.to_s)
             end
           end
 
