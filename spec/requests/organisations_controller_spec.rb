@@ -405,9 +405,9 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when using a search query" do
-          let!(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
-          let!(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
-          let!(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
+          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
 
           it "has search results in the title" do
@@ -461,16 +461,18 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when there are more than 1 page of search results" do
-            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: "XX1 1YY") }
+            let(:postcode) { "XX11YY" }
+            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+            let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
               get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
-              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_content("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
               get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
-              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_content("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
