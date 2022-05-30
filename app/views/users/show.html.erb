@@ -5,17 +5,17 @@
     <h1 class="govuk-heading-l">
       <%= content_for(:title) %>
     </h1>
-    <% if current_user.can_toggle_active?(@user) %>
-      <% if @user.active? %>
-        <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
-      <% else %>
-      <p>
-        <span class="app-!-colour-muted govuk-!-margin-right-2">
-          This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %>
-        </span>
-      </p>
+    <p>
+      <% if current_user.can_toggle_active?(@user) %>
+        <% if @user.active? %>
+          <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
+        <% else %>
+          <span class="app-!-colour-muted govuk-!-margin-right-2">
+            This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %>
+          </span>
+        <% end %>
       <% end %>
-    <% end %>
+    </p>
 
     <h2 class="govuk-heading-m">
       Personal details
