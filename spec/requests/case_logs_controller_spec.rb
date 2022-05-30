@@ -333,7 +333,7 @@ RSpec.describe CaseLogsController, type: :request do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id.to_s)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
@@ -347,7 +347,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows case logs matching the property reference" do
             get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id.to_s)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
             end
@@ -367,7 +367,7 @@ RSpec.describe CaseLogsController, type: :request do
             it "displays all matching logs" do
               get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
-              expect(page).to have_content(matching_postcode_log.id)
+              expect(page).to have_link(matching_postcode_log.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
               end
