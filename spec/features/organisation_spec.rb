@@ -192,7 +192,7 @@ RSpec.describe "User Features" do
               expect(page).to have_css('[aria-current="page"]', text: "Users")
               expect(page).to have_current_path("/organisations/#{org_id}/users")
               expect(page).to have_link("Logs")
-              expect(page).to have_link("About your organisation")
+              expect(page).to have_link("About this organisation")
             end
           end
         end
