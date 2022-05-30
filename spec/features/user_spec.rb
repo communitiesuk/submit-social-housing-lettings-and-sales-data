@@ -172,6 +172,22 @@ RSpec.describe "User Features" do
     end
   end
 
+  context "when the user is trying to log in with deactivated user" do
+    before do
+      user.update!(active: false)
+    end
+
+    it "shows a gov uk error summary and no flash message" do
+      visit("/logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: "pAssword1")
+      click_button("Sign in")
+      expect(page).to have_selector("#error-summary-title")
+      expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
+      expect(page).to have_title("Error")
+    end
+  end
+
   context "when signed in as a data provider" do
     context "when viewing your account" do
       before do

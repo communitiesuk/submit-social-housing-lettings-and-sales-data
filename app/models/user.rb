@@ -142,4 +142,8 @@ class User < ApplicationRecord
   def can_toggle_active?(user)
     self != user && (support? || data_coordinator?)
   end
+
+  def valid_for_authentication?
+    super && active?
+  end
 end
