@@ -9,7 +9,11 @@
       <% if @user.active? %>
         <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
       <% else %>
-        <span class="app-!-colour-muted govuk-!-margin-right-2">This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %></span>
+      <p>
+        <span class="app-!-colour-muted govuk-!-margin-right-2">
+          This user has been deactivated. <%= govuk_link_to "Reactivate user", "/users/#{@user.id}/reactivate" %>
+        </span>
+      </p>
       <% end %>
     <% end %>
 

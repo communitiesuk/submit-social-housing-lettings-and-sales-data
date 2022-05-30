@@ -376,6 +376,62 @@ RSpec.describe "User Features" do
                )).to be_a(User)
       end
     end
+
+    context "when deactivating a user" do
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", organisation: user.organisation) }
+
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        visit("/users/#{other_user.id}")
+        click_link("Deactivate user")
+      end
+
+      it "allows to cancel user deactivation" do
+        click_link("No - I’ve changed my mind")
+        expect(page).to have_current_path("/users/#{other_user.id}")
+        expect(page).to have_no_content("This user has been deactivated.")
+        expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
+      end
+
+      it "allows to deactivate the user" do
+        click_button("I’m sure - deactivate this user")
+        expect(page).to have_current_path("/users/#{other_user.id}")
+        expect(page).to have_content("This user has been deactivated.")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      end
+    end
+
+    context "when reactivating a user" do
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", active: false, organisation: user.organisation) }
+
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: "pAssword1")
+        click_button("Sign in")
+        visit("/users/#{other_user.id}")
+        click_link("Reactivate user")
+      end
+
+      it "allows to cancel user reactivation" do
+        click_link("No - I’ve changed my mind")
+        expect(page).to have_current_path("/users/#{other_user.id}")
+        expect(page).to have_content("This user has been deactivated.")
+        expect(page).to have_no_css(".govuk-notification-banner.govuk-notification-banner--success")
+      end
+
+      it "allows to reactivate the user" do
+        click_button("I’m sure - reactivate this user")
+        expect(page).to have_current_path("/users/#{other_user.id}")
+        expect(page).to have_no_content("This user has been deactivated.")
+        expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+      end
+    end
   end
 
   context "when the user is a customer support person" do
