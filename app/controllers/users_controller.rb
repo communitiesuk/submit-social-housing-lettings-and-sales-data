@@ -30,6 +30,10 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def edit
+    redirect_to user_path(@user) unless @user.active?
+  end
+
   def update
     if @user.update(user_params)
       if @user == current_user

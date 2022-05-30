@@ -1258,6 +1258,19 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[is_key_contact]")
           end
         end
+
+        context "when trying to edit deactivated user" do
+          before do
+            other_user.update!(active: false)
+            get "/users/#{other_user.id}/edit", headers:, params: {}
+          end
+
+          it "redirects to user details page" do
+            expect(response).to redirect_to("/users/#{other_user.id}")
+            follow_redirect!
+            expect(page).not_to have_link("Change")
+          end
+        end
       end
     end
 
