@@ -109,11 +109,13 @@ RSpec.describe Imports::CaseLogsFieldImportService do
       end
 
       it "updates the case_log major repairs date" do
+        expect(logger).to receive(:info).with(/Case Log \d+'s major repair value has been updated/)
         expect { import_service.send(:update_field, field, remote_folder) }
           .to(change { case_log.reload.mrcdate })
       end
 
       it "updates the case_log major repairs" do
+        expect(logger).to receive(:info).with(/Case Log \d+'s major repair value has been updated/)
         expect { import_service.send(:update_field, field, remote_folder) }
           .to(change { case_log.reload.majorrepairs })
       end
