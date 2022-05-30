@@ -177,8 +177,8 @@
     <Q23>1 Flat / maisonette</Q23>
     <Q24>1 Purpose built</Q24>
     <Q25>2 No</Q25>
-    <Q26/>
-    <Q27>15 First let of newbuild property</Q27>
+    <Q26>4 An Intermediate Rent basis</Q26>
+    <Q27>10 Relet - tenant evicted due to arrears</Q27>
   </Group>
   <Group>
     <Q28Auth>Leeds</Q28Auth>
@@ -516,14 +516,14 @@
     <P7NnDepDedct>0</P7NnDepDedct>
     <P8NnDepDedct>0</P8NnDepDedct>
     <DAY>30</DAY>
-    <MONTH>9</MONTH>
+    <MONTH>11</MONTH>
     <YEAR>2021</YEAR>
     <VDAY>30</VDAY>
     <VMONTH>9</VMONTH>
     <VYEAR>2021</VYEAR>
-    <MRCDAY/>
-    <MRCMONTH/>
-    <MRCYEAR/>
+    <MRCDAY>16</MRCDAY>
+    <MRCMONTH>10</MRCMONTH>
+    <MRCYEAR>2021</MRCYEAR>
     <PPOSTC1>SR7</PPOSTC1>
     <PPOSTC2>0A5</PPOSTC2>
     <POSTCODE>TS27</POSTCODE>
