@@ -191,7 +191,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "page has correct title" do
             get "/logs", headers: headers, params: {}
-            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (Logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
 
