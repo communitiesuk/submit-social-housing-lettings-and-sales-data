@@ -153,5 +153,20 @@ RSpec.describe "User Features" do
         expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
       end
     end
+    context "when I search for users belonging to a specific organisation" do
+      context "when I am signed in and there are users in the database" do
+        let(:user) { FactoryBot.create(:user, :support) }
+        let(:otp) { "999111" }
+        before do
+          allow(SecureRandom).to receive(:random_number).and_return(otp)
+          visit("/organisations")
+          fill_in("user[email]", with: user.email)
+          fill_in("user[password]", with: user.password)
+          click_button("Sign in")
+          fill_in("code", with: otp)
+          click_button("Submit")
+        end
+      end
+    end
   end
 end
