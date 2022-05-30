@@ -1,5 +1,11 @@
 module Imports
   class CaseLogsImportService < ImportService
+    def initialize(storage_service, logger = Rails.logger)
+      @logs_with_discrepancies = Set.new
+      @logs_overridden = Set.new
+      super
+    end
+
     def create_logs(folder)
       import_from(folder, :create_log)
       if @logs_with_discrepancies.count.positive?
@@ -193,19 +199,35 @@ module Imports
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
 
-      case_log = CaseLog.new(attributes)
-      save_case_log(case_log, attributes)
+      case_log = save_case_log(attributes)
       compute_differences(case_log, attributes)
-      check_status_completed(case_log, previous_status)
+      check_status_completed(case_log, previous_status) unless @logs_overridden.include?(case_log.old_id)
     end
 
-    def save_case_log(case_log, attributes)
-      case_log.save!
-    rescue ActiveRecord::RecordNotUnique
-      unless attributes["old_id"].nil?
-        record = CaseLog.find_by(old_id: attributes["old_id"])
-        @logger.info "Updating case log #{case_log.id} with legacy ID #{attributes['old_id']}"
+    def save_case_log(attributes)
+      case_log = CaseLog.new(attributes)
+      begin
+        case_log.save!
+        case_log
+      rescue ActiveRecord::RecordNotUnique
+        legacy_id = attributes["old_id"]
+        record = CaseLog.find_by(old_id: legacy_id)
+        @logger.info "Updating case log #{record.id} with legacy ID #{legacy_id}"
         record.update!(attributes)
+        record
+      rescue ActiveRecord::RecordInvalid => e
+        rescue_validation_or_raise(case_log, attributes, e)
+      end
+    end
+
+    def rescue_validation_or_raise(case_log, attributes, exception)
+      if case_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
+        @logger.warn("Log #{case_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
+        @logs_overridden << case_log.old_id
+        attributes.delete("referral")
+        save_case_log(attributes)
+      else
+        raise exception
       end
     end
 
