@@ -20,6 +20,7 @@ module NavigationItemsHelper
   def secondary_items(path, current_organisation_id)
     [
       NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", organisation_logs_current?(path, current_organisation_id)),
+      NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", organisation_logs_current?(path, current_organisation_id)),
       NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", about_organisation_current?(path, current_organisation_id)),
     ]
   end
