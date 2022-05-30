@@ -166,6 +166,17 @@ RSpec.describe "User Features" do
 
     context "when I search for users belonging to a specific organisation" do
       context "when I am signed in and there are users in the database" do
+        let!(:user_list) { FactoryBot.create_list(:user, 4, organisation: organisation) }
+
+        context "when I visit the organisation page" do
+          before do
+            visit("/organisations/#{org_id}")
+          end
+
+          it "has link to the organisations users tab" do
+            expect(page).to have_link("Users", href: "/organisations/#{org_id}/users")
+          end
+        end
       end
     end
   end
