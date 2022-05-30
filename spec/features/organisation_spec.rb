@@ -166,7 +166,7 @@ RSpec.describe "User Features" do
 
     context "when I search for users belonging to a specific organisation" do
       context "when I am signed in and there are users in the database" do
-        let!(:user_list) { FactoryBot.create_list(:user, 4, organisation: organisation) }
+        let!(:user_list) { FactoryBot.create_list(:user, 4, organisation: user.organisation) }
 
         context "when I visit the organisation page" do
           before do
@@ -175,6 +175,25 @@ RSpec.describe "User Features" do
 
           it "has link to the organisations users tab" do
             expect(page).to have_link("Users", href: "/organisations/#{org_id}/users")
+          end
+
+          context "I click users link in submenu" do
+            before do
+              click_link("Users", href: "/organisations/#{org_id}/users")
+            end
+
+            it "shows list of users belonging to the same organisation" do
+              user_list.each do |user|
+                expect(page).to have_content(user.email)
+              end
+            end
+
+            it "shows submenu for selected orgnisation" do
+              expect(page).to have_css('[aria-current="page"]', text: "Users")
+              expect(page).to have_current_path("/organisations/#{org_id}/users")
+              expect(page).to have_link("Logs")
+              expect(page).to have_link("About your organisation")
+            end
           end
         end
       end
