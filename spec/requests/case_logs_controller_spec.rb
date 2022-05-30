@@ -463,7 +463,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (Logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows the download csv link" do
