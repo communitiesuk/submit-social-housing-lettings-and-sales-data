@@ -24,8 +24,9 @@ module Imports
                         elsif previous_status.include?("submitted")
                           0
                         end
-        if major_repairs.present? && record.majorrepairs.blank? && record.status != "completed"
+        if major_repairs.present? && record.majorrepairs.nil? && record.status != "completed"
           record.update!(mrcdate: major_repairs_date, majorrepairs: major_repairs)
+          @logger.info("Case Log #{record.id}'s major repair value has been updated'")
         elsif record.majorrepairs.present?
           @logger.info("Case Log #{record.id} has a value for major repairs, skipping update")
         end
