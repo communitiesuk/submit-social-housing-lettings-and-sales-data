@@ -80,6 +80,12 @@ class UsersController < ApplicationController
     render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }
   end
 
+  def deactivate
+    unless current_user != @user && (current_user.support? || current_user.data_coordinator?)
+      redirect_to user_path(@user)
+    end
+  end
+
 private
 
   def format_error_messages

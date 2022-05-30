@@ -1,0 +1,20 @@
+<% content_for :title, current_user == @user ? "Your account" : "#{@user.name.presence || @user.email}’s account" %>
+
+<div class="govuk-grid-row">
+    <%= form_with model: @user, url: user_path(@user), method: "post", local: true do |f| %>
+        <div class="govuk-grid-column-two-thirds-from-desktop"> 
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-l"><%= @user.name %></span>
+                Are you sure you want to deactivate this user?
+            </h1>
+            <p>Deactivating this user will mean they can no longer access this service to submit CORE data.</p>
+            <p>Any logs this user has already submitted will not be affected.</p>
+            <input type="hidden" id="<%= @user.id %>" name="active" value=false>
+            <%= f.govuk_submit "I’m sure - deactivate this user" %>
+            <p class="govuk-body">
+                <%= govuk_link_to("No - I’ve changed my mind", user_path(@user)) %>
+            </p>
+        </div>
+    </div>
+    <% end %>
+</div>

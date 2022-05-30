@@ -111,6 +111,13 @@ RSpec.describe UsersController, type: :request do
         expect(CGI.unescape_html(response.body)).to include(expected_link)
       end
     end
+
+    describe "#deactivate" do
+      it "does not let you see deactivate page" do
+        get "/users/#{user.id}/deactivate", headers: headers, params: {}
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -830,6 +837,36 @@ RSpec.describe UsersController, type: :request do
       it "cannot assign support role to the new user" do
         get "/users/new"
         expect(page).not_to have_field("user-role-support-field")
+      end
+    end
+
+    describe "#deactivate" do
+      before do
+        sign_in user
+      end
+
+      context "when the current user matches the user ID" do
+        before do
+          get "/users/#{user.id}/deactivate", headers: headers, params: {}
+        end
+
+        it "redirects user to user page" do
+          expect(response).to redirect_to("/users/#{user.id}")
+        end
+      end
+
+      context "when the current user does not match the user ID" do
+        before do
+          get "/users/#{other_user.id}/deactivate", headers: headers, params: {}
+        end
+
+        it "shows deactivation page with deactivate and cancel buttons for the user" do
+          expect(path).to include("/users/#{other_user.id}")
+          expect(page).to have_content(other_user.name)
+          expect(page).to have_content("Are you sure you want to deactivate this user?")
+          expect(page).to have_button("I’m sure - deactivate this user")
+          expect(page).to have_link("No - I’ve changed my mind", href: "/users/#{other_user.id}")
+        end
       end
     end
   end
