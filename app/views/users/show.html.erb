@@ -6,7 +6,11 @@
       <%= content_for(:title) %>
     </h1>
     <% if can_toggle_active?(@user, current_user) %>
-      <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
+      <% if @user.active? %>
+        <%= govuk_link_to "Deactivate user", "/users/#{@user.id}/deactivate" %>
+      <% else %>
+        <span class="app-!-colour-muted govuk-!-margin-right-2">This user has been deactivated.</span>
+      <% end %>
     <% end %>
 
     <h2 class="govuk-heading-m">

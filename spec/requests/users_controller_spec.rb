@@ -505,6 +505,17 @@ RSpec.describe UsersController, type: :request do
           it "allows deactivating the user" do
             expect(page).to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
           end
+
+          context "when user is deactivated" do
+            before do
+              other_user.update!(active: false)
+              get "/users/#{other_user.id}", headers:, params: {}
+            end
+
+            it "shows if user is not active" do
+              expect(page).to have_content("This user has been deactivated.")
+            end
+          end
         end
 
         context "when the user is not part of the same organisation as the current user" do
