@@ -81,13 +81,17 @@ class UsersController < ApplicationController
   end
 
   def deactivate
-    unless current_user != @user && (current_user.support? || current_user.data_coordinator?)
+    if current_user.can_toggle_active?(@user)
+      render "toggle-active", locals: { action: "deactivate" }
+    else
       redirect_to user_path(@user)
     end
   end
 
   def reactivate
-    unless current_user != @user && (current_user.support? || current_user.data_coordinator?)
+    if current_user.can_toggle_active?(@user)
+      render "toggle-active", locals: { action: "reactivate" }
+    else
       redirect_to user_path(@user)
     end
   end

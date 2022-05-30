@@ -1,0 +1,26 @@
+<% content_for :title, "#{action.capitalize} #{@user.name.presence || @user.email}’s account" %>
+
+<div class="govuk-grid-row">
+    <%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
+        <div class="govuk-grid-column-two-thirds-from-desktop"> 
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-l"><%= @user.name %></span>
+                Are you sure you want to <%= action %> this user?
+            </h1>
+            <% if action == "deactivate" %>
+                <p>Deactivating this user will mean they can no longer access this service to submit CORE data.</p>
+                <p>Any logs this user has already submitted will not be affected.</p>
+            <% end %>
+            <% active_value = action == "deactivate" ? false : true %>
+            <div hidden> 
+                <%= f.govuk_text_field :active,
+                value: active_value %>
+            </div>
+            <%= f.govuk_submit "I’m sure - #{action} this user" %>
+            <p class="govuk-body">
+                <%= govuk_link_to("No - I’ve changed my mind", user_path(@user)) %>
+            </p>
+        </div>
+    </div>
+    <% end %>
+</div>
