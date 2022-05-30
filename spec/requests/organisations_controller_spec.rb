@@ -405,12 +405,14 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when using a search query" do
-          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
-          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let!(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
+          let!(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let!(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+
 
           it "has search results in the title" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content("Logs (search results for ‘#{log_to_search.id}’) - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows case logs matching the id" do
