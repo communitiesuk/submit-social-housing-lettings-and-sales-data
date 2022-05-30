@@ -88,7 +88,7 @@ class UsersController < ApplicationController
 
   def deactivate
     if current_user.can_toggle_active?(@user)
-      render "toggle-active", locals: { action: "deactivate" }
+      render "toggle_active", locals: { action: "deactivate" }
     else
       redirect_to user_path(@user)
     end
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
 
   def reactivate
     if current_user.can_toggle_active?(@user)
-      render "toggle-active", locals: { action: "reactivate" }
+      render "toggle_active", locals: { action: "reactivate" }
     else
       redirect_to user_path(@user)
     end
