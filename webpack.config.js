@@ -13,10 +13,6 @@ module.exports = {
   entry: {
     application: [
       "./app/frontend/application.js",
-    ],
-    active_admin: [
-      './app/frontend/active_admin.js',
-      './app/frontend/styles/active_admin.scss'
     ]
   },
   module: {
@@ -68,12 +64,6 @@ module.exports = {
         { from: "app/frontend/vendor/outerHTML.js", to: "vendor" },
         { from: "app/frontend/vendor/polyfill-output-value.js", to: "vendor" }
       ],
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      jquery: 'jquery',
-      'window.jQuery': 'jquery'
     })
   ]
 }

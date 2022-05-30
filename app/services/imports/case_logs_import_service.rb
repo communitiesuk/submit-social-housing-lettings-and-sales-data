@@ -2,6 +2,9 @@ module Imports
   class CaseLogsImportService < ImportService
     def create_logs(folder)
       import_from(folder, :create_log)
+      if @logs_with_discrepancies.count.positive?
+        @logger.warn("The following case logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
+      end
     end
 
   private
@@ -52,6 +55,7 @@ module Imports
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
+      attributes["tenant_code"] = string_or_nil(xml_doc, "_2bTenCode")
       attributes["tenancyother"] = string_or_nil(xml_doc, "Q2ba")
       attributes["tenancylength"] = safe_string_as_integer(xml_doc, "_2cYears")
       attributes["needstype"] = needs_type(xml_doc)
@@ -225,6 +229,8 @@ module Imports
     def check_status_completed(case_log, previous_status)
       if previous_status.include?("submitted") && case_log.status != "completed"
         @logger.warn "Case log #{case_log.id} is not completed"
+        @logger.warn "Case log with old id:#{case_log.old_id} is incomplete but status should be complete"
+        @logs_with_discrepancies << case_log.old_id
       end
     end
 

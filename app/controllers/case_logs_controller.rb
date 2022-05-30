@@ -1,6 +1,7 @@
 class CaseLogsController < ApplicationController
   include Pagy::Backend
   include Modules::CaseLogsFilter
+  include Modules::SearchFilter
 
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
@@ -10,12 +11,17 @@ class CaseLogsController < ApplicationController
   def index
     set_session_filters
 
-    @pagy, @case_logs = pagy(filtered_case_logs(current_user.case_logs))
+    all_logs = current_user.case_logs
+    unpaginated_filtered_logs = filtered_case_logs(filtered_collection(all_logs, search_term))
+
+    @pagy, @case_logs = pagy(unpaginated_filtered_logs)
+    @searched = search_term.presence
+    @total_count = all_logs.size
 
     respond_to do |format|
       format.html
       format.csv do
-        send_data filtered_case_logs(current_user.case_logs).to_csv, filename: "logs-#{Time.zone.now}.csv"
+        send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
       end
     end
   end
@@ -84,6 +90,10 @@ class CaseLogsController < ApplicationController
 private
 
   API_ACTIONS = %w[create show update destroy].freeze
+
+  def search_term
+    params["search"]
+  end
 
   def json_api_request?
     API_ACTIONS.include?(request["action"]) && request.format.json?

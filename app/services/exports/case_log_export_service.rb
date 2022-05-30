@@ -179,7 +179,7 @@ module Exports
       # Mapping which would require a change in our data model
       attribute_hash["createddate"] = attribute_hash["created_at"]
       attribute_hash["uploaddate"] = attribute_hash["updated_at"]
-      attribute_hash["tenancycode"] = attribute_hash["tenancy_code"]
+      attribute_hash["tenancycode"] = attribute_hash["tenant_code"]
       attribute_hash["ppcodenk"] = attribute_hash["previous_postcode_known"]
 
       # Age refused

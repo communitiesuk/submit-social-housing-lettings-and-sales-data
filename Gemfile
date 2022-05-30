@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.1"
+ruby "3.1.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 7.0.2"
@@ -27,8 +27,6 @@ gem "govuk_markdown"
 gem "notifications-ruby-client"
 # A modest javascript framework for the html you already have
 gem "stimulus-rails"
-# Administration framework
-gem "activeadmin"
 # Admin charts
 gem "chartkick"
 # Spreadsheet parsing
@@ -89,6 +87,7 @@ group :test do
   gem "capybara", require: false
   gem "capybara-lockstep"
   gem "factory_bot_rails"
+  gem "faker"
   gem "rspec-rails", require: false
   gem "selenium-webdriver", require: false
   gem "simplecov", require: false

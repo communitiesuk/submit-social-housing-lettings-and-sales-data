@@ -62,12 +62,18 @@ class Organisation < ApplicationRecord
     data_protection_confirmed? ? "Accepted" : "Not accepted"
   end
 
+  DISPLAY_PROVIDER_TYPE = { "LA": "Local authority", "PRP": "Private registered provider" }.freeze
+
+  def display_provider_type
+    DISPLAY_PROVIDER_TYPE[provider_type.to_sym]
+  end
+
   def display_attributes
     [
       { name: "name", value: name, editable: true },
       { name: "address", value: address_string, editable: true },
       { name: "telephone_number", value: phone, editable: true },
-      { name: "type", value: "Org type", editable: false },
+      { name: "type", value: display_provider_type, editable: false },
       { name: "local_authorities_operated_in", value: local_authority_names, editable: false, format: :bullet },
       { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },

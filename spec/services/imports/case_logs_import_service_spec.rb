@@ -30,7 +30,7 @@ RSpec.describe Imports::CaseLogsImportService do
            .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
   end
 
-  context "when importing users" do
+  context "when importing case logs" do
     let(:remote_folder) { "case_logs" }
     let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:case_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
@@ -66,6 +66,39 @@ RSpec.describe Imports::CaseLogsImportService do
       expect { 2.times { case_log_service.create_logs(remote_folder) } }
         .to change(CaseLog, :count).by(3)
     end
+
+    context "when there are status discrepancies" do
+      let(:case_log_id4) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
+      let(:case_log_id5) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
+      let(:case_log_file) { open_file(fixture_directory, case_log_id4) }
+      let(:case_log_xml) { Nokogiri::XML(case_log_file) }
+
+      before do
+        allow(storage_service).to receive(:get_file_io)
+          .with("#{remote_folder}/#{case_log_id4}.xml")
+          .and_return(open_file(fixture_directory, case_log_id4), open_file(fixture_directory, case_log_id4))
+        allow(storage_service).to receive(:get_file_io)
+          .with("#{remote_folder}/#{case_log_id5}.xml")
+          .and_return(open_file(fixture_directory, case_log_id5), open_file(fixture_directory, case_log_id5))
+      end
+
+      it "the logger logs a warning with the case log's old id/filename" do
+        expect(logger).to receive(:warn).with(/is not completed/).once
+        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id4} is incomplete but status should be complete/).once
+
+        case_log_service.send(:create_log, case_log_xml)
+      end
+
+      it "on completion the ids of all logs with status discrepancies are logged in a warning" do
+        allow(storage_service).to receive(:list_files)
+                                  .and_return(%W[#{remote_folder}/#{case_log_id4}.xml #{remote_folder}/#{case_log_id5}.xml])
+        allow(logger).to receive(:warn).with(/is not completed/)
+        allow(logger).to receive(:warn).with(/is incomplete but status should be complete/)
+        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/).once
+
+        case_log_service.create_logs(remote_folder)
+      end
+    end
   end
 
   context "when importing a specific log" do
@@ -78,6 +111,8 @@ RSpec.describe Imports::CaseLogsImportService do
 
       it "does not import the voiddate" do
         allow(logger).to receive(:warn).with(/is not completed/)
+        allow(logger).to receive(:warn).with(/Case log with old id:#{case_log_id} is incomplete but status should be complete/)
+
         case_log_service.send(:create_log, case_log_xml)
 
         case_log = CaseLog.where(old_id: case_log_id).first

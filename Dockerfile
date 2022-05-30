@@ -1,5 +1,5 @@
 # Build compilation image
-FROM ruby:3.1.1-alpine as builder
+FROM ruby:3.1.2-alpine as builder
 
 # The application runs from /app
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN apk add --no-cache build-base yarn postgresql-dev git
 
 # Install bundler to run bundle exec
 # This should be the same version as the Gemfile.lock
-RUN gem install bundler:2.3.7 --no-document
+RUN gem install bundler:2.3.14 --no-document
 
 # Install gems defined in Gemfile
 COPY .ruby-version Gemfile Gemfile.lock /app/
@@ -45,7 +45,7 @@ RUN rm -rf node_modules log tmp && \
       find /usr/local/bundle/gems -name "*.html" -delete
 
 # Build runtime image
-FROM ruby:3.1.1-alpine as production
+FROM ruby:3.1.2-alpine as production
 
 # The application runs from /app
 WORKDIR /app

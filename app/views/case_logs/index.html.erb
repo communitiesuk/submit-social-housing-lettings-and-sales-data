@@ -1,8 +1,17 @@
-<% content_for :title, "Logs" %>
+<% item_label = @pagy.count > 1 ? "logs" : "log" %>
 
-<h1 class="govuk-heading-l">
-  <%= content_for(:title) %>
-</h1>
+<% if @searched.present? %>
+  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total logs)" %>
+<% else %>
+  <% title = "Your organisation (Logs)" %>
+<% end %>
+
+<% content_for :title, title %>
+
+<% content_for :tab_title do %>
+  <%= "Logs" %>
+<% end %>
+
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
     <%= govuk_button_to "Create a new lettings log", case_logs_path %>
@@ -10,10 +19,10 @@
   </div>
 
   <%= render partial: "log_filters" %>
-  <% if @case_logs.present? %>
-    <div class="app-filter-layout__content">
-      <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy } %>
-      <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
-    </div>
-  <% end %>
+  <div class="app-filter-layout__content">
+    <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
+  </div>
 </div>

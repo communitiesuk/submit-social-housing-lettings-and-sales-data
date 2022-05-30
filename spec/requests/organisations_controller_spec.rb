@@ -379,10 +379,6 @@ RSpec.describe OrganisationsController, type: :request do
           get "/organisations/#{organisation.id}/logs", headers:, params: {}
         end
 
-        it "displays the name of the organisation in the header" do
-          expect(CGI.unescape_html(response.body)).to match("<span class=\"govuk-caption-l\">#{organisation.name}</span>")
-        end
-
         it "only shows logs for that organisation" do
           expect(page).to have_content("#{number_of_org1_case_logs} total logs")
           organisation.case_logs.map(&:id).each do |case_log_id|
@@ -406,6 +402,113 @@ RSpec.describe OrganisationsController, type: :request do
         it "has a sub-navigation with correct tabs" do
           expect(page).to have_css(".app-sub-navigation")
           expect(page).to have_content("About this organisation")
+        end
+
+        context "when using a search query" do
+          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
+          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+
+          it "has search results in the title" do
+            get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "shows case logs matching the id" do
+            get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            expect(page).to have_link(log_to_search.id.to_s)
+            logs.each do |log|
+              expect(page).not_to have_link(log.id.to_s)
+            end
+          end
+
+          it "shows case logs matching the tenant code" do
+            get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
+            expect(page).to have_link(log_to_search.id.to_s)
+            logs.each do |log|
+              expect(page).not_to have_link(log.id.to_s)
+            end
+          end
+
+          it "shows case logs matching the property reference" do
+            get "/organisations/#{organisation.id}/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
+            expect(page).to have_link(log_to_search.id.to_s)
+            logs.each do |log|
+              expect(page).not_to have_link(log.id.to_s)
+            end
+          end
+
+          it "shows case logs matching the property postcode" do
+            get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+            expect(page).to have_link(log_to_search.id.to_s)
+            logs.each do |log|
+              expect(page).not_to have_link(log.id.to_s)
+            end
+          end
+
+          context "when more than one results with matching postcode" do
+            let!(:matching_postcode_log) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
+
+            it "displays all matching logs" do
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+              expect(page).to have_link(log_to_search.id.to_s)
+              expect(page).to have_link(matching_postcode_log.id.to_s)
+              logs.each do |log|
+                expect(page).not_to have_link(log.id.to_s)
+              end
+            end
+          end
+
+          context "when there are more than 1 page of search results" do
+            let(:postcode) { "XX11YY" }
+            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+            let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+
+            it "has title with pagination details for page 1" do
+              get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
+              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            end
+
+            it "has title with pagination details for page 2" do
+              get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
+              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            end
+          end
+
+          context "when search query doesn't match any logs" do
+            it "doesn't display any logs" do
+              get "/organisations/#{organisation.id}/logs?search=foobar", headers:, params: {}
+              logs.each do |log|
+                expect(page).not_to have_link(log.id.to_s)
+              end
+              expect(page).not_to have_link(log_to_search.id.to_s)
+            end
+          end
+
+          context "when search query is empty" do
+            it "doesn't display any logs" do
+              get "/organisations/#{organisation.id}/logs?search=", headers:, params: {}
+              logs.each do |log|
+                expect(page).not_to have_link(log.id.to_s)
+              end
+              expect(page).not_to have_link(log_to_search.id.to_s)
+            end
+          end
+
+          context "when search and filter is present" do
+            let(:matching_postcode) { log_to_search.postcode_full }
+            let(:matching_status) { "in_progress" }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
+
+            it "shows only logs matching both search and filters" do
+              get "/organisations/#{organisation.id}/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
+              expect(page).to have_content(log_matching_filter_and_search.id)
+              expect(page).not_to have_content(log_to_search.id)
+              logs.each do |log|
+                expect(page).not_to have_content(log.id)
+              end
+            end
+          end
         end
       end
 

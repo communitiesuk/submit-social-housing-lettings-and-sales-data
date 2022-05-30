@@ -4,13 +4,9 @@ require "rake"
 describe "rake core:data_import", type: :task do
   subject(:task) { Rake::Task["core:data_import"] }
 
-  let(:fixture_path) { "spec/fixtures/softwire_imports/organisations" }
   let(:instance_name) { "paas_import_instance" }
-  let(:type) { "organisation" }
-
   let(:storage_service) { instance_double(StorageService) }
   let(:paas_config_service) { instance_double(PaasConfigurationService) }
-  let(:import_service) { instance_double(Imports::OrganisationImportService) }
 
   before do
     Rake.application.rake_require("tasks/data_import")
@@ -24,6 +20,10 @@ describe "rake core:data_import", type: :task do
   end
 
   context "when importing organisation data" do
+    let(:type) { "organisation" }
+    let(:import_service) { instance_double(Imports::OrganisationImportService) }
+    let(:fixture_path) { "spec/fixtures/softwire_imports/organisations" }
+
     before do
       allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
     end
@@ -40,6 +40,7 @@ describe "rake core:data_import", type: :task do
   context "when importing user data" do
     let(:type) { "user" }
     let(:import_service) { instance_double(Imports::UserImportService) }
+    let(:fixture_path) { "spec/fixtures/softwire_imports/users" }
 
     before do
       allow(Imports::UserImportService).to receive(:new).and_return(import_service)

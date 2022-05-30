@@ -1,6 +1,9 @@
 <% content_for :content do %>
   <h1 class="govuk-heading-l">
-    <%= organisation_header(request.path, current_user, @organisation) %>
+    <% if current_user.support? && request.path != "/organisations" %>
+      <span class="govuk-caption-l"><%= @organisation.name %></span>
+    <% end %>
+    <%= content_for(:title) %>
   </h1>
 
   <% items = tab_items(current_user) %>
