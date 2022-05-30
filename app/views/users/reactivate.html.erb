@@ -5,15 +5,12 @@
         <div class="govuk-grid-column-two-thirds-from-desktop"> 
             <h1 class="govuk-heading-l">
                 <span class="govuk-caption-l"><%= @user.name %></span>
-                Are you sure you want to deactivate this user?
+                Are you sure you want to reactivate this user?
             </h1>
-            <p>Deactivating this user will mean they can no longer access this service to submit CORE data.</p>
-            <p>Any logs this user has already submitted will not be affected.</p>
             <%= f.govuk_text_field :active,
-                                    value: false,
+                                    value: true,
                                     hidden: true %>
-
-            <%= f.govuk_submit "I’m sure - deactivate this user" %>
+            <%= f.govuk_submit "I’m sure - reactivate this user" %>
             <p class="govuk-body">
                 <%= govuk_link_to("No - I’ve changed my mind", user_path(@user)) %>
             </p>

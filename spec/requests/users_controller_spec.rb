@@ -118,6 +118,13 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    describe "#reactivate" do
+      it "does not let you see reactivate page" do
+        get "/users/#{user.id}/reactivate", headers: headers, params: {}
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
   end
 
   context "when user is signed in as a data provider" do
@@ -143,6 +150,17 @@ RSpec.describe UsersController, type: :request do
 
         it "does not allow deactivating the user" do
           expect(page).not_to have_link("Deactivate user", href: "/users/#{user.id}/deactivate")
+        end
+
+        context "when user is deactivated" do
+          before do
+            user.update!(active: false)
+            get "/users/#{user.id}", headers:, params: {}
+          end
+
+          it "does not allow reactivating the user" do
+            expect(page).not_to have_link("Reactivate user", href: "/users/#{user.id}/reactivate")
+          end
         end
       end
 
@@ -171,6 +189,17 @@ RSpec.describe UsersController, type: :request do
 
           it "does not allow deactivating the user" do
             expect(page).not_to have_link("Deactivate user", href: "/users/#{other_user.id}/deactivate")
+          end
+
+          context "when user is deactivated" do
+            before do
+              other_user.update!(active: false)
+              get "/users/#{other_user.id}", headers:, params: {}
+            end
+
+            it "does not allow reactivating the user" do
+              expect(page).not_to have_link("Reactivate user", href: "/users/#{other_user.id}/reactivate")
+            end
           end
         end
 
@@ -475,6 +504,17 @@ RSpec.describe UsersController, type: :request do
 
         it "does not allow deactivating the user" do
           expect(page).not_to have_link("Deactivate user", href: "/users/#{user.id}/deactivate")
+        end
+
+        context "when user is deactivated" do
+          before do
+            user.update!(active: false)
+            get "/users/#{user.id}", headers:, params: {}
+          end
+
+          it "does not allow reactivating the user" do
+            expect(page).not_to have_link("Reactivate user", href: "/users/#{user.id}/reactivate")
+          end
         end
       end
 
@@ -876,10 +916,31 @@ RSpec.describe UsersController, type: :request do
         end
 
         it "shows deactivation page with deactivate and cancel buttons for the user" do
-          expect(path).to include("/users/#{other_user.id}")
+          expect(path).to include("/users/#{other_user.id}/deactivate")
           expect(page).to have_content(other_user.name)
           expect(page).to have_content("Are you sure you want to deactivate this user?")
           expect(page).to have_button("I’m sure - deactivate this user")
+          expect(page).to have_link("No - I’ve changed my mind", href: "/users/#{other_user.id}")
+        end
+      end
+    end
+
+    describe "#reactivate" do
+      before do
+        sign_in user
+      end
+
+      context "when the current user does not match the user ID" do
+        before do
+          other_user.update!(active: false)
+          get "/users/#{other_user.id}/reactivate", headers: headers, params: {}
+        end
+
+        it "shows reactivation page with reactivate and cancel buttons for the user" do
+          expect(path).to include("/users/#{other_user.id}/reactivate")
+          expect(page).to have_content(other_user.name)
+          expect(page).to have_content("Are you sure you want to reactivate this user?")
+          expect(page).to have_button("I’m sure - reactivate this user")
           expect(page).to have_link("No - I’ve changed my mind", href: "/users/#{other_user.id}")
         end
       end

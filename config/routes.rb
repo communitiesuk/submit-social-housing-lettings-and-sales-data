@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   end
 
   get "/users/:id/deactivate", to: "users#deactivate"
+  get "/users/:id/reactivate", to: "users#reactivate"
 
   resources :organisations do
     member do
