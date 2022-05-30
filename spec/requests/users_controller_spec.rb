@@ -900,15 +900,19 @@ RSpec.describe UsersController, type: :request do
         get "/users", headers:, params: {}
       end
 
-      it "shows all active users" do
+      it "shows all users" do
         expect(page).to have_content(user.name)
         expect(page).to have_content(other_user.name)
-        expect(page).not_to have_content(inactive_user.name)
+        expect(page).to have_content(inactive_user.name)
         expect(page).to have_content(other_org_user.name)
       end
 
+      it "shows last logged in as deactivated for inactive users" do
+        expect(page).to have_content("Deactivated")
+      end
+
       it "shows the pagination count" do
-        expect(page).to have_content("3 total users")
+        expect(page).to have_content("4 total users")
       end
 
       it "shows the download csv link" do

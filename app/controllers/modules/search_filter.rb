@@ -8,6 +8,6 @@ module Modules::SearchFilter
   end
 
   def filtered_users(base_collection, search_term = nil)
-    filtered_collection(base_collection, search_term).filter_by_active.includes(:organisation)
+    filtered_collection(base_collection, search_term).includes(:organisation)
   end
 end
