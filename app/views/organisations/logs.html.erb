@@ -1,5 +1,4 @@
 <% item_label = @pagy.count > 1 ? "logs" : "log" %>
-
 <% if @searched.present? %>
   <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total logs)" %>
 <% else %>
