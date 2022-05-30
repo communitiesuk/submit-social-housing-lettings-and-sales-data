@@ -191,7 +191,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "page has correct title" do
             get "/logs", headers: headers, params: {}
-            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (Logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
 
@@ -322,17 +322,18 @@ RSpec.describe CaseLogsController, type: :request do
         context "when using a search query" do
           let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
           let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
           it "has search results in the title" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content("Logs (search results for ‘#{log_to_search.id}’) - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows case logs matching the id" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id.to_s)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
-              expect(page).not_to have_content(log.id.to_s)
+              expect(page).not_to have_link(log.id.to_s)
             end
           end
 
@@ -346,7 +347,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           it "shows case logs matching the property reference" do
             get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
-            expect(page).to have_content(log_to_search.id.to_s)
+            expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
             end
@@ -366,7 +367,7 @@ RSpec.describe CaseLogsController, type: :request do
             it "displays all matching logs" do
               get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
-              expect(page).to have_content(matching_postcode_log.id)
+              expect(page).to have_link(matching_postcode_log.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
               end
@@ -374,16 +375,18 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           context "when there are more than 1 page of search results" do
-            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: "XX1 1YY") }
+            let(:postcode) { "XX11YY" }
+            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+            let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
               get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
-              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
               get "/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
-              expect(page).to have_content("Logs (search results for ‘#{logs[0].postcode_full}’, page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -463,7 +466,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Logs - Submit social housing and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Your organisation (Logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows the download csv link" do
@@ -539,7 +542,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 1 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Your organisation (Logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -564,7 +567,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination in the title" do
-              expect(page).to have_title("Logs (page 2 of 2) - Submit social housing and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Your organisation (Logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
         end
@@ -752,6 +755,27 @@ RSpec.describe CaseLogsController, type: :request do
         get "/logs?status[]=completed", headers:, params: {}
         csv = CSV.parse(response.body)
         expect(csv.count).to eq(2)
+      end
+
+      it "dowloads searched logs" do
+        get "/logs?search=#{case_log.id}", headers:, params: {}
+        csv = CSV.parse(response.body)
+        expect(csv.count).to eq(2)
+      end
+
+      context "when both filter and search applied" do
+        let(:postcode) { "XX1 1TG" }
+
+        before do
+          FactoryBot.create(:case_log, :in_progress, postcode_full: postcode, owning_organisation: organisation)
+          FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation)
+        end
+
+        it "dowloads logs matching both csv and filter logs" do
+          get "/logs?status[]=completed&search=#{postcode}", headers:, params: {}
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(2)
+        end
       end
     end
 

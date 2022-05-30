@@ -1,9 +1,8 @@
 <% item_label = @pagy.count > 1 ? "logs" : "log" %>
-
 <% if @searched.present? %>
-  <% title = "Logs (search results for ‘#{@searched}’#{@pagy.last > 1 ? ", page #{@pagy.page} of #{@pagy.last}" : ''}) - Submit social housing and sales data (CORE) - GOV.UK" %>
+  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total logs)" %>
 <% else %>
-  <% title = "Logs #{@pagy.last > 1 ? "(page #{@pagy.page} of #{@pagy.last}) " : ''}- Submit social housing and sales data (CORE) - GOV.UK" %>
+  <% title = "Your organisation (Logs)" %>
 <% end %>
 
 <% content_for :title, title %>
