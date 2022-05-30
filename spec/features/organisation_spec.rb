@@ -15,7 +15,10 @@ RSpec.describe "User Features" do
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(Devise).to receive(:friendly_token).and_return(confirmation_token)
     allow(notify_client).to receive(:send_email).and_return(true)
-    sign_in user
+    visit("/organisations")
+    fill_in("user[email]", with: user.email)
+    fill_in("user[password]", with: user.password)
+    click_button("Sign in")
   end
 
   context "when user is a data coordinator" do
@@ -82,21 +85,28 @@ RSpec.describe "User Features" do
   end
 
   context "when user is support user" do
+    let(:otp) { "999111" }
+    let(:user) { FactoryBot.create(:user, :support) }
+
+    before do
+      allow(SecureRandom).to receive(:random_number).and_return(otp)
+      click_link("Sign out")
+      visit("/organisations")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+      fill_in("code", with: otp)
+      click_button("Submit")
+    end
+
     context "when viewing logs for specific organisation" do
-      let(:user) { FactoryBot.create(:user, :support) }
       let(:first_log) { organisation.case_logs.first }
-      let(:otp) { "999111" }
       let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
       let!(:other_logs) { FactoryBot.create_list(:case_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
       let(:number_of_case_logs) { CaseLog.count }
 
       before do
         first_log.update!(startdate: Time.utc(2022, 6, 2, 10, 36, 49))
-        allow(SecureRandom).to receive(:random_number).and_return(otp)
-        click_link("Sign out")
-        sign_in user
-        fill_in("code", with: otp)
-        click_button("Submit")
         visit("/organisations/#{org_id}/logs")
       end
 
@@ -153,19 +163,9 @@ RSpec.describe "User Features" do
         expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
       end
     end
+
     context "when I search for users belonging to a specific organisation" do
       context "when I am signed in and there are users in the database" do
-        let(:user) { FactoryBot.create(:user, :support) }
-        let(:otp) { "999111" }
-        before do
-          allow(SecureRandom).to receive(:random_number).and_return(otp)
-          visit("/organisations")
-          fill_in("user[email]", with: user.email)
-          fill_in("user[password]", with: user.password)
-          click_button("Sign in")
-          fill_in("code", with: otp)
-          click_button("Submit")
-        end
       end
     end
   end
