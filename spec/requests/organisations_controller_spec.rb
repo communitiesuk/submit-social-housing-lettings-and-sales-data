@@ -409,7 +409,6 @@ RSpec.describe OrganisationsController, type: :request do
           let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
           let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
-
           it "has search results in the title" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
