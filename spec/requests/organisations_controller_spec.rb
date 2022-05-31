@@ -132,8 +132,6 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "shows only active users in the current user's organisation" do
-            expected_case_row_log = "<span class=\"govuk-visually-hidden\">User </span>#{user.id}"
-            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">User </span>#{other_org_user.id}"
             expect(page).to have_content(user.name)
             expect(page).to have_content(other_user.name)
             expect(page).to have_content(inactive_user.name)
