@@ -63,7 +63,7 @@
 
       <%= summary_list.row do |row|
             row.key { "Role" }
-            row.value { @user.role.humanize }
+            row.value { @user.role&.humanize }
             if can_edit_roles?(@user, current_user)
               row.action(
                 visually_hidden_text: "role",
