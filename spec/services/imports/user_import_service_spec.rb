@@ -58,16 +58,6 @@ RSpec.describe Imports::UserImportService do
       end
     end
 
-    context "when the user is a data accessor" do
-      let(:old_user_id) { "b7829b1a5dfb68bb1e01c08445830c0add40907c" }
-
-      it "sets their role correctly" do
-        FactoryBot.create(:organisation, old_org_id:)
-        import_service.create_users("user_directory")
-        expect(User.find_by(old_user_id:)).to be_data_accessor
-      end
-    end
-
     context "when the user is a data protection officer" do
       let(:old_user_id) { "10c887710550844e2551b3e0fb88dc9b4a8a642b" }
 

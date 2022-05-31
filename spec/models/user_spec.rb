@@ -33,12 +33,12 @@ RSpec.describe User, type: :model do
     end
 
     it "has case logs through their organisation" do
-      expect(user.case_logs.to_a).to eq([owned_case_log, managed_case_log])
+      expect(user.case_logs.to_a).to match_array([owned_case_log, managed_case_log])
     end
 
     it "has case log status helper methods" do
-      expect(user.completed_case_logs.to_a).to eq([owned_case_log])
-      expect(user.not_completed_case_logs.to_a).to eq([managed_case_log])
+      expect(user.completed_case_logs.to_a).to match_array([owned_case_log])
+      expect(user.not_completed_case_logs.to_a).to match_array([managed_case_log])
     end
 
     it "has a role" do
@@ -103,20 +103,11 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context "when the user is a data accessor" do
-      let(:user) { FactoryBot.create(:user, :data_accessor) }
-
-      it "cannot assign roles" do
-        expect(user.assignable_roles).to eq({})
-      end
-    end
-
     context "when the user is a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
       it "can assign all roles except support" do
         expect(user.assignable_roles).to eq({
-          data_accessor: 0,
           data_provider: 1,
           data_coordinator: 2,
         })
@@ -141,7 +132,6 @@ RSpec.describe User, type: :model do
 
       it "can assign all roles" do
         expect(user.assignable_roles).to eq({
-          data_accessor: 0,
           data_provider: 1,
           data_coordinator: 2,
           support: 99,
