@@ -3,7 +3,7 @@ class OrganisationsController < ApplicationController
   include Modules::CaseLogsFilter
   include Modules::SearchFilter
 
-  before_action :authenticate_user!, except: [:index]
+  before_action :authenticate_user!
   before_action :find_resource, except: [:index]
   before_action :authenticate_scope!
 
