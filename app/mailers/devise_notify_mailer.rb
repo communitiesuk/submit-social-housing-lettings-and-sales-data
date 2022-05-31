@@ -15,10 +15,10 @@ class DeviseNotifyMailer < Devise::Mailer
     )
   end
 
-  def personalisation(record, token, url)
+  def personalisation(record, token, url, username: false)
     {
       name: record.name || record.email,
-      email: record.email,
+      email: username || record.email,
       organisation: record.respond_to?(:organisation) ? record.organisation.name : "",
       link: "#{url}#{token}",
     }
@@ -36,10 +36,20 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, _opts = {})
     url = "#{user_confirmation_url}?confirmation_token="
+
+    username = record.email
+    if record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+      username = record.unconfirmed_email
+      send_email(
+        record.unconfirmed_email,
+        record.confirmable_template,
+        personalisation(record, token, url, username:),
+      )
+    end
     send_email(
       record.email,
       record.confirmable_template,
-      personalisation(record, token, url),
+      personalisation(record, token, url, username:),
     )
   end
 

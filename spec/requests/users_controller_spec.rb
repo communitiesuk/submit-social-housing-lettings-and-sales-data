@@ -838,6 +838,15 @@ RSpec.describe UsersController, type: :request do
           },
         }
       end
+
+      let(:personalisation) do
+        {
+          name: params[:user][:name],
+          email: params[:user][:email],
+          organisation: user.organisation.name,
+          link: include("/account/confirmation?confirmation_token="),
+        }
+      end
       let(:request) { post "/users/", headers:, params: }
 
       before do
@@ -846,6 +855,11 @@ RSpec.describe UsersController, type: :request do
 
       it "invites a new user" do
         expect { request }.to change(User, :count).by(1)
+      end
+
+      it "sends an invitation email" do
+        expect(notify_client).to receive(:send_email).with(email_address: params[:user][:email], template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+        request
       end
 
       it "redirects back to organisation users page" do
@@ -1305,17 +1319,20 @@ RSpec.describe UsersController, type: :request do
 
     describe "#update" do
       context "when the current user matches the user ID" do
+        let(:request) { patch "/users/#{user.id}", headers:, params: }
+
         before do
           sign_in user
-          patch "/users/#{user.id}", headers:, params:
         end
 
         it "updates the user" do
+          request
           user.reload
           expect(user.name).to eq(new_name)
         end
 
         it "tracks who updated the record" do
+          request
           user.reload
           whodunnit_actor = user.versions.last.actor
           expect(whodunnit_actor).to be_a(User)
@@ -1324,12 +1341,31 @@ RSpec.describe UsersController, type: :request do
 
         context "when user changes email, dpo and key contact" do
           let(:params) { { id: user.id, user: { name: new_name, email: new_email, is_dpo: "true", is_key_contact: "true" } } }
+          let(:personalisation) do
+            {
+              name: params[:user][:name],
+              email: new_email,
+              organisation: user.organisation.name,
+              link: include("/account/confirmation?confirmation_token="),
+            }
+          end
+
+          before do
+            user.update(old_user_id: nil)
+          end
 
           it "allows changing email and dpo" do
+            request
             user.reload
             expect(user.unconfirmed_email).to eq(new_email)
             expect(user.is_data_protection_officer?).to be true
             expect(user.is_key_contact?).to be true
+          end
+
+          it "sends a confirmation email to both emails" do
+            expect(notify_client).to receive(:send_email).with(email_address: new_email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+            expect(notify_client).to receive(:send_email).with(email_address: user.email, template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
+            request
           end
         end
 

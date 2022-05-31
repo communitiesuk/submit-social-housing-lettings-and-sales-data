@@ -80,7 +80,7 @@ class User < ApplicationRecord
   end
 
   def confirmable_template
-    if last_sign_in_at.present?
+    if last_sign_in_at.present? && (unconfirmed_email.blank? || unconfirmed_email == email)
       USER_REACTIVATED_TEMPLATE_ID
     elsif was_migrated_from_softwire?
       BETA_ONBOARDING_TEMPLATE_ID
