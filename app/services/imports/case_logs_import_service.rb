@@ -549,6 +549,8 @@ module Imports
     end
 
     def apply_date_consistency!(attributes)
+      return if attributes["voiddate"].nil? || attributes["startdate"].nil?
+
       if attributes["voiddate"] > attributes["startdate"]
         attributes.delete("voiddate")
       end
