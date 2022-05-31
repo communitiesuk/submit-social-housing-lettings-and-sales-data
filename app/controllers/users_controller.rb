@@ -44,10 +44,10 @@ class UsersController < ApplicationController
         case user_params[:active]
         when "false"
           @user.update!(confirmed_at: nil, sign_in_count: 0, encrypted_password: "")
-          flash[:notice] = I18n.t("devise.activation.deactivated", user_name: @user.name)
+          flash[:notice] = I18n.t("devise.activation.deactivated", user_name: @user.name.possessive)
         when "true"
           @user.send_confirmation_instructions
-          flash[:notice] = I18n.t("devise.activation.reactivated", user_name: @user.name)
+          flash[:notice] = I18n.t("devise.activation.reactivated", user_name: @user.name.possessive)
         end
         redirect_to user_path(@user)
       end
