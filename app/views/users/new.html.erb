@@ -40,7 +40,7 @@
             :id,
             :name,
             label: { text: "Organisation", size: "m" },
-            options: { disabled: [""], selected: @organisation_id ? answer_options : "" } %>
+            options: { disabled: [""], selected: @organisation_id ? answer_options.first : "" } %>
       <% end %>
 
       <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
