@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       else
         case user_params[:active]
         when "false"
-          @user.update!(confirmed_at: nil, sign_in_count: 0, encrypted_password: "")
+          @user.update!(confirmed_at: nil, sign_in_count: 0)
           flash[:notice] = I18n.t("devise.activation.deactivated", user_name: @user.name.possessive)
         when "true"
           @user.send_confirmation_instructions
