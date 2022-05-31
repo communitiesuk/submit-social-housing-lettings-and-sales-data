@@ -11,6 +11,8 @@ namespace :core do
     case field
     when "tenant_code"
       Imports::CaseLogsFieldImportService.new(storage_service).update_field(field, path)
+    when "major_repairs"
+      Imports::CaseLogsFieldImportService.new(storage_service).update_field(field, path)
     else
       raise "Field #{field} cannot be updated by data_import_field"
     end

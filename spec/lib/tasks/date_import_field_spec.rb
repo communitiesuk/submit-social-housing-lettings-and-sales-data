@@ -42,6 +42,20 @@ describe "rake core:data_import_field", type: :task do
       end
     end
 
+    context "and we update the major repairs fields" do
+      let(:field) { "major_repairs" }
+
+      it "properly configures the storage service" do
+        expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+        task.invoke(field, fixture_path)
+      end
+
+      it "calls the expected update method with parameters" do
+        expect(import_service).to receive(:update_field).with(field, fixture_path)
+        task.invoke(field, fixture_path)
+      end
+    end
+
     it "raises an exception if no parameters are provided" do
       expect { task.invoke }.to raise_error(/Usage/)
     end
