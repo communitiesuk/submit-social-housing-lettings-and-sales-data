@@ -519,6 +519,76 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      context "when viewing a specific organisation users" do
+        let!(:users) { FactoryBot.create_list(:user, 5, organisation: user.organisation) }
+
+        before do
+          get "/organisations/#{organisation.id}/users", headers:, params: {}
+        end
+
+        it "displays the name of the organisation" do
+          expect(page).to have_content(organisation.name)
+        end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("Users")
+        end
+
+        it "returns all users" do
+          expect(page).to have_content(user.email)
+          users.each do |user|
+            expect(page).to have_content(user.email)
+          end
+        end
+      end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       context "when viewing a specific organisation details" do
         before do
           get "/organisations/#{organisation.id}/details", headers:, params: {}
