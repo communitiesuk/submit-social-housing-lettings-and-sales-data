@@ -407,9 +407,18 @@ RSpec.describe "User Features" do
 
     context "when reactivating a user" do
       let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", active: false, organisation: user.organisation) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", active: false, organisation: user.organisation, last_sign_in_at: Time.zone.now) }
+      let(:personalisation) do
+        {
+          name: other_user.name,
+          email: other_user.email,
+          organisation: other_user.organisation.name,
+          link: include("/account/confirmation?confirmation_token=#{other_user.confirmation_token}"),
+        }
+      end
 
       before do
+        other_user.update!(confirmation_token: "abc")
         visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
@@ -426,6 +435,7 @@ RSpec.describe "User Features" do
       end
 
       it "allows to reactivate the user" do
+        expect(notify_client).to receive(:send_email).with(email_address: other_user.email, template_id: User::USER_REACTIVATED_TEMPLATE_ID, personalisation:).once
         click_button("I’m sure - reactivate this user")
         expect(page).to have_current_path("/users/#{other_user.id}")
         expect(page).to have_no_content("This user has been deactivated.")
