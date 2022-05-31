@@ -519,31 +519,6 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       context "when viewing a specific organisation users" do
         let!(:users) { FactoryBot.create_list(:user, 5, organisation: user.organisation) }
         let!(:different_org_users) { FactoryBot.create_list(:user, 5) }
@@ -573,28 +548,98 @@ RSpec.describe OrganisationsController, type: :request do
             expect(page).not_to have_content(different_org_user.email)
           end
         end
+
+        context "when a search parameter is passed" do
+          let!(:matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "matching@example.com") }
+          let(:org_user_count) { User.where(organisation: user.organisation).count }
+
+          before do
+            get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
+          end
+
+          context "when our search string matches case" do
+            let(:search_param) { "joe" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(matching_user.name)
+
+              different_org_users.each do |different_org_user|
+                expect(page).not_to have_content(different_org_user.email)
+              end
+
+              users.each do |org_user|
+                expect(page).not_to have_content(org_user.email)
+              end
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+            end
+
+            context "when we need case insensitive search" do
+              let(:search_param) { "Joe" }
+
+              it "returns only matching results" do
+                expect(page).to have_content(matching_user.name)
+
+                different_org_users.each do |different_org_user|
+                  expect(page).not_to have_content(different_org_user.email)
+                end
+
+                users.each do |org_user|
+                  expect(page).not_to have_content(org_user.email)
+                end
+              end
+
+              it "updates the table caption" do
+                expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+              end
+            end
+          end
+
+          context "when our search term matches an email" do
+            let(:search_param) { "matching@example.com" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(matching_user.name)
+
+              different_org_users.each do |different_org_user|
+                expect(page).not_to have_content(different_org_user.email)
+              end
+
+              users.each do |org_user|
+                expect(page).not_to have_content(org_user.email)
+              end
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+            end
+
+            context "when our search term matches an email and a name" do
+              let!(:other_matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "matching", email: "foobar@example.com") }
+              let(:search_param) { "matching" }
+
+              it "returns only matching results" do
+                expect(page).to have_content(matching_user.name)
+                expect(page).to have_content(other_matching_user.name)
+
+                different_org_users.each do |different_org_user|
+                  expect(page).not_to have_content(different_org_user.email)
+                end
+
+                users.each do |org_user|
+                  expect(page).not_to have_content(org_user.email)
+                end
+              end
+
+              it "updates the table caption" do
+                expect(page).to have_content("2 users found matching ‘#{search_param}’ of #{org_user_count} total users.")
+              end
+            end
+          end
+        end
       end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       context "when viewing a specific organisation details" do
         before do
