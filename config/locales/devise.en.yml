@@ -55,8 +55,8 @@ en:
       send_paranoid_instructions: "If your account exists, you will receive an email in a few minutes with instructions for how to unlock it"
       unlocked: "Your account has been successfully unlocked. Sign in to continue."
     activation:
-      deactivated: "%{user_name} has been deactivated."
-      reactivated: "%{user_name} has been reactivated."
+      deactivated: "%{user_name}’s account has been deactivated."
+      reactivated: "%{user_name}’s account has been reactivated."
 
   errors:
     messages:
