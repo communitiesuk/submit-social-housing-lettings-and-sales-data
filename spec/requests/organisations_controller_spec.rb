@@ -131,6 +131,13 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response.body).to include(user.email)
           end
 
+          it "shows hidden accesibility fields only for active users in the current user's organisation" do
+            expected_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"
+            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{other_org_user.email}</span>"
+            expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
+            expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
+          end
+
           it "shows only active users in the current user's organisation" do
             expect(page).to have_content(user.name)
             expect(page).to have_content(other_user.name)
