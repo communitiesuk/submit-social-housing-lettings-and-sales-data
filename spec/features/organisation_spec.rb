@@ -177,7 +177,7 @@ RSpec.describe "User Features" do
             expect(page).to have_link("Users", href: "/organisations/#{org_id}/users")
           end
 
-          context "I click users link in submenu" do
+          context "when I click users link in submenu" do
             before do
               click_link("Users", href: "/organisations/#{org_id}/users")
             end
