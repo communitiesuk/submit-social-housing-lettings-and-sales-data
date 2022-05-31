@@ -14,7 +14,8 @@ module Imports
   private
 
     def update_major_repairs(xml_doc)
-      record = log(xml_doc)
+      old_id = field_value(xml_doc, "meta", "document-id")
+      record = CaseLog.find_by(old_id:)
 
       if record.present?
         previous_status = field_value(xml_doc, "meta", "status")
@@ -36,7 +37,8 @@ module Imports
     end
 
     def update_tenant_code(xml_doc)
-      record = log(xml_doc)
+      old_id = field_value(xml_doc, "meta", "document-id")
+      record = CaseLog.find_by(old_id:)
 
       if record.present?
         tenant_code = string_or_nil(xml_doc, "_2bTenCode")
@@ -48,11 +50,6 @@ module Imports
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
       end
-    end
-
-    def log(xml_doc)
-      old_id = field_value(xml_doc, "meta", "document-id")
-      CaseLog.find_by(old_id:)
     end
 
     def compose_date(xml_doc, day_str, month_str, year_str)
