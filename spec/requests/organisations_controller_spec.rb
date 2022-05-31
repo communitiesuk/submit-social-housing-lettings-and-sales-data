@@ -546,6 +546,7 @@ RSpec.describe OrganisationsController, type: :request do
 
       context "when viewing a specific organisation users" do
         let!(:users) { FactoryBot.create_list(:user, 5, organisation: user.organisation) }
+        let!(:different_org_users) { FactoryBot.create_list(:user, 5) }
 
         before do
           get "/organisations/#{organisation.id}/users", headers:, params: {}
@@ -560,10 +561,16 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_content("Users")
         end
 
-        it "returns all users" do
+        it "displays users for this organisation" do
           expect(page).to have_content(user.email)
           users.each do |user|
             expect(page).to have_content(user.email)
+          end
+        end
+
+        it "doesn't display users for other organisations" do
+          different_org_users.each do |different_org_user|
+            expect(page).not_to have_content(different_org_user.email)
           end
         end
       end
