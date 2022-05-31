@@ -164,6 +164,19 @@ RSpec.describe UsersController, type: :request do
         end
       end
 
+      context "when the user does not have a role because they are a data protection officer only" do
+        let(:user) { FactoryBot.create(:user, role: nil) }
+
+        before do
+          sign_in user
+          get "/users/#{user.id}", headers:, params: {}
+        end
+
+        it "shows their details" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
       context "when the current user does not match the user ID" do
         before do
           sign_in user

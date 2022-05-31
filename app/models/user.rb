@@ -24,7 +24,6 @@ class User < ApplicationRecord
   has_one_time_password(encrypted: true)
 
   ROLES = {
-    data_accessor: 0,
     data_provider: 1,
     data_coordinator: 2,
     support: 99,
