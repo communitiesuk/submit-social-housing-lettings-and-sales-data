@@ -5,6 +5,7 @@ RSpec.describe "User Features" do
   include Helpers
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
+  let(:org_name) { organisation.name }
   let(:set_password_template_id) { User::CONFIRMABLE_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:confirmation_token) { "MCDH5y6Km-U7CFPgAMVS" }
@@ -199,7 +200,9 @@ RSpec.describe "User Features" do
               before do
                 click_link(text: "Invite user")
               end
-              it "pre-fills the organisation details dropdown with specific organisation" do
+
+              it "has only specific organisation name in the dropdown" do
+                expect(page).to have_select("user-organisation-id-field", options: [org_name])
               end
             end
           end

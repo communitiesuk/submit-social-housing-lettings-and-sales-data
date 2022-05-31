@@ -16,7 +16,7 @@
 ) %>
 
 <% if current_user.data_coordinator? || current_user.support? %>
-  <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
+  <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
 <% end %>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>

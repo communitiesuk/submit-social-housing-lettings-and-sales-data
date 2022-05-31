@@ -30,13 +30,17 @@
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
+        <% if @organisation_id %>
+          <% organisation = Organisation.find(@organisation_id) %>
+          <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
+        <% end %>
 
           <%= f.govuk_collection_select :organisation_id,
             answer_options,
             :id,
             :name,
             label: { text: "Organisation", size: "m" },
-            options: { disabled: [""], selected: "" } %>
+            options: { disabled: [""], selected: @organisation_id ? answer_options : "" } %>
       <% end %>
 
       <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
