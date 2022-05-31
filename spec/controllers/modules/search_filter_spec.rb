@@ -40,16 +40,16 @@ RSpec.describe Modules::SearchFilter do
     context "when given a search term" do
       let(:search_term) { "Blogg" }
 
-      it "filters the collection on search term and active users" do
-        expect(instance.filtered_users(user_list, search_term).count).to eq(1)
+      it "filters the collection on search term" do
+        expect(instance.filtered_users(user_list, search_term).count).to eq(2)
       end
     end
 
     context "when not given a search term" do
       let(:search_term) { nil }
 
-      it "filters the collection on active users" do
-        expect(instance.filtered_users(user_list, search_term).count).to eq(6)
+      it "returns all the users" do
+        expect(instance.filtered_users(user_list, search_term).count).to eq(7)
       end
     end
   end

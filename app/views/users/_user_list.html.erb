@@ -48,7 +48,7 @@
             ) : "" %>
           <% end %>
           <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
-          <% row.cell(text: user.last_sign_in_at&.to_formatted_s(:govuk_date)) %>
+          <% row.cell(text: user.active? ? user.last_sign_in_at&.to_formatted_s(:govuk_date) : "Deactivated") %>
         <% end %>
       <% end %>
     <% end %>

@@ -30,6 +30,10 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def edit
+    redirect_to user_path(@user) unless @user.active?
+  end
+
   def update
     if @user.update(user_params)
       if @user == current_user
@@ -37,6 +41,14 @@ class UsersController < ApplicationController
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
         redirect_to account_path
       else
+        case user_params[:active]
+        when "false"
+          @user.update!(confirmed_at: nil, sign_in_count: 0)
+          flash[:notice] = I18n.t("devise.activation.deactivated", user_name: @user.name.possessive)
+        when "true"
+          @user.send_confirmation_instructions
+          flash[:notice] = I18n.t("devise.activation.reactivated", user_name: @user.name.possessive)
+        end
         redirect_to user_path(@user)
       end
     elsif user_params.key?("password")
@@ -80,6 +92,22 @@ class UsersController < ApplicationController
     render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }
   end
 
+  def deactivate
+    if current_user.can_toggle_active?(@user)
+      render "toggle_active", locals: { action: "deactivate" }
+    else
+      redirect_to user_path(@user)
+    end
+  end
+
+  def reactivate
+    if current_user.can_toggle_active?(@user)
+      render "toggle_active", locals: { action: "reactivate" }
+    else
+      redirect_to user_path(@user)
+    end
+  end
+
 private
 
   def format_error_messages
@@ -116,9 +144,9 @@ private
         params.require(:user).permit(:email, :name, :password, :password_confirmation)
       end
     elsif current_user.data_coordinator?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :active)
     elsif current_user.support?
-      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id)
+      params.require(:user).permit(:email, :name, :role, :is_dpo, :is_key_contact, :organisation_id, :active)
     end
   end
 

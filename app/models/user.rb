@@ -74,13 +74,16 @@ class User < ApplicationRecord
   RESET_PASSWORD_TEMPLATE_ID = "2c410c19-80a7-481c-a531-2bcb3264f8e6".freeze
   CONFIRMABLE_TEMPLATE_ID = "257460a6-6616-4640-a3f9-17c3d73d9e91".freeze
   BETA_ONBOARDING_TEMPLATE_ID = "b48bc2cd-5887-4611-8296-d0ab3ed0e7fd".freeze
+  USER_REACTIVATED_TEMPLATE_ID = "ac45a899-490e-4f59-ae8d-1256fc0001f9".freeze
 
   def reset_password_notify_template
     RESET_PASSWORD_TEMPLATE_ID
   end
 
   def confirmable_template
-    if was_migrated_from_softwire?
+    if last_sign_in_at.present? && (unconfirmed_email.blank? || unconfirmed_email == email)
+      USER_REACTIVATED_TEMPLATE_ID
+    elsif was_migrated_from_softwire? && last_sign_in_at.blank?
       BETA_ONBOARDING_TEMPLATE_ID
     else
       CONFIRMABLE_TEMPLATE_ID
@@ -138,5 +141,13 @@ class User < ApplicationRecord
         csv << download_attributes.map { |attr| record.public_send(attr) }
       end
     end
+  end
+
+  def can_toggle_active?(user)
+    self != user && (support? || data_coordinator?)
+  end
+
+  def valid_for_authentication?
+    super && active?
   end
 end

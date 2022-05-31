@@ -28,7 +28,7 @@ en:
       password_change:
         subject: "Password successfully changed"
     omniauth_callbacks:
-      failure: "We could not authenticate you from %{kind} because \"%{reason}\""
+      failure: 'We could not authenticate you from %{kind} because "%{reason}"'
       success: "Successfully authenticated from %{kind} account"
     passwords:
       no_token: "You can’t access this page unless you’re trying to reset your password. Check you’re using the correct URL in the email we sent you."
@@ -54,6 +54,10 @@ en:
       send_instructions: "You will receive an email in a few minutes with instructions for how to unlock your account"
       send_paranoid_instructions: "If your account exists, you will receive an email in a few minutes with instructions for how to unlock it"
       unlocked: "Your account has been successfully unlocked. Sign in to continue."
+    activation:
+      deactivated: "%{user_name} account has been deactivated."
+      reactivated: "%{user_name} account has been reactivated."
+
   errors:
     messages:
       already_confirmed: "Email has already been confirmed. Sign in."

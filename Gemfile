@@ -59,6 +59,7 @@ gem "sentry-rails"
 gem "sentry-ruby"
 # Pagination
 gem "pagy"
+gem "possessive"
 
 group :development, :test do
   # Check gems for known vulnerabilities
