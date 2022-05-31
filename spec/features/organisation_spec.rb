@@ -196,9 +196,10 @@ RSpec.describe "User Features" do
               expect(page).to have_link("About this organisation")
             end
 
-            context "when I click on Invite user" do
+            context "when I click on Invite user and there are multiple organisations in the database" do
               before do
-                click_link(text: "Invite user")
+                FactoryBot.create_list(:organisation, 5)
+                click_link(text: "Invite user")                
               end
 
               it "has only specific organisation name in the dropdown" do
