@@ -24,7 +24,11 @@ class OrganisationsController < ApplicationController
     @pagy, @users = pagy(filtered_users(@organisation.users.sorted_by_organisation_and_role, search_term))
     @searched = search_term.presence
     @total_count = @organisation.users.size
-    render "users", layout: "application"
+    if current_user.support?
+      render "users", layout: "application"
+    else
+      render "/users/index"
+    end
   end
 
   def details

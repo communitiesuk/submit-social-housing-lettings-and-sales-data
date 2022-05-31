@@ -4,24 +4,24 @@ module NavigationItemsHelper
   def primary_items(path, current_user)
     if current_user.support?
       [
-        NavigationItem.new("Organisations", organisations_path, organisation_current?(path)),
+        NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
       ]
     else
       [
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
-        NavigationItem.new("Users", users_organisation_path(current_user.organisation), users_current?(path)),
-        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", organisation_current?(path)),
+        NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
+        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
       ]
     end
   end
 
   def secondary_items(path, current_organisation_id)
     [
-      NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", organisation_logs_current?(path, current_organisation_id)),
-      NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", organisation_logs_current?(path, current_organisation_id)),
-      NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", about_organisation_current?(path, current_organisation_id)),
+      NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+      NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
+      NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
     ]
   end
 
@@ -32,18 +32,22 @@ private
   end
 
   def users_current?(path)
-    path.include?("/users")
+    path == "/users"
   end
 
-  def organisation_current?(path)
-    path.include?("/organisations") && !path.include?("/users")
+  def organisations_current?(path)
+    path == "/organisations" || subnav_users_path?(path) || subnav_logs_path?(path) || subnav_details_path?(path)
   end
 
-  def about_organisation_current?(path, organisation_id)
-    path.include?("/organisations/#{organisation_id}/details") || path.include?("/organisations/#{organisation_id}/edit")
+  def subnav_users_path?(path)
+    path.include?("/organisations") && path.include?("/users")
   end
 
-  def organisation_logs_current?(path, organisation_id)
-    path == "/organisations/#{organisation_id}/logs"
+  def subnav_logs_path?(path)
+    path.include?("/organisations") && path.include?("/logs")
+  end
+
+  def subnav_details_path?(path)
+    path.include?("/organisations") && path.include?("/details")
   end
 end
