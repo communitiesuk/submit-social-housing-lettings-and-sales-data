@@ -35,22 +35,12 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def confirmation_instructions(record, token, _opts = {})
-    url = "#{user_confirmation_url}?confirmation_token="
-
     username = record.email
-    if record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+    if email_changed(record)
       username = record.unconfirmed_email
-      send_email(
-        record.unconfirmed_email,
-        record.confirmable_template,
-        personalisation(record, token, url, username:),
-      )
+      send_confirmation_email(record.unconfirmed_email, record, token, username)
     end
-    send_email(
-      record.email,
-      record.confirmable_template,
-      personalisation(record, token, url, username:),
-    )
+    send_confirmation_email(record.email, record, token, username)
   end
 
   def intercept_send?(email)
@@ -60,6 +50,22 @@ class DeviseNotifyMailer < Devise::Mailer
 
   def email_allowlist
     Rails.application.credentials[:email_allowlist]
+  end
+
+private
+
+  def email_changed(record)
+    record.confirmable_template == User::CONFIRMABLE_TEMPLATE_ID && (record.unconfirmed_email.present? && record.unconfirmed_email != record.email)
+  end
+
+  def send_confirmation_email(email, record, token, username)
+    url = "#{user_confirmation_url}?confirmation_token="
+
+    send_email(
+      email,
+      record.confirmable_template,
+      personalisation(record, token, url, username:),
+    )
   end
 
   # def unlock_instructions(record, token, opts = {})
