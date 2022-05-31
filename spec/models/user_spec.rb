@@ -199,11 +199,12 @@ RSpec.describe User, type: :model do
   end
 
   describe "scopes" do
-    before do
-      FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com")
-      FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com")
-      FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com")
-    end
+    let(:organisation_1) { FactoryBot.create(:organisation, name: "A") }
+    let(:organisation_2) { FactoryBot.create(:organisation, name: "B") }
+    let!(:user_1) { FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
+    let!(:user_3) { FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
+    let!(:user_2) { FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
+    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org_2.com", organisation: organisation_2, role: "data_coordinator") }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
@@ -223,6 +224,12 @@ RSpec.describe User, type: :model do
       it "returns case insensitive matching records" do
         expect(described_class.search_by("Smith").count).to eq(2)
         expect(described_class.search_by("smith").count).to eq(2)
+      end
+    end
+
+    context "when using sorted by organisation and role scope" do
+      it "returns all users sorted by organisation name and then by role" do
+        expect(described_class.sorted_by_organisation_and_role.to_a).to eq([user_1, user_2, user_3, user_4])
       end
     end
   end
