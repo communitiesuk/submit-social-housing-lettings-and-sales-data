@@ -919,8 +919,8 @@ RSpec.describe UsersController, type: :request do
           expect(path).to include("/users/#{other_user.id}/deactivate")
           expect(page).to have_content(other_user.name)
           expect(page).to have_content("Are you sure you want to deactivate this user?")
-          expect(page).to have_button("I’m sure - deactivate this user")
-          expect(page).to have_link("No - I’ve changed my mind", href: "/users/#{other_user.id}")
+          expect(page).to have_button("I’m sure – deactivate this user")
+          expect(page).to have_link("No – I’ve changed my mind", href: "/users/#{other_user.id}")
         end
       end
     end
@@ -940,8 +940,8 @@ RSpec.describe UsersController, type: :request do
           expect(path).to include("/users/#{other_user.id}/reactivate")
           expect(page).to have_content(other_user.name)
           expect(page).to have_content("Are you sure you want to reactivate this user?")
-          expect(page).to have_button("I’m sure - reactivate this user")
-          expect(page).to have_link("No - I’ve changed my mind", href: "/users/#{other_user.id}")
+          expect(page).to have_button("I’m sure – reactivate this user")
+          expect(page).to have_link("No – I’ve changed my mind", href: "/users/#{other_user.id}")
         end
       end
     end
