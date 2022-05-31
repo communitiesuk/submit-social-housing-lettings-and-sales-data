@@ -12,11 +12,11 @@
                 <p>Any logs this user has already submitted will not be affected.</p>
             <% end %>
             <% active_value = action != "deactivate" %>
-            <div hidden>
-                <%= f.govuk_text_field :active,
-                value: active_value %>
-            </div>
+
+            <%= f.hidden_field :active, value: active_value %>
+
             <%= f.govuk_submit "I’m sure – #{action} this user", warning: action == "deactivate" %>
+
             <p class="govuk-body">
                 <%= govuk_link_to("No – I’ve changed my mind", user_path(@user)) %>
             </p>
