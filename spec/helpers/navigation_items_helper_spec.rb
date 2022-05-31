@@ -84,6 +84,7 @@ RSpec.describe NavigationItemsHelper do
 
       context "when the user is on the specific organisation's page" do
         context "when the user is on organisation logs page" do
+          let(:required_sub_path) { "logs" }
           let(:expected_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
@@ -101,7 +102,56 @@ RSpec.describe NavigationItemsHelper do
           end
 
           it "returns navigation items with the logs item set as current" do
-            expect(secondary_items("/organisations/#{current_user.organisation.id}/logs", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
+            expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
+            expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
+          end
+        end
+
+        context "when the user is on organisation users page" do
+          let(:required_sub_path) { "users" }
+          let(:expected_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
+              NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+              NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            ]
+          end
+
+          let(:expected_secondary_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
+              NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
+            ]
+          end
+
+          it "returns navigation items with the logs item set as current" do
+            expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
+            expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
+          end
+        end
+
+        context "when the user is on organisation details page" do
+          let(:required_sub_path) { "details" }
+          let(:expected_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
+              NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+              NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            ]
+          end
+
+          let(:expected_secondary_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
+              NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
+            ]
+          end
+
+          it "returns navigation items with the logs item set as current" do
+            expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
+            expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
           end
         end
       end
