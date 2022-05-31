@@ -49,6 +49,9 @@
           <% end %>
           <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
           <% row.cell(text: user.active? ? user.last_sign_in_at&.to_formatted_s(:govuk_date) : "Deactivated") %>
+          <%= govuk_link_to users_path(user) do %>
+            <span class="govuk-visually-hidden">User </span><%= user.id %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>
