@@ -240,9 +240,11 @@ en:
         message: "Net income is higher than expected based on the lead tenant’s working situation. Are you sure this is correct?"
     rent:
       min:
-        hint_text: '<h1 class="govuk-heading-l app-panel--interruption">You told us the rent is %{brent}</h1><p>The minimum rent for this type of property in %{la} is £%{soft_min_for_period}.</p>'
+        title_text: "You told us the rent is %{brent}"
+        hint_text: "The minimum rent for this type of property in %{la} is £%{soft_min_for_period}."
       max:
-        hint_text: '<h1 class="govuk-heading-l app-panel--interruption">You told us the rent is %{brent}</h1><p>The maximum rent for this type of property in %{la} is £%{soft_max_for_period}.</p>'
+        title_text: "You told us the rent is %{brent}"
+        hint_text: "The maximum rent for this type of property in %{la} is £%{soft_max_for_period}."
     retirement:
       min:
         title: "You told us this person is under %{age} and retired"
