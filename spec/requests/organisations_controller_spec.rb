@@ -282,7 +282,7 @@ RSpec.describe OrganisationsController, type: :request do
               phone: "011101101",
               provider_type: "LA",
               holds_own_stock: "true",
-              housing_registration_no: "7917937"
+              housing_registration_no: "7917937",
             },
           }
         end
@@ -854,7 +854,7 @@ RSpec.describe OrganisationsController, type: :request do
               phone: "011101101",
               provider_type: "LA",
               holds_own_stock: "true",
-              housing_registration_no: "7917937"
+              housing_registration_no: "7917937",
             },
           }
         end
