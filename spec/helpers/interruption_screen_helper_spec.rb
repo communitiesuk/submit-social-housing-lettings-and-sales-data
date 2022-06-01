@@ -100,7 +100,7 @@ RSpec.describe InterruptionScreenHelper do
   describe "display_title_text" do
     context "when title text has no arguments" do
       it "returns the correct title text" do
-        title_text = "test.title_text.no_argument"
+        title_text = { "translation" => "test.title_text.no_argument" }
         expect(display_title_text(title_text, case_log))
           .to eq(I18n.t("test.title_text.no_argument"))
       end
@@ -120,6 +120,18 @@ RSpec.describe InterruptionScreenHelper do
         }
         expect(display_title_text(title_text, case_log))
           .to eq(I18n.t("test.title_text.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
+      end
+    end
+
+    context "when title text is not defined" do
+      it "returns an empty string" do
+        expect(display_title_text(nil, case_log)).to eq("")
+      end
+    end
+
+    context "when title text is empty string" do
+      it "returns an empty string" do
+        expect(display_title_text("", case_log)).to eq("")
       end
     end
   end

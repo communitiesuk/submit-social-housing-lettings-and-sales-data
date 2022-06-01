@@ -22,22 +22,18 @@ module InterruptionScreenHelper
   end
 
   def display_title_text(title_text, case_log)
-    return "" if title_text.blank?
+    return "" if title_text.nil?
 
-    if title_text["arguments"]
-      translation_params = {}
-      title_text["arguments"].each do |argument|
-        value = if argument["label"]
-                  case_log.form.get_question(argument["key"], case_log).answer_label(case_log).downcase
-                else
-                  case_log.public_send(argument["key"])
-                end
-        translation_params[argument["i18n_template"].to_sym] = value
-      end
-      translation = I18n.t(title_text["translation"], **translation_params)
-    else
-      translation = I18n.t(title_text)
+    translation_params = {}
+    arguments = title_text["arguments"] || {}
+    arguments.each do |argument|
+      value = if argument["label"]
+                case_log.form.get_question(argument["key"], case_log).answer_label(case_log).downcase
+              else
+                case_log.public_send(argument["key"])
+              end
+      translation_params[argument["i18n_template"].to_sym] = value
     end
-    translation.to_s
+    I18n.t(title_text["translation"], **translation_params).to_s
   end
 end
