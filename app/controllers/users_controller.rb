@@ -41,13 +41,14 @@ class UsersController < ApplicationController
         flash[:notice] = I18n.t("devise.passwords.updated") if user_params.key?("password")
         redirect_to account_path
       else
+        user_name = @user.name&.possessive || @user.email.possessive
         case user_params[:active]
         when "false"
           @user.update!(confirmed_at: nil, sign_in_count: 0)
-          flash[:notice] = I18n.t("devise.activation.deactivated", user_name: @user.name.possessive)
+          flash[:notice] = I18n.t("devise.activation.deactivated", user_name:)
         when "true"
           @user.send_confirmation_instructions
-          flash[:notice] = I18n.t("devise.activation.reactivated", user_name: @user.name.possessive)
+          flash[:notice] = I18n.t("devise.activation.reactivated", user_name:)
         end
         redirect_to user_path(@user)
       end
