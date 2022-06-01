@@ -22,6 +22,7 @@ module InterruptionScreenHelper
   end
 
   def display_title_text(title_text, case_log)
+    return "" unless title_text.present?
     if title_text["arguments"]
       translation_params = {}
       title_text["arguments"].each do |argument|
