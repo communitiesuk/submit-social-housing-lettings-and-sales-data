@@ -1614,7 +1614,7 @@ RSpec.describe UsersController, type: :request do
 
         context "when organisation id is present in params in there are multiple organisations in the database" do
           it "has only specific organisation name in the dropdown" do
-            get "/users/new", params: {organisation_id: user.organisation.id}
+            get "/users/new", params: { organisation_id: user.organisation.id }
             expect(page).to have_select("user-organisation-id-field", options: [user.organisation.name])
           end
         end
