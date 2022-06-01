@@ -520,7 +520,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when viewing a specific organisation users" do
-        let!(:users) { FactoryBot.create_list(:user, 5, organisation: user.organisation) }
+        let!(:users) { FactoryBot.create_list(:user, 5, organisation:) }
         let!(:different_org_users) { FactoryBot.create_list(:user, 5) }
 
         before do
@@ -550,8 +550,8 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when a search parameter is passed" do
-          let!(:matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "matching@example.com") }
-          let(:org_user_count) { User.where(organisation: user.organisation).count }
+          let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "joe", email: "matching@example.com") }
+          let(:org_user_count) { User.where(organisation:).count }
 
           before do
             get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
@@ -562,6 +562,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "returns only matching results" do
               expect(page).to have_content(matching_user.name)
+              expect(page).not_to have_link(user.name)
 
               different_org_users.each do |different_org_user|
                 expect(page).not_to have_content(different_org_user.email)
@@ -581,6 +582,7 @@ RSpec.describe OrganisationsController, type: :request do
 
               it "returns only matching results" do
                 expect(page).to have_content(matching_user.name)
+                expect(page).not_to have_link(user.name)
 
                 different_org_users.each do |different_org_user|
                   expect(page).not_to have_content(different_org_user.email)
@@ -602,6 +604,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "returns only matching results" do
               expect(page).to have_content(matching_user.name)
+              expect(page).not_to have_link(user.name)
 
               different_org_users.each do |different_org_user|
                 expect(page).not_to have_content(different_org_user.email)
@@ -617,14 +620,19 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when our search term matches an email and a name" do
-              let!(:matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "Matching", email: "some@example.com") }
-              let!(:other_matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "matching", email: "foobar@example.com") }
-              let(:org_user_count) { User.where(organisation: user.organisation).count }
-              let(:search_param) { "matching" }
+              let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "Foobar", email: "some@example.com") }
+              let!(:another_matching_user) { FactoryBot.create(:user, organisation:, name: "Joe", email: "foobar@example.com") }
+              let!(:org_user_count) { User.where(organisation:).count }
+              let(:search_param) { "Foobar" }
+
+              before do
+                get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
+              end
 
               it "returns only matching results" do
-                expect(page).to have_content(matching_user.name)
-                expect(page).to have_content(other_matching_user.name)
+                expect(page).to have_link(matching_user.name)
+                expect(page).to have_link(another_matching_user.name)
+                expect(page).not_to have_link(user.name)
 
                 different_org_users.each do |different_org_user|
                   expect(page).not_to have_content(different_org_user.email)
