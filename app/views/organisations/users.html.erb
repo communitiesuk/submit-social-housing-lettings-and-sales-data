@@ -1,0 +1,27 @@
+<% item_label = @pagy.count > 1 ? "users" : "user" %>
+<% if @searched.present? %>
+  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total users)" %>
+<% else %>
+  <% title = "Your organisation (User)" %>
+<% end %>
+
+<% content_for :title, title %>
+
+<% content_for :tab_title do %>
+  <%= "Users" %>
+<% end %>
+
+<%= render SubNavigationComponent.new(
+  items: secondary_items(request.path, @organisation.id),
+) %>
+
+<% if current_user.data_coordinator? || current_user.support? %>
+  <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
+<% end %>
+
+<%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+
+<%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>

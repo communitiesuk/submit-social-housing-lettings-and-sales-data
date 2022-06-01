@@ -5,6 +5,7 @@ RSpec.describe "User Features" do
   include Helpers
   let(:organisation) { user.organisation }
   let(:org_id) { organisation.id }
+  let(:org_name) { organisation.name }
   let(:set_password_template_id) { User::CONFIRMABLE_TEMPLATE_ID }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:confirmation_token) { "MCDH5y6Km-U7CFPgAMVS" }
@@ -15,7 +16,10 @@ RSpec.describe "User Features" do
     allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
     allow(Devise).to receive(:friendly_token).and_return(confirmation_token)
     allow(notify_client).to receive(:send_email).and_return(true)
-    sign_in user
+    visit("/organisations")
+    fill_in("user[email]", with: user.email)
+    fill_in("user[password]", with: user.password)
+    click_button("Sign in")
   end
 
   context "when user is a data coordinator" do
@@ -82,21 +86,28 @@ RSpec.describe "User Features" do
   end
 
   context "when user is support user" do
+    let(:otp) { "999111" }
+    let(:user) { FactoryBot.create(:user, :support) }
+
+    before do
+      allow(SecureRandom).to receive(:random_number).and_return(otp)
+      click_link("Sign out")
+      visit("/organisations")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+      fill_in("code", with: otp)
+      click_button("Submit")
+    end
+
     context "when viewing logs for specific organisation" do
-      let(:user) { FactoryBot.create(:user, :support) }
       let(:first_log) { organisation.case_logs.first }
-      let(:otp) { "999111" }
       let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
       let!(:other_logs) { FactoryBot.create_list(:case_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
       let(:number_of_case_logs) { CaseLog.count }
 
       before do
         first_log.update!(startdate: Time.utc(2022, 6, 2, 10, 36, 49))
-        allow(SecureRandom).to receive(:random_number).and_return(otp)
-        click_link("Sign out")
-        sign_in user
-        fill_in("code", with: otp)
-        click_button("Submit")
         visit("/organisations/#{org_id}/logs")
       end
 
@@ -151,6 +162,52 @@ RSpec.describe "User Features" do
         click_button("Apply filters")
         expect(page).to have_current_path("/organisations/#{org_id}/logs?years[]=&years[]=2021&status[]=&user=all")
         expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
+      end
+    end
+
+    context "when I search for users belonging to a specific organisation" do
+      context "when I am signed in and there are users in the database" do
+        let!(:user_list) { FactoryBot.create_list(:user, 4, organisation: user.organisation) }
+
+        context "when I visit the organisation page" do
+          before do
+            visit("/organisations/#{org_id}")
+          end
+
+          it "has link to the organisations users tab" do
+            expect(page).to have_link("Users", href: "/organisations/#{org_id}/users")
+          end
+
+          context "when I click users link in submenu" do
+            before do
+              click_link("Users", href: "/organisations/#{org_id}/users")
+            end
+
+            it "shows list of users belonging to the same organisation" do
+              user_list.each do |user|
+                expect(page).to have_content(user.email)
+              end
+            end
+
+            it "shows submenu for selected orgnisation" do
+              expect(page).to have_css('[aria-current="page"]', text: "Users")
+              expect(page).to have_current_path("/organisations/#{org_id}/users")
+              expect(page).to have_link("Logs")
+              expect(page).to have_link("About this organisation")
+            end
+
+            context "when I click on Invite user and there are multiple organisations in the database" do
+              before do
+                FactoryBot.create_list(:organisation, 5)
+                click_link(text: "Invite user")
+              end
+
+              it "has only specific organisation name in the dropdown" do
+                expect(page).to have_select("user-organisation-id-field", options: [org_name])
+              end
+            end
+          end
+        end
       end
     end
   end

@@ -1593,16 +1593,31 @@ RSpec.describe UsersController, type: :request do
     describe "#new" do
       before do
         sign_in user
+        FactoryBot.create(:organisation, name: "other org")
       end
 
-      it "can assign support role to the new user" do
-        get "/users/new"
-        expect(page).to have_field("user-role-support-field")
-      end
+      context "when support user" do
+        it "can assign support role to the new user" do
+          get "/users/new"
+          expect(page).to have_field("user-role-support-field")
+        end
 
-      it "can assign organisation to the new user" do
-        get "/users/new"
-        expect(page).to have_field("user-organisation-id-field")
+        it "can assign organisation to the new user" do
+          get "/users/new"
+          expect(page).to have_field("user-organisation-id-field")
+        end
+
+        it "has all organisation names in the dropdown" do
+          get "/users/new"
+          expect(page).to have_select("user-organisation-id-field", with_options: Organisation.pluck(:name))
+        end
+
+        context "when organisation id is present in params and there are multiple organisations in the database" do
+          it "has only specific organisation name in the dropdown" do
+            get "/users/new", params: { organisation_id: user.organisation.id }
+            expect(page).to have_select("user-organisation-id-field", options: [user.organisation.name])
+          end
+        end
       end
     end
   end

@@ -131,9 +131,11 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response.body).to include(user.email)
           end
 
-          it "has a hidden header title" do
-            expected_html = "<h2 class=\"govuk-visually-hidden\">  Users"
-            expect(response.body).to include(expected_html)
+          it "shows hidden accesibility fields only for active users in the current user's organisation" do
+            expected_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"
+            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{other_org_user.email}</span>"
+            expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
+            expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
           end
 
           it "shows only active users in the current user's organisation" do
@@ -511,6 +513,138 @@ RSpec.describe OrganisationsController, type: :request do
               expect(page).not_to have_content(log_to_search.id)
               logs.each do |log|
                 expect(page).not_to have_content(log.id)
+              end
+            end
+          end
+        end
+      end
+
+      context "when viewing a specific organisation users" do
+        let!(:users) { FactoryBot.create_list(:user, 5, organisation:) }
+        let!(:different_org_users) { FactoryBot.create_list(:user, 5) }
+
+        before do
+          get "/organisations/#{organisation.id}/users", headers:, params: {}
+        end
+
+        it "displays the name of the organisation" do
+          expect(page).to have_content(organisation.name)
+        end
+
+        it "has a sub-navigation with correct tabs" do
+          expect(page).to have_css(".app-sub-navigation")
+          expect(page).to have_content("Users")
+        end
+
+        it "displays users for this organisation" do
+          expect(page).to have_content(user.email)
+          users.each do |user|
+            expect(page).to have_content(user.email)
+          end
+        end
+
+        it "doesn't display users for other organisations" do
+          different_org_users.each do |different_org_user|
+            expect(page).not_to have_content(different_org_user.email)
+          end
+        end
+
+        context "when a search parameter is passed" do
+          let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "joe", email: "matching@example.com") }
+          let(:org_user_count) { User.where(organisation:).count }
+
+          before do
+            get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
+          end
+
+          context "when our search string matches case" do
+            let(:search_param) { "joe" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(matching_user.name)
+              expect(page).not_to have_link(user.name)
+
+              different_org_users.each do |different_org_user|
+                expect(page).not_to have_content(different_org_user.email)
+              end
+
+              users.each do |org_user|
+                expect(page).not_to have_content(org_user.email)
+              end
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+            end
+
+            context "when we need case insensitive search" do
+              let(:search_param) { "Joe" }
+
+              it "returns only matching results" do
+                expect(page).to have_content(matching_user.name)
+                expect(page).not_to have_link(user.name)
+
+                different_org_users.each do |different_org_user|
+                  expect(page).not_to have_content(different_org_user.email)
+                end
+
+                users.each do |org_user|
+                  expect(page).not_to have_content(org_user.email)
+                end
+              end
+
+              it "updates the table caption" do
+                expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+              end
+            end
+          end
+
+          context "when our search term matches an email" do
+            let(:search_param) { "matching@example.com" }
+
+            it "returns only matching results" do
+              expect(page).to have_content(matching_user.name)
+              expect(page).not_to have_link(user.name)
+
+              different_org_users.each do |different_org_user|
+                expect(page).not_to have_content(different_org_user.email)
+              end
+
+              users.each do |org_user|
+                expect(page).not_to have_content(org_user.email)
+              end
+            end
+
+            it "updates the table caption" do
+              expect(page).to have_content("1 user found matching ‘#{search_param}’ of #{org_user_count} total users.")
+            end
+
+            context "when our search term matches an email and a name" do
+              let!(:matching_user) { FactoryBot.create(:user, organisation:, name: "Foobar", email: "some@example.com") }
+              let!(:another_matching_user) { FactoryBot.create(:user, organisation:, name: "Joe", email: "foobar@example.com") }
+              let!(:org_user_count) { User.where(organisation:).count }
+              let(:search_param) { "Foobar" }
+
+              before do
+                get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
+              end
+
+              it "returns only matching results" do
+                expect(page).to have_link(matching_user.name)
+                expect(page).to have_link(another_matching_user.name)
+                expect(page).not_to have_link(user.name)
+
+                different_org_users.each do |different_org_user|
+                  expect(page).not_to have_content(different_org_user.email)
+                end
+
+                users.each do |org_user|
+                  expect(page).not_to have_content(org_user.email)
+                end
+              end
+
+              it "updates the table caption" do
+                expect(page).to have_content("2 users found matching ‘#{search_param}’ of #{org_user_count} total users.")
               end
             end
           end

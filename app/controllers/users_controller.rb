@@ -62,6 +62,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    @organisation_id = params["organisation_id"]
     @resource = User.new
   end
 
