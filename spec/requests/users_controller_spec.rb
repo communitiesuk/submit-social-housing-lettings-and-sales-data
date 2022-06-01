@@ -1609,7 +1609,7 @@ RSpec.describe UsersController, type: :request do
 
         it "has all organisation names in the dropdown" do
           get "/users/new"
-          expect(page).to have_select("user-organisation-id-field", options: Organisation.pluck(:name))
+          expect(page).to have_select("user-organisation-id-field", with_options: Organisation.pluck(:name))
         end
 
         context "when organisation id is present in params and there are multiple organisations in the database" do
