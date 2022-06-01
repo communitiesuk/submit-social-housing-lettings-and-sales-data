@@ -39,7 +39,7 @@
         width: 20 %>
 
       <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
-      <% types = Organisation::PROVIDER_TYPE.map { |key, val| OpenStruct.new(id: key, name: Organisation::DISPLAY_PROVIDER_TYPE[key]) } %>
+      <% types = Organisation::PROVIDER_TYPE.map { |key, _val| OpenStruct.new(id: key, name: Organisation::DISPLAY_PROVIDER_TYPE[key]) } %>
       <% type_answer_options = null_option + types %>
 
       <%= f.govuk_collection_select :provider_type,
