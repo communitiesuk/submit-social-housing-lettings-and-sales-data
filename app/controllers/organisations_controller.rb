@@ -88,7 +88,7 @@ class OrganisationsController < ApplicationController
 private
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)
   end
 
   def search_term

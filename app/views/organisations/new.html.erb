@@ -38,6 +38,10 @@
         autocomplete: "tel",
         width: 20 %>
 
+      <%= f.govuk_text_field :housing_registration_no,
+        label: { text: "Regulator of Social Housing registration number", size: "m" },
+        width: 10 %>
+
       <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
       <% types = Organisation::PROVIDER_TYPE.map { |key, _val| OpenStruct.new(id: key, name: Organisation::DISPLAY_PROVIDER_TYPE[key]) } %>
       <% type_answer_options = null_option + types %>
