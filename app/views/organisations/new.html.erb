@@ -1,0 +1,61 @@
+<% content_for :title, "Create a new organisation" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: :back,
+  ) %>
+<% end %>
+
+<%= form_for(@resource, as: :organisation, html: { method: :post }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= f.govuk_text_field :name,
+        label: { size: "m" },
+        autocomplete: "name" %>
+
+      <%= f.govuk_text_field :address_line1,
+        label: { text: "Address line 1", size: "m" },
+        autocomplete: "address-line1" %>
+
+      <%= f.govuk_text_field :address_line2,
+        label: { text: "Address line 2", size: "m" },
+        autocomplete: "address-line2" %>
+
+      <%= f.govuk_text_field :postcode,
+        label: { size: "m" },
+        autocomplete: "postal-code",
+        width: 10 %>
+
+      <%= f.govuk_phone_field :phone,
+        label: { text: "Telephone number", size: "m" },
+        autocomplete: "tel",
+        width: 20 %>
+
+      <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+      <% types = Organisation::PROVIDER_TYPE.map { |key, val| OpenStruct.new(id: key, name: Organisation::DISPLAY_PROVIDER_TYPE[key]) } %>
+      <% type_answer_options = null_option + types %>
+
+      <%= f.govuk_collection_select :provider_type,
+        type_answer_options,
+        :id,
+        :name,
+        label: { text: "Organisation type", size: "m" },
+        options: { disabled: [""], selected: @resource.provider_type || "" } %>
+
+      <%= f.govuk_collection_radio_buttons :holds_own_stock,
+        [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
+        :id,
+        :name,
+        legend: { text: "Does the organisation hold it's own stock?", size: "m" } %>
+
+      <%= f.govuk_submit "Create organisation" %>
+    </div>
+  </div>
+<% end %>

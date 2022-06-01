@@ -7,6 +7,10 @@
 
 <% content_for :title, title %>
 
+<% if current_user.support? %>
+  <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>
+<% end %>
+
 <%= render SearchComponent.new(current_user:, search_label: "Search by organisation name", value: @searched) %>
 
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
