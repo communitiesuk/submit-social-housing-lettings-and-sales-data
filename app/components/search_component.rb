@@ -9,10 +9,12 @@ class SearchComponent < ViewComponent::Base
   end
 
   def path(current_user)
-    if request.path.include?("users")
-      user_path(current_user)
+    if request.path.include?("organisations") && request.path.include?("users")
+      request.path
     elsif request.path.include?("organisations") && request.path.include?("logs")
       request.path
+    elsif request.path.include?("users")
+      user_path(current_user)
     elsif request.path.include?("organisations")
       organisations_path
     elsif request.path.include?("logs")

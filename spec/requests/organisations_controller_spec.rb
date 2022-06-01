@@ -617,7 +617,9 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when our search term matches an email and a name" do
+              let!(:matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "Matching", email: "some@example.com") }
               let!(:other_matching_user) { FactoryBot.create(:user, organisation: user.organisation, name: "matching", email: "foobar@example.com") }
+              let(:org_user_count) { User.where(organisation: user.organisation).count }
               let(:search_param) { "matching" }
 
               it "returns only matching results" do
