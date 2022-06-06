@@ -481,7 +481,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows case logs matching the id" do
@@ -536,12 +536,12 @@ RSpec.describe OrganisationsController, type: :request do
 
               it "has title with pagination details for page 1" do
                 get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
-                expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+                expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
 
               it "has title with pagination details for page 2" do
                 get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
-                expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+                expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
             end
 
@@ -798,11 +798,11 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "updates the table caption" do
-              expect(page).to have_content("1 organisation found matching ‘#{search_param}’ of 29 total organisations.")
+              expect(page).to have_content("1 organisation found matching ‘#{search_param}’")
             end
 
             it "has search in the title" do
-              expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’ of 29 total organisations) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             context "when the search term matches more than 1 result" do
@@ -814,11 +814,11 @@ RSpec.describe OrganisationsController, type: :request do
               end
 
               it "updates the table caption" do
-                expect(page).to have_content("2 organisations found matching ‘#{search_param}’ of 29 total organisations.")
+                expect(page).to have_content("2 organisations found matching ‘#{search_param}’")
               end
 
               it "has search in the title" do
-                expect(page).to have_title("Organisations (2 organisations matching ‘#{search_param}’ of 29 total organisations) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+                expect(page).to have_title("Organisations (2 organisations matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
             end
 
@@ -826,7 +826,7 @@ RSpec.describe OrganisationsController, type: :request do
               let(:search_param) { "DLUHC" }
 
               it "has search and pagination in the title" do
-                expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’ of 29 total organisations) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+                expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
             end
           end
@@ -876,118 +876,6 @@ RSpec.describe OrganisationsController, type: :request do
         it "redirects to the organisation list" do
           request
           expect(response).to redirect_to("/organisations")
-        end
-
-        it "has a sub-navigation with correct tabs" do
-          expect(page).to have_css(".app-sub-navigation")
-          expect(page).to have_content("About this organisation")
-        end
-
-        it "allows to edit the organisation details" do
-          expect(page).to have_link("Change", count: 3)
-        end
-      end
-    end
-
-    context "when there are more than 20 organisations" do
-      let(:support_user) { FactoryBot.create(:user, :support) }
-
-      let(:total_organisations_count) { Organisation.all.count }
-
-      before do
-        FactoryBot.create_list(:organisation, 25)
-        allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in support_user
-        get "/organisations"
-      end
-
-      context "when on the first page" do
-        it "has pagination links" do
-          expect(page).to have_content("Previous")
-          expect(page).not_to have_link("Previous")
-          expect(page).to have_content("Next")
-          expect(page).to have_link("Next")
-        end
-
-        it "shows which organisations are being shown on the current page" do
-          expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{total_organisations_count}</b> organisations")
-        end
-
-        it "has pagination in the title" do
-          expect(page).to have_title("Organisations (page 1 of 2)")
-        end
-      end
-
-      context "when on the second page" do
-        before do
-          get "/organisations?page=2", headers:, params: {}
-        end
-
-        it "shows the total organisations count" do
-          expect(CGI.unescape_html(response.body)).to match("<strong>#{total_organisations_count}</strong> total organisations.")
-        end
-
-        it "has pagination links" do
-          expect(page).to have_content("Previous")
-          expect(page).to have_link("Previous")
-          expect(page).to have_content("Next")
-          expect(page).not_to have_link("Next")
-        end
-
-        it "shows which logs are being shown on the current page" do
-          expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>#{total_organisations_count}</b> of <b>#{total_organisations_count}</b> organisations")
-        end
-
-        it "has pagination in the title" do
-          expect(page).to have_title("Organisations (page 2 of 2)")
-        end
-      end
-
-      context "when searching" do
-        let!(:searched_organisation) { FactoryBot.create(:organisation, name: "Unusual name") }
-        let!(:other_organisation) { FactoryBot.create(:organisation, name: "Some other name") }
-        let(:search_param) { "Unusual" }
-
-        before do
-          get "/organisations?search=#{search_param}"
-        end
-
-        it "returns matching results" do
-          expect(page).to have_content(searched_organisation.name)
-          expect(page).not_to have_content(other_organisation.name)
-        end
-
-        it "updates the table caption" do
-          expect(page).to have_content("1 organisation found matching ‘#{search_param}’ of 29 total organisations.")
-        end
-
-        it "has search in the title" do
-          expect(page).to have_title("Organisations (1 organisation matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
-        end
-
-        context "when the search term matches more than 1 result" do
-          let(:search_param) { "name" }
-
-          it "returns matching results" do
-            expect(page).to have_content(searched_organisation.name)
-            expect(page).to have_content(other_organisation.name)
-          end
-
-          it "updates the table caption" do
-            expect(page).to have_content("2 organisations found matching ‘#{search_param}’ of 29 total organisations.")
-          end
-
-          it "has search in the title" do
-            expect(page).to have_title("Organisations (2 organisations matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
-          end
-        end
-
-        context "when search results require pagination" do
-          let(:search_param) { "DLUHC" }
-
-          it "has search and pagination in the title" do
-            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
-          end
         end
       end
     end
