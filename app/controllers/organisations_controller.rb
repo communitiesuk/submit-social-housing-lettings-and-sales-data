@@ -4,8 +4,8 @@ class OrganisationsController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
-  before_action :find_resource, except: [:index]
-  before_action :authenticate_scope!
+  before_action :find_resource, except: %i[index new create]
+  before_action :authenticate_scope!, except: [:index]
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -27,12 +27,26 @@ class OrganisationsController < ApplicationController
     if current_user.support?
       render "users", layout: "application"
     else
-      render "/users/index"
+      render "users/index"
     end
   end
 
   def details
     render "show"
+  end
+
+  def new
+    @resource = Organisation.new
+    render "new", layout: "application"
+  end
+
+  def create
+    organisation = Organisation.create(org_params)
+    if organisation.persisted?
+      redirect_to organisations_path
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def edit
@@ -74,7 +88,7 @@ class OrganisationsController < ApplicationController
 private
 
   def org_params
-    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone)
+    params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)
   end
 
   def search_term
@@ -82,7 +96,11 @@ private
   end
 
   def authenticate_scope!
-    render_not_found if current_user.organisation != @organisation && !current_user.support?
+    if %w[create new].include? action_name
+      head :unauthorized and return unless current_user.support?
+    elsif current_user.organisation != @organisation && !current_user.support?
+      render_not_found
+    end
   end
 
   def find_resource
