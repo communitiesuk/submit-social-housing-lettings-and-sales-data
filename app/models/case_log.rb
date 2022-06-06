@@ -433,6 +433,18 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def age_known?(person_num)
+    return false unless person_num.is_a?(Integer)
+
+    !!public_send("age#{person_num}_known")&.zero?
+  end
+
+  def age_unknown?(person_num)
+    return false unless person_num.is_a?(Integer)
+
+    public_send("age#{person_num}_known") == 1
+  end
+
 private
 
   PIO = Postcodes::IO.new
@@ -566,10 +578,6 @@ private
 
   def age_under_16?(person_num)
     public_send("age#{person_num}") && public_send("age#{person_num}") < 16
-  end
-
-  def age_known?(person_num)
-    !!public_send("age#{person_num}_known")&.zero?
   end
 
   def process_postcode_changes!

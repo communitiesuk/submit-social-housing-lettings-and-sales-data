@@ -136,7 +136,7 @@ private
     (1..8).any? do |n|
       next if record["sex#{n}"].nil?
 
-      record["sex#{n}"] == "F" && (in_pregnancy_age_range?(record, n) || record["age#{n}_known"] == 1)
+      record["sex#{n}"] == "F" && (in_pregnancy_age_range?(record, n) || record.age_unknown?(n))
     end
   end
 
