@@ -1,9 +1,11 @@
 <% item_label = @pagy.count > 1 ? "organisations" : "organisation" %>
 <% if @searched.present? %>
-  <% title = "Organisations (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total organisations)" %>
+  <% title = "Organisations (#{@pagy.count} #{item_label} matching ‘#{@searched}’" %>
 <% else %>
   <% title = "Organisations" %>
 <% end %>
+
+<% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
   <% if current_user.support? && request.path == "/organisations" %>
