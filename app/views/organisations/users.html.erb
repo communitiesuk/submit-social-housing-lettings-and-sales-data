@@ -13,11 +13,11 @@
   <% end %>
 </h1>
 
-<h2 class="govuk-visually-hidden">Users</h2>
-
 <%= render SubNavigationComponent.new(
   items: secondary_items(request.path, @organisation.id),
 ) %>
+
+<h2 class="govuk-visually-hidden">Users</h2>
 
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
