@@ -11,11 +11,11 @@
   <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
 </h1>
 
-<h2 class="govuk-visually-hidden">Logs</h2>
-
 <%= render SubNavigationComponent.new(
   items: secondary_items(request.path, @organisation.id),
 ) %>
+
+<h2 class="govuk-visually-hidden">Logs</h2>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <%= render partial: "case_logs/log_filters" %>

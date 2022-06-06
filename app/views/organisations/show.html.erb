@@ -10,13 +10,13 @@
   <% end %>
 </h1>
 
-<h2 class="govuk-visually-hidden">About this organisation</h2>
-
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
 <% end %>
+
+<h2 class="govuk-visually-hidden">About this organisation</h2>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
