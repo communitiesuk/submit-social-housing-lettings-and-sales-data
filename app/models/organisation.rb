@@ -3,7 +3,6 @@ class Organisation < ApplicationRecord
   has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
-  has_many :organisation_las
   has_many :organisation_rent_periods
 
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
@@ -36,15 +35,6 @@ class Organisation < ApplicationRecord
     %i[address_line1 address_line2 postcode].map { |field| public_send(field) }.join("\n")
   end
 
-  def local_authorities
-    organisation_las.pluck(:ons_code)
-  end
-
-  def local_authority_names
-    names = local_authorities.map { |ons_code| LocalAuthority.ons_code_mappings[ons_code] }
-    names.presence || %w[All]
-  end
-
   def rent_periods
     organisation_rent_periods.pluck(:rent_period)
   end
@@ -74,7 +64,6 @@ class Organisation < ApplicationRecord
       { name: "address", value: address_string, editable: true },
       { name: "telephone_number", value: phone, editable: true },
       { name: "type", value: display_provider_type, editable: false },
-      { name: "local_authorities_operated_in", value: local_authority_names, editable: false, format: :bullet },
       { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },

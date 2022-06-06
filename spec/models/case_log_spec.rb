@@ -115,10 +115,6 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_property_void_date)
     end
 
-    it "validates local authority" do
-      expect(validator).to receive(:validate_la)
-    end
-
     it "validates benefits as proportion of income" do
       expect(validator).to receive(:validate_net_income_uc_proportion)
     end

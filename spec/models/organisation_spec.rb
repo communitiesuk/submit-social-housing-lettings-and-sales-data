@@ -29,40 +29,6 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
-    context "when the organisation only operates in specific local authorities" do
-      let(:ons_code_mappings) do
-        {
-          "" => "Select an option",
-          "E07000223" => "Adur",
-          "E09000023" => "Lewisham",
-          "E08000003" => "Manchester",
-          "E07000178" => "Oxford",
-          "E07000114" => "Thanet",
-          "E09000033" => "Westminster",
-          "E06000014" => "York",
-        }
-      end
-
-      before do
-        FactoryBot.create(:organisation_la, organisation:, ons_code: "E07000178")
-        allow(LocalAuthority).to receive(:ons_code_mappings).and_return(ons_code_mappings)
-      end
-
-      it "has local authorities associated" do
-        expect(organisation.local_authorities).to eq(%w[E07000178])
-      end
-
-      it "maps the ons codes to LA names for display" do
-        expect(organisation.local_authority_names).to eq(%w[Oxford])
-      end
-    end
-
-    context "when the organisation has not specified which local authorities it operates in" do
-      it "displays `all`" do
-        expect(organisation.local_authority_names).to eq(%w[All])
-      end
-    end
-
     context "when the organisation only uses specific rent periods" do
       let(:rent_period_mappings) do
         { "2" => { "value" => "Weekly for 52 weeks" }, "3" => { "value" => "Every 2 weeks" } }
