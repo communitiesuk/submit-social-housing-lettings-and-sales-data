@@ -5,11 +5,14 @@
   <% title = "Your organisation (Users)" %>
 <% end %>
 
-<% content_for :title, title %>
+<h1 class="govuk-heading-l">
+  <% unless current_user.support? %>
+    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
+  <% end %>
+  Users
+</h1>
 
-<% content_for :tab_title do %>
-  <%= "Users" %>
-<% end %>
+<h2 class="govuk-visually-hidden">Users</h2>
 
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>

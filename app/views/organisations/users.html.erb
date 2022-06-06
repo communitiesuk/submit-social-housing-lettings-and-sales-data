@@ -5,11 +5,13 @@
   <% title = "Your organisation (User)" %>
 <% end %>
 
-<% content_for :title, title %>
+<h1 class="govuk-heading-l">
+  <% if current_user.support? %>
+    <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
+  <% end %>
+</h1>
 
-<% content_for :tab_title do %>
-  <%= "Users" %>
-<% end %>
+<h2 class="govuk-visually-hidden">Users</h2>
 
 <%= render SubNavigationComponent.new(
   items: secondary_items(request.path, @organisation.id),

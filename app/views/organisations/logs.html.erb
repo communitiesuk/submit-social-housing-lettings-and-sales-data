@@ -5,11 +5,11 @@
   <% title = "Your organisation (Logs)" %>
 <% end %>
 
-<% content_for :title, title %>
+<h1 class="govuk-heading-l">
+  <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
+</h1>
 
-<% content_for :tab_title do %>
-  <%= "Logs" %>
-<% end %>
+<h2 class="govuk-visually-hidden">Logs</h2>
 
 <%= render SubNavigationComponent.new(
   items: secondary_items(request.path, @organisation.id),

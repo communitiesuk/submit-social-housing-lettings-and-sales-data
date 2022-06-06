@@ -1,16 +1,17 @@
-<% content_for :content do %>
-  <h1 class="govuk-heading-l">
-    <% if current_user.support? && request.path != "/organisations" %>
-      <span class="govuk-caption-l"><%= @organisation.name %></span>
-    <% end %>
-    <%= content_for(:title) %>
-  </h1>
+<%# <% content_for :content do %1> %>
+<%#   <h1 class="govuk-heading-l"> %>
+<%#     <% if current_user.support? && request.path != "/organisations" %1> %>
+<%#       <span class="govuk-caption-l"><%= @organisation.name %1></span> %>
+<%#     <% end %1> %>
+<%#     <%= content_for(:title) %1> %>
+<%#   </h1> %>
 
-  <% items = tab_items(current_user) %>
+<%#   <% items = tab_items(current_user) %1> %>
 
-  <h2 class="govuk-visually-hidden"><%= content_for(:tab_title) %></h2>
+<%#   <h2 class="govuk-visually-hidden"><%= content_for(:tab_title) %1></h2> %>
 
-  <%= content_for?(:organisations_content) ? yield(:organisations_content) : yield %>
-<% end %>
+<%#   <%= content_for?(:organisations_content) ? yield(:organisations_content) : yield %1> %>
+<%# <% end %1> %>
+<%#   <%= content_for?(:organisations_content) ? yield(:organisations_content) : yield %1> %>
 
 <%= render template: "layouts/application" %>
