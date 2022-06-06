@@ -226,6 +226,11 @@ module Imports
         @logs_overridden << case_log.old_id
         attributes.delete("referral")
         save_case_log(attributes)
+      elsif case_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
+        @logger.warn("Log #{case_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
+        @logs_overridden << case_log.old_id
+        attributes.delete("referral")
+        save_case_log(attributes)
       else
         raise exception
       end
@@ -378,7 +383,7 @@ module Imports
 
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
       if age_refused.present?
-        if age_refused.casecmp("AGE_REFUSED").zero?
+        if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
           return 1 # No
         else
           return 0 # Yes
