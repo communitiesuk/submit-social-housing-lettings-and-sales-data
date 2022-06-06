@@ -844,17 +844,25 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#create" do
+        let(:name) { "Unique new org name" }
+        let(:address_line1) { "12 Random Street" }
+        let(:address_line2) { "Manchester" }
+        let(:postcode) { "MD1 5TR" }
+        let(:phone) { "011101101" }
+        let(:provider_type) { "LA" }
+        let(:holds_own_stock) { "true" }
+        let(:housing_registration_no) { "7917937" }
         let(:params) do
           {
             "organisation": {
-              name: "new organisation",
-              address_line1: "12 Random Street",
-              address_line2: "Manchester",
-              postcode: "MD1 5TR",
-              phone: "011101101",
-              provider_type: "LA",
-              holds_own_stock: "true",
-              housing_registration_no: "7917937",
+              name:,
+              address_line1:,
+              address_line2:,
+              postcode:,
+              phone:,
+              provider_type:,
+              holds_own_stock:,
+              housing_registration_no:,
             },
           }
         end
@@ -862,6 +870,17 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "creates a new organisation" do
           expect { request }.to change(Organisation, :count).by(1)
+        end
+
+        it "sets the organisation attributes correctly" do
+          request
+          organisation = Organisation.find_by(housing_registration_no:)
+          expect(organisation.name).to eq(name)
+          expect(organisation.address_line1).to eq(address_line1)
+          expect(organisation.address_line2).to eq(address_line2)
+          expect(organisation.postcode).to eq(postcode)
+          expect(organisation.phone).to eq(phone)
+          expect(organisation.holds_own_stock).to be true
         end
 
         it "redirects to the organisation list" do
