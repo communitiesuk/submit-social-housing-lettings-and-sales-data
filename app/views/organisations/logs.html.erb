@@ -1,15 +1,17 @@
 <% item_label = @pagy.count > 1 ? "logs" : "log" %>
 <% if @searched.present? %>
-  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total logs)" %>
+  <% title = "#{@organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
 <% else %>
-  <% title = "Your organisation (Logs)" %>
+  <% title = "#{@organisation.name} (Logs)" %>
 <% end %>
 
 <% content_for :title, title %>
 
-<% content_for :tab_title do %>
-  <%= "Logs" %>
-<% end %>
+<h1 class="govuk-heading-l">
+  <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
+</h1>
+
+<h2 class="govuk-visually-hidden">Logs</h2>
 
 <%= render SubNavigationComponent.new(
   items: secondary_items(request.path, @organisation.id),

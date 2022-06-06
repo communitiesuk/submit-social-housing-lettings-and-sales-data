@@ -1,15 +1,20 @@
 <% item_label = @pagy.count > 1 ? "users" : "user" %>
 <% if @searched.present? %>
-  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total users)" %>
+  <% title = "#{current_user.support? ? 'Users' : current_user.organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’" %>
 <% else %>
-  <% title = "Your organisation (Users)" %>
+  <% title = current_user.support? ? "Users" : "#{current_user.organisation.name} (Users)" %>
 <% end %>
 
 <% content_for :title, title %>
 
-<% content_for :tab_title do %>
-  <%= "Users" %>
-<% end %>
+<h1 class="govuk-heading-l">
+  <% unless current_user.support? %>
+    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
+  <% end %>
+  Users
+</h1>
+
+<h2 class="govuk-visually-hidden">Users</h2>
 
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>

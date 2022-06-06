@@ -1,16 +1,18 @@
 <% item_label = @pagy.count > 1 ? "logs" : "log" %>
-
 <% if @searched.present? %>
-  <% title = "Your organisation (#{@pagy.count} #{item_label} matching ‘#{@searched}’ of #{@total_count} total logs)" %>
+  <% title = "#{current_user.support? ? 'Logs' : current_user.organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
 <% else %>
-  <% title = "Your organisation (Logs)" %>
+  <% title = current_user.support? ? "Logs" : "#{current_user.organisation.name} (Logs)" %>
 <% end %>
 
 <% content_for :title, title %>
 
-<% content_for :tab_title do %>
-  <%= "Logs" %>
-<% end %>
+<h1 class="govuk-heading-l">
+  <% unless current_user.support? %>
+    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
+  <% end %>
+  Logs
+</h1>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
