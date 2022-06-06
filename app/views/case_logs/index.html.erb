@@ -2,13 +2,13 @@
 <% if @searched.present? %>
   <% title = "#{current_user.support? ? 'Logs' : current_user.organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
 <% else %>
-  <% title = "#{current_user.support? ? 'Logs' : current_user.organisation.name}" %>
+  <% title = current_user.support? ? "Logs" : "#{current_user.organisation.name} (Logs)" %>
 <% end %>
 
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
-  <% if !current_user.support? %>
+  <% unless current_user.support? %>
     <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
   <% end %>
   Logs
