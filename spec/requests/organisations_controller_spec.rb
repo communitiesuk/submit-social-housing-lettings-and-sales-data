@@ -408,7 +408,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           it "has search results in the title" do
             get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
-            expect(page).to have_title("Your organisation (1 log matching ‘#{log_to_search.id}’ of #{log_total_count} total logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows case logs matching the id" do
