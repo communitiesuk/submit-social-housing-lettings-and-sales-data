@@ -5,7 +5,19 @@
   <% title = "Organisations" %>
 <% end %>
 
-<% content_for :title, title %>
+<h1 class="govuk-heading-l">
+  <% if current_user.support? && request.path == "/organisations" %>
+    Organisations
+  <% end %>
+  <% if current_user.support? && request.path != "/organisations" %>
+    <span class="govuk-caption-l"><%= @organisation.name %></span>
+    <h1 class="govuk-heading-l">Organisations</h1>
+  <% end %>
+</h1>
+
+<% items = tab_items(current_user) %>
+
+<h2 class="govuk-visually-hidden">Organisations</h2>
 
 <% if current_user.support? %>
   <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>

@@ -1,8 +1,13 @@
-<% content_for :title, current_user.support? ? "Details" : "Your organisation" %>
+<h1 class="govuk-heading-l">
+  <% if !current_user.support? %>
+    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
+    About your organisation
+  <% else %>
+    <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
+  <% end %>
+</h1>
 
-<% content_for :tab_title do %>
-  <%= "Details" %>
-<% end %>
+<h2 class="govuk-visually-hidden">About this organisation</h2>
 
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(

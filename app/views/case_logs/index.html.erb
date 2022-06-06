@@ -6,11 +6,12 @@
   <% title = "Your organisation (Logs)" %>
 <% end %>
 
-<% content_for :title, title %>
-
-<% content_for :tab_title do %>
-  <%= "Logs" %>
-<% end %>
+<h1 class="govuk-heading-l">
+  <% if !current_user.support? %>
+    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
+  <% end %>
+  Logs
+</h1>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
