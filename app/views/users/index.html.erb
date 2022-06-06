@@ -2,7 +2,7 @@
 <% if @searched.present? %>
   <% title = "#{current_user.support? ? 'Users' : current_user.organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’" %>
 <% else %>
-  <% title = "#{current_user.support? ? 'Users' : current_user.organisation.name}" %>
+  <% title = current_user.support? ? "Users" : "#{current_user.organisation.name} (Users)" %>
 <% end %>
 
 <% content_for :title, title %>
