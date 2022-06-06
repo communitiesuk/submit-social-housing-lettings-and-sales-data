@@ -134,10 +134,16 @@ private
 
   def women_of_child_bearing_age_in_household(record)
     (1..8).any? do |n|
-      next if record["sex#{n}"].nil? || record["age#{n}"].nil?
+      next if record["sex#{n}"].nil?
 
-      (record["sex#{n}"]) == "F" && record["age#{n}"] >= 11 && record["age#{n}"] <= 65
+      record["sex#{n}"] == "F" && (in_pregnancy_age_range?(record, n) || record["age#{n}_known"] == 1)
     end
+  end
+
+  def in_pregnancy_age_range?(record, person_num)
+    return false if record["age#{person_num}"].nil?
+
+    record["age#{person_num}"] >= 11 && record["age#{person_num}"] <= 65
   end
 
   def women_in_household(record)
