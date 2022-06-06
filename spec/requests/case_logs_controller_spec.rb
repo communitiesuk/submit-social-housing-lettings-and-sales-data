@@ -381,12 +381,12 @@ RSpec.describe CaseLogsController, type: :request do
 
             it "has title with pagination details for page 1" do
               get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
-              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{log_to_search.owning_organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
               get "/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
-              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{log_to_search.owning_organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -466,7 +466,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "does not have pagination in the title" do
-            expect(page).to have_title("Your organisation (Logs) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("#{user.organisation.name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows the download csv link" do
