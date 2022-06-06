@@ -463,12 +463,12 @@ RSpec.describe OrganisationsController, type: :request do
 
             it "has title with pagination details for page 1" do
               get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
-              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
               get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
-              expect(page).to have_title("Your organisation (#{logs.count} logs matching ‘#{postcode}’ of #{log_total_count} total logs) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+              expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
@@ -758,7 +758,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "DLUHC" }
 
           it "has search and pagination in the title" do
-            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’ of 29 total organisations) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
