@@ -323,11 +323,6 @@ RSpec.describe OrganisationsController, type: :request do
             expect(response.body).to include(organisation.name)
           end
 
-          it "has a hidden header title" do
-            expected_html = "<h2 class=\"govuk-visually-hidden\">  Details"
-            expect(response.body).to include(expected_html)
-          end
-
           it "does not have a change details link" do
             expected_html = "data-qa=\"change-name\" href=\"/organisations/#{organisation.id}/edit\""
             expect(response.body).not_to include(expected_html)
