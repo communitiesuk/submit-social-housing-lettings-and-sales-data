@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_25_130518) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -236,14 +236,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_25_130518) do
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
-  end
-
-  create_table "organisation_las", force: :cascade do |t|
-    t.bigint "organisation_id"
-    t.string "ons_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["organisation_id"], name: "index_organisation_las_on_organisation_id"
   end
 
   create_table "organisation_rent_periods", force: :cascade do |t|
