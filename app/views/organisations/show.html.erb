@@ -1,3 +1,6 @@
+<% title = "#{@organisation.name} (Organisation details)" %>
+<% content_for :title, title %>
+
 <h1 class="govuk-heading-l">
   <% if !current_user.support? %>
     <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
