@@ -1,4 +1,4 @@
-<% title = "#{@organisation.name} (Organisation details)" %>
+<% title =  current_user.support? ? "#{@organisation.name} (Organisation details)" : "Organisation details" %>
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
