@@ -19,7 +19,7 @@ class Form::Question
     @fields_to_add = hsh["fields-to-add"]
     @result_field = hsh["result-field"]
     @readonly = hsh["readonly"]
-    @answer_options = hsh["answer_options"]
+    @answer_options = hsh["answer_options"].is_a?(String) ? public_send(hsh["answer_options"]) : hsh["answer_options"]
     @conditional_for = hsh["conditional_for"]
     @inferred_answers = hsh["inferred_answers"]
     @inferred_check_answers_value = hsh["inferred_check_answers_value"]
@@ -160,6 +160,10 @@ class Form::Question
 
   def value_is_refused?(value)
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
+  end
+
+  def get_all_orgs_answer_options
+    Organisation.all.map { |org| { "#{org.id}": org.name.to_s } }.reduce({}, :merge)
   end
 
 private

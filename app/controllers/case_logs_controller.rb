@@ -112,9 +112,10 @@ private
   end
 
   def org_params
+    organisation_id = current_user.support? && params["organisation_id"].present? ? params["organisation_id"] : current_user.organisation.id
     {
-      "owning_organisation_id" => current_user.organisation.id,
-      "managing_organisation_id" => current_user.organisation.id,
+      "owning_organisation_id" => organisation_id,
+      "managing_organisation_id" => organisation_id,
       "created_by_id" => current_user.id,
     }
   end

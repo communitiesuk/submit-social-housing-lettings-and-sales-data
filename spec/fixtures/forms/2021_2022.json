@@ -351,6 +351,17 @@
                     "illness": 1
                   }
                 ]
+              },
+              "accessible_select_three": {
+                "questions": {
+                  "organisation_id": {
+                    "header": "Select options",
+                    "hint_text": "What is the managing organisation",
+                    "type": "select",
+                    "check_answer_label": "Accessible Select",
+                    "answer_options": "get_all_orgs_answer_options"
+                  }
+                }
               }
             }
           }

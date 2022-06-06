@@ -121,20 +121,69 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "when UI" do
+      let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user) }
+      let(:support_user) { FactoryBot.create(:user, :support) }
       let(:headers) { { "Accept" => "text/html" } }
+      let(:params) { { "organisation_id" => organisation.id } }
 
-      before do
-        RequestHelper.stub_http_requests
-        sign_in user
-        post "/logs", headers:
+      context("and created by a user from the same organisation") do
+        before do
+          RequestHelper.stub_http_requests
+          sign_in user
+          post "/logs", headers:
+        end
+
+        it "tracks who created the record" do
+          created_id = response.location.match(/[0-9]+/)[0]
+          case_log = CaseLog.find_by(id: created_id)
+          whodunnit_actor = case_log.versions.last.actor
+          expect(whodunnit_actor).to be_a(User)
+          expect(whodunnit_actor.id).to eq(user.id)
+          expect(case_log.created_by_id).to eq(user.id)
+        end
       end
 
-      it "tracks who created the record" do
-        created_id = response.location.match(/[0-9]+/)[0]
-        whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
-        expect(whodunnit_actor).to be_a(User)
-        expect(whodunnit_actor.id).to eq(user.id)
+      context("and created by a support user") do
+        let(:created_id) do
+          response.location.match(/[0-9]+/)[0]
+        end
+
+        before do
+          RequestHelper.stub_http_requests
+          allow(support_user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in support_user
+        end
+
+        context "when organisaition params are provided" do
+          before do
+            post "/logs", headers:, params: params
+          end
+
+          it "tracks who created the record" do
+            whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
+            expect(whodunnit_actor).to be_a(User)
+            expect(whodunnit_actor.id).to eq(support_user.id)
+          end
+
+          it "creates the record for the correct organisation" do
+            case_log = CaseLog.find_by(id: created_id)
+            expect(case_log.owning_organisation_id).to eq(organisation.id)
+            expect(case_log.managing_organisation_id).to eq(organisation.id)
+          end
+        end
+
+        context "with no organisation params" do
+          before do
+            post "/logs", headers:
+          end
+
+          it "created the record with the support user's organisation" do
+            case_log = CaseLog.find_by(id: created_id)
+            expect(case_log.owning_organisation_id).to eq(support_user.organisation.id)
+            expect(case_log.managing_organisation_id).to eq(support_user.organisation.id)
+          end
+        end
       end
     end
   end

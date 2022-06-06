@@ -166,6 +166,18 @@ RSpec.describe Form::Question, type: :model do
         expect(question.label_from_value(9999)).to eq("9999")
       end
     end
+
+    context "when the answer options are dynamic" do
+      let(:page_id) { "accessible_select_three" }
+      let(:question_id) { "organisation_id" }
+      let(:organisation) { FactoryBot.create(:organisation) }
+
+      it "gets the answer options from given method" do
+        answer_options = { "#{organisation.id}": organisation.name.to_s }
+        allow(Organisation).to receive(:all).and_return([organisation])
+        expect(question.answer_options).to eq(answer_options)
+      end
+    end
   end
 
   context "when type is checkbox" do
