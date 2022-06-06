@@ -178,6 +178,29 @@ RSpec.describe Imports::CaseLogsImportService do
         expect(case_log).not_to be_nil
         expect(case_log.referral).to be_nil
       end
+
+      context "and this is an internal transfer from a previous fixed term tenancy" do
+        before do
+          case_log_xml.at_xpath("//xmlns:Q11").content = "30 Fixed term Local Authority General Needs tenancy"
+          case_log_xml.at_xpath("//xmlns:Q16").content = "1 Internal Transfer"
+        end
+
+        it "intercepts the relevant validation error" do
+          expect(logger).to receive(:warn).with(/Removing internal transfer referral since previous tenancy is fixed terms or lifetime/)
+          expect { case_log_service.send(:create_log, case_log_xml) }
+            .not_to raise_error
+        end
+
+        it "clears out the referral answer" do
+          allow(logger).to receive(:warn)
+
+          case_log_service.send(:create_log, case_log_xml)
+          case_log = CaseLog.find_by(old_id: case_log_id)
+
+          expect(case_log).not_to be_nil
+          expect(case_log.referral).to be_nil
+        end
+      end
     end
   end
 end

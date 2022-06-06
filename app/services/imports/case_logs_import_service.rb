@@ -226,6 +226,11 @@ module Imports
         @logs_overridden << case_log.old_id
         attributes.delete("referral")
         save_case_log(attributes)
+      elsif case_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
+        @logger.warn("Log #{case_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
+        @logs_overridden << case_log.old_id
+        attributes.delete("referral")
+        save_case_log(attributes)
       else
         raise exception
       end

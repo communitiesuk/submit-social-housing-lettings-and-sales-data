@@ -111,8 +111,8 @@ module Validations::HouseholdValidations
 
   def validate_referral(record)
     if record.is_internal_transfer? && record.owning_organisation.provider_type == "PRP" && record.is_prevten_la_general_needs?
-      record.errors.add :referral, I18n.t("validations.household.referral.la_general_needs.internal_transfer")
-      record.errors.add :prevten, I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
+      record.errors.add :prevten, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.household.prevten.la_general_needs.internal_transfer")
+      record.errors.add :referral, :internal_transfer_fixed_or_lifetime, message: I18n.t("validations.household.referral.la_general_needs.internal_transfer")
     end
 
     if record.owning_organisation.provider_type == "LA" && record.local_housing_referral?
