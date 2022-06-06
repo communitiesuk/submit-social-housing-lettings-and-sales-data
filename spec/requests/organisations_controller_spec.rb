@@ -986,7 +986,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "DLUHC" }
 
           it "has search and pagination in the title" do
-            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’ of 29 total organisations) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Organisations (27 organisations matching ‘#{search_param}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
