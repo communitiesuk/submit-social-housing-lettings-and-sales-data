@@ -383,7 +383,7 @@ module Imports
 
       age_refused = string_or_nil(xml_doc, "P#{index}AR")
       if age_refused.present?
-        if age_refused.casecmp("AGE_REFUSED").zero?
+        if age_refused.casecmp?("AGE_REFUSED") || age_refused.casecmp?("No")
           return 1 # No
         else
           return 0 # Yes
