@@ -13,13 +13,32 @@ RSpec.describe TitleHelper do
   end
 
   describe "#format_title" do
+    let(:page_title) { "Title" }
+    let(:item_label) { "label" }
+    let(:search_item)  { nil }
+    let(:count)  { 1 }
+    let(:organisation_name) { nil }
+
     context "coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      context "specific organisation details path" do
+        let(:path) { "organisations/1/details" }
+        let(:page_title) { "Organisation details" }
+        let(:organisation_name) { nil }
+
+        context "search is missing" do
+          let(:expected_title) { page_title }
+
+          it "returns expected title when no search" do
+            expect(format_title(path, nil, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
+          end
+        end
+      end
+    end
+
+    context "support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:page_title) { "Title" }
-      let(:item_label) { "label" }
-      let(:search_item)  { nil }
-      let(:count)  { 1 }
-      let(:organisation_name) { nil }
 
       context "highest level links" do
         context "organisation path" do

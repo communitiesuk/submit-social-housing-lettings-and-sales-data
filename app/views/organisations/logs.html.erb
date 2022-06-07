@@ -1,9 +1,5 @@
 <% item_label = format_label(@pagy.count, "log") %>
-<% if @searched.present? %>
-  <% title = "#{@organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
-<% else %>
-  <% title = "#{@organisation.name} (Logs)" %>
-<% end %>
+<% title = format_title(request.path, @searched, "Logs", current_user, item_label, @pagy.count, nil) %>
 
 <% content_for :title, title %>
 
