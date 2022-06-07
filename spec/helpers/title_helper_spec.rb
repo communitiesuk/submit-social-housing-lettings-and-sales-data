@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ItemLabelHelper do
+RSpec.describe TitleHelper do
   describe "#format_label" do
     let(:item) { "organisation" }
     it "returns singular when count is 1" do

@@ -1,4 +1,4 @@
-module ItemLabelHelper
+module TitleHelper
   def format_label(count, item)
     count > 1 ? item.pluralize : item
   end
