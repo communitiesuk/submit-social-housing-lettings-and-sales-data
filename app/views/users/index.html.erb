@@ -1,4 +1,4 @@
-<% item_label = @pagy.count > 1 ? "users" : "user" %>
+<% item_label = format_label(@pagy.count, "user") %>
 <% if @searched.present? %>
   <% title = "#{current_user.support? ? 'Users' : current_user.organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’" %>
 <% else %>
