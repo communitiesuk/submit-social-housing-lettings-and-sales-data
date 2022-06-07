@@ -20,68 +20,95 @@ RSpec.describe TitleHelper do
       let(:search_item)  { nil }
       let(:count)  { 1 }
 
-      context "organisation path" do
-        let(:path) { "/organisations" }
-        let(:page_title) { "Organisations" }
+      context "highest level links" do
+        context "organisation path" do
+          let(:path) { "/organisations" }
+          let(:page_title) { "Organisations" }
 
-        context "search is missing" do
-          let(:expected_title) { page_title }
+          context "search is missing" do
+            let(:expected_title) { page_title }
 
-          it "returns expected title when no search" do
-            expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            it "returns expected title when no search" do
+              expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            end
+          end
+
+          context "search is present" do
+            let(:search_item)  { "foobar" }
+            let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
+
+            it "returns expected title when search is present" do
+              expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+            end
           end
         end
 
-        context "search is present" do
-          let(:search_item)  { "foobar" }
-          let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
+        context "users path" do
+          let(:path) { "/users" }
+          let(:page_title) { "Users" }
 
-          it "returns expected title when search is present" do
-            expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+          context "search is missing" do
+            let(:expected_title) { page_title }
+
+            it "returns expected title when no search" do
+              expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            end
+          end
+
+          context "search is present" do
+            let(:search_item)  { "foobar" }
+            let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
+
+            it "returns expected title when search is present" do
+              expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+            end
+          end
+        end
+
+        context "logs path" do
+          let(:path) { "/logs" }
+          let(:page_title) { "Logs" }
+
+          context "search is missing" do
+            let(:expected_title) { page_title }
+
+            it "returns expected title when no search" do
+              expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            end
+          end
+
+          context "search is present" do
+            let(:search_item)  { "foobar" }
+            let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
+
+            it "returns expected title when search is present" do
+              expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+            end
           end
         end
       end
 
-      context "users path" do
-        let(:path) { "/users" }
-        let(:page_title) { "Users" }
+      context "sub nav links" do
+        context "specific organisation logs path" do
+          let(:path) { "organisations/1/logs" }
+          let(:page_title) { "Logs" }
+          let(:organisation_name) { "Some Name" }
 
-        context "search is missing" do
-          let(:expected_title) { page_title }
+          context "search is missing" do
+            let(:expected_title) { "#{organisation_name} (#{page_title})" }
 
-          it "returns expected title when no search" do
-            expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            it "returns expected title when no search" do
+              expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
+            end
           end
-        end
 
-        context "search is present" do
-          let(:search_item)  { "foobar" }
-          let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
+          context "search is present" do
+            let(:search_item)  { "foobar" }
+            let(:expected_title) { "#{organisation_name} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
-          it "returns expected title when search is present" do
-            expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
-          end
-        end
-      end
-
-      context "logs path" do
-        let(:path) { "/logs" }
-        let(:page_title) { "Logs" }
-
-        context "search is missing" do
-          let(:expected_title) { page_title }
-
-          it "returns expected title when no search" do
-            expect(format_title(path, nil, page_title, user, item_label, count)).to eq(expected_title)
-          end
-        end
-
-        context "search is present" do
-          let(:search_item)  { "foobar" }
-          let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
-
-          it "returns expected title when search is present" do
-            expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+            it "returns expected title when search is present" do
+              expect(format_title(path, search_item, page_title, user, item_label, count)).to eq(expected_title)
+            end
           end
         end
       end
