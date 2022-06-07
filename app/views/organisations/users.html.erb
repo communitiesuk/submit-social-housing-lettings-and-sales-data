@@ -4,9 +4,7 @@
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
-  <% if current_user.support? %>
-    <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
-  <% end %>
+  <%= @organisation.name %>
 </h1>
 
 <%= render SubNavigationComponent.new(
