@@ -1,4 +1,4 @@
-<% item_label = @pagy.count > 1 ? "organisations" : "organisation" %>
+<% item_label = format_label(@pagy.count, "organisation") %>
 <% if @searched.present? %>
   <% title = "Organisations (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
 <% else %>
