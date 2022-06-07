@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "user") %>
-<% title = format_title(request.path, @searched, "Users", current_user, item_label, @pagy.count, nil) %>
+<% title = format_title(@searched, "Users", current_user, item_label, @pagy.count, nil) %>
 
 <% content_for :title, title %>
 
