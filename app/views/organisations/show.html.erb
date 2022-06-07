@@ -1,5 +1,5 @@
 <% title = current_user.support? ? "#{@organisation.name} (Organisation details)" : "Organisation details" %>
-<% title = format_title(request.path, nil, "Organisation details", current_user, nil, nil, @organisation.name) %>
+<% title = format_title(request.path, nil, current_user.support? ? "Organisation details" : "About your organisation", current_user, nil, nil, @organisation.name) %>
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
