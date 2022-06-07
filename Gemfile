@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 7.0.2"
+gem "rails", "~> 7.0.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 # Use Puma as the app server
@@ -27,8 +27,6 @@ gem "govuk_markdown"
 gem "notifications-ruby-client"
 # A modest javascript framework for the html you already have
 gem "stimulus-rails"
-# Admin charts
-gem "chartkick"
 # Spreadsheet parsing
 gem "roo"
 # Json Schema
