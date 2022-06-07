@@ -3,19 +3,18 @@ module TitleHelper
     count > 1 ? item.pluralize : item
   end
 
-  def format_title(path, searched, page_title, current_user, item_label, count, organisation_name)
+  def format_title(_path, searched, page_title, current_user, item_label, count, organisation_name)
     if searched.present?
-      actual_title = support_user_sab_nav?(current_user, organisation_name) ? "#{organisation_name}" : page_title
-      title = "#{actual_title} (#{count} #{item_label} matching ‘#{searched}’)"
+      actual_title = support_user_sab_nav?(current_user, organisation_name) ? organisation_name.to_s : page_title
+      "#{actual_title} (#{count} #{item_label} matching ‘#{searched}’)"
     else
-      actual_title = support_user_sab_nav?(current_user, organisation_name) ? "#{organisation_name} (#{page_title})" : page_title
-      title = actual_title
+      support_user_sab_nav?(current_user, organisation_name) ? "#{organisation_name} (#{page_title})" : page_title
     end
   end
 
-  private
+private
 
-  def support_user_sab_nav? current_user, organisation_name
+  def support_user_sab_nav?(current_user, organisation_name)
     current_user.support? && organisation_name
   end
 end

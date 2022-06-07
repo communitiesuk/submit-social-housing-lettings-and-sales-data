@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe TitleHelper do
   describe "#format_label" do
     let(:item) { "organisation" }
+
     it "returns singular when count is 1" do
       expect(format_label(1, item)).to eq("organisation")
     end
@@ -16,18 +17,18 @@ RSpec.describe TitleHelper do
     let(:page_title) { "Title" }
     let(:item_label) { "label" }
     let(:search_item)  { nil }
-    let(:count)  { 1 }
+    let(:count) { 1 }
     let(:organisation_name) { nil }
 
-    context "coordinator user" do
+    context "when coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
 
-      context "specific organisation details path" do
+      context "when specific organisation details path" do
         let(:path) { "organisations/1/details" }
         let(:page_title) { "Organisation details" }
         let(:organisation_name) { nil }
 
-        context "search is missing" do
+        context "when search is missing" do
           let(:expected_title) { page_title }
 
           it "returns expected title when no search" do
@@ -37,15 +38,15 @@ RSpec.describe TitleHelper do
       end
     end
 
-    context "support user" do
+    context "when support user" do
       let(:user) { FactoryBot.create(:user, :support) }
 
-      context "highest level links" do
-        context "organisation path" do
+      context "when highest level links" do
+        context "when organisation path" do
           let(:path) { "/organisations" }
           let(:page_title) { "Organisations" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { page_title }
 
             it "returns expected title when no search" do
@@ -53,8 +54,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
@@ -63,11 +64,11 @@ RSpec.describe TitleHelper do
           end
         end
 
-        context "users path" do
+        context "when users path" do
           let(:path) { "/users" }
           let(:page_title) { "Users" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { page_title }
 
             it "returns expected title when no search" do
@@ -75,8 +76,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
@@ -85,11 +86,11 @@ RSpec.describe TitleHelper do
           end
         end
 
-        context "logs path" do
+        context "when logs path" do
           let(:path) { "/logs" }
           let(:page_title) { "Logs" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { page_title }
 
             it "returns expected title when no search" do
@@ -97,8 +98,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
@@ -108,13 +109,13 @@ RSpec.describe TitleHelper do
         end
       end
 
-      context "sub nav links" do
-        context "specific organisation logs path" do
+      context "when sub nav links" do
+        context "when specific organisation logs path" do
           let(:path) { "organisations/1/logs" }
           let(:page_title) { "Logs" }
           let(:organisation_name) { "Foo Bar" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { "#{organisation_name} (#{page_title})" }
 
             it "returns expected title when no search" do
@@ -122,8 +123,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{organisation_name} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
@@ -132,12 +133,12 @@ RSpec.describe TitleHelper do
           end
         end
 
-        context "specific organisation users path" do
+        context "when specific organisation users path" do
           let(:path) { "organisations/1/users" }
           let(:page_title) { "Users" }
           let(:organisation_name) { "Foo Bar" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { "#{organisation_name} (#{page_title})" }
 
             it "returns expected title when no search" do
@@ -145,8 +146,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{organisation_name} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
@@ -155,12 +156,12 @@ RSpec.describe TitleHelper do
           end
         end
 
-        context "specific organisation details path" do
+        context "when specific organisation details path" do
           let(:path) { "organisations/1/details" }
           let(:page_title) { "Organisation details" }
           let(:organisation_name) { "Foo Bar" }
 
-          context "search is missing" do
+          context "when search is missing" do
             let(:expected_title) { "#{organisation_name} (#{page_title})" }
 
             it "returns expected title when no search" do
@@ -168,8 +169,8 @@ RSpec.describe TitleHelper do
             end
           end
 
-          context "search is present" do
-            let(:search_item)  { "foobar" }
+          context "when search is present" do
+            let(:search_item) { "foobar" }
             let(:expected_title) { "#{organisation_name} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
             it "returns expected title when search is present" do
