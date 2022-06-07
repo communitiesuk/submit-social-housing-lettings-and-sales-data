@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "log") %>
-<% title = format_title(request.path, @searched, "Logs", current_user, item_label, @pagy.count, nil) %>
+<% title = format_title(request.path, @searched, "Logs", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
