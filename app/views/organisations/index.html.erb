@@ -3,13 +3,7 @@
 
 <% content_for :title, title %>
 
-<% if request.path == "/organisations" %>
-  <%= render partial: "headings", locals: { main: "Organisations", sub: nil } %>
-<% else %>
-  <%= render partial: "headings", locals: { main: @organisation.name, sub: "Organisations" } %>
-<% end %>
-
-<% items = tab_items(current_user) %>
+<%= render partial: "organisations/headings", locals: request.path == "/organisations" ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
 
 <h2 class="govuk-visually-hidden">Organisations</h2>
 

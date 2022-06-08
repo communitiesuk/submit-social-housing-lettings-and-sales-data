@@ -3,11 +3,7 @@
 
 <% content_for :title, title %>
 
-<% if current_user.support? %>
-  <%= render partial: "organisations/headings", locals: { main: "Users", sub: nil } %>
-<% else %>
-  <%= render partial: "organisations/headings", locals: { main: "User", sub: current_user.organisation.name } %>
-<% end %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Users", sub: nil } : { main: "User", sub: current_user.organisation.name } %>
 
 <h2 class="govuk-visually-hidden">Users</h2>
 

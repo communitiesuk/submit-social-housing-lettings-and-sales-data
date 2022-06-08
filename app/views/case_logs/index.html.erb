@@ -3,11 +3,7 @@
 
 <% content_for :title, title %>
 
-<% if current_user.support? %>
-  <%= render partial: "organisations/headings", locals: { main: "Logs", sub: nil } %>
-<% else %>
-  <%= render partial: "organisations/headings", locals: { main: "Logs", sub: current_user.organisation.name } %>
-<% end %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Logs", sub: nil } : { main: "Logs", sub: current_user.organisation.name } %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
