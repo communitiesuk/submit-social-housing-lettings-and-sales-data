@@ -3,12 +3,7 @@
 
 <% content_for :title, title %>
 
-<h1 class="govuk-heading-l">
-  <% unless current_user.support? %>
-    <span class="govuk-caption-l"><%= current_user.organisation.name %></span>
-  <% end %>
-  Logs
-</h1>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Logs", sub: nil } : { main: "Logs", sub: current_user.organisation.name } %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
