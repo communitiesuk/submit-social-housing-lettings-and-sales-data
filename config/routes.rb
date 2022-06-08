@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
+  get "/supported-housing", to: "schemes#index"
+
   resources :users do
     member do
       get "deactivate", to: "users#deactivate"
