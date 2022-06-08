@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_08_144156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -192,9 +192,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
+    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "shelteredaccom"
-    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
@@ -232,7 +232,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
@@ -275,6 +275,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
     t.string "old_org_id"
     t.integer "old_visible_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
+  end
+
+  create_table "schemes", force: :cascade do |t|
+    t.string "code"
+    t.string "service"
+    t.bigint "organisation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -330,4 +339,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_06_082639) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "schemes", "organisations"
 end
