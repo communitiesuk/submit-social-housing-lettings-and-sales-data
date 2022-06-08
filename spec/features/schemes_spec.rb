@@ -4,7 +4,7 @@ RSpec.describe "Supported housing scheme Features" do
   context "when viewing list of schemes" do
     context "when I am signed as a support user in there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
-      let!(:schemes) { FactoryBot.create(:scheme) }
+      let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
       let(:notify_client) { instance_double(Notifications::Client) }
       let(:confirmation_token) { "MCDH5y6Km-U7CFPgAMVS" }
       let(:devise_notify_mailer) { DeviseNotifyMailer.new }
@@ -25,7 +25,19 @@ RSpec.describe "Supported housing scheme Features" do
       end
 
       it "displays the link to the supported housing" do
-        expect(page).to have_link("Supported housing")
+        expect(page).to have_link("Supported housing", href: "/supported-housing")
+      end
+
+      context "when I click Supported housing" do
+        before do
+          click_link "Supported housing", href: "/supported-housing"
+        end
+
+        it "shows list of schemes" do
+          schemes.each do |scheme|
+            expect(page).to have_content(schemes.code)
+          end
+        end
       end
     end
   end
