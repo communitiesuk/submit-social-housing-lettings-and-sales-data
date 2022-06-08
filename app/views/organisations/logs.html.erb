@@ -1,14 +1,10 @@
-<% item_label = @pagy.count > 1 ? "logs" : "log" %>
-<% if @searched.present? %>
-  <% title = "#{@organisation.name} (#{@pagy.count} #{item_label} matching ‘#{@searched}’)" %>
-<% else %>
-  <% title = "#{@organisation.name} (Logs)" %>
-<% end %>
+<% item_label = format_label(@pagy.count, "log") %>
+<% title = format_title(@searched, "Logs", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
 <h1 class="govuk-heading-l">
-  <h1 class="govuk-heading-l"><%= @organisation.name %></h1>
+  <%= @organisation.name %>
 </h1>
 
 <%= render SubNavigationComponent.new(
