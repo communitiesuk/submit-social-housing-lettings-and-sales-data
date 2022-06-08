@@ -30,7 +30,7 @@ RSpec.describe TitleHelper do
         context "when search is missing" do
           let(:expected_title) { page_title }
 
-          it "returns expected title when no search" do
+          it "returns expected title" do
             expect(format_title(nil, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
 
@@ -38,7 +38,7 @@ RSpec.describe TitleHelper do
             let(:search_item) { "foobar" }
             let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
-            it "returns expected title when search is present" do
+            it "returns expected title" do
               expect(format_title(search_item, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
             end
           end
@@ -56,7 +56,7 @@ RSpec.describe TitleHelper do
         context "when search is missing" do
           let(:expected_title) { page_title }
 
-          it "returns expected title when no search" do
+          it "returns expected title" do
             expect(format_title(nil, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
 
@@ -64,7 +64,7 @@ RSpec.describe TitleHelper do
             let(:search_item) { "foobar" }
             let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
-            it "returns expected title when search is present" do
+            it "returns expected title" do
               expect(format_title(search_item, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
             end
           end
@@ -81,7 +81,7 @@ RSpec.describe TitleHelper do
         context "when search is missing" do
           let(:expected_title) { page_title }
 
-          it "returns expected title when no search" do
+          it "returns expected title" do
             expect(format_title(nil, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
         end
@@ -90,7 +90,7 @@ RSpec.describe TitleHelper do
           let(:search_item) { "foobar" }
           let(:expected_title) { "#{page_title} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
-          it "returns expected title when search is present" do
+          it "returns expected title" do
             expect(format_title(search_item, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
         end
@@ -103,7 +103,7 @@ RSpec.describe TitleHelper do
         context "when search is missing" do
           let(:expected_title) { "#{organisation_name} (#{page_title})" }
 
-          it "returns expected title when no search" do
+          it "returns expected title" do
             expect(format_title(nil, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
         end
@@ -112,7 +112,7 @@ RSpec.describe TitleHelper do
           let(:search_item) { "foobar" }
           let(:expected_title) { "#{organisation_name} (#{count} #{item_label} matching ‘#{search_item}’)" }
 
-          it "returns expected title when search is present" do
+          it "returns expected title" do
             expect(format_title(search_item, page_title, user, item_label, count, organisation_name)).to eq(expected_title)
           end
         end
