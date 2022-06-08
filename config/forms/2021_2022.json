@@ -9,6 +9,20 @@
         "setup": {
           "label": "Set up this lettings log",
           "pages": {
+            "organisation": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "owning_organisation_id": {
+                  "check_answer_label": "Which owning org?",
+                  "header": "Which owning org?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": "get_all_orgs_answer_options"
+                }
+              },
+              "derived": true
+            },
             "needs_type": {
               "header": "",
               "description": "",
