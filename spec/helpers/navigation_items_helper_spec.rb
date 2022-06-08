@@ -110,7 +110,7 @@ RSpec.describe NavigationItemsHelper do
         end
 
         it "returns navigation items with the users item set as current" do
-          expect(primary_items("/logs", current_user)).to eq(expected_navigation_items)
+          expect(primary_items("/supported-housing", current_user)).to eq(expected_navigation_items)
         end
       end
 
@@ -122,6 +122,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             ]
           end
 
@@ -146,6 +147,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             ]
           end
 
@@ -170,6 +172,7 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             ]
           end
 

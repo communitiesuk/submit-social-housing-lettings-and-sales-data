@@ -7,6 +7,7 @@ module NavigationItemsHelper
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
+        NavigationItem.new("Supported housing", "/supported-housing", supported_housing_current?(path)),
       ]
     else
       [
@@ -33,6 +34,10 @@ private
 
   def users_current?(path)
     path == "/users"
+  end
+
+  def supported_housing_current?(path)
+    path == "/supported-housing"
   end
 
   def organisations_current?(path)
