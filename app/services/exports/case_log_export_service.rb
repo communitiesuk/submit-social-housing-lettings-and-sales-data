@@ -181,13 +181,80 @@ module Exports
       attribute_hash["uploaddate"] = attribute_hash["updated_at"]
       attribute_hash["tenancycode"] = attribute_hash["tenant_code"]
       attribute_hash["ppcodenk"] = attribute_hash["previous_postcode_known"]
+      attribute_hash["sheltered"] = attribute_hash["shelteredaccom"]
 
       # Age refused
       (1..8).each do |index|
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
       end
 
+      attribute_hash["hhtype"] = get_hhtype(case_log)
+      attribute_hash["new_old"] = get_new_old(case_log)
+      attribute_hash["vacdays"] = get_vacdays(case_log)
+
       attribute_hash
+    end
+
+    def get_vacdays(case_log)
+      return if case_log.startdate.nil?
+
+      if case_log.mrcdate.present?
+        (case_log.startdate - case_log.mrcdate).to_i / 1.day
+      elsif case_log.voiddate.present?
+        (case_log.startdate - case_log.voiddate).to_i / 1.day
+      end
+    end
+
+    def get_new_old(case_log)
+      if [6, 8, 30, 31, 32, 33].include?(case_log.prevten) || [1, 10].include?(case_log.referral)
+        2 # Tenant existing in social housing sector
+      else
+        1 # Tenant new to social housing sector
+      end
+    end
+
+    def get_hhtype(case_log)
+      return if case_log.totelder.nil? || case_log.totadult.nil? || case_log.totchild.nil?
+
+      if only_one_elder?(case_log)
+        1
+      elsif two_adults_including_elders?(case_log)
+        2
+      elsif only_one_adult?(case_log)
+        3
+      elsif only_two_adults?(case_log)
+        4
+      elsif one_adult_with_at_least_one_child?(case_log)
+        5
+      elsif two_adults_with_at_least_one_child?(case_log)
+        6
+      else
+        9
+      end
+    end
+
+    def two_adults_with_at_least_one_child?(case_log)
+      case_log.totelder.zero? && case_log.totadult >= 2 && case_log.totchild >= 1
+    end
+
+    def one_adult_with_at_least_one_child?(case_log)
+      case_log.totelder.zero? && case_log.totadult == 1 && case_log.totchild >= 1
+    end
+
+    def only_two_adults?(case_log)
+      case_log.totelder.zero? && case_log.totadult == 2 && case_log.totchild.zero?
+    end
+
+    def only_one_adult?(case_log)
+      case_log.totelder.zero? && case_log.totadult == 1 && case_log.totchild.zero?
+    end
+
+    def two_adults_including_elders?(case_log)
+      (case_log.totelder + case_log.totadult) == 2 && case_log.totelder >= 1
+    end
+
+    def only_one_elder?(case_log)
+      case_log.totelder == 1 && case_log.totadult.zero? && case_log.totchild.zero?
     end
 
     def filter_keys!(attributes)

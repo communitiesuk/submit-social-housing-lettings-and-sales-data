@@ -129,7 +129,6 @@
     <relat8/>
     <lar/>
     <irproduct/>
-    <shelteredaccom>0</shelteredaccom>
     <form>{id}</form>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
@@ -141,6 +140,10 @@
     <uploaddate>2022-02-08 16:52:15 UTC</uploaddate>
     <tenancycode>BZ737</tenancycode>
     <ppcodenk>1</ppcodenk>
+    <sheltered>0</sheltered>
+    <hhtype>4</hhtype>
+    <new_old>2</new_old>
+    <vacdays>638</vacdays>
     <providertype>1</providertype>
   </form>
 </forms>
