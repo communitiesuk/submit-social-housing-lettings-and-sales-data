@@ -15,9 +15,7 @@ RSpec.describe "Supported housing scheme Features" do
 
       it "displays the link to the supported housing" do
         expect(page).to have_link("Supported housing")
-        
       end
-      
     end
   end
 end
