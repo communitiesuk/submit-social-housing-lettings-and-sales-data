@@ -54,12 +54,28 @@ RSpec.describe NavigationItemsHelper do
     context "when the user is a support user" do
       let(:current_user) { FactoryBot.create(:user, :support) }
 
+      context "when the user is on the logs page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", true),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/logs", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
       context "when the user is on the users page" do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
           ]
         end
 
@@ -74,11 +90,27 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
           ]
         end
 
         it "returns navigation items with the users item set as current" do
           expect(primary_items("/account", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
+      context "when the user is on the supported housing page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/logs", current_user)).to eq(expected_navigation_items)
         end
       end
 
