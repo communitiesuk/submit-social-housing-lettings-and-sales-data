@@ -19,7 +19,7 @@
     <h2 class="govuk-heading-m">Before you start</h2>
     <p class="govuk-body">Use your account details to sign in.</p>
     <p class="govuk-body">If you need to set up a new account, speak to your organisation’s CORE data coordinator. If you don’t know who that is, <%= govuk_link_to("contact the helpdesk", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %>.</p>
-    <p class="govuk-body">You can <%= govuk_link_to("request an account", "https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/group/21") %> if your organisation doesn’t have one.</p>
+    <p class="govuk-body">You can <%= govuk_mail_to("dluhc.digital-services@levellingup.gov.uk", "request an account", subject: "CORE: Request a new account") %> if your organisation doesn’t have one.</p>
   </div>
 
   <div class="govuk-grid-column-one-third-from-desktop">
