@@ -2,11 +2,8 @@
 <% title = format_title(nil, current_user.support? ? "About this organisation" : "About your organisation", current_user, nil, nil, @organisation.name) %>
 <% content_for :title, title %>
 
-<% if !current_user.support? %>
-  <%= render partial: "organisations/headings", locals: { main: current_user.organisation.name, sub: "About your organisation" } %>
-<% else %>
-  <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
-<% end %>
+<% locals = current_user.support? ? { main: @organisation.name, sub: nil } : { main: "About your organisation", sub: current_user.organisation.name }%>
+<%= render partial: "organisations/headings", locals: locals %>
 
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
