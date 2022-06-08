@@ -10,7 +10,7 @@ RSpec.describe TagHelper do
     end
 
     it "returns tag with correct status text and colour and custom class" do
-      expect(status_tag("not_started", "app-tag--small")).to eq("<strong class=\"govuk-tag app-tag--small govuk-tag--grey\">Not started</strong>")
+      expect(status_tag("not_started", "app-tag--small")).to eq("<strong class=\"govuk-tag govuk-tag--grey app-tag--small\">Not started</strong>")
     end
   end
 end
