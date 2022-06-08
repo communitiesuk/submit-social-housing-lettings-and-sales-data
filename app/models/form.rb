@@ -157,17 +157,22 @@ class Form
     depends_on.any? do |conditions_set|
       return false unless conditions_set
 
-      conditions_set.all? do |question, value|
+      conditions_set.all? do |x|
+
+        object = x["object"]
+        method = x["method"]
+        value = x["value"]
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
           operand = value["operand"]
-          case_log[question]&.send(operator, operand)
+          case_log[method]&.send(operator, operand)
         else
-          parts = question.split(".")
+          parts = method.split(".")
+
           case_log_value = send_chain(parts, case_log)
 
           value.nil? ? case_log_value == value : !case_log_value.nil? && case_log_value == value
-        end
+        end 
       end
     end
   end
