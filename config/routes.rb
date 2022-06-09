@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
-  get "/supported-housing", to: "schemes#index"
+  resources :schemes, :path => "/supported-housing", only: [:index]
 
   resources :users do
     member do
