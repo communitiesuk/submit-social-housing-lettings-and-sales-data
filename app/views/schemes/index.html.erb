@@ -1,5 +1,9 @@
 <%= render partial: "organisations/headings", locals: { main: "Supported housing services", sub: nil } %>
 
+<%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+
 <section class="app-table-group" tabindex="0">
   <%= govuk_table do |table| %>
     <%= table.head do |head| %>
