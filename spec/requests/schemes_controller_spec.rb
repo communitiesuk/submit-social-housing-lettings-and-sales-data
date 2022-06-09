@@ -14,6 +14,7 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
     context "when signed in as a support user" do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -29,6 +30,10 @@ RSpec.describe SchemesController, type: :request do
         schemes.each do |scheme|
           expect(page).to have_content(scheme.code)
         end
+      end
+
+      it "shows a search bar" do
+        expect(page).to have_field("search", type: "search")
       end
     end
   end
