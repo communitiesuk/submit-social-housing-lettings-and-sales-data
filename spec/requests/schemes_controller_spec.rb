@@ -5,6 +5,7 @@ RSpec.describe SchemesController, type: :request do
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :data_coordinator) }
+  let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
 
   describe "#index" do
     context "when signed in as a support user" do
@@ -14,8 +15,14 @@ RSpec.describe SchemesController, type: :request do
         get "/supported-housing"
       end
 
-      it "shows the organisation list" do
+      it "has page heading" do
         expect(page).to have_content("Supported housing services")
+      end
+
+      it "shows all schemes" do
+        schemes.each do |scheme|
+          expect(page).to have_content(scheme.code)
+        end
       end
     end
   end
