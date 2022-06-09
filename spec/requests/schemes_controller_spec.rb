@@ -35,6 +35,10 @@ RSpec.describe SchemesController, type: :request do
       it "shows a search bar" do
         expect(page).to have_field("search", type: "search")
       end
+
+      it "has correct title" do
+        expect(page).to have_title("Supported housing services - Submit social housing lettings and sales data (CORE) - GOV.UK")
+      end
     end
 
     context "when signed in as a data coordinator user" do
