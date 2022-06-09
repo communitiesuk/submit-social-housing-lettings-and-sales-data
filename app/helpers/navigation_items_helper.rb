@@ -2,7 +2,6 @@ module NavigationItemsHelper
   NavigationItem = Struct.new(:text, :href, :current, :classes)
 
   def primary_items(path, current_user)
-    nav_items = []
     if current_user.support?
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
