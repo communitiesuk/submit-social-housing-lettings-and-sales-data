@@ -15,6 +15,20 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
+    context "when signed in as a data provider user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/supported-housing"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
     context "when signed in as a support user" do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
