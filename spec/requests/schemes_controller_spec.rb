@@ -8,6 +8,12 @@ RSpec.describe SchemesController, type: :request do
   let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
 
   describe "#index" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/supported-housing"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
     context "when signed in as a support user" do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
