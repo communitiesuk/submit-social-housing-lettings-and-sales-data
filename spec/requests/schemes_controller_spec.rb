@@ -11,7 +11,7 @@ RSpec.describe SchemesController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/supported-housing", headers:, params:
+        get "/supported-housing"
       end
 
       it "shows the organisation list" do
