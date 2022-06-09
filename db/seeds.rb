@@ -54,6 +54,13 @@ unless Rails.env.test?
     pp "Seeded 3 dummy users"
   end
 
+  Scheme.create!(
+    code: "7XYZ",
+    service: "Beulahside Care",
+    organisation: org,
+    created_at: Time.zone.now,
+  )
+
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

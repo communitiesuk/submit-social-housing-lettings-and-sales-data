@@ -1,0 +1,30 @@
+<section class="app-table-group" tabindex="0">
+  <%= govuk_table do |table| %>
+    <%= table.head do |head| %>
+      <%= head.row do |row| %>
+        <% row.cell(header: true, text: "Code", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Service", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Managing agent", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Created", html_attributes: {
+          scope: "col",
+        }) %>
+      <% end %>
+    <% end %>
+    <% @all_schemes.each do |scheme| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: scheme.code) %>
+          <% row.cell(text: scheme.service) %>
+          <% row.cell(text: scheme.organisation.name) %>
+          <% row.cell(text: scheme.created_at.to_formatted_s(:govuk_date)) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>
