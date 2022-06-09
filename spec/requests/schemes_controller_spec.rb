@@ -39,6 +39,70 @@ RSpec.describe SchemesController, type: :request do
       it "has correct title" do
         expect(page).to have_title("Supported housing services - Submit social housing lettings and sales data (CORE) - GOV.UK")
       end
+
+      it "shows the total organisations count" do
+        expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes.")
+      end
+
+      context "when paginating over 20 results" do
+        let!(:other_schemes) { FactoryBot.create_list(:scheme, 20) }
+        let(:total_schemes_count) { Scheme.count }
+
+        context "when on the first page" do
+          before do
+            get "/supported-housing"
+          end
+
+          it "shows the total schemes count" do
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes.")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{total_schemes_count}</b> schemes")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("Supported housing services (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+
+        end
+
+        context "when on the second page" do
+          before do
+            get "/supported-housing?page=2"
+          end
+          it "shows the total schemes count" do
+            expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes.")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{total_schemes_count}</b> schemes")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("Supported housing services (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+        end
+      end
     end
 
     context "when signed in as a data coordinator user" do
