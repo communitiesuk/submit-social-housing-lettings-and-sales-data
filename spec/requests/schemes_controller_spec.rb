@@ -4,7 +4,7 @@ RSpec.describe SchemesController, type: :request do
   let(:organisation) { user.organisation }
   let(:headers) { { "Accept" => "text/html" } }
   let(:page) { Capybara::Node::Simple.new(response.body) }
-  let(:user) { FactoryBot.create(:user, :data_coordinator) }
+  let(:user) { FactoryBot.create(:user, :support) }
   let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
 
   describe "#index" do
@@ -29,6 +29,31 @@ RSpec.describe SchemesController, type: :request do
       it "shows all schemes" do
         schemes.each do |scheme|
           expect(page).to have_content(scheme.code)
+        end
+      end
+
+      it "shows a search bar" do
+        expect(page).to have_field("search", type: "search")
+      end
+    end
+
+    context "when signed in as a data coordinator user" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator) }
+    let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        sign_in user
+        get "/supported-housing"
+      end
+
+      it "has page heading" do
+        expect(page).to have_content("Supported housing services")
+      end
+
+      it "shows only schemes belonging to the same organisation" do
+        expect(page).to have_content(same_org_scheme.code)
+        schemes.each do |scheme|
+          expect(page).not_to have_content(scheme.code)
         end
       end
 

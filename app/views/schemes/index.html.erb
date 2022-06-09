@@ -1,4 +1,4 @@
-<%= render partial: "organisations/headings", locals: { main: "Supported housing services", sub: nil } %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Supported housing services", sub: nil } : { main: "Supported housing services", sub: current_user.organisation.name } %>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
 
