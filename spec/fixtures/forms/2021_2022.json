@@ -463,7 +463,10 @@
                   }
                 },
                 "depends_on": [
-                  [{"object": "case_log", "method": "is_la_inferred", "value": false}]
+                  [
+                    {"object": "case_log", "method": "is_la_inferred", "value": false},
+                    {"object": "user", "method": "role", "value": "data_provider"}
+                  ]
                 ]
               },
               "property_wheelchair_accessible": {
