@@ -2,15 +2,21 @@ module NavigationItemsHelper
   NavigationItem = Struct.new(:text, :href, :current, :classes)
 
   def primary_items(path, current_user)
+    nav_items = []
     if current_user.support?
-      nav_items = [
+      [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
         NavigationItem.new("Supported housing", "/supported-housing", supported_housing_current?(path)),
       ]
-
-      Rails.env.production? ? nav_items[0...-1] : nav_items
+    elsif current_user.data_coordinator?
+      [
+        NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
+        NavigationItem.new("Supported housing", "/supported-housing", supported_housing_current?(path)),
+        NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
+        NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
+      ]
     else
       [
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
