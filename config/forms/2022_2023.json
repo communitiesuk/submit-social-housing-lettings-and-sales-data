@@ -13,6 +13,34 @@
               "header": "",
               "description": "",
               "questions": {
+                "organisation": {
+                  "header": "",
+                  "description": "",
+                  "questions": {
+                    "owning_organisation": {
+                      "header": "Which organisation owns this log?",
+                      "hint_text": "",
+                      "type": "select",
+                      "answer_options": {
+                        "1": {
+                          "value": "General needs"
+                        },
+                        "2": {
+                          "value": "Supported housing"
+                        }
+                      }
+                    }
+                  },
+                  "depends_on": [
+                    [
+                      {
+                        "object": "user",
+                        "method": "role",
+                        "value": "support"
+                      }
+                    ]
+                  ]
+                },
                 "needstype": {
                   "check_answer_label": "Needs type",
                   "header": "What is the needs type?",
