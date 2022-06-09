@@ -27,7 +27,7 @@ RSpec.describe NavigationItemsHelper do
       context "data provider user" do
         let(:current_user) { FactoryBot.create(:user) }
 
-        it "user can't see the link to supported housing" do
+        it "data provider user can't see the link to supported housing" do
           expect(primary_items("/logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -42,7 +42,7 @@ RSpec.describe NavigationItemsHelper do
         end
         let(:current_user) { FactoryBot.create(:user, :support) }
 
-        it "user can't see the link to supported housing" do
+        it "support user can't see the link to supported housing" do
           expect(primary_items("/logs", current_user)).to eq(expected_navigation_items)
         end
       end
@@ -53,6 +53,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", true),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -67,6 +68,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -81,6 +83,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, true),
           ]
@@ -95,6 +98,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
