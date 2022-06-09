@@ -572,10 +572,10 @@ RSpec.describe OrganisationsController, type: :request do
 
               it "shows only logs matching both search and filters" do
                 get "/organisations/#{organisation.id}/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
-                expect(page).to have_content(log_matching_filter_and_search.id)
-                expect(page).not_to have_content(log_to_search.id)
+                expect(page).to have_link(log_matching_filter_and_search.id.to_s)
+                expect(page).not_to have_link(log_to_search.id.to_s)
                 logs.each do |log|
-                  expect(page).not_to have_content(log.id)
+                  expect(page).not_to have_link(log.id.to_s)
                 end
               end
             end

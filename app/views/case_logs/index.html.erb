@@ -14,7 +14,7 @@
   <%= render partial: "log_filters" %>
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
-    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+    <%= govuk_section_break(visible: true, size: "m") %>
     <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>
