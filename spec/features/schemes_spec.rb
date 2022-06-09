@@ -35,7 +35,7 @@ RSpec.describe "Supported housing scheme Features" do
 
         it "shows list of schemes" do
           schemes.each do |scheme|
-            expect(page).to have_content(schemes.code)
+            expect(page).to have_content(scheme.code)
           end
         end
       end
