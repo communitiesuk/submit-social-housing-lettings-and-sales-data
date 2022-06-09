@@ -29,6 +29,7 @@ class CaseLogsController < ApplicationController
   def create
     case_log = CaseLog.create(case_log_params)
     respond_to do |format|
+      case_log.form.current_user = current_user
       format.html { redirect_to case_log }
       format.json do
         if case_log.persisted?

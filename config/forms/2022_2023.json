@@ -22,15 +22,14 @@
                       "hint_text": "",
                       "type": "select",
                       "answer_options": {
-                        "1": {
-                          "value": "General needs"
-                        },
-                        "2": {
-                          "value": "Supported housing"
-                        }
-                      }
+                        "": "Select an option",
+                        "2": "Believe",
+                        "3": "Barrow"
+                      },
+                      "hidden_in_check_answers": true
                     }
                   },
+                  "derived": true,
                   "depends_on": [
                     [
                       {
