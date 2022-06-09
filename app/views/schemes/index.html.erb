@@ -1,4 +1,10 @@
+<% item_label = format_label(@pagy.count, "scheme") %>
+<% title = format_title(@searched, "Supported housing services", current_user, item_label, @pagy.count, nil) %>
+
+<% content_for :title, title %>
+
 <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Supported housing services", sub: nil } : { main: "Supported housing services", sub: current_user.organisation.name } %>
+
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
 
@@ -22,7 +28,7 @@
         }) %>
       <% end %>
     <% end %>
-    <% @all_schemes.each do |scheme| %>
+    <% @schemes.each do |scheme| %>
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: scheme.code) %>
