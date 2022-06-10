@@ -66,9 +66,12 @@ RSpec.describe SchemesController, type: :request do
       context "when paginating over 20 results" do
         let(:total_schemes_count) { Scheme.count }
 
+        before do
+          FactoryBot.create_list(:scheme, 20)
+        end
+
         context "when on the first page" do
           before do
-            FactoryBot.create_list(:scheme, 20)
             get "/supported-housing"
           end
 
