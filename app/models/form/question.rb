@@ -167,8 +167,13 @@ private
   def answer_options_from_lookup(lookup)
     values = {}
     values[""] = "Select an option"
-    records = Object.const_get((lookup["class"]).to_s).send((lookup["scope"]).to_s)
-    records.each { |record| values[record.send((lookup["id"]).to_s)] = record.send((lookup["label"]).to_s) }
+    begin
+      records = Object.const_get((lookup["class"]).to_s).send((lookup["scope"]).to_s)
+      records.each { |record| values[record.send((lookup["id"]).to_s)] = record.send((lookup["label"]).to_s) }
+    rescue ActiveRecord::ConnectionNotEstablished
+      # We should only reach this when loading the rails environment without a database running for example
+      # when running 'bundle exec rake lint' in CI
+    end
     values
   end
 
