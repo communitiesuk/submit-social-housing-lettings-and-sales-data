@@ -125,7 +125,7 @@ class Form::Question
               labels = answer_options[value.to_s]
               labels["value"] if labels
             when "select"
-              answer_options[value.to_s]
+              answer_options[value.to_s] || answer_options[value]
             else
               value.to_s
             end

@@ -26,8 +26,7 @@
                         "scope": "all",
                         "id": "id",
                         "label": "name"
-                      },
-                      "hidden_in_check_answers": true
+                      }
                     }
                   },
                   "derived": true,
