@@ -4,6 +4,7 @@ RSpec.describe Organisation, type: :model do
   describe "#new" do
     let(:user) { FactoryBot.create(:user) }
     let!(:organisation) { user.organisation }
+    let!(:scheme) { FactoryBot.create(:scheme, organisation: organisation) }
 
     it "has expected fields" do
       expect(organisation.attribute_names).to include("name", "phone", "provider_type")
@@ -11,6 +12,10 @@ RSpec.describe Organisation, type: :model do
 
     it "has users" do
       expect(organisation.users.first).to eq(user)
+    end
+
+    it "has schemes" do
+      expect(organisation.schemes.first).to eq(scheme)
     end
 
     it "validates provider_type presence" do
