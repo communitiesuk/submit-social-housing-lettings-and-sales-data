@@ -195,6 +195,10 @@ RSpec.describe Form::Question, type: :model do
       it "can correctly lookup the data" do
         expect(question.answer_options).to eq(expected_answer_options)
       end
+
+      it "can correctly determine the value labels" do
+        expect(question.label_from_value(org1.id)).to eq(org1.name)
+      end
     end
   end
 
