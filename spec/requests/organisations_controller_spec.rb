@@ -35,56 +35,113 @@ RSpec.describe OrganisationsController, type: :request do
 
   context "when user is signed in" do
     describe "#schemes" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-      let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
-
-      before do
-        sign_in user
-        get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
-      end
-
-      it "has page heading" do
-        expect(page).to have_content("Supported housing services")
-      end
-
-      it "shows a search bar" do
-        expect(page).to have_field("search", type: "search")
-      end
-
-      it "has hidden accebility field with description" do
-        expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
-        expect(CGI.unescape_html(response.body)).to include(expected_field)
-      end
-
-      it "shows only schemes belonging to the same organisation" do
-        expect(page).to have_content(same_org_scheme.code)
-        schemes.each do |scheme|
-          expect(page).not_to have_content(scheme.code)
-        end
-      end
-
-      context "when searching" do
-        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
-        let(:search_param) { "CODE321" }
+      context "support user" do
+        let(:user) { FactoryBot.create(:user, :support) }
+        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
         before do
-          get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+          sign_in user
+          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
         end
 
-        it "returns matching results" do
-          expect(page).to have_content(searched_scheme.code)
+        it "has page heading" do
+          expect(page).to have_content("Supported housing services")
+        end
+
+        it "shows a search bar" do
+          expect(page).to have_field("search", type: "search")
+        end
+
+        it "has hidden accebility field with description" do
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+          expect(CGI.unescape_html(response.body)).to include(expected_field)
+        end
+
+        it "shows only schemes belonging to the same organisation" do
+          expect(page).to have_content(same_org_scheme.code)
           schemes.each do |scheme|
             expect(page).not_to have_content(scheme.code)
           end
         end
 
-        it "updates the table caption" do
-          expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+        context "when searching" do
+          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
+          let(:search_param) { "CODE321" }
+
+          before do
+            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+          end
+
+          it "returns matching results" do
+            expect(page).to have_content(searched_scheme.code)
+            schemes.each do |scheme|
+              expect(page).not_to have_content(scheme.code)
+            end
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+          end
+
+          it "has search in the title" do
+            expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+        end
+      end
+
+      context "data coordinator user" do
+        let(:user) { FactoryBot.create(:user, :data_coordinator) }
+        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+        before do
+          sign_in user
+          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
         end
 
-        it "has search in the title" do
-          expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        it "has page heading" do
+          expect(page).to have_content("Supported housing services")
+        end
+
+        it "shows a search bar" do
+          expect(page).to have_field("search", type: "search")
+        end
+
+        it "has hidden accebility field with description" do
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+          expect(CGI.unescape_html(response.body)).to include(expected_field)
+        end
+
+        it "shows only schemes belonging to the same organisation" do
+          expect(page).to have_content(same_org_scheme.code)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.code)
+          end
+        end
+
+        context "when searching" do
+          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
+          let(:search_param) { "CODE321" }
+
+          before do
+            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+          end
+
+          it "returns matching results" do
+            expect(page).to have_content(searched_scheme.code)
+            schemes.each do |scheme|
+              expect(page).not_to have_content(scheme.code)
+            end
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+          end
+
+          it "has search in the title" do
+            expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
         end
       end
     end

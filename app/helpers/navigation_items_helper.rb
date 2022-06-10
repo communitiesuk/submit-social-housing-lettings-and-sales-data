@@ -28,6 +28,7 @@ module NavigationItemsHelper
   def secondary_items(path, current_organisation_id)
     [
       NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+      NavigationItem.new("Supported housing", "/organisations/#{current_organisation_id}/supported-housing", subnav_supported_housing_path?(path)),
       NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
       NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
     ]
@@ -48,7 +49,7 @@ private
   end
 
   def organisations_current?(path)
-    path == "/organisations" || subnav_users_path?(path) || subnav_logs_path?(path) || subnav_details_path?(path)
+    path == "/organisations" || subnav_users_path?(path) || subnav_logs_path?(path) || subnav_details_path?(path) || subnav_supported_housing_path?(path)
   end
 
   def subnav_supported_housing_path?(path)

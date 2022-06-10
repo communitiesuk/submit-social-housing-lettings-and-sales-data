@@ -147,6 +147,7 @@ RSpec.describe NavigationItemsHelper do
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", true),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
@@ -172,12 +173,39 @@ RSpec.describe NavigationItemsHelper do
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
           end
 
           it "returns navigation items with the logs item set as current" do
+            expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
+            expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
+          end
+        end
+
+        context "when the user is on organisation schemes page" do
+          let(:required_sub_path) { "supported-housing" }
+          let(:expected_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
+              NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+              NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            ]
+          end
+
+          let(:expected_secondary_navigation_items) do
+            [
+              NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", true),
+              NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users",false),
+              NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
+            ]
+          end
+
+          it "returns navigation items with the schemes item set as current" do
             expect(primary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user)).to eq(expected_navigation_items)
             expect(secondary_items("/organisations/#{current_user.organisation.id}/#{required_sub_path}", current_user.organisation.id)).to eq(expected_secondary_navigation_items)
           end
@@ -197,6 +225,7 @@ RSpec.describe NavigationItemsHelper do
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
+              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
             ]
