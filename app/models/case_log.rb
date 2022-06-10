@@ -528,7 +528,7 @@ private
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
-    self.managing_organisation_id = owning_organisation_id 
+    self.managing_organisation_id = owning_organisation_id
     self.incref = 1 if net_income_refused?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
