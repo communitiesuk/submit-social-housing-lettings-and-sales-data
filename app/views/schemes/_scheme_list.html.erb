@@ -1,0 +1,39 @@
+<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
+  <%= govuk_table do |table| %>
+    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+      <span class="govuk-!-margin-right-4">
+        <% if searched.present? %>
+          <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total schemes. <%= govuk_link_to("Clear search", request.path) %>
+        <% else %>
+          <strong><%= pagy.count %></strong> total schemes.
+        <% end %>
+      </span>
+    <% end %>
+    <%= table.head do |head| %>
+      <%= head.row do |row| %>
+        <% row.cell(header: true, text: "Code", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Service", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Managing agent", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Created", html_attributes: {
+          scope: "col",
+        }) %>
+      <% end %>
+    <% end %>
+    <% @schemes.each do |scheme| %>
+      <%= table.body do |body| %>
+        <%= body.row do |row| %>
+          <% row.cell(text: scheme.code) %>
+          <% row.cell(text: scheme.service_name) %>
+          <% row.cell(text: scheme.organisation.name) %>
+          <% row.cell(text: scheme.created_at.to_formatted_s(:govuk_date)) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</section>

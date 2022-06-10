@@ -54,6 +54,45 @@ unless Rails.env.test?
     pp "Seeded 3 dummy users"
   end
 
+  if Rails.env.development?
+    dummy_org = Organisation.find_or_create_by!(
+      name: "FooBar LTD",
+      address_line1: "Higher Kingston",
+      address_line2: "Yeovil",
+      postcode: "BA21 4AT",
+      holds_own_stock: false,
+      other_stock_owners: "None",
+      managing_agents: "None",
+      provider_type: "LA",
+    )
+
+    pp "Seeded dummy FooBar LTD organisation"
+  end
+
+  if Rails.env.development? && Scheme.count.zero?
+    Scheme.create!(
+      code: "S878",
+      service_name: "Beulahside Care",
+      organisation: org,
+      created_at: Time.zone.now,
+    )
+
+    Scheme.create!(
+      code: "S312",
+      service_name: "Abdullahview Point",
+      organisation: org,
+      created_at: Time.zone.now,
+    )
+
+    Scheme.create!(
+      code: "7XYZ",
+      service_name: "Caspermouth Center",
+      organisation: dummy_org,
+      created_at: Time.zone.now,
+    )
+  end
+
+  pp "Seeded 3 dummy schemes"
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

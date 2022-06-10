@@ -30,10 +30,141 @@ RSpec.describe OrganisationsController, type: :request do
         get "/organisations", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
+
+      it "does not let you see supported housing list" do
+        get "/organisations/#{organisation.id}/supported-housing", headers: headers, params: {}
+        expect(response).to redirect_to("/account/sign-in")
+      end
     end
   end
 
   context "when user is signed in" do
+    describe "#schemes" do
+      context "when support user" do
+        let(:user) { FactoryBot.create(:user, :support) }
+        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+        before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
+          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
+        end
+
+        it "has page heading" do
+          expect(page).to have_content("Supported housing services")
+        end
+
+        it "shows a search bar" do
+          expect(page).to have_field("search", type: "search")
+        end
+
+        it "has hidden accebility field with description" do
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+          expect(CGI.unescape_html(response.body)).to include(expected_field)
+        end
+
+        it "shows only schemes belonging to the same organisation" do
+          expect(page).to have_content(same_org_scheme.code)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.code)
+          end
+        end
+
+        context "when searching" do
+          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
+          let(:search_param) { "CODE321" }
+
+          before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+          end
+
+          it "returns matching results" do
+            expect(page).to have_content(searched_scheme.code)
+            schemes.each do |scheme|
+              expect(page).not_to have_content(scheme.code)
+            end
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+          end
+
+          it "has search in the title" do
+            expect(page).to have_title("#{user.organisation.name} (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+        end
+      end
+
+      context "when data coordinator user" do
+        let(:user) { FactoryBot.create(:user, :data_coordinator) }
+        let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+        before do
+          sign_in user
+          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
+        end
+
+        it "has page heading" do
+          expect(page).to have_content("Supported housing services")
+        end
+
+        it "shows a search bar" do
+          expect(page).to have_field("search", type: "search")
+        end
+
+        it "has hidden accebility field with description" do
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+          expect(CGI.unescape_html(response.body)).to include(expected_field)
+        end
+
+        it "shows only schemes belonging to the same organisation" do
+          expect(page).to have_content(same_org_scheme.code)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.code)
+          end
+        end
+
+        context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
+          let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
+
+          before do
+            get "/organisations/#{unauthorised_organisation.id}/supported-housing", headers:, params: {}
+          end
+
+          it "returns not found 404 from org details route" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
+        context "when searching" do
+          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
+          let(:search_param) { "CODE321" }
+
+          before do
+            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+          end
+
+          it "returns matching results" do
+            expect(page).to have_content(searched_scheme.code)
+            schemes.each do |scheme|
+              expect(page).not_to have_content(scheme.code)
+            end
+          end
+
+          it "updates the table caption" do
+            expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+          end
+
+          it "has search in the title" do
+            expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+        end
+      end
+    end
+
     describe "#show" do
       context "with an organisation that the user belongs to" do
         before do
