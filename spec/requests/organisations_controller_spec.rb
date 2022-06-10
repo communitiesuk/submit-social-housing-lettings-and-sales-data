@@ -30,6 +30,11 @@ RSpec.describe OrganisationsController, type: :request do
         get "/organisations", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
+
+      it "does not let you see supported housing list" do
+        get "/organisations/#{organisation.id}/supported-housing", headers: headers, params: {}
+        expect(response).to redirect_to("/account/sign-in")
+      end
     end
   end
 
