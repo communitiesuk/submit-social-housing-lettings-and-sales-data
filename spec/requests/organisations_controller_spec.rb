@@ -127,6 +127,18 @@ RSpec.describe OrganisationsController, type: :request do
           end
         end
 
+        context "with schemes that are not in scope for the user, i.e. that they do not belong to" do
+          let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
+
+          before do
+            get "/organisations/#{unauthorised_organisation.id}/supported-housing", headers:, params: {}
+          end
+
+          it "returns not found 404 from org details route" do
+            expect(response).to have_http_status(:not_found)
+          end
+        end
+
         context "when searching" do
           let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
           let(:search_param) { "CODE321" }
