@@ -9,10 +9,8 @@ RSpec.describe Scheme, type: :model do
     end
 
     describe "scopes" do
-      let(:organisation) { FactoryBot.create(:organisation, name: "Foo") }
-      let(:different_organisation) { FactoryBot.create(:organisation, name: "Bar") }
-      let!(:scheme_1) { FactoryBot.create(:scheme, organisation: organisation) }
-      let!(:scheme_2) { FactoryBot.create(:scheme, organisation: different_organisation) }
+      let!(:scheme_1) { FactoryBot.create(:scheme) }
+      let!(:scheme_2) { FactoryBot.create(:scheme) }
 
       context "when searching by code" do
         it "returns case insensitive matching records" do
@@ -27,12 +25,12 @@ RSpec.describe Scheme, type: :model do
 
       context "when searching by service name" do
         it "returns case insensitive matching records" do
-          expect(described_class.search_by_organisation(organisation.name.upcase).count).to eq(1)
-          expect(described_class.search_by_organisation(organisation.name.downcase).count).to eq(1)
-          expect(described_class.search_by_organisation(organisation.name.upcase).first.organisation.name).to eq(scheme_1.organisation.name)
-          expect(described_class.search_by_organisation(different_organisation.name.upcase).count).to eq(1)
-          expect(described_class.search_by_organisation(different_organisation.name.downcase).count).to eq(1)
-          expect(described_class.search_by_organisation(different_organisation.name.upcase).first.organisation.name).to eq(scheme_2.organisation.name)
+          expect(described_class.search_by_service(scheme_1.service.upcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_1.service.downcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_1.service.downcase).first.service).to eq(scheme_1.service)
+          expect(described_class.search_by_service(scheme_2.service.upcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_2.service.downcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_2.service.downcase).first.service).to eq(scheme_2.service)
         end
       end
 
@@ -41,9 +39,9 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by(scheme_1.code.upcase).count).to eq(1)
           expect(described_class.search_by(scheme_1.code.downcase).count).to eq(1)
           expect(described_class.search_by(scheme_1.code.downcase).first.code).to eq(scheme_1.code)
-          expect(described_class.search_by(different_organisation.name.upcase).count).to eq(1)
-          expect(described_class.search_by(different_organisation.name.downcase).count).to eq(1)
-          expect(described_class.search_by(different_organisation.name.upcase).first.organisation.name).to eq(scheme_2.organisation.name)
+          expect(described_class.search_by_service(scheme_2.service.upcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_2.service.downcase).count).to eq(1)
+          expect(described_class.search_by_service(scheme_2.service.downcase).first.service).to eq(scheme_2.service)
         end
       end
     end
