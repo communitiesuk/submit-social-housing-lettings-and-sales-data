@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
       get "logs", to: "organisations#logs"
+      get "schemes", to: "organisations#schemes"
     end
   end
 
