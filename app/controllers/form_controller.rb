@@ -13,6 +13,7 @@ class FormController < ApplicationController
       else
         redirect_path = "case_log_#{@page.id}_path"
         session[:errors] = @case_log.errors.to_json
+        Rails.logger.info "User triggered validation(s) on: #{@case_log.errors.map(&:attribute).join(', ')}"
         redirect_to(send(redirect_path, @case_log))
       end
     else
