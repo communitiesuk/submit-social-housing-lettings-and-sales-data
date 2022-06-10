@@ -48,10 +48,6 @@ RSpec.describe OrganisationsController, type: :request do
         expect(page).to have_content("Supported housing services")
       end
 
-      it "redirects to the organisation schemes path" do
-        expect(path).to match("/organisations/#{user.organisation.id}/schemes")
-      end
-
       it "shows a search bar" do
         expect(page).to have_field("search", type: "search")
       end

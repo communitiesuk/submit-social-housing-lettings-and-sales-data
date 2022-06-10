@@ -151,9 +151,9 @@ RSpec.describe SchemesController, type: :request do
         get "/supported-housing"
       end
 
-      it "has page heading" do
+      it "redirects to the organisation schemes path" do
         follow_redirect!
-        expect(page).to have_content("Supported housing services")
+        expect(path).to match("/organisations/#{user.organisation.id}/supported-housing")
       end
     end
   end
