@@ -25,12 +25,12 @@ RSpec.describe Scheme, type: :model do
 
       context "when searching by service name" do
         it "returns case insensitive matching records" do
-          expect(described_class.search_by_service(scheme_1.service.upcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_1.service.downcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_1.service.downcase).first.service).to eq(scheme_1.service)
-          expect(described_class.search_by_service(scheme_2.service.upcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_2.service.downcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_2.service.downcase).first.service).to eq(scheme_2.service)
+          expect(described_class.search_by_service_name(scheme_1.service_name.upcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_1.service_name.downcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_1.service_name.downcase).first.service_name).to eq(scheme_1.service_name)
+          expect(described_class.search_by_service_name(scheme_2.service_name.upcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_2.service_name.downcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_2.service_name.downcase).first.service_name).to eq(scheme_2.service_name)
         end
       end
 
@@ -39,9 +39,9 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by(scheme_1.code.upcase).count).to eq(1)
           expect(described_class.search_by(scheme_1.code.downcase).count).to eq(1)
           expect(described_class.search_by(scheme_1.code.downcase).first.code).to eq(scheme_1.code)
-          expect(described_class.search_by_service(scheme_2.service.upcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_2.service.downcase).count).to eq(1)
-          expect(described_class.search_by_service(scheme_2.service.downcase).first.service).to eq(scheme_2.service)
+          expect(described_class.search_by_service_name(scheme_2.service_name.upcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_2.service_name.downcase).count).to eq(1)
+          expect(described_class.search_by_service_name(scheme_2.service_name.downcase).first.service_name).to eq(scheme_2.service_name)
         end
       end
     end

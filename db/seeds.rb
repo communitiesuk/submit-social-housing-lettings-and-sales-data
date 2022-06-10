@@ -72,21 +72,21 @@ unless Rails.env.test?
   if Rails.env.development? && Scheme.count.zero?
     Scheme.create!(
       code: "S878",
-      service: "Beulahside Care",
+      service_name: "Beulahside Care",
       organisation: org,
       created_at: Time.zone.now,
     )
 
     Scheme.create!(
       code: "S312",
-      service: "Abdullahview Point",
+      service_name: "Abdullahview Point",
       organisation: org,
       created_at: Time.zone.now,
     )
 
     Scheme.create!(
       code: "7XYZ",
-      service: "Caspermouth Center",
+      service_name: "Caspermouth Center",
       organisation: dummy_org,
       created_at: Time.zone.now,
     )

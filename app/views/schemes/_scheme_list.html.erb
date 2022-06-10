@@ -29,7 +29,7 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: scheme.code) %>
-          <% row.cell(text: scheme.service) %>
+          <% row.cell(text: scheme.service_name) %>
           <% row.cell(text: scheme.organisation.name) %>
           <% row.cell(text: scheme.created_at.to_formatted_s(:govuk_date)) %>
         <% end %>

@@ -279,7 +279,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_08_144156) do
 
   create_table "schemes", force: :cascade do |t|
     t.string "code"
-    t.string "service"
+    t.string "service_name"
     t.bigint "organisation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
