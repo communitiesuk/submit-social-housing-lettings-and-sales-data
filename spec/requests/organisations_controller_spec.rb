@@ -35,7 +35,7 @@ RSpec.describe OrganisationsController, type: :request do
 
   context "when user is signed in" do
     describe "#schemes" do
-      context "support user" do
+      context "when support user" do
         let(:user) { FactoryBot.create(:user, :support) }
         let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
         let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
@@ -90,7 +90,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
 
-      context "data coordinator user" do
+      context "when data coordinator user" do
         let(:user) { FactoryBot.create(:user, :data_coordinator) }
         let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
         let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }

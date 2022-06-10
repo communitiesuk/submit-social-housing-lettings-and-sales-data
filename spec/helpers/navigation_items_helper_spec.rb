@@ -200,7 +200,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
               NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", true),
-              NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users",false),
+              NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
           end
