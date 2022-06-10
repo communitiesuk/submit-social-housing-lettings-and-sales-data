@@ -65,7 +65,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when searching" do
-        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321") }
+        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
         let(:search_param) { "CODE321" }
 
         before do
