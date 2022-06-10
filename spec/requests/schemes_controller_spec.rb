@@ -29,6 +29,20 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
+    context "when signed in as a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+        get "/supported-housing"
+      end
+
+      it "redirects to the organisation schemes path" do
+        follow_redirect!
+        expect(path).to match("/organisations/#{user.organisation.id}/supported-housing")
+      end
+    end
+
     context "when signed in as a support user" do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -143,20 +157,6 @@ RSpec.describe SchemesController, type: :request do
         it "has search in the title" do
           expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
         end
-      end
-    end
-
-    context "when signed in as a data coordinator user" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-
-      before do
-        sign_in user
-        get "/supported-housing"
-      end
-
-      it "redirects to the organisation schemes path" do
-        follow_redirect!
-        expect(path).to match("/organisations/#{user.organisation.id}/supported-housing")
       end
     end
   end
