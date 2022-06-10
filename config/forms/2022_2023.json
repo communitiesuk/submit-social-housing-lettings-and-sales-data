@@ -21,10 +21,11 @@
                       "header": "Which organisation owns this log?",
                       "hint_text": "",
                       "type": "select",
-                      "answer_options": {
-                        "": "Select an option",
-                        "2": "Believe",
-                        "3": "Barrow"
+                      "answer_options_lookup": {
+                        "class": "Organisation",
+                        "scope": "all",
+                        "id": "id",
+                        "label": "name"
                       },
                       "hidden_in_check_answers": true
                     }

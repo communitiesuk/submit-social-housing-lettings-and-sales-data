@@ -166,6 +166,36 @@ RSpec.describe Form::Question, type: :model do
         expect(question.label_from_value(9999)).to eq("9999")
       end
     end
+
+    context "when the answer options are derived from model data" do
+      let(:question_definition) do
+        {
+          "header" => "Which organisation owns this log?",
+          "type" => "select",
+          "answer_options_lookup" => {
+            "class" => "Organisation",
+            "scope" => "all",
+            "id" => "id",
+            "label" => "name",
+          },
+        }
+      end
+      let(:question_id) { "owning_organisation_id" }
+      let(:page) { nil }
+      let!(:org1) { FactoryBot.create(:organisation, name: "first organisation") }
+      let!(:org2) { FactoryBot.create(:organisation, name: "second organisation") }
+      let(:expected_answer_options) do
+        {
+          "" => "Select an option",
+          org1.id => org1.name,
+          org2.id => org2.name,
+        }
+      end
+
+      it "can correctly lookup the data" do
+        expect(question.answer_options).to eq(expected_answer_options)
+      end
+    end
   end
 
   context "when type is checkbox" do
