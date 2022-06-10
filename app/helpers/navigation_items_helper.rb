@@ -12,7 +12,7 @@ module NavigationItemsHelper
     elsif current_user.data_coordinator?
       [
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
-        NavigationItem.new("Supported housing", "/supported-housing", supported_housing_current?(path)),
+        NavigationItem.new("Supported housing", "/supported-housing", subnav_supported_housing_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
       ]
@@ -49,6 +49,10 @@ private
 
   def organisations_current?(path)
     path == "/organisations" || subnav_users_path?(path) || subnav_logs_path?(path) || subnav_details_path?(path)
+  end
+
+  def subnav_supported_housing_path?(path)
+    path.include?("/organisations") && path.include?("/supported-housing")
   end
 
   def subnav_users_path?(path)
