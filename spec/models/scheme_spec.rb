@@ -35,6 +35,17 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by_organisation(different_organisation.name.upcase).first.organisation.name).to eq(scheme_2.organisation.name)
         end
       end
+
+      context "when searching by all searchable field" do
+        it "returns case insensitive matching records" do
+          expect(described_class.search_by(scheme_1.code.upcase).count).to eq(1)
+          expect(described_class.search_by(scheme_1.code.downcase).count).to eq(1)
+          expect(described_class.search_by(scheme_1.code.downcase).first.code).to eq(scheme_1.code)
+          expect(described_class.search_by(different_organisation.name.upcase).count).to eq(1)
+          expect(described_class.search_by(different_organisation.name.downcase).count).to eq(1)
+          expect(described_class.search_by(different_organisation.name.upcase).first.organisation.name).to eq(scheme_2.organisation.name)
+        end
+      end
     end
   end
 end
