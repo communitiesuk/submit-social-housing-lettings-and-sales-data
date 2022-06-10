@@ -59,21 +59,16 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when paginating over 20 results" do
-        let!(:other_schemes) { FactoryBot.create_list(:scheme, 20) }
         let(:total_schemes_count) { Scheme.count }
 
         context "when on the first page" do
           before do
+            FactoryBot.create_list(:scheme, 20)
             get "/supported-housing"
           end
 
           it "shows the total schemes count" do
             expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes.")
-          end
-
-          it "has pagination links" do
-            expect(page).to have_content("Next")
-            expect(page).to have_link("Next")
           end
 
           it "shows which schemes are being shown on the current page" do
@@ -96,6 +91,7 @@ RSpec.describe SchemesController, type: :request do
           before do
             get "/supported-housing?page=2"
           end
+
           it "shows the total schemes count" do
             expect(CGI.unescape_html(response.body)).to match("<strong>#{total_schemes_count}</strong> total schemes.")
           end
@@ -144,7 +140,6 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
       before do
         sign_in user

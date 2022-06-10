@@ -14,7 +14,7 @@ class SchemesController < ApplicationController
     @total_count = all_schemes.size
   end
 
-  private
+private
 
   def search_term
     params["search"]
