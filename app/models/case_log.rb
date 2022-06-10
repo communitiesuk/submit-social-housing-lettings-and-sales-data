@@ -31,8 +31,8 @@ class CaseLog < ApplicationRecord
   before_validation :set_derived_fields!
   before_save :update_status!
 
-  belongs_to :owning_organisation, class_name: "Organisation"
-  belongs_to :managing_organisation, class_name: "Organisation"
+  belongs_to :owning_organisation, class_name: "Organisation", optional: true
+  belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User"
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
@@ -528,6 +528,7 @@ private
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
+    self.managing_organisation_id = owning_organisation_id 
     self.incref = 1 if net_income_refused?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype
