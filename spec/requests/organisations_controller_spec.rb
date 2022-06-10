@@ -41,6 +41,7 @@ RSpec.describe OrganisationsController, type: :request do
         let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
         before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
           sign_in user
           get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
         end
@@ -70,6 +71,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "CODE321" }
 
           before do
+            allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
           end
 
