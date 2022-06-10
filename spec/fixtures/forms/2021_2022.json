@@ -21,12 +21,8 @@
                   }
                 },
                 "depends_on": [
-                  {
-                    "housingneeds_a": 1
-                  },
-                  {
-                    "housingneeds_a": null
-                  }
+                  [{"object": "case_log", "method": "housingneeds_a", "value": 1}],
+                  [{"object": "case_log", "method": "housingneeds_a", "value": null}]
                 ]              },
               "person_1_age": {
                 "questions": {
@@ -189,8 +185,20 @@
                       "9": {
                         "value": "Child under 16",
                         "depends_on": [
-                          { "age2_known": 1 },
-                          { "age2": { "operator": "<", "operand": 16 } }
+                          [
+                            {
+                              "object": "case_log",
+                              "method": "age2_known",
+                              "value": 1
+                            }
+                          ],
+                          [
+                            {
+                              "object": "case_log",
+                              "method": "age2",
+                              "value": { "operator": "<", "operand": 16 }
+                            }
+                          ]
                         ]
                       },
                       "1": {
@@ -200,9 +208,9 @@
                   }
                 },
                 "depends_on": [
-                  {
-                    "age2": { "operator": ">", "operand": 15 }
-                  }
+                  [{
+                    "object": "case_log", "method": "age2", "value": { "operator": ">", "operand": 15 }
+                  }]
                 ]
               },
               "propcode": {
@@ -322,11 +330,10 @@
                     }
                   }
                 },
-                "depends_on": [
-                  {
-                    "previous_la_known": 1,
-                    "is_previous_la_inferred": false
-                  }
+                "depends_on": [[
+                  {"object": "case_log", "method": "previous_la_known", "value": 1},
+                  {"object": "case_log", "method": "is_previous_la_inferred", "value": false}
+                ]
                 ]
               },
               "condition_effects": {
@@ -347,9 +354,7 @@
                   }
                 },
                 "depends_on": [
-                  {
-                    "illness": 1
-                  }
+                  [{"object": "case_log", "method": "illness", "value": 1}]
                 ]
               }
             }
@@ -397,9 +402,7 @@
                   }
                 },
                 "depends_on": [
-                  {
-                    "is_la_inferred": false
-                  }
+                  [{"object": "case_log", "method": "is_la_inferred", "value": false}]
                 ]
               },
               "property_postcode": {
@@ -459,7 +462,9 @@
                     }
                   }
                 },
-                "depends_on": [{"is_la_inferred": false}]
+                "depends_on": [
+                  [{"object": "case_log", "method": "is_la_inferred", "value": false}]
+                ]
               },
               "property_wheelchair_accessible": {
                 "questions": {
@@ -513,7 +518,10 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 1 }, { "wchair" : 1 }]
+                "depends_on": [
+                  [{"object": "case_log", "method": "preg_occ", "value": 1}],
+                  [{"object": "case_log", "method": "wchair", "value": 1}]
+                ]
               },
               "conditional_question_no_page": {
                 "questions": {
@@ -531,7 +539,9 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 2 }]
+                "depends_on": [
+                  [{"object": "case_log", "method": "preg_occ", "value": 2}]
+                ]
               },
               "conditional_question_no_second_page": {
                 "questions": {
@@ -549,7 +559,10 @@
                     }
                   }
                 },
-                "depends_on": [{ "preg_occ": 2, "sex1": "M" }]
+                "depends_on": [
+                  [{"object": "case_log", "method": "preg_occ", "value": 2},
+                  {"object": "case_log", "method": "sex1", "value": "M"}]
+                 ]
               }
             }
           }
@@ -599,7 +612,9 @@
                 }
               },
               "net_income_value_check": {
-                "depends_on": [{ "net_income_soft_validation_triggered?": true }],
+                "depends_on": [
+                  [{"object": "case_log", "method": "net_income_soft_validation_triggered?", "value": true}]
+                ],
                 "title_text": { "translation": "soft_validations.net_income.title_text" },
                 "informative_text": {
                   "translation": "soft_validations.net_income.hint_text",
@@ -681,7 +696,9 @@
                 }
               },
               "dependent_page": {
-                "depends_on": [{ "incfreq": 1 }],
+                "depends_on": [
+                  [{"object": "case_log", "method": "incfreq", "value": 1}]
+                ],
                 "questions": {
                   "dependent_question": {
                     "check_answer_label": "Dependent Question",
@@ -825,7 +842,9 @@
                     "width": 4
                   }
                 },
-                "depends_on": [{"period": 3}]
+                "depends_on": [
+                  [{"object": "case_log", "method": "period", "value": 3}]
+                ]
               },
               "care_home_charge_bi_weekly": {
                 "questions": {
@@ -839,7 +858,9 @@
                     "width": 4
                   }
                 },
-                "depends_on": [{"period": 2}]
+                "depends_on": [
+                  [{"object": "case_log", "method": "period", "value": 2}]
+                ]
               }
             }
           }
@@ -888,13 +909,15 @@
                     },
                     "hidden_in_check_answers": {
                       "depends_on": [
-                        { "layear": 0 },
-                        { "layear": 1 }
+                        [{"object": "case_log", "method": "layear", "value": 0}],
+                        [{"object": "case_log", "method": "layear", "value": 1}]
                       ]
                     }
                   }
                 },
-                "depends_on":  [{ "renewal": 0 }]
+                "depends_on":  [
+                  [{"object": "case_log", "method": "renewal", "value": 0}]
+                ]
               },
               "time_on_la_waiting_list": {
                 "questions": {

@@ -516,9 +516,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "is_la_inferred": false
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "is_la_inferred",
+                    "value": false
+                  }
+                ]
               ]
             },
             "first_time_property_let_as_social_housing": {
@@ -543,9 +547,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_let_type": {
@@ -577,10 +585,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "first_time_property_let_as_social_housing": 0,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "first_time_property_let_as_social_housing",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_vacancy_reason_not_first_let": {
@@ -631,10 +647,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "first_time_property_let_as_social_housing": 0,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "first_time_property_let_as_social_housing",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_vacancy_reason_first_let": {
@@ -660,10 +684,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "first_time_property_let_as_social_housing": 1,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "first_time_property_let_as_social_housing",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_number_of_times_relet_not_social_let": {
@@ -682,10 +714,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "first_time_property_let_as_social_housing": 0,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "first_time_property_let_as_social_housing",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_number_of_times_relet_social_let": {
@@ -704,10 +744,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "first_time_property_let_as_social_housing": 1,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "first_time_property_let_as_social_housing",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "property_unit_type": {
@@ -804,9 +852,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "needstype": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "void_or_renewal_date": {
@@ -821,54 +873,150 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0,
-                  "rsnvac": 5
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 6
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 8
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 9
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 10
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 11
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 12
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 13
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 18
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 19
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 5
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 6
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 8
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 9
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 10
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 11
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 12
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 13
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 16
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 17
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 18
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 19
+                  }
+                ]
               ]
             },
             "new_build_handover_date": {
@@ -883,10 +1031,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0,
-                  "rsnvac": 15
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 15
+                  }
+                ]
               ]
             },
             "property_major_repairs": {
@@ -918,54 +1074,150 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0,
-                  "rsnvac": 5
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 6
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 8
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 9
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 10
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 11
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 12
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 13
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 16
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 17
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 18
-                },
-                {
-                  "renewal": 0,
-                  "rsnvac": 19
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 5
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 6
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 8
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 9
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 10
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 11
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 12
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 13
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 16
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 17
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 18
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "rsnvac",
+                    "value": 19
+                  }
+                ]
               ]
             }
           }
@@ -1064,9 +1316,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "startertenancy": 2
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "startertenancy",
+                    "value": 2
+                  }
+                ]
               ]
             },
             "starter_tenancy_type": {
@@ -1109,9 +1365,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "startertenancy": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "startertenancy",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "tenancy_length": {
@@ -1130,15 +1390,27 @@
                 }
               },
               "depends_on": [
-                {
-                  "tenancy": 4
-                },
-                {
-                  "tenancy": 6
-                },
-                {
-                  "tenancy": 3
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "tenancy",
+                    "value": 4
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "tenancy",
+                    "value": 6
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "tenancy",
+                    "value": 3
+                  }
+                ]
               ]
             },
             "shelteredaccom": {
@@ -1170,9 +1442,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "needstype": 2
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  }
+                ]
               ]
             }
           }
@@ -1224,7 +1500,15 @@
               }
             },
             "no_females_pregnant_household_lead_hhmemb_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1264,9 +1548,13 @@
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -1326,12 +1614,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age1_known": 0
-                      },
-                      {
-                        "age1_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age1_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age1_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -1353,7 +1649,15 @@
               }
             },
             "no_females_pregnant_household_lead_age_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1393,9 +1697,13 @@
             },
             "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -1464,7 +1772,15 @@
               }
             },
             "no_females_pregnant_household_lead_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1504,9 +1820,13 @@
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -1600,9 +1920,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "ethnic_group": 4
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "ethnic_group",
+                    "value": 4
+                  }
+                ]
               ]
             },
             "lead_tenant_ethnic_background_asian": {
@@ -1634,9 +1958,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "ethnic_group": 2
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "ethnic_group",
+                    "value": 2
+                  }
+                ]
               ]
             },
             "lead_tenant_ethnic_background_black": {
@@ -1662,9 +1990,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "ethnic_group": 3
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "ethnic_group",
+                    "value": 3
+                  }
+                ]
               ]
             },
             "lead_tenant_ethnic_background_mixed": {
@@ -1693,9 +2025,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "ethnic_group": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "ethnic_group",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "lead_tenant_ethnic_background_white": {
@@ -1724,9 +2060,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "ethnic_group": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "ethnic_group",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "lead_tenant_nationality": {
@@ -1807,7 +2147,15 @@
               }
             },
             "lead_tenant_under_retirement_value_check": {
-              "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_1_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -1852,7 +2200,13 @@
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
-                { "person_1_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_1_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -1916,27 +2270,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 2
-                },
-                {
-                  "hhmemb": 3
-                },
-                {
-                  "hhmemb": 4
-                },
-                {
-                  "hhmemb": 5
-                },
-                {
-                  "hhmemb": 6
-                },
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 2 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 3 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 4 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 5 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 6 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_2_relationship_to_lead": {
@@ -1969,9 +2309,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_2": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_2_age": {
@@ -1995,12 +2339,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age2_known": 0
-                      },
-                      {
-                        "age2_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age2_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age2_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -2021,14 +2373,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_2": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_2_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age2_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age2_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2069,10 +2436,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age2_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age2_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2140,17 +2515,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_2": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_2_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_2": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2191,10 +2578,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_2": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2270,8 +2665,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age2_known": 1 },
-                        { "age2": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age2_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age2",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -2287,21 +2694,42 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_2": 0,
-                  "age2": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age2",
+                    "value": { "operator": ">", "operand": 15 }
                   }
-                },
-                {
-                  "details_known_2": 0,
-                  "age2": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_2",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age2",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_2_under_retirement_value_check": {
-              "depends_on": [{ "person_2_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_2_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -2346,7 +2774,13 @@
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
-                { "person_2_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_2_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -2410,24 +2844,12 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 3
-                },
-                {
-                  "hhmemb": 4
-                },
-                {
-                  "hhmemb": 5
-                },
-                {
-                  "hhmemb": 6
-                },
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 3 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 4 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 5 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 6 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_3_relationship_to_lead": {
@@ -2460,9 +2882,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_3": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_3_age": {
@@ -2486,12 +2912,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age3_known": 0
-                      },
-                      {
-                        "age3_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age3_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age3_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -2512,14 +2946,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_3": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_3_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age3_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age3_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2560,10 +3009,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age3_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age3_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2631,17 +3088,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_3": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_3_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_3": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2682,10 +3151,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_3": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -2761,8 +3238,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age3_known": 1 },
-                        { "age3": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age3_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age3",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -2778,21 +3267,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_3": 0,
-                  "age3": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age3",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_3": 0,
-                  "age3": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_3",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age3",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_3_under_retirement_value_check": {
-              "depends_on": [{ "person_3_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_3_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -2837,7 +3350,13 @@
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
-                { "person_3_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_3_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -2901,21 +3420,11 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 4
-                },
-                {
-                  "hhmemb": 5
-                },
-                {
-                  "hhmemb": 6
-                },
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 4 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 5 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 6 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_4_relationship_to_lead": {
@@ -2948,9 +3457,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_4": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_4_age": {
@@ -2974,12 +3487,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age4_known": 0
-                      },
-                      {
-                        "age4_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age4_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age4_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -3000,14 +3521,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_4": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_4_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age4_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age4_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3048,10 +3584,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age4_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age4_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3119,17 +3663,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_4": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_4_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_4": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3170,10 +3726,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_4": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3249,8 +3813,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age4_known": 1 },
-                        { "age4": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age4_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age4",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -3266,21 +3842,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_4": 0,
-                  "age4": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age4",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_4": 0,
-                  "age4": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_4",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age4",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_4_under_retirement_value_check": {
-              "depends_on": [{ "person_4_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_4_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3325,7 +3925,13 @@
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
-                { "person_4_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_4_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -3389,18 +3995,10 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 5
-                },
-                {
-                  "hhmemb": 6
-                },
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 5 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 6 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_5_relationship_to_lead": {
@@ -3433,9 +4031,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_5": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_5_age": {
@@ -3459,12 +4061,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age5_known": 0
-                      },
-                      {
-                        "age5_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age5_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age5_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -3485,14 +4095,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_5": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_5_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age5_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age5_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3533,10 +4158,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age5_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age5_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3604,17 +4237,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_5": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_5_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_5": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3655,10 +4300,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_5": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -3734,8 +4387,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age5_known": 1 },
-                        { "age5": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age5_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age5",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -3751,21 +4416,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_5": 0,
-                  "age5": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age5",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_5": 0,
-                  "age5": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_5",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age5",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_5_under_retirement_value_check": {
-              "depends_on": [{ "person_5_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_5_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3810,7 +4499,13 @@
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
-                { "person_5_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_5_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -3874,15 +4569,9 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 6
-                },
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 6 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_6_relationship_to_lead": {
@@ -3915,9 +4604,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_6": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_6_age": {
@@ -3941,12 +4634,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age6_known": 0
-                      },
-                      {
-                        "age6_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age6_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age6_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -3967,14 +4668,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_6": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_6_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age6_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age6_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4015,10 +4731,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age6_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age6_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4086,17 +4810,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_6": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_6_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_6": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4137,10 +4873,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_6": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4216,8 +4960,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age6_known": 1 },
-                        { "age6": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age6_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age6",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -4233,21 +4989,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_6": 0,
-                  "age6": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age6",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_6": 0,
-                  "age6": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_6",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age6",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_6_under_retirement_value_check": {
-              "depends_on": [{ "person_6_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_6_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4292,7 +5072,13 @@
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
-                { "person_6_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_6_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -4356,12 +5142,8 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 7
-                },
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 7 }],
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_7_relationship_to_lead": {
@@ -4394,9 +5176,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_7": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_7_age": {
@@ -4420,12 +5206,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age7_known": 0
-                      },
-                      {
-                        "age7_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age7_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age7_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -4446,14 +5240,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_7": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_7_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age7_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age7_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4494,10 +5303,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age7_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age7_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4565,17 +5382,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_7": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_7_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_7": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4616,10 +5445,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_7": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4695,8 +5532,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age7_known": 1 },
-                        { "age7": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age7_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age7",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -4712,21 +5561,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_7": 0,
-                  "age7": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age7",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_7": 0,
-                  "age7": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_7",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age7",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_7_under_retirement_value_check": {
-              "depends_on": [{ "person_7_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_7_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4771,7 +5644,13 @@
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
-                { "person_7_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_7_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -4835,9 +5714,7 @@
                 }
               },
               "depends_on": [
-                {
-                  "hhmemb": 8
-                }
+                [{ "object": "case_log", "method": "hhmemb", "value": 8 }]
               ]
             },
             "person_8_relationship_to_lead": {
@@ -4870,9 +5747,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_8": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "person_8_age": {
@@ -4896,12 +5777,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "age8_known": 0
-                      },
-                      {
-                        "age8_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age8_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "age8_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -4922,14 +5811,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_8": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_8_age_value_check": {
               "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age8_known": 0 }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age8_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -4970,10 +5874,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age8_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age8_known",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -5041,17 +5953,29 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_8": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "no_females_pregnant_household_person_8_value_check": {
               "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_8": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -5092,10 +6016,18 @@
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_8": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -5171,8 +6103,20 @@
                     "9": {
                       "value": "Child under 16",
                       "depends_on": [
-                        { "age8_known": 1 },
-                        { "age8": { "operator": "<", "operand": 16 } }
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age8_known",
+                            "value": 1
+                          }
+                        ],
+                        [
+                          {
+                            "object": "case_log",
+                            "method": "age8",
+                            "value": { "operator": "<", "operand": 16 }
+                          }
+                        ]
                       ]
                     },
                     "0": {
@@ -5188,21 +6132,45 @@
                 }
               },
               "depends_on": [
-                {
-                  "details_known_8": 0,
-                  "age8": {
-                    "operator": ">",
-                    "operand": 15
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age8",
+                    "value": {
+                      "operator": ">",
+                      "operand": 15
+                    }
                   }
-                },
-                {
-                  "details_known_8": 0,
-                  "age8": null
-                }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "details_known_8",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "age8",
+                    "value": null
+                  }
+                ]
               ]
             },
             "person_8_under_retirement_value_check": {
-              "depends_on": [{ "person_8_retired_under_soft_min_age?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_8_retired_under_soft_min_age?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -5247,7 +6215,13 @@
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
-                { "person_8_not_retired_over_soft_max_age?": true }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "person_8_not_retired_over_soft_max_age?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
@@ -5337,9 +6311,13 @@
               "header": "",
               "description": "",
               "depends_on": [
-                {
-                  "armedforces": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "armedforces",
+                    "value": 1
+                  }
+                ]
               ],
               "questions": {
                 "leftreg": {
@@ -5371,12 +6349,20 @@
               "header": "",
               "description": "",
               "depends_on": [
-                {
-                  "armedforces": 1
-                },
-                {
-                  "armedforces": 4
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "armedforces",
+                    "value": 1
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "armedforces",
+                    "value": 4
+                  }
+                ]
               ],
               "questions": {
                 "reservist": {
@@ -5428,7 +6414,15 @@
               }
             },
             "no_females_pregnant_household_value_check": {
-              "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "no_females_in_a_pregnant_household?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -5468,9 +6462,13 @@
             },
             "females_in_soft_age_range_in_pregnant_household_value_check": {
               "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "female_in_pregnant_household_in_soft_validation_range?",
+                    "value": true
+                  }
+                ]
               ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
@@ -5574,9 +6572,13 @@
               "header": "",
               "description": "",
               "depends_on": [
-                {
-                  "illness": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "illness",
+                    "value": 1
+                  }
+                ]
               ],
               "questions": {
                 "condition_effects": {
@@ -5720,9 +6722,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "reason_for_leaving_last_settled_home": {
@@ -5849,9 +6855,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "reason_for_leaving_last_settled_home_renewal": {
@@ -5874,9 +6884,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "previous_housing_situation": {
@@ -5962,9 +6976,7 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0
-                }
+                [{ "object": "case_log", "method": "renewal", "value": 0 }]
               ]
             },
             "previous_housing_situation_renewal": {
@@ -5987,10 +6999,18 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 1,
-                  "needstype": 2
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  }
+                ]
               ]
             },
             "homelessness": {
@@ -6013,9 +7033,7 @@
                 }
               },
               "depends_on": [
-                {
-                  "renewal": 0
-                }
+                [{ "object": "case_log", "method": "renewal", "value": 0 }]
               ]
             },
             "previous_postcode": {
@@ -6039,12 +7057,20 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "previous_postcode_known": 0
-                      },
-                      {
-                        "previous_postcode_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "previous_postcode_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "previous_postcode_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   }
                 },
@@ -6079,12 +7105,20 @@
                   "type": "radio",
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      {
-                        "previous_la_known": 0
-                      },
-                      {
-                        "previous_la_known": 1
-                      }
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "previous_la_known",
+                          "value": 0
+                        }
+                      ],
+                      [
+                        {
+                          "object": "case_log",
+                          "method": "previous_la_known",
+                          "value": 1
+                        }
+                      ]
                     ]
                   },
                   "answer_options": {
@@ -6499,9 +7533,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "is_previous_la_inferred": false
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "is_previous_la_inferred",
+                    "value": false
+                  }
+                ]
               ]
             },
             "reasonable_preference": {
@@ -6562,9 +7600,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "reasonpref": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "reasonpref",
+                    "value": 1
+                  }
+                ]
               ]
             },
             "allocation_system": {
@@ -6643,11 +7685,23 @@
                 }
               },
               "depends_on": [
-                {
-                  "managing_organisation.provider_type": "LA",
-                  "needstype": 1,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "managing_organisation.provider_type",
+                    "value": "LA"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "referral_prp": {
@@ -6700,11 +7754,23 @@
                 }
               },
               "depends_on": [
-                {
-                  "managing_organisation.provider_type": "PRP",
-                  "needstype": 1,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "managing_organisation.provider_type",
+                    "value": "PRP"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "referral_supported_housing": {
@@ -6757,11 +7823,23 @@
                 }
               },
               "depends_on": [
-                {
-                  "managing_organisation.provider_type": "LA",
-                  "needstype": 2,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "managing_organisation.provider_type",
+                    "value": "LA"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             },
             "referral_supported_housing_prp": {
@@ -6817,11 +7895,23 @@
                 }
               },
               "depends_on": [
-                {
-                  "managing_organisation.provider_type": "PRP",
-                  "needstype": 2,
-                  "renewal": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "managing_organisation.provider_type",
+                    "value": "PRP"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "renewal",
+                    "value": 0
+                  }
+                ]
               ]
             }
           }
@@ -6868,9 +7958,13 @@
             },
             "income_amount": {
               "depends_on": [
-                {
-                  "net_income_known": 0
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "net_income_known",
+                    "value": 0
+                  }
+                ]
               ],
               "header": "Total household income",
               "description": "",
@@ -6927,8 +8021,18 @@
               }
             },
             "net_income_value_check": {
-              "depends_on": [{ "net_income_soft_validation_triggered?": true }],
-              "title_text": { "translation": "soft_validations.net_income.title_text" },
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "net_income_soft_validation_triggered?",
+                    "value": true
+                  }
+                ]
+              ],
+              "title_text": {
+                "translation": "soft_validations.net_income.title_text"
+              },
               "informative_text": {
                 "translation": "soft_validations.net_income.hint_text",
                 "arguments": [
@@ -7042,9 +8146,13 @@
                 }
               },
               "depends_on": [
-                {
-                  "needstype": 2
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  }
+                ]
               ]
             },
             "rent_period": {
@@ -7088,12 +8196,20 @@
                 }
               },
               "depends_on": [
-                {
-                  "household_charge": 0
-                },
-                {
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "care_home_weekly": {
@@ -7129,66 +8245,210 @@
                 }
               },
               "depends_on": [
-                {
-                  "period": 1,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 1,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 5,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 5,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 6,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 6,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 7,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 7,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 8,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 8,
-                  "needstype": 2,
-                  "household_charge": null
-                },
-                {
-                  "period": 9,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 9,
-                  "needstype": 2,
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 8
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 8
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needstype",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "care_home_bi_weekly": {
@@ -7224,16 +8484,40 @@
                 }
               },
               "depends_on": [
-                {
-                  "period": 2,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 2,
-                  "needstype": 2,
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "care_home_4_weekly": {
@@ -7269,16 +8553,40 @@
                 }
               },
               "depends_on": [
-                {
-                  "period": 3,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 3,
-                  "needstype": 2,
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "care_home_monthly": {
@@ -7314,16 +8622,40 @@
                 }
               },
               "depends_on": [
-                {
-                  "period": 4,
-                  "needstype": 2,
-                  "household_charge": 0
-                },
-                {
-                  "period": 4,
-                  "needstype": 2,
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "needst",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "rent_weekly": {
@@ -7402,126 +8734,397 @@
                 }
               },
               "depends_on": [
-                {
-                  "period": 1,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 1,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 5,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 5,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 6,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 6,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 7,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 7,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 8,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 8,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 9,
-                  "household_charge": 0,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 9,
-                  "household_charge": null,
-                  "is_carehome": 0
-                },
-                {
-                  "period": 1,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 1,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 5,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 5,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 6,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 6,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 7,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 7,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 8,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 8,
-                  "household_charge": null,
-                  "is_carehome": null
-                },
-                {
-                  "period": 9,
-                  "household_charge": 0,
-                  "is_carehome": null
-                },
-                {
-                  "period": 9,
-                  "household_charge": null,
-                  "is_carehome": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 8
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 5
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 7
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 8
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 8
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 9
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ]
               ]
             },
             "rent_bi_weekly": {
@@ -7600,26 +9203,57 @@
                 }
               },
               "depends_on": [
-                {
-                  "household_charge": 0,
-                  "period": 2,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": null,
-                  "period": 2,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": 0,
-                  "period": 2,
-                  "is_carehome": null
-                },
-                {
-                  "household_charge": null,
-                  "period": 2,
-                  "is_carehome": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 2
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ]
               ]
             },
             "rent_4_weekly": {
@@ -7698,26 +9332,74 @@
                 }
               },
               "depends_on": [
-                {
-                  "household_charge": 0,
-                  "period": 3,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": null,
-                  "period": 3,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": 0,
-                  "period": 3,
-                  "is_carehome": null
-                },
-                {
-                  "household_charge": null,
-                  "period": 3,
-                  "is_carehome": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 3
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ]
               ]
             },
             "rent_monthly": {
@@ -7796,30 +9478,86 @@
                 }
               },
               "depends_on": [
-                {
-                  "household_charge": 0,
-                  "period": 4,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": null,
-                  "period": 4,
-                  "is_carehome": 0
-                },
-                {
-                  "household_charge": 0,
-                  "period": 4,
-                  "is_carehome": null
-                },
-                {
-                  "household_charge": null,
-                  "period": 4,
-                  "is_carehome": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "period",
+                    "value": 4
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "is_carehome",
+                    "value": null
+                  }
+                ]
               ]
             },
             "min_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_min_range?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "rent_in_soft_min_range?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.rent.min.title_text",
                 "arguments": [
@@ -7863,7 +9601,15 @@
               }
             },
             "max_rent_value_check": {
-              "depends_on": [{ "rent_in_soft_max_range?": true }],
+              "depends_on": [
+                [
+                  {
+                    "object": "case_log",
+                    "method": "rent_in_soft_max_range?",
+                    "value": true
+                  }
+                ]
+              ],
               "title_text": {
                 "translation": "soft_validations.rent.max.title_text",
                 "arguments": [
@@ -7929,22 +9675,54 @@
                 }
               },
               "depends_on": [
-                {
-                  "hb": 1,
-                  "household_charge": 0
-                },
-                {
-                  "hb": 1,
-                  "household_charge": null
-                },
-                {
-                  "hb": 6,
-                  "household_charge": 0
-                },
-                {
-                  "hb": 6,
-                  "household_charge": null
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": "1"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": "1"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": "6"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": 0
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": "6"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "household_charge",
+                    "value": null
+                  }
+                ]
               ]
             },
             "outstanding_amount_known": {
@@ -7987,14 +9765,30 @@
                 }
               },
               "depends_on": [
-                {
-                  "hb": 1,
-                  "hbrentshortfall": 1
-                },
-                {
-                  "hb": 6,
-                  "hbrentshortfall": 1
-                }
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": 1
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "hbrentshortfall",
+                    "value": 1
+                  }
+                ],
+                [
+                  {
+                    "object": "case_log",
+                    "method": "hb",
+                    "value": 6
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "hbrentshortfall",
+                    "value": 1
+                  }
+                ]
               ]
             }
           }
