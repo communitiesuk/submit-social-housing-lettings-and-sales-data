@@ -92,7 +92,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has search in the title" do
-            expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("#{user.organisation.name} (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
