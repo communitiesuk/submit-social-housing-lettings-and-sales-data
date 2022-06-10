@@ -90,7 +90,6 @@ RSpec.describe SchemesController, type: :request do
             expect(page).to have_content("Next")
             expect(page).to have_link("Next")
           end
-
         end
 
         context "when on the second page" do
@@ -115,6 +114,30 @@ RSpec.describe SchemesController, type: :request do
           it "has correct page 1 of 2 title" do
             expect(page).to have_title("Supported housing services (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
+        end
+      end
+
+      context "when searching" do
+        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321") }
+        let(:search_param) { "CODE321" }
+
+        before do
+          get "/supported-housing?search=#{search_param}"
+        end
+
+        it "returns matching results" do
+          expect(page).to have_content(searched_scheme.code)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.code)
+          end
+        end
+
+        it "updates the table caption" do
+          expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
+        end
+
+        it "has search in the title" do
+          expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
         end
       end
     end
