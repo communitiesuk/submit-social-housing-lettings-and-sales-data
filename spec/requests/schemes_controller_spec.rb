@@ -152,18 +152,26 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has page heading" do
+        follow_redirect!
         expect(page).to have_content("Supported housing services")
       end
 
+      it "redirects to the organisation schemes path" do
+        follow_redirect!
+        expect(path).to match("/organisations/#{user.organisation.id}/schemes")
+      end
+
+      it "shows a search bar" do
+        follow_redirect!
+        expect(page).to have_field("search", type: "search")
+      end
+
       it "shows only schemes belonging to the same organisation" do
+        follow_redirect!
         expect(page).to have_content(same_org_scheme.code)
         schemes.each do |scheme|
           expect(page).not_to have_content(scheme.code)
         end
-      end
-
-      it "shows a search bar" do
-        expect(page).to have_field("search", type: "search")
       end
     end
   end
