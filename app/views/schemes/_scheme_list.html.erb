@@ -29,7 +29,7 @@
       <%= table.body do |body| %>
         <%= body.row do |row| %>
           <% row.cell(text: scheme.code) %>
-          <% row.cell(text: simple_format(scheme_cell(scheme), {}, wrapper_tag: "div")) %>
+          <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
           <% row.cell(text: scheme.organisation.name) %>
           <% row.cell(text: scheme.created_at.to_formatted_s(:govuk_date)) %>
         <% end %>
