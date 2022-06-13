@@ -160,4 +160,29 @@ RSpec.describe SchemesController, type: :request do
       end
     end
   end
+
+  context "#show" do
+    let(:specific_scheme) { schemes.first }
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/supported-housing/#{specific_scheme.id}"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/supported-housing/#{specific_scheme.id}"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
