@@ -29,7 +29,6 @@ class CaseLogsController < ApplicationController
   def create
     case_log = CaseLog.create(case_log_params)
     respond_to do |format|
-      case_log.form.current_user = current_user
       format.html { redirect_to case_log }
       format.json do
         if case_log.persisted?
@@ -105,9 +104,7 @@ private
   end
 
   def case_log_params
-    if current_user && current_user.role == "support"
-      { "created_by_id": current_user.id }.merge(api_case_log_params)
-    elsif current_user
+    if current_user
       org_params.merge(api_case_log_params)
     else
       api_case_log_params
@@ -117,6 +114,7 @@ private
   def org_params
     {
       "owning_organisation_id" => current_user.organisation.id,
+      "managing_organisation_id" => current_user.organisation.id,
       "created_by_id" => current_user.id,
     }
   end
