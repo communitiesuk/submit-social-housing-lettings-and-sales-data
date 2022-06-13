@@ -110,6 +110,17 @@ RSpec.describe "Supported housing scheme Features" do
             expect(page).to have_content(scheme.primary_client_group)
           end
         end
+
+        context "when I click to see individual scheme" do
+          before do
+            click_link(schemes.first.service_name)
+          end
+
+          it "shows me details about the selected scheme" do
+            expect(page).to have_content(schemes.first.service_name)
+            expect(page).to have_content(schemes.first.sensitive)
+          end
+        end
       end
     end
   end
