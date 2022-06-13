@@ -15,6 +15,7 @@ class SchemesController < ApplicationController
   end
 
   def show
+    @scheme = Scheme.find_by(id: params[:id])
   end
 
 private

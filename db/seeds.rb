@@ -74,7 +74,7 @@ unless Rails.env.test?
       code: "S878",
       service_name: "Beulahside Care",
       organisation: org,
-      primary_client_group: "Some Improtant Group",
+      primary_client_group: "G",
       created_at: Time.zone.now,
     )
 
@@ -82,7 +82,7 @@ unless Rails.env.test?
       code: "S312",
       service_name: "Abdullahview Point",
       organisation: org,
-      primary_client_group: "Some Improtant Group",
+      primary_client_group: "I",
       created_at: Time.zone.now,
     )
 
@@ -90,7 +90,7 @@ unless Rails.env.test?
       code: "7XYZ",
       service_name: "Caspermouth Center",
       organisation: dummy_org,
-      primary_client_group: "Some Improtant Group",
+      primary_client_group: "G",
       created_at: Time.zone.now,
     )
   end

@@ -161,7 +161,7 @@ RSpec.describe SchemesController, type: :request do
     end
   end
 
-  context "#show" do
+  describe "#show" do
     let(:specific_scheme) { schemes.first }
 
     context "when not signed in" do

@@ -100,8 +100,8 @@ RSpec.describe "Supported housing scheme Features" do
       end
 
       context "when I visit supported housing page" do
-        before do 
-          visit("supported-housing") 
+        before do
+          visit("supported-housing")
         end
 
         it "shows list of links to schemes" do

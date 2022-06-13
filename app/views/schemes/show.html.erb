@@ -1,0 +1,18 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <%= content_for("Test") %>
+    </h1>
+    <h2 class="govuk-heading-m">
+      Scheme Result
+    </h2>
+    <%= govuk_summary_list do |summary_list| %>
+      <% @scheme.display_attributes.each do |attr| %>
+          <%= summary_list.row do |row| %>
+            <% row.key { attr[:name].to_s.humanize } %>
+            <% row.value { details_html(attr) } %>
+          <% end %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
