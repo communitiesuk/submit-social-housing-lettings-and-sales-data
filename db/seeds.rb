@@ -54,7 +54,7 @@ unless Rails.env.test?
     pp "Seeded 3 dummy users"
   end
 
-  if Rails.env.development?
+  if Rails.env.development? || Rails.env.staging?
     dummy_org = Organisation.find_or_create_by!(
       name: "FooBar LTD",
       address_line1: "Higher Kingston",
@@ -69,7 +69,7 @@ unless Rails.env.test?
     pp "Seeded dummy FooBar LTD organisation"
   end
 
-  if Rails.env.development? && Scheme.count.zero?
+  if (Rails.env.development? || Rails.env.staging?) && Scheme.count.zero?
     Scheme.create!(
       code: "S878",
       service_name: "Beulahside Care",
