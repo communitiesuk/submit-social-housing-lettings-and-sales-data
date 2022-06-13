@@ -9,6 +9,7 @@ class CaseLogValidator < ActiveModel::Validator
   include Validations::DateValidations
   include Validations::LocalAuthorityValidations
   include Validations::SubmissionValidations
+  include DerivedVariables::CaseLogVariables
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }
@@ -210,7 +211,7 @@ class CaseLog < ApplicationRecord
   end
 
   def is_fixed_term_tenancy?
-    [4, 6].include?(tenancy)
+    [4, 6, 7].include?(tenancy)
   end
 
   def is_secure_tenancy?
@@ -262,10 +263,12 @@ class CaseLog < ApplicationRecord
   def previous_tenancy_was_temporary?
     # 4: Tied housing or renting with job
     # 6: Supported housing
-    # 8: Sheltered accomodation
+    # 8: Sheltered accomodation (<= 21/22)
     # 24: Housed by National Asylum Support Service (prev Home Office)
     # 25: Other
-    ![4, 6, 8, 24, 25].include?(prevten)
+    # 34: Specialist retirement housing
+    # 35: Extra care housing
+    ![4, 6, 8, 24, 25, 34, 35].include?(prevten)
   end
 
   def armed_forces_regular?
@@ -296,11 +299,6 @@ class CaseLog < ApplicationRecord
   def is_assessed_homeless?
     # 11: Assessed as homeless (or threatened with homelessness within 56 days) by a local authority and owed a homelessness duty
     homeless == 11
-  end
-
-  def is_other_homeless?
-    # 7: Other homeless – not found statutorily homeless but considered homeless by landlord
-    homeless == 7
   end
 
   def is_not_homeless?
@@ -334,6 +332,7 @@ class CaseLog < ApplicationRecord
     hb == 1
   end
 
+  # Option 8 has been removed starting from 22/23
   def receives_housing_benefit_and_universal_credit?
     # 8: Housing benefit and Universal Credit (without housing element)
     hb == 8
@@ -359,8 +358,12 @@ class CaseLog < ApplicationRecord
   end
 
   def receives_housing_related_benefits?
-    receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||
-      receives_housing_benefit_and_universal_credit?
+    if collection_start_year <= 2021
+      receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit? ||
+        receives_housing_benefit_and_universal_credit?
+    else
+      receives_housing_benefit_only? || receives_uc_with_housing_element_excl_housing_benefit?
+    end
   end
 
   def benefits_unknown?
@@ -518,64 +521,6 @@ private
     collection_start_year >= 2022 && !is_fixed_term_tenancy?
   end
 
-  def set_derived_fields!
-    # TODO: Remove once we support supported housing logs
-    self.needstype = 1 unless needstype
-    if rsnvac.present?
-      self.newprop = has_first_let_vacancy_reason? ? 1 : 2
-    end
-    self.incref = 1 if net_income_refused?
-    self.renttype = RENT_TYPE_MAPPING[rent_type]
-    self.lettype = get_lettype
-    self.totchild = get_totchild
-    self.totelder = get_totelder
-    self.totadult = get_totadult
-    self.refused = get_refused
-    self.ethnic = 17 if ethnic_refused?
-    if %i[brent scharge pscharge supcharg].any? { |f| public_send(f).present? }
-      self.brent ||= 0
-      self.scharge ||= 0
-      self.pscharge ||= 0
-      self.supcharg ||= 0
-      self.tcharge = brent.to_f + scharge.to_f + pscharge.to_f + supcharg.to_f
-    end
-    if period.present?
-      self.wrent = weekly_value(brent) if brent.present?
-      self.wscharge = weekly_value(scharge) if scharge.present?
-      self.wpschrge = weekly_value(pscharge) if pscharge.present?
-      self.wsupchrg = weekly_value(supcharg) if supcharg.present?
-      self.wtcharge = weekly_value(tcharge) if tcharge.present?
-      if is_supported_housing? && chcharge.present?
-        self.wchchrg = weekly_value(chcharge)
-      end
-    end
-    self.has_benefits = get_has_benefits
-    self.tshortfall_known = 0 if tshortfall
-    self.wtshortfall = if tshortfall && receives_housing_related_benefits?
-                         weekly_value(tshortfall)
-                       end
-    self.nocharge = household_charge&.zero? ? 1 : 0
-    self.housingneeds = get_housingneeds
-    if is_renewal?
-      self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.homeless = 2
-      self.referral = 0
-      self.waityear = 1
-      if is_general_needs?
-        # fixed term
-        self.prevten = 32 if managing_organisation.provider_type == "PRP"
-        self.prevten = 30 if managing_organisation.provider_type == "LA"
-      end
-    end
-    (2..8).each do |idx|
-      if age_under_16?(idx)
-        self["ecstat#{idx}"] = 9
-      elsif public_send("ecstat#{idx}") == 9 && age_known?(idx)
-        self["ecstat#{idx}"] = nil
-      end
-    end
-  end
-
   def age_under_16?(person_num)
     public_send("age#{person_num}") && public_send("age#{person_num}") < 16
   end
@@ -613,31 +558,6 @@ private
     end
     self[is_inferred_key] = false
     self[postcode_key] = nil
-  end
-
-  def get_totelder
-    ages = [age1, age2, age3, age4, age5, age6, age7, age8]
-    ages.count { |x| !x.nil? && x >= 60 }
-  end
-
-  def get_totchild
-    relationships = [relat2, relat3, relat4, relat5, relat6, relat7, relat8]
-    relationships.count("C")
-  end
-
-  def get_totadult
-    total = !age1.nil? && age1 >= 16 && age1 < 60 ? 1 : 0
-    total + (2..8).count do |i|
-      age = public_send("age#{i}")
-      relat = public_send("relat#{i}")
-      !age.nil? && ((age >= 16 && age < 18 && %w[P X].include?(relat)) || age >= 18 && age < 60)
-    end
-  end
-
-  def get_refused
-    return 1 if age_refused? || sex_refused? || relat_refused? || ecstat_refused?
-
-    0
   end
 
   def get_inferred_la(postcode)

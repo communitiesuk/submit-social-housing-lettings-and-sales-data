@@ -5328,6 +5328,9 @@
                     },
                     "3": {
                       "value": "Person prefers not to say"
+                    },
+                    "6": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -5689,9 +5692,6 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
-                      "value": "Just moved to local authority area"
-                    },
                     "2": {
                       "value": "Less than 1 year"
                     },
