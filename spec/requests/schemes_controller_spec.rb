@@ -184,5 +184,20 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    context "when signed in as a support user" do
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/supported-housing/#{specific_scheme.id}"
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.service_name)
+        expect(page).to have_content(specific_scheme.organisation.name)
+        expect(page).to have_content(specific_scheme.organisation.sensitive)
+      end
+    end
   end
 end
