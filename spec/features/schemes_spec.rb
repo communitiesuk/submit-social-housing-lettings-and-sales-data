@@ -100,11 +100,13 @@ RSpec.describe "Supported housing scheme Features" do
       end
 
       context "when I visit supported housing page" do
-        before { visit("supported-housing") }
+        before do 
+          visit("supported-housing") 
+        end
 
         it "shows list of links to schemes" do
           schemes.each do |scheme|
-            expect(page).to have_link((scheme.service_name)
+            expect(page).to have_link(scheme.service_name)
           end
         end
       end
