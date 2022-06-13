@@ -76,7 +76,7 @@ RSpec.describe "Supported housing scheme Features" do
     end
   end
 
-  context "when viewing particular scheme" do
+  context "when viewing individual scheme" do
     context "when I am signed as a support user in there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
@@ -104,7 +104,7 @@ RSpec.describe "Supported housing scheme Features" do
 
         it "shows list of links to schemes" do
           schemes.each do |scheme|
-            expect(page).to have_content(scheme.code)
+            expect(page).to have_link((scheme.service_name)
           end
         end
       end
