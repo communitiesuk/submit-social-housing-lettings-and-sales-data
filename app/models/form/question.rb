@@ -19,6 +19,7 @@ class Form::Question
     @fields_to_add = hsh["fields-to-add"]
     @result_field = hsh["result-field"]
     @readonly = hsh["readonly"]
+    @answer_options = hsh["answer_options"]
     @conditional_for = hsh["conditional_for"]
     @inferred_answers = hsh["inferred_answers"]
     @inferred_check_answers_value = hsh["inferred_check_answers_value"]
@@ -28,7 +29,6 @@ class Form::Question
     @requires_js = hsh["requires_js"]
     @fields_added = hsh["fields_added"]
     @page = page
-    @answer_options = hsh["answer_options_lookup"] ? answer_options_from_lookup(hsh["answer_options_lookup"]) : hsh["answer_options"]
   end
 
   delegate :subsection, to: :page
@@ -125,7 +125,7 @@ class Form::Question
               labels = answer_options[value.to_s]
               labels["value"] if labels
             when "select"
-              answer_options[value.to_s] || answer_options[value]
+              answer_options[value.to_s]
             else
               value.to_s
             end
@@ -163,19 +163,6 @@ class Form::Question
   end
 
 private
-
-  def answer_options_from_lookup(lookup)
-    values = {}
-    values[""] = "Select an option"
-    begin
-      records = Object.const_get((lookup["class"]).to_s).send((lookup["scope"]).to_s)
-      records.each { |record| values[record.send((lookup["id"]).to_s)] = record.send((lookup["label"]).to_s) }
-    rescue ActiveRecord::ConnectionNotEstablished
-      # We should only reach this when loading the rails environment without a database running for example
-      # when running 'bundle exec rake lint' in CI
-    end
-    values
-  end
 
   def selected_answer_option_is_derived?(case_log)
     selected_option = answer_options&.dig(case_log[id].to_s.presence)

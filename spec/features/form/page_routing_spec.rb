@@ -47,52 +47,7 @@ RSpec.describe "Form Page Routing" do
     expect(page).to have_current_path("/logs/#{id}/conditional-question/check-answers")
   end
 
-  context "when a page is dependent on the current user's role" do
-    let(:case_log) do
-      FactoryBot.create(
-        :case_log,
-        :in_progress,
-        owning_organisation: user.organisation,
-        managing_organisation: user.organisation,
-        is_previous_la_inferred: false,
-      )
-    end
-
-    context "when the user has the required role" do
-      it "routes to the page" do
-        visit("/logs/#{id}/property-postcode")
-        click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{id}/do-you-know-the-local-authority")
-      end
-    end
-
-    context "when the user does not have the required role" do
-      let(:support_user) { FactoryBot.create(:user, :support, organisation: user.organisation) }
-      let(:devise_notify_mailer) { DeviseNotifyMailer.new }
-      let(:notify_client) { instance_double(Notifications::Client) }
-      let(:otp) { "999111" }
-
-      before do
-        allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
-        allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
-        allow(notify_client).to receive(:send_email).and_return(true)
-        allow(SecureRandom).to receive(:random_number).and_return(otp)
-        click_link("Sign out")
-        visit("/account/sign-in")
-        sign_in support_user
-        fill_in("code", with: otp)
-        click_button("Submit")
-      end
-
-      it "does not route to the page" do
-        visit("/logs/#{id}/property-postcode")
-        click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
-      end
-    end
-  end
-
-  context "when the answers are inferred" do
+  context "when the answers are inferred", js: true do
     it "shows question if the answer could not be inferred" do
       visit("/logs/#{id}/property-postcode")
       fill_in("case-log-postcode-full-field", with: "PO5 3TE")

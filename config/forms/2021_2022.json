@@ -9,33 +9,6 @@
         "setup": {
           "label": "Set up this lettings log",
           "pages": {
-            "organisation": {
-              "header": "",
-              "description": "",
-              "questions": {
-                "owning_organisation_id": {
-                  "header": "Which organisation owns this log?",
-                  "hint_text": "",
-                  "type": "select",
-                  "answer_options_lookup": {
-                    "class": "Organisation",
-                    "scope": "all",
-                    "id": "id",
-                    "label": "name"
-                  }
-                }
-              },
-              "derived": true,
-              "depends_on": [
-                [
-                  {
-                    "object": "user",
-                    "method": "role",
-                    "value": "support"
-                  }
-                ]
-              ]
-            },
             "needs_type": {
               "header": "",
               "description": "",

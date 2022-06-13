@@ -1,7 +1,6 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
               :start_date, :end_date, :type, :name
-  attr_accessor :current_user
 
   def initialize(form_path, name)
     raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
@@ -15,7 +14,6 @@ class Form
     @subsections = sections.flat_map(&:subsections)
     @pages = subsections.flat_map(&:pages)
     @questions = pages.flat_map(&:questions)
-    @current_user = nil
   end
 
   def get_subsection(id)
@@ -165,9 +163,8 @@ class Form
                           when "case_log"
                             case_log
                           when "user"
-                            current_user
+                            nil
                           end
-        return false unless object_instance
 
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
