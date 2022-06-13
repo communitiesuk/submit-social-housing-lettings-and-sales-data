@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_08_144156) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_13_094847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -283,6 +283,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_08_144156) do
     t.bigint "organisation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "primary_client_group"
+    t.string "secondary_client_group"
+    t.boolean "sensitive"
+    t.boolean "total_units"
+    t.integer "scheme_type"
+    t.boolean "registered_under_care_act"
+    t.integer "support_type"
+    t.string "intended_stay"
     t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
   end
 
