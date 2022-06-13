@@ -61,7 +61,7 @@ module Imports
       attributes["joint"] = unsafe_string_as_integer(xml_doc, "joint")
       attributes["startertenancy"] = unsafe_string_as_integer(xml_doc, "_2a")
       attributes["tenancy"] = unsafe_string_as_integer(xml_doc, "Q2b")
-      attributes["tenant_code"] = string_or_nil(xml_doc, "_2bTenCode")
+      attributes["tenancycode"] = string_or_nil(xml_doc, "_2bTenCode")
       attributes["tenancyother"] = string_or_nil(xml_doc, "Q2ba")
       attributes["tenancylength"] = safe_string_as_integer(xml_doc, "_2cYears")
       attributes["needstype"] = needs_type(xml_doc)

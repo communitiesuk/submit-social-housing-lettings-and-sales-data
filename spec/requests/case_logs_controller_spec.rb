@@ -149,7 +149,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
-        tenant_code: "LC783",
+        tenancycode: "LC783",
       )
     end
     let!(:unauthorized_case_log) do
@@ -157,7 +157,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: other_organisation,
         managing_organisation: other_organisation,
-        tenant_code: "UA984",
+        tenancycode: "UA984",
       )
     end
 
@@ -795,7 +795,7 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "PATCH" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "M1 1AE")
+      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "M1 1AE")
     end
     let(:params) do
       { tenant_code: "New Value" }
@@ -853,10 +853,10 @@ RSpec.describe CaseLogsController, type: :request do
   # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
   describe "PUT" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "SW1A 2AA")
+      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "SW1A 2AA")
     end
     let(:params) do
-      { tenant_code: "New Value" }
+      { tenancycode: "New Value" }
     end
     let(:id) { case_log.id }
 

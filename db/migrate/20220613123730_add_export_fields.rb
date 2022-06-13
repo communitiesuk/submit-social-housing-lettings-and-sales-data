@@ -7,6 +7,7 @@ class AddExportFields < ActiveRecord::Migration[7.0]
       t.rename :tenant_code, :tenancycode
       t.rename :previous_postcode_known, :ppcodenk
       t.rename :shelteredaccom, :sheltered
+      t.remove :tenancy_code
     end
   end
 end

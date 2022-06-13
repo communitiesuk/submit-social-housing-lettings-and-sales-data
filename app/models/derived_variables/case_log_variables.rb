@@ -1,4 +1,6 @@
 module DerivedVariables::CaseLogVariables
+  RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
+
   def set_derived_fields!
     # TODO: Remove once we support supported housing logs
     self.needstype = 1 unless needstype

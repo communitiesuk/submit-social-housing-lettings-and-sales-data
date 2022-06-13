@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_123730) do
     t.integer "reservist"
     t.integer "illness"
     t.integer "preg_occ"
-    t.string "tenancy_code"
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"

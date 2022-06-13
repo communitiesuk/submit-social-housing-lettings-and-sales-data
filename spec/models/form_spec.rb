@@ -126,7 +126,7 @@ RSpec.describe Form, type: :model do
       end
 
       before do
-        case_log.tenant_code = "123"
+        case_log.tenancycode = "123"
         case_log.age1 = 35
         case_log.sex1 = "M"
         case_log.ecstat1 = 0

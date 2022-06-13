@@ -1228,7 +1228,7 @@ RSpec.describe CaseLog do
           managing_organisation: owning_organisation,
           owning_organisation:,
           created_by: created_by_user,
-          previous_postcode_known: 1,
+          ppcodenk: 1,
           ppostcode_full: "M1 1AE",
         })
       end
@@ -1268,7 +1268,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets all fields if previous postcode not known" do
-        address_case_log.update!({ previous_postcode_known: 0 })
+        address_case_log.update!({ ppcodenk: 0 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["ppostcode_full"]).to eq(nil)
@@ -1277,7 +1277,7 @@ RSpec.describe CaseLog do
       end
 
       it "correctly resets la if la is not known" do
-        address_case_log.update!({ previous_postcode_known: 0 })
+        address_case_log.update!({ ppcodenk: 0 })
         address_case_log.update!({ previous_la_known: 1, prevloc: "S92000003" })
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["prevloc"]).to eq("S92000003")
@@ -1290,7 +1290,7 @@ RSpec.describe CaseLog do
       end
 
       it "changes the prevloc if previous postcode changes from not known to known and provided" do
-        address_case_log.update!({ previous_postcode_known: 0 })
+        address_case_log.update!({ ppcodenk: 0 })
         address_case_log.update!({ previous_la_known: 1, prevloc: "E09000033" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
@@ -1298,7 +1298,7 @@ RSpec.describe CaseLog do
         expect(address_case_log.prevloc).to eq("E09000033")
         expect(record_from_db["prevloc"]).to eq("E09000033")
 
-        address_case_log.update!({ previous_postcode_known: 0, ppostcode_full: "M1 1AD" })
+        address_case_log.update!({ ppcodenk: 0, ppostcode_full: "M1 1AD" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
         expect(record_from_db["ppostcode_full"]).to eq("M11AD")
@@ -1393,8 +1393,8 @@ RSpec.describe CaseLog do
 
       it "correctly derives and saves waityear" do
         record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(1)
-        expect(case_log["waityear"]).to eq(1)
+        expect(record_from_db["waityear"]).to eq(2)
+        expect(case_log["waityear"]).to eq(2)
       end
 
       it "correctly derives and saves underoccupation_benefitcap if year is 2021" do
@@ -1693,10 +1693,10 @@ RSpec.describe CaseLog do
       end
 
       context "when the question type does not have answer options" do
-        let(:case_log) { FactoryBot.create(:case_log, :in_progress, housingneeds_a: 1, tenant_code: "test") }
+        let(:case_log) { FactoryBot.create(:case_log, :in_progress, housingneeds_a: 1, tenancycode: "test") }
 
         it "clears the answer" do
-          expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :tenant_code).from("test").to(nil)
+          expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :tenancycode).from("test").to(nil)
         end
       end
 
@@ -1750,8 +1750,8 @@ RSpec.describe CaseLog do
         case_log.update!({ renewal: 1 })
 
         record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["waityear"]).to eq(1)
-        expect(case_log["waityear"]).to eq(1)
+        expect(record_from_db["waityear"]).to eq(2)
+        expect(case_log["waityear"]).to eq(2)
 
         case_log.update!({ renewal: 0 })
         record_from_db = ActiveRecord::Base.connection.execute("select waityear from case_logs where id=#{case_log.id}").to_a[0]
@@ -1884,13 +1884,13 @@ RSpec.describe CaseLog do
 
       describe "#filter_by_tenant_code" do
         it "allows searching by a Tenant Code" do
-          result = described_class.filter_by_tenant_code(case_log_to_search.tenant_code)
+          result = described_class.filter_by_tenant_code(case_log_to_search.tenancycode)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
 
         context "when tenant_code has lower case letters" do
-          let(:matching_tenant_code_lower_case) { case_log_to_search.tenant_code.downcase }
+          let(:matching_tenant_code_lower_case) { case_log_to_search.tenancycode.downcase }
 
           it "allows searching by a Tenant Code" do
             result = described_class.filter_by_tenant_code(matching_tenant_code_lower_case)
@@ -1934,7 +1934,7 @@ RSpec.describe CaseLog do
         end
 
         it "allows searching using tenancy code" do
-          result = described_class.search_by(case_log_to_search.tenant_code)
+          result = described_class.search_by(case_log_to_search.tenancycode)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
