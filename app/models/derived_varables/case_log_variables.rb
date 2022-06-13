@@ -141,11 +141,11 @@ private
     return unless startdate
 
     referral_within_sector = [1, 10]
-    if collection_start_year <= 2021
-      previous_social_tenancies = [6, 8, 30, 31, 32, 33]
-    else
-      previous_social_tenancies = [6, 30, 31, 32, 33, 34, 35]
-    end
+    previous_social_tenancies = if collection_start_year <= 2021
+                                  [6, 8, 30, 31, 32, 33]
+                                else
+                                  [6, 30, 31, 32, 33, 34, 35]
+                                end
 
     if previous_social_tenancies.include?(prevten) || referral_within_sector.include?(referral)
       2 # Tenant existing in social housing sector
