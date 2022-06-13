@@ -36,6 +36,38 @@
                 ]
               ]
             },
+            "user": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "created_by_id": {
+                  "header": "Which user are you creating this log for?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options_lookup": {
+                    "class": "User",
+                    "scope": "all",
+                    "id": "id",
+                    "label": "name"
+                  }
+                }
+              },
+              "derived": true,
+              "depends_on": [
+                [
+                  {
+                    "object": "user",
+                    "method": "role",
+                    "value": "support"
+                  },
+                  {
+                    "object": "case_log",
+                    "method": "owning_organisation_id.nil?",
+                    "value": false
+                  }
+                ]
+              ]
+            },
             "needs_type": {
               "header": "",
               "description": "",

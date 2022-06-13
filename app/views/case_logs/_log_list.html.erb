@@ -64,8 +64,8 @@
             <%= status_tag(log.status) %>
           <% end %>
           <% if current_user.support? %>
-            <% row.cell(text: log.owning_organisation.name) %>
-            <% row.cell(text: log.managing_organisation.name) %>
+            <% row.cell(text: log.owning_organisation&.name) %>
+            <% row.cell(text: log.managing_organisation&.name) %>
           <% end %>
         <% end %>
       <% end %>
