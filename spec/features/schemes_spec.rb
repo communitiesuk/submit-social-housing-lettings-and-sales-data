@@ -107,6 +107,7 @@ RSpec.describe "Supported housing scheme Features" do
         it "shows list of links to schemes" do
           schemes.each do |scheme|
             expect(page).to have_link(scheme.service_name)
+            expect(page).to have_content(scheme.primary_client_group)
           end
         end
       end
