@@ -31,8 +31,8 @@ class CaseLog < ApplicationRecord
   before_validation :set_derived_fields!
   before_save :update_status!
 
-  belongs_to :owning_organisation, class_name: "Organisation"
-  belongs_to :managing_organisation, class_name: "Organisation"
+  belongs_to :owning_organisation, class_name: "Organisation", optional: true
+  belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User"
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
@@ -468,13 +468,16 @@ private
         enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
         current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(public_send(question.id).to_s) : false
         if !current_answer_option_valid && respond_to?(question.id.to_s)
+          Rails.logger.debug("Cleared #{question.id} value")
           public_send("#{question.id}=", nil)
         else
           (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
+            Rails.logger.debug("Cleared #{invalid_answer_option} value")
             public_send("#{invalid_answer_option}=", nil) if respond_to?(invalid_answer_option)
           end
         end
       else
+        Rails.logger.debug("Cleared #{question.id} value")
         public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
       end
     end
@@ -490,6 +493,7 @@ private
       condition_key = conditions.first[:key]
       condition_value = conditions.first[:value]
       if public_send("#{condition_key}_changed?") && condition_value == public_send(condition_key) && !public_send("#{dependent}_changed?")
+        Rails.logger.debug("Cleared derived #{dependent} value")
         self[dependent] = nil
       end
     end
@@ -524,6 +528,7 @@ private
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
+    self.managing_organisation_id ||= owning_organisation_id
     self.incref = 1 if net_income_refused?
     self.renttype = RENT_TYPE_MAPPING[rent_type]
     self.lettype = get_lettype

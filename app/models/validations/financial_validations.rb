@@ -130,6 +130,8 @@ private
   NEEDSTYPE_VALUES = { 2 => :supported_housing, 1 => :general_needs }.freeze
 
   def validate_charges(record)
+    return unless record.owning_organisation
+
     provider_type = record.owning_organisation.provider_type_before_type_cast
     %i[scharge pscharge supcharg].each do |charge|
       maximum = CHARGE_MAXIMUMS.dig(charge, PROVIDER_TYPE[provider_type], NEEDSTYPE_VALUES[record.needstype])

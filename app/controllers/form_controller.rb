@@ -1,7 +1,6 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_resource, only: %i[submit_form review]
-  before_action :find_resource_by_named_id, except: %i[submit_form review]
+  before_action :find_resources
 
   def submit_form
     if @case_log
@@ -24,7 +23,7 @@ class FormController < ApplicationController
   def check_answers
     if @case_log
       current_url = request.env["PATH_INFO"]
-      subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
+      subsection = @form.get_subsection(current_url.split("/")[-2])
       render "form/check_answers", locals: { subsection: }
     else
       render_not_found
@@ -92,12 +91,16 @@ private
     end
   end
 
-  def find_resource
-    @case_log = current_user.case_logs.find_by(id: params[:id])
-  end
+  def find_resources
+    @case_log = if params[:case_log_id]
+                  current_user.case_logs.find_by(id: params[:case_log_id])
+                else
+                  current_user.case_logs.find_by(id: params[:id])
+                end
+    return unless @case_log
 
-  def find_resource_by_named_id
-    @case_log = current_user.case_logs.find_by(id: params[:case_log_id])
+    @form = @case_log.form
+    @form.current_user = current_user
   end
 
   def is_referrer_check_answers?
@@ -107,17 +110,17 @@ private
 
   def successful_redirect_path
     if is_referrer_check_answers?
-      page_ids = @case_log.form.subsection_for_page(@page).pages.map(&:id)
+      page_ids = @form.subsection_for_page(@page).pages.map(&:id)
       page_index = page_ids.index(@page.id)
-      next_page = @case_log.form.next_page(@page, @case_log)
-      previous_page = @case_log.form.previous_page(page_ids, page_index, @case_log)
+      next_page = @form.next_page(@page, @case_log)
+      previous_page = @form.previous_page(page_ids, page_index, @case_log)
       if next_page.to_s.include?("value_check") || next_page == previous_page
         return "/logs/#{@case_log.id}/#{next_page.dasherize}?referrer=check_answers"
       else
-        return send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log)
+        return send("case_log_#{@form.subsection_for_page(@page).id}_check_answers_path", @case_log)
       end
     end
-    redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
+    redirect_path = @form.next_page_redirect_path(@page, @case_log)
     send(redirect_path, @case_log)
   end
 end
