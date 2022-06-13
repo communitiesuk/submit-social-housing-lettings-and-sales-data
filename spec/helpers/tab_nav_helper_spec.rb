@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe TabNavHelper do
   let(:organisation) { FactoryBot.create(:organisation) }
   let(:user) { FactoryBot.build(:user, organisation:) }
+  let(:scheme) { FactoryBot.build(:scheme) }
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
@@ -15,6 +16,13 @@ RSpec.describe TabNavHelper do
     it "returns the users org name and role separated by a newline character" do
       expected_html = "DLUHC\n<span class=\"app-!-colour-muted\">Data provider</span>"
       expect(org_cell(user)).to match(expected_html)
+    end
+  end
+
+  describe "#scheme_cell" do
+    it "returns the scheme link service name and primary user group separated by a newline character" do
+      expected_html = "<a class=\"govuk-link\" href=\"/supported-housing\">#{scheme.service_name}</a>\n<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group}</span>"
+      expect(scheme_cell(scheme)).to match(expected_html)
     end
   end
 
