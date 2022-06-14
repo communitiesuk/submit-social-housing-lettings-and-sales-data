@@ -41,23 +41,23 @@ private
   end
 
   def users_current?(path)
-    path == "/users"
+    path == "/users" || path.include?("/users/")
   end
 
   def supported_housing_current?(path)
-    path == "/supported-housing"
+    path == "/supported-housing" || path.include?("/supported-housing/")
   end
 
   def organisations_current?(path)
-    path == "/organisations" || subnav_users_path?(path) || subnav_logs_path?(path) || subnav_details_path?(path) || subnav_supported_housing_path?(path)
+    path == "/organisations" || path.include?("/organisations/")
   end
 
   def subnav_supported_housing_path?(path)
-    path.include?("/organisations") && path.include?("/supported-housing")
+    path.include?("/organisations") && path.include?("/supported-housing") || path.include?("/supported-housing/")
   end
 
   def subnav_users_path?(path)
-    path.include?("/organisations") && path.include?("/users")
+    (path.include?("/organisations") && path.include?("/users")) || path.include?("/users/")
   end
 
   def subnav_logs_path?(path)

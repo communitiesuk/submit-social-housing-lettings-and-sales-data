@@ -67,6 +67,36 @@ RSpec.describe NavigationItemsHelper do
           expect(primary_items("/account", current_user)).to eq(expected_navigation_items)
         end
       end
+
+      context "when the user is on the individual user's page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
+            NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/users/1", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
+      context "when the user is on the individual scheme's page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+            NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
+            NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
+          ]
+        end
+
+        it "returns navigation items with supported housing item set as current" do
+          expect(primary_items("/supported-housing/1", current_user)).to eq(expected_navigation_items)
+        end
+      end
     end
 
     context "when the user is a support user" do
@@ -129,6 +159,36 @@ RSpec.describe NavigationItemsHelper do
 
         it "returns navigation items with the users item set as current" do
           expect(primary_items("/supported-housing", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
+      context "when the user is on the individual user's page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+          ]
+        end
+
+        it "returns navigation items with the users item set as current" do
+          expect(primary_items("/users/1", current_user)).to eq(expected_navigation_items)
+        end
+      end
+
+      context "when the user is on the individual scheme's page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+          ]
+        end
+
+        it "returns navigation items with supported housing item set as current" do
+          expect(primary_items("/supported-housing/1", current_user)).to eq(expected_navigation_items)
         end
       end
 
