@@ -119,7 +119,7 @@ RSpec.describe "Supported housing scheme Features" do
           it "shows me details about the selected scheme" do
             expect(page).to have_content(schemes.first.code)
             expect(page).to have_content(schemes.first.service_name)
-            expect(page).to have_content(schemes.first.sensitive)
+            expect(page).to have_content(schemes.first.sensitive_display)
             expect(page).to have_content(schemes.first.scheme_type_display)
             expect(page).to have_content(schemes.first.registered_under_care_act_display)
             expect(page).to have_content(schemes.first.total_units)
