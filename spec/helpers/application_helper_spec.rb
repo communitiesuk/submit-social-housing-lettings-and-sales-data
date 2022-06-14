@@ -6,31 +6,40 @@ RSpec.describe ApplicationHelper do
   let(:subsection) { form.get_subsection("household_characteristics") }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
   let(:pagy) { nil }
+  let(:current_user) { FactoryBot.create(:user) }
 
   describe "govuk_header_classes" do
     context "with external user" do
-      expect(govuk_header_classes) .to eq("app-header")
+      it "shows the standard app header" do
+        expect(govuk_header_classes(current_user)).to eq("app-header")
+      end
     end
 
     context "with internal support user" do
       let(:current_user) { FactoryBot.create(:user, :support) }
-      expect(govuk_header_classes) .to eq("app-header app-header--orange")
+
+      it "shows an orange header" do
+        expect(govuk_header_classes(current_user)).to eq("app-header app-header--orange")
+      end
     end
   end
 
   describe "govuk_phase_banner_tag" do
     context "with external user" do
-      expect(govuk_phase_banner_tag) .to eq({
-        text: "Beta",
-      })
+      it "shows the standard phase tag" do
+        expect(govuk_phase_banner_tag(current_user)).to eq({ text: "Beta" })
+      end
     end
 
     context "with support user" do
       let(:current_user) { FactoryBot.create(:user, :support) }
-      expect(govuk_phase_banner_tag) .to eq({
-        colour: "orange",
-        text: "Support beta",
-      })
+
+      it "shows an orange phase tag" do
+        expect(govuk_phase_banner_tag(current_user)).to eq({
+          colour: "orange",
+          text: "Support beta",
+        })
+      end
     end
   end
 

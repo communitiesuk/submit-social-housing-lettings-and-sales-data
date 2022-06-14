@@ -9,7 +9,7 @@ module ApplicationHelper
     end
   end
 
-  def govuk_header_classes
+  def govuk_header_classes(current_user)
     if current_user && current_user.support?
       "app-header app-header--orange"
     else
@@ -17,7 +17,7 @@ module ApplicationHelper
     end
   end
 
-  def govuk_phase_banner_tag
+  def govuk_phase_banner_tag(current_user)
     if current_user && current_user.support?
       { colour: "orange", text: "Support beta" }
     else

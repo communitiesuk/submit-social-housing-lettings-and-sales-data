@@ -43,7 +43,7 @@
     <%= govuk_skip_link %>
 
     <%= govuk_header(
-      classes: govuk_header_classes,
+      classes: govuk_header_classes(current_user),
       service_url: current_user.nil? ? "/" : "/logs",
       navigation_classes: "govuk-header__navigation--end",
     ) do |component|
@@ -60,7 +60,7 @@
 
     <%= govuk_phase_banner(
       classes: "govuk-width-container",
-      tag: govuk_phase_banner_tag,
+      tag: govuk_phase_banner_tag(current_user),
       text: "This is a new service – help us improve it by #{feedback_link}".html_safe,
     ) %>
 
