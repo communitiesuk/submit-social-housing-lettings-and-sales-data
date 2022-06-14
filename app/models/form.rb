@@ -1,19 +1,24 @@
 class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
-              :start_date, :end_date, :type, :name
+              :start_date, :end_date, :type, :name, :setup_definition,
+              :setup_sections, :form_sections
 
-  def initialize(form_path, name)
+  def initialize(form_path, name, setup_path)
+    raise "No setup definition file exists for given path".freeze unless File.exist?(setup_path)
     raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
-    @form_definition = JSON.parse(File.open(form_path).read)
     @name = name
-    @start_date = Time.iso8601(form_definition["start_date"])
-    @end_date = Time.iso8601(form_definition["end_date"])
+    @setup_definition = JSON.parse(File.open(setup_path).read)
+    @setup_sections = setup_definition["sections"].map { |id, s| Form::Section.new(id, s, self) } || []
+    @form_definition = JSON.parse(File.open(form_path).read)
+    @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
     @type = form_definition["form_type"]
-    @sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
+    @sections =  setup_sections + form_sections
     @subsections = sections.flat_map(&:subsections)
     @pages = subsections.flat_map(&:pages)
     @questions = pages.flat_map(&:questions)
+    @start_date = Time.iso8601(form_definition["start_date"])
+    @end_date = Time.iso8601(form_definition["end_date"])
   end
 
   def get_subsection(id)

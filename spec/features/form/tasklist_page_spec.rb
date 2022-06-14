@@ -27,6 +27,16 @@ RSpec.describe "Task List" do
       managing_organisation: user.organisation,
     )
   end
+  let(:setup_completed_log) do
+    FactoryBot.create(
+      :case_log,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+      renewal: 1,
+      rent_type: 1,
+      startdate: Time.zone.local(2021, 5, 1),
+    )
+  end
   let(:id) { case_log.id }
   let(:status) { case_log.status }
 
@@ -40,14 +50,13 @@ RSpec.describe "Task List" do
   end
 
   it "shows number of completed sections if one section is completed" do
-    answer_all_questions_in_income_subsection(empty_case_log)
-    visit("/logs/#{empty_case_log.id}")
-    expect(page).to have_content("1 of 9 sections completed.")
+    visit("/logs/#{setup_completed_log.id}")
+    expect(page).to have_content("1 of 10 sections completed.")
   end
 
   it "show skip link for next incomplete section" do
-    answer_all_questions_in_income_subsection(empty_case_log)
-    visit("/logs/#{empty_case_log.id}")
+    answer_all_questions_in_income_subsection(setup_completed_log)
+    visit("/logs/#{setup_completed_log.id}")
     expect(page).to have_link("Skip to next incomplete section", href: /#household-characteristics/)
   end
 
