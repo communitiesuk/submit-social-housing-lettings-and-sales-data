@@ -214,9 +214,9 @@ RSpec.describe SchemesController, type: :request do
       context "when coordinator attempts to see scheme belogning to a different organisation" do
         let!(:specific_scheme) { FactoryBot.create(:scheme) }
 
-        it "returns 401 unauthorized" do
+        it "returns 404 not found" do
           request
-          expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:not_found)
         end
       end
     end

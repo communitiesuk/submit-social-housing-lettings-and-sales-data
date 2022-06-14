@@ -16,6 +16,7 @@ class SchemesController < ApplicationController
 
   def show
     @scheme = Scheme.find_by(id: params[:id])
+    render_not_found and return unless (current_user.organisation == @scheme.organisation) || current_user.support?
   end
 
 private
