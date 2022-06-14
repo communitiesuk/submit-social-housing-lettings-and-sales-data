@@ -34,7 +34,7 @@ module NavigationItemsHelper
     ]
   end
 
-  def scheme_items(path, current_scheme_id, count)
+  def scheme_items(_path, current_scheme_id, count)
     [
       NavigationItem.new("Scheme", "/supported-housing/#{current_scheme_id}", true),
       NavigationItem.new("#{count} locations", "/supported-housing/#{current_scheme_id}/locations", false),

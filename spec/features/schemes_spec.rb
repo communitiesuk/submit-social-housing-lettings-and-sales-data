@@ -134,12 +134,12 @@ RSpec.describe "Supported housing scheme Features" do
             expect(page).to have_link("#{schemes.first.locations.count} locations")
           end
 
-          context "there are locations that belong to the selected scheme" do
+          context "when there are locations that belong to the selected scheme" do
             let!(:locations) { FactoryBot.create_list(:location, 3, scheme: schemes.first) }
 
             context "when I click locations link" do
               before do
-                click_link ("#{schemes.first.locations.count} locations")
+                click_link("#{schemes.first.locations.count} locations")
               end
 
               it "shows details of those locations" do
