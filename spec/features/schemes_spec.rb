@@ -130,8 +130,8 @@ RSpec.describe "Supported housing scheme Features" do
           end
 
           it "shows service and locations tab" do
-            expect(page).to have_content("Service")
-            expect(page).to have_content("locations")
+            expect(page).to have_link("Service")
+            expect(page).to have_link("#{schemes.count} locations")
           end
         end
       end

@@ -34,6 +34,13 @@ module NavigationItemsHelper
     ]
   end
 
+  def scheme_items(path, current_scheme_id)
+    [
+      NavigationItem.new("Scheme", "/supported-housing/#{current_scheme_id}", true),
+      NavigationItem.new("Locations", "/supported-housing/#{current_scheme_id}/locations", false),
+    ]
+  end
+
 private
 
   def logs_current?(path)
