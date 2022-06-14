@@ -8,14 +8,14 @@ class Scheme < ApplicationRecord
   SCHEME_TYPE = {
     0 => "Missings",
     4 => "Foyer",
-    5 => "D, L, Airect Access Hostel",
+    5 => "Direct Access Hostel",
     6 => "Other Supported Housing",
     7 => "Housing for older people",
   }.freeze
 
   PRIMARY_CLIENT_GROUP = {
     "O" => "Homeless families with support needs",
-    "H" => "Offenders &amp; people at risk of offending",
+    "H" => "Offenders & people at risk of offending",
     "M" => "Older people with support needs",
     "L" => "People at risk of domestic violence",
     "A" => "People with a physical or sensory disability",

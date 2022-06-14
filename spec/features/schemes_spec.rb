@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Supported housing scheme Features" do
   context "when viewing list of schemes" do
-    context "when I am signed as a support user in there are schemes in the database" do
+    context "when I am signed as a support user and there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
       let!(:scheme_to_search) { FactoryBot.create(:scheme) }
@@ -77,7 +77,7 @@ RSpec.describe "Supported housing scheme Features" do
   end
 
   context "when viewing individual scheme" do
-    context "when I am signed as a support user in there are schemes in the database" do
+    context "when I am signed as a support user and there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
       let(:notify_client) { instance_double(Notifications::Client) }
