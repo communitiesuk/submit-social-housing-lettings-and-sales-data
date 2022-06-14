@@ -41,7 +41,7 @@ private
   end
 
   def users_current?(path)
-    path == "/users"
+    path == "/users" || path.include?("/users/")
   end
 
   def supported_housing_current?(path)
@@ -57,7 +57,7 @@ private
   end
 
   def subnav_users_path?(path)
-    path.include?("/organisations") && path.include?("/users") || path.include?("/users/")
+    path.include?("/organisations") && path.include?("/users")
   end
 
   def subnav_logs_path?(path)

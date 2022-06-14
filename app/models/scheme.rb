@@ -44,11 +44,11 @@ class Scheme < ApplicationRecord
   }.freeze
 
   INTENDED_STAY = {
-    "M" =>"Medium stay",
-    "P" =>"Permanent",
-    "S" =>"Short Stay",
-    "V" =>"Very short stay",
-    "X" =>"Missing",
+    "M" => "Medium stay",
+    "P" => "Permanent",
+    "S" => "Short Stay",
+    "V" => "Very short stay",
+    "X" => "Missing",
   }.freeze
 
   REGISTERED_UNDER_CARE_ACT = {
