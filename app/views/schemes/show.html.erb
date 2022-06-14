@@ -3,8 +3,9 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
+
 <%= render SubNavigationComponent.new(
-  items: scheme_items(request.path, @scheme.id),
+  items: scheme_items(request.path, @scheme.id, @scheme.locations.count),
 ) %>
 
 <div class="govuk-grid-row">
@@ -19,3 +20,5 @@
     <% end %>
   </div>
 </div>
+
+<%= govuk_back_link(href: "#{request.referrer}")%>
