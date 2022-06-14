@@ -9,6 +9,22 @@ module ApplicationHelper
     end
   end
 
+  def govuk_header_classes
+    if current_user && current_user.support?
+      "app-header app-header--orange"
+    else
+      "app-header"
+    end
+  end
+
+  def govuk_phase_banner_tag
+    if current_user && current_user.support?
+      { colour: "orange", text: "Support beta" }
+    else
+      { text: "Beta" }
+    end
+  end
+
 private
 
   def paginated_title(title, pagy)
