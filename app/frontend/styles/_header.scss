@@ -21,3 +21,8 @@
     }
   }
 }
+
+.app-header--orange,
+.app-header--orange .govuk-header__container {
+  border-bottom-color: govuk-colour("orange");
+}
