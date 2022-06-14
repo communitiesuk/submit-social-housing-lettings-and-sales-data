@@ -4,6 +4,7 @@ class Scheme < ApplicationRecord
   scope :search_by_code, ->(code) { where("code ILIKE ?", "%#{code}%") }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_code(param).or(search_by_service_name(param)) }
+  has_many :locations
 
   SCHEME_TYPE = {
     0 => "Missings",
