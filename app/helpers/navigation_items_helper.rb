@@ -45,7 +45,7 @@ private
   end
 
   def supported_housing_current?(path)
-    path == "/supported-housing"
+    path.include?("/supported-housing") && !organisations_current?(path)
   end
 
   def organisations_current?(path)
