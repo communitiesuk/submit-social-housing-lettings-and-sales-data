@@ -185,6 +185,42 @@ RSpec.describe SchemesController, type: :request do
       end
     end
 
+    context "when signed in as a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:specific_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        sign_in user
+        get "/supported-housing/#{specific_scheme.id}"
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.service_name)
+        expect(page).to have_content(specific_scheme.organisation.name)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.service_name)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.scheme_type_display)
+        expect(page).to have_content(specific_scheme.registered_under_care_act_display)
+        expect(page).to have_content(specific_scheme.total_units)
+        expect(page).to have_content(specific_scheme.primary_client_group_display)
+        expect(page).to have_content(specific_scheme.secondary_client_group_display)
+        expect(page).to have_content(specific_scheme.support_type_display)
+        expect(page).to have_content(specific_scheme.intended_stay_display)
+      end
+
+      context "when coordinator attempts to see scheme belogning to a different organisation" do
+        let!(:specific_scheme) { FactoryBot.create(:scheme) }
+
+        it "returns 401 unauthorized" do
+          request
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
     context "when signed in as a support user" do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -196,7 +232,17 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.code)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
-        expect(page).to have_content(specific_scheme.organisation.sensitive)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.service_name)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.scheme_type_display)
+        expect(page).to have_content(specific_scheme.registered_under_care_act_display)
+        expect(page).to have_content(specific_scheme.total_units)
+        expect(page).to have_content(specific_scheme.primary_client_group_display)
+        expect(page).to have_content(specific_scheme.secondary_client_group_display)
+        expect(page).to have_content(specific_scheme.support_type_display)
+        expect(page).to have_content(specific_scheme.intended_stay_display)
       end
     end
   end
