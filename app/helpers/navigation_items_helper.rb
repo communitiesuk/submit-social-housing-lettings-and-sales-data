@@ -57,7 +57,7 @@ private
   end
 
   def subnav_users_path?(path)
-    path.include?("/organisations") && path.include?("/users")
+    (path.include?("/organisations") && path.include?("/users")) || path.include?("/users/")
   end
 
   def subnav_logs_path?(path)
