@@ -210,12 +210,19 @@ RSpec.describe CaseLog do
         hbrentshortfall: 1,
       })
     end
+    
+    context "production specific code" do
+      before do
+        allow(Rails.env).to receive(:production?).and_return(true)
+      end
 
-    it "derives that all forms are general needs" do
-      record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
-      expect(record_from_db["needstype"]).to eq(1)
-      expect(case_log["needstype"]).to eq(1)
-    end
+      it "derives that all forms are general needs when in production" do
+        case_log = FactoryBot.create(:case_log)
+        record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["needstype"]).to eq(1)
+        expect(case_log["needstype"]).to eq(1)
+      end
+    end 
 
     it "correctly derives and saves partial and full major repairs date" do
       record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from case_logs where id=#{case_log.id}").to_a[0]
@@ -2096,5 +2103,23 @@ RSpec.describe CaseLog do
         expect { case_log.save! }.to raise_error(ActiveRecord::RecordInvalid, /Enter a postcode in the correct format/)
       end
     end
+  end
+
+  describe "needs_question_enabled?" do
+    it "returns false for the case log if the environment is not production" do
+      case_log = FactoryBot.create(:case_log)
+      expect(case_log.needs_question_enabled?).to eq(false)
+    end
+
+    context "when in the production environment" do
+      before do
+        allow(Rails.env).to receive(:production?).and_return(true)
+      end
+
+      it "returns true for a case log" do
+        case_log = FactoryBot.create(:case_log)
+        expect(case_log.needs_question_enabled?).to eq(true)
+      end 
+    end 
   end
 end

@@ -112,6 +112,10 @@ class CaseLog < ApplicationRecord
     status == "in_progress"
   end
 
+  def needs_question_enabled?
+    FeatureToggle.needs_question_enabled?
+  end 
+
   def weekly_net_income
     return unless earnings && incfreq
 
@@ -520,7 +524,7 @@ private
 
   def set_derived_fields!
     # TODO: Remove once we support supported housing logs
-    self.needstype = 1 unless needstype
+    self.needstype = 1 unless needs_question_enabled?
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end
