@@ -128,6 +128,11 @@ RSpec.describe "Supported housing scheme Features" do
             expect(page).to have_content(schemes.first.support_type_display)
             expect(page).to have_content(schemes.first.intended_stay_display)
           end
+
+          it "shows service and locations tab" do
+            expect(page).to have_content("Service")
+            expect(page).to have_content("locations")
+          end
         end
       end
     end
