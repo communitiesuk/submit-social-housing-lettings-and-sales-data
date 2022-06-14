@@ -191,10 +191,10 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/supported-housing/#{specific_scheme.id}"
       end
 
       it "has page heading" do
+        get "/supported-housing/#{specific_scheme.id}"
         expect(page).to have_content(specific_scheme.code)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
@@ -215,7 +215,7 @@ RSpec.describe SchemesController, type: :request do
         let!(:specific_scheme) { FactoryBot.create(:scheme) }
 
         it "returns 404 not found" do
-          request
+          get "/supported-housing/#{specific_scheme.id}"
           expect(response).to have_http_status(:not_found)
         end
       end
