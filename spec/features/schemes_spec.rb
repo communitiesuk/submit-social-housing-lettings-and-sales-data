@@ -107,7 +107,7 @@ RSpec.describe "Supported housing scheme Features" do
         it "shows list of links to schemes" do
           schemes.each do |scheme|
             expect(page).to have_link(scheme.service_name)
-            expect(page).to have_content(scheme.primary_client_group)
+            expect(page).to have_content(scheme.primary_client_group_display)
           end
         end
 
@@ -117,8 +117,16 @@ RSpec.describe "Supported housing scheme Features" do
           end
 
           it "shows me details about the selected scheme" do
+            expect(page).to have_content(schemes.first.code)
             expect(page).to have_content(schemes.first.service_name)
             expect(page).to have_content(schemes.first.sensitive)
+            expect(page).to have_content(schemes.first.scheme_type_display)
+            expect(page).to have_content(schemes.first.registered_under_care_act_display)
+            expect(page).to have_content(schemes.first.total_units)
+            expect(page).to have_content(schemes.first.primary_client_group_display)
+            expect(page).to have_content(schemes.first.secondary_client_group_display)
+            expect(page).to have_content(schemes.first.support_type_display)
+            expect(page).to have_content(schemes.first.intended_stay_display)
           end
         end
       end
