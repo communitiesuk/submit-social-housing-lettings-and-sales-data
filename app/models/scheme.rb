@@ -66,7 +66,7 @@ class Scheme < ApplicationRecord
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act_display },
       { name: "Total number of units", value: total_units },
       { name: "Primary client group", value: primary_client_group_display },
-      { name: "Secondary client group", value: primary_client_group_display },
+      { name: "Secondary client group", value: secondary_client_group_display },
       { name: "Level of support given", value: support_type_display },
       { name: "Intended length of stay", value: intended_stay_display },
     ]

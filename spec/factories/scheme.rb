@@ -3,7 +3,7 @@ FactoryBot.define do
     code { Faker::Name.initials(number: 4) }
     service_name { Faker::Name.name_with_middle }
     sensitive { Faker::Boolean.boolean }
-    registered_under_care_act { Faker::Boolean.boolean }
+    registered_under_care_act { Faker::Number.within(range: 0..1) }
     support_type { Faker::Number.within(range: 0..6) }
     scheme_type { %i[0 4 5 6 7].sample }
     total_units { Faker::Number.number(digits: 2) }

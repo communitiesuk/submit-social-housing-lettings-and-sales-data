@@ -1,11 +1,10 @@
+<% title = @scheme.service_name %>
+<% content_for :title, title %>
+
+<%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
-      <%= content_for("Test") %>
-    </h1>
-    <h2 class="govuk-heading-m">
-      Scheme Result
-    </h2>
     <%= govuk_summary_list do |summary_list| %>
       <% @scheme.display_attributes.each do |attr| %>
           <%= summary_list.row do |row| %>

@@ -73,24 +73,45 @@ unless Rails.env.test?
     Scheme.create!(
       code: "S878",
       service_name: "Beulahside Care",
+      sensitive: true,
+      registered_under_care_act: 0,
+      support_type: 1,
+      scheme_type: 4,
+      total_units: 5,
+      intended_stay: "M",
+      primary_client_group: "O",
+      secondary_client_group: "H",
       organisation: org,
-      primary_client_group: "G",
       created_at: Time.zone.now,
     )
 
     Scheme.create!(
       code: "S312",
       service_name: "Abdullahview Point",
+      sensitive: false,
+      registered_under_care_act: 1,
+      support_type: 1,
+      scheme_type: 5,
+      total_units: 2,
+      intended_stay: "S",
+      primary_client_group: "D",
+      secondary_client_group: "E",
       organisation: org,
-      primary_client_group: "I",
       created_at: Time.zone.now,
     )
 
     Scheme.create!(
       code: "7XYZ",
       service_name: "Caspermouth Center",
-      organisation: dummy_org,
+      sensitive: true,
+      registered_under_care_act: 1,
+      support_type: 4,
+      scheme_type: 7,
+      total_units: 7,
+      intended_stay: "X",
       primary_client_group: "G",
+      secondary_client_group: "R",
+      organisation: dummy_org,
       created_at: Time.zone.now,
     )
   end
