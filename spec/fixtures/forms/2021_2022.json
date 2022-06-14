@@ -10,7 +10,7 @@
           "household_characteristics": {
             "label": "Household characteristics",
             "pages": {
-              "tenant_code": {
+              "tenancycode": {
                 "questions": {
                   "tenancycode": {
                     "check_answer_label": "Tenant code",
@@ -359,21 +359,6 @@
       "tenancy_and_property": {
         "label": "Tenancy and property information",
         "subsections": {
-          "tenancy_information": {
-            "label": "Tenancy information",
-            "pages": {
-              "tenancy_code": {
-                "questions": {
-                  "tenancy_code": {
-                    "check_answer_label": "What is the tenancy code?",
-                    "header": "What is the tenancy code?",
-                    "type": "text",
-                    "width": 10
-                  }
-                }
-              }
-            }
-          },
           "property_information": {
             "label": "Property information",
             "pages": {
@@ -975,7 +960,6 @@
             "depends_on": [{
               "household_characteristics": "completed",
               "household_needs": "completed",
-              "tenancy_information": "completed",
               "property_information": "completed"
             }],
             "pages": {

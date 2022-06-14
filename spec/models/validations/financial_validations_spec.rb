@@ -109,6 +109,8 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "housing benefit rent shortfall validations" do
+    before { record.startdate = Time.zone.local(2022, 5, 1) }
+
     context "when shortfall is yes" do
       it "validates that housing benefit is not none" do
         record.hbrentshortfall = 1
@@ -126,7 +128,8 @@ RSpec.describe Validations::FinancialValidations do
           .to include(match I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits"))
       end
 
-      it "validates that housing benefit is not Universal Credit without housing benefit" do
+      it "validates that housing benefit is not Universal Credit without housing benefit (prior to 22/23)" do
+        record.startdate = Time.zone.local(2022, 3, 1)
         record.hbrentshortfall = 1
         record.hb = 7
         financial_validator.validate_tshortfall(record)

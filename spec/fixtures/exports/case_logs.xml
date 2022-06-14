@@ -2,6 +2,7 @@
 <forms>
   <form>
     <status>2</status>
+    <tenancycode>BZ737</tenancycode>
     <age1>35</age1>
     <sex1>F</sex1>
     <ethnic>2</ethnic>
@@ -108,6 +109,7 @@
     <tcharge>325.0</tcharge>
     <tshortfall>12.0</tshortfall>
     <chcharge/>
+    <ppcodenk>1</ppcodenk>
     <has_benefits>1</has_benefits>
     <renewal>0</renewal>
     <wrent>100.0</wrent>
@@ -129,6 +131,10 @@
     <relat8/>
     <lar/>
     <irproduct/>
+    <sheltered>0</sheltered>
+    <hhtype>4</hhtype>
+    <new_old>2</new_old>
+    <vacdays>638</vacdays>
     <form>{id}</form>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
@@ -138,12 +144,6 @@
     <manhcnum>1234</manhcnum>
     <createddate>2022-02-08 16:52:15 UTC</createddate>
     <uploaddate>2022-02-08 16:52:15 UTC</uploaddate>
-    <tenancycode>BZ737</tenancycode>
-    <ppcodenk>1</ppcodenk>
-    <sheltered>0</sheltered>
-    <hhtype>4</hhtype>
-    <new_old>2</new_old>
-    <vacdays>638</vacdays>
     <providertype>1</providertype>
   </form>
 </forms>

@@ -88,7 +88,7 @@ RSpec.describe Form, type: :model do
       end
 
       def answer_tenancy_information(case_log)
-        case_log.tenancy_code = "1234"
+        case_log.tenancycode = "1234"
       end
 
       def answer_property_information(case_log)
@@ -148,7 +148,7 @@ RSpec.describe Form, type: :model do
 
       it "returns the first page of the next incomplete subsection (skipping completed subsections)" do
         answer_household_needs(case_log)
-        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("tenancy-code")
+        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("accessible-select-too")
       end
 
       it "returns the declaration section for a completed case log" do

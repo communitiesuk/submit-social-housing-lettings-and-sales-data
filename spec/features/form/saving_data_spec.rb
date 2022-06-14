@@ -23,7 +23,7 @@ RSpec.describe "Form Saving Data" do
   end
   let(:question_answers) do
     {
-      tenant_code: { type: "text", answer: "BZ737", path: "tenant_code" },
+      tenancycode: { type: "text", answer: "BZ737", path: "tenancycode" },
       age1: { type: "numeric", answer: 25, path: "person_1_age" },
       sex1: { type: "radio", answer: { "F" => "Female" }, path: "person_1_gender" },
       hhmemb: { type: "numeric", answer: 3, path: "household_number_of_members" },

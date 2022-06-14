@@ -62,7 +62,7 @@ module Validations::FinancialValidations
       cannot_have_outstanding_amount = record.has_hbrentshortfall? &&
         (record.benefits_unknown? ||
           record.receives_no_benefits? ||
-          tenant_refuses_to_say_benefits?)
+          record.tenant_refuses_to_say_benefits?)
     end
 
     if cannot_have_outstanding_amount

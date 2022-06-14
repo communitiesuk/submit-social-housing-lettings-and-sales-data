@@ -80,9 +80,9 @@ RSpec.describe FormController, type: :request do
           let(:case_log_year_2) { FactoryBot.create(:case_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation) }
 
           it "displays the correct question details for each case log based on form year" do
-            get "/logs/#{case_log_year_1.id}/tenant-code", headers: headers, params: {}
+            get "/logs/#{case_log_year_1.id}/tenancycode", headers: headers, params: {}
             expect(response.body).to include("What is the tenant code?")
-            get "/logs/#{case_log_year_2.id}/tenant-code", headers: headers, params: {}
+            get "/logs/#{case_log_year_2.id}/tenancycode", headers: headers, params: {}
             expect(response.body).to match("Different question header text for this year - 2023")
           end
         end
@@ -275,7 +275,7 @@ RSpec.describe FormController, type: :request do
                 accessibility_requirements:
                                        %w[ housingneeds_a
                                            housingneeds_f],
-                tenant_code:,
+                tenancycode: tenant_code,
               },
             }
           end
@@ -295,7 +295,7 @@ RSpec.describe FormController, type: :request do
                     "housingneeds_h" => "Don’t know" },
                 }, nil
               ),
-              Form::Question.new("tenant_code", { "type" => "text" }, nil),
+              Form::Question.new("tenancycode", { "type" => "text" }, nil),
             ]
           end
           let(:page) { case_log.form.get_page("accessibility_requirements") }
@@ -307,7 +307,7 @@ RSpec.describe FormController, type: :request do
 
             expect(case_log.housingneeds_a).to eq(1)
             expect(case_log.housingneeds_f).to eq(1)
-            expect(case_log.tenant_code).to eq(tenant_code)
+            expect(case_log.tenancycode).to eq(tenant_code)
           end
         end
       end

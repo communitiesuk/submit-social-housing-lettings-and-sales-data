@@ -111,7 +111,7 @@ module Imports
       attributes["prevten"] = unsafe_string_as_integer(xml_doc, "Q11")
       attributes["prevloc"] = string_or_nil(xml_doc, "Q12aONS")
       attributes["ppostcode_full"] = compose_postcode(xml_doc, "PPOSTC1", "PPOSTC2")
-      attributes["previous_postcode_known"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"])
+      attributes["ppcodenk"] = previous_postcode_known(xml_doc, attributes["ppostcode_full"], attributes["prevloc"])
       attributes["layear"] = unsafe_string_as_integer(xml_doc, "Q12c")
       attributes["waityear"] = unsafe_string_as_integer(xml_doc, "Q12d")
       attributes["homeless"] = unsafe_string_as_integer(xml_doc, "Q13")

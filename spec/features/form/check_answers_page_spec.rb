@@ -220,13 +220,13 @@ RSpec.describe "Form Check Answers Page" do
       it "they can click a button to skip sections until the next incomplete section" do
         visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/tenancy-code")
+        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/property-information/check-answers")
       end
 
       it "they can click a button to cycle around to the next incomplete section" do
         visit("/logs/#{cycle_sections_case_log.id}/declaration/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code")
+        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenancycode")
       end
     end
   end

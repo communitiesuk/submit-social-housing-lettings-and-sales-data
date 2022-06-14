@@ -14,21 +14,21 @@ RSpec.describe Validations::LocalAuthorityValidations do
     end
 
     it "does not add an error if the record ppostcode_full is valid (uppercase space)" do
-      record.previous_postcode_known = 1
+      record.ppcodenk = 1
       record.ppostcode_full = "M1 1AE"
       local_auth_validator.validate_previous_accommodation_postcode(record)
       expect(record.errors).to be_empty
     end
 
     it "does not add an error if the record ppostcode_full is valid (lowercase no space)" do
-      record.previous_postcode_known = 1
+      record.ppcodenk = 1
       record.ppostcode_full = "m11ae"
       local_auth_validator.validate_previous_accommodation_postcode(record)
       expect(record.errors).to be_empty
     end
 
     it "does add an error when the postcode is invalid" do
-      record.previous_postcode_known = 1
+      record.ppcodenk = 1
       record.ppostcode_full = "invalid"
       local_auth_validator.validate_previous_accommodation_postcode(record)
       expect(record.errors).not_to be_empty
