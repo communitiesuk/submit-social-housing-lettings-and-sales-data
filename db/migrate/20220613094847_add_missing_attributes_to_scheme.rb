@@ -3,8 +3,8 @@ class AddMissingAttributesToScheme < ActiveRecord::Migration[7.0]
     change_table :schemes, bulk: true do |t|
       t.string   :primary_client_group
       t.string   :secondary_client_group
-      t.boolean  :sensitive
-      t.boolean  :total_units
+      t.integer  :sensitive
+      t.integer  :total_units
       t.integer  :scheme_type
       t.integer  :registered_under_care_act
       t.integer  :support_type

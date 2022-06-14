@@ -73,7 +73,7 @@ unless Rails.env.test?
     Scheme.create!(
       code: "S878",
       service_name: "Beulahside Care",
-      sensitive: true,
+      sensitive: 0,
       registered_under_care_act: 0,
       support_type: 1,
       scheme_type: 4,
@@ -88,7 +88,7 @@ unless Rails.env.test?
     Scheme.create!(
       code: "S312",
       service_name: "Abdullahview Point",
-      sensitive: false,
+      sensitive: 0,
       registered_under_care_act: 1,
       support_type: 1,
       scheme_type: 5,
@@ -103,7 +103,7 @@ unless Rails.env.test?
     Scheme.create!(
       code: "7XYZ",
       service_name: "Caspermouth Center",
-      sensitive: true,
+      sensitive: 1,
       registered_under_care_act: 1,
       support_type: 4,
       scheme_type: 7,

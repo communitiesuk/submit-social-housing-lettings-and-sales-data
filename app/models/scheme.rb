@@ -52,15 +52,20 @@ class Scheme < ApplicationRecord
   }.freeze
 
   REGISTERED_UNDER_CARE_ACT = {
-    0 => "Yes – part registered as a care home",
-    1 => "No",
+    0 => "No",
+    1 => "Yes – part registered as a care home",
+  }.freeze
+
+  SENSITIVE = {
+    0 => "No",
+    1 => "Yes",
   }.freeze
 
   def display_attributes
     [
       { name: "Service code", value: code },
       { name: "Name", value: service_name },
-      { name: "Confidential information", value: sensitive },
+      { name: "Confidential information", value: sensitive_display },
       { name: "Managing agent", value: organisation.name },
       { name: "Type of service", value: scheme_type_display },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act_display },
@@ -74,6 +79,10 @@ class Scheme < ApplicationRecord
 
   def scheme_type_display
     SCHEME_TYPE[scheme_type]
+  end
+
+  def sensitive_display
+    SENSITIVE[sensitive]
   end
 
   def registered_under_care_act_display

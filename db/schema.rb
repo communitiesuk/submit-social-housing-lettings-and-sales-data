@@ -285,8 +285,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_094847) do
     t.datetime "updated_at", null: false
     t.string "primary_client_group"
     t.string "secondary_client_group"
-    t.boolean "sensitive"
-    t.boolean "total_units"
+    t.integer "sensitive"
+    t.integer "total_units"
     t.integer "scheme_type"
     t.integer "registered_under_care_act"
     t.integer "support_type"
