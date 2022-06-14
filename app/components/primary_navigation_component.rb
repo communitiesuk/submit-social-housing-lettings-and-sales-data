@@ -3,7 +3,7 @@ class PrimaryNavigationComponent < ViewComponent::Base
 
   def initialize(items:)
     @items = items
-    FeatureToggle.show_schemes_button? ? @items = @items.reject { |nav_item| nav_item.text.include?("Supported housing") } : @items
+    FeatureToggle.supported_housing_schemes_enabled? ? @items : @items.reject! { |nav_item| nav_item.text.include?("Supported housing") }
     super
   end
 

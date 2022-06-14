@@ -1,9 +1,7 @@
 class FeatureToggle
-  def self.needs_question_enabled?
-    !Rails.env.production?
-  end
+  def self.supported_housing_schemes_enabled?
+    return true unless Rails.env.production?
 
-  def self.show_schemes_button?
-    Rails.env.production?
+    false
   end
 end

@@ -30,7 +30,7 @@
               },
               "depends_on": [
                 {
-                  "needs_question_enabled?" : true
+                  "supported_housing_schemes_enabled?" : true
                 }
               ]
             },

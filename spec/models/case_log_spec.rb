@@ -2105,10 +2105,10 @@ RSpec.describe CaseLog do
     end
   end
 
-  describe "needs_question_enabled?" do
-    it "returns false for the case log if the environment is not production" do
+  describe "supported_housing_schemes_enabled?" do
+    it "returns true for the case log if the environment is not production" do
       case_log = FactoryBot.create(:case_log)
-      expect(case_log.needs_question_enabled?).to eq(false)
+      expect(case_log.supported_housing_schemes_enabled?).to eq(true)
     end
 
     context "when in the production environment" do
@@ -2116,9 +2116,9 @@ RSpec.describe CaseLog do
         allow(Rails.env).to receive(:production?).and_return(true)
       end
 
-      it "returns true for a case log" do
+      it "returns false for a case log" do
         case_log = FactoryBot.create(:case_log)
-        expect(case_log.needs_question_enabled?).to eq(true)
+        expect(case_log.supported_housing_schemes_enabled?).to eq(false)
       end
     end
   end
