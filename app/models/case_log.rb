@@ -114,7 +114,7 @@ class CaseLog < ApplicationRecord
 
   def needs_question_enabled?
     FeatureToggle.needs_question_enabled?
-  end 
+  end
 
   def weekly_net_income
     return unless earnings && incfreq
