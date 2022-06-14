@@ -27,8 +27,6 @@ gem "govuk_markdown"
 gem "notifications-ruby-client"
 # A modest javascript framework for the html you already have
 gem "stimulus-rails"
-# Admin charts
-gem "chartkick"
 # Spreadsheet parsing
 gem "roo"
 # Json Schema
