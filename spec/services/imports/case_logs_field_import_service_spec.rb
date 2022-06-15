@@ -79,6 +79,7 @@ RSpec.describe Imports::CaseLogsFieldImportService do
     let(:case_log) { CaseLog.find_by(old_id: case_log_id) }
 
     before do
+      allow(logger).to receive(:warn)
       Imports::CaseLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
       case_log_file.rewind
     end
@@ -160,6 +161,33 @@ RSpec.describe Imports::CaseLogsFieldImportService do
         it "does not update the value" do
           expect { import_service.send(:update_field, field, remote_folder) }
             .not_to(change { case_log.reload.cap })
+        end
+      end
+    end
+
+    context "when allocation type is none of cap, chr, cbl" do
+      let(:case_log_id) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
+
+      context "when it did not have a value set for letting_allocation_unknown" do
+        before do
+          case_log.update!(letting_allocation_unknown: nil)
+        end
+
+        it "updates the value" do
+          expect(logger).to receive(:info).with(/Case Log \d+'s letting_allocation_unknown value has been updated/)
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .to(change { case_log.reload.letting_allocation_unknown }.from(nil).to(1))
+        end
+      end
+
+      context "when it had a value set for letting_allocation_unknown" do
+        before do
+          case_log.update!(letting_allocation_unknown: 1)
+        end
+
+        it "updates the value" do
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .not_to(change { case_log.reload.letting_allocation_unknown })
         end
       end
     end

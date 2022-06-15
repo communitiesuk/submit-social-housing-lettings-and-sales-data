@@ -36,6 +36,10 @@ module Imports
           record.update!(cap: 0)
           @logger.info("Case Log #{record.id}'s cap value has been updated'")
         end
+        if cbl == 2 && chr == 2 && cap == 2 && record.letting_allocation_unknown.nil?
+          record.update!(letting_allocation_unknown: 1)
+          @logger.info("Case Log #{record.id}'s letting_allocation_unknown value has been updated'")
+        end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")
       end

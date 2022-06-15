@@ -126,6 +126,7 @@ module Imports
       attributes["cbl"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CBL"))
       attributes["chr"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CHR"))
       attributes["cap"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CAP"))
+      attributes["letting_allocation_unknown"] = allocation_system_unknown(attributes["cbl"], attributes["chr"], attributes["cap"])
 
       attributes["referral"] = unsafe_string_as_integer(xml_doc, "Q16")
       attributes["period"] = unsafe_string_as_integer(xml_doc, "Q17")
@@ -558,6 +559,17 @@ module Imports
       when 1
         1
       when 2
+        0
+      end
+    end
+
+    def allocation_system_unknown(cbl, chr, cap)
+      allocation_values = [cbl, chr, cap]
+      if allocation_values.all? { |att| att.nil? }
+        nil
+      elsif allocation_values.all? { |att| att&.zero? }
+        1
+      else
         0
       end
     end
