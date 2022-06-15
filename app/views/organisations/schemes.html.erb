@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "scheme") %>
-<% title = format_title(@searched, "Schemes", current_user, item_label, @pagy.count, @organisation.name) %>
+<% title = format_title(@searched, "Supported housing schemes", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
@@ -11,7 +11,7 @@
   ) %>
 <% end %>
 
-<h2 class="govuk-visually-hidden">Schemes</h2>
+<h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
 

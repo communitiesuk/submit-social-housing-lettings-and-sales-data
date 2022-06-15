@@ -60,7 +60,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "has hidden accebility field with description" do
-          expected_field = "<h2 class=\"govuk-visually-hidden\">Schemes</h2>"
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
           expect(CGI.unescape_html(response.body)).to include(expected_field)
         end
 
@@ -116,7 +116,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "has hidden accessibility field with description" do
-          expected_field = "<h2 class=\"govuk-visually-hidden\">Schemes</h2>"
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
           expect(CGI.unescape_html(response.body)).to include(expected_field)
         end
 
@@ -159,7 +159,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has search in the title" do
-            expect(page).to have_title("Schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Supported housing schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
