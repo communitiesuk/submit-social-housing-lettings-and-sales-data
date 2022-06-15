@@ -274,7 +274,7 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
-      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
 
       before do
         sign_in user
@@ -282,7 +282,16 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "shows scheme" do
-        expect(page).to have_content(location.location_code)
+        locations.each do |location|
+          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.county)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.type_of_building)
+          expect(page).to have_content(location.wheelchair_adaptation_display)
+          expect(page).to have_content(location.address_line1)
+          expect(page).to have_content(location.address_line2)
+        end
       end
     end
   end
