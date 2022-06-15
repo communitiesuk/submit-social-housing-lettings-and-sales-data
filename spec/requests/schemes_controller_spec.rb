@@ -252,7 +252,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}/locations"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -262,7 +262,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}/locations"
       end
 
       it "returns 401 unauthorized" do
