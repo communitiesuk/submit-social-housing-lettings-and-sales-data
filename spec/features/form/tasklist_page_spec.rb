@@ -30,10 +30,9 @@ RSpec.describe "Task List" do
   let(:setup_completed_log) do
     FactoryBot.create(
       :case_log,
+      :about_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
-      renewal: 1,
-      rent_type: 1,
       startdate: Time.zone.local(2021, 5, 1),
     )
   end
