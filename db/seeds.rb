@@ -115,7 +115,16 @@ unless Rails.env.test?
       created_at: Time.zone.now,
     )
 
-    Location.create(scheme: scheme, location_code: "7XYZ")
+    Location.create(
+      scheme: scheme, 
+      location_code: "7XYZ", 
+      postcode: "ZX1 177", 
+      address_line1: "1 High street",
+      address_line2: "London",
+      type_of_unit: "unit",
+      type_of_building: "building",
+      wheelchair_adaptation: 0,
+    )
   end
 
   pp "Seeded 3 dummy schemes"
