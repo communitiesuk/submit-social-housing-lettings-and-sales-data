@@ -36,6 +36,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "are-you-es5": "^2.1.2",
+    "standard": "^17.0.0",
     "stylelint": "^14.7.1",
     "stylelint-config-gds": "^0.2.0"
   },
