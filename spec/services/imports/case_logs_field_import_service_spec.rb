@@ -74,6 +74,97 @@ RSpec.describe Imports::CaseLogsFieldImportService do
     end
   end
 
+  context "when updating letings allocation values" do
+    let(:field) { "lettings_allocation" }
+    let(:case_log) { CaseLog.find_by(old_id: case_log_id) }
+
+    before do
+      Imports::CaseLogsImportService.new(storage_service, logger).create_logs(fixture_directory)
+      case_log_file.rewind
+    end
+
+    context "when cbl" do
+      let(:case_log_id) { "166fc004-392e-47a8-acb8-1c018734882b" }
+
+      context "when it was incorrectly set" do
+        before do
+          case_log.update!(cbl: 1)
+        end
+
+        it "updates the value" do
+          expect(logger).to receive(:info).with(/Case Log \d+'s cbl value has been updated/)
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .to(change { case_log.reload.cbl }.from(1).to(0))
+        end
+      end
+
+      context "when it was correctly set" do
+        before do
+          case_log.update!(cbl: 0)
+        end
+
+        it "does not update the value" do
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .not_to(change { case_log.reload.cbl })
+        end
+      end
+    end
+
+    context "when chr" do
+      let(:case_log_id) { "166fc004-392e-47a8-acb8-1c018734882b" }
+
+      context "when it was incorrectly set" do
+        before do
+          case_log.update!(chr: 1)
+        end
+
+        it "updates the value" do
+          expect(logger).to receive(:info).with(/Case Log \d+'s chr value has been updated/)
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .to(change { case_log.reload.chr }.from(1).to(0))
+        end
+      end
+
+      context "when it was correctly set" do
+        before do
+          case_log.update!(chr: 0)
+        end
+
+        it "does not update the value" do
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .not_to(change { case_log.reload.chr })
+        end
+      end
+    end
+
+    context "when cap" do
+      let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
+
+      context "when it was incorrectly set" do
+        before do
+          case_log.update!(cap: 1)
+        end
+
+        it "updates the value" do
+          expect(logger).to receive(:info).with(/Case Log \d+'s cap value has been updated/)
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .to(change { case_log.reload.cap }.from(1).to(0))
+        end
+      end
+
+      context "when it was correctly set" do
+        before do
+          case_log.update!(cap: 0)
+        end
+
+        it "does not update the value" do
+          expect { import_service.send(:update_field, field, remote_folder) }
+            .not_to(change { case_log.reload.cap })
+        end
+      end
+    end
+  end
+
   context "when updating major repairs" do
     let(:field) { "major_repairs" }
 
