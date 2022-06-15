@@ -36,7 +36,7 @@ module NavigationItemsHelper
 
   def scheme_items(path, current_scheme_id, title)
     [
-      NavigationItem.new("Schemes", "/schemes/#{current_scheme_id}", !path.include?("locations")),
+      NavigationItem.new("Scheme", "/schemes/#{current_scheme_id}", !path.include?("locations")),
       NavigationItem.new(title, "/schemes/#{current_scheme_id}/locations", path.include?("locations")),
     ]
   end
