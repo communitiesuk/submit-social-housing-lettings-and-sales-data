@@ -54,6 +54,69 @@ unless Rails.env.test?
     pp "Seeded 3 dummy users"
   end
 
+  if Rails.env.development?
+    dummy_org = Organisation.find_or_create_by!(
+      name: "FooBar LTD",
+      address_line1: "Higher Kingston",
+      address_line2: "Yeovil",
+      postcode: "BA21 4AT",
+      holds_own_stock: false,
+      other_stock_owners: "None",
+      managing_agents: "None",
+      provider_type: "LA",
+    )
+
+    pp "Seeded dummy FooBar LTD organisation"
+  end
+
+  if Rails.env.development? && Scheme.count.zero?
+    Scheme.create!(
+      code: "S878",
+      service_name: "Beulahside Care",
+      sensitive: 0,
+      registered_under_care_act: 0,
+      support_type: 1,
+      scheme_type: 4,
+      total_units: 5,
+      intended_stay: "M",
+      primary_client_group: "O",
+      secondary_client_group: "H",
+      organisation: org,
+      created_at: Time.zone.now,
+    )
+
+    Scheme.create!(
+      code: "S312",
+      service_name: "Abdullahview Point",
+      sensitive: 0,
+      registered_under_care_act: 1,
+      support_type: 1,
+      scheme_type: 5,
+      total_units: 2,
+      intended_stay: "S",
+      primary_client_group: "D",
+      secondary_client_group: "E",
+      organisation: org,
+      created_at: Time.zone.now,
+    )
+
+    Scheme.create!(
+      code: "7XYZ",
+      service_name: "Caspermouth Center",
+      sensitive: 1,
+      registered_under_care_act: 1,
+      support_type: 4,
+      scheme_type: 7,
+      total_units: 7,
+      intended_stay: "X",
+      primary_client_group: "G",
+      secondary_client_group: "R",
+      organisation: dummy_org,
+      created_at: Time.zone.now,
+    )
+  end
+
+  pp "Seeded 3 dummy schemes"
   if LaRentRange.count.zero?
     Dir.glob("config/rent_range_data/*.csv").each do |path|
       start_year = File.basename(path, ".csv")

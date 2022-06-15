@@ -16,6 +16,14 @@ class OrganisationsController < ApplicationController
     @total_count = all_organisations.size
   end
 
+  def schemes
+    all_schemes = Scheme.where(organisation: @organisation)
+
+    @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
+    @searched = search_term.presence
+    @total_count = all_schemes.size
+  end
+
   def show
     redirect_to details_organisation_path(@organisation)
   end

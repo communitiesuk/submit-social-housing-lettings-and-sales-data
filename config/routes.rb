@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
+  resources :schemes, path: "/supported-housing", only: %i[index show]
+
   resources :users do
     member do
       get "deactivate", to: "users#deactivate"
@@ -48,6 +50,7 @@ Rails.application.routes.draw do
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
       get "logs", to: "organisations#logs"
+      get "supported-housing", to: "organisations#schemes"
     end
   end
 

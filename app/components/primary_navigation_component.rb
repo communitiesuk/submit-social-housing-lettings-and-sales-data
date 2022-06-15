@@ -3,6 +3,7 @@ class PrimaryNavigationComponent < ViewComponent::Base
 
   def initialize(items:)
     @items = items
+    Rails.env.production? ? @items = @items.reject { |nav_item| nav_item.text.include?("Supported housing") } : @items
     super
   end
 

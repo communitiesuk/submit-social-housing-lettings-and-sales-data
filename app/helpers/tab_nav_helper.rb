@@ -6,6 +6,11 @@ module TabNavHelper
     [govuk_link_to(link_text, user), "<span class=\"govuk-visually-hidden\">User </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{user.email}</span>"].join("\n")
   end
 
+  def scheme_cell(scheme)
+    link_text = scheme.service_name.presence
+    [govuk_link_to(link_text, scheme), "<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group_display}</span>"].join("\n")
+  end
+
   def org_cell(user)
     role = "<span class=\"app-!-colour-muted\">#{user.role.to_s.humanize}</span>"
     [user.organisation.name, role].join("\n")

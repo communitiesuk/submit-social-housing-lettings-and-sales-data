@@ -17,7 +17,7 @@
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by name or email address", value: @searched) %>
 
-<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
+<%= govuk_section_break(visible: true, size: "m") %>
 
 <%= render partial: "users/user_list", locals: { users: @users, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "users" } %>

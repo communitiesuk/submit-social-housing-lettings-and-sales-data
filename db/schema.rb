@@ -191,9 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_123730) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
+    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
-    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.integer "hhtype"
     t.integer "new_old"
@@ -234,7 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_123730) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
@@ -277,6 +277,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_123730) do
     t.string "old_org_id"
     t.integer "old_visible_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
+  end
+
+  create_table "schemes", force: :cascade do |t|
+    t.string "code"
+    t.string "service_name"
+    t.bigint "organisation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "primary_client_group"
+    t.string "secondary_client_group"
+    t.integer "sensitive"
+    t.integer "total_units"
+    t.integer "scheme_type"
+    t.integer "registered_under_care_act"
+    t.integer "support_type"
+    t.string "intended_stay"
+    t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -332,4 +349,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_123730) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "schemes", "organisations"
 end

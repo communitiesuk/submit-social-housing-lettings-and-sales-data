@@ -174,25 +174,32 @@ RSpec.describe FormController, type: :request do
           }
         end
 
-        before do
-          post "/logs/#{case_log.id}/form", params:
-        end
-
         context "with invalid answers" do
           let(:page) { Capybara::Node::Simple.new(response.body) }
           let(:answer) { 2000 }
           let(:valid_answer) { 20 }
 
+          before do
+            allow(Rails.logger).to receive(:info)
+          end
+
           it "re-renders the same page with errors if validation fails" do
+            post "/logs/#{case_log.id}/form", params: params
             expect(response).to redirect_to("/logs/#{case_log.id}/#{page_id.dasherize}")
             follow_redirect!
             expect(page).to have_content("There is a problem")
           end
 
           it "resets errors when fixed" do
+            post "/logs/#{case_log.id}/form", params: params
             post "/logs/#{case_log.id}/form", params: valid_params
             get "/logs/#{case_log.id}/#{page_id.dasherize}"
             expect(page).not_to have_content("There is a problem")
+          end
+
+          it "logs that validation was triggered" do
+            expect(Rails.logger).to receive(:info).with("User triggered validation(s) on: age1").once
+            post "/logs/#{case_log.id}/form", params: params
           end
         end
 
@@ -207,6 +214,10 @@ RSpec.describe FormController, type: :request do
                 age2: 2000,
               },
             }
+          end
+
+          before do
+            post "/logs/#{case_log.id}/form", params:
           end
 
           it "re-renders the same page with errors if validation fails" do
