@@ -37,8 +37,9 @@ private
 
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
-    if %w[show locations].include? action_name
-      render_not_found and return unless (current_user.organisation == @scheme.organisation) || current_user.support?
+
+    if %w[show locations].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+      render_not_found and return
     end
   end
 end

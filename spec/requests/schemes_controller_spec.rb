@@ -283,7 +283,10 @@ RSpec.describe SchemesController, type: :request do
 
       context "when coordinator attempts to see scheme belonging to a different organisation" do
         let!(:specific_scheme) { FactoryBot.create(:scheme) }
-        let!(:locations) { FactoryBot.create(:location, scheme: specific_scheme) }
+
+        before do
+          FactoryBot.create(:location, scheme: specific_scheme)
+        end
 
         it "returns 404 not found" do
           get "/schemes/#{specific_scheme.id}/locations"
@@ -313,10 +316,9 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when paginating over 20 results" do
-        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
-
         context "when on the first page" do
           before do
+            FactoryBot.create_list(:location, 25, scheme:)
             get "/schemes/#{scheme.id}/locations"
           end
 
@@ -392,10 +394,9 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when paginating over 20 results" do
-        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
-
         context "when on the first page" do
           before do
+            FactoryBot.create_list(:location, 25, scheme:)
             get "/schemes/#{scheme.id}/locations"
           end
 
