@@ -1,10 +1,12 @@
 class Location < ApplicationRecord
   belongs_to :scheme
 
-  WHEELCHAIR_ADAPTATION = {
-    0 => "No",
-    1 => "Yes",
+  WHEELCHAIR_ADAPTATIONS = {
+    no: 0,
+    yes: 1,
   }.freeze
+
+  enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
 
   def display_attributes
     [
@@ -12,11 +14,7 @@ class Location < ApplicationRecord
       { name: "Postcode", value: postcode, suffix: county },
       { name: "Type of unit", value: type_of_unit, suffix: false },
       { name: "Type of building", value: type_of_building, suffix: false },
-      { name: "Wheelchair adaptation", value: wheelchair_adaptation_display, suffix: false },
+      { name: "Wheelchair adaptation", value: wheelchair_adaptation, suffix: false },
     ]
-  end
-
-  def wheelchair_adaptation_display
-    WHEELCHAIR_ADAPTATION[wheelchair_adaptation]
   end
 end
