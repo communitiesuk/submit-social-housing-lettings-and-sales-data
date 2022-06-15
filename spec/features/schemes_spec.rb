@@ -133,8 +133,8 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme: scheme) }
             let(:scheme)     { schemes.first }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme: scheme) }
 
             before do
               visit("schemes")

@@ -270,5 +270,20 @@ RSpec.describe SchemesController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    context "when signed in as a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme: scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      it "shows scheme" do
+        expect(page).to have_content(location.location_code)
+      end
+    end
   end
 end
