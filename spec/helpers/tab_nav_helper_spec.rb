@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe TabNavHelper do
   let(:organisation) { FactoryBot.create(:organisation) }
   let(:user) { FactoryBot.build(:user, organisation:) }
-  let(:scheme) { FactoryBot.build(:scheme) }
+  let(:scheme) { FactoryBot.build(:scheme, service_name: "Some name") }
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
