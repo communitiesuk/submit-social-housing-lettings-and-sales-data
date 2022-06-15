@@ -316,14 +316,15 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
         context "when on the first page" do
           before do
-            FactoryBot.create_list(:location, 25, scheme:)
             get "/schemes/#{scheme.id}/locations"
           end
 
           it "shows which schemes are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> locations")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
           end
 
           it "has correct page 1 of 2 title" do
@@ -344,7 +345,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows which schemes are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>25</b> locations")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
           it "has correct page 1 of 2 title" do
@@ -394,14 +395,15 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
         context "when on the first page" do
           before do
-            FactoryBot.create_list(:location, 25, scheme:)
             get "/schemes/#{scheme.id}/locations"
           end
 
           it "shows which schemes are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> locations")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
           end
 
           it "has correct page 1 of 2 title" do
@@ -422,7 +424,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "shows which schemes are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>25</b> locations")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
           it "has correct page 1 of 2 title" do
