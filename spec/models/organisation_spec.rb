@@ -87,7 +87,7 @@ RSpec.describe Organisation, type: :model do
       end
 
       it "has case logs" do
-        expect(organisation.case_logs.to_a).to eq([owned_case_log, managed_case_log])
+        expect(organisation.case_logs.to_a).to match_array([owned_case_log, managed_case_log])
       end
 
       it "has case log status helper methods" do
