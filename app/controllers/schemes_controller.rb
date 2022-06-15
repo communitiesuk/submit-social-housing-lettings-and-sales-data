@@ -3,6 +3,7 @@ class SchemesController < ApplicationController
   include Modules::SearchFilter
 
   before_action :authenticate_user!
+  before_action :find_resource, except: %i[index]
   before_action :authenticate_scope!
 
   def index
@@ -16,7 +17,6 @@ class SchemesController < ApplicationController
 
   def show
     @scheme = Scheme.find_by(id: params[:id])
-    render_not_found and return unless (current_user.organisation == @scheme.organisation) || current_user.support?
   end
 
   def locations
@@ -31,7 +31,14 @@ private
     params["search"]
   end
 
+  def find_resource
+    @scheme = Scheme.find_by(id: params[:id])
+  end
+
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
+    if %w[show locations].include? action_name
+      render_not_found and return unless (current_user.organisation == @scheme.organisation) || current_user.support?
+    end
   end
 end

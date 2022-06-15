@@ -281,6 +281,16 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes/#{scheme.id}/locations"
       end
 
+      context "when coordinator attempts to see scheme belonging to a different organisation" do
+        let!(:specific_scheme) { FactoryBot.create(:scheme) }
+        let!(:locations) { FactoryBot.create(:location, scheme: specific_scheme) }
+
+        it "returns 404 not found" do
+          get "/schemes/#{specific_scheme.id}/locations"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
       it "shows scheme" do
         locations.each do |location|
           expect(page).to have_content(location.location_code)
