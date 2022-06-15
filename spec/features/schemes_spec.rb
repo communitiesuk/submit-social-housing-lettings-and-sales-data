@@ -131,6 +131,21 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content(schemes.first.intended_stay_display)
           end
 
+          context "when I click to go back" do
+            before do
+              visit("schemes")
+              click_link(scheme.service_name)
+            end
+
+            it "shows list of links to schemes" do
+              click_on("Back")
+              schemes.each do |scheme|
+                expect(page).to have_link(scheme.service_name)
+                expect(page).to have_content(scheme.primary_client_group_display)
+              end
+            end
+          end
+
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
