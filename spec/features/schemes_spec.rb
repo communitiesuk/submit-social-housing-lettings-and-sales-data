@@ -112,8 +112,10 @@ RSpec.describe "Supported housing scheme Features" do
         end
 
         context "when I click to see individual scheme" do
+          let(:scheme)     { schemes.first }
+
           before do
-            click_link(schemes.first.service_name)
+            click_link(scheme.service_name)
           end
 
           it "shows me details about the selected scheme" do
@@ -129,17 +131,24 @@ RSpec.describe "Supported housing scheme Features" do
             expect(page).to have_content(schemes.first.intended_stay_display)
           end
 
-          it "shows service and locations tab" do
-            expect(page).to have_link("Scheme")
-            expect(page).to have_link("#{schemes.first.locations.count} locations")
-          end
-
           context "when there are locations that belong to the selected scheme" do
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme: schemes.first) }
+            let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme: scheme) }
+            let(:scheme)     { schemes.first }
+
+            before do
+              visit("supported-housing")
+              click_link(scheme.service_name)
+            end
+
+            it "shows service and locations tab" do
+              expect(page).to have_link("Scheme")
+              expect(page).to have_link("#{scheme.locations.count} locations")
+            end
 
             context "when I click locations link" do
               before do
-                click_link("#{schemes.first.locations.count} locations")
+                click_link("#{scheme.locations.count} locations")
               end
 
               it "shows details of those locations" do
