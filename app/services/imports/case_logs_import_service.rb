@@ -565,7 +565,7 @@ module Imports
 
     def allocation_system_unknown(cbl, chr, cap)
       allocation_values = [cbl, chr, cap]
-      if allocation_values.all? { |att| att.nil? }
+      if allocation_values.all?(&:nil?)
         nil
       elsif allocation_values.all? { |att| att&.zero? }
         1
