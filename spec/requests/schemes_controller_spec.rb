@@ -325,6 +325,27 @@ RSpec.describe SchemesController, type: :request do
             expect(page).to have_link("Next")
           end
         end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>25</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
       end
     end
   end
