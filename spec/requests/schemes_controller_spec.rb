@@ -297,6 +297,10 @@ RSpec.describe SchemesController, type: :request do
       it "has page heading" do
         expect(page).to have_content(scheme.service_name)
       end
+
+      it "has correct title" do
+        expect(page).to have_title("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+      end
     end
   end
 end
