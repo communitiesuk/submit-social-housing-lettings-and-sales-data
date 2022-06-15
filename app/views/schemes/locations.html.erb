@@ -1,0 +1,11 @@
+<% title = @scheme.service_name %>
+<% content_for :title, title %>
+
+<%= govuk_back_link(href: "#{request.referrer}")%>
+
+<%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
+
+
+<%= render SubNavigationComponent.new(
+  items: scheme_items(request.path, @scheme.id, @scheme.locations.count),
+) %>

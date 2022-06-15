@@ -100,7 +100,7 @@ unless Rails.env.test?
       created_at: Time.zone.now,
     )
 
-    Scheme.create!(
+    scheme = Scheme.create!(
       code: "7XYZ",
       service_name: "Caspermouth Center",
       sensitive: 1,
