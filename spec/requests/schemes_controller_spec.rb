@@ -348,5 +348,84 @@ RSpec.describe SchemesController, type: :request do
         end
       end
     end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      it "shows scheme" do
+        locations.each do |location|
+          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.county)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.type_of_building)
+          expect(page).to have_content(location.wheelchair_adaptation_display)
+          expect(page).to have_content(location.address_line1)
+          expect(page).to have_content(location.address_line2)
+        end
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
+
+      it "has correct title" do
+        expect(page).to have_title("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+      end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>25</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
+      end
+    end
   end
 end
