@@ -59,7 +59,7 @@ private
     path == "/organisations" || path.include?("/organisations/")
   end
 
-  def subnav_supported_housing_path?(path)
+  def subnav_supported_housing_scheme_path?(path)
     path.include?("/organisations") && path.include?("/schemes") || path.include?("/schemes/")
   end
 
