@@ -114,6 +114,8 @@ unless Rails.env.test?
       organisation: dummy_org,
       created_at: Time.zone.now,
     )
+
+    Location.create(scheme: scheme, location_code: "7XYZ")
   end
 
   pp "Seeded 3 dummy schemes"

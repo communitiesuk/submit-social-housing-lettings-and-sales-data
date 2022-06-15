@@ -19,6 +19,10 @@ class SchemesController < ApplicationController
     render_not_found and return unless (current_user.organisation == @scheme.organisation) || current_user.support?
   end
 
+  def locations
+    @scheme = Scheme.find_by(id: params[:id])
+  end
+
 private
 
   def search_term
