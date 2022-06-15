@@ -301,7 +301,7 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(location.county)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.type_of_building)
-          expect(page).to have_content(location.wheelchair_adaptation_display)
+          expect(page).to have_content(location.wheelchair_adaptation)
           expect(page).to have_content(location.address_line1)
           expect(page).to have_content(location.address_line2)
         end
@@ -380,7 +380,7 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(location.county)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.type_of_building)
-          expect(page).to have_content(location.wheelchair_adaptation_display)
+          expect(page).to have_content(location.wheelchair_adaptation)
           expect(page).to have_content(location.address_line1)
           expect(page).to have_content(location.address_line2)
         end
