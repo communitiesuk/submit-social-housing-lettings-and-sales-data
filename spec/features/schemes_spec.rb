@@ -112,7 +112,7 @@ RSpec.describe "Schemes scheme Features" do
         end
 
         context "when I click to see individual scheme" do
-          let(:scheme)     { schemes.first }
+          let(:scheme) { schemes.first }
 
           before do
             click_link(scheme.service_name)
@@ -134,7 +134,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme: scheme) }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
 
             before do
               visit("schemes")

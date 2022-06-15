@@ -5,15 +5,14 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
-
 <%= render SubNavigationComponent.new(
   items: scheme_items(request.path, @scheme.id, @scheme.locations.count),
 ) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <section class="x-govuk-summary-card govuk-!-margin-bottom-6">
-      <% @scheme.locations.each do |location| %>
+    <% @scheme.locations.each do |location| %>
+      <section class="x-govuk-summary-card govuk-!-margin-bottom-6">
         <header class="x-govuk-summary-card__header">
           <h2 class="x-govuk-summary-card__title">
             <%= "#{location.address_line1}, #{location.address_line2}" %>
@@ -21,49 +20,22 @@
         </header>
         <div class="x-govuk-summary-card__body">
           <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Location code
-              </dt>
-              <dd class="govuk-summary-list__key">
-                <%= location.location_code %>
-              </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Postcode
-              </dt>
-              <dd class="govuk-summary-list__key">
-                <%= location.postcode %>
-              </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Type of unit
-              </dt>
-              <dd class="govuk-summary-list__key">
-                <%= location.type_of_unit %>
-              </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Type of building
-              </dt>
-              <dd class="govuk-summary-list__key">
-                <%= location.type_of_building %>
-              </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Wheelchair adaptation
-              </dt>
-              <dd class="govuk-summary-list__key">
-                <%= location.wheelchair_adaptation %>
-              </dd>
-            </div>
+            <% location.display_attributes.each do |attribute| %>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  <%= attribute[:name] %>
+                </dt>
+                <dd class="govuk-summary-list__value app-!-font-tabular">
+                  <span class="govuk-!-margin-right-4"><%= attribute[:value] %></span>
+                  <% if attribute[:suffix] %>
+                    <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= attribute[:suffix] %></span>
+                  <% end %>
+                </dd>
+              </div>
+            <% end %>
           </dl>
         </div>
-      <% end %>
-    </section>
+      </section>
+    <% end %>
   </div>
 </div>
