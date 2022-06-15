@@ -51,7 +51,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has page heading" do
-        expect(page).to have_content("Supported housing services")
+        expect(page).to have_content("Schemes")
       end
 
       it "shows all schemes" do
@@ -65,7 +65,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has correct title" do
-        expect(page).to have_title("Supported housing services - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title("Schemes - Submit social housing lettings and sales data (CORE) - GOV.UK")
       end
 
       it "shows the total organisations count" do
@@ -73,7 +73,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has hidden accebility field with description" do
-        expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+        expected_field = "<h2 class=\"govuk-visually-hidden\">Schemes</h2>"
         expect(CGI.unescape_html(response.body)).to include(expected_field)
       end
 
@@ -98,7 +98,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expect(page).to have_title("Supported housing services (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Schemes (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "has pagination links" do
@@ -130,7 +130,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expect(page).to have_title("Supported housing services (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Schemes (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
@@ -155,7 +155,7 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "has search in the title" do
-          expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          expect(page).to have_title("Schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
         end
       end
     end

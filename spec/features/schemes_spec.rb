@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Supported housing scheme Features" do
+RSpec.describe "Schemes scheme Features" do
   context "when viewing list of schemes" do
     context "when I am signed as a support user and there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
@@ -25,13 +25,13 @@ RSpec.describe "Supported housing scheme Features" do
         click_button("Submit")
       end
 
-      it "displays the link to the supported housing" do
-        expect(page).to have_link("Supported housing", href: "/schemes")
+      it "displays the link to the schemes" do
+        expect(page).to have_link("Schemes", href: "/schemes")
       end
 
-      context "when I click Supported housing" do
+      context "when I click schemes" do
         before do
-          click_link "Supported housing", href: "/schemes"
+          click_link "Schemes", href: "/schemes"
         end
 
         it "shows list of schemes" do
@@ -99,7 +99,7 @@ RSpec.describe "Supported housing scheme Features" do
         click_button("Submit")
       end
 
-      context "when I visit supported housing page" do
+      context "when I visit schemes page" do
         before do
           visit("schemes")
         end
