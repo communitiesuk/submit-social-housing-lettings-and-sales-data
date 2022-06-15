@@ -301,6 +301,35 @@ RSpec.describe SchemesController, type: :request do
       it "has correct title" do
         expect(page).to have_title("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
       end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows the total locations count" do
+            expect(CGI.unescape_html(response.body)).to match("<strong>25</strong> total schemes.")
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> schemes")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expect(page).to have_title("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+      end
     end
   end
 end
