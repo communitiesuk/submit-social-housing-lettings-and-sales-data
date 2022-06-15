@@ -293,6 +293,10 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(location.address_line2)
         end
       end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
     end
   end
 end
