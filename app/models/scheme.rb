@@ -68,7 +68,7 @@ class Scheme < ApplicationRecord
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive_display },
       { name: "Managing agent", value: organisation.name },
-      { name: "Type of service", value: scheme_type_display },
+      { name: "Type of scheme", value: scheme_type_display },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act_display },
       { name: "Total number of units", value: total_units },
       { name: "Primary client group", value: primary_client_group_display },

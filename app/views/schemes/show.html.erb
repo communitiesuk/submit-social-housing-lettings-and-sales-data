@@ -12,7 +12,7 @@
     <%= govuk_summary_list do |summary_list| %>
       <% @scheme.display_attributes.each do |attr| %>
         <%= summary_list.row do |row| %>
-          <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" :  attr[:name].to_s.humanize} %>
+          <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
           <% row.value { details_html(attr) } %>
         <% end %>
       <% end %>
