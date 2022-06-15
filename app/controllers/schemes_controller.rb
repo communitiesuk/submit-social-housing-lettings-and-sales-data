@@ -21,6 +21,8 @@ class SchemesController < ApplicationController
 
   def locations
     @scheme = Scheme.find_by(id: params[:id])
+    @pagy, @locations = pagy(@scheme.locations)
+    @total_count = @scheme.locations.size
   end
 
 private

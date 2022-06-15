@@ -310,12 +310,8 @@ RSpec.describe SchemesController, type: :request do
             get "/schemes/#{scheme.id}/locations"
           end
 
-          it "shows the total locations count" do
-            expect(CGI.unescape_html(response.body)).to match("<strong>25</strong> total schemes.")
-          end
-
           it "shows which schemes are being shown on the current page" do
-            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> schemes")
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>25</b> locations")
           end
 
           it "has correct page 1 of 2 title" do
