@@ -10,7 +10,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#index" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/supported-housing"
+        get "/schemes"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -20,7 +20,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/supported-housing"
+        get "/schemes"
       end
 
       it "returns 401 unauthorized" do
@@ -34,12 +34,12 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/supported-housing"
+        get "/schemes"
       end
 
       it "redirects to the organisation schemes path" do
         follow_redirect!
-        expect(path).to match("/organisations/#{user.organisation.id}/supported-housing")
+        expect(path).to match("/organisations/#{user.organisation.id}/schemes")
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe SchemesController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/supported-housing"
+        get "/schemes"
       end
 
       it "has page heading" do
@@ -86,7 +86,7 @@ RSpec.describe SchemesController, type: :request do
 
         context "when on the first page" do
           before do
-            get "/supported-housing"
+            get "/schemes"
           end
 
           it "shows the total schemes count" do
@@ -111,7 +111,7 @@ RSpec.describe SchemesController, type: :request do
 
         context "when on the second page" do
           before do
-            get "/supported-housing?page=2"
+            get "/schemes?page=2"
           end
 
           it "shows the total schemes count" do
@@ -140,7 +140,7 @@ RSpec.describe SchemesController, type: :request do
         let(:search_param) { "CODE321" }
 
         before do
-          get "/supported-housing?search=#{search_param}"
+          get "/schemes?search=#{search_param}"
         end
 
         it "returns matching results" do
@@ -166,7 +166,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/supported-housing/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -176,7 +176,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/supported-housing/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}"
       end
 
       it "returns 401 unauthorized" do
@@ -194,7 +194,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has page heading" do
-        get "/supported-housing/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}"
         expect(page).to have_content(specific_scheme.code)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
@@ -211,11 +211,11 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.intended_stay_display)
       end
 
-      context "when coordinator attempts to see scheme belogning to a different organisation" do
+      context "when coordinator attempts to see scheme belonging to a different organisation" do
         let!(:specific_scheme) { FactoryBot.create(:scheme) }
 
         it "returns 404 not found" do
-          get "/supported-housing/#{specific_scheme.id}"
+          get "/schemes/#{specific_scheme.id}"
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -225,7 +225,7 @@ RSpec.describe SchemesController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/supported-housing/#{specific_scheme.id}"
+        get "/schemes/#{specific_scheme.id}"
       end
 
       it "has page heading" do
@@ -243,6 +243,31 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.secondary_client_group_display)
         expect(page).to have_content(specific_scheme.support_type_display)
         expect(page).to have_content(specific_scheme.intended_stay_display)
+      end
+    end
+  end
+
+  describe "#locations" do
+    let(:specific_scheme) { schemes.first }
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/#{specific_scheme.id}"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/#{specific_scheme.id}"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

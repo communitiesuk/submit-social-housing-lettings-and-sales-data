@@ -7,12 +7,12 @@ module NavigationItemsHelper
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
-        NavigationItem.new("Supported housing", "/supported-housing", supported_housing_current?(path)),
+        NavigationItem.new("Supported housing", "/schemes", supported_housing_current?(path)),
       ]
     elsif current_user.data_coordinator?
       [
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
-        NavigationItem.new("Supported housing", "/supported-housing", subnav_supported_housing_path?(path)),
+        NavigationItem.new("Supported housing", "/schemes", subnav_supported_housing_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
       ]
@@ -28,7 +28,7 @@ module NavigationItemsHelper
   def secondary_items(path, current_organisation_id)
     [
       NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
-      NavigationItem.new("Supported housing", "/organisations/#{current_organisation_id}/supported-housing", subnav_supported_housing_path?(path)),
+      NavigationItem.new("Supported housing", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_path?(path)),
       NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
       NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
     ]
@@ -36,8 +36,8 @@ module NavigationItemsHelper
 
   def scheme_items(_path, current_scheme_id, count)
     [
-      NavigationItem.new("Scheme", "/supported-housing/#{current_scheme_id}", true),
-      NavigationItem.new("#{count} locations", "/supported-housing/#{current_scheme_id}/locations", false),
+      NavigationItem.new("Scheme", "/schemes/#{current_scheme_id}", true),
+      NavigationItem.new("#{count} locations", "/schemes/#{current_scheme_id}/locations", false),
     ]
   end
 
@@ -52,7 +52,7 @@ private
   end
 
   def supported_housing_current?(path)
-    path == "/supported-housing" || path.include?("/supported-housing/")
+    path == "/schemes" || path.include?("/schemes/")
   end
 
   def organisations_current?(path)
@@ -60,7 +60,7 @@ private
   end
 
   def subnav_supported_housing_path?(path)
-    path.include?("/organisations") && path.include?("/supported-housing") || path.include?("/supported-housing/")
+    path.include?("/organisations") && path.include?("/schemes") || path.include?("/schemes/")
   end
 
   def subnav_users_path?(path)

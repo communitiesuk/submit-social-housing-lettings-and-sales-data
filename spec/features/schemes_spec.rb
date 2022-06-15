@@ -26,12 +26,12 @@ RSpec.describe "Supported housing scheme Features" do
       end
 
       it "displays the link to the supported housing" do
-        expect(page).to have_link("Supported housing", href: "/supported-housing")
+        expect(page).to have_link("Supported housing", href: "/schemes")
       end
 
       context "when I click Supported housing" do
         before do
-          click_link "Supported housing", href: "/supported-housing"
+          click_link "Supported housing", href: "/schemes"
         end
 
         it "shows list of schemes" do
@@ -101,7 +101,7 @@ RSpec.describe "Supported housing scheme Features" do
 
       context "when I visit supported housing page" do
         before do
-          visit("supported-housing")
+          visit("schemes")
         end
 
         it "shows list of links to schemes" do
@@ -137,7 +137,7 @@ RSpec.describe "Supported housing scheme Features" do
             let(:scheme)     { schemes.first }
 
             before do
-              visit("supported-housing")
+              visit("schemes")
               click_link(scheme.service_name)
             end
 
