@@ -52,6 +52,11 @@
       "last 1 safari version"
     ]
   },
+  "standard": {
+    "ignore": [
+      "app/frontend/vendor/*.js"
+    ]
+  },
   "stylelint": {
     "extends": "stylelint-config-gds/scss"
   },

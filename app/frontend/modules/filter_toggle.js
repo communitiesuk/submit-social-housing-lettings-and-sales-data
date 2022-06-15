@@ -25,7 +25,7 @@ export class FilterToggle {
   }
 
   enableSmallMode () {
-    this.options.filter.container.setAttribute("tabindex", "-1")
+    this.options.filter.container.setAttribute('tabindex', '-1')
     this.hideMenu()
     this.addMenuButton()
     this.addCloseButton()
@@ -33,8 +33,8 @@ export class FilterToggle {
 
   addCloseButton () {
     if (this.options.closeButton) {
-      this.closeButton = document.createElement("button")
-      this.closeButton.classList.add("app-filter__close")
+      this.closeButton = document.createElement('button')
+      this.closeButton.classList.add('app-filter__close')
       this.closeButton.innerText = this.options.closeButton.text
       this.closeButton.type = 'button'
       this.closeButton.addEventListener('click', this.onCloseClick.bind(this))
@@ -56,13 +56,13 @@ export class FilterToggle {
   }
 
   addMenuButton () {
-    this.menuButton = document.createElement("button")
-    this.menuButton.setAttribute("aria-expanded", "false")
-    this.menuButton.setAttribute("aria-has-popup", "true")
-    this.menuButton.classList.add("govuk-button", this.options.toggleButton.classes, "app-filter-toggle__button")
+    this.menuButton = document.createElement('button')
+    this.menuButton.setAttribute('aria-expanded', 'false')
+    this.menuButton.setAttribute('aria-has-popup', 'true')
+    this.menuButton.classList.add('govuk-button', this.options.toggleButton.classes, 'app-filter-toggle__button')
     this.menuButton.innerText = this.options.toggleButton.showText
-    this.menuButton.type = "button"
-    this.menuButton.addEventListener("click", this.onMenuButtonClick.bind(this))
+    this.menuButton.type = 'button'
+    this.menuButton.addEventListener('click', this.onMenuButtonClick.bind(this))
 
     this.options.toggleButton.container.prepend(this.menuButton)
   }
@@ -76,18 +76,18 @@ export class FilterToggle {
 
   hideMenu () {
     if (this.menuButton) {
-      this.menuButton.setAttribute("aria-expanded", "false")
+      this.menuButton.setAttribute('aria-expanded', 'false')
       this.menuButton.innerText = this.options.toggleButton.showText
     }
-    this.options.filter.container.setAttribute("hidden", true)
+    this.options.filter.container.setAttribute('hidden', true)
   }
 
   showMenu () {
     if (this.menuButton) {
-      this.menuButton.setAttribute("aria-expanded", "true")
+      this.menuButton.setAttribute('aria-expanded', 'true')
       this.menuButton.innerText = this.options.toggleButton.hideText
     }
-    this.options.filter.container.removeAttribute("hidden")
+    this.options.filter.container.removeAttribute('hidden')
   }
 
   onMenuButtonClick () {
