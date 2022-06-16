@@ -67,7 +67,7 @@ class Scheme < ApplicationRecord
       { name: "Service code", value: code },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive_display },
-      { name: "Managing by", value: organisation.name },
+      { name: "Managed by", value: organisation.name },
       { name: "Type of scheme", value: scheme_type_display },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act_display },
       { name: "Total number of units", value: total_units },
