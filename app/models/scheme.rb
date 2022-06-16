@@ -56,6 +56,8 @@ class Scheme < ApplicationRecord
 
   REGISTERED_UNDER_CARE_ACT = {
     0 => "No",
+    1 => "Yes – registered care home providing nursing care",
+    1 => "Yes – registered care home providing personal care",
     1 => "Yes – part registered as a care home",
   }.freeze
 
@@ -63,6 +65,14 @@ class Scheme < ApplicationRecord
     0 => "No",
     1 => "Yes",
   }.freeze
+
+  def scheme_types
+    SCHEME_TYPE.values
+  end
+
+  def care_act_types
+    REGISTERED_UNDER_CARE_ACT.values
+  end
 
   def display_attributes
     [

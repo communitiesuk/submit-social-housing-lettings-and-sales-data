@@ -35,7 +35,7 @@
           <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
         <% end %>
 
-      <%= f.govuk_collection_select :organisation_id,
+        <%= f.govuk_collection_select :organisation_id,
           answer_options,
           :id,
           :name,
@@ -45,13 +45,26 @@
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
-      <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% scheme_types = @resource.scheme_types.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :scheme_type,
-        roles,
+        scheme_types,
         :id,
         :name,
-        legend: { text: "Role", size: "m" } %>
+        legend: { text: "What is this type of scheme?", size: "m" } %>
+
+      <% care_act_types = @resource.care_act_types.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :scheme_type,
+        care_act_types,
+        :id,
+        :name,
+        legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
+
+      <%= f.govuk_number_field :service_name,
+        width: 2,
+        label: { text: "Total number of units", size: "m" },
+        hint: { text: "For example, a unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff." } %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>
