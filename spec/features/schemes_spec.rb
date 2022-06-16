@@ -132,4 +132,15 @@ RSpec.describe "Supported housing scheme Features" do
       end
     end
   end
+
+  context "when a data provider is setting up their supported housing lettings log" do
+    let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+    let!(:scheme) { FactoryBot.create(:scheme, service_name: "test scheme") }
+
+    it "they are able to select a scheme from a list of schemes their organisation owns or manages" do
+      visit("#{case_log.id}/scheme")
+      expect(page).to have_content("What scheme is this log for?")
+      page.should have_select('scheme-selection', :options => ['test scheme'])
+    end
+  end 
 end

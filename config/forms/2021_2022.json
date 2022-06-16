@@ -34,6 +34,26 @@
                 }
               ]
             },
+            "schemes": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "scheme_name": {
+                  "check_answer_label": "Scheme name",
+                  "header": "What scheme is this log for?",
+                  "hint_text": "",
+                  "type": "select",
+                  "answer_options": {
+                    "": "Select an option"
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "supported_housing_schemes_enabled?" : true
+                }
+              ]
+            },
             "renewal": {
               "header": "",
               "description": "",
