@@ -20,7 +20,7 @@
     "css-loader": "^6.7.1",
     "custom-event-polyfill": "^1.0.7",
     "file-loader": "^6.2.0",
-    "govuk-frontend": "^4.0.1",
+    "govuk-frontend": "4.0.1",
     "govuk-prototype-components": "^0.1.5",
     "html5shiv": "^3.7.3",
     "intersection-observer": "^0.12.0",
@@ -36,6 +36,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "are-you-es5": "^2.1.2",
+    "standard": "^17.0.0",
     "stylelint": "^14.7.1",
     "stylelint-config-gds": "^0.2.0"
   },
@@ -49,6 +50,11 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "standard": {
+    "ignore": [
+      "app/frontend/vendor/*.js"
     ]
   },
   "stylelint": {

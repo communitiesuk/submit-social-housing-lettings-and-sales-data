@@ -1,8 +1,8 @@
-import { Controller } from "@hotwired/stimulus";
-import { FilterToggle } from "../modules/filter_toggle.js"
+import { Controller } from '@hotwired/stimulus'
+import { FilterToggle } from '../modules/filter_toggle.js'
 
 export default class extends Controller {
-  connect() {
+  connect () {
     const filterToggle = new FilterToggle({
       bigModeMediaQuery: '(min-width: 48.0625em)',
       closeButton: {

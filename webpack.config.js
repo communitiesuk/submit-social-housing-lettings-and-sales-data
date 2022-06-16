@@ -1,18 +1,18 @@
-const path    = require("path")
-const webpack = require("webpack")
+const path = require('node:path')
+const webpack = require('webpack')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts')
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin')
 
 const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production'
 
 module.exports = {
   mode,
-  devtool: "source-map",
+  devtool: 'source-map',
   entry: {
     application: [
-      "./app/frontend/application.js",
+      './app/frontend/application.js'
     ]
   },
   module: {
@@ -24,9 +24,9 @@ module.exports = {
           path.resolve(__dirname, 'node_modules/@stimulus/polyfills'),
           path.resolve(__dirname, 'node_modules/@rails/actioncable'),
           path.resolve(__dirname, 'node_modules/chartjs'),
-          path.resolve(__dirname, 'app/frontend'),
+          path.resolve(__dirname, 'app/frontend')
         ],
-        use: ['babel-loader'],
+        use: ['babel-loader']
       },
       {
         test: /\.(png|jpe?g|gif|eot|woff|woff2|ttf|svg|ico)$/i,
@@ -34,9 +34,9 @@ module.exports = {
       },
       {
         test: /\.(scss|css)/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
       }
-    ],
+    ]
   },
   resolve: {
     alias: {
@@ -46,11 +46,11 @@ module.exports = {
     modules: ['node_modules', 'node_modules/govuk-frontend/govuk']
   },
   output: {
-    filename: "[name].js",
+    filename: '[name].js',
     // we must set publicPath to an empty value to override the default of
     // auto which doesn't work in IE11
     publicPath: '',
-    path: path.resolve(__dirname, "app/assets/builds"),
+    path: path.resolve(__dirname, 'app/assets/builds')
   },
   plugins: [
     new RemoveEmptyScriptsPlugin(),
@@ -58,12 +58,12 @@ module.exports = {
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     new CopyPlugin({
       patterns: [
-        { from: "node_modules/govuk-frontend/govuk/assets/images", to: "images" },
-        { from: "node_modules/govuk-frontend/govuk/assets/fonts", to: "fonts" },
-        { from: "node_modules/html5shiv/dist/html5shiv.min.js", to: "vendor" },
-        { from: "app/frontend/vendor/outerHTML.js", to: "vendor" },
-        { from: "app/frontend/vendor/polyfill-output-value.js", to: "vendor" }
-      ],
+        { from: 'node_modules/govuk-frontend/govuk/assets/images', to: 'images' },
+        { from: 'node_modules/govuk-frontend/govuk/assets/fonts', to: 'fonts' },
+        { from: 'node_modules/html5shiv/dist/html5shiv.min.js', to: 'vendor' },
+        { from: 'app/frontend/vendor/outerHTML.js', to: 'vendor' },
+        { from: 'app/frontend/vendor/polyfill-output-value.js', to: 'vendor' }
+      ]
     })
   ]
 }
