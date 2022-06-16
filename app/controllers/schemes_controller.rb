@@ -25,6 +25,14 @@ class SchemesController < ApplicationController
     @total_count = @scheme.locations.size
   end
 
+  def new
+    @resource = Scheme.new
+  end
+
+  def create
+    debugger
+  end
+
 private
 
   def search_term

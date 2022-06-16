@@ -9,7 +9,7 @@ class Scheme < ApplicationRecord
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
   SCHEME_TYPE = {
-    0 => "Missings",
+    0 => "Missing",
     4 => "Foyer",
     5 => "Direct Access Hostel",
     6 => "Other Supported Housing",

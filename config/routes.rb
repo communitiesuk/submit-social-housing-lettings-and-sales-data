@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
-  resources :schemes, only: %i[index show] do
+  resources :schemes do
     member do
       get "locations", to: "schemes#locations"
     end
