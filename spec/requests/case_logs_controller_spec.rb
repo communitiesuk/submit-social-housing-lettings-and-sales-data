@@ -289,7 +289,7 @@ RSpec.describe CaseLogsController, type: :request do
                                 startdate: Time.zone.local(2022, 12, 1),
                                 tenancy: 6,
                                 managing_organisation: organisation,
-                                tenant_code: nil)
+                                tenancycode: nil)
             end
 
             it "shows case logs for multiple selected statuses and years" do
