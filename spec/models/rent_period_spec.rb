@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.describe RentPeriod, type: :model do
   describe "rent period mapping" do
-    let(:setup_path) { "spec/fixtures/forms/setup/log_setup.json" }
-    let(:form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022", setup_path) }
+    let(:form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
     before do
       allow(FormHandler.instance).to receive(:current_form).and_return(form)

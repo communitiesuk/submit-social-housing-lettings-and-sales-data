@@ -21,16 +21,10 @@ private
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
         form_name = File.basename(form_path, ".json")
-        forms[form_name] = Form.new(form_path, form_name, setup_path)
+        forms[form_name] = Form.new(form_path, form_name)
       end
     end
     forms
-  end
-
-  def setup_path
-    return "spec/fixtures/forms/setup/log_setup.json" if Rails.env.test?
-
-    "config/forms/setup/log_setup.json"
   end
 
   def directories
