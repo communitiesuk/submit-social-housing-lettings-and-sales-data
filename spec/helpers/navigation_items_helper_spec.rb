@@ -12,7 +12,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", true),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -27,7 +27,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -42,7 +42,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, true),
           ]
@@ -57,7 +57,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -72,7 +72,7 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
@@ -87,14 +87,14 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
             NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
           ]
         end
 
-        it "returns navigation items with supported housing item set as current" do
-          expect(primary_items("/supported-housing/1", current_user)).to eq(expected_navigation_items)
+        it "returns navigation items with Schemes item set as current" do
+          expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
         end
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", true),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
           ]
         end
 
@@ -123,7 +123,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
           ]
         end
 
@@ -138,7 +138,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
           ]
         end
 
@@ -147,18 +147,18 @@ RSpec.describe NavigationItemsHelper do
         end
       end
 
-      context "when the user is on the supported housing page" do
+      context "when the user is on the Schemes page" do
         let(:expected_navigation_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
           ]
         end
 
         it "returns navigation items with the users item set as current" do
-          expect(primary_items("/supported-housing", current_user)).to eq(expected_navigation_items)
+          expect(primary_items("/schemes", current_user)).to eq(expected_navigation_items)
         end
       end
 
@@ -168,7 +168,7 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
           ]
         end
 
@@ -183,12 +183,43 @@ RSpec.describe NavigationItemsHelper do
             NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
             NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
             NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-            NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", true),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
           ]
         end
 
-        it "returns navigation items with supported housing item set as current" do
-          expect(primary_items("/supported-housing/1", current_user)).to eq(expected_navigation_items)
+        let(:expected_scheme_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Scheme", "/schemes/1", true),
+            NavigationItemsHelper::NavigationItem.new("1 location", "/schemes/1/locations", false),
+          ]
+        end
+
+        it "returns navigation items with Schemes item set as current" do
+          expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
+          expect(scheme_items("/schemes/1", 1, "1 location")).to eq(expected_scheme_items)
+        end
+      end
+
+      context "when the user is on the scheme locations page" do
+        let(:expected_navigation_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
+            NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
+            NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
+            NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
+          ]
+        end
+
+        let(:expected_scheme_items) do
+          [
+            NavigationItemsHelper::NavigationItem.new("Scheme", "/schemes/1", false),
+            NavigationItemsHelper::NavigationItem.new("1 location", "/schemes/1/locations", true),
+          ]
+        end
+
+        it "returns navigation items with Schemes item set as current" do
+          expect(primary_items("/schemes/1/locations", current_user)).to eq(expected_navigation_items)
+          expect(scheme_items("/schemes/1/locations", 1, "1 location")).to eq(expected_scheme_items)
         end
       end
 
@@ -200,14 +231,14 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
 
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", true),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
@@ -226,14 +257,14 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
 
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
@@ -246,20 +277,20 @@ RSpec.describe NavigationItemsHelper do
         end
 
         context "when the user is on organisation schemes page" do
-          let(:required_sub_path) { "supported-housing" }
+          let(:required_sub_path) { "schemes" }
           let(:expected_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
 
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", true),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
             ]
@@ -278,14 +309,14 @@ RSpec.describe NavigationItemsHelper do
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
               NavigationItemsHelper::NavigationItem.new("Logs", "/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
 
           let(:expected_secondary_navigation_items) do
             [
               NavigationItemsHelper::NavigationItem.new("Logs", "/organisations/#{current_user.organisation.id}/logs", false),
-              NavigationItemsHelper::NavigationItem.new("Supported housing", "/organisations/#{current_user.organisation.id}/supported-housing", false),
+              NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
             ]

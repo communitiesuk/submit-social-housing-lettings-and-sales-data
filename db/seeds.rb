@@ -70,7 +70,7 @@ unless Rails.env.test?
   end
 
   if Rails.env.development? && Scheme.count.zero?
-    Scheme.create!(
+    scheme1 = Scheme.create!(
       code: "S878",
       service_name: "Beulahside Care",
       sensitive: 0,
@@ -85,7 +85,7 @@ unless Rails.env.test?
       created_at: Time.zone.now,
     )
 
-    Scheme.create!(
+    scheme2 = Scheme.create!(
       code: "S312",
       service_name: "Abdullahview Point",
       sensitive: 0,
@@ -113,6 +113,42 @@ unless Rails.env.test?
       secondary_client_group: "R",
       organisation: dummy_org,
       created_at: Time.zone.now,
+    )
+
+    Location.create!(
+      scheme: scheme1,
+      location_code: "S254-CU193AA",
+      postcode: "CU19 3AA",
+      address_line1: "Rectory Road",
+      address_line2: "North Chaim",
+      type_of_unit: "Self-contained flat or bedsit",
+      type_of_building: "Purpose-built",
+      county: "Mid Sussex",
+      wheelchair_adaptation: 0,
+    )
+
+    Location.create!(
+      scheme: scheme1,
+      location_code: "S254-DM250DC",
+      postcode: "DM25 0DC",
+      address_line1: "Smithy Lane",
+      address_line2: "North Kellieworth",
+      type_of_unit: "Self-contained flat or bedsit with common facilities",
+      type_of_building: "Converted from previous residential or non-residential property",
+      county: "Fife",
+      wheelchair_adaptation: 1,
+    )
+
+    Location.create!(
+      scheme: scheme2,
+      location_code: "S254-YX130WP",
+      postcode: "YX13 0WP",
+      address_line1: "Smithy Lane",
+      address_line2: "East Darwin",
+      type_of_unit: "Shared house or hostel",
+      type_of_building: "Converted from previous residential or non-residential property",
+      county: "Rochford",
+      wheelchair_adaptation: 1,
     )
   end
 

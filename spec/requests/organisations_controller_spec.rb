@@ -31,8 +31,8 @@ RSpec.describe OrganisationsController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
 
-      it "does not let you see supported housing list" do
-        get "/organisations/#{organisation.id}/supported-housing", headers: headers, params: {}
+      it "does not let you see schemes list" do
+        get "/organisations/#{organisation.id}/schemes", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -48,11 +48,11 @@ RSpec.describe OrganisationsController, type: :request do
         before do
           allow(user).to receive(:need_two_factor_authentication?).and_return(false)
           sign_in user
-          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
+          get "/organisations/#{organisation.id}/schemes", headers:, params: {}
         end
 
         it "has page heading" do
-          expect(page).to have_content("Supported housing services")
+          expect(page).to have_content("Schemes")
         end
 
         it "shows a search bar" do
@@ -60,7 +60,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "has hidden accebility field with description" do
-          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
           expect(CGI.unescape_html(response.body)).to include(expected_field)
         end
 
@@ -77,7 +77,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           before do
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+            get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
           it "returns matching results" do
@@ -104,19 +104,19 @@ RSpec.describe OrganisationsController, type: :request do
 
         before do
           sign_in user
-          get "/organisations/#{organisation.id}/supported-housing", headers:, params: {}
+          get "/organisations/#{organisation.id}/schemes", headers:, params: {}
         end
 
         it "has page heading" do
-          expect(page).to have_content("Supported housing services")
+          expect(page).to have_content("Schemes")
         end
 
         it "shows a search bar" do
           expect(page).to have_field("search", type: "search")
         end
 
-        it "has hidden accebility field with description" do
-          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing services</h2>"
+        it "has hidden accessibility field with description" do
+          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
           expect(CGI.unescape_html(response.body)).to include(expected_field)
         end
 
@@ -131,7 +131,7 @@ RSpec.describe OrganisationsController, type: :request do
           let!(:unauthorised_organisation) { FactoryBot.create(:organisation) }
 
           before do
-            get "/organisations/#{unauthorised_organisation.id}/supported-housing", headers:, params: {}
+            get "/organisations/#{unauthorised_organisation.id}/schemes", headers:, params: {}
           end
 
           it "returns not found 404 from org details route" do
@@ -144,7 +144,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "CODE321" }
 
           before do
-            get "/organisations/#{organisation.id}/supported-housing?search=#{search_param}"
+            get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
           it "returns matching results" do
@@ -159,7 +159,7 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "has search in the title" do
-            expect(page).to have_title("Supported housing services (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title("Supported housing schemes (1 scheme matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
       end
