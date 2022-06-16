@@ -1,8 +1,8 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-       <%= render(ViewResultComponent.new(searched: searched, count: pagy.count, item_label: item_label, total_count: total_count, item: "users", request: request)) %>
-      <% if current_user.support? %>
+     <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", request:)) %>
+       <% if current_user.support? %>
         <% query = searched.present? ? "?search=#{searched}" : nil %>
         <%= govuk_link_to "Download (CSV)", "/users.csv#{query}", type: "text/csv" %>
       <% end %>

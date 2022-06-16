@@ -1,4 +1,4 @@
-class ViewResultComponent < ViewComponent::Base
+class SearchResultCaptionComponent < ViewComponent::Base
   attr_reader :searched, :count, :item_label, :total_count, :item, :request
 
   def initialize(searched:, count:, item_label:, total_count:, item:, request:)

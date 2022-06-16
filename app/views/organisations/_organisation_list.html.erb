@@ -1,8 +1,8 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-       <%= render(ViewResultComponent.new(searched: searched, count: pagy.count, item_label: item_label, total_count: total_count, item: "organisations", request: request)) %>
-    <% end %>
+   <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", request:)) %>
+       <% end %>
     <%= table.head do |head| %>
       <%= head.row do |row| %>
         <% row.cell(header: true, text: "Name", html_attributes: {
