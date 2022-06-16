@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= form_for(@resource, as: :scheme, html: { method: :post }) do |f| %>
+<%= form_for(@resource, as: :scheme, method: :post, url: schemes_path(scheme: @resource)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
