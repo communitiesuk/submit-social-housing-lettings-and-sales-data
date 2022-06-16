@@ -10,7 +10,7 @@
           "household_characteristics": {
             "label": "Household characteristics",
             "pages": {
-              "tenant_code": {
+              "tenant_code_test": {
                 "questions": {
                   "tenant_code": {
                     "check_answer_label": "Tenant code",
@@ -27,7 +27,7 @@
                   {
                     "housingneeds_a": null
                   }
-                ]              },
+                ]},
               "person_1_age": {
                 "questions": {
                   "age1": {
@@ -39,7 +39,15 @@
                     "step": 1,
                     "width": 2
                   }
-                }
+                },
+                "depends_on": [
+                  {
+                    "housingneeds_a": 1
+                  },
+                  {
+                    "housingneeds_a": null
+                  }
+                ]  
               },
               "person_1_gender": {
                 "questions": {
@@ -212,7 +220,7 @@
                     "header": "property reference?",
                     "type": "text"
                   }
-                }
+                }    
               }
             }
           },

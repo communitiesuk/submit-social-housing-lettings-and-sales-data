@@ -25,7 +25,7 @@ RSpec.describe Form::Subsection, type: :model do
   end
 
   it "has pages" do
-    expected_pages = %w[tenant_code person_1_age person_1_gender person_1_working_situation household_number_of_members person_2_working_situation propcode]
+    expected_pages = %w[tenant_code_test person_1_age person_1_gender person_1_working_situation household_number_of_members person_2_working_situation propcode]
     expect(subsection.pages.map(&:id)).to eq(expected_pages)
   end
 

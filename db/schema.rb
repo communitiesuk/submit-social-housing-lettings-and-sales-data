@@ -192,9 +192,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
-    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "shelteredaccom"
+    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
@@ -247,7 +247,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", null: false
+    t.datetime "started_at", precision: nil, null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false

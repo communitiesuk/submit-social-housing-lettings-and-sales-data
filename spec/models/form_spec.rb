@@ -134,6 +134,7 @@ RSpec.describe Form, type: :model do
         case_log.relat2 = "P"
         case_log.sex2 = "F"
         case_log.ecstat2 = 1
+        case_log.needstype = 1
       end
 
       it "returns the first page of the next incomplete subsection if the subsection is not in progress" do
