@@ -219,6 +219,10 @@ RSpec.describe "Schemes scheme Features" do
     end
 
     context "when creating a new scheme" do
+      before do
+        click_link "Schemes", href: "/schemes"
+      end
+
       it "displays the link to create a new scheme" do
         expect(page).to have_link("Create a new supported housing scheme")
       end
