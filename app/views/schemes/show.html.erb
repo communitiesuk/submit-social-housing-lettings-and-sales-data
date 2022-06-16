@@ -1,17 +1,21 @@
 <% title = @scheme.service_name %>
 <% content_for :title, title %>
 
+<%= govuk_back_link(href: request.referer.to_s) %>
+
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
+
+<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_summary_list do |summary_list| %>
       <% @scheme.display_attributes.each do |attr| %>
-          <%= summary_list.row do |row| %>
-            <% row.key { attr[:name].to_s.humanize } %>
-            <% row.value { details_html(attr) } %>
-          <% end %>
+        <%= summary_list.row do |row| %>
+          <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
+          <% row.value { details_html(attr) } %>
         <% end %>
+      <% end %>
     <% end %>
   </div>
 </div>

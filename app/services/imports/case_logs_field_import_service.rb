@@ -6,12 +6,44 @@ module Imports
         import_from(folder, :update_tenant_code)
       when "major_repairs"
         import_from(folder, :update_major_repairs)
+      when "lettings_allocation"
+        import_from(folder, :update_lettings_allocation)
       else
         raise "Updating #{field} is not supported by the field import service"
       end
     end
 
   private
+
+    def update_lettings_allocation(xml_doc)
+      old_id = field_value(xml_doc, "meta", "document-id")
+      previous_status = field_value(xml_doc, "meta", "status")
+      record = CaseLog.find_by(old_id:)
+
+      if record.present? && previous_status.include?("submitted")
+        cbl = unsafe_string_as_integer(xml_doc, "Q15CBL")
+        chr = unsafe_string_as_integer(xml_doc, "Q15CHR")
+        cap = unsafe_string_as_integer(xml_doc, "Q15CAP")
+        if cbl == 2 && record.cbl == 1
+          record.update!(cbl: 0)
+          @logger.info("Case Log #{record.id}'s cbl value has been updated'")
+        end
+        if chr == 2 && record.chr == 1
+          record.update!(chr: 0)
+          @logger.info("Case Log #{record.id}'s chr value has been updated'")
+        end
+        if cap == 2 && record.cap == 1
+          record.update!(cap: 0)
+          @logger.info("Case Log #{record.id}'s cap value has been updated'")
+        end
+        if cbl == 2 && chr == 2 && cap == 2 && record.letting_allocation_unknown.nil?
+          record.update!(letting_allocation_unknown: 1)
+          @logger.info("Case Log #{record.id}'s letting_allocation_unknown value has been updated'")
+        end
+      else
+        @logger.warn("Could not find record matching legacy ID #{old_id}")
+      end
+    end
 
     def update_major_repairs(xml_doc)
       old_id = field_value(xml_doc, "meta", "document-id")
@@ -66,6 +98,16 @@ module Imports
     def string_or_nil(xml_doc, attribute)
       str = field_value(xml_doc, "xmlns", attribute)
       str.presence
+    end
+
+    # Unsafe: A string that has more than just the integer value
+    def unsafe_string_as_integer(xml_doc, attribute)
+      str = string_or_nil(xml_doc, attribute)
+      if str.nil?
+        nil
+      else
+        str.to_i
+      end
     end
   end
 end

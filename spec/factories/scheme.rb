@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :scheme do
     code { Faker::Name.initials(number: 4) }
-    service_name { Faker::Name.name_with_middle }
+    service_name { Faker::Name.name }
     sensitive { Faker::Number.within(range: 0..1) }
     registered_under_care_act { Faker::Number.within(range: 0..1) }
     support_type { Faker::Number.within(range: 0..6) }

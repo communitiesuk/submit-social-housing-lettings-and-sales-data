@@ -17,7 +17,7 @@ RSpec.describe FormHandler do
       form_handler = described_class.instance
       form = form_handler.get_form(test_form_name)
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(34)
+      expect(form.pages.count).to eq(37)
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe FormHandler do
 
   it "loads the form once at boot time" do
     form_handler = described_class.instance
-    expect(Form).not_to receive(:new).with(:any, test_form_name)
+    expect(Form).not_to receive(:new).with(:any, test_form_name, :any)
     expect(form_handler.get_form(test_form_name)).to be_a(Form)
   end
 end

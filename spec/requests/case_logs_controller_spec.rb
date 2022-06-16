@@ -288,7 +288,8 @@ RSpec.describe CaseLogsController, type: :request do
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
                                 tenancy: 6,
-                                managing_organisation: organisation)
+                                managing_organisation: organisation,
+                                tenant_code: nil)
             end
 
             it "shows case logs for multiple selected statuses and years" do
@@ -622,7 +623,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "displays a section status for a case log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 6
+              assert_select ".govuk-tag", text: /Not started/, count: 7
               assert_select ".govuk-tag", text: /In progress/, count: 1
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
@@ -645,7 +646,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "displays a section status for a case log" do
-              assert_select ".govuk-tag", text: /Not started/, count: 6
+              assert_select ".govuk-tag", text: /Not started/, count: 7
               assert_select ".govuk-tag", text: /Completed/, count: 1
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end

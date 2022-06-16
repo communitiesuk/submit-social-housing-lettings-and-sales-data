@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Supported housing scheme Features" do
+RSpec.describe "Schemes scheme Features" do
   context "when viewing list of schemes" do
     context "when I am signed as a support user and there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
@@ -25,13 +25,13 @@ RSpec.describe "Supported housing scheme Features" do
         click_button("Submit")
       end
 
-      it "displays the link to the supported housing" do
-        expect(page).to have_link("Supported housing", href: "/supported-housing")
+      it "displays the link to the schemes" do
+        expect(page).to have_link("Schemes", href: "/schemes")
       end
 
-      context "when I click Supported housing" do
+      context "when I click schemes" do
         before do
-          click_link "Supported housing", href: "/supported-housing"
+          click_link "Schemes", href: "/schemes"
         end
 
         it "shows list of schemes" do
@@ -99,9 +99,9 @@ RSpec.describe "Supported housing scheme Features" do
         click_button("Submit")
       end
 
-      context "when I visit supported housing page" do
+      context "when I visit schemes page" do
         before do
-          visit("supported-housing")
+          visit("schemes")
         end
 
         it "shows list of links to schemes" do
@@ -112,8 +112,10 @@ RSpec.describe "Supported housing scheme Features" do
         end
 
         context "when I click to see individual scheme" do
+          let(:scheme) { schemes.first }
+
           before do
-            click_link(schemes.first.service_name)
+            click_link(scheme.service_name)
           end
 
           it "shows me details about the selected scheme" do
@@ -127,6 +129,49 @@ RSpec.describe "Supported housing scheme Features" do
             expect(page).to have_content(schemes.first.secondary_client_group_display)
             expect(page).to have_content(schemes.first.support_type_display)
             expect(page).to have_content(schemes.first.intended_stay_display)
+          end
+
+          context "when I click to go back" do
+            before do
+              visit("schemes")
+              click_link(scheme.service_name)
+            end
+
+            it "shows list of links to schemes" do
+              click_on("Back")
+              schemes.each do |scheme|
+                expect(page).to have_link(scheme.service_name)
+                expect(page).to have_content(scheme.primary_client_group_display)
+              end
+            end
+          end
+
+          context "when there are locations that belong to the selected scheme" do
+            let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
+            let(:scheme)     { schemes.first }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+            before do
+              visit("schemes")
+              click_link(scheme.service_name)
+            end
+
+            it "shows service and locations tab" do
+              expect(page).to have_link("Scheme")
+              expect(page).to have_link("#{scheme.locations.count} locations")
+            end
+
+            context "when I click locations link" do
+              before do
+                click_link("#{scheme.locations.count} locations")
+              end
+
+              it "shows details of those locations" do
+                locations.each do |location|
+                  expect(page).to have_content(location.location_code)
+                end
+              end
+            end
           end
         end
       end

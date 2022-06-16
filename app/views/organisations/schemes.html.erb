@@ -1,9 +1,9 @@
 <% item_label = format_label(@pagy.count, "scheme") %>
-<% title = format_title(@searched, "Supported housing services", current_user, item_label, @pagy.count, @organisation.name) %>
+<% title = format_title(@searched, "Supported housing schemes", current_user, item_label, @pagy.count, @organisation.name) %>
 
 <% content_for :title, title %>
 
-<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Supported housing services", sub: current_user.organisation.name } %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Schemes", sub: current_user.organisation.name } %>
 
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
@@ -11,7 +11,7 @@
   ) %>
 <% end %>
 
-<h2 class="govuk-visually-hidden">Supported housing services</h2>
+<h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
 

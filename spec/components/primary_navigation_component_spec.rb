@@ -6,7 +6,7 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
       NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
       NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
       NavigationItemsHelper::NavigationItem.new("Logs ", "/logs", false),
-      NavigationItemsHelper::NavigationItem.new("Supported housing", "/supported-housing", false),
+      NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
     ]
   end
 
@@ -36,7 +36,7 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
       expect(result.text).to include("Organisations")
       expect(result.text).to include("Users")
       expect(result.text).to include("Logs")
-      expect(result.text).to include("Supported housing")
+      expect(result.text).to include("Schemes")
     end
   end
 
@@ -45,9 +45,9 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
       allow(Rails.env).to receive(:production?).and_return(true)
     end
 
-    it "doesn't render supported housing" do
+    it "doesn't render schemes" do
       result = render_inline(described_class.new(items:))
-      expect(result.text).not_to include("Supported housing")
+      expect(result.text).not_to include("Schemes")
     end
   end
 end

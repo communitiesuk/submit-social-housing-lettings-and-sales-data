@@ -6,8 +6,9 @@ RSpec.describe Imports::CaseLogsImportService do
   let(:storage_service) { instance_double(StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
-  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
+  let(:real_setup_path)     { "config/forms/setup/log_setup.json" }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022", real_setup_path) }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023", real_setup_path) }
   let(:fixture_directory) { "spec/fixtures/softwire_imports/case_logs" }
 
   def open_file(directory, filename)

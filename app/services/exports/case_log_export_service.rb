@@ -180,6 +180,10 @@ module Exports
       attribute_hash["createddate"] = attribute_hash["created_at"]
       attribute_hash["uploaddate"] = attribute_hash["updated_at"]
 
+      attribute_hash["cbl"] = 2 if attribute_hash["cbl"]&.zero?
+      attribute_hash["cap"] = 2 if attribute_hash["cap"]&.zero?
+      attribute_hash["chr"] = 2 if attribute_hash["chr"]&.zero?
+
       # Age refused
       (1..8).each do |index|
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1

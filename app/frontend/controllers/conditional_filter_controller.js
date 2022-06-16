@@ -1,13 +1,13 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  initialize() {
+  initialize () {
     this.clearIfHidden()
   }
 
-  clearIfHidden() {
-    if(this.element.style["display"] == "none") {
-      this.element.value = ""
+  clearIfHidden () {
+    if (this.element.style.display === 'none') {
+      this.element.value = ''
     }
   }
 }
