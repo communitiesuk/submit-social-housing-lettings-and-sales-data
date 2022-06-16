@@ -1,0 +1,7 @@
+  <span class="govuk-!-margin-right-4">
+    <% if searched.present? %>
+      <strong><%= count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total <%= item %>. <%= govuk_link_to("Clear search", request.path) %>
+    <% else %>
+      <strong><%= count %></strong> total <%= item %>.
+    <% end %>
+</span>
