@@ -11,6 +11,6 @@
 
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--m">
 
-<%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+<%= render partial: "schemes/scheme_list", locals: { schemes: @schemes, title:, pagy: @pagy, searched: @searched, item_label: item_label, total_count: @total_count } %>
 
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "schemes" } %>
