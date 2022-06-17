@@ -273,7 +273,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation, service_name: "Miss Frederic O'Hara") }
       let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
 
       before do
@@ -312,7 +312,8 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has correct title" do
-        expect(page).to have_title("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
       end
 
       context "when paginating over 20 results" do
