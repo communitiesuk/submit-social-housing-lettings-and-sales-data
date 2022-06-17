@@ -1700,10 +1700,10 @@ RSpec.describe CaseLog do
       end
 
       context "when the question type does not have answer options" do
-        let(:case_log) { FactoryBot.create(:case_log, :in_progress, housingneeds_a: 1, tenancycode: "test") }
+        let(:case_log) { FactoryBot.create(:case_log, :in_progress, housingneeds_a: 1, age1: 19) }
 
         it "clears the answer" do
-          expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :tenancycode).from("test").to(nil)
+          expect { case_log.update!(housingneeds_a: 0) }.to change(case_log, :age1).from(19).to(nil)
         end
       end
 

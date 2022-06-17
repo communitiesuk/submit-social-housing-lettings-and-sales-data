@@ -194,6 +194,7 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
+          needstype: 1,
           tenancycode: nil,
           age1: nil,
           layear: 2,
@@ -226,7 +227,7 @@ RSpec.describe "Form Check Answers Page" do
       it "they can click a button to cycle around to the next incomplete section" do
         visit("/logs/#{cycle_sections_case_log.id}/declaration/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenancycode")
+        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code-test")
       end
     end
   end

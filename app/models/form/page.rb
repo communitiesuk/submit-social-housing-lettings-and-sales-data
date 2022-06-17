@@ -4,15 +4,17 @@ class Form::Page
 
   def initialize(id, hsh, subsection)
     @id = id
-    @header = hsh["header"]
-    @description = hsh["description"]
-    @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
-    @depends_on = hsh["depends_on"]
-    @derived = hsh["derived"]
-    @title_text = hsh["title_text"]
-    @informative_text = hsh["informative_text"]
-    @hide_subsection_label = hsh["hide_subsection_label"]
     @subsection = subsection
+    if hsh
+      @header = hsh["header"]
+      @description = hsh["description"]
+      @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
+      @depends_on = hsh["depends_on"]
+      @derived = hsh["derived"]
+      @title_text = hsh["title_text"]
+      @informative_text = hsh["informative_text"]
+      @hide_subsection_label = hsh["hide_subsection_label"]
+    end
   end
 
   delegate :form, to: :subsection

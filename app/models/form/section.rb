@@ -3,9 +3,11 @@ class Form::Section
 
   def initialize(id, hsh, form)
     @id = id
-    @label = hsh["label"]
-    @description = hsh["description"]
     @form = form
-    @subsections = hsh["subsections"].map { |s_id, s| Form::Subsection.new(s_id, s, self) }
+    if hsh
+      @label = hsh["label"]
+      @description = hsh["description"]
+      @subsections = hsh["subsections"].map { |s_id, s| Form::Subsection.new(s_id, s, self) }
+    end
   end
 end

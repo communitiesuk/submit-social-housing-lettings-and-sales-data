@@ -6,18 +6,18 @@ RSpec.describe TasklistHelper do
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      expect(get_next_incomplete_section(case_log).id).to eq("setup")
     end
 
     it "returns the first subsection name if it is partially completed" do
       case_log["tenancycode"] = 123
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      expect(get_next_incomplete_section(case_log).id).to eq("setup")
     end
   end
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_subsections_count(empty_case_log)).to eq(9)
+      expect(get_subsections_count(empty_case_log)).to eq(10)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do
@@ -25,11 +25,11 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of not started sections" do
-      expect(get_subsections_count(empty_case_log, :not_started)).to eq(8)
+      expect(get_subsections_count(empty_case_log, :not_started)).to eq(9)
     end
 
     it "returns the number of sections in progress" do
-      expect(get_subsections_count(case_log, :in_progress)).to eq(3)
+      expect(get_subsections_count(case_log, :in_progress)).to eq(4)
     end
 
     it "returns 0 for invalid state" do
@@ -48,9 +48,9 @@ RSpec.describe TasklistHelper do
       expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenancycode/)
     end
 
-    it "when first question being not routed to returns the second question link" do
+    it "when first question being not routed to returns the next routed question link" do
       empty_case_log.housingneeds_a = "No"
-      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-age/)
+      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-gender/)
     end
   end
 

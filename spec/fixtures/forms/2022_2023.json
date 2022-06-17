@@ -9,7 +9,7 @@
           "household_characteristics": {
             "label": "Household characteristics",
             "pages": {
-              "tenancycode": {
+              "tenant_code_test": {
                 "questions": {
                   "tenancycode": {
                     "check_answer_label": "Tenant code",
