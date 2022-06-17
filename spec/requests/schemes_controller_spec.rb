@@ -151,7 +151,6 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "updates the table caption" do
-          debugger
           expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
         end
 
