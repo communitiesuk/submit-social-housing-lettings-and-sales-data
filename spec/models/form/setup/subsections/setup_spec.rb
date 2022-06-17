@@ -12,7 +12,16 @@ RSpec.describe Form::Setup::Subsections::Setup, type: :model do
   end
 
   it "has correct pages" do
-    expect(setup.pages.map(&:id)).to eq(%w[organisation needs_type renewal tenancy_start_date rent_type tenant_code property_reference])
+    expect(setup.pages.map(&:id)).to eq(
+      %w[organisation
+         created_by
+         needs_type
+         renewal
+         tenancy_start_date
+         rent_type
+         tenant_code
+         property_reference],
+    )
   end
 
   it "has the correct id" do

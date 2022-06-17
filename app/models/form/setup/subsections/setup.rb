@@ -10,6 +10,7 @@ class Form::Subsections::Setup < ::Form::Subsection
   def pages
     [
       Form::Setup::Pages::Organisation.new(nil, nil, self),
+      Form::Setup::Pages::CreatedBy.new(nil, nil, self),
       Form::Setup::Pages::NeedsType.new(nil, nil, self),
       Form::Setup::Pages::Renewal.new(nil, nil, self),
       Form::Setup::Pages::TenancyStartDate.new(nil, nil, self),

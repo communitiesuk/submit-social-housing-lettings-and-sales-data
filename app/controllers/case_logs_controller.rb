@@ -109,9 +109,7 @@ private
   end
 
   def case_log_params
-    if current_user && current_user.support?
-      { "created_by_id": current_user.id }.merge(api_case_log_params)
-    elsif current_user
+    if current_user && !current_user.support?
       org_params.merge(api_case_log_params)
     else
       api_case_log_params
