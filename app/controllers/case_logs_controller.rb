@@ -27,7 +27,9 @@ class CaseLogsController < ApplicationController
   end
 
   def create
-    case_log = CaseLog.create(case_log_params)
+    case_log = CaseLog.new(case_log_params)
+    case_log.form.current_user = current_user
+    case_log.save
     respond_to do |format|
       format.html { redirect_to case_log }
       format.json do
@@ -58,6 +60,7 @@ class CaseLogsController < ApplicationController
       format.html { edit }
       format.json do
         if @case_log
+          @case_log.form.current_user = current_user
           render json: @case_log, status: :ok
         else
           render_not_found_json("Log", params[:id])
@@ -104,7 +107,9 @@ private
   end
 
   def case_log_params
-    if current_user
+    if current_user && current_user.support?
+      { "created_by_id": current_user.id }.merge(api_case_log_params)
+    elsif current_user
       org_params.merge(api_case_log_params)
     else
       api_case_log_params

@@ -2,6 +2,7 @@ class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
+  attr_accessor :current_user
 
   include Form::Setup
 
@@ -115,7 +116,7 @@ class Form
   end
 
   def invalidated_pages(case_log)
-    pages.reject { |p| p.routed_to?(case_log) }
+    pages.select { |p| p.invalidated?(case_log) }
   end
 
   def invalidated_questions(case_log)
