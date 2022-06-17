@@ -2,7 +2,7 @@ module Imports
   class CaseLogsFieldImportService < ImportService
     def update_field(field, folder)
       case field
-      when "tenant_code"
+      when "tenancycode"
         import_from(folder, :update_tenant_code)
       when "major_repairs"
         import_from(folder, :update_major_repairs)
@@ -74,10 +74,10 @@ module Imports
 
       if record.present?
         tenant_code = string_or_nil(xml_doc, "_2bTenCode")
-        if tenant_code.present? && record.tenant_code.blank?
-          record.update!(tenant_code:)
+        if tenant_code.present? && record.tenancycode.blank?
+          record.update!(tenancycode: tenant_code)
         else
-          @logger.info("Case Log #{record.id} has a value for tenant_code, skipping update")
+          @logger.info("Case Log #{record.id} has a value for tenancycode, skipping update")
         end
       else
         @logger.warn("Could not find record matching legacy ID #{old_id}")

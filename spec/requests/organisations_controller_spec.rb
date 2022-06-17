@@ -624,7 +624,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows case logs matching the tenant code" do
-              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)

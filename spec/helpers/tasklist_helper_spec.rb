@@ -10,14 +10,14 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the first subsection name if it is partially completed" do
-      case_log["tenant_code"] = 123
+      case_log["tenancycode"] = 123
       expect(get_next_incomplete_section(case_log).id).to eq("setup")
     end
   end
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_subsections_count(empty_case_log)).to eq(10)
+      expect(get_subsections_count(empty_case_log)).to eq(9)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do
@@ -25,7 +25,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of not started sections" do
-      expect(get_subsections_count(empty_case_log, :not_started)).to eq(9)
+      expect(get_subsections_count(empty_case_log, :not_started)).to eq(8)
     end
 
     it "returns the number of sections in progress" do
@@ -45,7 +45,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code/)
+      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code-test/)
     end
 
     it "when first question being not routed to returns the next routed question link" do

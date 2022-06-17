@@ -148,7 +148,7 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
-          tenant_code: "123",
+          tenancycode: "123",
           age1: 35,
           sex1: "M",
           hhmemb: 1,
@@ -161,7 +161,7 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
-          tenant_code: "123",
+          tenancycode: "123",
           age1: 35,
           sex1: "M",
           hhmemb: 1,
@@ -176,7 +176,7 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
-          tenant_code: "123",
+          tenancycode: "123",
           age1: 35,
           sex1: "M",
           hhmemb: 1,
@@ -195,7 +195,7 @@ RSpec.describe "Form Check Answers Page" do
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
           needstype: 1,
-          tenant_code: nil,
+          tenancycode: nil,
           age1: nil,
           layear: 2,
           waityear: 1,
@@ -221,7 +221,7 @@ RSpec.describe "Form Check Answers Page" do
       it "they can click a button to skip sections until the next incomplete section" do
         visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/tenancy-code")
+        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/property-information/check-answers")
       end
 
       it "they can click a button to cycle around to the next incomplete section" do

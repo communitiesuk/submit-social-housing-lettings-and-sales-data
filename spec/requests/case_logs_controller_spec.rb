@@ -40,7 +40,7 @@ RSpec.describe CaseLogsController, type: :request do
           "owning_organisation_id": owning_organisation.id,
           "managing_organisation_id": managing_organisation.id,
           "created_by_id": user.id,
-          "tenant_code": tenant_code,
+          "tenancycode": tenant_code,
           "age1": age1,
           "postcode_full": postcode_full,
           "offered": offered,
@@ -63,7 +63,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "creates a case log with the values passed" do
         json_response = JSON.parse(response.body)
-        expect(json_response["tenant_code"]).to eq(tenant_code)
+        expect(json_response["tenancycode"]).to eq(tenant_code)
         expect(json_response["age1"]).to eq(age1)
         expect(json_response["postcode_full"]).to eq(postcode_full)
       end
@@ -149,7 +149,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
-        tenant_code: "LC783",
+        tenancycode: "LC783",
       )
     end
     let!(:unauthorized_case_log) do
@@ -157,7 +157,7 @@ RSpec.describe CaseLogsController, type: :request do
         :case_log,
         owning_organisation: other_organisation,
         managing_organisation: other_organisation,
-        tenant_code: "UA984",
+        tenancycode: "UA984",
       )
     end
 
@@ -289,7 +289,7 @@ RSpec.describe CaseLogsController, type: :request do
                                 startdate: Time.zone.local(2022, 12, 1),
                                 tenancy: 6,
                                 managing_organisation: organisation,
-                                tenant_code: nil)
+                                tenancycode: nil)
             end
 
             it "shows case logs for multiple selected statuses and years" do
@@ -339,7 +339,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "shows case logs matching the tenant code" do
-            get "/logs?search=#{log_to_search.tenant_code}", headers: headers, params: {}
+            get "/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
@@ -487,8 +487,8 @@ RSpec.describe CaseLogsController, type: :request do
           let(:tenant_code_2) { "TC8745" }
 
           before do
-            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenant_code: tenant_code_1)
-            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenant_code: tenant_code_2)
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1)
+            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
           end
@@ -624,7 +624,7 @@ RSpec.describe CaseLogsController, type: :request do
 
             it "displays a section status for a case log" do
               assert_select ".govuk-tag", text: /Not started/, count: 7
-              assert_select ".govuk-tag", text: /In progress/, count: 2
+              assert_select ".govuk-tag", text: /In progress/, count: 1
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
@@ -752,7 +752,7 @@ RSpec.describe CaseLogsController, type: :request do
         expect(csv.second[10]).to eq("Full-time – 30 hours or more")
       end
 
-      it "dowloads filtered logs" do
+      it "downloads filtered logs" do
         get "/logs?status[]=completed", headers:, params: {}
         csv = CSV.parse(response.body)
         expect(csv.count).to eq(2)
@@ -772,7 +772,7 @@ RSpec.describe CaseLogsController, type: :request do
           FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation)
         end
 
-        it "dowloads logs matching both csv and filter logs" do
+        it "downloads logs matching both csv and filter logs" do
           get "/logs?status[]=completed&search=#{postcode}", headers:, params: {}
           csv = CSV.parse(response.body)
           expect(csv.count).to eq(2)
@@ -796,10 +796,10 @@ RSpec.describe CaseLogsController, type: :request do
 
   describe "PATCH" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "M1 1AE")
+      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "M1 1AE")
     end
     let(:params) do
-      { tenant_code: "New Value" }
+      { tenancycode: "New Value" }
     end
     let(:id) { case_log.id }
 
@@ -813,7 +813,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
-      expect(case_log.tenant_code).to eq("New Value")
+      expect(case_log.tenancycode).to eq("New Value")
       expect(case_log.postcode_full).to eq("M11AE")
     end
 
@@ -854,10 +854,10 @@ RSpec.describe CaseLogsController, type: :request do
   # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
   describe "PUT" do
     let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenant_code: "Old Value", postcode_full: "SW1A 2AA")
+      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "SW1A 2AA")
     end
     let(:params) do
-      { tenant_code: "New Value" }
+      { tenancycode: "New Value" }
     end
     let(:id) { case_log.id }
 
@@ -871,7 +871,7 @@ RSpec.describe CaseLogsController, type: :request do
 
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
-      expect(case_log.tenant_code).to eq("New Value")
+      expect(case_log.tenancycode).to eq("New Value")
       expect(case_log.postcode_full).to eq("SW1A2AA")
     end
 

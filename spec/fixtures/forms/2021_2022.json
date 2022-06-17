@@ -12,7 +12,7 @@
             "pages": {
               "tenant_code_test": {
                 "questions": {
-                  "tenant_code": {
+                  "tenancycode": {
                     "check_answer_label": "Tenant code",
                     "header": "What is the tenant code?",
                     "hint_text": "This is how you usually refer to this tenancy on your own systems.",
@@ -47,7 +47,7 @@
                   {
                     "housingneeds_a": null
                   }
-                ]  
+                ]
               },
               "person_1_gender": {
                 "questions": {
@@ -220,7 +220,7 @@
                     "header": "property reference?",
                     "type": "text"
                   }
-                }    
+                }
               }
             }
           },
@@ -367,21 +367,6 @@
       "tenancy_and_property": {
         "label": "Tenancy and property information",
         "subsections": {
-          "tenancy_information": {
-            "label": "Tenancy information",
-            "pages": {
-              "tenancy_code": {
-                "questions": {
-                  "tenancy_code": {
-                    "check_answer_label": "What is the tenancy code?",
-                    "header": "What is the tenancy code?",
-                    "type": "text",
-                    "width": 10
-                  }
-                }
-              }
-            }
-          },
           "property_information": {
             "label": "Property information",
             "pages": {
@@ -983,7 +968,6 @@
             "depends_on": [{
               "household_characteristics": "completed",
               "household_needs": "completed",
-              "tenancy_information": "completed",
               "property_information": "completed"
             }],
             "pages": {

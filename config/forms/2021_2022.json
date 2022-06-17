@@ -981,7 +981,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "shelteredaccom": {
+                "sheltered": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
@@ -1161,7 +1161,14 @@
                     "age1": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age1_known": 0 }, { "age1_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age1_known": 0
+                      },
+                      {
+                        "age1_known": 1
+                      }
+                    ]
                   }
                 },
                 "age1": {
@@ -1859,7 +1866,14 @@
                     "age2": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age2_known": 0 }, { "age2_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age2_known": 0
+                      },
+                      {
+                        "age2_known": 1
+                      }
+                    ]
                   }
                 },
                 "age2": {
@@ -2147,7 +2161,10 @@
               "depends_on": [
                 {
                   "details_known_2": 0,
-                  "age2": { "operator": ">", "operand": 15 }
+                  "age2": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_2": 0,
@@ -2340,7 +2357,14 @@
                     "age3": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age3_known": 0 }, { "age3_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age3_known": 0
+                      },
+                      {
+                        "age3_known": 1
+                      }
+                    ]
                   }
                 },
                 "age3": {
@@ -2628,7 +2652,10 @@
               "depends_on": [
                 {
                   "details_known_3": 0,
-                  "age3": { "operator": ">", "operand": 15 }
+                  "age3": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_3": 0,
@@ -2818,7 +2845,14 @@
                     "age4": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age4_known": 0 }, { "age4_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age4_known": 0
+                      },
+                      {
+                        "age4_known": 1
+                      }
+                    ]
                   }
                 },
                 "age4": {
@@ -3106,7 +3140,10 @@
               "depends_on": [
                 {
                   "details_known_4": 0,
-                  "age4": { "operator": ">", "operand": 15 }
+                  "age4": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_4": 0,
@@ -3293,7 +3330,14 @@
                     "age5": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age5_known": 0 }, { "age5_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age5_known": 0
+                      },
+                      {
+                        "age5_known": 1
+                      }
+                    ]
                   }
                 },
                 "age5": {
@@ -3581,7 +3625,10 @@
               "depends_on": [
                 {
                   "details_known_5": 0,
-                  "age5": { "operator": ">", "operand": 15 }
+                  "age5": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_5": 0,
@@ -3765,7 +3812,14 @@
                     "age6": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age6_known": 0 }, { "age6_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age6_known": 0
+                      },
+                      {
+                        "age6_known": 1
+                      }
+                    ]
                   }
                 },
                 "age6": {
@@ -4053,7 +4107,10 @@
               "depends_on": [
                 {
                   "details_known_6": 0,
-                  "age6": { "operator": ">", "operand": 15 }
+                  "age6": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_6": 0,
@@ -4234,7 +4291,14 @@
                     "age7": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age7_known": 0 }, { "age7_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age7_known": 0
+                      },
+                      {
+                        "age7_known": 1
+                      }
+                    ]
                   }
                 },
                 "age7": {
@@ -4522,7 +4586,10 @@
               "depends_on": [
                 {
                   "details_known_7": 0,
-                  "age7": { "operator": ">", "operand": 15 }
+                  "age7": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_7": 0,
@@ -4700,7 +4767,14 @@
                     "age8": [0]
                   },
                   "hidden_in_check_answers": {
-                    "depends_on": [{ "age8_known": 0 }, { "age8_known": 1 }]
+                    "depends_on": [
+                      {
+                        "age8_known": 0
+                      },
+                      {
+                        "age8_known": 1
+                      }
+                    ]
                   }
                 },
                 "age8": {
@@ -4988,7 +5062,10 @@
               "depends_on": [
                 {
                   "details_known_8": 0,
-                  "age8": { "operator": ">", "operand": 15 }
+                  "age8": {
+                    "operator": ">",
+                    "operand": 15
+                  }
                 },
                 {
                   "details_known_8": 0,
@@ -5857,7 +5934,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "previous_postcode_known": {
+                "ppcodenk": {
                   "header": "Do you know the postcode of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
@@ -5874,8 +5951,12 @@
                   },
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      { "previous_postcode_known": 0 },
-                      { "previous_postcode_known": 1 }
+                      {
+                        "ppcodenk": 0
+                      },
+                      {
+                        "ppcodenk": 1
+                      }
                     ]
                   }
                 },
@@ -5892,7 +5973,7 @@
                   },
                   "inferred_check_answers_value": {
                     "condition": {
-                      "previous_postcode_known": 0
+                      "ppcodenk": 0
                     },
                     "value": "Not known"
                   }
@@ -5910,8 +5991,12 @@
                   "type": "radio",
                   "hidden_in_check_answers": {
                     "depends_on": [
-                      { "previous_la_known": 0 },
-                      { "previous_la_known": 1 }
+                      {
+                        "previous_la_known": 0
+                      },
+                      {
+                        "previous_la_known": 1
+                      }
                     ]
                   },
                   "answer_options": {

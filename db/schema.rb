@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tenant_code"
+    t.string "tenancycode"
     t.integer "age1"
     t.string "sex1"
     t.integer "ethnic"
@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
     t.integer "reservist"
     t.integer "illness"
     t.integer "preg_occ"
-    t.string "tenancy_code"
     t.integer "startertenancy"
     t.integer "tenancylength"
     t.integer "tenancy"
@@ -143,7 +142,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
     t.decimal "tshortfall", precision: 10, scale: 2
     t.decimal "chcharge", precision: 10, scale: 2
     t.integer "declaration"
-    t.integer "previous_postcode_known"
+    t.integer "ppcodenk"
     t.integer "previous_la_known"
     t.boolean "is_previous_la_inferred"
     t.integer "age1_known"
@@ -194,8 +193,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_124115) do
     t.integer "illness_type_0"
     t.integer "retirement_value_check"
     t.integer "tshortfall_known"
-    t.integer "shelteredaccom"
+    t.integer "sheltered"
     t.integer "pregnancy_value_check"
+    t.integer "hhtype"
+    t.integer "new_old"
+    t.integer "vacdays"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true

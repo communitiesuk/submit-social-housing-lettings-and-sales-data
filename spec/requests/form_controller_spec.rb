@@ -286,7 +286,7 @@ RSpec.describe FormController, type: :request do
                 accessibility_requirements:
                                        %w[ housingneeds_a
                                            housingneeds_f],
-                tenant_code:,
+                tenancycode: tenant_code,
               },
             }
           end
@@ -306,7 +306,7 @@ RSpec.describe FormController, type: :request do
                     "housingneeds_h" => "Don’t know" },
                 }, nil
               ),
-              Form::Question.new("tenant_code", { "type" => "text" }, nil),
+              Form::Question.new("tenancycode", { "type" => "text" }, nil),
             ]
           end
           let(:page) { case_log.form.get_page("accessibility_requirements") }
@@ -318,7 +318,7 @@ RSpec.describe FormController, type: :request do
 
             expect(case_log.housingneeds_a).to eq(1)
             expect(case_log.housingneeds_f).to eq(1)
-            expect(case_log.tenant_code).to eq(tenant_code)
+            expect(case_log.tenancycode).to eq(tenant_code)
           end
         end
       end

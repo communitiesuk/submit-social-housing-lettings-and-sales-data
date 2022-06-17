@@ -11,7 +11,7 @@
             "pages": {
               "tenant_code_test": {
                 "questions": {
-                  "tenant_code": {
+                  "tenancycode": {
                     "check_answer_label": "Tenant code",
                     "header": "Different question header text for this year - 2023",
                     "type": "text",

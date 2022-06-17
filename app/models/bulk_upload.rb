@@ -62,7 +62,7 @@ class BulkUpload
       # managementgroup: row[4],
       # schemecode: row[5],
       # firstletting: row[6],
-      tenant_code: row[7],
+      tenancycode: row[7],
       startertenancy: row[8],
       tenancy: row[9],
       tenancyother: row[10],

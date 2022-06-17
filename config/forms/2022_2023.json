@@ -1016,7 +1016,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "shelteredaccom": {
+                "sheltered": {
                   "check_answer_label": "Is this letting in sheltered accommodation?",
                   "header": "Is this letting in sheltered accommodation?",
                   "hint_text": "",
@@ -5199,6 +5199,9 @@
                     },
                     "3": {
                       "value": "Person prefers not to say"
+                    },
+                    "6": {
+                      "value": "Don’t know"
                     }
                   }
                 }
@@ -5560,9 +5563,6 @@
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
-                    "1": {
-                      "value": "Just moved to local authority area"
-                    },
                     "2": {
                       "value": "Less than 1 year"
                     },
@@ -5893,7 +5893,7 @@
               "header": "",
               "description": "",
               "questions": {
-                "previous_postcode_known": {
+                "ppcodenk": {
                   "header": "Do you know the postcode of the household’s last settled accommodation?",
                   "hint_text": "This is also known as the household’s ‘last settled home’.",
                   "type": "radio",
@@ -5911,10 +5911,10 @@
                   "hidden_in_check_answers": {
                     "depends_on": [
                       {
-                        "previous_postcode_known": 0
+                        "ppcodenk": 0
                       },
                       {
-                        "previous_postcode_known": 1
+                        "ppcodenk": 1
                       }
                     ]
                   }
@@ -5932,7 +5932,7 @@
                   },
                   "inferred_check_answers_value": {
                     "condition": {
-                      "previous_postcode_known": 0
+                      "ppcodenk": 0
                     },
                     "value": "Not known"
                   }

@@ -11,7 +11,7 @@ FactoryBot.define do
     end
     trait :in_progress do
       status { 1 }
-      tenant_code { Faker::Name.initials(number: 10) }
+      tenancycode { Faker::Name.initials(number: 10) }
       postcode_full { Faker::Address.postcode }
       ppostcode_full { Faker::Address.postcode }
       age1 { 17 }
@@ -27,7 +27,7 @@ FactoryBot.define do
       incfreq { 1 }
     end
     trait :conditional_section_complete do
-      tenant_code { Faker::Name.initials(number: 10) }
+      tenancycode { Faker::Name.initials(number: 10) }
       age1 { 34 }
       sex1 { "M" }
       ethnic { 2 }
@@ -37,7 +37,7 @@ FactoryBot.define do
     end
     trait :completed do
       status { 2 }
-      tenant_code { Faker::Name.initials(number: 10) }
+      tenancycode { Faker::Name.initials(number: 10) }
       age1 { 35 }
       sex1 { "F" }
       ethnic { 2 }
@@ -55,7 +55,6 @@ FactoryBot.define do
       reservist { 0 }
       illness { 1 }
       preg_occ { 2 }
-      tenancy_code { Faker::Name.initials(number: 10) }
       startertenancy { 0 }
       tenancylength { 5 }
       tenancy { 1 }
@@ -132,7 +131,7 @@ FactoryBot.define do
       unitletas { 2 }
       has_benefits { 1 }
       is_carehome { 0 }
-      shelteredaccom { 0 }
+      sheltered { 0 }
       declaration { 1 }
     end
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }

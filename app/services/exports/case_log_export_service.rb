@@ -179,8 +179,6 @@ module Exports
       # Mapping which would require a change in our data model
       attribute_hash["createddate"] = attribute_hash["created_at"]
       attribute_hash["uploaddate"] = attribute_hash["updated_at"]
-      attribute_hash["tenancycode"] = attribute_hash["tenant_code"]
-      attribute_hash["ppcodenk"] = attribute_hash["previous_postcode_known"]
 
       attribute_hash["cbl"] = 2 if attribute_hash["cbl"]&.zero?
       attribute_hash["cap"] = 2 if attribute_hash["cap"]&.zero?

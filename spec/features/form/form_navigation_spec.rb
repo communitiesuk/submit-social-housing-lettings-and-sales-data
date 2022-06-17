@@ -16,7 +16,7 @@ RSpec.describe "Form Navigation" do
   let(:id) { case_log.id }
   let(:question_answers) do
     {
-      tenant_code: { type: "text", answer: "BZ737", path: "tenant-code-test" },
+      tenancycode: { type: "text", answer: "BZ737", path: "tenant-code-test" },
       age1: { type: "numeric", answer: 25, path: "person-1-age" },
       sex1: { type: "radio", answer: "Female", path: "person-1-gender" },
       ecstat1: { type: "radio", answer: 3, path: "person-1-working-situation" },
@@ -55,7 +55,7 @@ RSpec.describe "Form Navigation" do
     describe "Back link directs correctly", js: true do
       it "go back to tasklist page from tenant code" do
         visit("/logs/#{id}")
-        visit("/logs/#{id}/tenant-code")
+        visit("/logs/#{id}/tenant-code-test")
         click_link(text: "Back")
         expect(page).to have_content("Log #{id}")
       end
@@ -65,7 +65,7 @@ RSpec.describe "Form Navigation" do
         click_button("Save and continue")
         visit("/logs/#{id}/person-1-age")
         click_link(text: "Back")
-        expect(page).to have_field("case-log-tenant-code-field")
+        expect(page).to have_field("case-log-tenancycode-field")
       end
 
       it "doesn't get stuck in infinite loops", js: true do
