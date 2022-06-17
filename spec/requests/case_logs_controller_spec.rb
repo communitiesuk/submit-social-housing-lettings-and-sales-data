@@ -624,7 +624,7 @@ RSpec.describe CaseLogsController, type: :request do
 
             it "displays a section status for a case log" do
               assert_select ".govuk-tag", text: /Not started/, count: 7
-              assert_select ".govuk-tag", text: /In progress/, count: 2
+              assert_select ".govuk-tag", text: /In progress/, count: 1
               assert_select ".govuk-tag", text: /Completed/, count: 0
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
