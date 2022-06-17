@@ -18,6 +18,13 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     end
   end
 
+  def displayed_answer_options(case_log)
+    return answer_options unless case_log.owning_organisation
+
+    user_ids = case_log.owning_organisation.users.pluck(:id) + [""]
+    answer_options.select { |k, _v| user_ids.include?(k) }
+  end
+
   def label_from_value(value)
     return unless value
 

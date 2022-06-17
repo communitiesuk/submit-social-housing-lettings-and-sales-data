@@ -73,4 +73,19 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
       expect(question.hidden_in_check_answers).to be true
     end
   end
+
+  context "when the user is already set" do
+    let(:user) { FactoryBot.create(:user, organisation: organisation_2) }
+    let(:case_log) { FactoryBot.create(:case_log, created_by: user) }
+    let(:expected_answer_options) do
+      {
+        "" => "Select an option",
+        organisation_2.id => organisation_2.name,
+      }
+    end
+
+    it "only displays users that belong to that organisation" do
+      expect(question.displayed_answer_options(case_log)).to eq(expected_answer_options)
+    end
+  end
 end
