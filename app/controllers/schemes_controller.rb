@@ -44,20 +44,23 @@ class SchemesController < ApplicationController
     elsif primary_client_group_patch?
       required_params = params.require(:scheme).permit(:primary_client_group)
       @scheme.update(required_params)
-      render "schemes/secondary_client_group"
+      # render "schemes/secondary_client_group"
+      render "schemes/check_answers"
     elsif secondary_client_group_patch?
       required_params = params.require(:scheme).permit(:secondary_client_group)
       @scheme.update(required_params)
-      render "schemes/support"
+      # render "schemes/support"
+      render "schemes/check_answers"
     elsif support_patch?
       required_params = params.require(:scheme).permit(:intended_stay, :support_type)
       @scheme.update(required_params)
-      render "schemes/details"
+      # render "schemes/details"
+      render "schemes/check_answers"
     elsif details_patch?
       required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id)
       required_params[:sensitive] = required_params[:sensitive].to_i
       @scheme.update(required_params)
-      redirect_to schemes_path
+      render "schemes/check_answers"
     end
   end
 
