@@ -273,7 +273,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation, service_name: "Miss Frederic O'Hara") }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
       let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
 
       before do
