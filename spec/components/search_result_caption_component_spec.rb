@@ -16,6 +16,7 @@ RSpec.describe SearchResultCaptionComponent, type: :component do
 
   context "when no search results are found" do
     let(:searched) { nil }
+
     it "all of the nav tabs specified in the items hash are passed to it" do
       result = render_inline(described_class.new(searched:, count:, item_label:, total_count:, item:, path:))
 
