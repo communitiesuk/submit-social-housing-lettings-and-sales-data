@@ -12,9 +12,9 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
   let!(:organisation_2) { FactoryBot.create(:organisation, name: "second test org") }
   let(:expected_answer_options) do
     {
-        "" => "Select an option",
-        organisation_1.id => organisation_1.name,
-        organisation_2.id => organisation_2.name,
+      "" => "Select an option",
+      organisation_1.id => organisation_1.name,
+      organisation_2.id => organisation_2.name,
     }
   end
 

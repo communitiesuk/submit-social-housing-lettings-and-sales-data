@@ -18,7 +18,7 @@ class Form::Setup::Pages::Organisation < ::Form::Page
     !!form.current_user&.support?
   end
 
-  def invalidated?(case_log)
+  def invalidated?(_case_log)
     false
   end
 end

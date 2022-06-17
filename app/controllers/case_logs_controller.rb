@@ -29,11 +29,13 @@ class CaseLogsController < ApplicationController
   def create
     case_log = CaseLog.new(case_log_params)
     case_log.form.current_user = current_user
-    case_log.save
     respond_to do |format|
-      format.html { redirect_to case_log }
+      format.html do
+        case_log.save!
+        redirect_to case_log
+      end
       format.json do
-        if case_log.persisted?
+        if case_log.save
           render json: case_log, status: :created
         else
           render json: { errors: case_log.errors.messages }, status: :unprocessable_entity

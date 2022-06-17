@@ -11,8 +11,8 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
   end
 
   def answer_options_values
-    hsh = { "" => "Select an option" }
-    Organisation.all.each_with_object(hsh) do |organisation, hsh|
+    answer_opts = { "" => "Select an option" }
+    Organisation.all.each_with_object(answer_opts) do |organisation, hsh|
       hsh[organisation.id] = organisation.name
       hsh
     end
