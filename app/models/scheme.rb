@@ -8,113 +8,86 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
-  SCHEME_TYPE = {
-    0 => "Missing",
-    4 => "Foyer",
-    5 => "Direct Access Hostel",
-    6 => "Other Supported Housing",
-    7 => "Housing for older people",
-  }.freeze
-
-  PRIMARY_CLIENT_GROUP = {
-    "O" => "Homeless families with support needs",
-    "H" => "Offenders & people at risk of offending",
-    "M" => "Older people with support needs",
-    "L" => "People at risk of domestic violence",
-    "A" => "People with a physical or sensory disability",
-    "G" => "People with alcohol problems",
-    "F" => "People with drug problems",
-    "B" => "People with HIV or AIDS",
-    "D" => "People with learning disabilities",
-    "E" => "People with mental health problems",
-    "I" => "Refugees (permanent)",
-    "S" => "Rough sleepers",
-    "N" => "Single homeless people with support needs",
-    "R" => "Teenage parents",
-    "Q" => "Young people at risk",
-    "P" => "Young people leaving care",
-    "X" => "Missing",
-  }.freeze
-
-  SUPPORT_TYPE = {
-    0 => "Missing",
-    1 => "Resettlement Support",
-    2 => "Low levels of support",
-    3 => "Medium levels of support",
-    4 => "High levels of care and support",
-    5 => "Nursing care services to a care home",
-    6 => "Floating Support",
-  }.freeze
-
-  INTENDED_STAY = {
-    "M" => "Medium stay",
-    "P" => "Permanent",
-    "S" => "Short Stay",
-    "V" => "Very short stay",
-    "X" => "Missing",
-  }.freeze
+  enum sensitive: [:no, :yes]
 
   REGISTERED_UNDER_CARE_ACT = {
-    0 => "No",
-    1 => "Yes – registered care home providing nursing care",
-    1 => "Yes – registered care home providing personal care",
-    1 => "Yes – part registered as a care home",
+    "No": 0,
+    "Yes – registered care home providing nursing care": 1,
+    "Yes – registered care home providing personal care": 2,
+    "Yes – part registered as a care home": 3,
   }.freeze
 
-  SENSITIVE = {
-    0 => "No",
-    1 => "Yes",
+  enum registered_under_care_act: REGISTERED_UNDER_CARE_ACT
+
+  SCHEME_TYPE = {
+    "Missing": 0,
+    "Foyer": 4,
+    "Direct Access Hostel": 5,
+    "Other Supported Housing": 6,
+    "Housing for older people": 7,
   }.freeze
 
-  def scheme_types
-    SCHEME_TYPE.values
-  end
+  enum scheme_type: SCHEME_TYPE, _suffix: true
 
-  def care_act_types
-    REGISTERED_UNDER_CARE_ACT.values
-  end
+  SUPPORT_TYPE = {
+    "Missing": 0,
+    "Resettlement Support": 1,
+    "Low levels of support": 2,
+    "Medium levels of support": 3,
+    "High levels of care and support": 4,
+    "Nursing care services to a care home": 5,
+    "Floating Support": 6,
+  }.freeze
+
+  enum support_type: SUPPORT_TYPE, _suffix: true
+
+  PRIMARY_CLIENT_GROUP = {
+    "Homeless families with support needs": "O",
+    "Offenders & people at risk of offending": "H",
+    "Older people with support needs": "M",
+    "People at risk of domestic violence": "L",
+    "People with a physical or sensory disability": "A",
+    "People with alcohol problems": "G",
+    "People with drug problems": "F",
+    "People with HIV or AIDS": "B",
+    "People with learning disabilities": "D",
+    "People with mental health problems": "E",
+    "Refugees (permanent)": "I",
+    "Rough sleepers": "S",
+    "Single homeless people with support needs": "N",
+    "Teenage parents": "R",
+    "Young people at risk": "Q",
+    "Young people leaving care": "P",
+    "Missing": "X",
+  }.freeze
+
+  enum primary_client_group: PRIMARY_CLIENT_GROUP, _suffix: true
+  enum secondary_client_group: PRIMARY_CLIENT_GROUP, _suffix: true
+
+  INTENDED_STAY = {
+    "Medium stay": "M",
+    "Permanent": "P",
+    "Short Stay": "S",
+    "Very short stay": "V",
+    "Missing": "X",
+  }.freeze
+
+  enum intended_stay: INTENDED_STAY, _suffix: true
+
 
   def display_attributes
     [
       { name: "Service code", value: code },
       { name: "Name", value: service_name },
-      { name: "Confidential information", value: sensitive_display },
+      { name: "Confidential information", value: sensitive },
       { name: "Managed by", value: organisation.name },
-      { name: "Type of scheme", value: scheme_type_display },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act_display },
+      { name: "Type of scheme", value: scheme_type },
+      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
       { name: "Total number of units", value: total_units },
-      { name: "Primary client group", value: primary_client_group_display },
-      { name: "Secondary client group", value: secondary_client_group_display },
-      { name: "Level of support given", value: support_type_display },
-      { name: "Intended length of stay", value: intended_stay_display },
+      { name: "Primary client group", value: primary_client_group },
+      { name: "Secondary client group", value: secondary_client_group },
+      { name: "Level of support given", value: support_type },
+      { name: "Intended length of stay", value: intended_stay },
     ]
-  end
-
-  def scheme_type_display
-    SCHEME_TYPE[scheme_type]
-  end
-
-  def sensitive_display
-    SENSITIVE[sensitive]
-  end
-
-  def registered_under_care_act_display
-    REGISTERED_UNDER_CARE_ACT[registered_under_care_act]
-  end
-
-  def primary_client_group_display
-    PRIMARY_CLIENT_GROUP[primary_client_group]
-  end
-
-  def secondary_client_group_display
-    PRIMARY_CLIENT_GROUP[secondary_client_group]
-  end
-
-  def support_type_display
-    SUPPORT_TYPE[support_type]
-  end
-
-  def intended_stay_display
-    INTENDED_STAY[intended_stay]
   end
 end
