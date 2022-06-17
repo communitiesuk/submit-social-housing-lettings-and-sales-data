@@ -210,7 +210,7 @@ class CaseLog < ApplicationRecord
   end
 
   def is_fixed_term_tenancy?
-    [4, 6, 7].include?(tenancy)
+    [4, 6].include?(tenancy)
   end
 
   def is_secure_tenancy?
@@ -332,7 +332,6 @@ class CaseLog < ApplicationRecord
   end
 
   def benefits_unknown?
-    # 3: Don’t know
     hb == 3
   end
 
