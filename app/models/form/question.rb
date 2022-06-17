@@ -7,28 +7,30 @@ class Form::Question
 
   def initialize(id, hsh, page)
     @id = id
-    @check_answer_label = hsh["check_answer_label"]
-    @header = hsh["header"]
-    @guidance_partial = hsh["guidance_partial"]
-    @hint_text = hsh["hint_text"]
-    @type = hsh["type"]
-    @min = hsh["min"]
-    @max = hsh["max"]
-    @step = hsh["step"]
-    @width = hsh["width"]
-    @fields_to_add = hsh["fields-to-add"]
-    @result_field = hsh["result-field"]
-    @readonly = hsh["readonly"]
-    @answer_options = hsh["answer_options"]
-    @conditional_for = hsh["conditional_for"]
-    @inferred_answers = hsh["inferred_answers"]
-    @inferred_check_answers_value = hsh["inferred_check_answers_value"]
-    @hidden_in_check_answers = hsh["hidden_in_check_answers"]
-    @prefix = hsh["prefix"]
-    @suffix = hsh["suffix"]
-    @requires_js = hsh["requires_js"]
-    @fields_added = hsh["fields_added"]
     @page = page
+    if hsh
+      @check_answer_label = hsh["check_answer_label"]
+      @header = hsh["header"]
+      @guidance_partial = hsh["guidance_partial"]
+      @hint_text = hsh["hint_text"]
+      @type = hsh["type"]
+      @min = hsh["min"]
+      @max = hsh["max"]
+      @step = hsh["step"]
+      @width = hsh["width"]
+      @fields_to_add = hsh["fields-to-add"]
+      @result_field = hsh["result-field"]
+      @readonly = hsh["readonly"]
+      @answer_options = hsh["answer_options"]
+      @conditional_for = hsh["conditional_for"]
+      @inferred_answers = hsh["inferred_answers"]
+      @inferred_check_answers_value = hsh["inferred_check_answers_value"]
+      @hidden_in_check_answers = hsh["hidden_in_check_answers"]
+      @prefix = hsh["prefix"]
+      @suffix = hsh["suffix"]
+      @requires_js = hsh["requires_js"]
+      @fields_added = hsh["fields_added"]
+    end
   end
 
   delegate :subsection, to: :page

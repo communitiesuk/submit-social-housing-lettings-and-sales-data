@@ -3,13 +3,13 @@ class Form
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
 
-  def initialize(form_path, name, setup_path)
-    raise "No setup definition file exists for given path".freeze unless File.exist?(setup_path)
+  include Form::Setup
+
+  def initialize(form_path, name)
     raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
     @name = name
-    @setup_definition = JSON.parse(File.open(setup_path).read)
-    @setup_sections = setup_definition["sections"].map { |id, s| Form::Section.new(id, s, self) } || []
+    @setup_sections = [Form::Setup::Sections::Setup.new(nil, nil, self)]
     @form_definition = JSON.parse(File.open(form_path).read)
     @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
     @type = form_definition["form_type"]

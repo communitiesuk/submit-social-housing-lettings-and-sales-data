@@ -6,8 +6,7 @@ RSpec.describe Imports::CaseLogsFieldImportService do
   let(:storage_service) { instance_double(StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_setup_path)     { "config/forms/setup/log_setup.json" }
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022", real_setup_path) }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:fixture_directory) { "spec/fixtures/softwire_imports/case_logs" }
 
   let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }

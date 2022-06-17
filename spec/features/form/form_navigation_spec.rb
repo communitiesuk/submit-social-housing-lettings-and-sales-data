@@ -16,7 +16,7 @@ RSpec.describe "Form Navigation" do
   let(:id) { case_log.id }
   let(:question_answers) do
     {
-      tenant_code: { type: "text", answer: "BZ737", path: "tenant-code" },
+      tenant_code: { type: "text", answer: "BZ737", path: "tenant-code-test" },
       age1: { type: "numeric", answer: 25, path: "person-1-age" },
       sex1: { type: "radio", answer: "Female", path: "person-1-gender" },
       ecstat1: { type: "radio", answer: 3, path: "person-1-working-situation" },
@@ -61,7 +61,7 @@ RSpec.describe "Form Navigation" do
       end
 
       it "go back to tenant code page from tenant age page", js: true do
-        visit("/logs/#{id}/tenant-code")
+        visit("/logs/#{id}/tenant-code-test")
         click_button("Save and continue")
         visit("/logs/#{id}/person-1-age")
         click_link(text: "Back")

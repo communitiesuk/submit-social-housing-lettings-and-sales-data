@@ -6,12 +6,12 @@ RSpec.describe TasklistHelper do
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      expect(get_next_incomplete_section(case_log).id).to eq("setup")
     end
 
     it "returns the first subsection name if it is partially completed" do
       case_log["tenant_code"] = 123
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      expect(get_next_incomplete_section(case_log).id).to eq("setup")
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of sections in progress" do
-      expect(get_subsections_count(case_log, :in_progress)).to eq(3)
+      expect(get_subsections_count(case_log, :in_progress)).to eq(4)
     end
 
     it "returns 0 for invalid state" do
@@ -48,9 +48,9 @@ RSpec.describe TasklistHelper do
       expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code/)
     end
 
-    it "when first question being not routed to returns the second question link" do
+    it "when first question being not routed to returns the next routed question link" do
       empty_case_log.housingneeds_a = "No"
-      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-age/)
+      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-gender/)
     end
   end
 
