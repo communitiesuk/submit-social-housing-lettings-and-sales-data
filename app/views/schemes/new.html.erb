@@ -45,7 +45,7 @@
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
-      <% scheme_types = @resource.scheme_types.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% scheme_types = Scheme.scheme_types.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :scheme_type,
         scheme_types,
@@ -53,7 +53,7 @@
         :name,
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
-      <% care_act_types = @resource.care_act_types.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% care_act_types = Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :scheme_type,
         care_act_types,
