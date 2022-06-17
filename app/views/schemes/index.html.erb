@@ -7,7 +7,7 @@
 
 <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 
-<%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :get } %>
+<%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by service name or code", value: @searched) %>
 

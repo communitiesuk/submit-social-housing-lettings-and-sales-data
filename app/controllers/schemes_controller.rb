@@ -27,7 +27,7 @@ class SchemesController < ApplicationController
   end
 
   def new
-    @resource = Scheme.new
+    @scheme = Scheme.new
   end
 
   def create
@@ -40,27 +40,48 @@ class SchemesController < ApplicationController
   def edit
     if !params[:scheme]
       @scheme = Scheme.find(params[:id])
-      render "schemes/primary_client_group", locals: { scheme: @scheme }
-    elsif params[:scheme][:primary_client_group]
+      render "schemes/primary_client_group"
+    elsif primary_client_group_patch?
       required_params = params.require(:scheme).permit(:primary_client_group)
       @scheme.update(required_params)
-      render "schemes/secondary_client_group", locals: { scheme: @scheme }
-    elsif params[:scheme][:secondary_client_group]
-      required_params = params.require(:scheme).permit(:secondaryy_client_group)
+      render "schemes/secondary_client_group"
+    elsif secondary_client_group_patch?
+      required_params = params.require(:scheme).permit(:secondary_client_group)
       @scheme.update(required_params)
-      render "schemes/secondary_client_group", locals: { scheme: @scheme }
-    elsif params[:scheme][:support]
-      required_params = params.require(:scheme).permit(:secondaryy_client_group)
+      render "schemes/support"
+    elsif support_patch?
+      required_params = params.require(:scheme).permit(:intended_stay, :support_type)
       @scheme.update(required_params)
-      render "schemes/secondary_client_group", locals: { scheme: @scheme }
+      render "schemes/details"
+    elsif details_patch?
+      required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id)
+      required_params[:sensitive] = required_params[:sensitive].to_i
+      @scheme.update(required_params)
+      redirect_to schemes_path
     end
   end
 
   private
 
+  def primary_client_group_patch?
+    params[:scheme][:primary_client_group]
+  end
+
+  def secondary_client_group_patch?
+    params[:scheme][:secondary_client_group]
+  end
+
+  def support_patch?
+    params[:scheme][:intended_stay]
+  end
+
+  def details_patch?
+    params[:scheme][:service_name]
+  end
+
   def clean_params
     code = "S#{SecureRandom.alphanumeric(5)}".upcase
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units).merge(code: code)
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id).merge(code: code)
     required_params[:sensitive] = required_params[:sensitive].to_i
     required_params
   end

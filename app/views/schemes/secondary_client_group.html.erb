@@ -7,7 +7,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: scheme_primary_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: scheme_secondary_path(scheme_id: @scheme.id)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -19,9 +19,9 @@
       <legend class="govuk-fieldset__legend">
       </legend>
 
-      <% primary_client_group_selection = Scheme.primary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      <%= f.govuk_collection_radio_buttons :primary_client_group,
-        primary_client_group_selection,
+      <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :secondary_client_group,
+        secondary_client_group_selection,
         :id,
         :name,
         legend: nil %>

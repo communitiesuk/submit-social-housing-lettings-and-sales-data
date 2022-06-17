@@ -37,6 +37,9 @@ Rails.application.routes.draw do
 
   resources :schemes do
     patch "primary", to: "schemes#edit"
+    patch "secondary", to: "schemes#edit"
+    patch "support", to: "schemes#edit"
+    patch "details", to: "schemes#edit"
 
     member do
       get "locations", to: "schemes#locations"
