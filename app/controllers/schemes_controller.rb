@@ -4,6 +4,7 @@ class SchemesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index]
+  before_action :find_by_scheme_id, only: %i[edit]
   before_action :authenticate_scope!
 
   def index
@@ -30,13 +31,46 @@ class SchemesController < ApplicationController
   end
 
   def create
-    debugger
+    @scheme = Scheme.new(clean_params)
+    @scheme.save
+
+    redirect_to edit_scheme_path(id: @scheme.id)
   end
 
-private
+  def edit
+    if !params[:scheme]
+      @scheme = Scheme.find(params[:id])
+      render "schemes/primary_client_group", locals: { scheme: @scheme }
+    elsif params[:scheme][:primary_client_group]
+      required_params = params.require(:scheme).permit(:primary_client_group)
+      @scheme.update(required_params)
+      render "schemes/secondary_client_group", locals: { scheme: @scheme }
+    elsif params[:scheme][:secondary_client_group]
+      required_params = params.require(:scheme).permit(:secondaryy_client_group)
+      @scheme.update(required_params)
+      render "schemes/secondary_client_group", locals: { scheme: @scheme }
+    elsif params[:scheme][:support]
+      required_params = params.require(:scheme).permit(:secondaryy_client_group)
+      @scheme.update(required_params)
+      render "schemes/secondary_client_group", locals: { scheme: @scheme }
+    end
+  end
+
+  private
+
+  def clean_params
+    code = "S#{SecureRandom.alphanumeric(5)}".upcase
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units).merge(code: code)
+    required_params[:sensitive] = required_params[:sensitive].to_i
+    required_params
+  end
 
   def search_term
     params["search"]
+  end
+
+  def find_by_scheme_id
+    @scheme = Scheme.find_by(id: params[:scheme_id])
   end
 
   def find_resource

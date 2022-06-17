@@ -21,8 +21,8 @@
         hint: { text: "This is how you’ll refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
       <%= f.govuk_check_box  :sensitive,
-        1,
         0,
+        1,
         multiple: false,
         label: { text: "This scheme contains confidential information" } %>
 
@@ -45,23 +45,23 @@
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
-      <% scheme_types = Scheme.scheme_types.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :scheme_type,
-        scheme_types,
+        scheme_types_selection,
         :id,
         :name,
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
-      <% care_act_types = Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% care_acts_selection = Scheme.registered_under_care_acts.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
-      <%= f.govuk_collection_radio_buttons :scheme_type,
-        care_act_types,
+      <%= f.govuk_collection_radio_buttons :registered_under_care_act,
+        care_acts_selection,
         :id,
         :name,
         legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
 
-      <%= f.govuk_number_field :service_name,
+      <%= f.govuk_number_field :total_units,
         width: 2,
         label: { text: "Total number of units", size: "m" },
         hint: { text: "For example, a unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff." } %>

@@ -469,6 +469,7 @@ DEPENDENCIES
   rubocop-govuk (= 4.3.0)
   rubocop-performance
   rubocop-rails
+  securerandom
   selenium-webdriver
   sentry-rails
   sentry-ruby

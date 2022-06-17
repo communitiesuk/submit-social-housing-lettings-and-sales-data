@@ -28,6 +28,8 @@ gem "notifications-ruby-client"
 # A modest javascript framework for the html you already have
 gem "stimulus-rails"
 # Spreadsheet parsing
+gem "securerandom"
+
 gem "roo"
 # Json Schema
 gem "json-schema"
