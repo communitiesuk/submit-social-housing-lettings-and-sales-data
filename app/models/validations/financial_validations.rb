@@ -51,22 +51,22 @@ module Validations::FinancialValidations
   end
 
   def validate_tshortfall(record)
-    return unless record.startdate
-
-    cannot_have_outstanding_amount = if record.collection_start_year <= 2021
-                                       record.has_hbrentshortfall? &&
-                                         (record.benefits_unknown? ||
-                                           record.receives_no_benefits? ||
-                                           record.receives_universal_credit_but_no_housing_benefit?)
-                                     else
-                                       record.has_hbrentshortfall? &&
-                                         (record.benefits_unknown? ||
-                                           record.receives_no_benefits? ||
-                                           record.tenant_refuses_to_say_benefits?)
-                                     end
-
-    if cannot_have_outstanding_amount
+    if record.has_hbrentshortfall? && no_known_benefits?(record)
       record.errors.add :tshortfall, I18n.t("validations.financial.hbrentshortfall.outstanding_no_benefits")
+    end
+  end
+
+  def no_known_benefits?(record)
+    return true unless record.collection_start_year
+
+    if record.collection_start_year <= 2021
+      record.benefits_unknown? ||
+        record.receives_no_benefits? ||
+        record.receives_universal_credit_but_no_housing_benefit?
+    else
+      record.benefits_unknown? ||
+        record.receives_no_benefits? ||
+        record.tenant_refuses_to_say_benefits?
     end
   end
 
