@@ -12,7 +12,7 @@ RSpec.describe Form::Setup::Pages::TenantCode, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[tenant_code])
+    expect(page.questions.map(&:id)).to eq(%w[tenancy_code])
   end
 
   it "has the correct id" do
