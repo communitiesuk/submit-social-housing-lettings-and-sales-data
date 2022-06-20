@@ -44,6 +44,8 @@ class DeviseNotifyMailer < Devise::Mailer
   end
 
   def intercept_send?(email)
+    return false unless email_allowlist
+
     email_domain = email.split("@").last.downcase
     !(Rails.env.production? || Rails.env.test?) && email_allowlist.exclude?(email_domain)
   end
