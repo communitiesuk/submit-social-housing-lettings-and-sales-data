@@ -70,6 +70,7 @@ RSpec.describe FormController, type: :request do
 
   context "when a user is signed in" do
     before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user
     end
 
@@ -139,6 +140,24 @@ RSpec.describe FormController, type: :request do
         it "renders the review page for the case log" do
           get "/logs/#{setup_complete_case_log.id}/review", headers: headers, params: {}
           expect(response.body).to match("Review lettings log")
+        end
+      end
+
+      context "when viewing a user dependent page" do
+        context "when the dependency is met" do
+          let(:user) { FactoryBot.create(:user, :support) }
+
+          it "routes to the page" do
+            get "/logs/#{case_log.id}/organisation"
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        context "when the dependency is not met" do
+          it "redirects to the tasklist page" do
+            get "/logs/#{case_log.id}/organisation"
+            expect(response).to redirect_to("/logs/#{case_log.id}")
+          end
         end
       end
     end

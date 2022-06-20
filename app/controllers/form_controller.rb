@@ -25,6 +25,7 @@ class FormController < ApplicationController
     if @case_log
       current_url = request.env["PATH_INFO"]
       subsection = @case_log.form.get_subsection(current_url.split("/")[-2])
+      @case_log.form.current_user = current_user
       render "form/check_answers", locals: { subsection: }
     else
       render_not_found
@@ -50,6 +51,7 @@ class FormController < ApplicationController
           end
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
+          @case_log.form.current_user = current_user
           if @page.routed_to?(@case_log) && @page.subsection.enabled?(@case_log)
             render "form/page"
           else

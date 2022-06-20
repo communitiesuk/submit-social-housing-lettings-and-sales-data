@@ -6,6 +6,8 @@ module DerivedVariables::CaseLogVariables
   end
 
   def set_derived_fields!
+    # TODO: Remove once we support parent/child relationships
+    self.managing_organisation_id ||= owning_organisation_id
     # TODO: Remove once we support supported housing logs
     self.needstype = 1 unless supported_housing_schemes_enabled?
     if rsnvac.present?
