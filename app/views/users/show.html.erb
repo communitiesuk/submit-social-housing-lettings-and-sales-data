@@ -80,9 +80,9 @@
             row.value { @user.is_data_protection_officer? ? "Yes" : "No" }
             if can_edit_dpo?(@user, current_user)
               row.action(
-                visually_hidden_text: "are #{pronoun(@user, current_user)} a data protection officer?",
+                visually_hidden_text: "if data protection officer",
                 href: aliased_user_edit(@user, current_user),
-                html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-data-protection-officer" },
+                html_attributes: { "data-qa": "change-data-protection-officer" },
               )
             else
               row.action
@@ -94,9 +94,9 @@
             row.value { @user.is_key_contact? ? "Yes" : "No" }
             if can_edit_key_contact?(@user, current_user)
               row.action(
-                visually_hidden_text: "are #{pronoun(@user, current_user)} a key contact?",
+                visually_hidden_text: "if a key contact",
                 href: aliased_user_edit(@user, current_user),
-                html_attributes: { "data-qa": "change-are-#{pronoun(@user, current_user)}-a-key-contact" },
+                html_attributes: { "data-qa": "change-key-contact" },
               )
             else
               row.action

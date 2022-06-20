@@ -55,13 +55,13 @@
         [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
         :id,
         :name,
-        legend: { text: "Are #{pronoun(@user, current_user)} the organisation’s data protection officer?", size: "m" } %>
+        legend: { text: "#{perspective(@user, current_user)} the organisation’s data protection officer?", size: "m" } %>
 
       <%= f.govuk_collection_radio_buttons :is_key_contact,
         [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
         :id,
         :name,
-        legend: { text: "Is this user a key contact for this service?", size: "m" },
+        legend: { text: "#{perspective(@user, current_user)} a key contact for this service?", size: "m" },
         hint: { text: "This is a person responsible for sharing information about social housing lettings and sales data within the organisation." } %>
 
       <%= f.govuk_submit "Continue" %>

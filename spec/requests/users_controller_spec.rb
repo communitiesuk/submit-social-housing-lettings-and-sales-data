@@ -144,8 +144,8 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "email address")
           expect(page).to have_link("Change", text: "password")
           expect(page).not_to have_link("Change", text: "role")
-          expect(page).not_to have_link("Change", text: "are you a data protection officer?")
-          expect(page).not_to have_link("Change", text: "are you a key contact?")
+          expect(page).not_to have_link("Change", text: "if data protection officer")
+          expect(page).not_to have_link("Change", text: "if a key contact")
         end
 
         it "does not allow deactivating the user" do
@@ -196,8 +196,8 @@ RSpec.describe UsersController, type: :request do
             expect(page).not_to have_link("Change", text: "email address")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).not_to have_link("Change", text: "role")
-            expect(page).not_to have_link("Change", text: "are you a data protection officer?")
-            expect(page).not_to have_link("Change", text: "are you a key contact?")
+            expect(page).not_to have_link("Change", text: "if data protection officer")
+            expect(page).not_to have_link("Change", text: "if a key contact")
           end
 
           it "does not allow deactivating the user" do
@@ -511,8 +511,8 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "email address")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
-          expect(page).to have_link("Change", text: "are you a data protection officer?")
-          expect(page).to have_link("Change", text: "are you a key contact?")
+          expect(page).to have_link("Change", text: "if data protection officer")
+          expect(page).to have_link("Change", text: "if a key contact")
         end
 
         it "does not allow deactivating the user" do
@@ -551,8 +551,8 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "email address")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
-            expect(page).to have_link("Change", text: "are they a data protection officer?")
-            expect(page).to have_link("Change", text: "are they a key contact?")
+            expect(page).to have_link("Change", text: "if data protection officer")
+            expect(page).to have_link("Change", text: "if a key contact")
           end
 
           it "allows deactivating the user" do
@@ -1168,8 +1168,8 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_link("Change", text: "email address")
           expect(page).to have_link("Change", text: "password")
           expect(page).to have_link("Change", text: "role")
-          expect(page).to have_link("Change", text: "are you a data protection officer?")
-          expect(page).to have_link("Change", text: "are you a key contact?")
+          expect(page).to have_link("Change", text: "if data protection officer")
+          expect(page).to have_link("Change", text: "if a key contact")
         end
 
         it "does not allow deactivating the user" do
@@ -1197,8 +1197,8 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "email address")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
-            expect(page).to have_link("Change", text: "are they a data protection officer?")
-            expect(page).to have_link("Change", text: "are they a key contact?")
+            expect(page).to have_link("Change", text: "if data protection officer")
+            expect(page).to have_link("Change", text: "if a key contact")
           end
 
           it "allows deactivating the user" do
@@ -1237,8 +1237,8 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_link("Change", text: "email address")
             expect(page).not_to have_link("Change", text: "password")
             expect(page).to have_link("Change", text: "role")
-            expect(page).to have_link("Change", text: "are they a data protection officer?")
-            expect(page).to have_link("Change", text: "are they a key contact?")
+            expect(page).to have_link("Change", text: "if data protection officer")
+            expect(page).to have_link("Change", text: "if a key contact")
           end
         end
       end

@@ -20,18 +20,18 @@ RSpec.describe UserHelper do
     end
   end
 
-  describe "pronoun" do
+  describe "perspective" do
     context "when the current logged in user is the same as the user being viewed" do
       let(:user) { current_user }
 
-      it "returns 'you'" do
-        expect(pronoun(user, current_user)).to eq("you")
+      it "returns 'Are you'" do
+        expect(perspective(user, current_user)).to eq("Are you")
       end
     end
 
     context "when the current logged in user is not the same as the user being viewed" do
-      it "returns 'they'" do
-        expect(pronoun(user, current_user)).to eq("they")
+      it "returns 'Is this person'" do
+        expect(perspective(user, current_user)).to eq("Is this person")
       end
     end
   end

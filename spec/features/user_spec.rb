@@ -199,8 +199,8 @@ RSpec.describe "User Features" do
 
       it "does not have change links for dpo and key contact" do
         visit("/account")
-        expect(page).not_to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
-        expect(page).not_to have_selector('[data-qa="change-are-you-a-key-contact"]')
+        expect(page).not_to have_selector('[data-qa="change-if-data-protection-officer"]')
+        expect(page).not_to have_selector('[data-qa="change-if-key-contact"]')
       end
 
       it "does not have dpo and key contact as editable fields" do
@@ -288,8 +288,8 @@ RSpec.describe "User Features" do
 
       it "has dpo and key contact as editable fields" do
         visit("/account")
-        expect(page).to have_selector('[data-qa="change-are-you-a-data-protection-officer"]')
-        expect(page).to have_selector('[data-qa="change-are-you-a-key-contact"]')
+        expect(page).to have_selector('[data-qa="change-data-protection-officer"]')
+        expect(page).to have_selector('[data-qa="change-key-contact"]')
       end
     end
 
