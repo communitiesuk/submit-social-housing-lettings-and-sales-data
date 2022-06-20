@@ -1,14 +1,8 @@
 <section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
   <%= govuk_table do |table| %>
     <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-      <span class="govuk-!-margin-right-4">
-        <% if searched.present? %>
-          <strong><%= pagy.count %></strong> <%= item_label %> found matching ‘<%= searched %>’ of <strong><%= total_count %></strong> total schemes. <%= govuk_link_to("Clear search", request.path) %>
-        <% else %>
-          <strong><%= pagy.count %></strong> total schemes.
-        <% end %>
-      </span>
-    <% end %>
+    <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "schemes", path: request.path)) %>
+      <% end %>
     <%= table.head do |head| %>
       <%= head.row do |row| %>
         <% row.cell(header: true, text: "Code", html_attributes: {
