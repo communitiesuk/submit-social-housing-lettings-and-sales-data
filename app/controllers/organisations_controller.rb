@@ -49,8 +49,8 @@ class OrganisationsController < ApplicationController
   end
 
   def create
-    organisation = Organisation.create(org_params)
-    if organisation.persisted?
+    @resource = Organisation.new(org_params)
+    if @resource.save
       redirect_to organisations_path
     else
       render :new, status: :unprocessable_entity
