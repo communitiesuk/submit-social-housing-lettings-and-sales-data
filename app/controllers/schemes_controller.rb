@@ -7,7 +7,7 @@ class SchemesController < ApplicationController
   before_action :authenticate_scope!
 
   def index
-    redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support? || current_user.data_coordinator?
+    redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_schemes = Scheme.all
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
