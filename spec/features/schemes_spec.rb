@@ -2,6 +2,68 @@ require "rails_helper"
 
 RSpec.describe "Schemes scheme Features" do
   context "when viewing list of schemes" do
+    context "when I am signed as a coordinator user and there are schemes in the database" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:schemes) { FactoryBot.create_list(:scheme, 5, organisation: user.organisation) }
+      let!(:scheme_to_search) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        visit("/logs")
+        fill_in("user[email]", with: user.email)
+        fill_in("user[password]", with: user.password)
+        click_button("Sign in")
+      end
+
+      it "displays the link to the schemes" do
+        expect(page).to have_link("Schemes", href: "/schemes")
+      end
+
+      context "when I click schemes" do
+        before do
+          click_link "Schemes"
+        end
+
+        it "shows list of schemes" do
+          schemes.each do |scheme|
+            expect(page).to have_content(scheme.code)
+          end
+        end
+
+        context "when I search for a specific scheme" do
+          it "there is a search bar with a message and search button for schemes" do
+            expect(page).to have_field("search")
+            expect(page).to have_content("Search by service name or code")
+            expect(page).to have_button("Search")
+          end
+
+          context "when I fill in search information and press the search button" do
+            before do
+              fill_in("search", with: scheme_to_search.code)
+              click_button("Search")
+            end
+
+            it "displays scheme matching the scheme code" do
+              expect(page).to have_content(scheme_to_search.code)
+            end
+
+            context "when I want to clear results" do
+              it "there is link to clear the search results" do
+                expect(page).to have_link("Clear search")
+              end
+
+              it "displays all schemes after I clear the search results" do
+                click_link("Clear search")
+                expect(page).to have_content(scheme_to_search.code)
+                schemes.each do |scheme|
+                  expect(page).to have_content(scheme.code)
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     context "when I am signed as a support user and there are schemes in the database" do
       let(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
