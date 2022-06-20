@@ -12,7 +12,7 @@ RSpec.describe Form::Setup::Questions::TenantCode, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("tenancy_code")
+    expect(question.id).to eq("tenancycode")
   end
 
   it "has the correct header" do

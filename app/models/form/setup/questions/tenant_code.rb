@@ -1,7 +1,7 @@
 class Form::Setup::Questions::TenantCode < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "tenancy_code"
+    @id = "tenancycode"
     @check_answer_label = "Tenant code"
     @header = "What is the tenant code?"
     @hint_text = "This is how you usually refer to this tenancy on your own systems."
