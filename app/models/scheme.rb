@@ -1,6 +1,7 @@
 class Scheme < ApplicationRecord
   belongs_to :organisation
   has_many :locations
+  has_many :case_logs
 
   scope :search_by_code, ->(code) { where("code ILIKE ?", "%#{code}%") }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
