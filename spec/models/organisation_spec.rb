@@ -20,7 +20,7 @@ RSpec.describe Organisation, type: :model do
 
     it "validates provider_type presence" do
       expect { FactoryBot.create(:organisation, provider_type: nil) }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type can’t be blank")
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.organisation.provider_type_missing')}")
     end
 
     context "with data protection confirmations" do

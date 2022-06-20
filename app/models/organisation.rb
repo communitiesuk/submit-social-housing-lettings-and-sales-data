@@ -18,7 +18,8 @@ class Organisation < ApplicationRecord
 
   enum provider_type: PROVIDER_TYPE
 
-  validates :provider_type, presence: true
+  validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
+  validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
   def case_logs
     CaseLog.filter_by_organisation(self)

@@ -1008,6 +1008,18 @@ RSpec.describe OrganisationsController, type: :request do
           request
           expect(response).to redirect_to("/organisations")
         end
+
+        context "when required params are missing" do
+          let(:name) { "" }
+          let(:provider_type) { "" }
+
+          it "displays the form with an error message" do
+            request
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
+            expect(page).to have_content(I18n.t("validations.organisation.provider_type_missing"))
+          end
+        end
       end
     end
   end
