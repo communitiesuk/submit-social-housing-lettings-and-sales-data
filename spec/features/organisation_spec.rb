@@ -111,6 +111,18 @@ RSpec.describe "User Features" do
         visit("/organisations/#{org_id}/logs")
       end
 
+      it "shows a create button for that organisation" do
+        expect(page).to have_button("Create a new lettings log for #{org_name}")
+      end
+
+      context "when creating a log for that organisation" do
+        it "pre-fills the value for owning organisation for that log" do
+          click_button("Create a new lettings log for #{org_name}")
+          click_link("Set up this lettings log")
+          expect(page).to have_content(org_name)
+        end
+      end
+
       context "when searching for specific logs" do
         it "displays the logs belonging to the same organisation" do
           expect(page).to have_content(log_to_search.id)

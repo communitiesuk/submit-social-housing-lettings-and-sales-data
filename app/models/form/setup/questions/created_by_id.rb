@@ -7,10 +7,9 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     @hint_text = ""
     @type = "select"
     @page = page
-    @answer_options = answer_options_values
   end
 
-  def answer_options_values
+  def answer_options
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 

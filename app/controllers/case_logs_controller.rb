@@ -128,8 +128,8 @@ private
     return {} unless params[:case_log]
 
     permitted = params.require(:case_log).permit(CaseLog.editable_fields)
-    permitted["owning_organisation"] = Organisation.find_by(permitted["owning_organisation"])
-    permitted["managing_organisation"] = Organisation.find_by(permitted["managing_organisation"])
+    owning_id = permitted["owning_organisation_id"]
+    permitted["owning_organisation"] = Organisation.find(owning_id) if owning_id
     permitted
   end
 
