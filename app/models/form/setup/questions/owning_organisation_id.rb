@@ -14,7 +14,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Organisation.select(:id, :name).all.each_with_object(answer_opts) do |organisation, hsh|
+    Organisation.select(:id, :name).each_with_object(answer_opts) do |organisation, hsh|
       hsh[organisation.id] = organisation.name
       hsh
     end
