@@ -52,7 +52,7 @@ en:
       outside_collection_window: "Date must be within the current collection windows"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     email:
-      taken: "Email already exists"
+      taken: "Enter an email address that hasn't already been used to sign up"
       invalid: "Enter an email address in the correct format, like name@example.com"
       blank: "Enter an email address"
     role:
