@@ -148,7 +148,7 @@ RSpec.describe "Schemes scheme Features" do
         it "shows list of links to schemes" do
           schemes.each do |scheme|
             expect(page).to have_link(scheme.service_name)
-            expect(page).to have_content(scheme.primary_client_group_display)
+            expect(page).to have_content(scheme.primary_client_group)
           end
         end
 
@@ -162,14 +162,14 @@ RSpec.describe "Schemes scheme Features" do
           it "shows me details about the selected scheme" do
             expect(page).to have_content(schemes.first.code)
             expect(page).to have_content(schemes.first.service_name)
-            expect(page).to have_content(schemes.first.sensitive_display)
-            expect(page).to have_content(schemes.first.scheme_type_display)
-            expect(page).to have_content(schemes.first.registered_under_care_act_display)
+            expect(page).to have_content(schemes.first.sensitive)
+            expect(page).to have_content(schemes.first.scheme_type)
+            expect(page).to have_content(schemes.first.registered_under_care_act)
             expect(page).to have_content(schemes.first.total_units)
-            expect(page).to have_content(schemes.first.primary_client_group_display)
-            expect(page).to have_content(schemes.first.secondary_client_group_display)
-            expect(page).to have_content(schemes.first.support_type_display)
-            expect(page).to have_content(schemes.first.intended_stay_display)
+            expect(page).to have_content(schemes.first.primary_client_group)
+            expect(page).to have_content(schemes.first.secondary_client_group)
+            expect(page).to have_content(schemes.first.support_type)
+            expect(page).to have_content(schemes.first.intended_stay)
           end
 
           context "when I click to go back" do
@@ -182,7 +182,7 @@ RSpec.describe "Schemes scheme Features" do
               click_on("Back")
               schemes.each do |scheme|
                 expect(page).to have_link(scheme.service_name)
-                expect(page).to have_content(scheme.primary_client_group_display)
+                expect(page).to have_content(scheme.primary_client_group)
               end
             end
           end
@@ -234,6 +234,12 @@ RSpec.describe "Schemes scheme Features" do
 
         it "lets me fill in the scheme details" do
           expect(page).to have_content "Scheme name"
+          expect(page).to have_content "This scheme contains confidential information"
+          expect(page).to have_content "Which organisation manages this scheme"
+          expect(page).to have_content "Which organisation manages this scheme"
+          expect(page).to have_content "What is this type of scheme?"
+          expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
+          expect(page).to have_content "Total number of units"
         end
       end
     end
