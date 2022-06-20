@@ -241,6 +241,16 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
           expect(page).to have_content "Total number of units"
         end
+
+        context "when I press save I see primary client group section" do
+          before do
+            click_button "Save and continue"
+          end
+
+          it "lets me fill in the scheme details" do
+            expect(page).to have_content "What client group is this scheme intended for?"
+          end
+        end
       end
     end
   end
