@@ -20,7 +20,7 @@ RSpec.describe "Schemes scheme Features" do
 
       context "when I click schemes" do
         before do
-          click_link "Schemes"
+          click_link "Schemes", href: "/schemes"
         end
 
         it "shows list of schemes" do
