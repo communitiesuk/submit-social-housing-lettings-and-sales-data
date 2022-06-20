@@ -47,7 +47,7 @@ RSpec.describe "User Features" do
         click_link("Users")
         click_link("Invite user")
         expect(page).to have_current_path("/users/new")
-        expect(page).to have_content("Invite user to submit CORE data")
+        expect(page).to have_content("Invite somebody to submit CORE data")
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "new_user@example.com")
         choose("user-role-data-provider-field")
