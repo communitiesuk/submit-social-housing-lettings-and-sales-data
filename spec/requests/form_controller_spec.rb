@@ -154,7 +154,7 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when the dependency is not met" do
-          it "routes to the page" do
+          it "redirects to the tasklist page" do
             get "/logs/#{case_log.id}/organisation"
             expect(response).to redirect_to("/logs/#{case_log.id}")
           end
