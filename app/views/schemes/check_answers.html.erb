@@ -7,8 +7,17 @@
   ) %>
 <% end %>
 
-<div class=class="govuk-tabs">  
-  <ul class="govuk-tabs__list">
-    <li class="govuk-tabs__list-item"><li>
-  </ul>
-</div>
+<%= govuk_tabs(title: 'Days of the week') do |component| %>
+  <% component.tab(label: 'Scheme') do %>
+    <%= govuk_summary_list do |summary_list| %>
+      <% @scheme.display_attributes.each do |attr| %>
+        <%= summary_list.row do |row| %>
+          <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
+          <% row.value { details_html(attr) } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= govuk_button_link_to "Create scheme", root_path, html: { method: :get } %>
