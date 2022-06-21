@@ -34,4 +34,8 @@ RSpec.describe Form::Setup::Questions::PropertyReference, type: :model do
   it "has the correct width" do
     expect(question.width).to eq(10)
   end
+
+  it "is not marked as derived" do
+    expect(question.derived?).to be false
+  end
 end

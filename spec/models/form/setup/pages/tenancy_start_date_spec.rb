@@ -30,8 +30,4 @@ RSpec.describe Form::Setup::Pages::TenancyStartDate, type: :model do
   it "has the correct depends_on" do
     expect(page.depends_on).to be nil
   end
-
-  it "has the correct derived" do
-    expect(page.derived).to be nil
-  end
 end

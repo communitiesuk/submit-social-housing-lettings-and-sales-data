@@ -51,8 +51,7 @@ class FormController < ApplicationController
           end
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
-          @case_log.form.current_user = current_user
-          if @page.routed_to?(@case_log) && @page.subsection.enabled?(@case_log)
+          if @page.routed_to?(@case_log, current_user) && @page.subsection.enabled?(@case_log)
             render "form/page"
           else
             redirect_to case_log_path(@case_log)
@@ -111,15 +110,15 @@ private
     if is_referrer_check_answers?
       page_ids = @case_log.form.subsection_for_page(@page).pages.map(&:id)
       page_index = page_ids.index(@page.id)
-      next_page = @case_log.form.next_page(@page, @case_log)
-      previous_page = @case_log.form.previous_page(page_ids, page_index, @case_log)
+      next_page = @case_log.form.next_page(@page, @case_log, current_user)
+      previous_page = @case_log.form.previous_page(page_ids, page_index, @case_log, current_user)
       if next_page.to_s.include?("value_check") || next_page == previous_page
         return "/logs/#{@case_log.id}/#{next_page.dasherize}?referrer=check_answers"
       else
         return send("case_log_#{@case_log.form.subsection_for_page(@page).id}_check_answers_path", @case_log)
       end
     end
-    redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log)
+    redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log, current_user)
     send(redirect_path, @case_log)
   end
 end

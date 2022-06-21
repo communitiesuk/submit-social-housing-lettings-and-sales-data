@@ -46,6 +46,10 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
     expect(question.answer_options).to eq(expected_answer_options)
   end
 
+  it "is marked as derived" do
+    expect(question.derived?).to be true
+  end
+
   context "when the current user is support" do
     let(:support_user) { FactoryBot.build(:user, :support) }
 

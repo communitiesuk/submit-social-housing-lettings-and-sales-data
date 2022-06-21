@@ -1,6 +1,6 @@
 class Form::Page
-  attr_accessor :id, :header, :description, :questions, :derived,
-                :depends_on, :title_text, :informative_text, :subsection, :hide_subsection_label
+  attr_accessor :id, :header, :description, :questions, :depends_on, :title_text,
+                :informative_text, :subsection, :hide_subsection_label
 
   def initialize(id, hsh, subsection)
     @id = id
@@ -10,7 +10,6 @@ class Form::Page
       @description = hsh["description"]
       @questions = hsh["questions"].map { |q_id, q| Form::Question.new(q_id, q, self) }
       @depends_on = hsh["depends_on"]
-      @derived = hsh["derived"]
       @title_text = hsh["title_text"]
       @informative_text = hsh["informative_text"]
       @hide_subsection_label = hsh["hide_subsection_label"]
@@ -19,7 +18,7 @@ class Form::Page
 
   delegate :form, to: :subsection
 
-  def routed_to?(case_log)
+  def routed_to?(case_log, _current_user)
     return true unless depends_on || subsection.depends_on
 
     subsection.enabled?(case_log) && form.depends_on_met(depends_on, case_log)
@@ -31,8 +30,8 @@ class Form::Page
     end
   end
 
-  def invalidated?(case_log)
-    !routed_to?(case_log)
+  def invalidated?(case_log, current_user)
+    !routed_to?(case_log, current_user)
   end
 
 private

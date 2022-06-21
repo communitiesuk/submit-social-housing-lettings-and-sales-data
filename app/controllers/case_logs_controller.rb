@@ -74,7 +74,7 @@ class CaseLogsController < ApplicationController
   def edit
     @case_log = current_user.case_logs.find_by(id: params[:id])
     if @case_log
-      render :edit
+      render :edit, locals: { current_user: }
     else
       render_not_found
     end

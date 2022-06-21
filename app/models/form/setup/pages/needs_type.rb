@@ -6,7 +6,6 @@ class Form::Setup::Pages::NeedsType < ::Form::Page
     @description = ""
     @questions = questions
     @depends_on = [{ "supported_housing_schemes_enabled?" => true }]
-    @derived = true
     @subsection = subsection
   end
 

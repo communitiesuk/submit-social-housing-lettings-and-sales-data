@@ -33,10 +33,6 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
     expect(page.depends_on).to be nil
   end
 
-  it "has the correct derived" do
-    expect(page.derived).to be nil
-  end
-
   context "when the current user is a support user" do
     let(:support_user) { FactoryBot.build(:user, :support) }
 
@@ -46,7 +42,7 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
     end
 
     it "is shown" do
-      expect(page.routed_to?(case_log)).to be true
+      expect(page.routed_to?(case_log, support_user)).to be true
     end
   end
 
@@ -59,7 +55,7 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
     end
 
     it "is not shown" do
-      expect(page.routed_to?(case_log)).to be false
+      expect(page.routed_to?(case_log, user)).to be false
     end
   end
 end

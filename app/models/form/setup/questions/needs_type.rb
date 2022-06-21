@@ -7,6 +7,7 @@ class Form::Setup::Questions::NeedsType < ::Form::Question
     @hint_text = ""
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
+    @derived = true
     @page = page
   end
 

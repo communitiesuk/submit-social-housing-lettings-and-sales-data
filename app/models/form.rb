@@ -32,7 +32,7 @@ class Form
 
   def get_question(id, case_log)
     all_questions = questions.select { |q| q.id == id.to_s.underscore }
-    routed_question = all_questions.find { |q| q.page.routed_to?(case_log) } if case_log
+    routed_question = all_questions.find { |q| q.page.routed_to?(case_log, nil) } if case_log
     routed_question || all_questions[0]
   end
 
@@ -40,20 +40,24 @@ class Form
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
-  def next_page(page, case_log)
+  def next_page(page, case_log, current_user)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = page.id.include?("value_check") && case_log[page.questions[0].id] == 1 && page.routed_to?(case_log) ? previous_page(page_ids, page_index, case_log) : page_ids[page_index + 1]
+    page_id = if page.id.include?("value_check") && case_log[page.questions[0].id] == 1 && page.routed_to?(case_log, current_user)
+                previous_page(page_ids, page_index, case_log, current_user)
+              else
+                page_ids[page_index + 1]
+              end
     nxt_page = get_page(page_id)
 
     return :check_answers if nxt_page.nil?
-    return nxt_page.id if nxt_page.routed_to?(case_log)
+    return nxt_page.id if nxt_page.routed_to?(case_log, current_user)
 
-    next_page(nxt_page, case_log)
+    next_page(nxt_page, case_log, current_user)
   end
 
-  def next_page_redirect_path(page, case_log)
-    nxt_page = next_page(page, case_log)
+  def next_page_redirect_path(page, case_log, current_user)
+    nxt_page = next_page(page, case_log, current_user)
     if nxt_page == :check_answers
       "case_log_#{subsection_for_page(page).id}_check_answers_path"
     else
@@ -116,22 +120,21 @@ class Form
   end
 
   def invalidated_pages(case_log)
-    pages.select { |p| p.invalidated?(case_log) }
+    pages.select { |p| p.invalidated?(case_log, nil) }
   end
 
   def invalidated_questions(case_log)
     invalidated_page_questions(case_log) + invalidated_conditional_questions(case_log)
   end
 
-  def invalidated_page_questions(case_log)
+  def invalidated_page_questions(case_log, current_user = nil)
     # we're already treating address fields as a special case and reset their values upon saving a case_log
     address_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full]
-    invalidated_pages(case_log).flat_map(&:questions).reject { |q| address_questions.include?(q.id) } || []
+    questions.select { |q| q.page.invalidated?(case_log, current_user) && !q.derived? && address_questions.exclude?(q.id) } || []
   end
 
-  def enabled_page_questions(case_log)
-    pages_that_are_routed_to_or_derived = pages.select { |p| p.routed_to?(case_log) || p.derived }
-    pages_that_are_routed_to_or_derived.flat_map(&:questions) || []
+  def enabled_page_questions(case_log, _current_user = nil)
+    questions - invalidated_page_questions(case_log)
   end
 
   def invalidated_conditional_questions(case_log)
@@ -146,11 +149,11 @@ class Form
     questions.select { |q| q.type == "numeric" }
   end
 
-  def previous_page(page_ids, page_index, case_log)
+  def previous_page(page_ids, page_index, case_log, current_user)
     prev_page = get_page(page_ids[page_index - 1])
-    return prev_page.id if prev_page.routed_to?(case_log)
+    return prev_page.id if prev_page.routed_to?(case_log, current_user)
 
-    previous_page(page_ids, page_index - 1, case_log)
+    previous_page(page_ids, page_index - 1, case_log, current_user)
   end
 
   def send_chain(arr, case_log)

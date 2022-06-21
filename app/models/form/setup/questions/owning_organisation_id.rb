@@ -6,6 +6,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     @header = "Which organisation is the owning organisation for this log?"
     @hint_text = ""
     @type = "select"
+    @derived = true
     @page = page
   end
 

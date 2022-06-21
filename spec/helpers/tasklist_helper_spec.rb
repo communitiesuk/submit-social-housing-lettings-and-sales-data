@@ -1,23 +1,17 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let(:empty_case_log) { FactoryBot.build(:case_log) }
-  let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
-  let(:user) { FactoryBot.build(:user) }
-
-  before do
-    empty_case_log.form.current_user = user
-    case_log.form.current_user = user
-  end
+  let(:empty_case_log) { FactoryBot.create(:case_log) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
-      expect(get_next_incomplete_section(case_log).id).to eq("setup")
+      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
     end
 
     it "returns the first subsection name if it is partially completed" do
       case_log["tenancycode"] = 123
-      expect(get_next_incomplete_section(case_log).id).to eq("setup")
+      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
     end
   end
 
@@ -35,7 +29,7 @@ RSpec.describe TasklistHelper do
     end
 
     it "returns the number of sections in progress" do
-      expect(get_subsections_count(case_log, :in_progress)).to eq(4)
+      expect(get_subsections_count(case_log, :in_progress)).to eq(3)
     end
 
     it "returns 0 for invalid state" do
@@ -45,27 +39,29 @@ RSpec.describe TasklistHelper do
 
   describe "get_next_page_or_check_answers" do
     let(:subsection) { case_log.form.get_subsection("household_characteristics") }
+    let(:user) { FactoryBot.build(:user) }
 
     it "returns the check answers page path if the section has been started already" do
-      expect(next_page_or_check_answers(subsection, case_log)).to match(/check-answers/)
+      expect(next_page_or_check_answers(subsection, case_log, user)).to match(/check-answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/tenant-code-test/)
+      expect(next_page_or_check_answers(subsection, empty_case_log, user)).to match(/tenant-code-test/)
     end
 
     it "when first question being not routed to returns the next routed question link" do
       empty_case_log.housingneeds_a = "No"
-      expect(next_page_or_check_answers(subsection, empty_case_log)).to match(/person-1-gender/)
+      expect(next_page_or_check_answers(subsection, empty_case_log, user)).to match(/person-1-gender/)
     end
   end
 
   describe "subsection link" do
     let(:subsection) { case_log.form.get_subsection("household_characteristics") }
+    let(:user) { FactoryBot.build(:user) }
 
     context "with a subsection that's enabled" do
       it "returns the subsection link url" do
-        expect(subsection_link(subsection, case_log)).to match(/household-characteristics/)
+        expect(subsection_link(subsection, case_log, user)).to match(/household-characteristics/)
       end
     end
 
@@ -75,7 +71,7 @@ RSpec.describe TasklistHelper do
       end
 
       it "returns the label instead of a link" do
-        expect(subsection_link(subsection, case_log)).to match(subsection.label)
+        expect(subsection_link(subsection, case_log, user)).to match(subsection.label)
       end
     end
   end

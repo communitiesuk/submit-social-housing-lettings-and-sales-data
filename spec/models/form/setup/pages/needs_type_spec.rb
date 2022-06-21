@@ -30,8 +30,4 @@ RSpec.describe Form::Setup::Pages::NeedsType, type: :model do
   it "has the correct depends_on" do
     expect(page.depends_on).to eq([{ "supported_housing_schemes_enabled?" => true }])
   end
-
-  it "has the correct derived" do
-    expect(page.derived).to be true
-  end
 end

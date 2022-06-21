@@ -6,6 +6,7 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     @header = "Which user are you creating this log for?"
     @hint_text = ""
     @type = "select"
+    @derived = true
     @page = page
   end
 

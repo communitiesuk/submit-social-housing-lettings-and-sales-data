@@ -3,7 +3,7 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
 
   def initialize(id, hsh, page)
     @id = id
@@ -26,6 +26,7 @@ class Form::Question
       @inferred_answers = hsh["inferred_answers"]
       @inferred_check_answers_value = hsh["inferred_check_answers_value"]
       @hidden_in_check_answers = hsh["hidden_in_check_answers"]
+      @derived = hsh["derived"]
       @prefix = hsh["prefix"]
       @suffix = hsh["suffix"]
       @requires_js = hsh["requires_js"]
@@ -71,6 +72,14 @@ class Form::Question
     else
       hidden_in_check_answers
     end
+  end
+
+  def displayed_to_user?(case_log)
+    page.routed_to?(case_log, nil) && enabled?(case_log)
+  end
+
+  def derived?
+    !!derived
   end
 
   def has_inferred_check_answers_value?(case_log)
