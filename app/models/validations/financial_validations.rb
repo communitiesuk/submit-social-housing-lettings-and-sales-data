@@ -102,6 +102,20 @@ module Validations::FinancialValidations
     end
   end
 
+  def validate_care_home_charges(record)
+    if record.is_carehome?
+      period = record.form.get_question("period", record).label_from_value(record.period).downcase
+      if record.chcharge.blank?
+        record.errors.add :chcharge, I18n.t("validations.financial.carehome.not_provided", period:)
+      elsif !weekly_value_in_range(record, "chcharge", 0, 1000)
+        max_chcharge = record.weekly_to_value_per_period(1000)
+        max_chcharge = [record.form.get_question("chcharge", record).prefix, max_chcharge].join("") if record.form.get_question("chcharge", record).present?
+        record.errors.add :period, I18n.t("validations.financial.carehome.over_1000", period:, min_chcharge: "£0", max_chcharge:)
+        record.errors.add :chcharge, I18n.t("validations.financial.carehome.over_1000", period:, min_chcharge: "£0", max_chcharge:)
+      end
+    end
+  end
+
 private
 
   CHARGE_MAXIMUMS = {

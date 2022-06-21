@@ -10,7 +10,7 @@ RSpec.describe RentPeriod, type: :model do
 
     it "maps rent period id to display names" do
       expect(described_class.rent_period_mappings).to be_a(Hash)
-      expect(described_class.rent_period_mappings["2"]).to eq({ "value" => "Weekly for 52 weeks" })
+      expect(described_class.rent_period_mappings["1"]).to eq({ "value" => "Weekly for 52 weeks" })
     end
   end
 end
