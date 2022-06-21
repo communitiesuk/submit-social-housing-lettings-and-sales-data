@@ -12,6 +12,10 @@
 <h2 class="govuk-visually-hidden">Logs</h2>
 
 <div class="app-filter-layout" data-controller="filter-layout">
+  <div class="govuk-button-group app-filter-toggle">
+    <%= govuk_button_to "Create a new lettings log for this organisation", case_logs_path(case_log: { owning_organisation_id: @organisation.id }, method: :post) %>
+  </div>
+
   <%= render partial: "case_logs/log_filters" %>
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
