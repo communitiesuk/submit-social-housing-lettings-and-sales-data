@@ -8,7 +8,12 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
-  enum sensitive: [:no, :yes]
+   SENSITIVE= {
+    No: 0,
+    Yes: 1,
+  }.freeze
+
+  enum sensitive: SENSITIVE, _suffix: true
 
   REGISTERED_UNDER_CARE_ACT = {
     "No": 0,
@@ -74,6 +79,36 @@ class Scheme < ApplicationRecord
 
   enum intended_stay: INTENDED_STAY, _suffix: true
 
+  def check_details_attributes
+    [
+      { name: "Service code", value: code },
+      { name: "Name", value: service_name },
+      { name: "Confidential information", value: sensitive },
+      { name: "Managed by", value: organisation.name },
+      { name: "Type of scheme", value: scheme_type },
+      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
+      { name: "Total number of units", value: total_units },
+    ]
+  end
+
+  def check_primary_client_attributes
+    [
+      { name: "Primary client group", value: primary_client_group },
+    ]
+  end
+
+  def check_secondary_client_attributes
+    [
+      { name: "Secondary client group", value: secondary_client_group },
+    ]
+  end
+
+  def check_support_attributes
+    [
+      { name: "Level of support given", value: support_type },
+      { name: "Intended length of stay", value: intended_stay },
+    ]
+  end
 
   def display_attributes
     [
