@@ -1,3 +1,5 @@
+<% content_for :title, "What client group is this scheme intended for?" %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
@@ -7,14 +9,10 @@
 
 <%= render partial: "organisations/headings", locals: { main: "What client group is this scheme intended for?", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: scheme_confirm_secondary_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
-
-      <h1 class="govuk-heading-l">
-        <%= content_for(:title) %>
-      </h1>
 
       <legend class="govuk-fieldset__legend">
       </legend>

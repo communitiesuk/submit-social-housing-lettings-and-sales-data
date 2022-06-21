@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: 'javascript:history.go(-1);',
   ) %>
 <% end %>
 
@@ -20,9 +20,9 @@
         label: { text: "Scheme name", size: "m" },
         hint: { text: "This is how you’ll refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
-      <%= f.govuk_check_box  :sensitive,
-        0,
+      <%= f.govuk_check_box :sensitive,
         1,
+        0,
         multiple: false,
         label: { text: "This scheme contains confidential information" } %>
 

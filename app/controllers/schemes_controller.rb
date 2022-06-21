@@ -69,10 +69,16 @@ class SchemesController < ApplicationController
     render "schemes/support"
   end
 
+  def details
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    render "schemes/details"
+  end
+
   def check_answers
     @scheme = Scheme.find_by(id: params[:scheme_id])
     if params[:scheme]
-      required_params = params.require(:scheme).permit(:intended_stay, :support_type)
+      required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed)
+      required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
       @scheme.update(required_params)
     end
     render "schemes/check_answers"

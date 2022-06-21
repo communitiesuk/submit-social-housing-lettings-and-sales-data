@@ -1,19 +1,17 @@
+<% content_for :title, "What client group is this scheme intended for?" %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: "/schemes/#{@scheme.id}/primary",
+    href: "/schemes/#{@scheme.id}/primary-client-group",
   ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
 
-<%= form_for(:confirmed, method: :patch, url: scheme_secondary_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(:confirmed, method: :patch, url: scheme_secondary_client_group_path(scheme_id: @scheme.id)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
-      <h1 class="govuk-heading-l">
-        <%= content_for(:title) %>
-      </h1>
 
       <% selection = ["Yes", "No"].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
@@ -21,6 +19,7 @@
         selection,
         :id,
         :name,
+        { checked: "Yes" },
         legend: nil
       %>
 
