@@ -149,7 +149,7 @@ This service follows the guidance and recommendations from the [GOV.UK Design Sy
 
 Service-specific components are built using the [ViewComponent](https://viewcomponent.org) framework, and can be found in `app/components`.
 
-Components use HTML class names that follow the BEM methodology. We use the `app-*` prefix to prevent collisions with components proved by the Design System (which uses `govuk-*`). See [Extending and modifying components in production](https://design-system.service.gov.uk/get-started/extending-and-modifying-components/).
+Components use HTML class names that follow the BEM methodology. We use the `app-*` prefix to prevent collisions with components provided by the Design System (which uses `govuk-*`). See [Extending and modifying components in production](https://design-system.service.gov.uk/get-started/extending-and-modifying-components/).
 
 Stylesheets are written using [Sass](https://sass-lang.com) (and the SCSS syntax), using the mixins and helpers provided by [govuk-frontend](https://frontend.design-system.service.gov.uk/sass-api-reference/).
 
