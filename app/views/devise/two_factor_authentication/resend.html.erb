@@ -1,10 +1,7 @@
 <% content_for :title, "Resend security code" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: "javascript:history.back()",
-  ) %>
+  <%= govuk_back_link(href: "javascript:history.back()") %>
 <% end %>
 
 <%= form_with(url: send("resend_code_#{resource_name}_two_factor_authentication_path"), html: { method: :get }) do |f| %>

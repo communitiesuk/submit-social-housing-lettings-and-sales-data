@@ -1,10 +1,7 @@
 <% content_for :title, @page.header.presence || @page.questions.first.header.html_safe %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: "javascript:history.back()",
-  ) %>
+  <%= govuk_back_link(href: "javascript:history.back()") %>
 <% end %>
 
 <div data-controller="govukfrontend"></div>

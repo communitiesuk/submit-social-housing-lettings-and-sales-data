@@ -1,10 +1,7 @@
 <% content_for :title, current_user == @user ? "Change your personal details" : "Change #{@user.name.presence || 'this user'}’s personal details" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: :back,
-  ) %>
+  <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>

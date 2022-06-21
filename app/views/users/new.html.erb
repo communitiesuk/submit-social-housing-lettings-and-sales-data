@@ -1,10 +1,7 @@
 <% content_for :title, "Invite somebody to submit CORE data" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: :back,
-  ) %>
+  <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= form_for(@resource, as: :user, html: { method: :post }) do |f| %>
