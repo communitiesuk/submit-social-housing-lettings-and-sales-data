@@ -1,13 +1,13 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: 'javascript:history.go(-1);',
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
+<%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: scheme_secondary_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: scheme_support_path(scheme_id: @scheme.id)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>

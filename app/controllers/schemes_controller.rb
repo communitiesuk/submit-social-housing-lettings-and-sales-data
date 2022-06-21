@@ -34,57 +34,60 @@ class SchemesController < ApplicationController
     @scheme = Scheme.new(clean_params)
     @scheme.save
 
-    redirect_to edit_scheme_path(id: @scheme.id)
+    render "schemes/primary_client_group"
   end
 
-  def edit
-    if !params[:scheme]
-      @scheme = Scheme.find(params[:id])
-      render "schemes/primary_client_group"
-    elsif primary_client_group_patch?
-      required_params = params.require(:scheme).permit(:primary_client_group)
-      @scheme.update(required_params)
-      # render "schemes/secondary_client_group"
-      render "schemes/check_answers"
-    elsif secondary_client_group_patch?
+  def primary_client_group
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    render "schemes/primary_client_group"
+  end
+
+  def confirm_secondary_group
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    if params[:scheme]
+      required_params = params.require(:scheme).permit(:primary_client_group) if params
+      @scheme.update(required_params) if required_params
+    end
+    render "schemes/confirm_secondary"
+  end
+
+  def secondary_client_group
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    if params[:confirmed]
+      params[:confirmed][:selection] == "Yes" ? render("schemes/secondary_client_group") : render("schemes/support")
+    else
+      render "schemes/secondary_client_group"
+    end
+  end
+
+  def support
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    if params[:scheme]
       required_params = params.require(:scheme).permit(:secondary_client_group)
-      @scheme.update(required_params)
-      # render "schemes/support"
-      render "schemes/check_answers"
-    elsif support_patch?
+      @scheme.update(required_params) if required_params
+    end
+    render "schemes/support"
+  end
+
+  def check_answers
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    if params[:scheme]
       required_params = params.require(:scheme).permit(:intended_stay, :support_type)
       @scheme.update(required_params)
-      # render "schemes/details"
-      render "schemes/check_answers"
-    elsif details_patch?
-      required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id)
-      required_params[:sensitive] = required_params[:sensitive].to_i
-      @scheme.update(required_params)
-      render "schemes/check_answers"
     end
+    render "schemes/check_answers"
+  end
+
+  def update
+    flash[:notice] = I18n.t("Scheme has been created.")
+    redirect_to schemes_path
   end
 
   private
 
-  def primary_client_group_patch?
-    params[:scheme][:primary_client_group]
-  end
-
-  def secondary_client_group_patch?
-    params[:scheme][:secondary_client_group]
-  end
-
-  def support_patch?
-    params[:scheme][:intended_stay]
-  end
-
-  def details_patch?
-    params[:scheme][:service_name]
-  end
-
   def clean_params
     code = "S#{SecureRandom.alphanumeric(5)}".upcase
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id).merge(code: code)
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed).merge(code: code)
     required_params[:sensitive] = required_params[:sensitive].to_i
     required_params
   end

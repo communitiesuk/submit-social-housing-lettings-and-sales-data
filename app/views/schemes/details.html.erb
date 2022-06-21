@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: 'javascript:history.go(-1);',
   ) %>
 <% end %>
 

@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: :back,
+    href: 'javascript:history.go(-1);',
   ) %>
 <% end %>
 
@@ -20,4 +20,4 @@
   <% end %>
 <% end %>
 
-<%= govuk_button_link_to "Create scheme", root_path, html: { method: :get } %>
+<%= govuk_button_link_to "Create scheme", scheme_update_path, html: { method: :put } %>
