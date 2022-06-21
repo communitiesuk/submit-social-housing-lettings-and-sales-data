@@ -79,7 +79,8 @@ class SchemesController < ApplicationController
   end
 
   def update
-    flash[:notice] = I18n.t("Scheme has been created.")
+    @scheme = Scheme.find_by(id: params[:scheme_id])
+    flash[:notice] = ("#{@scheme.service_name} has been created.")
     redirect_to schemes_path
   end
 

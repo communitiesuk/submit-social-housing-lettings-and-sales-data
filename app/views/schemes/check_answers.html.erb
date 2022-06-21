@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= govuk_tabs(title: 'Days of the week') do |component| %>
+<%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
   <% component.tab(label: 'Scheme') do %>
     <%= govuk_summary_list do |summary_list| %>
       <% @scheme.display_attributes.each do |attr| %>
@@ -20,4 +20,4 @@
   <% end %>
 <% end %>
 
-<%= govuk_button_link_to "Create scheme", scheme_update_path, html: { method: :put } %>
+<%= govuk_button_link_to "Create scheme", scheme_update_path, html: { method: :get } %>
