@@ -130,7 +130,7 @@
     "new_build_handover_date": "01/01/2019",
     "has_benefits": 1,
     "household_charge": 0,
-    "is_carehome": 1,
+    "is_carehome": 0,
     "sheltered": 0,
     "declaration": 1,
     "referral": 1

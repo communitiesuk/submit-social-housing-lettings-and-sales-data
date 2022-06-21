@@ -141,7 +141,9 @@ en:
         under_10: "Total charge must be at least £10 per week"
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
-
+      carehome:
+        over_1000: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
+        not_provided: "Enter how much rent and other charges the household pays %{period}"
     household:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
