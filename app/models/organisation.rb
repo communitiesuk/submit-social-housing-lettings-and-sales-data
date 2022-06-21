@@ -67,7 +67,7 @@ class Organisation < ApplicationRecord
       { name: "telephone_number", value: phone, editable: true },
       { name: "type", value: display_provider_type, editable: false },
       { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
-      { name: "holds_own_stock", value: holds_own_stock.to_s.humanize, editable: false },
+      { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
       { name: "other_stock_owners", value: other_stock_owners, editable: false },
       { name: "managing_agents", value: managing_agents, editable: false },
       { name: "data_protection_agreement", value: data_protection_agreement_string, editable: false },
