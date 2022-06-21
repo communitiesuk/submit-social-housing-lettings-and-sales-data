@@ -1,14 +1,13 @@
-[![Production CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml)
-
-[![Staging CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml)
-
 # Submit social housing lettings and sales data (CORE)
 
-This is the codebase for the Ruby on Rails app that will handle the submission of lettings and sales of social housing data in England.
+[![Production CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/production_pipeline.yml)
+[![Staging CI/CD Pipeline](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml/badge.svg)](https://github.com/communitiesuk/mhclg-data-collection-beta/actions/workflows/staging_pipeline.yml)
+
+Codebase for the Ruby on Rails app that handles the submission of lettings and sales of social housing data in England.
 
 ## API documentation
 
-API documentation can be found here: https://communitiesuk.github.io/mhclg-data-collection-beta/. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
+API documentation can be found here: <https://communitiesuk.github.io/mhclg-data-collection-beta>. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
 
 ## Required Setup
 
@@ -57,14 +56,12 @@ Pre-requisites:
 If you're not modifying front end assets you can bundle them as a one off task:\
   `yarn build --mode=development`
 
-Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while
-production mode will target older browsers.
+Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while production mode will target older browsers.
 
 The Rails server will start on <http://localhost:3000>.
 
 Running the test suite (front end assets need to be built or server needs to be running):\
   `bundle exec rspec`
-
 
 ### Using Docker
 
@@ -82,10 +79,7 @@ Running the test suite (front end assets need to be built or server needs to be 
 
 If this is not needed you can run `docker-compose up` as normal
 
-
 The Rails server will start on <http://localhost:8080>.
-
-
 
 ## Infrastructure
 
@@ -112,7 +106,7 @@ Once the app is deployed:
 2. Check logs:\
 `cf logs dluhc-core-staging --recent`
 
-#### Troubleshooting deployments
+### Troubleshooting deployments
 
 A failed Github deployment action will occasionally leave a Cloud Foundry deployment in a broken state. As a result all subsequent Github deployment actions will also fail with the message `Cannot update this process while a deployment is in flight`.
 
@@ -131,7 +125,39 @@ When a commit is made to `main` the following GitHub action jobs are triggered:
 
 When a pull request is opened to `main` only the Test stage runs.
 
-## Single log submission
+## Frontend
+
+### GOV.UK Design System components
+
+This service follows the guidance and recommendations from the [GOV.UK Design System](https://design-system.service.gov.uk). This is achieved using the following libraries:
+
+- **GOV.UK Frontend** – CSS and JavaScript for all Design System components\
+  [Documentation](https://frontend.design-system.service.gov.uk) ·
+  [GitHub](https://github.com/alphagov/govuk-frontend)
+
+- **GOV.UK Components** – Rails view components for non-form related Design System components\
+  [Documentation](https://govuk-components.netlify.app) ·
+  [Github](https://github.com/DFE-Digital/govuk-components) ·
+  [RubyDoc](https://www.rubydoc.info/gems/govuk-components)
+
+- **GOV.UK FormBuilder** – Rails form builder for form related Design System components\
+  [Documentation](https://govuk-form-builder.netlify.app) ·
+  [GitHub](https://github.com/DFE-Digital/govuk-formbuilder) ·
+  [RubyDoc](https://www.rubydoc.info/gems/govuk_design_system_formbuilder)
+
+### Service-specific components
+
+Service-specific components are built using the [ViewComponent](https://viewcomponent.org) framework, and can be found in `app/components`.
+
+Components use HTML class names that follow the BEM methodology. We use the `app-*` prefix to prevent collisions with components proved by the Design System (which uses `govuk-*`). See [Extending and modifying components in production](https://design-system.service.gov.uk/get-started/extending-and-modifying-components/).
+
+Stylesheets are written using [Sass](https://sass-lang.com) (and the SCSS syntax), using the mixins and helpers provided by [govuk-frontend](https://frontend.design-system.service.gov.uk/sass-api-reference/).
+
+Separate stylesheets are used for each component, with filenames that match the component’s namespace.
+
+Like the components provided by the Design System, components are progressively enhanced. We use [Stimulus](https://stimulus.hotwired.dev) to add any client-side JavaScript enhancements.
+
+## Single log submission form configuration
 
 The form for this is driven by a JSON file in `/config/forms/{start_year}_{end_year}.json`
 
@@ -217,36 +243,17 @@ Assumptions made by the format:
   "page_4": { "questions": { "question_4: "answer_options": ["G", "H"] }, "depends_on": [{ "question_1": "B" }] },
   ```
 
-## JSON Form Validation against Schema
+### JSON form validation against Schema
 
-To validate the form JSON against the schema you can run:
-`rake form_definition:validate["config/forms/2021_2022.json"]`
+To validate the form JSON against the schema you can run:\
+  `rake form_definition:validate["config/forms/2021_2022.json"]`
 
-n.b. You may have to escape square brackets in zsh
-`rake form_definition:validate\["config/forms/2021_2022.json"\]`
+n.b. You may have to escape square brackets in zsh\
+  `rake form_definition:validate\["config/forms/2021_2022.json"\]`
 
 This will validate the given form definition against the schema in `config/forms/schema/generic.json`.
 
-You can also run:
-`rake form_definition:validate_all`
-This will validate all forms in directories = ["config/forms", "spec/fixtures/forms"]
+You can also run:\
+  `rake form_definition:validate_all`
 
-## Useful documentation (external dependencies)
-
-### GOV.UK Design System Form Builder for Rails
-
-- [Examples](https://govuk-form-builder.netlify.app/)
-- [Technical docs](https://www.rubydoc.info/gems/govuk_design_system_formbuilder/)
-- [GitHub repository](https://github.com/DFE-Digital/govuk-formbuilder)
-
-### GOV.UK Frontend for Rails
-
-- [Github repository](https://github.com/DFE-Digital/govuk-components)
-
-### GOV.UK Frontend
-
-- [GitHub repository](https://github.com/alphagov/govuk-frontend)
-
-### Hotwire (Turbo/Stimulus)
-
-- [Docs](https://turbo.hotwired.dev/)
+This will validate all forms in directories = `["config/forms", "spec/fixtures/forms"]`
