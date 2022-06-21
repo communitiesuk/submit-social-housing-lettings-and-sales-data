@@ -1,10 +1,7 @@
 <% content_for :title, "Change #{@organisation.name}’s details" %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: :back,
-  ) %>
+  <%= govuk_back_link(href: :back) %>
 <% end %>
 
 <%= form_for(@organisation, as: :organisation, html: { method: :patch }) do |f| %>
