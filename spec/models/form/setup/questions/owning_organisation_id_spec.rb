@@ -27,7 +27,7 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
   end
 
   it "has the correct header" do
-    expect(question.header).to eq("Which organisation is the owning organisation for this log?")
+    expect(question.header).to eq("Which organisation owns this log?")
   end
 
   it "has the correct check_answer_label" do
