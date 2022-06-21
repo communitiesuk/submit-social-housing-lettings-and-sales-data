@@ -23,7 +23,7 @@ RSpec.describe Scheme, type: :model do
         end
       end
 
-      context "when searching by service name" do
+      context "when searching by scheme name" do
         it "returns case insensitive matching records" do
           expect(described_class.search_by_service_name(scheme_1.service_name.upcase).count).to eq(1)
           expect(described_class.search_by_service_name(scheme_1.service_name.downcase).count).to eq(1)
