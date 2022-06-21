@@ -20,7 +20,7 @@ RSpec.describe TabNavHelper do
   end
 
   describe "#scheme_cell" do
-    it "returns the scheme link service name and primary user group separated by a newline character" do
+    it "returns the scheme link, name and primary user group separated by a newline character" do
       expected_html = "<a class=\"govuk-link\" href=\"/schemes\">#{scheme.service_name}</a>\n<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group_display}</span>"
       expect(scheme_cell(scheme)).to match(expected_html)
     end
