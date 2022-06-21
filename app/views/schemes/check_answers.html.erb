@@ -16,6 +16,10 @@
         <%= summary_list.row do |row| %>
           <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
           <% row.value { details_html(attr) } %>
+          <% row.action(
+            text: "Change",
+            href: scheme_details_path(scheme_id: @scheme.id),
+          ) %>
         <% end %>
       <% end %>
     <% end %>

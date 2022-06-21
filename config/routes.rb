@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     patch "support", to: "schemes#support"
     get "support", to: "schemes#support"
     get "update", to: "schemes#update"
+    get "details", to: "schemes#details"
     patch "check-your-answers", to: "schemes#check_answers"
     get "check-your-answers", to: "schemes#check_answers"
     patch "confirm-secondary-client-group", to: "schemes#confirm_secondary_group"

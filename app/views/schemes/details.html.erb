@@ -9,7 +9,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Scheme details", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: scheme_check_answers_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: scheme_check_your_answers_path(scheme_id: @scheme.id)) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -40,8 +40,7 @@
           :name,
           label: { text: "Which organisation manages this scheme", size: "m" },
           hint: { text: "Enter organisation name" },
-          selected: selected_option(@scheme.organisation.id),
-          options: { disabled: [""], selected: selected_option(@scheme.organisation.name) },
+          options: { disabled: [""], selected: @scheme.organisation.name },
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
