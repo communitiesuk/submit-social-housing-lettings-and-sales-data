@@ -2,7 +2,6 @@ class Form
   attr_reader :form_definition, :sections, :subsections, :pages, :questions,
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
-  attr_accessor :current_user
 
   include Form::Setup
 
