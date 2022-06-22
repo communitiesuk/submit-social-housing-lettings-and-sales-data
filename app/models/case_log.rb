@@ -35,8 +35,8 @@ class CaseLog < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation", optional: true
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
-  belongs_to :scheme, required: false
-  
+  belongs_to :scheme, optional: true
+
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_status, ->(status, _user = nil) { where status: }
   scope :filter_by_years, lambda { |years, _user = nil|
