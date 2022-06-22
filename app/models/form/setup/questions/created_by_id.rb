@@ -39,4 +39,10 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
   def derived?
     true
   end
+
+private
+
+  def selected_answer_option_is_derived?(_case_log)
+    false
+  end
 end
