@@ -3,7 +3,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     super
     @id = "owning_organisation_id"
     @check_answer_label = "Owning organisation"
-    @header = "Which organisation is the owning organisation for this log?"
+    @header = "Which organisation owns this log?"
     @hint_text = ""
     @type = "select"
     @page = page
