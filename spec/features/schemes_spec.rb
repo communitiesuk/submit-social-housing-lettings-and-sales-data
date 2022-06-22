@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Schemes scheme Features" do
   context "when viewing list of schemes" do
     context "when I am signed as a coordinator user and there are schemes in the database" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
       let!(:schemes) { FactoryBot.create_list(:scheme, 5, organisation: user.organisation) }
       let!(:scheme_to_search) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
@@ -228,6 +228,8 @@ RSpec.describe "Schemes scheme Features" do
       end
 
       context "when I press create a new scheme" do
+        let!(:organisation) { FactoryBot.create(:organisation, name: "FooBar") }
+
         before do
           click_link "Create a new supported housing scheme"
         end
@@ -236,14 +238,19 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "Scheme name"
           expect(page).to have_content "This scheme contains confidential information"
           expect(page).to have_content "Which organisation manages this scheme"
-          expect(page).to have_content "Which organisation manages this scheme"
           expect(page).to have_content "What is this type of scheme?"
           expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
           expect(page).to have_content "Total number of units"
         end
 
-        context "when I press save I see primary client group section" do
+        context "when I fill in scheme details and I press save I see primary client group section" do
           before do
+            fill_in 'Scheme name', with: 'FooBar'
+            check 'This scheme contains confidential information'
+            choose "Direct access hostel"
+            choose "Yes – registered care home providing nursing care"
+            fill_in "Total number of units", with: 1
+            select organisation.name, from: "scheme-organisation-id-field"
             click_button "Save and continue"
           end
 
