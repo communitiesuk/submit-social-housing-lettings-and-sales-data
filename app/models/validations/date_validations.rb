@@ -35,11 +35,10 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
-    # if record.voiddate.present?
-    #   if (record.startdate.to_date - record.voiddate.to_date).to_i.abs > 730
-    #     record.errors.add :startdate, I18n.t("validations.setup.startdate.voiddate_difference")
-    #   end
-    # end
+    if record.startdate < Time.zone.today - 14
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_or_14_days_before")
+
+    end 
 
     if record.scheme_id.present?
       scheme_end_date = Scheme.find(record.scheme_id).end_date

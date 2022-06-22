@@ -62,10 +62,8 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       startdate:
-        today_or_earlier: "The start date of a supported housing tenancy must be today or ealier"
+        later_than_or_14_days_before: "The start date of a supported housing tenancy must be 14 days before today or later"
         before_scheme_end_date: "The start date of a supported housing tenancy must be before the housing scheme end date"
-        voiddate_difference: "The difference between the tenancy start date and property void date must be 730 days or less"
-        mrcdate_difference: "The difference between the tenancy start date and major repais date must be 730 days or less"
 
     property:
       mrcdate:
