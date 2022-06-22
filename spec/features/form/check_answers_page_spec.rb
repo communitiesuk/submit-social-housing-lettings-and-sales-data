@@ -194,6 +194,7 @@ RSpec.describe "Form Check Answers Page" do
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
+          created_by: user,
           needstype: 1,
           tenancycode: nil,
           age1: nil,

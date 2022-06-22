@@ -19,11 +19,8 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(case_log)
-    return answer_options unless case_log.created_by
-
-    ids = ["", case_log.created_by.organisation.id]
-    answer_options.select { |k, _v| ids.include?(k) }
+  def displayed_answer_options(_case_log)
+    answer_options
   end
 
   def label_from_value(value)

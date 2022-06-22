@@ -68,6 +68,7 @@ RSpec.describe Organisation, type: :model do
           :completed,
           owning_organisation: organisation,
           managing_organisation: other_organisation,
+          created_by: user,
         )
       end
       let!(:managed_case_log) do

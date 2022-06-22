@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :case_log do
-    owning_organisation { FactoryBot.create(:organisation) }
-    managing_organisation { FactoryBot.create(:organisation) }
     created_by { FactoryBot.create(:user) }
+    owning_organisation { created_by.organisation }
+    managing_organisation { created_by.organisation }
     trait :about_completed do
       renewal { 0 }
       needstype { 1 }

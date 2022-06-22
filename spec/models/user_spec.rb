@@ -10,6 +10,7 @@ RSpec.describe User, type: :model do
         :completed,
         owning_organisation: user.organisation,
         managing_organisation: other_organisation,
+        created_by: user,
       )
     end
     let!(:managed_case_log) do
