@@ -257,6 +257,36 @@ RSpec.describe "Schemes scheme Features" do
           it "lets me fill in the scheme details" do
             expect(page).to have_content "What client group is this scheme intended for?"
           end
+
+          context "when I select primary client group details" do
+            before do
+              choose "Homeless families with support needs"
+            end
+
+            it "lets me confirm if I want to select secondary group details" do
+              expect(page).to have_content "Does this scheme provide for another client group?"
+            end
+
+            context "when I confirm the secondary group" do
+              before do
+                choose "Yes"
+              end
+
+              it "lets me select secondary client group detail" do
+                expect(page).to have_content "Does this scheme provide for another client group?"
+              end
+
+              context "when I select the secondary group" do
+                before do
+                  choose "Homeless families with support needs"
+                end
+
+                it "lets me select secondary client group detail" do
+                  expect(page).to have_content "Does this scheme provide for another client group?"
+                end
+              end
+            end
+          end
         end
       end
     end
