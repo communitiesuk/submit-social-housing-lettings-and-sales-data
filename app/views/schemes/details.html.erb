@@ -1,4 +1,4 @@
-<% content_for :title, "Scheme details" %>
+<% content_for :title, "Create a new supported housing scheme" %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "Scheme details", sub: @scheme.service_name } %>
+<%= render partial: "organisations/headings", locals: { main: "Create a new supported housing scheme", sub: nil } %>
 
 <%= form_for(@scheme, method: :patch, url: @path) do |f| %>
   <div class="govuk-grid-row">
