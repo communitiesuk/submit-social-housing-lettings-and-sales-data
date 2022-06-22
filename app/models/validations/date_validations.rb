@@ -34,6 +34,21 @@ module Validations::DateValidations
     if record.startdate < first_collection_start_date || record.startdate > second_collection_end_date
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
+    
+    # if record.voiddate.present?
+    #   if (record.startdate.to_date - record.voiddate.to_date).to_i.abs > 730
+    #     record.errors.add :startdate, I18n.t("validations.setup.startdate.voiddate_difference")
+    #   end 
+    # end 
+
+    if record.scheme_id.present?
+      scheme_end_date = Scheme.find(record.scheme_id).end_date
+      if scheme_end_date.present?
+        if record.startdate > scheme_end_date
+          record.errors.add :startdate, I18n.t("validations.setup.startdate.before_scheme_end_date")
+        end
+      end
+    end
   end
 
   def validate_sale_completion_date(record)
