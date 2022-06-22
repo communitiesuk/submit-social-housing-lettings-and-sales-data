@@ -30,10 +30,6 @@ class Form::Page
     end
   end
 
-  def invalidated?(case_log, current_user)
-    !routed_to?(case_log, current_user)
-  end
-
 private
 
   def conditional_question_ids

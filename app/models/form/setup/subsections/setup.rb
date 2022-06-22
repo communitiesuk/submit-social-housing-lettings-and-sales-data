@@ -20,24 +20,13 @@ class Form::Subsections::Setup < ::Form::Subsection
     ]
   end
 
-  def status(case_log)
-    unless enabled?(case_log)
-      return :cannot_start_yet
-    end
-
-    qs = applicable_questions(case_log)
-    qs_optional_removed = qs.reject { |q| case_log.optional_fields.include?(q.id) }
-    return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? || question.derived? }
-    return :completed if qs_optional_removed.all? { |question| question.completed?(case_log) }
-
-    :in_progress
+  def applicable_questions(case_log)
+    questions.select { |q| support_only_questions.include?(q.id) } + super
   end
 
-  def applicable_questions(case_log)
-    questions.select do |q|
-      (q.displayed_to_user?(case_log) && !q.derived?) ||
-        q.has_inferred_check_answers_value?(case_log) ||
-        %w[owning_organisation_id created_by_id].include?(q.id)
-    end
+private
+
+  def support_only_questions
+    %w[owning_organisation_id created_by_id].freeze
   end
 end

@@ -29,9 +29,9 @@ class Form
     pages.find { |p| p.id == id.to_s.underscore }
   end
 
-  def get_question(id, case_log)
+  def get_question(id, case_log, current_user = nil)
     all_questions = questions.select { |q| q.id == id.to_s.underscore }
-    routed_question = all_questions.find { |q| q.page.routed_to?(case_log, nil) } if case_log
+    routed_question = all_questions.find { |q| q.page.routed_to?(case_log, current_user) } if case_log
     routed_question || all_questions[0]
   end
 
@@ -118,8 +118,8 @@ class Form
     }.flatten
   end
 
-  def invalidated_pages(case_log)
-    pages.select { |p| p.invalidated?(case_log, nil) }
+  def invalidated_pages(case_log, current_user = nil)
+    pages.reject { |p| p.routed_to?(case_log, current_user) }
   end
 
   def invalidated_questions(case_log)
@@ -129,10 +129,10 @@ class Form
   def invalidated_page_questions(case_log, current_user = nil)
     # we're already treating address fields as a special case and reset their values upon saving a case_log
     address_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full]
-    questions.select { |q| q.page.invalidated?(case_log, current_user) && !q.derived? && address_questions.exclude?(q.id) } || []
+    questions.reject { |q| q.page.routed_to?(case_log, current_user) || q.derived? || address_questions.include?(q.id) } || []
   end
 
-  def enabled_page_questions(case_log, _current_user = nil)
+  def enabled_page_questions(case_log)
     questions - invalidated_page_questions(case_log)
   end
 

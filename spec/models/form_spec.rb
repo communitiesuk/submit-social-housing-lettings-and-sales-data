@@ -198,7 +198,7 @@ RSpec.describe Form, type: :model do
       let(:case_log) { FactoryBot.build(:case_log, :in_progress, startdate: Time.utc(2023, 2, 2, 10, 36, 49)) }
 
       it "does not count it's questions as invalidated" do
-        expect(form.enabled_page_questions(case_log, user).map(&:id).uniq).to include("tshortfall_known")
+        expect(form.enabled_page_questions(case_log).map(&:id).uniq).to include("tshortfall_known")
       end
 
       it "does not route to the page" do
