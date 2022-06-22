@@ -11,6 +11,8 @@ RSpec.describe Scheme, type: :model do
     describe "scopes" do
       let!(:scheme_1) { FactoryBot.create(:scheme) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }
+      let!(:location) { FactoryBot.create(:location, scheme: scheme_1) }
+      let!(:location_2) { FactoryBot.create(:location, scheme: scheme_2) }
 
       context "when searching by code" do
         it "returns case insensitive matching records" do
@@ -34,7 +36,25 @@ RSpec.describe Scheme, type: :model do
         end
       end
 
-      context "when searching by all searchable field" do
+      context "when searching by postcode" do
+        it "returns case insensitive matching records" do
+          expect(described_class.search_by_postcode(location.postcode.upcase).count).to eq(1)
+          expect(described_class.search_by_postcode(location.postcode.downcase).count).to eq(1)
+          expect(described_class.search_by_postcode(location.postcode.downcase).first.locations.first.postcode).to eq(location.postcode)
+          expect(described_class.search_by_postcode(location_2.postcode.upcase).count).to eq(1)
+          expect(described_class.search_by_postcode(location_2.postcode.downcase).count).to eq(1)
+          expect(described_class.search_by_postcode(location_2.postcode.downcase).first.locations.first.postcode).to eq(location_2.postcode)
+        end
+
+        it "returns case search results for postcodes without space" do
+          expect(described_class.search_by_postcode(location.postcode.delete(" ")).count).to eq(1)
+          expect(described_class.search_by_postcode(location.postcode.delete(" ")).first.locations.first.postcode).to eq(location.postcode)
+          expect(described_class.search_by_postcode(location_2.postcode.delete(" ")).count).to eq(1)
+          expect(described_class.search_by_postcode(location_2.postcode.delete(" ")).first.locations.first.postcode).to eq(location_2.postcode)
+        end
+      end
+
+      context "when searching by all searchable fields" do
         it "returns case insensitive matching records" do
           expect(described_class.search_by(scheme_1.code.upcase).count).to eq(1)
           expect(described_class.search_by(scheme_1.code.downcase).count).to eq(1)

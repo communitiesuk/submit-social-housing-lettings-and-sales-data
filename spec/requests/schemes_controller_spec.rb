@@ -140,6 +140,7 @@ RSpec.describe SchemesController, type: :request do
         let(:search_param) { "CODE321" }
 
         before do
+          FactoryBot.create(:location, scheme: searched_scheme)
           get "/schemes?search=#{search_param}"
         end
 

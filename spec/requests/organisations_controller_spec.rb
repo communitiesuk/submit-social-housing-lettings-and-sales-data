@@ -76,6 +76,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "CODE321" }
 
           before do
+            FactoryBot.create(:location, scheme: searched_scheme)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
@@ -144,6 +145,7 @@ RSpec.describe OrganisationsController, type: :request do
           let(:search_param) { "CODE321" }
 
           before do
+            FactoryBot.create(:location, scheme: searched_scheme)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
