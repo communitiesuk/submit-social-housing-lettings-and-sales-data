@@ -2,8 +2,8 @@ class Location < ApplicationRecord
   belongs_to :scheme
 
   WHEELCHAIR_ADAPTATIONS = {
-    no: 0,
-    yes: 1,
+    No: 0,
+    Yes: 1,
   }.freeze
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
