@@ -361,9 +361,9 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can work out if the question will be shown in check answers" do
-      expect(question.hidden_in_check_answers?(case_log)).to be(false)
+      expect(question.hidden_in_check_answers?(case_log, nil)).to be(false)
       case_log.layear = 0
-      expect(question.hidden_in_check_answers?(case_log)).to be(true)
+      expect(question.hidden_in_check_answers?(case_log, nil)).to be(true)
     end
   end
 end

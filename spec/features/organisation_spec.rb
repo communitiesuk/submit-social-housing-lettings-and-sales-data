@@ -107,7 +107,6 @@ RSpec.describe "User Features" do
       let(:number_of_case_logs) { CaseLog.count }
 
       before do
-        first_log.update!(startdate: Time.utc(2022, 6, 2, 10, 36, 49))
         visit("/organisations/#{org_id}/logs")
       end
 

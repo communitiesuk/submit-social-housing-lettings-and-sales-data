@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Form, type: :model do
+  let(:user) { FactoryBot.build(:user) }
   let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
   let(:form) { case_log.form }
   let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
@@ -11,7 +12,7 @@ RSpec.describe Form, type: :model do
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
-      expect(form.next_page(previous_page, case_log)).to eq("person_1_gender")
+      expect(form.next_page(previous_page, case_log, user)).to eq("person_1_gender")
     end
 
     context "when the current page is a value check page" do
@@ -23,12 +24,12 @@ RSpec.describe Form, type: :model do
 
       it "returns the previous page if answer is `No` and the page is routed to" do
         case_log.net_income_value_check = 1
-        expect(form.next_page(value_check_previous_page, case_log)).to eq("net_income")
+        expect(form.next_page(value_check_previous_page, case_log, user)).to eq("net_income")
       end
 
       it "returns the next page if answer is `Yes` answer and the page is routed to" do
         case_log.net_income_value_check = 0
-        expect(form.next_page(value_check_previous_page, case_log)).to eq("net_income_uc_proportion")
+        expect(form.next_page(value_check_previous_page, case_log, user)).to eq("net_income_uc_proportion")
       end
     end
   end
@@ -44,12 +45,12 @@ RSpec.describe Form, type: :model do
 
       it "returns the previous page if the page is routed to" do
         page_index = page_ids.index("conditional_question_no_second_page")
-        expect(form.previous_page(page_ids, page_index, case_log)).to eq("conditional_question_no_page")
+        expect(form.previous_page(page_ids, page_index, case_log, user)).to eq("conditional_question_no_page")
       end
 
       it "returns the page before the previous one if the previous page is not routed to" do
         page_index = page_ids.index("conditional_question_no_page")
-        expect(form.previous_page(page_ids, page_index, case_log)).to eq("conditional_question")
+        expect(form.previous_page(page_ids, page_index, case_log, user)).to eq("conditional_question")
       end
     end
   end
@@ -60,16 +61,16 @@ RSpec.describe Form, type: :model do
     let(:previous_conditional_page) { form.get_page("conditional_question") }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(form.next_page_redirect_path(previous_page, case_log)).to eq("case_log_net_income_uc_proportion_path")
+      expect(form.next_page_redirect_path(previous_page, case_log, user)).to eq("case_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do
-      expect(form.next_page_redirect_path(last_previous_page, case_log)).to eq("case_log_income_and_benefits_check_answers_path")
+      expect(form.next_page_redirect_path(last_previous_page, case_log, user)).to eq("case_log_income_and_benefits_check_answers_path")
     end
 
     it "returns a correct page path if there is conditional routing" do
       case_log["preg_occ"] = 2
-      expect(form.next_page_redirect_path(previous_conditional_page, case_log)).to eq("case_log_conditional_question_no_page_path")
+      expect(form.next_page_redirect_path(previous_conditional_page, case_log, user)).to eq("case_log_conditional_question_no_page_path")
     end
   end
 
@@ -92,6 +93,7 @@ RSpec.describe Form, type: :model do
       end
 
       def answer_property_information(case_log)
+        case_log.postcode_known = 1
         case_log.wchair = "No"
       end
 
@@ -192,7 +194,7 @@ RSpec.describe Form, type: :model do
       end
     end
 
-    context "when a page is marked as `derived` and `depends_on: false`" do
+    context "when a question is marked as `derived` and `depends_on: false`" do
       let(:case_log) { FactoryBot.build(:case_log, :in_progress, startdate: Time.utc(2023, 2, 2, 10, 36, 49)) }
 
       it "does not count it's questions as invalidated" do

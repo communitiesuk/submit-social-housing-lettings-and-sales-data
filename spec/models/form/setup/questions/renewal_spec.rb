@@ -37,4 +37,8 @@ RSpec.describe Form::Setup::Questions::Renewal, type: :model do
       "0" => { "value" => "No" },
     })
   end
+
+  it "is not marked as derived" do
+    expect(question.derived?).to be false
+  end
 end

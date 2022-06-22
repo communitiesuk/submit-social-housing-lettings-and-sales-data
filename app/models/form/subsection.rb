@@ -34,7 +34,7 @@ class Form::Subsection
 
     qs = applicable_questions(case_log)
     qs_optional_removed = qs.reject { |q| case_log.optional_fields.include?(q.id) }
-    return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? }
+    return :not_started if qs.all? { |question| case_log[question.id].blank? || question.read_only? || question.derived? }
     return :completed if qs_optional_removed.all? { |question| question.completed?(case_log) }
 
     :in_progress
@@ -48,27 +48,9 @@ class Form::Subsection
     %i[in_progress completed].include?(status(case_log))
   end
 
-  def applicable_questions_count(case_log)
-    applicable_questions(case_log).count
-  end
-
-  def answered_questions_count(case_log)
-    answered_questions(case_log).count
-  end
-
   def applicable_questions(case_log)
-    questions.select { |q| (displayed_to_user?(case_log, q) && !q.hidden_in_check_answers?(case_log)) || q.has_inferred_check_answers_value?(case_log) }
-  end
-
-  def answered_questions(case_log)
-    applicable_questions(case_log).select { |question| question.completed?(case_log) }
-  end
-
-  def unanswered_questions(case_log)
-    applicable_questions(case_log) - answered_questions(case_log)
-  end
-
-  def displayed_to_user?(case_log, question)
-    question.page.routed_to?(case_log) && question.enabled?(case_log)
+    questions.select do |q|
+      (q.displayed_to_user?(case_log) && !q.derived?) || q.has_inferred_check_answers_value?(case_log)
+    end
   end
 end

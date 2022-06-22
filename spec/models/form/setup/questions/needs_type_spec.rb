@@ -27,6 +27,10 @@ RSpec.describe Form::Setup::Questions::NeedsType, type: :model do
     expect(question.type).to eq("radio")
   end
 
+  it "is marked as derived" do
+    expect(question.derived?).to be true
+  end
+
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
       "1" => { "value" => "General needs" },

@@ -45,4 +45,8 @@ RSpec.describe Form::Setup::Questions::RentType, type: :model do
       "5" => { "value" => "Other intermediate rent product" },
     })
   end
+
+  it "is not marked as derived" do
+    expect(question.derived?).to be false
+  end
 end

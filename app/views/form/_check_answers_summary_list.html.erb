@@ -1,5 +1,5 @@
 <%= govuk_summary_list do |summary_list| %>
-  <% subsection.applicable_questions(@case_log).each do |question| %>
+  <% total_applicable_questions(subsection, @case_log, current_user).each do |question| %>
     <% summary_list.row do |row| %>
       <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
       <% row.value do %>

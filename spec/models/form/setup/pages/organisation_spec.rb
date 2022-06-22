@@ -33,33 +33,19 @@ RSpec.describe Form::Setup::Pages::Organisation, type: :model do
     expect(page.depends_on).to be nil
   end
 
-  it "has the correct derived" do
-    expect(page.derived).to be nil
-  end
-
   context "when the current user is a support user" do
     let(:support_user) { FactoryBot.build(:user, :support) }
 
-    before do
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(support_user)
-    end
-
     it "is shown" do
-      expect(page.routed_to?(case_log)).to be true
+      expect(page.routed_to?(case_log, support_user)).to be true
     end
   end
 
   context "when the current user is not a support user" do
     let(:user) { FactoryBot.build(:user) }
 
-    before do
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(user)
-    end
-
     it "is not shown" do
-      expect(page.routed_to?(case_log)).to be false
+      expect(page.routed_to?(case_log, user)).to be false
     end
   end
 end

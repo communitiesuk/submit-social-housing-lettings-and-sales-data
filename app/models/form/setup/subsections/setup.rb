@@ -19,4 +19,14 @@ class Form::Subsections::Setup < ::Form::Subsection
       Form::Setup::Pages::PropertyReference.new(nil, nil, self),
     ]
   end
+
+  def applicable_questions(case_log)
+    questions.select { |q| support_only_questions.include?(q.id) } + super
+  end
+
+private
+
+  def support_only_questions
+    %w[owning_organisation_id created_by_id].freeze
+  end
 end

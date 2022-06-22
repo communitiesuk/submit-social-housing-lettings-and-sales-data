@@ -15,7 +15,7 @@
     <% if subsection.id == "setup" && subsection.status(@case_log) == :completed %>
       <%= govuk_inset_text(text: "Changing these answers might remove answers you’ve already given in other sections.") %>
     <% end %>
-    <%= display_answered_questions_summary(subsection, @case_log) %>
+    <%= display_answered_questions_summary(subsection, @case_log, current_user) %>
 
     <%= render partial: "form/check_answers_summary_list", locals: {
       subsection:,

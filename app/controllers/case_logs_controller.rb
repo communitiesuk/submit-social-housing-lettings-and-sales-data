@@ -28,7 +28,6 @@ class CaseLogsController < ApplicationController
 
   def create
     case_log = CaseLog.new(case_log_params)
-    case_log.form.current_user = current_user
     respond_to do |format|
       format.html do
         case_log.save!
@@ -62,7 +61,6 @@ class CaseLogsController < ApplicationController
       format.html { edit }
       format.json do
         if @case_log
-          @case_log.form.current_user = current_user
           render json: @case_log, status: :ok
         else
           render_not_found_json("Log", params[:id])
@@ -74,7 +72,7 @@ class CaseLogsController < ApplicationController
   def edit
     @case_log = current_user.case_logs.find_by(id: params[:id])
     if @case_log
-      render :edit
+      render :edit, locals: { current_user: }
     else
       render_not_found
     end

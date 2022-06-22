@@ -26,4 +26,8 @@ RSpec.describe Form::Setup::Questions::TenancyStartDate, type: :model do
   it "has the correct type" do
     expect(question.type).to eq("date")
   end
+
+  it "is not marked as derived" do
+    expect(question.derived?).to be false
+  end
 end
