@@ -75,27 +75,6 @@ RSpec.describe Form::Subsection, type: :model do
     it "has question helpers for the number of applicable questions" do
       expected_questions = %w[tenancycode age1 sex1 ecstat1 hhmemb ecstat2 propcode]
       expect(subsection.applicable_questions(case_log).map(&:id)).to eq(expected_questions)
-      expect(subsection.applicable_questions_count(case_log)).to eq(7)
-    end
-
-    it "has question helpers for the number of answered questions" do
-      subsection_definition = section_definition["subsections"]["household_needs"]
-      subsection = described_class.new("household_needs", subsection_definition, section)
-      expected_questions = %w[armedforces illness accessibility_requirements prevloc condition_effects]
-      case_log.armedforces = 3
-      case_log.illness = 1
-      case_log.housingneeds_a = 1
-      case_log.previous_la_known = 1
-      case_log.is_previous_la_inferred = false
-      case_log.prevloc = "E06000014"
-      case_log.illness_type_1 = 1
-      expect(subsection.answered_questions(case_log).map(&:id)).to eq(expected_questions)
-      expect(subsection.answered_questions_count(case_log)).to eq(5)
-    end
-
-    it "has a question helpers for the unanswered questions" do
-      expected_questions = %w[sex1 ecstat1 hhmemb ecstat2 propcode]
-      expect(subsection.unanswered_questions(case_log).map(&:id)).to eq(expected_questions)
     end
   end
 

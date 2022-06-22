@@ -6,7 +6,6 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     @header = "Which organisation is the owning organisation for this log?"
     @hint_text = ""
     @type = "select"
-    @derived = true
     @page = page
   end
 
@@ -33,7 +32,11 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     answer_options[value]
   end
 
-  def hidden_in_check_answers
-    !form.current_user.support?
+  def hidden_in_check_answers?(_case_log, current_user)
+    !current_user.support?
+  end
+
+  def derived?
+    true
   end
 end

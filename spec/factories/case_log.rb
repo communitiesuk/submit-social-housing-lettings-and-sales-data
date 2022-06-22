@@ -76,6 +76,7 @@ FactoryBot.define do
       tcharge { 325 }
       layear { 2 }
       waityear { 1 }
+      postcode_known { 1 }
       postcode_full { Faker::Address.postcode }
       reasonpref { 1 }
       cbl { 1 }

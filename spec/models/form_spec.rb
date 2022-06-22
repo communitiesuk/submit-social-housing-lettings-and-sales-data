@@ -93,6 +93,7 @@ RSpec.describe Form, type: :model do
       end
 
       def answer_property_information(case_log)
+        case_log.postcode_known = 1
         case_log.wchair = "No"
       end
 

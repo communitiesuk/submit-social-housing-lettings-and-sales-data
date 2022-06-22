@@ -53,28 +53,16 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
   context "when the current user is support" do
     let(:support_user) { FactoryBot.build(:user, :support) }
 
-    before do
-      allow(page).to receive(:subsection).and_return(subsection)
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(support_user)
-    end
-
     it "is shown in check answers" do
-      expect(question.hidden_in_check_answers).to be false
+      expect(question.hidden_in_check_answers?(nil, support_user)).to be false
     end
   end
 
   context "when the current user is not support" do
     let(:user) { FactoryBot.build(:user) }
 
-    before do
-      allow(page).to receive(:subsection).and_return(subsection)
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(user)
-    end
-
     it "is not shown in check answers" do
-      expect(question.hidden_in_check_answers).to be true
+      expect(question.hidden_in_check_answers?(nil, user)).to be true
     end
   end
 

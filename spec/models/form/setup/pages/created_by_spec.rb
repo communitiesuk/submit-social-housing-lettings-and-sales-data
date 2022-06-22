@@ -36,11 +36,6 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
   context "when the current user is a support user" do
     let(:support_user) { FactoryBot.build(:user, :support) }
 
-    before do
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(support_user)
-    end
-
     it "is shown" do
       expect(page.routed_to?(case_log, support_user)).to be true
     end
@@ -48,11 +43,6 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
 
   context "when the current user is not a support user" do
     let(:user) { FactoryBot.build(:user) }
-
-    before do
-      allow(subsection).to receive(:form).and_return(form)
-      allow(form).to receive(:current_user).and_return(user)
-    end
 
     it "is not shown" do
       expect(page.routed_to?(case_log, user)).to be false
