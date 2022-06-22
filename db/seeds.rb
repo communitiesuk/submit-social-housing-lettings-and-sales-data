@@ -71,7 +71,6 @@ unless Rails.env.test?
 
   if Rails.env.development? && Scheme.count.zero?
     scheme1 = Scheme.create!(
-      code: "S878",
       service_name: "Beulahside Care",
       sensitive: 0,
       registered_under_care_act: 0,
@@ -86,7 +85,6 @@ unless Rails.env.test?
     )
 
     scheme2 = Scheme.create!(
-      code: "S312",
       service_name: "Abdullahview Point",
       sensitive: 0,
       registered_under_care_act: 1,
@@ -101,7 +99,6 @@ unless Rails.env.test?
     )
 
     Scheme.create!(
-      code: "7XYZ",
       service_name: "Caspermouth Center",
       sensitive: 1,
       registered_under_care_act: 1,

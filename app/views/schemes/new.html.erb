@@ -32,10 +32,6 @@
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
-        <% if @organisation_id %>
-          <% organisation = Organisation.find(@organisation_id) %>
-          <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
-        <% end %>
 
         <%= f.govuk_collection_select :organisation_id,
           answer_options,
@@ -43,8 +39,11 @@
           :name,
           label: { text: "Which organisation manages this scheme", size: "m" },
           hint: { text: "Enter organisation name" },
-          options: { disabled: [""], selected: selected_option(answer_options) },
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
+      <% end %>
+
+      <% if current_user.data_coordinator? %>
+        <%= f.hidden_field :organisation_id, value: current_user.organisation.id %>
       <% end %>
 
       <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>

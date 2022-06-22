@@ -40,10 +40,17 @@ class SchemesController < ApplicationController
 
   def primary_client_group
     @scheme = Scheme.find_by(id: params[:scheme_id])
+
     if params[:check_answers]
       @path = scheme_check_your_answers_path(scheme_id: @scheme.id)
     else
       @path = scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
+    end
+
+    if params[:scheme]
+      required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :secondary_client_group, :primary_client_group)
+      required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
+      @scheme.update(required_params)
     end
 
     render "schemes/primary_client_group"
@@ -81,6 +88,11 @@ class SchemesController < ApplicationController
 
   def details
     @scheme = Scheme.find_by(id: params[:scheme_id])
+    if params[:check_answers]
+      @path = scheme_check_your_answers_path(scheme_id: @scheme.id)
+    else
+      @path = scheme_primary_client_group_path(scheme_id: @scheme.id)
+    end
 
     render "schemes/details"
   end
@@ -106,8 +118,7 @@ class SchemesController < ApplicationController
   private
 
   def clean_params
-    code = "S#{SecureRandom.alphanumeric(5)}".upcase
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed).merge(code: code)
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed)
     required_params[:sensitive] = required_params[:sensitive].to_i
     required_params
   end

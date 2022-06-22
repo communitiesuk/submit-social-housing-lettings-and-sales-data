@@ -3,13 +3,13 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: "/schemes/#{@scheme.id}/secondary",
+    href: :back,
   ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Scheme details", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: scheme_check_your_answers_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: @path) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -26,13 +26,7 @@
         label: { text: "This scheme contains confidential information" } %>
 
       <% if current_user.support? %>
-        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
-        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-        <% answer_options = null_option + organisations %>
-        <% if @organisation_id %>
-          <% organisation = Organisation.find(@organisation_id) %>
-          <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
-        <% end %>
+        <% answer_options = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
 
         <%= f.govuk_collection_select :organisation_id,
           answer_options,
@@ -40,8 +34,12 @@
           :name,
           label: { text: "Which organisation manages this scheme", size: "m" },
           hint: { text: "Enter organisation name" },
-          options: { disabled: [""], selected: @scheme.organisation.name },
+          options: { required: true },
           "data-controller": %w[accessible-autocomplete conditional-filter] %>
+      <% end %>
+
+      <% if current_user.data_coordinator? %>
+        <%= f.hidden_field :organisation_id, value: current_user.organisation.id %>
       <% end %>
 
       <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>

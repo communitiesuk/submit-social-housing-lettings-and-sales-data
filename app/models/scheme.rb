@@ -1,4 +1,6 @@
 class Scheme < ApplicationRecord
+  before_create :create_code
+
   belongs_to :organisation
   has_many :locations
   has_many :case_logs
@@ -8,7 +10,7 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
-   SENSITIVE= {
+  SENSITIVE= {
     No: 0,
     Yes: 1,
   }.freeze
@@ -124,5 +126,11 @@ class Scheme < ApplicationRecord
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
     ]
+  end
+
+  private
+
+  def create_code
+    self.code =  Scheme.last.nil? ? "S1" : "S#{Scheme.last.code[1..-1].to_i + 1}"
   end
 end
