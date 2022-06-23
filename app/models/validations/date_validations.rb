@@ -40,7 +40,7 @@ module Validations::DateValidations
     end
 
     if record.scheme_id.present?
-      scheme_end_date = Scheme.find(record.scheme_id).end_date
+      scheme_end_date = record.scheme.end_date
       if scheme_end_date.present? && (record.startdate > scheme_end_date)
         record.errors.add :startdate, I18n.t("validations.setup.startdate.before_scheme_end_date")
       end
