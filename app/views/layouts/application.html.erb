@@ -74,7 +74,7 @@
       <%= content_for(:breadcrumbs) %>
       <%= content_for(:before_content) %>
 
-      <main class="govuk-main-wrapper" id="main-content" role="main">
+      <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
         <% if flash.notice && !flash.notice.include?("translation missing") %>
           <%= govuk_notification_banner(
             title_text: "Success",
