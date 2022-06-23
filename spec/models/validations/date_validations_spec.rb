@@ -33,19 +33,6 @@ RSpec.describe Validations::DateValidations do
       expect(record.errors["startdate"]).to be_empty
     end
 
-    it "validates that the tenancy start date is later than or 14 days before the current date" do
-      record.startdate = Time.zone.today - 15.days
-      setup_validator.validate_startdate(record)
-      expect(record.errors["startdate"])
-        .to include(match I18n.t("validations.setup.startdate.later_than_or_14_days_before"))
-    end
-
-    it "produces no error when the tenancy start date is later than or 14 days before the current date" do
-      record.startdate = Time.zone.today - 7.days
-      setup_validator.validate_startdate(record)
-      expect(record.errors["startdate"]).to be_empty
-    end
-
     it "validates that the tenancy start date is before the end date of the chosen scheme if it has an end date" do
       record.startdate = Time.zone.today - 3.days
       record.scheme = scheme
