@@ -249,12 +249,14 @@ RSpec.describe CaseLogsController, type: :request do
                                 managing_organisation: organisation)
             end
             let!(:case_log_2022) do
-              FactoryBot.create(:case_log, :completed,
-                                owning_organisation: organisation,
-                                mrcdate: Time.zone.local(2022, 2, 1),
-                                startdate: Time.zone.local(2022, 12, 1),
-                                tenancy: 6,
-                                managing_organisation: organisation)
+              case_log = FactoryBot.build(:case_log, :completed,
+                                          owning_organisation: organisation,
+                                          mrcdate: Time.zone.local(2022, 2, 1),
+                                          startdate: Time.zone.local(2022, 12, 1),
+                                          tenancy: 6,
+                                          managing_organisation: organisation)
+              case_log.save!(validate: false)
+              case_log
             end
 
             it "shows case logs for multiple selected years" do
@@ -279,23 +281,27 @@ RSpec.describe CaseLogsController, type: :request do
                                 created_by: user)
             end
             let!(:case_log_2022) do
-              FactoryBot.create(:case_log, :completed,
-                                owning_organisation: organisation,
-                                mrcdate: Time.zone.local(2022, 2, 1),
-                                startdate: Time.zone.local(2022, 12, 1),
-                                tenancy: 6,
-                                managing_organisation: organisation,
-                                created_by: user)
+              case_log = FactoryBot.build(:case_log, :completed,
+                                          owning_organisation: organisation,
+                                          mrcdate: Time.zone.local(2022, 2, 1),
+                                          startdate: Time.zone.local(2022, 12, 1),
+                                          tenancy: 6,
+                                          managing_organisation: organisation
+                                          created_by: user)
+              case_log.save!(validate: false)
+              case_log
             end
             let!(:case_log_2022_in_progress) do
-              FactoryBot.create(:case_log, :in_progress,
-                                owning_organisation: organisation,
-                                mrcdate: Time.zone.local(2022, 2, 1),
-                                startdate: Time.zone.local(2022, 12, 1),
-                                tenancy: 6,
-                                managing_organisation: organisation,
-                                tenancycode: nil,
-                                created_by: user)
+              case_log = FactoryBot.build(:case_log, :in_progress,
+                                          owning_organisation: organisation,
+                                          mrcdate: Time.zone.local(2022, 2, 1),
+                                          startdate: Time.zone.local(2022, 12, 1),
+                                          tenancy: 6,
+                                          managing_organisation: organisation,
+                                          tenancycode: nil
+                                          created_by: user)
+              case_log.save!(validate: false)
+              case_log
             end
 
             it "shows case logs for multiple selected statuses and years" do
