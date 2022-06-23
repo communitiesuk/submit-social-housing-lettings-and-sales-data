@@ -45,13 +45,6 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by_postcode(location_2.postcode.downcase).count).to eq(1)
           expect(described_class.search_by_postcode(location_2.postcode.downcase).first.locations.first.postcode).to eq(location_2.postcode)
         end
-
-        it "returns case search results for postcodes without space" do
-          expect(described_class.search_by_postcode(location.postcode.delete(" ")).count).to eq(1)
-          expect(described_class.search_by_postcode(location.postcode.delete(" ")).first.locations.first.postcode).to eq(location.postcode)
-          expect(described_class.search_by_postcode(location_2.postcode.delete(" ")).count).to eq(1)
-          expect(described_class.search_by_postcode(location_2.postcode.delete(" ")).first.locations.first.postcode).to eq(location_2.postcode)
-        end
       end
 
       context "when searching by all searchable fields" do

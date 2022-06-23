@@ -5,7 +5,7 @@ class Scheme < ApplicationRecord
 
   scope :search_by_code, ->(code) { where("code ILIKE ?", "%#{code}%") }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
-  scope :search_by_postcode, ->(postcode) { joins(:locations).where("REPLACE(locations.postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
+  scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
   SCHEME_TYPE = {
