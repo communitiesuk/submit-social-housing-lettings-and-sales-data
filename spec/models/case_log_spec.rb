@@ -1778,6 +1778,16 @@ RSpec.describe CaseLog do
         expect(case_log["waityear"]).to eq(2)
       end
     end
+
+    context "when a support user changes the owning organisation of the log" do
+      let(:case_log) { FactoryBot.create(:case_log, created_by: created_by_user) }
+      let(:organisation_2) { FactoryBot.create(:organisation) }
+
+      it "clears the created by user set" do
+        expect { case_log.update!(owning_organisation: organisation_2) }
+          .to change { case_log.reload.created_by }.from(created_by_user).to(nil)
+      end
+    end
   end
 
   describe "tshortfall_unknown?" do

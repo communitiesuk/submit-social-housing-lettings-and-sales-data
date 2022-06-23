@@ -606,8 +606,8 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
-            let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+            let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, created_by: user) }
             let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
@@ -699,7 +699,7 @@ RSpec.describe OrganisationsController, type: :request do
             context "when search and filter is present" do
               let(:matching_postcode) { log_to_search.postcode_full }
               let(:matching_status) { "in_progress" }
-              let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
+              let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
               it "shows only logs matching both search and filters" do
                 get "/organisations/#{organisation.id}/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}

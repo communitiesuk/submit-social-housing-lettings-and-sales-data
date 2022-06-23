@@ -511,9 +511,16 @@ private
     end
   end
 
+  def reset_created_by
+    return unless created_by && owning_organisation
+
+    self.created_by = nil if created_by.organisation != owning_organisation
+  end
+
   def reset_invalidated_dependent_fields!
     return unless form
 
+    reset_created_by
     reset_not_routed_questions
     reset_derived_questions
   end

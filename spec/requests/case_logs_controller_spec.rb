@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe CaseLogsController, type: :request do
-  let(:owning_organisation) { FactoryBot.create(:organisation) }
-  let(:managing_organisation) { owning_organisation }
   let(:user) { FactoryBot.create(:user) }
+  let(:owning_organisation) { user.organisation }
+  let(:managing_organisation) { owning_organisation }
   let(:api_username) { "test_user" }
   let(:api_password) { "test_password" }
   let(:basic_credentials) do
@@ -198,15 +198,18 @@ RSpec.describe CaseLogsController, type: :request do
         context "when filtering" do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
+            let(:user_2) { FactoryBot.create(:user, organisation: organisation_2) }
             let!(:in_progress_case_log) do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
-                                managing_organisation: organisation)
+                                managing_organisation: organisation,
+                                created_by: user)
             end
             let!(:completed_case_log) do
               FactoryBot.create(:case_log, :completed,
                                 owning_organisation: organisation_2,
-                                managing_organisation: organisation)
+                                managing_organisation: organisation,
+                                created_by: user_2)
             end
 
             it "shows case logs for multiple selected statuses" do
@@ -272,7 +275,8 @@ RSpec.describe CaseLogsController, type: :request do
               FactoryBot.create(:case_log, :in_progress,
                                 owning_organisation: organisation,
                                 startdate: Time.zone.local(2022, 3, 1),
-                                managing_organisation: organisation)
+                                managing_organisation: organisation,
+                                created_by: user)
             end
             let!(:case_log_2022) do
               FactoryBot.create(:case_log, :completed,
@@ -280,7 +284,8 @@ RSpec.describe CaseLogsController, type: :request do
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
                                 tenancy: 6,
-                                managing_organisation: organisation)
+                                managing_organisation: organisation,
+                                created_by: user)
             end
             let!(:case_log_2022_in_progress) do
               FactoryBot.create(:case_log, :in_progress,
@@ -289,7 +294,8 @@ RSpec.describe CaseLogsController, type: :request do
                                 startdate: Time.zone.local(2022, 12, 1),
                                 tenancy: 6,
                                 managing_organisation: organisation,
-                                tenancycode: nil)
+                                tenancycode: nil,
+                                created_by: user)
             end
 
             it "shows case logs for multiple selected statuses and years" do
@@ -321,8 +327,8 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "when using a search query" do
-          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation) }
-          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation) }
+          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, created_by: user) }
           let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
           it "has search results in the title" do
@@ -377,7 +383,7 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when there are more than 1 page of search results" do
             let(:postcode) { "XX11YY" }
-            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, created_by: user) }
             let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
@@ -414,7 +420,7 @@ RSpec.describe CaseLogsController, type: :request do
           context "when search and filter is present" do
             let(:matching_postcode) { log_to_search.postcode_full }
             let(:matching_status) { "in_progress" }
-            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode) }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
             it "shows only logs matching both search and filters" do
               get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
@@ -732,7 +738,8 @@ RSpec.describe CaseLogsController, type: :request do
         FactoryBot.create(:case_log,
                           :completed,
                           owning_organisation: organisation,
-                          managing_organisation: organisation)
+                          managing_organisation: organisation,
+                          created_by: user)
         get "/logs", headers:, params: {}
       end
 
@@ -768,8 +775,8 @@ RSpec.describe CaseLogsController, type: :request do
         let(:postcode) { "XX1 1TG" }
 
         before do
-          FactoryBot.create(:case_log, :in_progress, postcode_full: postcode, owning_organisation: organisation)
-          FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation)
+          FactoryBot.create(:case_log, :in_progress, postcode_full: postcode, owning_organisation: organisation, created_by: user)
+          FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation, created_by: user)
         end
 
         it "downloads logs matching both csv and filter logs" do

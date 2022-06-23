@@ -9,18 +9,19 @@ RSpec.describe Imports::CaseLogsImportService do
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
   let(:fixture_directory) { "spec/fixtures/softwire_imports/case_logs" }
+  let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
   end
 
   before do
-    # Owning and Managing organisations
-    FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP")
+    allow(Organisation).to receive(:find_by).and_return(nil)
+    allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id.to_i).and_return(organisation)
 
     # Created by users
-    FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa")
-    FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f")
+    FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
+    FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)

@@ -10,6 +10,7 @@ RSpec.describe "Task List" do
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:completed_case_log) do
@@ -18,6 +19,7 @@ RSpec.describe "Task List" do
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:empty_case_log) do
@@ -25,6 +27,7 @@ RSpec.describe "Task List" do
       :case_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
   let(:setup_completed_log) do
@@ -34,6 +37,7 @@ RSpec.describe "Task List" do
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       startdate: Time.zone.local(2021, 5, 1),
+      created_by: user,
     )
   end
   let(:id) { case_log.id }

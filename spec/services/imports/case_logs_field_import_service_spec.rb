@@ -14,17 +14,17 @@ RSpec.describe Imports::CaseLogsFieldImportService do
   let(:case_log_xml) { Nokogiri::XML(case_log_file) }
   let(:remote_folder) { "case_logs" }
   let(:old_user_id) { "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa" }
+  let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
   end
 
   before do
-    # Owning and Managing organisations
-    FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP")
+    allow(Organisation).to receive(:find_by).and_return(organisation)
 
     # Created by users
-    FactoryBot.create(:user, old_user_id:)
+    FactoryBot.create(:user, old_user_id:, organisation:)
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
