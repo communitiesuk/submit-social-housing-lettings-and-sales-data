@@ -62,7 +62,7 @@ en:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
       startdate:
-        later_than_or_14_days_before: "The start date of a supported housing tenancy must be 14 days before today or later"
+        later_than_14_days_after: "The tenancy start date must be not be later than 14 days from today's date"
         before_scheme_end_date: "The start date of a supported housing tenancy must be before the supported housing scheme end date"
 
     property:

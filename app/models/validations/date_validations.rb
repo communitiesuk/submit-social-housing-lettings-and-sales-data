@@ -35,6 +35,10 @@ module Validations::DateValidations
       record.errors.add :startdate, I18n.t("validations.date.outside_collection_window")
     end
 
+    if FeatureToggle.startdate_two_week_validation_enabled? && (record.startdate > Time.zone.today + 14)
+      record.errors.add :startdate, I18n.t("validations.setup.startdate.later_than_14_days_after")
+    end
+
     if record.scheme_id.present?
       scheme_end_date = Scheme.find(record.scheme_id).end_date
       if scheme_end_date.present? && (record.startdate > scheme_end_date)

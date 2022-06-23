@@ -4,4 +4,10 @@ class FeatureToggle
 
     false
   end
+
+  def self.startdate_two_week_validation_enabled?
+    return true if Rails.env.production?
+
+    false
+  end
 end
