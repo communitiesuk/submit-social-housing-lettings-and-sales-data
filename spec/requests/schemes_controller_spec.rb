@@ -393,7 +393,8 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has correct title" do
-        expect(page).to have_title("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
       end
 
       context "when paginating over 20 results" do
