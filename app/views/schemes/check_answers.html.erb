@@ -19,7 +19,7 @@
           <% row.value { details_html(attr) } %>
           <% row.action(
             text: "Change",
-            href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
+            href: schemes_path(scheme_id: @scheme.id, check_answers: true),
           ) %>
         <% end %>
       <% end %>
@@ -67,4 +67,4 @@
   <% end %>
 <% end %>
 
-<%= govuk_button_link_to "Create scheme", scheme_update_path, html: { method: :get } %>
+<%= govuk_button_link_to "Create scheme", schemes_path, html: { method: :get } %>

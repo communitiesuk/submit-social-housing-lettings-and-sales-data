@@ -4,7 +4,6 @@ class SchemesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index]
-  before_action :find_by_scheme_id, only: %i[edit]
   before_action :authenticate_scope!
 
   def index
@@ -31,108 +30,63 @@ class SchemesController < ApplicationController
   end
 
   def create
-    @scheme = Scheme.create!(clean_params)
-    @path = scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
-
+    @scheme = Scheme.create!(scheme_params)
     render "schemes/primary_client_group"
-  end
-
-  def primary_client_group
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-
-    @path = if params[:check_answers]
-              scheme_check_your_answers_path(scheme_id: @scheme.id)
-            else
-              scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
-            end
-
-    if params[:scheme]
-      required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :secondary_client_group, :primary_client_group)
-      required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
-      @scheme.update!(required_params)
-    end
-
-    render "schemes/primary_client_group"
-  end
-
-  def confirm_secondary_client_group
-
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    @path = params[:check_answers] ? scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true) : scheme_secondary_client_group_path(scheme_id: @scheme.id)
-    if params[:scheme]
-      required_params = params.require(:scheme).permit(:primary_client_group) if params
-      @scheme.update!(required_params) if required_params
-    end
-
-    render "schemes/confirm_secondary"
-  end
-
-  def secondary_client_group
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    @path = params[:check_answers] ? scheme_check_your_answers_path(scheme_id: @scheme.id) : scheme_support_path(scheme_id: @scheme.id)
-    if params[:scheme]
-      required_params = params.require(:scheme).permit(:has_other_client_group) if params
-      @scheme.update!(required_params) if required_params
-      if @scheme.has_other_client_group == "Yes"
-        render("schemes/secondary_client_group")
-      elsif params[:check_answers]
-        redirect_to(scheme_check_your_answers_path(sheme_id: @scheme.id))
-      else
-        redirect_to(scheme_support_path(scheme_id: @scheme.id))
-      end
-    else
-      render "schemes/secondary_client_group"
-    end
-  end
-
-  def support
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    if params[:scheme]
-      required_params = params.require(:scheme).permit(:secondary_client_group)
-      @scheme.update!(required_params) if required_params
-    end
-
-    render "schemes/support"
-  end
-
-  def check_answers
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    if params[:scheme]
-      required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :secondary_client_group, :primary_client_group)
-      required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
-      @scheme.update!(required_params)
-    end
-
-    render "schemes/check_answers"
   end
 
   def update
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    flash[:notice] = "#{@scheme.service_name} has been created."
+    if @scheme.update(scheme_params)
+      schemes_path = case params[:scheme][:page]
+                     when "primary-client-group"
+                       scheme_confirm_secondary_client_group_path(@scheme)
+                     when "confirm-secondary"
+                       @scheme.has_other_client_group == "Yes" ? scheme_secondary_client_group_path(@scheme) : scheme_support_path(@scheme)
+                     when "secondary-client-group"
+                       scheme_support_path(@scheme)
+                     when "support"
+                       scheme_check_answers_path(@scheme)
+                     end
 
-    redirect_to schemes_path
+      redirect_to schemes_path
+    else
+      render request.current_url, status: :unprocessable_entity
+    end
   end
 
   def edit; end
 
+  def primary_client_group
+    render "schemes/primary_client_group"
+  end
+
+  def confirm_secondary_client_group
+    render "schemes/confirm_secondary"
+  end
+
+  def secondary_client_group
+    render "schemes/secondary_client_group"
+  end
+
+  def support
+    render "schemes/support"
+  end
+
+  def check_answers
+    render "schemes/check_answers"
+  end
+
 private
 
-  def clean_params
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed)
-    required_params[:sensitive] = required_params[:sensitive].to_i
-    required_params
+  def scheme_params
+    params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :has_other_client_group)
   end
 
   def search_term
     params["search"]
   end
 
-  def find_by_scheme_id
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-  end
-
   def find_resource
-    @scheme = Scheme.find_by(id: params[:id])
+    @scheme = Scheme.find_by(id: params[:id]) || Scheme.find_by(id: params[:scheme_id])
   end
 
   def authenticate_scope!

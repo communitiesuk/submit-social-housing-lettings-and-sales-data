@@ -9,7 +9,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
 
-<%= form_for(@scheme, method: :patch, url: @path) do |f| %>
+<%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -23,6 +23,8 @@
         :id,
         :name,
         legend: nil %>
+
+        <%= f.hidden_field :page, value: "secondary-client-group" %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>

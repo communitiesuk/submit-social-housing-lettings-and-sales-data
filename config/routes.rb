@@ -36,17 +36,11 @@ Rails.application.routes.draw do
   end
 
   resources :schemes do
-    patch "primary-client-group", to: "schemes#primary_client_group"
     get "primary-client-group", to: "schemes#primary_client_group"
-    patch "confirm-secondary-client-group", to: "schemes#confirm_secondary_client_group"
     get "confirm-secondary-client-group", to: "schemes#confirm_secondary_client_group"
-    patch "secondary-client-group", to: "schemes#secondary_client_group"
     get "secondary-client-group", to: "schemes#secondary_client_group"
-    patch "support", to: "schemes#support"
     get "support", to: "schemes#support"
-    patch "check-your-answers", to: "schemes#check_answers"
-    get "check-your-answers", to: "schemes#check_answers"
-    get "update", to: "schemes#update"
+    get "check-answers", to: "schemes#check_answers"
 
     member do
       get "locations", to: "schemes#locations"

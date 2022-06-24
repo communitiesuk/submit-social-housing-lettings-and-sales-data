@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= form_for(@scheme, as: :scheme, method: :post, url: schemes_path(scheme: @scheme)) do |f| %>
+<%= form_for(@scheme, as: :scheme, method: :post) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -22,8 +22,7 @@
 
 
       <%= f.govuk_check_box :sensitive,
-        1,
-        0,
+        "Yes",
         checked: @scheme.sensitive?,
         multiple: false,
         label: { text: "This scheme contains confidential information" } %>
