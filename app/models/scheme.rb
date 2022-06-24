@@ -10,7 +10,7 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
-  SENSITIVE= {
+  SENSITIVE = {
     No: 0,
     Yes: 1,
   }.freeze
@@ -74,12 +74,18 @@ class Scheme < ApplicationRecord
   INTENDED_STAY = {
     "Medium stay": "M",
     "Permanent": "P",
-    "Short Stay": "S",
+    "Short stay": "S",
     "Very short stay": "V",
     "Missing": "X",
   }.freeze
 
+  HAS_OTHER_CLIENT_GROUP = {
+    "Yes": "yes",
+    "No": "no",
+  }.freeze
+
   enum intended_stay: INTENDED_STAY, _suffix: true
+  enum has_other_client_group: HAS_OTHER_CLIENT_GROUP, _suffix: true
 
   def check_details_attributes
     [
@@ -96,6 +102,12 @@ class Scheme < ApplicationRecord
   def check_primary_client_attributes
     [
       { name: "Primary client group", value: primary_client_group },
+    ]
+  end
+
+  def check_secondary_client_confirmation_attributes
+    [
+      { name: "Scheme provides for another client group", value: has_other_client_group },
     ]
   end
 
@@ -128,9 +140,9 @@ class Scheme < ApplicationRecord
     ]
   end
 
-  private
+private
 
   def create_code
-    self.code =  Scheme.last.nil? ? "S1" : "S#{Scheme.last.code[1..-1].to_i + 1}"
+    self.code = Scheme.last.nil? ? "S1" : "S#{Scheme.last.code[1..].to_i + 1}"
   end
 end

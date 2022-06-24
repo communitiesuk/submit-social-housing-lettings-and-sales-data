@@ -32,7 +32,7 @@ class SchemesController < ApplicationController
 
   def create
     @scheme = Scheme.new(clean_params)
-    @scheme.save
+    @scheme.save!
     @path = scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
 
     render "schemes/primary_client_group"
@@ -41,26 +41,27 @@ class SchemesController < ApplicationController
   def primary_client_group
     @scheme = Scheme.find_by(id: params[:scheme_id])
 
-    if params[:check_answers]
-      @path = scheme_check_your_answers_path(scheme_id: @scheme.id)
-    else
-      @path = scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
-    end
+    @path = if params[:check_answers]
+              scheme_check_your_answers_path(scheme_id: @scheme.id)
+            else
+              scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
+            end
 
     if params[:scheme]
       required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :secondary_client_group, :primary_client_group)
       required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
-      @scheme.update(required_params)
+      @scheme.update!(required_params)
     end
 
     render "schemes/primary_client_group"
   end
 
-  def confirm_secondary_group
+  def confirm_secondary_client_group
     @scheme = Scheme.find_by(id: params[:scheme_id])
+    @path = params[:check_answers] ? scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true) : scheme_secondary_client_group_path(scheme_id: @scheme.id)
     if params[:scheme]
       required_params = params.require(:scheme).permit(:primary_client_group) if params
-      @scheme.update(required_params) if required_params
+      @scheme.update!(required_params) if required_params
     end
 
     render "schemes/confirm_secondary"
@@ -69,8 +70,16 @@ class SchemesController < ApplicationController
   def secondary_client_group
     @scheme = Scheme.find_by(id: params[:scheme_id])
     @path = params[:check_answers] ? scheme_check_your_answers_path(scheme_id: @scheme.id) : scheme_support_path(scheme_id: @scheme.id)
-    if params[:confirmed]
-      params[:confirmed][:selection] == "Yes" ? render("schemes/secondary_client_group") : render("schemes/support")
+    if params[:scheme]
+      required_params = params.require(:scheme).permit(:has_other_client_group) if params
+      @scheme.update!(required_params) if required_params
+      if @scheme.has_other_client_group == "Yes"
+        render("schemes/secondary_client_group")
+      elsif params[:check_answers]
+        redirect_to(scheme_check_your_answers_path(sheme_id: @scheme.id))
+      else
+        redirect_to(scheme_support_path(scheme_id: @scheme.id))
+      end
     else
       render "schemes/secondary_client_group"
     end
@@ -80,7 +89,7 @@ class SchemesController < ApplicationController
     @scheme = Scheme.find_by(id: params[:scheme_id])
     if params[:scheme]
       required_params = params.require(:scheme).permit(:secondary_client_group)
-      @scheme.update(required_params) if required_params
+      @scheme.update!(required_params) if required_params
     end
 
     render "schemes/support"
@@ -88,11 +97,11 @@ class SchemesController < ApplicationController
 
   def details
     @scheme = Scheme.find_by(id: params[:scheme_id])
-    if params[:check_answers]
-      @path = scheme_check_your_answers_path(scheme_id: @scheme.id)
-    else
-      @path = scheme_primary_client_group_path(scheme_id: @scheme.id)
-    end
+    @path = if params[:check_answers]
+              scheme_check_your_answers_path(scheme_id: @scheme.id)
+            else
+              scheme_primary_client_group_path(scheme_id: @scheme.id)
+            end
 
     render "schemes/details"
   end
@@ -102,7 +111,7 @@ class SchemesController < ApplicationController
     if params[:scheme]
       required_params = params.require(:scheme).permit(:intended_stay, :support_type, :service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :secondary_client_group, :primary_client_group)
       required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
-      @scheme.update(required_params)
+      @scheme.update!(required_params)
     end
 
     render "schemes/check_answers"
@@ -110,12 +119,14 @@ class SchemesController < ApplicationController
 
   def update
     @scheme = Scheme.find_by(id: params[:scheme_id])
-    flash[:notice] = ("#{@scheme.service_name} has been created.")
+    flash[:notice] = "#{@scheme.service_name} has been created."
 
     redirect_to schemes_path
   end
 
-  private
+  def edit; end
+
+private
 
   def clean_params
     required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed)

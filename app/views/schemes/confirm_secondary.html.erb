@@ -9,17 +9,16 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Does this scheme provide for another client group?", sub: @scheme.service_name } %>
 
-<%= form_for(:confirmed, method: :patch, url: scheme_secondary_client_group_path(scheme_id: @scheme.id)) do |f| %>
+<%= form_for(@scheme, method: :patch, url: @path) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <% selection = ["Yes", "No"].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% selection = [OpenStruct.new(id: "Yes", name: "Yes"), OpenStruct.new(id: "No", name: "No")] %>
 
-      <%= f.govuk_collection_radio_buttons :selection,
+      <%= f.govuk_collection_radio_buttons :has_other_client_group,
         selection,
         :id,
         :name,
-        { checked: "Yes" },
         legend: nil
       %>
 

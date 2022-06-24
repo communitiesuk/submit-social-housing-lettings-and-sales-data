@@ -136,8 +136,8 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when searching" do
-        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321") }
-        let(:search_param) { "CODE321" }
+        let!(:searched_scheme) { FactoryBot.create(:scheme) }
+        let(:search_param) { searched_scheme.code }
 
         before do
           FactoryBot.create(:location, scheme: searched_scheme)

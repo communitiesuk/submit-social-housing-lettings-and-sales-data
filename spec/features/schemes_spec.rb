@@ -224,6 +224,7 @@ RSpec.describe "Schemes scheme Features" do
       end
 
       it "displays the link to create a new scheme" do
+        expect(page).to have_current_path("/schemes")
         expect(page).to have_link("Create a new supported housing scheme")
       end
 
@@ -235,6 +236,7 @@ RSpec.describe "Schemes scheme Features" do
         end
 
         it "lets me fill in the scheme details" do
+          expect(page).to have_current_path("/schemes/new")
           expect(page).to have_content "Scheme name"
           expect(page).to have_content "This scheme contains confidential information"
           expect(page).to have_content "Which organisation manages this scheme"
@@ -245,8 +247,8 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I fill in scheme details and I press save I see primary client group section" do
           before do
-            fill_in 'Scheme name', with: 'FooBar'
-            check 'This scheme contains confidential information'
+            fill_in "Scheme name", with: "FooBar"
+            check "This scheme contains confidential information"
             choose "Direct access hostel"
             choose "Yes – registered care home providing nursing care"
             fill_in "Total number of units", with: 1
@@ -261,6 +263,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when I select primary client group details" do
             before do
               choose "Homeless families with support needs"
+              click_button "Save and continue"
             end
 
             it "lets me confirm if I want to select secondary group details" do
@@ -270,19 +273,21 @@ RSpec.describe "Schemes scheme Features" do
             context "when I confirm the secondary group" do
               before do
                 choose "Yes"
+                click_button "Save and continue"
               end
 
-              it "lets me select secondary client group detail" do
-                expect(page).to have_content "Does this scheme provide for another client group?"
+              it "lets me select secondary client group" do
+                expect(page).to have_content "What is the other client group?"
               end
 
               context "when I select the secondary group" do
                 before do
                   choose "Homeless families with support needs"
+                  click_button "Save and continue"
                 end
 
-                it "lets me select secondary client group detail" do
-                  expect(page).to have_content "Does this scheme provide for another client group?"
+                it "lets me select level of support" do
+                  expect(page).to have_content "What support does this scheme provide?"
                 end
               end
             end
