@@ -37,14 +37,6 @@ RSpec.describe FormController, type: :request do
       managing_organisation: organisation,
     )
   end
-  let(:case_log_2022) do
-    FactoryBot.create(
-      :case_log,
-      startdate: Time.zone.local(2022, 12, 1),
-      owning_organisation: organisation,
-      managing_organisation: organisation,
-    )
-  end
   let(:headers) { { "Accept" => "text/html" } }
 
   context "when a user is not signed in" do
@@ -112,8 +104,23 @@ RSpec.describe FormController, type: :request do
         end
 
         context "when no other sections are enabled" do
+          let(:case_log_2022) do
+            FactoryBot.create(
+              :case_log,
+              startdate: Time.zone.local(2022, 12, 1),
+              owning_organisation: organisation,
+              managing_organisation: organisation,
+            )
+          end
+          let(:headers) { { "Accept" => "text/html" } }
+
           before do
+            Timecop.freeze(Time.zone.local(2022, 12, 1))
             get "/logs/#{case_log_2022.id}/setup/check-answers", headers: headers, params: {}
+          end
+
+          after do
+            Timecop.unfreeze
           end
 
           it "does not show Save and go to next incomplete section button" do

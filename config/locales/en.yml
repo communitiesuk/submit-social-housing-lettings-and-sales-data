@@ -61,6 +61,9 @@ en:
     setup:
       intermediate_rent_product_name:
         blank: "Enter name of other intermediate rent product"
+      startdate:
+        later_than_14_days_after: "The tenancy start date must not be later than 14 days from today’s date"
+        before_scheme_end_date: "The tenancy start date must be before the end date for this supported housing scheme"
 
     property:
       mrcdate:

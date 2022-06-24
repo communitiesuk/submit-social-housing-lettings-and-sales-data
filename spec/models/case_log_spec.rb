@@ -1881,7 +1881,12 @@ RSpec.describe CaseLog do
     let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
+      Timecop.freeze(Time.utc(2022, 6, 3))
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
+    end
+
+    after do
+      Timecop.unfreeze
     end
 
     context "when searching logs" do
@@ -1981,6 +1986,14 @@ RSpec.describe CaseLog do
     end
 
     context "when filtering by year" do
+      before do
+        Timecop.freeze(Time.utc(2021, 5, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
       it "allows filtering on a single year" do
         expect(described_class.filter_by_years(%w[2021]).count).to eq(2)
       end
@@ -1994,8 +2007,10 @@ RSpec.describe CaseLog do
       end
 
       it "filters based on date boundaries correctly" do
-        case_log_1.update!(startdate: Time.zone.local(2022, 4, 1))
-        case_log_2.update!(startdate: Time.zone.local(2022, 3, 31))
+        case_log_1.startdate = Time.zone.local(2022, 4, 1)
+        case_log_1.save!(validate: false)
+        case_log_2.startdate = Time.zone.local(2022, 3, 31)
+        case_log_2.save!(validate: false)
 
         expect(described_class.filter_by_years(%w[2021]).count).to eq(1)
         expect(described_class.filter_by_years(%w[2022]).count).to eq(2)

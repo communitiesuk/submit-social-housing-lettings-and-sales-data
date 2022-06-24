@@ -5,6 +5,8 @@ RSpec.describe Validations::DateValidations do
 
   let(:validator_class) { Class.new { include Validations::DateValidations } }
   let(:record) { FactoryBot.create(:case_log) }
+  let(:scheme) { FactoryBot.create(:scheme, end_date: Time.zone.today - 5.days) }
+  let(:scheme_no_end_date) { FactoryBot.create(:scheme, end_date: nil) }
 
   describe "tenancy start date" do
     it "cannot be before the first collection window start date" do
@@ -27,6 +29,41 @@ RSpec.describe Validations::DateValidations do
 
     it "does not raise an error when valid" do
       record.startdate = Time.zone.local(2022, 1, 1)
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"]).to be_empty
+    end
+
+    it "validates that the tenancy start date is before the end date of the chosen scheme if it has an end date" do
+      record.startdate = Time.zone.today - 3.days
+      record.scheme = scheme
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.before_scheme_end_date"))
+    end
+
+    it "produces no error when the tenancy start date is before the end date of the chosen scheme if it has an end date" do
+      record.startdate = Time.zone.today - 30.days
+      record.scheme = scheme
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"]).to be_empty
+    end
+
+    it "produces no startdate error for scheme end dates when the chosen scheme does not have an end date" do
+      record.startdate = Time.zone.today
+      record.scheme = scheme_no_end_date
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"]).to be_empty
+    end
+
+    it "validates that the tenancy start date is not later than 14 days from the current date" do
+      record.startdate = Time.zone.today + 15.days
+      date_validator.validate_startdate(record)
+      expect(record.errors["startdate"])
+        .to include(match I18n.t("validations.setup.startdate.later_than_14_days_after"))
+    end
+
+    it "produces no error when tenancy start date is not later than 14 days from the current date" do
+      record.startdate = Time.zone.today + 7.days
       date_validator.validate_startdate(record)
       expect(record.errors["startdate"]).to be_empty
     end
