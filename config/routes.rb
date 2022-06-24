@@ -44,7 +44,6 @@ Rails.application.routes.draw do
     get "secondary-client-group", to: "schemes#secondary_client_group"
     patch "support", to: "schemes#support"
     get "support", to: "schemes#support"
-    get "details", to: "schemes#details"
     patch "check-your-answers", to: "schemes#check_answers"
     get "check-your-answers", to: "schemes#check_answers"
     get "update", to: "schemes#update"

@@ -31,8 +31,7 @@ class SchemesController < ApplicationController
   end
 
   def create
-    @scheme = Scheme.new(clean_params)
-    @scheme.save!
+    @scheme = Scheme.create!(clean_params)
     @path = scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id)
 
     render "schemes/primary_client_group"
@@ -57,6 +56,7 @@ class SchemesController < ApplicationController
   end
 
   def confirm_secondary_client_group
+
     @scheme = Scheme.find_by(id: params[:scheme_id])
     @path = params[:check_answers] ? scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true) : scheme_secondary_client_group_path(scheme_id: @scheme.id)
     if params[:scheme]
@@ -93,17 +93,6 @@ class SchemesController < ApplicationController
     end
 
     render "schemes/support"
-  end
-
-  def details
-    @scheme = Scheme.find_by(id: params[:scheme_id])
-    @path = if params[:check_answers]
-              scheme_check_your_answers_path(scheme_id: @scheme.id)
-            else
-              scheme_primary_client_group_path(scheme_id: @scheme.id)
-            end
-
-    render "schemes/details"
   end
 
   def check_answers
