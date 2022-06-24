@@ -1881,7 +1881,12 @@ RSpec.describe CaseLog do
     let!(:case_log_2) { FactoryBot.create(:case_log, :completed, startdate: Time.utc(2021, 5, 3), created_by: created_by_user) }
 
     before do
+      Timecop.freeze(Time.utc(2022, 6, 3))
       FactoryBot.create(:case_log, startdate: Time.utc(2022, 6, 3))
+    end
+
+    after do
+      Timecop.unfreeze
     end
 
     context "when searching logs" do
