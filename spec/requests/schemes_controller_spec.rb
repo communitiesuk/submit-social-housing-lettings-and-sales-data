@@ -350,8 +350,9 @@ RSpec.describe SchemesController, type: :request do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
-          it "has correct page 1 of 2 title" do
-            expect(page).to have_title("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          it "has correct page 2 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
           end
 
           it "has pagination links" do
@@ -410,7 +411,8 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expect(page).to have_title("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
           end
 
           it "has pagination links" do
