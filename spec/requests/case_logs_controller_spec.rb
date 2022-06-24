@@ -286,7 +286,7 @@ RSpec.describe CaseLogsController, type: :request do
                                           mrcdate: Time.zone.local(2022, 2, 1),
                                           startdate: Time.zone.local(2022, 12, 1),
                                           tenancy: 6,
-                                          managing_organisation: organisation
+                                          managing_organisation: organisation,
                                           created_by: user)
               case_log.save!(validate: false)
               case_log
@@ -298,7 +298,7 @@ RSpec.describe CaseLogsController, type: :request do
                                           startdate: Time.zone.local(2022, 12, 1),
                                           tenancy: 6,
                                           managing_organisation: organisation,
-                                          tenancycode: nil
+                                          tenancycode: nil,
                                           created_by: user)
               case_log.save!(validate: false)
               case_log
