@@ -39,11 +39,17 @@
       <% end %>
 
       <%= f.hidden_field :page, value: @page.id %>
-      <% next_page = @case_log.form.next_page(@page, @case_log, current_user) %>
-      <% if !@page.id.include?("value_check") %>
-        <%= f.govuk_submit "Save and continue" %>
-          <%= govuk_link_to "Skip for now", "/logs/#{@case_log.id}/#{next_page.dasherize}", secondary: true %>
+
+      <div class="govuk-button-group">
+        <% if !@page.id.include?("value_check") %>
+          <%= f.govuk_submit "Save and continue" %>
+          <% if request.query_parameters["referrer"] == "check_answers" %>
+            <%= govuk_link_to "Cancel", "/logs/#{@case_log.id}/setup/check-answers" %>
+          <% else %>
+            <%= govuk_link_to "Skip for now", send(@case_log.form.next_page_redirect_path(@page, @case_log, current_user), @case_log) %>
+          <% end %>
         <% end %>
+      </div>
     </div>
   </div>
 <% end %>
