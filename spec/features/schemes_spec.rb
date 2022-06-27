@@ -365,13 +365,13 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   context "when changing answers" do
+                    it "displays change links" do
+                      assert_selector "a", text: "Change", count: 12
+                    end
+
                     context "changing details" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-                      end
-
-                      it "displays change links" do
-                        assert_selector "a", text: "Change", count: 12
                       end
 
                       it "allows changing details questions" do
@@ -400,8 +400,11 @@ RSpec.describe "Schemes scheme Features" do
                     end
 
                     context "changing primary client group" do
-                      it "allows changing primary-client-group question" do
+                      before do
                         click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+                      end
+
+                      it "allows changing primary-client-group question" do
                         expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
 
                         choose "Older people with support needs"
@@ -423,6 +426,55 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
+                    context "changing confirm secondary group answer" do
+                      before do
+                        click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+                      end
+
+                      it "allows changing confirm-secondary-client-group question to yes" do
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                        choose "Yes"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+                        choose "People at risk of domestic violence"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                        expect(page).to have_content "People at risk of domestic violence"
+                      end
+
+                      context "when I press the back button" do
+                        before do
+                          click_link "Back"
+                        end
+
+                        it "lets me select the support answers" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).to have_content "Check your changes before updating this scheme"
+                        end
+                      end
+
+                    end
+
+                    context "allows changing confirm-secondary-client-group question to no" do
+                      before do
+                        click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+                      end
+
+                      it "allows changing confirm-secondary-client-group question to no" do
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                        choose "No"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                        expect(page).to have_content "None"
+                      end
+                    end
+
                     it "allows changing secondary-client-group question" do
                       click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
                       expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
@@ -432,33 +484,6 @@ RSpec.describe "Schemes scheme Features" do
 
                       expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
                       expect(page).to have_content "People at risk of domestic violence"
-                    end
-
-                    it "allows changing confirm-secondary-client-group question to yes" do
-                      click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-                      choose "Yes"
-                      click_button "Save and continue"
-
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-
-                      choose "People at risk of domestic violence"
-                      click_button "Save and continue"
-
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                      expect(page).to have_content "People at risk of domestic violence"
-                    end
-
-                    it "allows changing confirm-secondary-client-group question to no" do
-                      click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-                      choose "No"
-                      click_button "Save and continue"
-
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                      expect(page).to have_content "None"
                     end
 
                     it "allows changing support questions" do
