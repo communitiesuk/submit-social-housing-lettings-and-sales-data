@@ -500,19 +500,35 @@ RSpec.describe "Schemes scheme Features" do
                           expect(page).to have_content "Check your changes before updating this scheme"
                         end
                       end
-
                     end
-                    it "allows changing support questions" do
-                      click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
 
-                      choose "Resettlement support"
-                      choose "Medium stay"
-                      click_button "Save and continue"
+                    context "changing support questions" do
+                      before do
+                        click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
+                      end
 
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                      expect(page).to have_content "Resettlement support"
-                      expect(page).to have_content "Medium stay"
+                      it "allows changing support questions" do
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
+
+                        choose "Resettlement support"
+                        choose "Medium stay"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                        expect(page).to have_content "Resettlement support"
+                        expect(page).to have_content "Medium stay"
+                      end
+
+                      context "when I press the back button" do
+                        before do
+                          click_link "Back"
+                        end
+
+                        it "lets me select the support answers" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).to have_content "Check your changes before updating this scheme"
+                        end
+                      end
                     end
                   end
                 end

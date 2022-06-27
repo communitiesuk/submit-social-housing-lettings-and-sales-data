@@ -1,12 +1,5 @@
 <% content_for :title, "Check your answers before creating this scheme" %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link(
-    text: "Back",
-    href: "/schemes/#{@scheme.id}/support",
-  ) %>
-<% end %>
-
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before updating this scheme", sub: @scheme.service_name } %>
 
 <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
