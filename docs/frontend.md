@@ -29,3 +29,21 @@ Stylesheets are written using [Sass](https://sass-lang.com) (and the SCSS syntax
 Separate stylesheets are used for each component, with filenames that match the component’s namespace.
 
 Like the components provided by the Design System, components are progressively enhanced. We use [Stimulus](https://stimulus.hotwired.dev) to add any client-side JavaScript enhancements.
+
+### Stimulus
+
+For adding custom javascript to the application we use [Stimulus](https://stimulus.hotwired.dev/).
+
+The general pattern is:
+
+- Register a controller in `/app/frontend/controllers/index.js`- be sure to use kebab case
+- Create that controller in `app/frontend/controllers/` - be sure to use underscore case
+- Attach the controller to the html element that should trigger it's functionality
+
+### Asset bundling and compilation
+
+- We use [Webpack](https://webpack.js.org/) via [jsbundling-rails](https://github.com/rails/jsbundling-rails) to bundle js, css and images. The configuration can be found in `webpack.config.js`.
+- We use [Propshaft](https://github.com/rails/propshaft) as our asset pipeline to serve the assets bundled/compiled by webpack
+- We use [Babel](https://babeljs.io/) to transpile js down to ES5 for Internet Explorer compatibility. The configuration can be found in `babel.config.js`
+- We use [browserslist](https://github.com/browserslist/browserslist) to specifiy the browsers we want to transpile for. The configuration can be found in `package.json`
+- We include a number of polyfills to support Internet Explorer. These can be found in `app/frontend/application.js`
