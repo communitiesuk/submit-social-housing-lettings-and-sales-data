@@ -26,7 +26,6 @@ RSpec.describe "Form Saving Data" do
       tenancycode: { type: "text", answer: "BZ737", path: "tenant-code-test" },
       age1: { type: "numeric", answer: 25, path: "person_1_age" },
       sex1: { type: "radio", answer: { "F" => "Female" }, path: "person_1_gender" },
-      hhmemb: { type: "numeric", answer: 3, path: "household_number_of_members" },
     }
   end
 

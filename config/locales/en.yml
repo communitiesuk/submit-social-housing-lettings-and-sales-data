@@ -51,6 +51,7 @@ en:
     organisation:
       name_missing: "Enter the organisation’s name"
       provider_type_missing: "Select the organisation’s type"
+    not_answered: "You must answer %{question}"
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
     other_field_not_required: "%{other_field_label} must not be provided if %{main_field_label} was not other"
