@@ -30,7 +30,7 @@ As a result it's not modelled as part of the config but rather as code. It still
 ### Features the Form Config supports
 
 - Defining sections, subsections, pages and questions that fit the GovUK tasklist pattern
-- Text, Numeric, Radio, Select and Checkbox question types
+- Text, Numeric, Date, Radio, Select and Checkbox question types
 - Conditional questions (`conditional_for`) - Radio and Checkbox questions can support "conditional" text or numeric questions that show/hide on the same page when the triggering option is selected
 - Routing (`depends_on`) - all pages can specify conditions (attributes of the case log) that determine whether or not they're shown to the user
   - Methods can be chained (i.e. you can have conditions in the form `{ owning_organisation.provider_type: "local_authority"`) which will call `case_log.owning_organisation.provider_type` and compare the result to the provided value.
@@ -38,7 +38,7 @@ As a result it's not modelled as part of the config but rather as code. It still
 - By default questions on pages that are not routed to are assumed to be invalid and are cleared. This can be prevented by setting `derived: true` on a question.
 - Questions can be optionally hidden from the check answers page of each section by setting `hidden_in_check_answers: true`. This can also take a condition.
 - Questions can be set as being inferred from other answers. This is similar to derived with the difference being that derived questions can be derived from anything not just other form question answers, and inferred answers are cleared when the answers they depend on change, whereas derived questions aren't.
-- Soft validation interruption pages can be included 
+- Soft validation interruption pages can be included
 - For complex html guidance partials can be referenced
 
 ### JSON Config
