@@ -30,6 +30,8 @@ As a result it's not modelled as part of the config but rather as code. It still
 ### Features the Form Config supports
 
 - Defining sections, subsections, pages and questions that fit the GovUK tasklist pattern
+- Auto-generated routes - urls are automatically created from dasherized page names
+- Data persistence requires a database field to exist which matches the name/id for each question (and answer option for checkbox questions)
 - Text, Numeric, Date, Radio, Select and Checkbox question types
 - Conditional questions (`conditional_for`) - Radio and Checkbox questions can support "conditional" text or numeric questions that show/hide on the same page when the triggering option is selected
 - Routing (`depends_on`) - all pages can specify conditions (attributes of the case log) that determine whether or not they're shown to the user
