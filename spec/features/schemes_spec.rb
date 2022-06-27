@@ -331,6 +331,17 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content "What support does this scheme provide?"
                 end
 
+                context "when I press the back button" do
+                  before do
+                    click_link "Back"
+                  end
+
+                  it "lets me select the secondary group" do
+                    expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
+                    expect(page).to have_content "What is the other client group?"
+                  end
+                end
+
                 context "when I select the support answers" do
                   before do
                     choose "Floating support"
