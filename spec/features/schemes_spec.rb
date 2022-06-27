@@ -220,6 +220,7 @@ RSpec.describe "Schemes scheme Features" do
 
     context "when creating a new scheme" do
       before do
+        Scheme.destroy_all
         click_link "Schemes", href: "/schemes"
       end
 
@@ -289,97 +290,105 @@ RSpec.describe "Schemes scheme Features" do
                 it "lets me select level of support" do
                   expect(page).to have_content "What support does this scheme provide?"
                 end
+
+                context "when I select the support answers" do
+                  before do
+                    choose "Floating support"
+                    choose "Very short stay"
+                    click_button "Save and continue"
+                  end
+
+                  it "lets me check my answers" do
+                    expect(page).to have_content "Check your changes before updating this scheme"
+                  end
+
+                  context "when changing answers" do
+                    let!(:scheme) { Scheme.first }
+
+                    it "displays change links" do
+                      assert_selector "a", text: "Change", count: 12
+                    end
+
+                    it "allows changing details questions" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+
+                      fill_in "Scheme name", with: "Example"
+                      choose "Direct access hostel"
+                      choose "Yes – registered care home providing nursing care"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "Example"
+                      expect(page).to have_content "Yes – registered care home providing nursing care"
+                    end
+
+                    it "allows changing primary-client-group question" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+
+                      choose "Older people with support needs"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "Older people with support needs"
+                    end
+
+                    it "allows changing secondary-client-group question" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+                      choose "People at risk of domestic violence"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "People at risk of domestic violence"
+                    end
+
+                    it "allows changing confirm-secondary-client-group question to yes" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                      choose "Yes"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+                      choose "People at risk of domestic violence"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "People at risk of domestic violence"
+                    end
+
+                    it "allows changing confirm-secondary-client-group question to no" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                      choose "No"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "None"
+                    end
+
+                    it "allows changing support questions" do
+                      click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
+
+                      choose "Resettlement support"
+                      choose "Medium stay"
+                      click_button "Save and continue"
+
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                      expect(page).to have_content "Resettlement support"
+                      expect(page).to have_content "Medium stay"
+                    end
+                  end
+                end
               end
             end
           end
-        end
-      end
-
-      context "when changing answers" do
-        let!(:scheme) { FactoryBot.create(:scheme) }
-
-        before do
-          visit "/schemes/#{scheme.id}/check-answers"
-        end
-
-        it "displays change links" do
-          assert_selector "a", text: "Change", count: 12
-        end
-
-        it "allows changing details questions" do
-          click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-          expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
-
-          fill_in "Scheme name", with: "Example"
-          choose "Direct access hostel"
-          choose "Yes – registered care home providing nursing care"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "Example"
-          expect(page).to have_content "Yes – registered care home providing nursing care"
-        end
-
-        it "allows changing primary-client-group question" do
-          click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
-          expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
-
-          choose "Older people with support needs"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "Older people with support needs"
-        end
-
-        it "allows changing secondary-client-group question" do
-          click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-
-          choose "People at risk of domestic violence"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "People at risk of domestic violence"
-        end
-
-        it "allows changing confirm-secondary-client-group question to yes" do
-          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-          choose "Yes"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-
-          choose "People at risk of domestic violence"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "People at risk of domestic violence"
-        end
-
-        it "allows changing confirm-secondary-client-group question to no" do
-          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-          choose "No"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "None"
-        end
-
-        it "allows changing support question to no" do
-          click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
-          expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
-
-          choose "Resettlement support"
-          choose "Medium stay"
-          click_button "Save and continue"
-
-          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-          expect(page).to have_content "Resettlement support"
-          expect(page).to have_content "Medium stay"
         end
       end
     end
