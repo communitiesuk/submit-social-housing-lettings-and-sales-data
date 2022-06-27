@@ -353,6 +353,17 @@ RSpec.describe "Schemes scheme Features" do
                     expect(page).to have_content "Check your changes before updating this scheme"
                   end
 
+                  context "when I press the back button" do
+                    before do
+                      click_link "Back"
+                    end
+
+                    it "lets me select the support answers" do
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/support")
+                      expect(page).to have_content "What support does this scheme provide?"
+                    end
+                  end
+
                   context "when changing answers" do
                     it "displays change links" do
                       assert_selector "a", text: "Change", count: 12
