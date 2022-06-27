@@ -36,18 +36,29 @@ class SchemesController < ApplicationController
 
   def update
     if @scheme.update(scheme_params)
-      schemes_path = case params[:scheme][:page]
-                     when "primary-client-group"
-                       scheme_confirm_secondary_client_group_path(@scheme)
-                     when "confirm-secondary"
-                       @scheme.has_other_client_group == "Yes" ? scheme_secondary_client_group_path(@scheme) : scheme_support_path(@scheme)
-                     when "secondary-client-group"
-                       scheme_support_path(@scheme)
-                     when "support"
-                       scheme_check_answers_path(@scheme)
-                     end
+      if params[:scheme][:check_answers] == "true"
+        if params[:scheme][:page] == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+          redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
+        else
+          if @scheme.has_other_client_group == "No"
+            @scheme.update!(secondary_client_group: nil)
+          end
+          redirect_to scheme_check_answers_path(@scheme)
+        end
+      else
+        schemes_path = case params[:scheme][:page]
+                       when "primary-client-group"
+                         scheme_confirm_secondary_client_group_path(@scheme)
+                       when "confirm-secondary"
+                         @scheme.has_other_client_group == "Yes" ? scheme_secondary_client_group_path(@scheme) : scheme_support_path(@scheme)
+                       when "secondary-client-group"
+                         scheme_support_path(@scheme)
+                       when "support"
+                         scheme_check_answers_path(@scheme)
+                       end
 
-      redirect_to schemes_path
+        redirect_to schemes_path
+      end
     else
       render request.current_url, status: :unprocessable_entity
     end
@@ -78,7 +89,7 @@ class SchemesController < ApplicationController
 private
 
   def scheme_params
-    params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :has_other_client_group)
+    params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :has_other_client_group, :primary_client_group, :secondary_client_group)
   end
 
   def search_term

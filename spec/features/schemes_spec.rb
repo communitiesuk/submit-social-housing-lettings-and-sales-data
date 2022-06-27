@@ -294,6 +294,70 @@ RSpec.describe "Schemes scheme Features" do
           end
         end
       end
+
+      context "when changing answers" do
+        let!(:scheme) { FactoryBot.create(:scheme) }
+
+        before do
+          visit "/schemes/#{scheme.id}/check-answers"
+        end
+
+        it "displays change links" do
+          assert_selector "a", text: "Change", count: 12
+        end
+
+        it "allows changing details questions" do
+        end
+
+        it "allows changing primary-client-group question" do
+          click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+          expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+
+          choose "Older people with support needs"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "Older people with support needs"
+        end
+
+        it "allows changing secondary-client-group question" do
+          click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+          choose "People at risk of domestic violence"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "People at risk of domestic violence"
+        end
+
+        it "allows changing confirm-secondary-client-group question to yes" do
+          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+          choose "Yes"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+          choose "People at risk of domestic violence"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "People at risk of domestic violence"
+        end
+
+        it "allows changing confirm-secondary-client-group question to no" do
+          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+          choose "No"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "None"
+        end
+      end
     end
   end
 end

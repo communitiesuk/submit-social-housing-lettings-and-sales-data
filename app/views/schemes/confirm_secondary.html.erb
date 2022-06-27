@@ -23,7 +23,10 @@
       %>
 
       <%= f.hidden_field :page, value: "confirm-secondary" %>
-
+      <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
+    
       <%= f.govuk_submit "Save and continue" %>
     </div>
   </div>
