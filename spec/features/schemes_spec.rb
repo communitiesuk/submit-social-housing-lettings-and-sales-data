@@ -365,22 +365,38 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   context "when changing answers" do
-                    it "displays change links" do
-                      assert_selector "a", text: "Change", count: 12
-                    end
+                    context "changing details" do
+                      before do
+                        click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+                      end
 
-                    it "allows changing details questions" do
-                      click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+                      it "displays change links" do
+                        assert_selector "a", text: "Change", count: 12
+                      end
 
-                      fill_in "Scheme name", with: "Example"
-                      choose "Direct access hostel"
-                      choose "Yes – registered care home providing nursing care"
-                      click_button "Save and continue"
+                      it "allows changing details questions" do
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
 
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                      expect(page).to have_content "Example"
-                      expect(page).to have_content "Yes – registered care home providing nursing care"
+                        fill_in "Scheme name", with: "Example"
+                        choose "Direct access hostel"
+                        choose "Yes – registered care home providing nursing care"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                        expect(page).to have_content "Example"
+                        expect(page).to have_content "Yes – registered care home providing nursing care"
+                      end
+
+                      context "when I press the back button" do
+                        before do
+                          click_link "Back"
+                        end
+
+                        it "lets me select the support answers" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).to have_content "Check your changes before updating this scheme"
+                        end
+                      end
                     end
 
                     it "allows changing primary-client-group question" do
