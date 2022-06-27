@@ -475,17 +475,33 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    it "allows changing secondary-client-group question" do
-                      click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+                    context "changing secondary-client-group question" do
+                      before do
+                        click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+                      end
 
-                      choose "People at risk of domestic violence"
-                      click_button "Save and continue"
+                      it "allows changing secondary-client-group question" do
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
 
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                      expect(page).to have_content "People at risk of domestic violence"
+                        choose "People at risk of domestic violence"
+                        click_button "Save and continue"
+
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                        expect(page).to have_content "People at risk of domestic violence"
+                      end
+
+                      context "when I press the back button" do
+                        before do
+                          click_link "Back"
+                        end
+
+                        it "lets me select the support answers" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).to have_content "Check your changes before updating this scheme"
+                        end
+                      end
+
                     end
-
                     it "allows changing support questions" do
                       click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
                       expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
