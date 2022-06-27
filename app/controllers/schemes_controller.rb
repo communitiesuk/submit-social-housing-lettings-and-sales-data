@@ -55,6 +55,8 @@ class SchemesController < ApplicationController
                          scheme_support_path(@scheme)
                        when "support"
                          scheme_check_answers_path(@scheme)
+                       when "details"
+                        scheme_primary_client_group_path(@scheme)
                        end
 
         redirect_to schemes_path
