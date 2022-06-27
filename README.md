@@ -28,6 +28,8 @@ All lettings and and sales of social housing in England need to be logged with t
 
 ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to DLUHCs data warehouse (CDS - consolidated data store), via nightly exports to XML which are transferred to S3 and ingested from there. CDS ingests and transforms the data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.  
 
+System architecture:
 ![View of system architecture](docs/images/architecture.png)
 
+View of the service frontend:
 ![View of the logs list](docs/images/logs_list.png)
