@@ -107,7 +107,7 @@ class Scheme < ApplicationRecord
 
   def check_secondary_client_confirmation_attributes
     [
-      { name: "Scheme provides for another client group", value: has_other_client_group },
+      { name: "Has another client group", value: has_other_client_group },
     ]
   end
 
