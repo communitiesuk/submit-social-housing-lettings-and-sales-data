@@ -39,9 +39,11 @@
       <% end %>
 
       <%= f.hidden_field :page, value: @page.id %>
+      <% next_page = @case_log.form.next_page(@page, @case_log, current_user) %>
       <% if !@page.id.include?("value_check") %>
         <%= f.govuk_submit "Save and continue" %>
-      <% end %>
+          <%= govuk_link_to "Skip for now", "/logs/#{@case_log.id}/#{next_page.dasherize}", secondary: true %>
+        <% end %>
     </div>
   </div>
 <% end %>
