@@ -321,7 +321,6 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   context "when changing answers" do
-
                     it "displays change links" do
                       assert_selector "a", text: "Change", count: 12
                     end

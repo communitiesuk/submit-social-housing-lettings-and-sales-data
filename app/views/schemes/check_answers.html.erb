@@ -10,7 +10,7 @@
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before updating this scheme", sub: @scheme.service_name } %>
 
 <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
-  <% component.tab(label: 'Scheme') do %>
+  <% component.tab(label: "Scheme") do %>
     <%= govuk_summary_list do |summary_list| %>
       <% @scheme.check_details_attributes.each do |attr| %>
         <% next if current_user.data_coordinator? && attr[:name] == ("Managed by") %>
@@ -19,7 +19,7 @@
           <% row.value { details_html(attr) } %>
           <% row.action(
             text: "Change",
-            href: scheme_details_path(scheme_id: @scheme.id, check_answers: true)
+            href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
           ) %>
         <% end %>
       <% end %>
