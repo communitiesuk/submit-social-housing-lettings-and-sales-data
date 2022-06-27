@@ -247,6 +247,8 @@ RSpec.describe "Schemes scheme Features" do
         end
 
         context "when I fill in scheme details and I press save I see primary client group section" do
+          let(:scheme) { Scheme.first }
+
           before do
             fill_in "Scheme name", with: "FooBar"
             check "This scheme contains confidential information"
@@ -259,6 +261,22 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me fill in the scheme details" do
             expect(page).to have_content "What client group is this scheme intended for?"
+          end
+
+          context "when I press the back button" do
+            before do
+              click_link "Back"
+            end
+
+            it "lets me fill in the scheme details" do
+              expect(page).to have_current_path("/schemes/#{scheme.id}/details")
+              expect(page).to have_content "Scheme name"
+              expect(page).to have_content "This scheme contains confidential information"
+              expect(page).to have_content "Which organisation manages this scheme"
+              expect(page).to have_content "What is this type of scheme?"
+              expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
+              expect(page).to have_content "Total number of units"
+            end
           end
 
           context "when I select primary client group details" do
@@ -303,7 +321,6 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   context "when changing answers" do
-                    let!(:scheme) { Scheme.first }
 
                     it "displays change links" do
                       assert_selector "a", text: "Change", count: 12
