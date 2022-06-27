@@ -289,6 +289,17 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content "Does this scheme provide for another client group?"
             end
 
+            context "when I press the back button" do
+              before do
+                click_link "Back"
+              end
+
+              it "lets me select the primary client group" do
+                expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group")
+                expect(page).to have_content "What client group is this scheme intended for?"
+              end
+            end
+
             context "when I confirm the secondary group" do
               before do
                 choose "Yes"
