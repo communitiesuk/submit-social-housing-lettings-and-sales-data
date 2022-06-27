@@ -281,7 +281,8 @@ RSpec.describe "Schemes scheme Features" do
             context "when we amend scheme details" do
               it "returns to the primary client group question" do
                 click_button "Save and continue"
-                expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group")              end
+                expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group")
+              end
             end
           end
 
@@ -308,7 +309,8 @@ RSpec.describe "Schemes scheme Features" do
               context "when we amend primary client group" do
                 it "returns to the confirm secondary client group question" do
                   click_button "Save and continue"
-                  expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group")                end
+                  expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group")
+                end
               end
             end
 
@@ -335,7 +337,8 @@ RSpec.describe "Schemes scheme Features" do
                 context "when we amend confirm secondary client" do
                   it "returns to the secondary client group question" do
                     click_button "Save and continue"
-                    expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")                end
+                    expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group")
+                  end
                 end
               end
 
@@ -362,7 +365,8 @@ RSpec.describe "Schemes scheme Features" do
                   context "when we amend secondary client" do
                     it "returns to the support question" do
                       click_button "Save and continue"
-                      expect(page).to have_current_path("/schemes/#{scheme.id}/support")                end
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/support")
+                    end
                   end
                 end
 

@@ -452,7 +452,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#new" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        patch "/schemes/1"
+        get "/schemes/new"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -482,6 +482,76 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a new scheme" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Create a new supported housing scheme")
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/new"
+      end
+
+      it "returns a template for a new scheme" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Create a new supported housing scheme")
+      end
+    end
+  end
+
+  describe "#create" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        post "/schemes"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        post "/schemes"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+
+      before do
+        sign_in user
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        post "/schemes", params: params
+
+        expect(Scheme.last.organisation_id).to eq(user.organisation_id)
+        expect(Scheme.last.service_name).to eq("testy")
+        expect(Scheme.last.scheme_type).to eq("Foyer")
+        expect(Scheme.last.sensitive).to eq("Yes")
+        expect(Scheme.last.registered_under_care_act).to eq("No")
+        expect(Scheme.last.id).not_to eq(nil)
+        expect(Scheme.last.has_other_client_group).to eq(nil)
+        expect(Scheme.last.primary_client_group).to eq(nil)
+        expect(Scheme.last.secondary_client_group).to eq(nil)
+        expect(Scheme.last.support_type).to eq(nil)
+        expect(Scheme.last.intended_stay).to eq(nil)
+        expect(Scheme.last.code).to match(/S*/)
       end
     end
 
