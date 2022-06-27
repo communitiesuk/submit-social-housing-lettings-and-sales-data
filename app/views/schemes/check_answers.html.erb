@@ -19,7 +19,7 @@
           <% row.value { details_html(attr) } %>
           <% row.action(
             text: "Change",
-            href: schemes_path(scheme_id: @scheme.id, check_answers: true),
+            href: scheme_details_path(scheme_id: @scheme.id, check_answers: true)
           ) %>
         <% end %>
       <% end %>

@@ -38,7 +38,7 @@ class Scheme < ApplicationRecord
 
   SUPPORT_TYPE = {
     "Missing": 0,
-    "Resettlement Support": 1,
+    "Resettlement support": 1,
     "Low levels of support": 2,
     "Medium levels of support": 3,
     "High levels of care and support": 4,

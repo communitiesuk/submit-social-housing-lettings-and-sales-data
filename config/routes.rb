@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     get "confirm-secondary-client-group", to: "schemes#confirm_secondary_client_group"
     get "secondary-client-group", to: "schemes#secondary_client_group"
     get "support", to: "schemes#support"
+    get "details", to: "schemes#details"
     get "check-answers", to: "schemes#check_answers"
 
     member do

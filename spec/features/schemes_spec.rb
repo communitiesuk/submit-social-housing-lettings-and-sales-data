@@ -307,6 +307,17 @@ RSpec.describe "Schemes scheme Features" do
         end
 
         it "allows changing details questions" do
+          click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+          expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+
+          fill_in "Scheme name", with: "Example"
+          choose "Direct access hostel"
+          choose "Yes – registered care home providing nursing care"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "Example"
+          expect(page).to have_content "Yes – registered care home providing nursing care"
         end
 
         it "allows changing primary-client-group question" do
@@ -356,6 +367,19 @@ RSpec.describe "Schemes scheme Features" do
 
           expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
           expect(page).to have_content "None"
+        end
+
+        it "allows changing support question to no" do
+          click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
+          expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
+
+          choose "Resettlement support"
+          choose "Medium stay"
+          click_button "Save and continue"
+
+          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+          expect(page).to have_content "Resettlement support"
+          expect(page).to have_content "Medium stay"
         end
       end
     end

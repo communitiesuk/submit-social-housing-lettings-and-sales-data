@@ -82,6 +82,10 @@ class SchemesController < ApplicationController
     render "schemes/support"
   end
 
+  def details
+    render "schemes/details"
+  end
+
   def check_answers
     render "schemes/check_answers"
   end
@@ -89,7 +93,9 @@ class SchemesController < ApplicationController
 private
 
   def scheme_params
-    params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :has_other_client_group, :primary_client_group, :secondary_client_group)
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :confirmed, :has_other_client_group, :primary_client_group, :secondary_client_group, :support_type, :intended_stay)
+    required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
+    required_params
   end
 
   def search_term
