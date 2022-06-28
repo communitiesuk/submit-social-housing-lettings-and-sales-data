@@ -73,6 +73,12 @@ RSpec.describe "Form Navigation" do
       expect(page).to have_current_path("/logs/#{empty_case_log.id}/person-1-age")
     end
 
+    it "routes to check answers when skipping on the last page in the form" do
+      visit("logs/#{empty_case_log.id}/propcode")
+      click_link(text: "Skip for now")
+      expect(page).to have_current_path("/logs/#{empty_case_log.id}/household-characteristics/check-answers")
+    end
+
     describe "Back link directs correctly", js: true do
       it "go back to tasklist page from tenant code" do
         visit("/logs/#{id}")
