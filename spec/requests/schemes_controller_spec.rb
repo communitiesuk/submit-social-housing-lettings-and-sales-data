@@ -594,7 +594,7 @@ RSpec.describe SchemesController, type: :request do
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.organisation.required"))
         end
       end
     end

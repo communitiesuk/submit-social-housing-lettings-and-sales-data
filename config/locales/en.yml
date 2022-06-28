@@ -38,10 +38,15 @@ en:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
 
-  validations:
-    scheme:
-      id_missing: "Enter the organisation’s name"
+  activerecord:
+    errors:
+      models:
+        scheme:
+          attributes:
+            organisation:
+              required: "Enter the organisation’s name"
 
+  validations:
     organisation:
       name_missing: "Enter the organisation’s name"
       provider_type_missing: "Select the organisation’s type"

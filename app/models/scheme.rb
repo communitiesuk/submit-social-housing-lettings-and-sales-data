@@ -5,8 +5,6 @@ class Scheme < ApplicationRecord
   has_many :locations
   has_many :case_logs
 
-  validates :organisation_id, presence: { message: I18n.t("validations.scheme.id_missing") }
-
   scope :search_by_code, ->(code) { where("code ILIKE ?", "%#{code}%") }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
