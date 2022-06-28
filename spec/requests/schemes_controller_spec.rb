@@ -524,9 +524,8 @@ RSpec.describe SchemesController, type: :request do
     end
 
     context "when signed in as a data coordinator" do
-      let(:organisation) { FactoryBot.create(:organisation) }
-      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: organisation) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", organisation_id: organisation.id } } }
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
 
       before do
         sign_in user
@@ -554,29 +553,49 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.code).to match(/S*/)
       end
+    end
+
+    context "when signed in as a support user" do
+      let(:organisation)  { FactoryBot.create(:organisation) }
+      let(:user) { FactoryBot.create(:user, :support) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", organisation_id: organisation.id } } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        post "/schemes", params: params
+
+        expect(Scheme.last.organisation_id).to eq(organisation.id)
+        expect(Scheme.last.service_name).to eq("testy")
+        expect(Scheme.last.scheme_type).to eq("Foyer")
+        expect(Scheme.last.sensitive).to eq("Yes")
+        expect(Scheme.last.registered_under_care_act).to eq("No")
+        expect(Scheme.last.id).not_to eq(nil)
+        expect(Scheme.last.has_other_client_group).to eq(nil)
+        expect(Scheme.last.primary_client_group).to eq(nil)
+        expect(Scheme.last.secondary_client_group).to eq(nil)
+        expect(Scheme.last.support_type).to eq(nil)
+        expect(Scheme.last.intended_stay).to eq(nil)
+        expect(Scheme.last.code).to match(/S*/)
+      end
 
       context "when required organisation id param is missing" do
-        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+        let(:params) { { "scheme"=> {"service_name"=>"qweqwer", "sensitive"=>"Yes", "organisation_id"=>"", "scheme_type"=>"Foyer", "registered_under_care_act"=>"Yes – part registered as a care home", "total_units"=>"1" } } }
+
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
         end
-      end
-    end
-
-    context "when signed in as a support user" do
-      let(:user) { FactoryBot.create(:user, :support) }
-
-      before do
-        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
-        sign_in user
-        get "/schemes/new"
-      end
-
-      it "returns a template for a new scheme" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Create a new supported housing scheme")
       end
     end
   end
