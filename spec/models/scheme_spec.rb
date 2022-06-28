@@ -8,11 +8,6 @@ RSpec.describe Scheme, type: :model do
       expect(scheme.organisation).to be_a(Organisation)
     end
 
-    it "validates organisation_id presence" do
-      expect { FactoryBot.create(:scheme, organisation: nil) }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.scheme.id_missing')}")
-    end
-
     describe "scopes" do
       let!(:scheme_1) { FactoryBot.create(:scheme) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }
