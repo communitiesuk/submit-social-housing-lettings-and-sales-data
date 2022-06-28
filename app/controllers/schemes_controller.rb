@@ -30,8 +30,12 @@ class SchemesController < ApplicationController
   end
 
   def create
-    @scheme = Scheme.create!(scheme_params)
-    render "schemes/primary_client_group"
+    @scheme = Scheme.new(scheme_params)
+    if @scheme.save
+      render "schemes/primary_client_group"
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update

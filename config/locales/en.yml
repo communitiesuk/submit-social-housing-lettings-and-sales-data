@@ -39,6 +39,9 @@ en:
     reset_password: "Reset your password"
 
   validations:
+    scheme:
+      id_missing: "Enter the organisation’s name"
+
     organisation:
       name_missing: "Enter the organisation’s name"
       provider_type_missing: "Select the organisation’s type"
