@@ -625,22 +625,40 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, :organisation => user.organisation) }
-      let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
 
-      before do
-        sign_in user
-        patch "/schemes/#{scheme_to_update.id}", params:
-      end
+      context "when updating primary client group" do
+        let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
 
-      it "renders the primary client group after successful update" do
-        follow_redirect!
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Does this scheme provide for another client group?")
-      end
+        before do
+          sign_in user
+          patch "/schemes/#{scheme_to_update.id}", params:
+        end
 
-      it "updates a scheme with valid params" do
-        follow_redirect!
-        expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Does this scheme provide for another client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
       end
     end
   end
