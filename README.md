@@ -27,9 +27,10 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 
 API documentation can be found here: <https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data>. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
 
-
 ## System architecture
+
 ![View of system architecture](docs/images/architecture.png)
 
-## UI:
+## User interface
+
 ![View of the logs list](docs/images/logs_list.png)
