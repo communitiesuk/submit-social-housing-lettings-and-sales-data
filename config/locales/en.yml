@@ -44,12 +44,9 @@ en:
         scheme:
           attributes:
             organisation:
-              required: ""
+              required: "Enter the organisation’s name"
 
   validations:
-    scheme:
-      organisation_id_missing: "Enter the organisation’s name"
-
     organisation:
       name_missing: "Enter the organisation’s name"
       provider_type_missing: "Select the organisation’s type"

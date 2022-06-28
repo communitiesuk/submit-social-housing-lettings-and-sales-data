@@ -34,6 +34,8 @@ class SchemesController < ApplicationController
     if @scheme.save
       render "schemes/primary_client_group"
     else
+      @scheme.errors.add(:organisation_id, message: @scheme.errors[:organisation])
+      @scheme.errors.delete(:organisation)
       render :new, status: :unprocessable_entity
     end
   end
