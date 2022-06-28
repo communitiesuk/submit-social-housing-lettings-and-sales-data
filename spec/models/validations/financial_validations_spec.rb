@@ -847,9 +847,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 1001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "weekly for 52 weeks", max_chcharge: 1000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
         end
 
         it "validates charge when period is monthly" do
@@ -857,9 +857,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 4334
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "4", max_chcharge: 4333))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
         end
 
         it "validates charge when period is every 2 weeks" do
@@ -867,9 +867,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 2001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "2", max_chcharge: 2000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
         end
 
         it "validates charge when period is every 4 weeks" do
@@ -877,9 +877,9 @@ RSpec.describe Validations::FinancialValidations do
           record.chcharge = 4001
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "every 4 weeks", max_chcharge: 4000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
           expect(record.errors["period"])
-            .to include(match I18n.t("validations.financial.carehome.over_1000", min_chcharge: "£0", period: "every 4 weeks", max_chcharge: 4000))
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
         end
       end
 
@@ -924,6 +924,48 @@ RSpec.describe Validations::FinancialValidations do
           financial_validator.validate_care_home_charges(record)
           expect(record.errors["chcharge"])
             .to include(match I18n.t("validations.financial.carehome.not_provided", period: "every 4 weeks"))
+        end
+      end
+
+      context "and charges under valid limit (£10pw)" do
+        it "validates charge when period is weekly for 52 weeks" do
+          record.period = 1
+          record.chcharge = 9
+          financial_validator.validate_care_home_charges(record)
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 10, period: "weekly for 52 weeks", max_chcharge: 1000))
+        end
+
+        it "validates charge when period is monthly" do
+          record.period = 4
+          record.chcharge = 42
+          financial_validator.validate_care_home_charges(record)
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 43, period: "4", max_chcharge: 4333))
+        end
+
+        it "validates charge when period is every 2 weeks" do
+          record.period = 2
+          record.chcharge = 19
+          financial_validator.validate_care_home_charges(record)
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 20, period: "2", max_chcharge: 2000))
+        end
+
+        it "validates charge when period is every 4 weeks" do
+          record.period = 3
+          record.chcharge = 39
+          financial_validator.validate_care_home_charges(record)
+          expect(record.errors["chcharge"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
+          expect(record.errors["period"])
+            .to include(match I18n.t("validations.financial.carehome.out_of_range", min_chcharge: 40, period: "every 4 weeks", max_chcharge: 4000))
         end
       end
     end

@@ -149,7 +149,7 @@ en:
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
-        over_1000: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
+        out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
     household:
       reasonpref:
