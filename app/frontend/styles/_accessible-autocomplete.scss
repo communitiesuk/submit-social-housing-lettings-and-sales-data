@@ -1,9 +1,27 @@
-.autocomplete__wrapper,
-.autocomplete__input,
-.autocomplete__hint {
+// Ensure the autocomplete uses the correct typeface
+.autocomplete__wrapper {
   font-family: $govuk-font-family;
 }
 
+.autocomplete__input {
+  font-family: inherit;
+}
+
+.autocomplete__option__append {
+  font-weight: bold;
+}
+
+.autocomplete__option__hint {
+  display: block;
+  color: $govuk-secondary-text-colour;
+
+  .autocomplete__option--focused &,
+  .autocomplete__option:hover & {
+    color: govuk-colour("white");
+  }
+}
+
+// Style the autocomplete if there’s an error
 .govuk-form-group--error {
   .autocomplete__input {
     border-color: $govuk-error-colour;
@@ -15,6 +33,9 @@
 }
 
 .autocomplete__dropdown-arrow-down {
+  // Ensure dropdown arrow can be clicked
+  // https://github.com/alphagov/accessible-autocomplete/issues/202
   pointer-events: none;
+  // Ensure dropdown arrow can be seen
   z-index: 0;
 }
