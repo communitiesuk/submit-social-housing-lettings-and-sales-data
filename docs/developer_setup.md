@@ -28,7 +28,7 @@ We recommend using RBenv to manage Ruby versions.
 
 2. Create a Postgres user
   ```bash
-  sudo su - postgres -c "createuser <username> -P"
+  sudo su - postgres -c "createuser <username> -s -P"
   ```
 
 3. Install RBenv & Ruby-build
@@ -43,10 +43,8 @@ We recommend using RBenv to manage Ruby versions.
 
   Linux (Debian):
   ```bash
-  sudo apt install -y rbenv
-  echo 'export PATH="/usr/local/rbenv/bin:\$PATH"' >> ~/.bashrc
+  sudo apt install -y rbenv git
   rbenv init
-  echo "# Load RBenv" >> ~/.bashrc
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
   mkdir -p ~/.rbenv/plugins
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
@@ -57,6 +55,7 @@ We recommend using RBenv to manage Ruby versions.
   ```bash
   rbenv install 3.1.2
   rbenv global 3.1.2
+  source ~/.bashrc
   gem install bundler
   ```
 
@@ -70,18 +69,19 @@ We recommend using RBenv to manage Ruby versions.
 
   Linux (Debian):
   ```bash
-  curl -sL https://deb.nodesource.com/setup_16.x | bash -
+  curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
   sudo apt -y install nodejs
-  mkdir "~/.npm-packages"
-  npm config set prefix "~/.npm-packages"
+  mkdir -p ~/.npm-packages
+  npm config set prefix ~/.npm-packages
   echo 'NPM_PACKAGES="~/.npm-packages"' >> ~/.bashrc
   echo 'export PATH="$PATH:$NPM_PACKAGES/bin"' >> ~/.bashrc
-  npm install --global yarn
+  source ~/.bashrc
+  npm install --location=global yarn
   ```
 
 6. Clone the repo
   ```bash
-  git clone git@github.com:communitiesuk/submit-social-housing-lettings-and-sales-data.git
+  git clone https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data.git
   ```
 
 
@@ -93,10 +93,10 @@ We recommend using RBenv to manage Ruby versions.
   `bundle install && yarn install`
 
 3. Create the database & run migrations:\
-  `rake db:create db:migrate`
+  `bundle exec rake db:create db:migrate`
 
 4. Seed the database if required:\
-  `rake db:seed`
+  `bundle exec rake db:seed`
 
 5. Start the dev servers
 
@@ -117,6 +117,17 @@ We recommend using RBenv to manage Ruby versions.
 Development mode will target the latest versions of Chrome, Firefox and Safari for transpilation while production mode will target older browsers.
 
 The Rails server will start on <http://localhost:3000>.
+
+6. Install Gecko Driver
+
+Linux (Debian):
+```bash
+wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
+tar -xvzf geckodriver-v0.31.0-linux64.tar.gz
+rm geckodriver-v0.31.0-linux64.tar.gz
+chmod +x geckodriver
+sudo mv geckodriver /usr/local/bin/
+```
 
 Running the test suite (front end assets need to be built or server needs to be running):\
   `bundle exec rspec`
