@@ -26,10 +26,10 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 ## API documentation
 
 API documentation can be found here: <https://communitiesuk.github.io/mhclg-data-collection-beta>. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
- 
 
-System architecture:
+
+## System architecture
 ![View of system architecture](docs/images/architecture.png)
 
-View of the service frontend:
+## UI:
 ![View of the logs list](docs/images/logs_list.png)
