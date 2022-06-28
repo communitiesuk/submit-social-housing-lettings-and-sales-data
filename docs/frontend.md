@@ -1,6 +1,6 @@
-## Frontend
+# Frontend
 
-### GOV.UK Design System components
+## GOV.UK Design System components
 
 This service follows the guidance and recommendations from the [GOV.UK Design System](https://design-system.service.gov.uk). This is achieved using the following libraries:
 
@@ -18,7 +18,7 @@ This service follows the guidance and recommendations from the [GOV.UK Design Sy
   [GitHub](https://github.com/DFE-Digital/govuk-formbuilder) ·
   [RubyDoc](https://www.rubydoc.info/gems/govuk_design_system_formbuilder)
 
-### Service-specific components
+## Service-specific components
 
 Service-specific components are built using the [ViewComponent](https://viewcomponent.org) framework, and can be found in `app/components`.
 
@@ -38,12 +38,12 @@ The general pattern is:
 
 - Register a controller in `/app/frontend/controllers/index.js`- be sure to use kebab case
 - Create that controller in `app/frontend/controllers/` - be sure to use underscore case
-- Attach the controller to the html element that should trigger it's functionality
+- Attach the controller to the html element that should trigger it’s functionality
 
 ### Asset bundling and compilation
 
-- We use [Webpack](https://webpack.js.org/) via [jsbundling-rails](https://github.com/rails/jsbundling-rails) to bundle js, css and images. The configuration can be found in `webpack.config.js`.
+- We use [Webpack](https://webpack.js.org/) via [jsbundling-rails](https://github.com/rails/jsbundling-rails) to bundle JavaScript, CSS and images. The configuration can be found in `webpack.config.js`.
 - We use [Propshaft](https://github.com/rails/propshaft) as our asset pipeline to serve the assets bundled/compiled by webpack
 - We use [Babel](https://babeljs.io/) to transpile js down to ES5 for Internet Explorer compatibility. The configuration can be found in `babel.config.js`
-- We use [browserslist](https://github.com/browserslist/browserslist) to specifiy the browsers we want to transpile for. The configuration can be found in `package.json`
+- We use [browserslist](https://github.com/browserslist/browserslist) to specify the browsers we want to transpile for. The configuration can be found in `package.json`
 - We include a number of polyfills to support Internet Explorer. These can be found in `app/frontend/application.js`
