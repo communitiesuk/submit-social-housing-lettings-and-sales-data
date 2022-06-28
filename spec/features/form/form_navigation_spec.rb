@@ -13,6 +13,15 @@ RSpec.describe "Form Navigation" do
       created_by: user,
     )
   end
+  let(:empty_case_log) do
+    FactoryBot.create(
+      :case_log,
+      owning_organisation: user.organisation,
+      managing_organisation: user.organisation,
+      created_by: user,
+    )
+  end
+
   let(:id) { case_log.id }
   let(:question_answers) do
     {
@@ -37,7 +46,7 @@ RSpec.describe "Form Navigation" do
     end
   end
 
-  describe "Viewing a log" do
+  describe "Viewing a log", js: true do
     it "questions can be accessed by url" do
       visit("/logs/#{id}/person-1-age")
       expect(page).to have_field("case-log-age1-field")
@@ -50,6 +59,18 @@ RSpec.describe "Form Navigation" do
         click_button("Save and continue")
         expect(page).to have_current_path("/logs/#{id}/#{pages[index + 1]}")
       end
+    end
+
+    it "a question page has a link allowing you to cancel your input and return to the check answers page" do
+      visit("logs/#{id}/tenant-code-test")
+      click_link(text: "Cancel")
+      expect(page).to have_current_path("/logs/#{id}/setup/check-answers")
+    end
+
+    it "a question page has a Skip for now link that lets you move on to the next question without inputting anything" do
+      visit("logs/#{empty_case_log.id}/tenant-code-test")
+      click_link(text: "Skip for now")
+      expect(page).to have_current_path("/logs/#{empty_case_log.id}/person-1-age")
     end
 
     describe "Back link directs correctly", js: true do
