@@ -10,6 +10,8 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
 
+  validates :organisation_id, presence: { message: I18n.t("validations.scheme.organisation_id_missing") }
+
   SENSITIVE = {
     No: 0,
     Yes: 1,
