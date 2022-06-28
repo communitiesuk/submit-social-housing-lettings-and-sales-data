@@ -660,6 +660,56 @@ RSpec.describe SchemesController, type: :request do
           end
         end
       end
+
+      context "when updating confirm secondary client group" do
+        let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary" } } }
+
+        before do
+          sign_in user
+          patch "/schemes/#{scheme_to_update.id}", params:
+        end
+
+        it "renders secondary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the other client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+        end
+
+        context "when updating from check answers page with the answer YES" do
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer NO" do
+          let(:params) { { scheme: { has_other_client_group: "No", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("No")
+          end
+        end
+      end
     end
   end
 end
