@@ -524,8 +524,9 @@ RSpec.describe SchemesController, type: :request do
     end
 
     context "when signed in as a data coordinator" do
-      let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+      let(:organisation) { FactoryBot.create(:organisation) }
+      let(:user) { FactoryBot.create(:user, :data_coordinator, organisation: organisation) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", organisation_id: organisation.id } } }
 
       before do
         sign_in user
@@ -552,6 +553,15 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.support_type).to eq(nil)
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.code).to match(/S*/)
+      end
+
+      context "when required organisation id param is missing" do
+        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+        it "displays the new page with an error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.organisation.name_missing"))
+        end
       end
     end
 
