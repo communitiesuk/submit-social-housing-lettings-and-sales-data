@@ -44,7 +44,7 @@ en:
         scheme:
           attributes:
             organisation:
-              required: "Enter the organisation’s name"
+              required: "Enter the existing organisation’s name"
 
   validations:
     organisation:
