@@ -85,9 +85,9 @@ class SchemesController < ApplicationController
     render "schemes/check_answers"
   end
 
-  private
+private
 
-  def next_page_path page
+  def next_page_path(page)
     case page
     when "primary-client-group"
       scheme_confirm_secondary_client_group_path(@scheme)

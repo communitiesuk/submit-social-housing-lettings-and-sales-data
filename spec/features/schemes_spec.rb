@@ -386,7 +386,7 @@ RSpec.describe "Schemes scheme Features" do
                       assert_selector "a", text: "Change", count: 12
                     end
 
-                    context "changing details" do
+                    context "when changing details" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
                       end
@@ -416,7 +416,7 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    context "changing primary client group" do
+                    context "when changing primary client group" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
                       end
@@ -443,7 +443,7 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    context "changing confirm secondary group answer" do
+                    context "when changing confirm secondary group answer" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
                       end
@@ -475,7 +475,7 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    context "allows changing confirm-secondary-client-group question to no" do
+                    context "when allows changing confirm-secondary-client-group question to no" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
                       end
@@ -491,7 +491,7 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    context "changing secondary-client-group question" do
+                    context "when changing secondary-client-group question" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
                       end
@@ -518,7 +518,7 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
 
-                    context "changing support questions" do
+                    context "when changing support questions" do
                       before do
                         click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
                       end

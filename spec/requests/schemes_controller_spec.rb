@@ -531,7 +531,7 @@ RSpec.describe SchemesController, type: :request do
         sign_in user
       end
 
-      it "creates a new scheme for user organisation with valid params" do
+      it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
@@ -556,7 +556,7 @@ RSpec.describe SchemesController, type: :request do
     end
 
     context "when signed in as a support user" do
-      let(:organisation)  { FactoryBot.create(:organisation) }
+      let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user, :support) }
       let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", organisation_id: organisation.id } } }
 
@@ -565,7 +565,7 @@ RSpec.describe SchemesController, type: :request do
         sign_in user
       end
 
-      it "creates a new scheme for user organisation with valid params" do
+      it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
@@ -589,7 +589,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when required organisation id param is missing" do
-        let(:params) { { "scheme"=> {"service_name"=>"qweqwer", "sensitive"=>"Yes", "organisation_id"=>"", "scheme_type"=>"Foyer", "registered_under_care_act"=>"Yes – part registered as a care home", "total_units"=>"1" } } }
+        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home", "total_units" => "1" } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
@@ -624,7 +624,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, :organisation => user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
       context "when updating primary client group" do
         let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
