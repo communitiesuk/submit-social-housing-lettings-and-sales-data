@@ -603,7 +603,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#update" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        patch "/schemes"
+        patch "/schemes/#{schemes.first.id}"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -613,7 +613,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        patch "/schemes"
+        patch "/schemes/#{schemes.first.id}"
       end
 
       it "returns 401 unauthorized" do
