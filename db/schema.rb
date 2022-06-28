@@ -310,11 +310,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_132228) do
     t.integer "registered_under_care_act"
     t.integer "support_type"
     t.string "intended_stay"
-<<<<<<< HEAD
     t.datetime "end_date"
-=======
     t.string "has_other_client_group"
->>>>>>> f6b27a1a (Add has other client group field to schemes. Display it in the check answers. Fix tests and routing)
     t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
   end
 
