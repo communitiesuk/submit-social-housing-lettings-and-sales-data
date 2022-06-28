@@ -55,8 +55,7 @@ gem "redis"
 # Receive exceptions and configure alerts
 gem "sentry-rails"
 gem "sentry-ruby"
-# Pagination
-gem "pagy"
+# Possessives in strings
 gem "possessive"
 
 group :development, :test do
