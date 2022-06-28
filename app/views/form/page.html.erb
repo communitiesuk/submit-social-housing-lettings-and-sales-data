@@ -5,7 +5,6 @@
 <% end %>
 
 <div data-controller="govukfrontend"></div>
-
 <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
