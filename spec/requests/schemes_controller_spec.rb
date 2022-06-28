@@ -782,6 +782,49 @@ RSpec.describe SchemesController, type: :request do
           end
         end
       end
+
+      context "when updating details" do
+        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details" } } }
+
+        before do
+          sign_in user
+          patch "/schemes/#{scheme_to_update.id}", params:
+        end
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
+          expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+          expect(scheme_to_update.reload.total_units).to eq(1)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.service_name).to eq("testy")
+            expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+            expect(scheme_to_update.reload.sensitive).to eq("Yes")
+            expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.total_units).to eq(1)
+          end
+        end
+      end
     end
   end
 end

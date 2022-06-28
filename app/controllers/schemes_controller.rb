@@ -52,7 +52,7 @@ class SchemesController < ApplicationController
           redirect_to scheme_check_answers_path(@scheme)
         end
       else
-        redirect_to derive_next_path params[:scheme][:page]
+        redirect_to next_page_path params[:scheme][:page]
       end
     else
       render request.current_url, status: :unprocessable_entity
@@ -87,8 +87,8 @@ class SchemesController < ApplicationController
 
   private
 
-  def derive_next_path page
-    case page 
+  def next_page_path page
+    case page
     when "primary-client-group"
       scheme_confirm_secondary_client_group_path(@scheme)
     when "confirm-secondary"
