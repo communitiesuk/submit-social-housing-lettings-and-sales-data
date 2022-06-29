@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe SearchResultCaptionComponent, type: :component do
-  let(:page) { Capybara::Node::Simple.new(rendered_component) }
   let(:searched) { "search item" }
   let(:count) { 2 }
   let(:item_label) { "user" }

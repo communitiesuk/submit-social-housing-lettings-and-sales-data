@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe SearchComponent, type: :component do
   let(:current_user) { FactoryBot.create(:user, :support) }
   let(:search_label) { "Search by name or email address" }
-  let(:page) { Capybara::Node::Simple.new(rendered_component) }
   let(:value) { nil }
 
   before do
