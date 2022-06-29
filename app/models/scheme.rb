@@ -5,10 +5,10 @@ class Scheme < ApplicationRecord
   has_many :locations
   has_many :case_logs
 
-  scope :search_by_code, ->(code) { where("code ILIKE ?", "%#{code}%") }
+  scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..-1] : id))}
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
-  scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(search_by_code(param)).distinct }
+  scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(filter_by_id(param)).distinct }
 
   SENSITIVE = {
     No: 0,

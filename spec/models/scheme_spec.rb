@@ -16,12 +16,10 @@ RSpec.describe Scheme, type: :model do
 
       context "when searching by code" do
         it "returns case insensitive matching records" do
-          expect(described_class.search_by_code(scheme_1.code.upcase).count).to eq(1)
-          expect(described_class.search_by_code(scheme_1.code.downcase).count).to eq(1)
-          expect(described_class.search_by_code(scheme_1.code.downcase).first.code).to eq(scheme_1.code)
-          expect(described_class.search_by_code(scheme_2.code.upcase).count).to eq(1)
-          expect(described_class.search_by_code(scheme_2.code.downcase).count).to eq(1)
-          expect(described_class.search_by_code(scheme_2.code.downcase).first.code).to eq(scheme_2.code)
+          expect(described_class.filter_by_id(scheme_1.id.to_s).count).to eq(1)
+          expect(described_class.filter_by_id(scheme_1.id.to_s).first.id).to eq(scheme_1.id)
+          expect(described_class.filter_by_id(scheme_2.id.to_s).count).to eq(1)
+          expect(described_class.filter_by_id(scheme_2.id.to_s).first.id).to eq(scheme_2.id)
         end
       end
 
