@@ -46,7 +46,7 @@ RSpec.describe "Form Navigation" do
     end
   end
 
-  describe "Viewing a log", js: true do
+  describe "Viewing a log" do
     it "questions can be accessed by url" do
       visit("/logs/#{id}/person-1-age")
       expect(page).to have_field("case-log-age1-field")
