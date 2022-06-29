@@ -954,14 +954,16 @@ RSpec.describe SchemesController, type: :request do
 
       context "when updating details" do
         let(:another_organisation) { FactoryBot.create(:organisation) }
-        let(:params) { { scheme: { service_name: "testy",
-                                   sensitive: "1",
-                                   scheme_type: "Foyer",
-                                   registered_under_care_act: "No",
-                                   total_units: "1",
-                                   page: "details",
-                                   organisation_id: another_organisation.id,
-                                   stock_owning_organisation_id: another_organisation.id, } } }
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      total_units: "1",
+                      page: "details",
+                      organisation_id: another_organisation.id,
+                      stock_owning_organisation_id: another_organisation.id } }
+        end
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
