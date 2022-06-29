@@ -1,5 +1,6 @@
 class Scheme < ApplicationRecord
   belongs_to :organisation
+  belongs_to :stock_owning_organisation, optional: true, class_name: "Organisation", foreign_key: "stock_owning_organisation_id"
   has_many :locations
   has_many :case_logs
 
@@ -94,6 +95,7 @@ class Scheme < ApplicationRecord
       { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
+      { name: "Housing stock owned by", value: stock_owning_organisation&.name },
       { name: "Managed by", value: organisation.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
@@ -131,6 +133,7 @@ class Scheme < ApplicationRecord
       { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
+      { name: "Housing stock owned by", value: stock_owning_organisation&.name },
       { name: "Managed by", value: organisation.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
