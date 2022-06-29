@@ -22,7 +22,7 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 - [Infrastructure](docs/infrastructure.md)
 - [Monitoring](docs/monitoring.md)
 - [Exporting to CDS](docs/exports)
-- [Application decision records](docs/adr)
+- [Architecture decision records](docs/adr)
 
 ## API documentation
 
