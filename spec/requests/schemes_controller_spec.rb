@@ -1007,7 +1007,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#primary_client_group" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/primary-client-group"
+        get "/schemes/1/primary-client-group"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1017,7 +1017,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/primary-client-group"
+        get "/schemes/1/primary-client-group"
       end
 
       it "returns 401 unauthorized" do
@@ -1073,7 +1073,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#confirm_secondary_client_group" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/confirm-secondary-client-group"
+        get "/schemes/1/confirm-secondary-client-group"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1083,7 +1083,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/confirm-secondary-client-group"
+        get "/schemes/1/confirm-secondary-client-group"
       end
 
       it "returns 401 unauthorized" do
@@ -1139,7 +1139,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#secondary_client_group" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/secondary-client-group"
+        get "/schemes/1/secondary-client-group"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1149,7 +1149,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/secondary-client-group"
+        get "/schemes/1/secondary-client-group"
       end
 
       it "returns 401 unauthorized" do
@@ -1205,7 +1205,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#support" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/support"
+        get "/schemes/1/support"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1215,7 +1215,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/support"
+        get "/schemes/1/support"
       end
 
       it "returns 401 unauthorized" do
@@ -1271,7 +1271,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#check-answers" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/check-answers"
+        get "/schemes/1/check-answers"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1281,7 +1281,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/check-answers"
+        get "/schemes/1/check-answers"
       end
 
       it "returns 401 unauthorized" do
@@ -1337,7 +1337,7 @@ RSpec.describe SchemesController, type: :request do
   describe "#details" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/#{1}/details"
+        get "/schemes/1/details"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -1347,7 +1347,7 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{1}/details"
+        get "/schemes/1/details"
       end
 
       it "returns 401 unauthorized" do
