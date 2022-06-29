@@ -43,9 +43,9 @@
         <% if !@page.id.include?("value_check") %>
           <%= f.govuk_submit "Save and continue" %>
           <% if request.query_parameters["referrer"] == "check_answers" %>
-            <%= govuk_link_to "Cancel", "/logs/#{@case_log.id}/setup/check-answers", secondary: true %>
+            <%= govuk_link_to "Cancel", "/logs/#{@case_log.id}/setup/check-answers" %>
           <% else %>
-            <%= govuk_link_to "Skip for now", send(@case_log.form.next_page_redirect_path(@page, @case_log, current_user), @case_log), secondary: true %>
+            <%= govuk_link_to "Skip for now", send(@case_log.form.next_page_redirect_path(@page, @case_log, current_user), @case_log) %>
           <% end %>
         <% end %>
       </div>
