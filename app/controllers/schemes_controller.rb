@@ -88,7 +88,7 @@ class SchemesController < ApplicationController
 
 private
 
-  def confirm_secondary_page? page
+  def confirm_secondary_page?(page)
     page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
   end
 
