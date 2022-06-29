@@ -103,7 +103,7 @@ private
   end
 
   def scheme_params
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :has_other_client_group, :primary_client_group, :secondary_client_group, :support_type, :intended_stay)
+    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :stock_owning_organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :has_other_client_group, :primary_client_group, :secondary_client_group, :support_type, :intended_stay)
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
     if current_user.data_coordinator?
       required_params[:organisation_id] = current_user.organisation_id
