@@ -39,7 +39,7 @@
 
       <%= f.hidden_field :page, value: @page.id %>
 
-      <div class ="govuk-button-group">
+      <div class="govuk-button-group">
         <% if !@page.id.include?("value_check") %>
           <%= f.govuk_submit "Save and continue" %>
           <% if request.query_parameters["referrer"] == "check_answers" %>
