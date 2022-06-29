@@ -1055,7 +1055,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1066,6 +1066,72 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a primary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
+      end
+    end
+  end
+
+  describe "#secondary_client_group" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/#{1}/secondary-client-group"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/#{1}/secondary-client-group"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/secondary-client-group"
+      end
+
+      it "returns a template for a secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the other client group?")
+      end
+
+      context "when attempting to access secondary-client-group scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/secondary-client-group"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/secondary-client-group"
+      end
+
+      it "returns a template for a secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the other client group?")
       end
     end
   end
