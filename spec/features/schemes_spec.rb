@@ -25,7 +25,7 @@ RSpec.describe "Schemes scheme Features" do
 
         it "shows list of schemes" do
           schemes.each do |scheme|
-            expect(page).to have_content(scheme.code)
+            expect(page).to have_content(scheme.id)
           end
         end
 
@@ -53,9 +53,9 @@ RSpec.describe "Schemes scheme Features" do
 
               it "displays all schemes after I clear the search results" do
                 click_link("Clear search")
-                expect(page).to have_content(scheme_to_search.code)
+                expect(page).to have_content(scheme_to_search.id)
                 schemes.each do |scheme|
-                  expect(page).to have_content(scheme.code)
+                  expect(page).to have_content(scheme.id)
                 end
               end
             end
@@ -100,7 +100,7 @@ RSpec.describe "Schemes scheme Features" do
 
         it "shows list of schemes" do
           schemes.each do |scheme|
-            expect(page).to have_content(scheme.code)
+            expect(page).to have_content(scheme.id)
           end
         end
 
@@ -130,7 +130,7 @@ RSpec.describe "Schemes scheme Features" do
                 click_link("Clear search")
                 expect(page).to have_content(scheme_to_search.code)
                 schemes.each do |scheme|
-                  expect(page).to have_content(scheme.code)
+                  expect(page).to have_content(scheme.id)
                 end
               end
             end

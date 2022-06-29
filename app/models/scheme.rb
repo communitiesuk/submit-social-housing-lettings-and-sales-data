@@ -1,6 +1,4 @@
 class Scheme < ApplicationRecord
-  before_create :create_code
-
   belongs_to :organisation
   has_many :locations
   has_many :case_logs
@@ -87,9 +85,13 @@ class Scheme < ApplicationRecord
   enum intended_stay: INTENDED_STAY, _suffix: true
   enum has_other_client_group: HAS_OTHER_CLIENT_GROUP, _suffix: true
 
+  def id_to_display
+    "S#{id}"
+  end
+
   def check_details_attributes
     [
-      { name: "Service code", value: code },
+      { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
       { name: "Managed by", value: organisation.name },
@@ -126,7 +128,7 @@ class Scheme < ApplicationRecord
 
   def display_attributes
     [
-      { name: "Service code", value: code },
+      { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
       { name: "Managed by", value: organisation.name },
@@ -138,11 +140,5 @@ class Scheme < ApplicationRecord
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
     ]
-  end
-
-private
-
-  def create_code
-    self.code = Scheme.last.nil? ? "S1" : "S#{Scheme.last.code[1..].to_i + 1}"
   end
 end

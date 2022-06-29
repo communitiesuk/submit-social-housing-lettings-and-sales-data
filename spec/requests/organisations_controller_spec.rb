@@ -65,15 +65,15 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "shows only schemes belonging to the same organisation" do
-          expect(page).to have_content(same_org_scheme.code)
+          expect(page).to have_content(same_org_scheme.id)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.code)
+            expect(page).not_to have_content(scheme.id)
           end
         end
 
         context "when searching" do
           let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
-          let(:search_param) { searched_scheme.code }
+          let(:search_param) { searched_scheme.id }
 
           before do
             FactoryBot.create(:location, scheme: searched_scheme)
@@ -82,9 +82,9 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "returns matching results" do
-            expect(page).to have_content(searched_scheme.code)
+            expect(page).to have_content(searched_scheme.id)
             schemes.each do |scheme|
-              expect(page).not_to have_content(scheme.code)
+              expect(page).not_to have_content(scheme.id)
             end
           end
 
@@ -122,9 +122,9 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "shows only schemes belonging to the same organisation" do
-          expect(page).to have_content(same_org_scheme.code)
+          expect(page).to have_content(same_org_scheme.id)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.code)
+            expect(page).not_to have_content(scheme.id)
           end
         end
 
@@ -142,7 +142,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         context "when searching" do
           let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
-          let(:search_param) { searched_scheme.code }
+          let(:search_param) { searched_scheme.id }
 
           before do
             FactoryBot.create(:location, scheme: searched_scheme)
@@ -150,9 +150,9 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           it "returns matching results" do
-            expect(page).to have_content(searched_scheme.code)
+            expect(page).to have_content(searched_scheme.id)
             schemes.each do |scheme|
-              expect(page).not_to have_content(scheme.code)
+              expect(page).not_to have_content(scheme.id)
             end
           end
 
