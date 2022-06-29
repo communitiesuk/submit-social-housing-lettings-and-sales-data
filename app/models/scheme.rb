@@ -1,6 +1,6 @@
 class Scheme < ApplicationRecord
   belongs_to :organisation
-  belongs_to :stock_owning_organisation, optional: true, class_name: "Organisation", foreign_key: "stock_owning_organisation_id"
+  belongs_to :stock_owning_organisation, optional: true, class_name: "Organisation"
   has_many :locations
   has_many :case_logs
 
