@@ -67,7 +67,7 @@
          legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
 
         <%= f.hidden_field :page, value: "details" %>
-        <% if request.query_parameters["check_answers"] == "true" %>
+        <% if request.query_parameters["check_answers"] %>
             <%= f.hidden_field :check_answers, value: "true" %>
         <% end %>
        <%= f.govuk_submit "Save and continue" %>

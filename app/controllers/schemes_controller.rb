@@ -41,14 +41,15 @@ class SchemesController < ApplicationController
   end
 
   def update
+    check_answers = params[:scheme][:check_answers]
+    page = params[:scheme][:page]
+
     if @scheme.update(scheme_params)
-      if params[:scheme][:check_answers] == "true"
-        if params[:scheme][:page] == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+      if check_answers
+        if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
         else
-          if @scheme.has_other_client_group == "No"
-            @scheme.update!(secondary_client_group: nil)
-          end
+          @scheme.update!(secondary_client_group: nil) unless @scheme.has_other_client_group == "Yes"
           redirect_to scheme_check_answers_path(@scheme)
         end
       else
@@ -87,6 +88,10 @@ class SchemesController < ApplicationController
 
 private
 
+  def confirm_secondary_page? page
+    page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+  end
+
   def next_page_path(page)
     case page
     when "primary-client-group"
@@ -103,7 +108,20 @@ private
   end
 
   def scheme_params
-    required_params = params.require(:scheme).permit(:service_name, :sensitive, :organisation_id, :stock_owning_organisation_id, :scheme_type, :registered_under_care_act, :total_units, :id, :has_other_client_group, :primary_client_group, :secondary_client_group, :support_type, :intended_stay)
+    required_params = params.require(:scheme).permit(:service_name,
+                                                     :sensitive,
+                                                     :organisation_id,
+                                                     :stock_owning_organisation_id,
+                                                     :scheme_type,
+                                                     :registered_under_care_act,
+                                                     :total_units,
+                                                     :id,
+                                                     :has_other_client_group,
+                                                     :primary_client_group,
+                                                     :secondary_client_group,
+                                                     :support_type,
+                                                     :intended_stay)
+
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
     if current_user.data_coordinator?
       required_params[:organisation_id] = current_user.organisation_id
