@@ -56,7 +56,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows all schemes" do
         schemes.each do |scheme|
-          expect(page).to have_content(scheme.id)
+          expect(page).to have_content(scheme.id_to_display)
         end
       end
 
@@ -137,7 +137,7 @@ RSpec.describe SchemesController, type: :request do
 
       context "when searching" do
         let!(:searched_scheme) { FactoryBot.create(:scheme) }
-        let(:search_param) { searched_scheme.id }
+        let(:search_param) { searched_scheme.id_to_display }
 
         before do
           FactoryBot.create(:location, scheme: searched_scheme)
@@ -145,9 +145,9 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "returns matching results" do
-          expect(page).to have_content(searched_scheme.id)
+          expect(page).to have_content(searched_scheme.id_to_display)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.id)
+            expect(page).not_to have_content(scheme.id_to_display)
           end
         end
 
@@ -196,11 +196,11 @@ RSpec.describe SchemesController, type: :request do
 
       it "has page heading" do
         get "/schemes/#{specific_scheme.id}"
-        expect(page).to have_content(specific_scheme.id)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
         expect(page).to have_content(specific_scheme.sensitive)
-        expect(page).to have_content(specific_scheme.id)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.scheme_type)
@@ -230,11 +230,11 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has page heading" do
-        expect(page).to have_content(specific_scheme.id)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
         expect(page).to have_content(specific_scheme.sensitive)
-        expect(page).to have_content(specific_scheme.id)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.scheme_type)

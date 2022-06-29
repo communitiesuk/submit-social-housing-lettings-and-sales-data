@@ -130,7 +130,7 @@ RSpec.describe "Schemes scheme Features" do
                 click_link("Clear search")
                 expect(page).to have_content(scheme_to_search.id_to_display)
                 schemes.each do |scheme|
-                  expect(page).to have_content(scheme.id)
+                  expect(page).to have_content(scheme.id_to_display)
                 end
               end
             end
