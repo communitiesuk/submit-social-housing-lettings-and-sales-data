@@ -20,7 +20,7 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Rent type")
+    expect(question.check_answer_label).to eq("Scheme name")
   end
 
   it "has the correct type" do
@@ -35,18 +35,22 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     expect(question.conditional_for).to be_nil
   end
 
-  it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "Affordable Rent" },
-      "2" => { "value" => "London Affordable Rent" },
-      "4" => { "value" => "London Living Rent" },
-      "3" => { "value" => "Rent to Buy" },
-      "0" => { "value" => "Social Rent" },
-      "5" => { "value" => "Other intermediate rent product" },
-    })
-  end
-
   it "is not marked as derived" do
     expect(question.derived?).to be false
+  end
+
+  context "When a user is signed in" do
+    let(:organisation) { FactoryBot.create(:organisation)}
+    let(:organisation_2) { FactoryBot.create(:organisation)}
+    let(:user) { FactoryBot.create(:user, organisation_id: organisation.id) }
+    let(:scheme) { FactoryBot.create(:scheme, organisation_id: organisation.id ) }
+    let!(:scheme_2) { FactoryBot.create(:scheme, organisation_id: organisation_2.id ) }
+    let(:case_log) { FactoryBot.create(:case_log, created_by: user)}
+    
+    
+    it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+      expected_answer = { scheme.id => "#{scheme.service_name}" }
+      expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
+    end
   end
 end
