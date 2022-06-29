@@ -62,4 +62,4 @@
   <% end %>
 <% end %>
 
-<%= govuk_button_link_to "Create scheme", schemes_path, html: { method: :get } %>
+<%= govuk_button_link_to "Create scheme", schemes_path(scheme_id: @scheme.id), html: { method: :get } %>
