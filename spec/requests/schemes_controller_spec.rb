@@ -85,6 +85,13 @@ RSpec.describe SchemesController, type: :request do
         expect(CGI.unescape_html(response.body)).to include(expected_field)
       end
 
+      context "params scheme_id is present" do
+        it "shows a success banner" do
+          get "/schemes", params: { scheme_id: schemes.first.id }
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        end
+      end
+
       context "when paginating over 20 results" do
         let(:total_schemes_count) { Scheme.count }
 
