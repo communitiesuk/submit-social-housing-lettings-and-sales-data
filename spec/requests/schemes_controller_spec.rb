@@ -624,13 +624,13 @@ RSpec.describe SchemesController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
 
+      before do
+        sign_in user
+        patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
       context "when updating primary client group" do
         let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
-
-        before do
-          sign_in user
-          patch "/schemes/#{scheme_to_update.id}", params:
-        end
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -661,11 +661,6 @@ RSpec.describe SchemesController, type: :request do
 
       context "when updating confirm secondary client group" do
         let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary" } } }
-
-        before do
-          sign_in user
-          patch "/schemes/#{scheme_to_update.id}", params:
-        end
 
         it "renders secondary client group after successful update" do
           follow_redirect!
@@ -712,11 +707,6 @@ RSpec.describe SchemesController, type: :request do
       context "when updating secondary client group" do
         let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group" } } }
 
-        before do
-          sign_in user
-          patch "/schemes/#{scheme_to_update.id}", params:
-        end
-
         it "renders confirm support page after successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
@@ -746,11 +736,6 @@ RSpec.describe SchemesController, type: :request do
 
       context "when updating support" do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
-
-        before do
-          sign_in user
-          patch "/schemes/#{scheme_to_update.id}", params:
-        end
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -784,10 +769,199 @@ RSpec.describe SchemesController, type: :request do
       context "when updating details" do
         let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details" } } }
 
-        before do
-          sign_in user
-          patch "/schemes/#{scheme_to_update.id}", params:
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
         end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
+          expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+          expect(scheme_to_update.reload.total_units).to eq(1)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.service_name).to eq("testy")
+            expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+            expect(scheme_to_update.reload.sensitive).to eq("Yes")
+            expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.total_units).to eq(1)
+          end
+        end
+      end
+    end
+
+    context "when signed in as a support" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when updating primary client group" do
+        let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Does this scheme provide for another client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating confirm secondary client group" do
+        let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary" } } }
+
+        it "renders secondary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the other client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+        end
+
+        context "when updating from check answers page with the answer YES" do
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer NO" do
+          let(:params) { { scheme: { has_other_client_group: "No", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("No")
+          end
+        end
+      end
+
+      context "when updating secondary client group" do
+        let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group" } } }
+
+        it "renders confirm support page after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What support does this scheme provide?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating support" do
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your changes before updating this scheme")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          end
+        end
+      end
+
+      context "when updating details" do
+        let(:another_organisation) { FactoryBot.create(:organisation) }
+        let(:params) { { scheme: { service_name: "testy",
+                                   sensitive: "1",
+                                   scheme_type: "Foyer",
+                                   registered_under_care_act: "No",
+                                   total_units: "1",
+                                   page: "details",
+                                   organisation_id: another_organisation.id,
+                                   stock_owning_organisation_id: another_organisation.id, } } }
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -802,6 +976,8 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
           expect(scheme_to_update.reload.total_units).to eq(1)
+          expect(scheme_to_update.reload.organisation_id).to eq(another_organisation.id)
+          expect(scheme_to_update.reload.stock_owning_organisation_id).to eq(another_organisation.id)
         end
 
         context "when updating from check answers page" do
