@@ -165,7 +165,6 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content(schemes.first.sensitive)
             expect(page).to have_content(schemes.first.scheme_type)
             expect(page).to have_content(schemes.first.registered_under_care_act)
-            expect(page).to have_content(schemes.first.total_units)
             expect(page).to have_content(schemes.first.primary_client_group)
             expect(page).to have_content(schemes.first.secondary_client_group)
             expect(page).to have_content(schemes.first.support_type)
@@ -244,7 +243,6 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "Which organisation manages this scheme?"
           expect(page).to have_content "What is this type of scheme?"
           expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
-          expect(page).to have_content "Total number of units"
         end
 
         context "when I fill in scheme details and I press save I see primary client group section" do
@@ -255,8 +253,8 @@ RSpec.describe "Schemes scheme Features" do
             check "This scheme contains confidential information"
             choose "Direct access hostel"
             choose "Yes – registered care home providing nursing care"
-            fill_in "Total number of units", with: 1
             select organisation.name, from: "scheme-organisation-id-field"
+            select organisation.name, from: "scheme-stock-owning-organisation-id-field"
             click_button "Save and continue"
           end
 
@@ -276,7 +274,6 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content "Which organisation manages this scheme"
               expect(page).to have_content "What is this type of scheme?"
               expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
-              expect(page).to have_content "Total number of units"
             end
 
             context "when we amend scheme details" do

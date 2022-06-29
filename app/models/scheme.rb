@@ -99,7 +99,6 @@ class Scheme < ApplicationRecord
       { name: "Managed by", value: organisation.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
-      { name: "Total number of units", value: total_units },
     ]
   end
 
@@ -137,7 +136,6 @@ class Scheme < ApplicationRecord
       { name: "Managed by", value: organisation.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
-      { name: "Total number of units", value: total_units },
       { name: "Primary client group", value: primary_client_group },
       { name: "Secondary client group", value: secondary_client_group },
       { name: "Level of support given", value: support_type },
