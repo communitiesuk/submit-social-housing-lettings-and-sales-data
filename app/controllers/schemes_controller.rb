@@ -60,8 +60,6 @@ class SchemesController < ApplicationController
     end
   end
 
-  def edit; end
-
   def primary_client_group
     render "schemes/primary_client_group"
   end
