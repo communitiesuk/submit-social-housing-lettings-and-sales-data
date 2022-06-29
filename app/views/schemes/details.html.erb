@@ -58,11 +58,6 @@
          :name,
          legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
 
-       <%= f.govuk_number_field :total_units,
-         width: 2,
-         label: { text: "Total number of units", size: "m" },
-         hint: { text: "For example, a unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff." } %>
-
         <%= f.hidden_field :page, value: "details" %>
         <% if request.query_parameters["check_answers"] == "true" %>
             <%= f.hidden_field :check_answers, value: "true" %>
