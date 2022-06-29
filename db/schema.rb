@@ -310,7 +310,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_29_105452) do
     t.integer "support_type"
     t.string "intended_stay"
     t.datetime "end_date"
-    t.string "has_other_client_group"
+    t.integer "has_other_client_group"
     t.bigint "stock_owning_organisation_id"
     t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
     t.index ["stock_owning_organisation_id"], name: "index_schemes_on_stock_owning_organisation_id"

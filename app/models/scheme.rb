@@ -79,8 +79,8 @@ class Scheme < ApplicationRecord
   }.freeze
 
   HAS_OTHER_CLIENT_GROUP = {
-    "Yes": "yes",
-    "No": "no",
+    No: 0,
+    Yes: 1,
   }.freeze
 
   enum intended_stay: INTENDED_STAY, _suffix: true
