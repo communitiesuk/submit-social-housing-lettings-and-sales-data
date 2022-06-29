@@ -8,20 +8,21 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 ## Domain documentation
 
 - [Service overview](docs/service_overview.md)
-- [User roles](docs/user_roles.md)
-- [Schemes](docs/schemes.md)
-- [Organisation relationships (Parent/Child)](docs/organisation_relationships.md)
+- [Organisations](docs/organisations.md)
+- [Users and roles](docs/users.md)
+- [Supported housing schemes](docs/schemes.md)
 
 ## Technical Documentation
 
 - [Developer setup](docs/developer_setup.md)
-- [Form builder](docs/form_builder.md)
-- [Form runner](docs/form_runner.md)
-- [Infrastructure & CI/CD pipelines](docs/infrastructure.md)
-- [Monitoring, logging & alerting](docs/monitoring.md)
 - [Frontend](docs/frontend.md)
-- [Testing strategies and style guide](docs/testing.md)
-- [Export to CDS](docs/exports)
+- [Testing strategy](docs/testing.md)
+- [Form Builder](docs/form_builder.md)
+- [Form Runner](docs/form_runner.md)
+- [Infrastructure](docs/infrastructure.md)
+- [Monitoring](docs/monitoring.md)
+- [Exporting to CDS](docs/exports)
+- [Application decision records](docs/adr)
 
 ## API documentation
 
@@ -33,4 +34,4 @@ API documentation can be found here: <https://communitiesuk.github.io/submit-soc
 
 ## User interface
 
-![View of the logs list](docs/images/logs_list.png)
+![View of the logs list](docs/images/service.png)
