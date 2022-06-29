@@ -551,7 +551,7 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.secondary_client_group).to eq(nil)
         expect(Scheme.last.support_type).to eq(nil)
         expect(Scheme.last.intended_stay).to eq(nil)
-        expect(Scheme.last.code).to match(/S*/)
+        expect(Scheme.last.id_to_display).to match(/S*/)
       end
     end
 
@@ -585,7 +585,7 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.secondary_client_group).to eq(nil)
         expect(Scheme.last.support_type).to eq(nil)
         expect(Scheme.last.intended_stay).to eq(nil)
-        expect(Scheme.last.code).to match(/S*/)
+        expect(Scheme.last.id_to_display).to match(/S*/)
       end
 
       context "when required organisation id param is missing" do

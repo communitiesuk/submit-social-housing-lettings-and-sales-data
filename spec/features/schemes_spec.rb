@@ -128,7 +128,7 @@ RSpec.describe "Schemes scheme Features" do
 
               it "displays all schemes after I clear the search results" do
                 click_link("Clear search")
-                expect(page).to have_content(scheme_to_search.code)
+                expect(page).to have_content(scheme_to_search.id_to_display)
                 schemes.each do |scheme|
                   expect(page).to have_content(scheme.id)
                 end
@@ -160,7 +160,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "shows me details about the selected scheme" do
-            expect(page).to have_content(schemes.first.code)
+            expect(page).to have_content(schemes.first.id_to_display)
             expect(page).to have_content(schemes.first.service_name)
             expect(page).to have_content(schemes.first.sensitive)
             expect(page).to have_content(schemes.first.scheme_type)
