@@ -4,13 +4,13 @@ The most common way to run a development version of the application is run with 
 
 Dependencies:
 
-- Ruby
-- Rails
-- PostgreSQL
-- NodeJS
-- Gecko driver (https://github.com/mozilla/geckodriver/releases) [for running Selenium tests]
+- [Ruby](https://www.ruby-lang.org/en/)
+- [Rails](https://rubyonrails.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [NodeJS](https://nodejs.org/en/)
+- [Gecko driver](https://github.com/mozilla/geckodriver/releases) [for running Selenium tests]
 
-We recommend using RBenv to manage Ruby versions.
+We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versions.
 
 1. Install PostgreSQL
 
@@ -64,7 +64,7 @@ We recommend using RBenv to manage Ruby versions.
     gem install bundler
     ```
 
-5. Install Javascript dependencies
+5. Install JavaScript dependencies
 
     macOS:
 
