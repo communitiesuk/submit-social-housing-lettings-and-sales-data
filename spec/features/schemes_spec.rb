@@ -38,12 +38,12 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I fill in search information and press the search button" do
             before do
-              fill_in("search", with: scheme_to_search.code)
+              fill_in("search", with: scheme_to_search.id_to_display)
               click_button("Search")
             end
 
             it "displays scheme matching the scheme code" do
-              expect(page).to have_content(scheme_to_search.code)
+              expect(page).to have_content(scheme_to_search.id_to_display)
             end
 
             context "when I want to clear results" do
@@ -113,12 +113,12 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I fill in search information and press the search button" do
             before do
-              fill_in("search", with: scheme_to_search.code)
+              fill_in("search", with: scheme_to_search.id_to_display)
               click_button("Search")
             end
 
             it "displays scheme matching the scheme code" do
-              expect(page).to have_content(scheme_to_search.code)
+              expect(page).to have_content(scheme_to_search.id_to_display)
             end
 
             context "when I want to clear results" do
