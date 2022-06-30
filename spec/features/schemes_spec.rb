@@ -379,6 +379,21 @@ RSpec.describe "Schemes scheme Features" do
                     expect(page).to have_content "Check your changes before updating this scheme"
                   end
 
+                  context "and I select to create a scheme" do
+                    before do
+                      click_link "Create scheme"
+                    end
+
+                    it "adds scheme to the list of schemes" do
+                      expect(page).to have_content "Supported housing schemes"
+                      expect(page).to have_content scheme.id_to_display
+                      expect(page).to have_content scheme.service_name
+                      expect(page).to have_content scheme.organisation.name
+                      expect(page).to have_content scheme.stock_owning_organisation.name
+                      expect(page).to have_content "#{scheme.organisation.name} has been created."
+                    end
+                  end
+
                   context "when changing answers" do
                     it "displays change links" do
                       assert_selector "a", text: "Change", count: 12
