@@ -56,15 +56,9 @@ RSpec.describe "Form Navigation" do
       pages = question_answers.map { |_key, val| val[:path] }
       pages[0..-2].each_with_index do |val, index|
         visit("/logs/#{id}/#{val}")
-        click_button("Save and continue")
+        click_link("Skip for now")
         expect(page).to have_current_path("/logs/#{id}/#{pages[index + 1]}")
       end
-    end
-
-    it "a question page has a link allowing you to cancel your input and return to the check answers page" do
-      visit("logs/#{id}/tenant-code-test?referrer=check_answers")
-      click_link(text: "Cancel")
-      expect(page).to have_current_path("/logs/#{id}/setup/check-answers")
     end
 
     it "a question page has a Skip for now link that lets you move on to the next question without inputting anything" do
@@ -113,6 +107,59 @@ RSpec.describe "Form Navigation" do
           click_link("Back")
           expect(page).to have_current_path("/logs/#{id}/household-characteristics/check-answers")
         end
+      end
+    end
+  end
+
+  describe "Editing a log" do
+    it "a question page has a link allowing you to cancel your input and return to the check answers page" do
+      visit("logs/#{id}/tenant-code-test?referrer=check_answers")
+      click_link(text: "Cancel")
+      expect(page).to have_current_path("/logs/#{id}/setup/check-answers")
+    end
+
+    context "when clicking save and continue on a mandatory question with no input" do
+      let(:id) { empty_case_log.id }
+
+      it "shows a validation error on radio questions" do
+        visit("/logs/#{id}/renewal")
+        click_button("Save and continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#case-log-renewal-error")
+        expect(page).to have_title("Error")
+      end
+
+      it "shows a validation error on date questions" do
+        visit("/logs/#{id}/tenancy-start-date")
+        click_button("Save and continue")
+        expect(page).to have_selector("#error-summary-title")
+        expect(page).to have_selector("#case-log-startdate-error")
+        expect(page).to have_title("Error")
+      end
+
+      context "when the page has a main and conditional question" do 
+        context "when the conditional question is required but not answered" do
+          xit "shows a validation error for the conditional question", js: true do
+            visit("/logs/#{id}/armed-forces")
+            choose("case-log-armedforces-1-field", allow_label_click: true)
+            click_button("Save and continue")
+            expect(page).to have_selector("#error-summary-title")
+            expect(page).to have_selector("#case-log-leftreg-error")
+            expect(page).to have_title("Error")
+          end
+        end 
+      end
+    end
+
+    context "when clicking save and continue on an optional question with no input" do
+      let(:id) { empty_case_log.id }
+
+      it "does not show a validation error" do
+        visit("/logs/#{id}/tenant-code")
+        click_button("Save and continue")
+        expect(page).not_to have_selector("#error-summary-title")
+        expect(page).not_to have_title("Error")
+        expect(page).to have_current_path("/logs/#{id}/property-reference")
       end
     end
   end
