@@ -13,7 +13,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     return answer_opts unless ActiveRecord::Base.connected?
 
     Scheme.select(:id, :service_name).each_with_object(answer_opts) do |scheme, hsh|
-      hsh[scheme.id] = scheme.service_name
+      hsh[scheme.id.to_s] = scheme.service_name
       hsh
     end
   end
@@ -21,7 +21,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
   def displayed_answer_options(case_log)
     return {} unless case_log.created_by
 
-    user_org_scheme_ids = Scheme.where("organisation_id = #{case_log.created_by.organisation_id}").map(&:id)
+    user_org_scheme_ids = Scheme.where(organisation_id: case_log.created_by.organisation_id).map(&:id).map(&:to_s)
     answer_options.select { |k, _v| user_org_scheme_ids.include?(k) }
   end
 
