@@ -7,11 +7,16 @@ class FormController < ApplicationController
     if @case_log
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
-      if @case_log.update(responses_for_page)
+      mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
+
+      if mandatory_questions_with_no_response.empty? && @case_log.update(responses_for_page)
         session[:errors] = nil
         redirect_to(successful_redirect_path)
       else
         redirect_path = "case_log_#{@page.id}_path"
+        mandatory_questions_with_no_response.map do |question|
+          @case_log.errors.add question.id.to_sym, I18n.t("validations.not_answered", question: question.display_label.downcase)
+        end
         session[:errors] = @case_log.errors.to_json
         Rails.logger.info "User triggered validation(s) on: #{@case_log.errors.map(&:attribute).join(', ')}"
         redirect_to(send(redirect_path, @case_log))
@@ -120,4 +125,13 @@ private
     redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log, current_user)
     send(redirect_path, @case_log)
   end
+
+  def mandatory_questions_with_no_response(responses_for_page)
+    @page.questions.select do |question| 
+      (responses_for_page[question.id].nil? || responses_for_page[question.id].empty?) && 
+        CaseLog::OPTIONAL_FIELDS.exclude?(question.id) && 
+          @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id) 
+    end
+  end
 end
+

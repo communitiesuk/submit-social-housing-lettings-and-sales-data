@@ -173,6 +173,10 @@ class Form::Question
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
   end
 
+  def display_label 
+    check_answer_label || header || id.humanize
+  end
+
 private
 
   def selected_answer_option_is_derived?(case_log)
