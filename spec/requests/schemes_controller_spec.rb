@@ -750,10 +750,10 @@ RSpec.describe SchemesController, type: :request do
       context "when updating support" do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
 
-        it "renders confirm secondary group after successful update" do
+        it "renders add location to this scheme successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Check your changes before updating this scheme")
+          expect(page).to have_content("Add a location to this scheme")
         end
 
         it "updates a scheme with valid params" do
