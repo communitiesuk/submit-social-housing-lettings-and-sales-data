@@ -23,6 +23,17 @@
                              label: { text: "Name (optional)", size: "m" },
                              hint: { text: "This is how you refer to this location within your organisation" } %>
 
+      <%= f.govuk_number_field :total_units,
+                               label: { text: "Total number of units at this location", size: "m" },
+                               width: 2,
+                               hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff.s" },
+                               autofocus: true %>
+
+      <%= f.govuk_collection_radio_buttons :scheme_type,
+                                           scheme_types_selection,
+                                           :id,
+                                           :name,
+                                           legend: { text: "What is this type of scheme?", size: "m" } %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>

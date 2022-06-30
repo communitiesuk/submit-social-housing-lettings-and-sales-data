@@ -239,7 +239,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
   create_table "locations", force: :cascade do |t|
     t.string "location_code"
     t.string "postcode"
-    t.string "type_of_unit"
     t.string "type_of_building"
     t.integer "wheelchair_adaptation"
     t.bigint "scheme_id", null: false
@@ -249,6 +248,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.integer "total_units"
+    t.integer "type_of_unit"
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
 

@@ -3,7 +3,7 @@ class LocationsController < ApplicationController
   before_action :authenticate_scope!
 
   def new
-    @scheme = Scheme.find(12)
+    @scheme = Scheme.find(params[:id])
     @location = Location.new
   end
 
