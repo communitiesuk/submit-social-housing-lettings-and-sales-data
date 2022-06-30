@@ -1,6 +1,8 @@
 class Location < ApplicationRecord
   belongs_to :scheme
 
+  attr_accessor :add_another_location
+
   WHEELCHAIR_ADAPTATIONS = {
     No: 0,
     Yes: 1,

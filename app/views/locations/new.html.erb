@@ -48,6 +48,16 @@
 
       <%= govuk_section_break(visible: true, size: "m") %>
 
+      <% another_location_selection = %w[No Yes].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :add_another_location,
+                                           another_location_selection,
+                                           :id,
+                                           :name,
+                                           inline: true,
+                                           legend: { text: "Do you want to add another location?", size: "m" } %>
+
+
       <%= f.govuk_submit "Save and continue" %>
     </div>
   </div>
