@@ -39,7 +39,7 @@
 
       <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
-      <%= f.govuk_collection_radio_buttons :type_of_unit,
+      <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
                                            wheelchair_user_selection,
                                            :id,
                                            :name,
