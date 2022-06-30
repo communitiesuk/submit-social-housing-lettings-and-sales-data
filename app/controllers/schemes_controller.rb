@@ -7,7 +7,7 @@ class SchemesController < ApplicationController
   before_action :authenticate_scope!
 
   def index
-    flash[:notice] = ("#{Scheme.find(params[:scheme_id].to_i).service_name} has been created.") if params[:scheme_id]
+    flash[:notice] = "#{Scheme.find(params[:scheme_id].to_i).service_name} has been created." if params[:scheme_id]
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_schemes = Scheme.all
 

@@ -37,7 +37,7 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes"
       end
 
-      context "params scheme_id is present" do
+      context "when params scheme_id is present" do
         it "shows a success banner" do
           get "/schemes", params: { scheme_id: schemes.first.id }
           follow_redirect!
@@ -85,7 +85,7 @@ RSpec.describe SchemesController, type: :request do
         expect(CGI.unescape_html(response.body)).to include(expected_field)
       end
 
-      context "params scheme_id is present" do
+      context "when params scheme_id is present" do
         it "shows a success banner" do
           get "/schemes", params: { scheme_id: schemes.first.id }
           expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
