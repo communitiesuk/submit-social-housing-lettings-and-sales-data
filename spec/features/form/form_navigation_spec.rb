@@ -139,7 +139,7 @@ RSpec.describe "Form Navigation" do
 
       context "when the page has a main and conditional question" do
         context "when the conditional question is required but not answered" do
-          xit "shows a validation error for the conditional question", js: true do
+          it "shows a validation error for the conditional question", js: true do
             visit("/logs/#{id}/armed-forces")
             choose("case-log-armedforces-1-field", allow_label_click: true)
             click_button("Save and continue")
