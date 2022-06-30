@@ -1,6 +1,6 @@
 <% content_for :title, "Check your answers before creating this scheme" %>
 
-<%= render partial: "organisations/headings", locals: { main: "Check your changes before updating this scheme", sub: @scheme.service_name } %>
+<%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
 <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
   <% component.tab(label: "Scheme") do %>

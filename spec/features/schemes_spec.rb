@@ -389,7 +389,7 @@ RSpec.describe "Schemes scheme Features" do
                     end
 
                     it "lets me check my answers" do
-                      expect(page).to have_content "Check your changes before updating this scheme"
+                      expect(page).to have_content "Check your changes before creating this scheme"
                     end
 
                     context "and I select to create a scheme" do
@@ -412,7 +412,7 @@ RSpec.describe "Schemes scheme Features" do
                   end
 
                   # it "lets me check my answers" do
-                  #   expect(page).to have_content "Check your changes before updating this scheme"
+                  #   expect(page).to have_content "Check your changes before creating this scheme"
                   # end
                 end
               end

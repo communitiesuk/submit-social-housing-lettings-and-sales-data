@@ -77,5 +77,32 @@ RSpec.describe LocationsController, type: :request do
         expect(response).to have_http_status(:unauthorized)
       end
     end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
+
+      before do
+        sign_in user
+        post "/schemes/#{scheme.id}/location/create", params: params
+      end
+
+      it "creates a new location for scheme with valid params and redirects to correct page" do
+        expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
+        follow_redirect!
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Check your answers before creating this scheme")
+      end
+
+      it "creates a new location for scheme with valid params" do
+
+        expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+        expect(Location.last.name).to eq("Test")
+        expect(Location.last.total_units).to eq(5)
+        expect(Location.last.type_of_unit).to eq("Bungalow")
+        expect(Location.last.wheelchair_adaptation).to eq("No")
+      end
+    end
   end
 end

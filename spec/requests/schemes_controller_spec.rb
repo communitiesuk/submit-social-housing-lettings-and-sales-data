@@ -662,7 +662,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -707,7 +707,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -737,7 +737,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -768,7 +768,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -802,7 +802,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -846,7 +846,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -891,7 +891,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -921,7 +921,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -937,7 +937,7 @@ RSpec.describe SchemesController, type: :request do
         it "renders confirm secondary group after successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Check your changes before updating this scheme")
+          expect(page).to have_content("Check your changes before creating this scheme")
         end
 
         it "updates a scheme with valid params" do
@@ -952,7 +952,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -997,7 +997,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -1310,7 +1310,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before updating this scheme")
+        expect(page).to have_content("Check your changes before creating this scheme")
       end
 
       context "when attempting to access check-answers scheme page for another organisation" do
@@ -1337,7 +1337,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before updating this scheme")
+        expect(page).to have_content("Check your changes before creating this scheme")
       end
     end
   end
