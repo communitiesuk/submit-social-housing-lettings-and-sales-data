@@ -1,0 +1,22 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: "javascript:history.go(-1);",
+  ) %>
+<% end %>
+
+<%= form_for(@location, method: :post, url: location_create_scheme_path) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <h1 class="govuk-heading-l">
+        <%= content_for(:title) %>
+      </h1>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

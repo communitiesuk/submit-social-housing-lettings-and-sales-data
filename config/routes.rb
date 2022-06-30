@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     member do
       get "locations", to: "schemes#locations"
       get "location/new", to: "locations#new"
+      post "location/create", to: "locations#create"
     end
   end
 
