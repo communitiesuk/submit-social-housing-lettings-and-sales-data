@@ -15,7 +15,7 @@ RSpec.describe Form::Setup::Questions::Location, type: :model do
     expect(question.id).to eq("location")
   end
 
-  xit "has the correct header" do
+  it "has the correct header" do
     expect(question.header).to eq("Which location used by #{scheme.service_name} is this log for?")
   end
 

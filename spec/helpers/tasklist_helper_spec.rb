@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TasklistHelper do
   let(:empty_case_log) { FactoryBot.create(:case_log) }
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
+  let(:case_log) { FactoryBot.create(:case_log, :in_progress, needstype: 1) }
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
