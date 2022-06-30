@@ -43,6 +43,7 @@ RSpec.describe "Form Page Routing" do
     choose("case-log-preg-occ-2-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question-no-page")
+    choose("case-log-cbl-0-field", allow_label_click: true)
     click_button("Save and continue")
     expect(page).to have_current_path("/logs/#{id}/conditional-question/check-answers")
   end

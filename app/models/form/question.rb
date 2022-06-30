@@ -173,8 +173,14 @@ class Form::Question
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
   end
 
-  def display_label 
+  def display_label
     check_answer_label || header || id.humanize
+  end
+
+  def unanswered_error_message
+    return I18n.t("validations.declaration.missing") if id == "declaration"
+
+    I18n.t("validations.not_answered", question: display_label.downcase)
   end
 
 private
