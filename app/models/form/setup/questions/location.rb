@@ -19,6 +19,8 @@ class Form::Setup::Questions::Location < ::Form::Question
     !supported_housing_selected?(case_log)
   end
 
+private
+
   def supported_housing_selected?(case_log)
     case_log.needstype == 2
   end

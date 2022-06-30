@@ -25,9 +25,17 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     answer_options.select { |k, _v| user_org_scheme_ids.include?(k) }
   end
 
+  def hidden_in_check_answers?(case_log, _current_user = nil)
+    !supported_housing_selected?(case_log)
+  end
+
 private
 
   def selected_answer_option_is_derived?(_case_log)
     false
+  end
+
+  def supported_housing_selected?(case_log)
+    case_log.needstype == 2
   end
 end

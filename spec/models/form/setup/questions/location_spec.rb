@@ -28,7 +28,7 @@ RSpec.describe Form::Setup::Questions::Location, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be_falsey
+    expect(question).not_to be_derived
   end
 
   it "has the correct answer_options" do

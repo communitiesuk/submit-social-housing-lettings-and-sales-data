@@ -90,7 +90,7 @@ RSpec.describe "Log Features" do
         visit("logs/#{log_id}/setup/check-answers")
         expect(page).to have_content("Owning organisation #{support_user.organisation.name}")
         expect(page).to have_content("User #{support_user.name}")
-        expect(page).to have_content("You have answered 2 of 7 questions")
+        expect(page).to have_content("You have answered 2 of 8 questions")
       end
     end
   end
@@ -120,7 +120,7 @@ RSpec.describe "Log Features" do
         visit("logs/#{log_id}/setup/check-answers")
         expect(page).not_to have_content("Owning organisation #{support_user.organisation.name}")
         expect(page).not_to have_content("User #{support_user.name}")
-        expect(page).to have_content("You have answered 0 of 5 questions")
+        expect(page).to have_content("You have answered 0 of 6 questions")
       end
     end
   end
