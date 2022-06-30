@@ -8,7 +8,6 @@ class CaseLogValidator < ActiveModel::Validator
   include Validations::TenancyValidations
   include Validations::DateValidations
   include Validations::LocalAuthorityValidations
-  include Validations::SubmissionValidations
 
   def validate(record)
     validation_methods = public_methods.select { |method| method.starts_with?("validate_") }

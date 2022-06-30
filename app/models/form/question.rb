@@ -191,6 +191,12 @@ class Form::Question
     label
   end
 
+  def unanswered_error_message
+    return I18n.t("validations.declaration.missing") if id == "declaration"
+
+    I18n.t("validations.not_answered", question: display_label.downcase)
+  end
+
 private
 
   def selected_answer_option_is_derived?(case_log)

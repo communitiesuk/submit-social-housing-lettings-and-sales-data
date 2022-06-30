@@ -15,7 +15,7 @@ class FormController < ApplicationController
       else
         redirect_path = "case_log_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
-          @case_log.errors.add question.id.to_sym, I18n.t("validations.not_answered", question: question.display_label.downcase)
+          @case_log.errors.add question.id.to_sym, question.unanswered_error_message
         end
         session[:errors] = @case_log.errors.to_json
         Rails.logger.info "User triggered validation(s) on: #{@case_log.errors.map(&:attribute).join(', ')}"
@@ -128,12 +128,13 @@ private
 
   def mandatory_questions_with_no_response(responses_for_page)
     @page.questions.select do |question|
-       question_is_required?(question) && question_missing_response?(responses_for_page, question)
+      question_is_required?(question) && question_missing_response?(responses_for_page, question)
     end
   end
 
   def question_is_required?(question)
     CaseLog::OPTIONAL_FIELDS.exclude?(question.id) &&
+      @page.questions.map(&:result_field).exclude?(question.id) &&
       @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id)
   end
 

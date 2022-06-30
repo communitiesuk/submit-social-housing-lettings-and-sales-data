@@ -137,7 +137,7 @@ RSpec.describe "Form Navigation" do
         expect(page).to have_title("Error")
       end
 
-      context "when the page has a main and conditional question" do 
+      context "when the page has a main and conditional question" do
         context "when the conditional question is required but not answered" do
           xit "shows a validation error for the conditional question", js: true do
             visit("/logs/#{id}/armed-forces")
@@ -147,7 +147,7 @@ RSpec.describe "Form Navigation" do
             expect(page).to have_selector("#case-log-leftreg-error")
             expect(page).to have_title("Error")
           end
-        end 
+        end
       end
     end
 

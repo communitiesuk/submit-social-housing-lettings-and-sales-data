@@ -33,6 +33,7 @@ RSpec.describe "Accessible Automcomplete" do
 
   it "total displays despite error message", js: true do
     visit("/logs/#{case_log.id}/rent")
+    choose("case-log-period-1-field", allow_label_click: true)
     fill_in("case-log-brent-field", with: 500)
     fill_in("case-log-scharge-field", with: 50)
     fill_in("case-log-pscharge-field", with: 50)
