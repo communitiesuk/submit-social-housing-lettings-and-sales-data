@@ -30,7 +30,11 @@ RSpec.describe Form::Setup::Pages::Location, type: :model do
   it "has the correct depends_on" do
     expect(page.depends_on).to eq([{
       "supported_housing_schemes_enabled?" => true,
-      scheme.locations.size > 1 => true
+      "needstype" => 2,
+      "scheme.locations.size" => {
+        "operator" => ">",
+        "operand" => 1,
+      },
     }])
   end
 end

@@ -16,6 +16,8 @@ RSpec.describe Form::Setup::Subsections::Setup, type: :model do
       %w[organisation
          created_by
          needs_type
+         scheme
+         location
          renewal
          tenancy_start_date
          rent_type

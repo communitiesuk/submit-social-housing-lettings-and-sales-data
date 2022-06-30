@@ -12,7 +12,7 @@ RSpec.describe Form::Setup::Pages::Scheme, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[scheme])
+    expect(page.questions.map(&:id)).to eq(%w[scheme_id])
   end
 
   it "has the correct id" do
@@ -28,6 +28,6 @@ RSpec.describe Form::Setup::Pages::Scheme, type: :model do
   end
 
   it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{ "supported_housing_schemes_enabled?" => true }])
+    expect(page.depends_on).to eq([{ "needstype" => 2, "supported_housing_schemes_enabled?" => true }])
   end
 end

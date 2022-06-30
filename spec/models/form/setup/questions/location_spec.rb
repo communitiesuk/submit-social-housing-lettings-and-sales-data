@@ -28,13 +28,10 @@ RSpec.describe Form::Setup::Questions::Location, type: :model do
   end
 
   it "is marked as derived" do
-    expect(question.derived?).to be true
+    expect(question.derived?).to be_falsey
   end
 
   it "has the correct answer_options" do
-    expect(question.answer_options).to eq({
-      "1" => { "value" => "General needs" },
-      "2" => { "value" => "Supported housing" },
-    })
+    expect(question.answer_options).to eq({})
   end
 end

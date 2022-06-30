@@ -39,17 +39,19 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     expect(question.derived?).to be false
   end
 
-  context "When a user is signed in" do
-    let(:organisation) { FactoryBot.create(:organisation)}
-    let(:organisation_2) { FactoryBot.create(:organisation)}
+  context "when a user is signed in" do
+    let(:organisation) { FactoryBot.create(:organisation) }
+    let(:organisation_2) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, organisation_id: organisation.id) }
-    let(:scheme) { FactoryBot.create(:scheme, organisation_id: organisation.id ) }
-    let!(:scheme_2) { FactoryBot.create(:scheme, organisation_id: organisation_2.id ) }
-    let(:case_log) { FactoryBot.create(:case_log, created_by: user)}
-    
-    
+    let(:scheme) { FactoryBot.create(:scheme, organisation_id: organisation.id) }
+    let(:case_log) { FactoryBot.create(:case_log, created_by: user) }
+
+    before do
+      FactoryBot.create(:scheme, organisation_id: organisation_2.id)
+    end
+
     it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
-      expected_answer = { scheme.id => "#{scheme.service_name}" }
+      expected_answer = { scheme.id => scheme.service_name }
       expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
     end
   end

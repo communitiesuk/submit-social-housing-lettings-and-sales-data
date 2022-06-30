@@ -1,5 +1,5 @@
 class Form::Setup::Pages::RentType < ::Form::Page
-  def initialize(id, hsh, subsection)
+  def initialize(_id, hsh, subsection)
     super("rent_type", hsh, subsection)
     @header = ""
     @description = ""
