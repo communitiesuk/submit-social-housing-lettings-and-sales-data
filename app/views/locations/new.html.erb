@@ -29,11 +29,24 @@
                                hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff.s" },
                                autofocus: true %>
 
-      <%= f.govuk_collection_radio_buttons :scheme_type,
-                                           scheme_types_selection,
+      <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :type_of_unit,
+                                           type_of_units_selection,
                                            :id,
                                            :name,
                                            legend: { text: "What is this type of scheme?", size: "m" } %>
+
+      <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :type_of_unit,
+                                           wheelchair_user_selection,
+                                           :id,
+                                           :name,
+                                           hint: { text: "This includes stairlifts, ramps, level-access showers or grab rails" },
+                                           legend: { text: "Are the majority of units in this location built or adapted to wheelchair-user standards?", size: "m" } %>
+
+      <%= govuk_section_break(visible: true, size: "m") %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>

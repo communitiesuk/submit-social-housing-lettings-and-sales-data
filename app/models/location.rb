@@ -8,6 +8,17 @@ class Location < ApplicationRecord
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
 
+  TYPE_OF_UNIT = {
+      "Self-contained flat or bedsit": 1,
+      "Self-contained flat or bedsit with common facilities": 2,
+      "Shared flat": 3,
+      "Shared house or hostel": 4,
+      "Bungalow": 5,
+      "Self-contained house": 6,
+    }.freeze
+
+  enum type_of_unit: TYPE_OF_UNIT
+
   def display_attributes
     [
       { name: "Location code ", value: location_code, suffix: false },
