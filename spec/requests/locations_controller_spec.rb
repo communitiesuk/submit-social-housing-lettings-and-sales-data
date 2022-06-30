@@ -63,5 +63,19 @@ RSpec.describe LocationsController, type: :request do
         expect(response).to redirect_to("/account/sign-in")
       end
     end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        post "/schemes/1/location/create"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 end

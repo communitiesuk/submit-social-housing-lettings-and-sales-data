@@ -8,11 +8,10 @@ class LocationsController < ApplicationController
   end
 
   def create
-    debugger
     @scheme = Scheme.find(params[:id])
     @location = Location.new(location_params)
     @location.save
-    render "schemes/check_answers"
+    redirect_to scheme_check_answers_path(scheme_id: @scheme.id)
   end
 
 private
