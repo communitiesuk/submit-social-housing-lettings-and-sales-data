@@ -247,6 +247,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.string "county"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
 
