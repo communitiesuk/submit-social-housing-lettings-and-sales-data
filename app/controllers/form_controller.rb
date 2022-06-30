@@ -10,8 +10,7 @@ class FormController < ApplicationController
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
       if mandatory_questions_with_no_response.empty? && @case_log.update(responses_for_page)
-        session[:errors] = nil
-        session[:fields] = nil
+        session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
         redirect_path = "case_log_#{@page.id}_path"
