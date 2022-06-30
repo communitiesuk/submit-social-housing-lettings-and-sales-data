@@ -105,6 +105,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when do you want to add another location is selected as yes" do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes" } } }
+
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!

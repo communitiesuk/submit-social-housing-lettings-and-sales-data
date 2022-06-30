@@ -1,6 +1,6 @@
 class ChangeLocationTypeOfUnit < ActiveRecord::Migration[7.0]
-  def change
-    remove_column :locations, :type_of_unit
-    add_column :locations, :type_of_unit, :integer
+  change_table :locations, :bulk => true do |t|
+    t.remove :type_of_unit
+    t.integer   :type_of_unit
   end
 end
