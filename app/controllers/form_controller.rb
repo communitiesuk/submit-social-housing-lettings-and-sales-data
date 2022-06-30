@@ -127,11 +127,23 @@ private
   end
 
   def mandatory_questions_with_no_response(responses_for_page)
-    @page.questions.select do |question| 
-      (responses_for_page[question.id].nil? || responses_for_page[question.id].empty?) && 
-        CaseLog::OPTIONAL_FIELDS.exclude?(question.id) && 
-          @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id) 
+    @page.questions.select do |question|
+       question_is_required?(question) && question_missing_response?(responses_for_page, question)
+    end
+  end
+
+  def question_is_required?(question)
+    CaseLog::OPTIONAL_FIELDS.exclude?(question.id) &&
+      @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id)
+  end
+
+  def question_missing_response?(responses_for_page, question)
+    if %w[checkbox validation_override].include?(question.type)
+      question.answer_options.keys.reject { |x| x.match(/divider/) }.all? do |option|
+        params["case_log"][question.id].exclude?(option)
+      end
+    else
+      responses_for_page[question.id].nil? || responses_for_page[question.id].blank?
     end
   end
 end
-
