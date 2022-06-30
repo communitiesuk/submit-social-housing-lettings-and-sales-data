@@ -375,6 +375,10 @@ RSpec.describe "Schemes scheme Features" do
                     click_button "Save and continue"
                   end
 
+                  it "lets me add location" do
+                    expect(page).to have_content "Add a location to this scheme"
+                  end
+
                   context "when I add location to the scheme" do
                     before do
                       fill_in "Postcode", with: "SW1P 4DF"
