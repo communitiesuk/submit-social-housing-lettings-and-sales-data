@@ -10,8 +10,13 @@ class LocationsController < ApplicationController
   def create
     @scheme = Scheme.find(params[:id])
     @location = Location.new(location_params)
-    @location.save
-    redirect_to scheme_check_answers_path(scheme_id: @scheme.id)
+
+    if @location.save
+      redirect_to scheme_check_answers_path(scheme_id: @scheme.id) if location_params[:add_another_location] == "No"
+      redirect_to location_new_scheme_path if location_params[:add_another_location] == "Yes"
+    elsif
+      render :new, status: :unprocessable_entity
+    end
   end
 
 private
