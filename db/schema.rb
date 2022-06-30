@@ -306,7 +306,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.string "primary_client_group"
     t.string "secondary_client_group"
     t.integer "sensitive"
-    t.integer "total_units"
     t.integer "scheme_type"
     t.integer "registered_under_care_act"
     t.integer "support_type"
