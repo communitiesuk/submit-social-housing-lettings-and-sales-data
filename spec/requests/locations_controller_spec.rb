@@ -55,4 +55,13 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#create" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        post "/schemes/1/location/create"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+  end
 end

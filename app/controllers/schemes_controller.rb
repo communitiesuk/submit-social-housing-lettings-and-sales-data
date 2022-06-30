@@ -113,7 +113,6 @@ private
                                                      :stock_owning_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
-                                                     :total_units,
                                                      :id,
                                                      :has_other_client_group,
                                                      :primary_client_group,
