@@ -11,6 +11,8 @@
   ) %>
 <% end %>
 
+<%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
+
 <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by scheme name, code or postcode", value: @searched) %>

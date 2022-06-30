@@ -1,0 +1,39 @@
+<% content_for :title, "What support does this scheme provide?" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/secondary-client-group",
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "What support does this scheme provide?", sub: @scheme.service_name } %>
+
+<%= form_for(@scheme, method: :patch) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <legend class="govuk-fieldset__legend">
+      </legend>
+
+      <% support_type_selection = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :support_type,
+        support_type_selection,
+        :id,
+        :name,
+        legend: { text: "Level of support given", size: "m" } %>
+
+      <% intended_stay_selection = Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :intended_stay,
+        intended_stay_selection,
+        :id,
+        :name,
+        legend: { text: "Intended length of stay", size: "m" } %>
+
+        <%= f.hidden_field :page, value: "support" %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

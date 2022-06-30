@@ -1,0 +1,35 @@
+<% content_for :title, "What is the other client group?" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/confirm-secondary-client-group",
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
+
+<%= form_for(@scheme, method: :patch) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <legend class="govuk-fieldset__legend">
+      </legend>
+
+      <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :secondary_client_group,
+        secondary_client_group_selection,
+        :id,
+        :name,
+        legend: nil %>
+
+        <%= f.hidden_field :page, value: "secondary-client-group" %>
+        <% if request.query_parameters["check_answers"] == "true" %>
+          <%= f.hidden_field :check_answers, value: "true" %>
+        <% end %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>
