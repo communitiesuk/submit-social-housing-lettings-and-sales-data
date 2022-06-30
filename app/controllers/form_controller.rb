@@ -53,6 +53,7 @@ class FormController < ApplicationController
               messages.each { |message| @case_log.errors.add field.to_sym, message }
             end
           end
+          session["fields"].each { |field, value| @case_log[field] = value } if session["fields"]
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
           if @page.routed_to?(@case_log, current_user)
@@ -127,23 +128,28 @@ private
   end
 
   def mandatory_questions_with_no_response(responses_for_page)
+    session["fields"] = {}
+    calc_questions = @page.questions.map(&:result_field)
     @page.questions.select do |question|
+      next if calc_questions.include?(question.id)
+
       question_is_required?(question) && question_missing_response?(responses_for_page, question)
     end
   end
 
   def question_is_required?(question)
     CaseLog::OPTIONAL_FIELDS.exclude?(question.id) &&
-      @page.questions.map(&:result_field).exclude?(question.id) &&
       @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id)
   end
 
   def question_missing_response?(responses_for_page, question)
     if %w[checkbox validation_override].include?(question.type)
       question.answer_options.keys.reject { |x| x.match(/divider/) }.all? do |option|
+        session["fields"][option] = @case_log[option] = params["case_log"][question.id].include?(option) ? 1 : 0
         params["case_log"][question.id].exclude?(option)
       end
     else
+      session["fields"][question.id] = @case_log[question.id] = responses_for_page[question.id]
       responses_for_page[question.id].nil? || responses_for_page[question.id].blank?
     end
   end
