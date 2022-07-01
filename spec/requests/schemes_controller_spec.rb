@@ -37,6 +37,14 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes"
       end
 
+      context "when params scheme_id is present" do
+        it "shows a success banner" do
+          get "/schemes", params: { scheme_id: schemes.first.id }
+          follow_redirect!
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        end
+      end
+
       it "redirects to the organisation schemes path" do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/schemes")
@@ -56,7 +64,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows all schemes" do
         schemes.each do |scheme|
-          expect(page).to have_content(scheme.code)
+          expect(page).to have_content(scheme.id_to_display)
         end
       end
 
@@ -75,6 +83,13 @@ RSpec.describe SchemesController, type: :request do
       it "has hidden accebility field with description" do
         expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
         expect(CGI.unescape_html(response.body)).to include(expected_field)
+      end
+
+      context "when params scheme_id is present" do
+        it "shows a success banner" do
+          get "/schemes", params: { scheme_id: schemes.first.id }
+          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+        end
       end
 
       context "when paginating over 20 results" do
@@ -102,7 +117,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has pagination links" do
-            expect(page).to have_content("Previous")
+            expect(page).not_to have_content("Previous")
             expect(page).not_to have_link("Previous")
             expect(page).to have_content("Next")
             expect(page).to have_link("Next")
@@ -121,7 +136,7 @@ RSpec.describe SchemesController, type: :request do
           it "has pagination links" do
             expect(page).to have_content("Previous")
             expect(page).to have_link("Previous")
-            expect(page).to have_content("Next")
+            expect(page).not_to have_content("Next")
             expect(page).not_to have_link("Next")
           end
 
@@ -136,17 +151,18 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when searching" do
-        let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321") }
-        let(:search_param) { "CODE321" }
+        let!(:searched_scheme) { FactoryBot.create(:scheme) }
+        let(:search_param) { searched_scheme.id_to_display }
 
         before do
+          FactoryBot.create(:location, scheme: searched_scheme)
           get "/schemes?search=#{search_param}"
         end
 
         it "returns matching results" do
-          expect(page).to have_content(searched_scheme.code)
+          expect(page).to have_content(searched_scheme.id_to_display)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.code)
+            expect(page).not_to have_content(scheme.id_to_display)
           end
         end
 
@@ -195,20 +211,19 @@ RSpec.describe SchemesController, type: :request do
 
       it "has page heading" do
         get "/schemes/#{specific_scheme.id}"
-        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
-        expect(page).to have_content(specific_scheme.sensitive_display)
-        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.sensitive_display)
-        expect(page).to have_content(specific_scheme.scheme_type_display)
-        expect(page).to have_content(specific_scheme.registered_under_care_act_display)
-        expect(page).to have_content(specific_scheme.total_units)
-        expect(page).to have_content(specific_scheme.primary_client_group_display)
-        expect(page).to have_content(specific_scheme.secondary_client_group_display)
-        expect(page).to have_content(specific_scheme.support_type_display)
-        expect(page).to have_content(specific_scheme.intended_stay_display)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.scheme_type)
+        expect(page).to have_content(specific_scheme.registered_under_care_act)
+        expect(page).to have_content(specific_scheme.primary_client_group)
+        expect(page).to have_content(specific_scheme.secondary_client_group)
+        expect(page).to have_content(specific_scheme.support_type)
+        expect(page).to have_content(specific_scheme.intended_stay)
       end
 
       context "when coordinator attempts to see scheme belonging to a different organisation" do
@@ -229,20 +244,19 @@ RSpec.describe SchemesController, type: :request do
       end
 
       it "has page heading" do
-        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
         expect(page).to have_content(specific_scheme.organisation.name)
-        expect(page).to have_content(specific_scheme.sensitive_display)
-        expect(page).to have_content(specific_scheme.code)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.sensitive_display)
-        expect(page).to have_content(specific_scheme.scheme_type_display)
-        expect(page).to have_content(specific_scheme.registered_under_care_act_display)
-        expect(page).to have_content(specific_scheme.total_units)
-        expect(page).to have_content(specific_scheme.primary_client_group_display)
-        expect(page).to have_content(specific_scheme.secondary_client_group_display)
-        expect(page).to have_content(specific_scheme.support_type_display)
-        expect(page).to have_content(specific_scheme.intended_stay_display)
+        expect(page).to have_content(specific_scheme.sensitive)
+        expect(page).to have_content(specific_scheme.scheme_type)
+        expect(page).to have_content(specific_scheme.registered_under_care_act)
+        expect(page).to have_content(specific_scheme.primary_client_group)
+        expect(page).to have_content(specific_scheme.secondary_client_group)
+        expect(page).to have_content(specific_scheme.support_type)
+        expect(page).to have_content(specific_scheme.intended_stay)
       end
     end
   end
@@ -334,7 +348,7 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has pagination links" do
-            expect(page).to have_content("Previous")
+            expect(page).not_to have_content("Previous")
             expect(page).not_to have_link("Previous")
             expect(page).to have_content("Next")
             expect(page).to have_link("Next")
@@ -350,14 +364,15 @@ RSpec.describe SchemesController, type: :request do
             expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
           end
 
-          it "has correct page 1 of 2 title" do
-            expect(page).to have_title("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          it "has correct page 2 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
           end
 
           it "has pagination links" do
             expect(page).to have_content("Previous")
             expect(page).to have_link("Previous")
-            expect(page).to have_content("Next")
+            expect(page).not_to have_content("Next")
             expect(page).not_to have_link("Next")
           end
         end
@@ -410,11 +425,12 @@ RSpec.describe SchemesController, type: :request do
           end
 
           it "has correct page 1 of 2 title" do
-            expect(page).to have_title("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
           end
 
           it "has pagination links" do
-            expect(page).to have_content("Previous")
+            expect(page).not_to have_content("Previous")
             expect(page).not_to have_link("Previous")
             expect(page).to have_content("Next")
             expect(page).to have_link("Next")
@@ -438,10 +454,963 @@ RSpec.describe SchemesController, type: :request do
           it "has pagination links" do
             expect(page).to have_content("Previous")
             expect(page).to have_link("Previous")
-            expect(page).to have_content("Next")
+            expect(page).not_to have_content("Next")
             expect(page).not_to have_link("Next")
           end
         end
+      end
+    end
+  end
+
+  describe "#new" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/new"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/new"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+
+      before do
+        sign_in user
+        get "/schemes/new"
+      end
+
+      it "returns a template for a new scheme" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Create a new supported housing scheme")
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/new"
+      end
+
+      it "returns a template for a new scheme" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Create a new supported housing scheme")
+      end
+    end
+  end
+
+  describe "#create" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        post "/schemes"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        post "/schemes"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+
+      before do
+        sign_in user
+      end
+
+      it "creates a new scheme for user organisation with valid params and renders correct page" do
+        expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        post "/schemes", params: params
+
+        expect(Scheme.last.organisation_id).to eq(user.organisation_id)
+        expect(Scheme.last.service_name).to eq("testy")
+        expect(Scheme.last.scheme_type).to eq("Foyer")
+        expect(Scheme.last.sensitive).to eq("Yes")
+        expect(Scheme.last.registered_under_care_act).to eq("No")
+        expect(Scheme.last.id).not_to eq(nil)
+        expect(Scheme.last.has_other_client_group).to eq(nil)
+        expect(Scheme.last.primary_client_group).to eq(nil)
+        expect(Scheme.last.secondary_client_group).to eq(nil)
+        expect(Scheme.last.support_type).to eq(nil)
+        expect(Scheme.last.intended_stay).to eq(nil)
+        expect(Scheme.last.id_to_display).to match(/S*/)
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:organisation) { FactoryBot.create(:organisation) }
+      let(:user) { FactoryBot.create(:user, :support) }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", organisation_id: organisation.id } } }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+      end
+
+      it "creates a new scheme for user organisation with valid params and renders correct page" do
+        expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        post "/schemes", params: params
+
+        expect(Scheme.last.organisation_id).to eq(organisation.id)
+        expect(Scheme.last.service_name).to eq("testy")
+        expect(Scheme.last.scheme_type).to eq("Foyer")
+        expect(Scheme.last.sensitive).to eq("Yes")
+        expect(Scheme.last.registered_under_care_act).to eq("No")
+        expect(Scheme.last.id).not_to eq(nil)
+        expect(Scheme.last.has_other_client_group).to eq(nil)
+        expect(Scheme.last.primary_client_group).to eq(nil)
+        expect(Scheme.last.secondary_client_group).to eq(nil)
+        expect(Scheme.last.support_type).to eq(nil)
+        expect(Scheme.last.intended_stay).to eq(nil)
+        expect(Scheme.last.id_to_display).to match(/S*/)
+      end
+
+      context "when required organisation id param is missing" do
+        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home", "total_units" => "1" } } }
+
+        it "displays the new page with an error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.organisation.required"))
+        end
+      end
+    end
+  end
+
+  describe "#update" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        patch "/schemes/#{schemes.first.id}"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        patch "/schemes/#{schemes.first.id}"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        sign_in user
+        patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when updating primary client group" do
+        let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Does this scheme provide for another client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating confirm secondary client group" do
+        let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary" } } }
+
+        it "renders secondary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the other client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+        end
+
+        context "when updating from check answers page with the answer YES" do
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer NO" do
+          let(:params) { { scheme: { has_other_client_group: "No", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("No")
+          end
+        end
+      end
+
+      context "when updating secondary client group" do
+        let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group" } } }
+
+        it "renders confirm support page after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What support does this scheme provide?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating support" do
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your changes before updating this scheme")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          end
+        end
+      end
+
+      context "when updating details" do
+        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
+          expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+          expect(scheme_to_update.reload.total_units).to eq(1)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.service_name).to eq("testy")
+            expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+            expect(scheme_to_update.reload.sensitive).to eq("Yes")
+            expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.total_units).to eq(1)
+          end
+        end
+      end
+    end
+
+    context "when signed in as a support" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when updating primary client group" do
+        let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Does this scheme provide for another client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating confirm secondary client group" do
+        let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary" } } }
+
+        it "renders secondary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the other client group?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+        end
+
+        context "when updating from check answers page with the answer YES" do
+          let(:params) { { scheme: { has_other_client_group: "Yes", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("What is the other client group?")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("Yes")
+          end
+        end
+
+        context "when updating from check answers page with the answer NO" do
+          let(:params) { { scheme: { has_other_client_group: "No", page: "confirm-secondary", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.has_other_client_group).to eq("No")
+          end
+        end
+      end
+
+      context "when updating secondary client group" do
+        let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group" } } }
+
+        it "renders confirm support page after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What support does this scheme provide?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { secondary_client_group: "Homeless families with support needs", page: "secondary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.secondary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating support" do
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your changes before updating this scheme")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
+            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          end
+        end
+      end
+
+      context "when updating details" do
+        let(:another_organisation) { FactoryBot.create(:organisation) }
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      total_units: "1",
+                      page: "details",
+                      organisation_id: another_organisation.id,
+                      stock_owning_organisation_id: another_organisation.id } }
+        end
+
+        it "renders confirm secondary group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
+          expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+          expect(scheme_to_update.reload.total_units).to eq(1)
+          expect(scheme_to_update.reload.organisation_id).to eq(another_organisation.id)
+          expect(scheme_to_update.reload.stock_owning_organisation_id).to eq(another_organisation.id)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before updating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.service_name).to eq("testy")
+            expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
+            expect(scheme_to_update.reload.sensitive).to eq("Yes")
+            expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.total_units).to eq(1)
+          end
+        end
+      end
+    end
+  end
+
+  describe "#primary_client_group" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/primary-client-group"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/primary-client-group"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/primary-client-group"
+      end
+
+      it "returns a template for a primary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      context "when attempting to access primary-client-group scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/primary-client-group"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/primary-client-group"
+      end
+
+      it "returns a template for a primary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What client group is this scheme intended for?")
+      end
+    end
+  end
+
+  describe "#confirm_secondary_client_group" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/confirm-secondary-client-group"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/confirm-secondary-client-group"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/confirm-secondary-client-group"
+      end
+
+      it "returns a template for a confirm-secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Does this scheme provide for another client group?")
+      end
+
+      context "when attempting to access confirm-secondary-client-group scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/confirm-secondary-client-group"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/confirm-secondary-client-group"
+      end
+
+      it "returns a template for a confirm-secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Does this scheme provide for another client group?")
+      end
+    end
+  end
+
+  describe "#secondary_client_group" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/secondary-client-group"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/secondary-client-group"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/secondary-client-group"
+      end
+
+      it "returns a template for a secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the other client group?")
+      end
+
+      context "when attempting to access secondary-client-group scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/secondary-client-group"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/secondary-client-group"
+      end
+
+      it "returns a template for a secondary-client-group" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the other client group?")
+      end
+    end
+  end
+
+  describe "#support" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/support"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/support"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/support"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What support does this scheme provide?")
+      end
+
+      context "when attempting to access secondary-client-group scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/support"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/support"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What support does this scheme provide?")
+      end
+    end
+  end
+
+  describe "#check-answers" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/check-answers"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/check-answers"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/check-answers"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Check your changes before updating this scheme")
+      end
+
+      context "when attempting to access check-answers scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/check-answers"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/check-answers"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Check your changes before updating this scheme")
+      end
+    end
+  end
+
+  describe "#details" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/details"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/details"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/details"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Create a new supported housing scheme")
+      end
+
+      context "when attempting to access check-answers scheme page for another organisation" do
+        before do
+          get "/schemes/#{another_scheme.id}/details"
+        end
+
+        it "returns 404 not_found" do
+          request
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/details"
+      end
+
+      it "returns a template for a support" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Create a new supported housing scheme")
       end
     end
   end

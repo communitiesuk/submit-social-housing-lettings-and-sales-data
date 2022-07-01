@@ -65,25 +65,26 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "shows only schemes belonging to the same organisation" do
-          expect(page).to have_content(same_org_scheme.code)
+          expect(page).to have_content(same_org_scheme.id_to_display)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.code)
+            expect(page).not_to have_content(scheme.id_to_display)
           end
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
-          let(:search_param) { "CODE321" }
+          let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+          let(:search_param) { searched_scheme.id }
 
           before do
+            FactoryBot.create(:location, scheme: searched_scheme)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
           it "returns matching results" do
-            expect(page).to have_content(searched_scheme.code)
+            expect(page).to have_content(searched_scheme.id_to_display)
             schemes.each do |scheme|
-              expect(page).not_to have_content(scheme.code)
+              expect(page).not_to have_content(scheme.id_to_display)
             end
           end
 
@@ -121,9 +122,9 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "shows only schemes belonging to the same organisation" do
-          expect(page).to have_content(same_org_scheme.code)
+          expect(page).to have_content(same_org_scheme.id_to_display)
           schemes.each do |scheme|
-            expect(page).not_to have_content(scheme.code)
+            expect(page).not_to have_content(scheme.id_to_display)
           end
         end
 
@@ -140,17 +141,18 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, code: "CODE321", organisation: user.organisation) }
-          let(:search_param) { "CODE321" }
+          let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+          let(:search_param) { searched_scheme.id_to_display }
 
           before do
+            FactoryBot.create(:location, scheme: searched_scheme)
             get "/organisations/#{organisation.id}/schemes?search=#{search_param}"
           end
 
           it "returns matching results" do
-            expect(page).to have_content(searched_scheme.code)
+            expect(page).to have_content(searched_scheme.id_to_display)
             schemes.each do |scheme|
-              expect(page).not_to have_content(scheme.code)
+              expect(page).not_to have_content(scheme.id_to_display)
             end
           end
 
@@ -874,7 +876,7 @@ RSpec.describe OrganisationsController, type: :request do
 
           context "when on the first page" do
             it "has pagination links" do
-              expect(page).to have_content("Previous")
+              expect(page).not_to have_content("Previous")
               expect(page).not_to have_link("Previous")
               expect(page).to have_content("Next")
               expect(page).to have_link("Next")
@@ -901,7 +903,7 @@ RSpec.describe OrganisationsController, type: :request do
             it "has pagination links" do
               expect(page).to have_content("Previous")
               expect(page).to have_link("Previous")
-              expect(page).to have_content("Next")
+              expect(page).not_to have_content("Next")
               expect(page).not_to have_link("Next")
             end
 

@@ -35,7 +35,14 @@ Rails.application.routes.draw do
     get "edit/password", to: "users#edit_password"
   end
 
-  resources :schemes, only: %i[index show] do
+  resources :schemes do
+    get "primary-client-group", to: "schemes#primary_client_group"
+    get "confirm-secondary-client-group", to: "schemes#confirm_secondary_client_group"
+    get "secondary-client-group", to: "schemes#secondary_client_group"
+    get "support", to: "schemes#support"
+    get "details", to: "schemes#details"
+    get "check-answers", to: "schemes#check_answers"
+
     member do
       get "locations", to: "schemes#locations"
     end

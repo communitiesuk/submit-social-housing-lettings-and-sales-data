@@ -548,7 +548,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
 
             it "has pagination links" do
-              expect(page).to have_content("Previous")
+              expect(page).not_to have_content("Previous")
               expect(page).not_to have_link("Previous")
               expect(page).to have_content("Next")
               expect(page).to have_link("Next")
@@ -575,7 +575,7 @@ RSpec.describe CaseLogsController, type: :request do
             it "has pagination links" do
               expect(page).to have_content("Previous")
               expect(page).to have_link("Previous")
-              expect(page).to have_content("Next")
+              expect(page).not_to have_content("Next")
               expect(page).not_to have_link("Next")
             end
 

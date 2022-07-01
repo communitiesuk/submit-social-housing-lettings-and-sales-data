@@ -7,8 +7,8 @@ module TabNavHelper
   end
 
   def scheme_cell(scheme)
-    link_text = scheme.service_name.presence
-    [govuk_link_to(link_text, scheme), "<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group_display}</span>"].join("\n")
+    link_text = scheme.service_name
+    [govuk_link_to(link_text, scheme), "<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group}</span>"].join("\n")
   end
 
   def org_cell(user)

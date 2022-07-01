@@ -1,41 +1,6 @@
-<% link = pagy_link_proc(pagy) -%>
+<%= govuk_pagination(pagy:) %>
 <% if pagy.pages > 1 %>
-  <nav class="app-pagination" id="pagination-label" aria-label="results navigation">
-    <ul class="app-pagination__list">
-      <li class="app-pagination__item app-pagination__item--prev">
-        <% if pagy.prev %>
-          <a class="app-pagination__link" href="<%= "#{request.path}?page=#{pagy.prev}" %>">
-        <% end %>
-          <span class="app-pagination__link-title">
-            <svg class="app-pagination__icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17">
-              <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
-            </svg>Previous
-            <span class="govuk-visually-hidden">page</span>
-          </span></a>
-      </li>
-      <% pagy.series.each do |item| %>
-        <% if item == :gap %>
-          <li class="app-pagination__item app-pagination__item--ellipses">…</li>
-        <% elsif item.is_a?(String) %>
-          <li class="app-pagination__item app-pagination__item--current"><span class="govuk-visually-hidden">Page </span><%= item %><span class="govuk-visually-hidden"> (current page) </span></li>
-        <% else %>
-          <li class="app-pagination__item"><a class="app-pagination__link" href="<%= "#{request.path}?page=#{item}" %>"><span class="govuk-visually-hidden">Page </span><%= item %></a></li>
-        <% end %>
-      <% end %>
-      <li class="app-pagination__item app-pagination__item--next">
-        <% if pagy.next %>
-          <a class="app-pagination__link" href="<%= "#{request.path}?page=#{pagy.next}" %>">
-        <% end %>
-          Next <span class="govuk-visually-hidden">page</span>
-          <span class="app-pagination__link-title">
-            <svg class="app-pagination__icon" xmlns="http://www.w3.org/2000/svg" height="13" width="17">
-              <path d="m10.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
-            </svg>
-          </span></a>
-      </li>
-    </ul>
-    <p class="app_pagination__results">
-      Showing <b><%= pagy.from %></b> to <b><%= pagy.to %></b> of <b><%= pagy.count %></b> <%= item_name %>
-    </p>
-  </nav>
+  <p class="govuk-body">
+    Showing <b><%= pagy.from %></b> to <b><%= pagy.to %></b> of <b><%= pagy.count %></b> <%= item_name %>
+  </p>
 <% end %>

@@ -299,7 +299,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_154441) do
   end
 
   create_table "schemes", force: :cascade do |t|
-    t.string "code"
     t.string "service_name"
     t.bigint "organisation_id", null: false
     t.datetime "created_at", null: false
@@ -313,7 +312,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_154441) do
     t.integer "support_type"
     t.string "intended_stay"
     t.datetime "end_date"
+    t.integer "has_other_client_group"
+    t.bigint "stock_owning_organisation_id"
     t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
+    t.index ["stock_owning_organisation_id"], name: "index_schemes_on_stock_owning_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -373,4 +375,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_154441) do
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
   add_foreign_key "schemes", "organisations"
+  add_foreign_key "schemes", "organisations", column: "stock_owning_organisation_id"
 end

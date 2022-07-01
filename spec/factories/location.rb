@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :location do
     location_code { Faker::Name.initials(number: 10) }
-    postcode { Faker::Address.postcode }
+    postcode { Faker::Address.postcode.delete(" ") }
     address_line1 { Faker::Address.street_name }
     address_line2 { Faker::Address.city }
     type_of_unit { Faker::Lorem.word }

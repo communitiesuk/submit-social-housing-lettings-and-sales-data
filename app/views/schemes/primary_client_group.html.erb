@@ -1,0 +1,35 @@
+<% content_for :title, "What client group is this scheme intended for?" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/details",
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "What client group is this scheme intended for?", sub: @scheme.service_name } %>
+
+<%= form_for(@scheme, method: :patch) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <legend class="govuk-fieldset__legend">
+      </legend>
+
+      <% primary_client_group_selection = Scheme.primary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :primary_client_group,
+        primary_client_group_selection,
+        :id,
+        :name,
+        legend: nil %>
+
+      <%= f.hidden_field :page, value: "primary-client-group" %>
+      <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

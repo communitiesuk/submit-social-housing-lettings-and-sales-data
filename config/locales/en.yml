@@ -38,6 +38,14 @@ en:
     create_password: "Create a password to finish setting up your account"
     reset_password: "Reset your password"
 
+  activerecord:
+    errors:
+      models:
+        scheme:
+          attributes:
+            organisation:
+              required: "Enter the existing organisation’s name"
+
   validations:
     organisation:
       name_missing: "Enter the organisation’s name"
@@ -149,7 +157,7 @@ en:
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
-        over_1000: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
+        out_of_range: "Household rent and other charges must be between %{min_chcharge} and %{max_chcharge} if paying %{period}"
         not_provided: "Enter how much rent and other charges the household pays %{period}"
     household:
       reasonpref:
