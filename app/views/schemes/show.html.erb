@@ -2,7 +2,10 @@
 <% content_for :title, title %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link(href: request.referer.to_s) %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: "/schemes",
+  ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
