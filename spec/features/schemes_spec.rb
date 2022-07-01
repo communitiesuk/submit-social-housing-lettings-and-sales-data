@@ -412,6 +412,17 @@ RSpec.describe "Schemes scheme Features" do
                       expect(page).to have_content "Check your changes before creating this scheme"
                     end
 
+                    context "when I select to view locations" do
+                      before do
+                        click_link "Locations"
+                      end
+
+                      it "displays information about locations" do
+                        expect(page).to have_content "Locations"
+                        expect(page).to have_content "#{scheme.locations.count} locations"
+                      end
+                    end
+
                     context "and I select to create a scheme" do
                       before do
                         click_link "Create scheme"
@@ -441,17 +452,6 @@ RSpec.describe "Schemes scheme Features" do
                             click_button "Save and continue"
                             expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
                           end
-                        end
-                      end
-
-                      context "when I select to view locations" do
-                        before do
-                          click_link "/schemes/#{scheme.id}/check-answers#locations"
-                        end
-
-                        it "displays information about locations" do
-                          expect(page).to have_content "Locations"
-                          expect(page).to have_content "#{scheme.locations.count} locations"
                         end
                       end
                     end
