@@ -379,12 +379,32 @@ RSpec.describe "Schemes scheme Features" do
                     expect(page).to have_content "Add a location to this scheme"
                   end
 
+                  context "when I press the back button" do
+                    before do
+                      click_link "Back"
+                    end
+
+                    it "lets me select the secondary group" do
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/support")
+                      expect(page).to have_content "What support does this scheme provide?"
+                    end
+
+                    context "when we amend support" do
+                      it "returns to the add location page" do
+                        click_button "Save and continue"
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
+                      end
+                    end
+                  end
+
                   context "when I add location to the scheme" do
                     before do
                       fill_in "Postcode", with: "SW1P 4DF"
-                      fill_in "Name(optional)", with: "Some name"
+                      fill_in "Name (optional)", with: "Some name"
                       fill_in "Total number of units at this location", with: 1
                       choose "Self-contained house"
+                      choose "location-wheelchair-adaptation-no-field"
+                      choose "location-add-another-location-no-field"
                       click_button "Save and continue"
                     end
 
@@ -410,10 +430,6 @@ RSpec.describe "Schemes scheme Features" do
                     context "when changing answers" do
                     end
                   end
-
-                  # it "lets me check my answers" do
-                  #   expect(page).to have_content "Check your changes before creating this scheme"
-                  # end
                 end
               end
             end

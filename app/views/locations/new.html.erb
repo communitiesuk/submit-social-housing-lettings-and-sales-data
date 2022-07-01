@@ -2,9 +2,9 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: "Back",
-    href: "javascript:history.go(-1);",
-  ) %>
+        text: "Back",
+        href: "/schemes/#{@scheme.id}/support"
+        ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
@@ -56,7 +56,6 @@
                                            :name,
                                            inline: true,
                                            legend: { text: "Do you want to add another location?", size: "m" } %>
-
 
       <%= f.govuk_submit "Save and continue" %>
     </div>
