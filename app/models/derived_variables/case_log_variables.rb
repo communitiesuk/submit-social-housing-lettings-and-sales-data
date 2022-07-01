@@ -5,6 +5,12 @@ module DerivedVariables::CaseLogVariables
     FeatureToggle.supported_housing_schemes_enabled?
   end
 
+  def scheme_has_multiple_locations?
+    return false unless scheme
+
+    scheme.locations.size > 1
+  end
+
   def set_derived_fields!
     # TODO: Remove once we support parent/child relationships
     self.managing_organisation_id ||= owning_organisation_id

@@ -12,7 +12,7 @@ RSpec.describe Form::Setup::Pages::Location, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[location])
+    expect(page.questions.map(&:id)).to eq(%w[location_id])
   end
 
   it "has the correct id" do
@@ -31,10 +31,7 @@ RSpec.describe Form::Setup::Pages::Location, type: :model do
     expect(page.depends_on).to eq([{
       "supported_housing_schemes_enabled?" => true,
       "needstype" => 2,
-      "scheme.locations.size" => {
-        "operator" => ">",
-        "operand" => 1,
-      },
+      "scheme_has_multiple_locations?" => true,
     }])
   end
 end

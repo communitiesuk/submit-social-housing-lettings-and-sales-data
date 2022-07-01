@@ -6,6 +6,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     @hint_text = "Enter scheme name or postcode"
     @type = "select"
     @answer_options = answer_options
+    @derived = true unless FeatureToggle.supported_housing_schemes_enabled?
   end
 
   def answer_options
@@ -30,10 +31,6 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
   end
 
 private
-
-  def selected_answer_option_is_derived?(_case_log)
-    false
-  end
 
   def supported_housing_selected?(case_log)
     case_log.needstype == 2

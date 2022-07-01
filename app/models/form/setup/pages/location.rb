@@ -4,21 +4,17 @@ class Form::Setup::Pages::Location < ::Form::Page
     @header = ""
     @description = ""
     @questions = questions
-    # Only display if there is more than one location
     @depends_on = [{
       "supported_housing_schemes_enabled?" => true,
       "needstype" => 2,
-      "scheme.locations.size" => {
-        "operator" => ">",
-        "operand" => 1,
-      },
+      "scheme_has_multiple_locations?" => true,
     }]
     @derived = true
   end
 
   def questions
     [
-      Form::Setup::Questions::Location.new(nil, nil, self),
+      Form::Setup::Questions::LocationId.new(nil, nil, self),
     ]
   end
 end

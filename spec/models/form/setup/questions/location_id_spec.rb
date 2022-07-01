@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Form::Setup::Questions::Location, type: :model do
+RSpec.describe Form::Setup::Questions::LocationId, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
   let(:question_id) { nil }
@@ -12,7 +12,7 @@ RSpec.describe Form::Setup::Questions::Location, type: :model do
   end
 
   it "has the correct id" do
-    expect(question.id).to eq("location")
+    expect(question.id).to eq("location_id")
   end
 
   it "has the correct header" do
