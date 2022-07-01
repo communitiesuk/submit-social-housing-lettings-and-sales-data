@@ -425,9 +425,39 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content scheme.stock_owning_organisation.name
                         expect(page).to have_content "#{scheme.organisation.name} has been created."
                       end
+
+                      context "when I press the back button" do
+                        before do
+                          click_link "Back"
+                        end
+
+                        it "lets me select the secondary group" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/support")
+                          expect(page).to have_content "What support does this scheme provide?"
+                        end
+
+                        context "when we amend support" do
+                          it "returns to the add location page" do
+                            click_button "Save and continue"
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
+                          end
+                        end
+                      end
+
+                      context "when I select to view locations" do
+                        before do
+                          click_link "/schemes/#{scheme.id}/check-answers#locations"
+                        end
+
+                        it "displays information about locations" do
+                          expect(page).to have_content "Locations"
+                          expect(page).to have_content "#{scheme.locations.count} locations"
+                        end
+                      end
                     end
 
                     context "when changing answers" do
+
                       it "displays change links" do
                         assert_selector "a", text: "Change", count: 12
                       end
