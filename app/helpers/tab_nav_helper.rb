@@ -8,7 +8,7 @@ module TabNavHelper
 
   def location_cell(location)
     link_text = location.postcode
-    [govuk_link_to(link_text, "locations"), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.scheme.service_name}</span>"].join("\n")
+    [govuk_link_to(link_text, location_scheme_path(location, scheme_id: location.scheme.id)), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.scheme.service_name}</span>"].join("\n")
   end
 
   def scheme_cell(scheme)
