@@ -1,44 +1,51 @@
 <% title = @scheme.service_name %>
 <% content_for :title, title %>
-
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: "Back",
-    href: "/schemes/#{@scheme.id}",
-  ) %>
+        text: "Back",
+        href: "/schemes/#{@scheme.id}",
+        ) %>
 <% end %>
-
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
-
-<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations")) %>
+<% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
+<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, location_caption)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <% @locations.each do |location| %>
-      <section class="x-govuk-summary-card govuk-!-margin-bottom-6">
-        <header class="x-govuk-summary-card__header">
-          <h2 class="x-govuk-summary-card__title">
-            <%= location.name %>
-          </h2>
-        </header>
-        <div class="x-govuk-summary-card__body">
-          <dl class="govuk-summary-list">
-            <% location.display_attributes.each do |attribute| %>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  <%= attribute[:name] %>
-                </dt>
-                <dd class="govuk-summary-list__value app-!-font-tabular">
-                  <span class="govuk-!-margin-right-4"><%= attribute[:value] %></span>
-                  <% if attribute[:suffix] %>
-                    <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= attribute[:suffix] %></span>
-                  <% end %>
-                </dd>
-              </div>
-            <% end %>
-          </dl>
-        </div>
-      </section>
+    <%= govuk_table do |table| %>
+      <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+        <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>.
+      <% end %>
+      <%= table.head do |head| %>
+        <%= head.row do |row| %>
+          <% row.cell(header: true, text: "Code", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Postcode", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Units", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Common unit type", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Actions", html_attributes: {
+            scope: "col",
+          }) %>
+        <% end %>
+      <% end %>
+      <% @locations.each do |location| %>
+        <%= table.body do |body| %>
+          <%= body.row do |row| %>
+            <% row.cell(text: location.id) %>
+            <% row.cell(text: location.postcode) %>
+            <% row.cell(text: location.total_units) %>
+            <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == "Yes" ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ""}")) %>
+            <% row.cell(text: "Delete") %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 </div>
