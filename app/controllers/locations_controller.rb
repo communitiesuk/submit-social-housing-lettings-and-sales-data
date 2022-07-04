@@ -1,14 +1,14 @@
 class LocationsController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_scope!
+  before_action :find_location, except: %i[new create]
+  before_action :find_scheme
 
   def new
-    @scheme = Scheme.find(params[:id])
     @location = Location.new
   end
 
   def create
-    @scheme = Scheme.find(params[:id])
     @location = Location.new(location_params)
 
     if @location.save
@@ -18,17 +18,25 @@ class LocationsController < ApplicationController
     end
   end
 
-  def details
-    @scheme = Scheme.find(params[:scheme_id])
-    @location = Location.find(params[:id])
-  end
+  def details; end
 
   def update
-    @scheme = Scheme.find(params[:scheme_id])
-    redirect_to scheme_check_answers_path(@scheme, anchor: "locations")
+    if @location.update(location_params)
+      location_params[:add_another_location] == "Yes" ? redirect_to(location_new_scheme_path) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+    else
+      render :details, status: :unprocessable_entity
+    end
   end
 
 private
+
+  def find_scheme
+    @scheme = params[:scheme_id] && params[:id] ? Scheme.find(params[:scheme_id]) : Scheme.find(params[:id])
+  end
+
+  def find_location
+    @location = Location.find(params[:id])
+  end
 
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
