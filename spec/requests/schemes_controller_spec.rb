@@ -929,7 +929,7 @@ RSpec.describe SchemesController, type: :request do
         it "renders confirm secondary group after successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Check your changes before creating this scheme")
+          expect(page).to have_content("Add a location to this scheme")
         end
 
         it "updates a scheme with valid params" do
