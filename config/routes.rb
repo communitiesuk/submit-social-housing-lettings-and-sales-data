@@ -47,8 +47,8 @@ Rails.application.routes.draw do
       get "locations", to: "schemes#locations"
       get "location/new", to: "locations#new"
       post "location/create", to: "locations#create"
-      patch "location", to: "locations#create"
       get "location", to: "locations#details"
+      patch "location", to: "locations#update"
     end
   end
 

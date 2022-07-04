@@ -11,6 +11,7 @@ RSpec.describe Location, type: :model do
 
   describe "#validate_postcode" do
     let(:location) { FactoryBot.build(:location) }
+
     it "does not add an error if postcode is valid" do
       location.postcode = "M1 1AE"
       location.save

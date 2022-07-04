@@ -19,7 +19,13 @@ class LocationsController < ApplicationController
   end
 
   def details
-    render :new
+    @scheme = Scheme.find(params[:scheme_id])
+    @location = Location.find(params[:id])
+  end
+
+  def update
+    @scheme = Scheme.find(params[:scheme_id])
+    redirect_to scheme_check_answers_path(@scheme, anchor: "locations")
   end
 
 private
