@@ -23,7 +23,8 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     return {} unless case_log.created_by
 
     user_org_scheme_ids = Scheme.select(:id).where(organisation_id: case_log.created_by.organisation_id).map(&:id)
-    answer_options.select do |k, _v| user_org_scheme_ids.include?(k.to_i)
+    answer_options.select do |k, _v|
+      user_org_scheme_ids.include?(k.to_i)
     end
   end
 
