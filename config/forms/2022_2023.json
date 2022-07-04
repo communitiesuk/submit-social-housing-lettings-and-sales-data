@@ -1152,7 +1152,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [
@@ -1195,7 +1195,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_age": {
               "header": "",
@@ -1225,7 +1225,7 @@
                         "age1_known": 1
                       }
                     ]
-                  }
+                  },"depends on": [{"declaration": 1}]
                 },
                 "age1": {
                   "header": "Age",
@@ -1324,7 +1324,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_gender_identity": {
               "header": "",
@@ -1353,7 +1353,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "no_females_pregnant_household_lead_value_check": {
               "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
@@ -1392,7 +1392,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
               "depends_on": [
@@ -1435,7 +1435,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_ethnic_group": {
               "header": "",
@@ -1470,7 +1470,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_ethnic_background_arab": {
               "header": "",
@@ -1493,7 +1493,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 4
+                  "ethnic_group": 4, "declaration": 1
                 }
               ]
             },
@@ -1527,7 +1527,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 2
+                  "ethnic_group": 2, "declaration": 1
                 }
               ]
             },
@@ -1555,7 +1555,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 3
+                  "ethnic_group": 3, "declaration": 1
                 }
               ]
             },
@@ -1586,7 +1586,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 1
+                  "ethnic_group": 1, "declaration": 1
                 }
               ]
             },
@@ -1617,7 +1617,7 @@
               },
               "depends_on": [
                 {
-                  "ethnic_group": 0
+                  "ethnic_group": 0, "declaration": 1
                 }
               ]
             },
@@ -1649,7 +1649,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_working_situation": {
               "header": "",
@@ -1696,7 +1696,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_under_retirement_value_check": {
               "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
@@ -1740,7 +1740,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "lead_tenant_over_retirement_value_check": {
               "depends_on": [
@@ -1786,7 +1786,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
@@ -1828,6 +1828,9 @@
                 },
                 {
                   "hhmemb": 8
+                },
+                {
+                  "declaration": 1
                 }
               ]
             },
@@ -1863,6 +1866,9 @@
               "depends_on": [
                 {
                   "details_known_2": 0
+                },
+                {
+                  "declaration": 1
                 }
               ]
             },
@@ -1892,6 +1898,9 @@
                       },
                       {
                         "age2_known": 1
+                      },
+                      {
+                        "declaration": 1
                       }
                     ]
                   }
@@ -1915,6 +1924,9 @@
               "depends_on": [
                 {
                   "details_known_2": 0
+                },
+                {
+                  "declaration": 1
                 }
               ]
             },
@@ -1957,7 +1969,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_age_value_check": {
               "depends_on": [
@@ -2001,7 +2013,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "person_2_gender_identity": {
               "header": "",
@@ -2033,7 +2045,7 @@
               },
               "depends_on": [
                 {
-                  "details_known_2": 0
+                  "details_known_2": 0, "declaration": 1
                 }
               ]
             },
@@ -2079,7 +2091,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_2_value_check": {
               "depends_on": [
@@ -2123,7 +2135,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "person_2_working_situation": {
               "header": "",
@@ -2234,7 +2246,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "person_2_over_retirement_value_check": {
               "depends_on": [
@@ -2280,7 +2292,7 @@
                     }
                   }
                 }
-              }
+              },"depends on": [{"declaration": 1}]
             },
             "person_3_known": {
               "header": "You’ve given us the details for 2 people in the household",
@@ -2319,6 +2331,9 @@
                 },
                 {
                   "hhmemb": 8
+                },
+                {
+                  "declaration": 1
                 }
               ]
             },
@@ -2353,7 +2368,7 @@
               },
               "depends_on": [
                 {
-                  "details_known_3": 0
+                  "details_known_3": 0, "declaration": 1
                 }
               ]
             },
@@ -2405,7 +2420,7 @@
               },
               "depends_on": [
                 {
-                  "details_known_3": 0
+                  "details_known_3": 0, "declaration": 1
                 }
               ]
             },
@@ -2448,7 +2463,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
               "depends_on": [
@@ -2492,7 +2507,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_3_gender_identity": {
               "header": "",
@@ -2524,7 +2539,7 @@
               },
               "depends_on": [
                 {
-                  "details_known_3": 0
+                  "details_known_3": 0, "declaration": 1
                 }
               ]
             },
@@ -2570,7 +2585,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
               "depends_on": [
@@ -2614,7 +2629,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_3_working_situation": {
               "header": "",
@@ -2680,7 +2695,8 @@
                 {
                   "details_known_3": 0,
                   "age3": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_3_under_retirement_value_check": {
@@ -2725,7 +2741,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_3_over_retirement_value_check": {
               "depends_on": [
@@ -2771,7 +2787,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
@@ -2807,6 +2823,9 @@
                 },
                 {
                   "hhmemb": 8
+                },
+                {
+                  "declaration": 1
                 }
               ]
             },
@@ -2842,7 +2861,8 @@
               "depends_on": [
                 {
                   "details_known_4": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_4_age": {
@@ -2894,7 +2914,8 @@
               "depends_on": [
                 {
                   "details_known_4": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_4_age_value_check": {
@@ -2936,7 +2957,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
               "depends_on": [
@@ -2980,7 +3001,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_4_gender_identity": {
               "header": "",
@@ -3013,7 +3034,8 @@
               "depends_on": [
                 {
                   "details_known_4": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_4_value_check": {
@@ -3058,7 +3080,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
               "depends_on": [
@@ -3102,7 +3124,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_4_working_situation": {
               "header": "",
@@ -3168,7 +3190,8 @@
                 {
                   "details_known_4": 0,
                   "age4": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_4_under_retirement_value_check": {
@@ -3213,7 +3236,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_4_over_retirement_value_check": {
               "depends_on": [
@@ -3259,7 +3282,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
@@ -3292,7 +3315,8 @@
                 },
                 {
                   "hhmemb": 8
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_5_relationship_to_lead": {
@@ -3327,7 +3351,8 @@
               "depends_on": [
                 {
                   "details_known_5": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_5_age": {
@@ -3379,7 +3404,8 @@
               "depends_on": [
                 {
                   "details_known_5": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_5_age_value_check": {
@@ -3421,7 +3447,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
               "depends_on": [
@@ -3465,7 +3491,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_5_gender_identity": {
               "header": "",
@@ -3498,7 +3524,8 @@
               "depends_on": [
                 {
                   "details_known_5": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_5_value_check": {
@@ -3543,7 +3570,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
               "depends_on": [
@@ -3587,7 +3614,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_5_working_situation": {
               "header": "",
@@ -3653,7 +3680,8 @@
                 {
                   "details_known_5": 0,
                   "age5": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_5_under_retirement_value_check": {
@@ -3698,7 +3726,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_5_over_retirement_value_check": {
               "depends_on": [
@@ -3744,7 +3772,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
@@ -3774,7 +3802,8 @@
                 },
                 {
                   "hhmemb": 8
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_6_relationship_to_lead": {
@@ -3809,7 +3838,8 @@
               "depends_on": [
                 {
                   "details_known_6": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_6_age": {
@@ -3861,7 +3891,8 @@
               "depends_on": [
                 {
                   "details_known_6": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_6_age_value_check": {
@@ -3903,7 +3934,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
               "depends_on": [
@@ -3947,7 +3978,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_6_gender_identity": {
               "header": "",
@@ -3980,7 +4011,8 @@
               "depends_on": [
                 {
                   "details_known_6": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_6_value_check": {
@@ -4025,7 +4057,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
               "depends_on": [
@@ -4069,7 +4101,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_6_working_situation": {
               "header": "",
@@ -4135,7 +4167,8 @@
                 {
                   "details_known_6": 0,
                   "age6": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_6_under_retirement_value_check": {
@@ -4180,7 +4213,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_6_over_retirement_value_check": {
               "depends_on": [
@@ -4226,7 +4259,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_7_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -4253,7 +4286,8 @@
                 },
                 {
                   "hhmemb": 8
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_7_relationship_to_lead": {
@@ -4288,7 +4322,8 @@
               "depends_on": [
                 {
                   "details_known_7": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_7_age": {
@@ -4340,7 +4375,8 @@
               "depends_on": [
                 {
                   "details_known_7": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_7_age_value_check": {
@@ -4382,7 +4418,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
               "depends_on": [
@@ -4426,7 +4462,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_7_gender_identity": {
               "header": "",
@@ -4459,7 +4495,8 @@
               "depends_on": [
                 {
                   "details_known_7": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_7_value_check": {
@@ -4504,7 +4541,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
               "depends_on": [
@@ -4548,7 +4585,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_7_working_situation": {
               "header": "",
@@ -4614,7 +4651,8 @@
                 {
                   "details_known_7": 0,
                   "age7": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_7_under_retirement_value_check": {
@@ -4659,7 +4697,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_7_over_retirement_value_check": {
               "depends_on": [
@@ -4705,7 +4743,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -4729,7 +4767,8 @@
               "depends_on": [
                 {
                   "hhmemb": 8
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_8_relationship_to_lead": {
@@ -4764,7 +4803,8 @@
               "depends_on": [
                 {
                   "details_known_8": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_8_age": {
@@ -4816,7 +4856,8 @@
               "depends_on": [
                 {
                   "details_known_8": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_8_age_value_check": {
@@ -4858,7 +4899,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
               "depends_on": [
@@ -4902,7 +4943,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_8_gender_identity": {
               "header": "",
@@ -4935,7 +4976,8 @@
               "depends_on": [
                 {
                   "details_known_8": 0
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "no_females_pregnant_household_person_8_value_check": {
@@ -4980,7 +5022,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
               "depends_on": [
@@ -5024,7 +5066,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_8_working_situation": {
               "header": "",
@@ -5090,7 +5132,8 @@
                 {
                   "details_known_8": 0,
                   "age8": null
-                }
+                },
+                {"declaration": 1}
               ]
             },
             "person_8_under_retirement_value_check": {
@@ -5135,7 +5178,7 @@
                     }
                   }
                 }
-              }
+              }, "depends on": [{"declaration": 1}]
             },
             "person_8_over_retirement_value_check": {
               "depends_on": [
@@ -5183,7 +5226,7 @@
                 }
               }
             }
-          }
+          }, "depends on": [{"declaration": 1}]
         },
         "household_needs": {
           "label": "Household needs",
