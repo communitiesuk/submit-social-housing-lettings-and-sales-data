@@ -97,7 +97,8 @@ en:
     financial:
       tshortfall:
         outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges"
-        more_than_rent: "Answer must be less than half of the basic rent amount"
+        more_than_rent: "Answer must be less than the basic rent amount"
+        must_be_positive: "Answer must be more than £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
         outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
       benefits:
@@ -109,7 +110,7 @@ en:
         earnings_missing: "Enter how much income the household has in total"
       negative_currency: "Enter an amount above 0"
       rent:
-        less_than_double_shortfall: "Answer must be more than double the shortfall in basic rent"
+        less_than_shortfall: "Answer must be more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
             general_needs: "Service charge must be between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"

@@ -77,14 +77,43 @@ RSpec.describe Validations::FinancialValidations do
     end
 
     context "when outstanding rent or charges is yes" do
+      let(:record) { FactoryBot.create(:case_log, :about_completed) }
+
       it "expects that a shortfall is provided" do
         record.hbrentshortfall = 1
         record.tshortfall = 99
         financial_validator.validate_outstanding_rent_amount(record)
         expect(record.errors["tshortfall"]).to be_empty
       end
+
+        it "validates that the shortfall is a positive £ amount" do
+          record.hb = 6
+          record.hbrentshortfall = 1
+          record.tshortfall_known = 0
+          record.tshortfall = 0
+          record.period = 2
+          record.set_derived_fields!
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["tshortfall"])
+            .to include(match I18n.t("validations.financial.tshortfall.must_be_positive"))
+        end
+
+        it "validates that basic rent is no less than the shortfall" do
+          record.hb = 6
+          record.hbrentshortfall = 1
+          record.tshortfall_known = 0
+          record.tshortfall = 299.50
+          record.brent = 198
+          record.period = 2
+          record.set_derived_fields!
+          financial_validator.validate_rent_amount(record)
+          expect(record.errors["brent"])
+            .to include(match I18n.t("validations.financial.rent.less_than_shortfall"))
+          expect(record.errors["tshortfall"])
+            .to include(match I18n.t("validations.financial.tshortfall.more_than_rent"))
+        end
+      end
     end
-  end
 
   describe "rent period validations" do
     let(:organisation) { FactoryBot.create(:organisation) }
@@ -213,19 +242,6 @@ RSpec.describe Validations::FinancialValidations do
   end
 
   describe "rent and charges validations" do
-    context "when shortfall amount is provided" do
-      it "validates that basic rent is no less than double the shortfall" do
-        record.hbrentshortfall = 2
-        record.tshortfall = 99.50
-        record.brent = 198
-        financial_validator.validate_rent_amount(record)
-        expect(record.errors["brent"])
-          .to include(match I18n.t("validations.financial.rent.less_than_double_shortfall", shortfall: 198))
-        expect(record.errors["tshortfall"])
-          .to include(match I18n.t("validations.financial.tshortfall.more_than_rent"))
-      end
-    end
-
     context "when the owning organisation is a private registered provider" do
       before { record.owning_organisation.provider_type = 2 }
 
