@@ -173,6 +173,24 @@ class Form::Question
     type == "radio" && RADIO_REFUSED_VALUE[id.to_sym]&.include?(value)
   end
 
+  def suffix_label(case_log)
+    return "" unless suffix
+    return suffix if suffix.is_a?(String)
+
+    label = ""
+
+    suffix.each do |s|
+      condition = s["depends_on"]
+      next unless condition
+
+      answer = case_log.send(condition.keys.first)
+      if answer == condition.values.first
+        label = s["label"]
+      end
+    end
+    label
+  end
+
 private
 
   def selected_answer_option_is_derived?(case_log)
@@ -194,24 +212,6 @@ private
 
   def format_value(answer_label)
     prefix == "£" ? ActionController::Base.helpers.number_to_currency(answer_label, delimiter: ",", format: "%n") : answer_label
-  end
-
-  def suffix_label(case_log)
-    return "" unless suffix
-    return suffix if suffix.is_a?(String)
-
-    label = ""
-
-    suffix.each do |s|
-      condition = s["depends_on"]
-      next unless condition
-
-      answer = case_log.send(condition.keys.first)
-      if answer == condition.values.first
-        label = ANSWER_SUFFIX_LABELS.key?(answer) ? ANSWER_SUFFIX_LABELS[answer] : answer
-      end
-    end
-    label
   end
 
   def conditional_on
@@ -236,12 +236,6 @@ private
   def enabled_inferred_answers(inferred_answers, case_log)
     inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
   end
-
-  ANSWER_SUFFIX_LABELS = {
-    1 => " every week",
-    2 => " every month",
-    3 => " every year",
-  }.freeze
 
   RADIO_YES_VALUE = {
     renewal: [1],

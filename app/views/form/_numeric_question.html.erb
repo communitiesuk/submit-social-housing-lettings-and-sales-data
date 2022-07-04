@@ -8,5 +8,5 @@
   width: question.width,
   readonly: question.read_only?,
   prefix_text: question.prefix.to_s,
-  suffix_text: question.suffix.is_a?(String) ? question.suffix : nil,
+  suffix_text: question.suffix_label(case_log),
   **stimulus_html_attributes(question) %>

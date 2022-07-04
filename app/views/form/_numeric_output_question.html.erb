@@ -17,6 +17,6 @@
             name="case_log[tcharge]"
             for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field" }.join(" ") : "" %>">
       <%= case_log[question.id] %></output>
-    <span class="govuk-input__suffix"><%= question.suffix %></span>
+    <span class="govuk-input__suffix"><%= question.suffix_label(case_log) %></span>
   </div>
 </div>

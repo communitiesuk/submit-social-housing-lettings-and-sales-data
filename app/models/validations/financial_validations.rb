@@ -71,9 +71,13 @@ module Validations::FinancialValidations
   end
 
   def validate_rent_amount(record)
-    if record.brent.present? && record.tshortfall.present? && record.brent < record.tshortfall * 2
-      record.errors.add :brent, I18n.t("validations.financial.rent.less_than_double_shortfall", tshortfall: record.tshortfall * 2)
-      record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+    if record.wtshortfall
+      if record.wrent && (record.wtshortfall > record.wrent)
+        record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.more_than_rent")
+        record.errors.add :brent, I18n.t("validations.financial.rent.less_than_shortfall")
+      elsif record.wtshortfall < 0.01
+        record.errors.add :tshortfall, I18n.t("validations.financial.tshortfall.must_be_positive")
+      end
     end
 
     if record.tcharge.present? && weekly_value_in_range(record, "tcharge", 0, 9.99)
