@@ -30,7 +30,7 @@ API documentation can be found here: <https://communitiesuk.github.io/submit-soc
 
 ## System architecture
 
-![View of system architecture](docs/images/architecture.png)
+![View of system architecture](docs/images/architecture.drawio.png)
 
 ## User interface
 
