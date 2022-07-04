@@ -389,7 +389,7 @@ RSpec.describe "Schemes scheme Features" do
                       expect(page).to have_content "What support does this scheme provide?"
                     end
 
-                    context "when we amend support" do
+                    context "when I amend support" do
                       it "returns to the add location page" do
                         click_button "Save and continue"
                         expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
@@ -420,6 +420,46 @@ RSpec.describe "Schemes scheme Features" do
                       it "displays information about locations" do
                         expect(page).to have_content "Locations"
                         expect(page).to have_content "#{scheme.locations.count} location"
+                      end
+
+                      it "displays information about newly created location" do
+                        expect(page).to have_content "SW1P4DF"
+                        expect(page).to have_content "Some name"
+                        expect(page).to have_content "Self-contained house"
+                      end
+                    end
+
+                    context "and I select to add another location a scheme" do
+                      before do
+                        click_link "Add a location"
+                        fill_in "Postcode", with: "XX1 1XX"
+                        fill_in "Name (optional)", with: "Other name"
+                        fill_in "Total number of units at this location", with: 2
+                        choose "Self-contained house"
+                        choose "location-wheelchair-adaptation-no-field"
+                        choose "location-add-another-location-no-field"
+                        click_button "Save and continue"
+                      end
+
+                      it "lets me check my answers" do
+                        expect(page).to have_content "Check your changes before creating this scheme"
+                      end
+
+                      context "when I select to view locations" do
+                        before do
+                          click_link "Locations"
+                        end
+
+                        it "displays information about another location" do
+                          expect(page).to have_content "Locations"
+                          expect(page).to have_content "#{scheme.locations.count} location"
+                        end
+
+                        it "displays information about newly created location" do
+                          expect(page).to have_content "XX11XX"
+                          expect(page).to have_content "Other name"
+                          expect(page).to have_content "Self-contained house"
+                        end
                       end
                     end
 
