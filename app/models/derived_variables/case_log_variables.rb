@@ -34,9 +34,11 @@ module DerivedVariables::CaseLogVariables
       self.wpschrge = weekly_value(pscharge) if pscharge.present?
       self.wsupchrg = weekly_value(supcharg) if supcharg.present?
       self.wtcharge = weekly_value(tcharge) if tcharge.present?
-      self.wtshortfall = weekly_value(tshortfall) if tshortfall && receives_housing_related_benefits?
       self.wchchrg = weekly_value(chcharge) if is_supported_housing? && chcharge.present?
     end
+    self.wtshortfall = if tshortfall && receives_housing_related_benefits? && period
+                         weekly_value(tshortfall)
+                       end
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge&.zero? ? 1 : 0

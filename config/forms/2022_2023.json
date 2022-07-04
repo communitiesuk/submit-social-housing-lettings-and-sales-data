@@ -6758,19 +6758,19 @@
                   "prefix": "£",
                   "suffix": [
                     {
-                      "label": "every week",
+                      "label": " every week",
                       "depends_on": {
                         "incfreq": 1
                       }
                     },
                     {
-                      "label": "every month",
+                      "label": " every month",
                       "depends_on": {
                         "incfreq": 2
                       }
                     },
                     {
-                      "label": "every year",
+                      "label": " every year",
                       "depends_on": {
                         "incfreq": 3
                       }
@@ -7854,7 +7854,44 @@
                   "step": 0.01,
                   "width": 5,
                   "prefix": "£",
-                  "suffix": " every month"
+                  "suffix": [
+                    {
+                      "label": " every 2 weeks",
+                      "depends_on": { "period": 2 }
+                    },
+                    {
+                      "label": " every 4 weeks",
+                      "depends_on": { "period": 3 }
+                    },
+                    {
+                      "label": " every calendar month",
+                      "depends_on": { "period": 4 }
+                    },
+                    {
+                      "label": " every week for 50 weeks",
+                      "depends_on": { "period": 5 }
+                    },
+                    {
+                      "label": " every week for 49 weeks",
+                      "depends_on": { "period": 6 }
+                    },
+                    {
+                      "label": " every week for 48 weeks",
+                      "depends_on": { "period": 7 }
+                    },
+                    {
+                      "label": " every week for 47 weeks",
+                      "depends_on": { "period": 8 }
+                    },
+                    {
+                      "label": " every week for 46 weeks",
+                      "depends_on": { "period": 9 }
+                    },
+                    {
+                      "label": " every week for 52 weeks",
+                      "depends_on": { "period": 1 }
+                    }
+                  ]
                 }
               },
               "depends_on": [

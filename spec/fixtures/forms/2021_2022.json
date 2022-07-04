@@ -568,9 +568,9 @@
                     "width": 5,
                     "prefix": "£",
                     "suffix": [
-                      { "label": "every week", "depends_on" : { "incfreq": 1 } },
-                      { "label": "every month", "depends_on" : { "incfreq": 2 } },
-                      { "label": "every month", "depends_on" : { "incfreq": 3 } }
+                      { "label": " every week", "depends_on" : { "incfreq": 1 } },
+                      { "label": " every month", "depends_on" : { "incfreq": 2 } },
+                      { "label": " every year", "depends_on" : { "incfreq": 3 } }
                     ]
                   },
                   "incfreq": {
