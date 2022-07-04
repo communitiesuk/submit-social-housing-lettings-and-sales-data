@@ -67,7 +67,7 @@
       <% component.tab(label: "Locations") do %>
         <%= govuk_table do |table| %>
           <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-            <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>.
+            <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
           <% end %>
           <%= table.head do |head| %>
             <%= head.row do |row| %>

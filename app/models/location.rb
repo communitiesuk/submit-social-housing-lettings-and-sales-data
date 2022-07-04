@@ -1,4 +1,6 @@
 class Location < ApplicationRecord
+  include Validations::PropertyValidations
+  validate :validate_postcode
   belongs_to :scheme
 
   attr_accessor :add_another_location
@@ -29,5 +31,15 @@ class Location < ApplicationRecord
       { name: "Type of building", value: type_of_building, suffix: false },
       { name: "Wheelchair adaptation", value: wheelchair_adaptation, suffix: false },
     ]
+    end
+
+private
+
+  def validate_postcode
+    unless postcode.match(Validations::PropertyValidations::POSTCODE_REGEXP)
+      debugger
+      error_message = I18n.t("validations.postcode")
+      errors.add :postcode, error_message
+    end
   end
 end
