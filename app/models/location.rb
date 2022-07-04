@@ -37,7 +37,6 @@ private
 
   def validate_postcode
     unless postcode.match(Validations::PropertyValidations::POSTCODE_REGEXP)
-      debugger
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     end
