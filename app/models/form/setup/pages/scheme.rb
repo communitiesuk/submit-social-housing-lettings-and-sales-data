@@ -8,7 +8,6 @@ class Form::Setup::Pages::Scheme < ::Form::Page
       "supported_housing_schemes_enabled?" => true,
       "needstype" => 2,
     }]
-    @derived = true
   end
 
   def questions

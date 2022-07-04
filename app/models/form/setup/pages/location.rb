@@ -9,7 +9,6 @@ class Form::Setup::Pages::Location < ::Form::Page
       "needstype" => 2,
       "scheme_has_multiple_locations?" => true,
     }]
-    @derived = true
   end
 
   def questions

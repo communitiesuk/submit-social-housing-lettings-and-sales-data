@@ -13,8 +13,8 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     answer_opts = {}
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Location.select(:id, :postcode, :address_line1).each_with_object(answer_opts) do |location, hsh|
-      hsh[location.id.to_s] = { "value" => location.postcode, "hint" => location.address_line1 }
+    Location.select(:id, :postcode, :name).each_with_object(answer_opts) do |location, hsh|
+      hsh[location.id.to_s] = { "value" => location.postcode, "hint" => location.name }
       hsh
     end
   end
