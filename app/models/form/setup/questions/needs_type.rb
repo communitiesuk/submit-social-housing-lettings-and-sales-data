@@ -7,7 +7,7 @@ class Form::Setup::Questions::NeedsType < ::Form::Question
     @hint_text = "General needs housing includes both self-contained and shared housing without support or specific adaptations. Supported housing can include direct access hostels, group homes, residential care and nursing homes."
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
-    @derived = true
+    @derived = true unless FeatureToggle.supported_housing_schemes_enabled?
     @page = page
   end
 

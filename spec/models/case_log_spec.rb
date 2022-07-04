@@ -1678,6 +1678,23 @@ RSpec.describe CaseLog do
         expect(case_log["tshortfall_known"]).to eq(0)
       end
     end
+
+    context "when a case log is a supported housing log" do
+      before { case_log.needstype = 2 }
+
+      context "and a scheme with a single log is selected" do
+        let(:scheme) { FactoryBot.create(:scheme) }
+        let!(:location) { FactoryBot.create(:location, scheme:) }
+
+        before { case_log.update!(scheme:) }
+
+        it "derives the scheme location" do
+          record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
+          expect(record_from_db["location_id"]).to eq(location.id)
+          expect(case_log["location_id"]).to eq(location.id)
+        end
+      end
+    end
   end
 
   describe "optional fields" do

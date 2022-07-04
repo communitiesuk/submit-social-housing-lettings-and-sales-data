@@ -1,13 +1,11 @@
 class Form::Setup::Pages::RentType < ::Form::Page
-  def initialize(id, hsh, subsection)
-    super
-    @id = "rent_type"
+  def initialize(_id, hsh, subsection)
+    super("rent_type", hsh, subsection)
     @header = ""
     @description = ""
     @questions = questions
     @depends_on = [{ "supported_housing_schemes_enabled?" => true }]
     @derived = true
-    @subsection = subsection
   end
 
   def questions

@@ -24,6 +24,7 @@ class CaseLog < ApplicationRecord
 
   validates_with CaseLogValidator
   before_validation :recalculate_start_year!, if: :startdate_changed?
+  before_validation :reset_scheme_location!, if: :scheme_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_invalidated_dependent_fields!
@@ -36,6 +37,7 @@ class CaseLog < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
   belongs_to :scheme, optional: true
+  belongs_to :location, optional: true
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
   scope :filter_by_status, ->(status, _user = nil) { where status: }
@@ -687,5 +689,9 @@ private
 
   def upcase_and_remove_whitespace(string)
     string.present? ? string.upcase.gsub(/\s+/, "") : string
+  end
+
+  def reset_scheme_location!
+    self.location = nil
   end
 end
