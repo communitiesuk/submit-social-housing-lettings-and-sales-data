@@ -21,7 +21,7 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 - [Form Runner](docs/form_runner.md)
 - [Infrastructure](docs/infrastructure.md)
 - [Monitoring](docs/monitoring.md)
-- [Exporting to CDS](docs/exports)
+- [Exporting to CDS](docs/exports.md)
 - [Architecture decision records](docs/adr)
 
 ## API documentation
