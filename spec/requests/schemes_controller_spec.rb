@@ -310,13 +310,9 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows scheme" do
         locations.each do |location|
-          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.county)
           expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.type_of_building)
-          expect(page).to have_content(location.wheelchair_adaptation)
-          expect(page).to have_content(location.name)
         end
       end
 
@@ -391,13 +387,9 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows scheme" do
         locations.each do |location|
-          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
-          expect(page).to have_content(location.county)
           expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.type_of_building)
-          expect(page).to have_content(location.wheelchair_adaptation)
-          expect(page).to have_content(location.name)
         end
       end
 

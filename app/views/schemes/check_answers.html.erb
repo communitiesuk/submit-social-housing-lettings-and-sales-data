@@ -67,7 +67,7 @@
       <% component.tab(label: "Locations") do %>
         <%= govuk_table do |table| %>
           <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-            <%= render(SearchResultCaptionComponent.new(searched: nil, count: 1, item_label: "location", total_count: @scheme.locations.count, item: "schemes", path: request.path)) %>
+            <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>.
           <% end %>
           <%= table.head do |head| %>
             <%= head.row do |row| %>
