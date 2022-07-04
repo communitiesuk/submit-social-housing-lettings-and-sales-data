@@ -469,6 +469,8 @@ RSpec.describe "Schemes scheme Features" do
                           end
 
                           it "displays changed location" do
+                            expect(page).to have_content "Locations"
+                            expect(page).to have_content "#{scheme.locations.count} location"
                             expect(page).to have_content "ZZ11ZZ"
                           end
                         end
