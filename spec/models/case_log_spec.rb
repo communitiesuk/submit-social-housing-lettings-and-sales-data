@@ -1681,9 +1681,11 @@ RSpec.describe CaseLog do
 
     context "when a case log is a supported housing log" do
       before { case_log.needstype = 2 }
+
       context "and a scheme with a single log is selected" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let!(:location) { FactoryBot.create(:location, scheme:)}
+        let!(:location) { FactoryBot.create(:location, scheme:) }
+
         before { case_log.update!(scheme:) }
 
         it "derives the scheme location" do
@@ -2162,6 +2164,4 @@ RSpec.describe CaseLog do
       end
     end
   end
-
-
 end
