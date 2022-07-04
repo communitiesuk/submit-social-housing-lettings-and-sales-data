@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe TabNavHelper do
   let(:organisation) { FactoryBot.create(:organisation) }
   let(:user) { FactoryBot.build(:user, organisation:) }
-  let(:scheme) { FactoryBot.build(:scheme, service_name: "Some name") }
+  let(:scheme) { FactoryBot.create(:scheme, service_name: "Some name") }
+  let(:location) { FactoryBot.create(:location, scheme: scheme) }
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do
@@ -19,9 +20,16 @@ RSpec.describe TabNavHelper do
     end
   end
 
+  describe "#location_cell" do
+    it "returns the location link to the postcode with optional name" do
+      expected_html = "<a class=\"govuk-link\" href=\"/schemes/#{location.id}/location?scheme_id=#{scheme.id}\">#{location.postcode}</a>\n<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"
+      expect(location_cell(location)).to match(expected_html)
+    end
+  end
+
   describe "#scheme_cell" do
     it "returns the scheme link service name and primary user group separated by a newline character" do
-      expected_html = "<a class=\"govuk-link\" href=\"/schemes\">#{scheme.service_name}</a>\n<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group}</span>"
+      expected_html = "<a class=\"govuk-link\" href=\"/schemes/#{scheme.id}\">#{scheme.service_name}</a>\n<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group}</span>"
       expect(scheme_cell(scheme)).to match(expected_html)
     end
   end
