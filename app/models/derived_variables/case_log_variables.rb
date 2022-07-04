@@ -68,6 +68,12 @@ module DerivedVariables::CaseLogVariables
     self.hhtype = household_type
     self.new_old = new_or_existing_tenant
     self.vacdays = property_vacant_days
+
+    if is_supported_housing?
+      if scheme && scheme.locations.size == 1
+        self.location = scheme.locations.first
+      end
+    end
   end
 
 private
