@@ -10,17 +10,6 @@ GIT
       responders
       warden (~> 1.2.3)
 
-GIT
-  remote: https://github.com/baarkerlounger/two_factor_authentication.git
-  revision: 5fa6ba40d90df9c1711d1b5eeff34686dda133a2
-  specs:
-    two_factor_authentication (2.2.0)
-      devise
-      encryptor
-      rails (>= 3.1.1)
-      randexp
-      rotp (>= 4.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -145,6 +134,12 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    devise_two_factor_authentication (3.0.0)
+      devise
+      encryptor
+      rails (>= 3.1.1)
+      randexp
+      rotp (>= 4.0.0)
     diff-lcs (1.5.0)
     digest (3.1.0)
     docile (1.4.0)
@@ -440,6 +435,7 @@ DEPENDENCIES
   capybara
   capybara-lockstep
   devise!
+  devise_two_factor_authentication
   dotenv-rails
   erb_lint
   factory_bot_rails
@@ -475,7 +471,6 @@ DEPENDENCIES
   simplecov
   stimulus-rails
   timecop (~> 0.9.4)
-  two_factor_authentication!
   tzinfo-data
   uk_postcode
   view_component
