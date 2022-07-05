@@ -100,7 +100,7 @@ private
     when "secondary-client-group"
       scheme_support_path(@scheme)
     when "support"
-      location_new_scheme_path
+      new_location_path
     when "details"
       scheme_primary_client_group_path(@scheme)
     end

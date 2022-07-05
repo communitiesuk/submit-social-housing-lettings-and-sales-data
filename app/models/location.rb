@@ -7,7 +7,7 @@ class Location < ApplicationRecord
 
   WHEELCHAIR_ADAPTATIONS = {
     Yes: 1,
-    No: 0
+    No: 0,
   }.freeze
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS

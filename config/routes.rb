@@ -44,11 +44,12 @@ Rails.application.routes.draw do
     get "check-answers", to: "schemes#check_answers"
 
     member do
-      get "locations", to: "schemes#locations"
-      get "location/new", to: "locations#new"
-      post "location/create", to: "locations#create"
-      get "location", to: "locations#details"
-      patch "location", to: "locations#update"
+      resources :locations
+      # get "locations", to: "schemes#locations"
+      # get "location/new", to: "locations#new"
+      # post "location/create", to: "locations#create"
+      # get "location", to: "locations#details"
+      # patch "location", to: "locations#update"
     end
   end
 

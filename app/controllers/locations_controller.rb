@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!
   before_action :authenticate_scope!
   before_action :find_location, except: %i[new create]
@@ -10,6 +11,7 @@ class LocationsController < ApplicationController
   end
 
   def create
+    debugger
     @location = Location.new(location_params)
 
     if @location.save
@@ -27,6 +29,12 @@ class LocationsController < ApplicationController
     else
       render :details, status: :unprocessable_entity
     end
+  end
+
+  def index
+    @scheme = Scheme.find_by(id: params[:id])
+    @pagy, @locations = pagy(@scheme.locations)
+    @total_count = @scheme.locations.size
   end
 
 private

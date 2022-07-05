@@ -9,7 +9,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
 
-<%= form_for(@location, method: :post, url: location_create_scheme_path) do |f| %>
+<%= form_for(@location, method: :post, url: locations_path) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
