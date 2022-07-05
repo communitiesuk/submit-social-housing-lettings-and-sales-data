@@ -54,7 +54,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+    if %w[new edit update create].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
       render_not_found and return
     end
   end
