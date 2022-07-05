@@ -340,7 +340,7 @@ RSpec.describe LocationsController, type: :request do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{scheme.id}/location"
+          get "/schemes/#{location.id}/location?scheme_id=#{another_scheme.id}"
           expect(response).to have_http_status(:not_found)
         end
       end
