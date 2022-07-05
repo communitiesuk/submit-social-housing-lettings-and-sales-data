@@ -298,10 +298,10 @@ RSpec.describe LocationsController, type: :request do
     end
   end
 
-  describe "#details" do
+  describe "#edit" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/1/location"
+        get "/schemes/1/locations/1/edit"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -311,7 +311,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/1/location"
+        get "/schemes/1/locations/1/edit"
       end
 
       it "returns 401 unauthorized" do
@@ -327,7 +327,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{location.id}/location?scheme_id=#{scheme.id}"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/edit"
       end
 
       it "returns a template for a new location" do
@@ -337,9 +337,10 @@ RSpec.describe LocationsController, type: :request do
 
       context "when trying to new location to a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{location.id}/location?scheme_id=#{another_scheme.id}"
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit"
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -353,7 +354,7 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/schemes/#{location.id}/location?scheme_id=#{scheme.id}"
+        get "/schemes/#{scheme.id}/locations/#{location.id}/edit"
       end
 
       it "returns a template for a new location" do
@@ -366,7 +367,7 @@ RSpec.describe LocationsController, type: :request do
   describe "#update" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        patch "/schemes/1/location"
+        patch "/schemes/1/locations/1"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -376,7 +377,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        patch "/schemes/1/location"
+        patch "/schemes/1/locations/1"
       end
 
       it "returns 401 unauthorized" do
@@ -393,11 +394,10 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        patch "/schemes/#{location.id}/location?scheme_id=#{scheme.id}", params: params
+        patch "/schemes/#{scheme.id}/locations/#{location.id}", params: params
       end
 
       it "updates existing location for scheme with valid params and redirects to correct page" do
-        expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
         follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Check your answers before creating this scheme")
@@ -420,21 +420,21 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
-      context "when trying to update location to a scheme that belongs to another organisation" do
+      context "when trying to update location for a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location) { FactoryBot.create(:location) }
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "displays the new page with an error message" do
-          post "/schemes/#{another_scheme.id}/location/create", params: params
+          patch "/schemes/#{another_scheme.id}/locations/#{another_location.id}", params: params
           expect(response).to have_http_status(:not_found)
         end
       end
 
-      context "when required postcode param is missing" do
-        let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
+      context "when required postcode param is invalid" do
+        let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "invalid" } } }
 
         it "displays the new page with an error message" do
-          post "/schemes/#{scheme.id}/location/create", params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.postcode"))
         end
@@ -444,7 +444,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Add a location to this scheme")
@@ -463,7 +462,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Check your changes before creating this scheme")
@@ -482,7 +480,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Check your changes before creating this scheme")
@@ -507,11 +504,10 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        patch "/schemes/#{location.id}/location?scheme_id=#{scheme.id}", params: params
+        patch "/schemes/#{scheme.id}/locations/#{location.id}", params: params
       end
 
       it "updates a location for scheme with valid params and redirects to correct page" do
-        expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
         follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Check your answers before creating this scheme")
@@ -534,10 +530,9 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when required postcode param is missing" do
-        let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "invalid" } } }
 
         it "displays the new page with an error message" do
-          post "/schemes/#{scheme.id}/location/create", params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.postcode"))
         end
@@ -547,7 +542,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
 
         it "updates location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Add a location to this scheme")
@@ -565,7 +559,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "updates a location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Check your changes before creating this scheme")
@@ -583,7 +576,6 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "updates a location for scheme with valid params and redirects to correct page" do
-          expect { post "/schemes/#{scheme.id}/location/create", params: }.to change(Location, :count).by(1)
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Check your changes before creating this scheme")
