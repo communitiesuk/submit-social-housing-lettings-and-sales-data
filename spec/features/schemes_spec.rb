@@ -392,7 +392,7 @@ RSpec.describe "Schemes scheme Features" do
                     context "when I amend support" do
                       it "returns to the add location page" do
                         click_button "Save and continue"
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/locations/new")
                       end
                     end
                   end
@@ -626,7 +626,7 @@ RSpec.describe "Schemes scheme Features" do
                           choose "Medium stay"
                           click_button "Save and continue"
 
-                          expect(page).to have_current_path("/schemes/#{scheme.id}/location/new")
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/locations/new")
                           expect(page).to have_content "Add a location to this scheme"
                         end
 

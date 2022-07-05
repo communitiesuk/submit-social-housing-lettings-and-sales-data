@@ -2,7 +2,7 @@ class LocationsController < ApplicationController
   include Pagy::Backend
   before_action :authenticate_user!
   before_action :authenticate_scope!
-  before_action :find_location, except: %i[new create]
+  before_action :find_location, except: %i[new create index]
   before_action :find_scheme
   before_action :authenticate_action!
 
@@ -38,7 +38,7 @@ class LocationsController < ApplicationController
 private
 
   def find_scheme
-    @scheme = if %w[new create].include?(action_name)
+    @scheme = if %w[new create index].include?(action_name)
                 Scheme.find(params[:id])
               else
                 @location.scheme
