@@ -31,7 +31,7 @@ class LocationsController < ApplicationController
     if @location.update(location_params)
       location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
     else
-      render :details, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
