@@ -19,7 +19,7 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      location_params[:add_another_location] == "Yes" ? redirect_to(location_new_scheme_path) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
+      location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class LocationsController < ApplicationController
 
   def update
     if @location.update(location_params)
-      location_params[:add_another_location] == "Yes" ? redirect_to(location_new_scheme_path) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+      location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
     else
       render :details, status: :unprocessable_entity
     end
@@ -38,11 +38,11 @@ class LocationsController < ApplicationController
 private
 
   def find_scheme
-    if %w[new create].include?(action_name)
-      @scheme = Scheme.find(params[:id])
-    else
-      @scheme = @location.scheme
-    end
+    @scheme = if %w[new create].include?(action_name)
+                Scheme.find(params[:id])
+              else
+                @location.scheme
+              end
   end
 
   def find_location
