@@ -37,7 +37,7 @@
                                            :name,
                                            legend: { text: "What is this type of scheme?", size: "m" } %>
 
-      <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
       <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
                                            wheelchair_user_selection,

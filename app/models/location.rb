@@ -6,8 +6,8 @@ class Location < ApplicationRecord
   attr_accessor :add_another_location
 
   WHEELCHAIR_ADAPTATIONS = {
-    No: 0,
     Yes: 1,
+    No: 0
   }.freeze
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
