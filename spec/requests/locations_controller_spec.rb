@@ -8,7 +8,7 @@ RSpec.describe LocationsController, type: :request do
   describe "#new" do
     context "when not signed in" do
       it "redirects to the sign in page" do
-        get "/schemes/1/location/new"
+        get "/schemes/1/locations/new"
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -18,7 +18,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/1/location/new"
+        get "/schemes/1/locations/new"
       end
 
       it "returns 401 unauthorized" do
@@ -33,7 +33,7 @@ RSpec.describe LocationsController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{scheme.id}/location/new"
+        get "/schemes/#{scheme.id}/locations/new"
       end
 
       it "returns a template for a new location" do
@@ -45,7 +45,7 @@ RSpec.describe LocationsController, type: :request do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
 
         it "displays the new page with an error message" do
-          get "/schemes/#{another_scheme.id}/location/new"
+          get "/schemes/#{another_scheme.id}/locations/new"
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -55,7 +55,7 @@ RSpec.describe LocationsController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/schemes/#{scheme.id}/location/new"
+        get "/schemes/#{scheme.id}/locations/new"
       end
 
       it "returns a template for a new location" do
