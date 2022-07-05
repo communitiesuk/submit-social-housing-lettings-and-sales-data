@@ -4,7 +4,7 @@
   <%= govuk_back_link(
         text: "Back",
         href: "/schemes/#{@scheme.id}",
-        ) %>
+      ) %>
 <% end %>
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 <% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
@@ -41,7 +41,7 @@
             <% row.cell(text: location.id) %>
             <% row.cell(text: location.postcode) %>
             <% row.cell(text: location.total_units) %>
-            <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == "Yes" ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ""}")) %>
+            <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == 'Yes' ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ''}")) %>
             <% row.cell(text: "Delete") %>
           <% end %>
         <% end %>

@@ -461,7 +461,7 @@ RSpec.describe "Schemes scheme Features" do
                           expect(page).to have_content "Self-contained house"
                         end
 
-                        context "changing location details" do
+                        context "when changing location details" do
                           before do
                             click_link "XX11XX"
                             fill_in "Postcode", with: "ZZ1 1ZZ"

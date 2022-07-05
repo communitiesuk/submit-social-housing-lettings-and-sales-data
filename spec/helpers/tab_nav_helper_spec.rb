@@ -4,7 +4,7 @@ RSpec.describe TabNavHelper do
   let(:organisation) { FactoryBot.create(:organisation) }
   let(:user) { FactoryBot.build(:user, organisation:) }
   let(:scheme) { FactoryBot.create(:scheme, service_name: "Some name") }
-  let(:location) { FactoryBot.create(:location, scheme: scheme) }
+  let(:location) { FactoryBot.create(:location, scheme:) }
 
   describe "#user_cell" do
     it "returns user link and email separated by a newline character" do

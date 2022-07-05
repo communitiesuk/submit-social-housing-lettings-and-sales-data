@@ -31,7 +31,7 @@ class Location < ApplicationRecord
       { name: "Type of building", value: type_of_building, suffix: false },
       { name: "Wheelchair adaptation", value: wheelchair_adaptation, suffix: false },
     ]
-    end
+  end
 
 private
 
