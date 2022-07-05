@@ -3,6 +3,7 @@ class LocationsController < ApplicationController
   before_action :authenticate_scope!
   before_action :find_location, except: %i[new create]
   before_action :find_scheme
+  before_action :authenticate_action!
 
   def new
     @location = Location.new
@@ -40,6 +41,12 @@ private
 
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
+  end
+
+  def authenticate_action!
+    if %w[new create details update].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+      render_not_found and return
+    end
   end
 
   def location_params

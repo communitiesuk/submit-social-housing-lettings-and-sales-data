@@ -103,6 +103,16 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.wheelchair_adaptation).to eq("No")
       end
 
+      context "when trying to add location to a scheme that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+
+        it "displays the new page with an error message" do
+          post "/schemes/#{another_scheme.id}/location/create", params: params
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
       context "when required organisation id param is missing" do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
 
