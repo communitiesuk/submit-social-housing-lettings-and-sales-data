@@ -590,4 +590,195 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#index" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/#{scheme.id}/locations"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      context "when coordinator attempts to see scheme belonging to a different organisation" do
+        let!(:another_scheme) { FactoryBot.create(:scheme) }
+
+        before do
+          FactoryBot.create(:location, scheme: scheme)
+        end
+
+        it "returns 404 not found" do
+          get "/schemes/#{another_scheme.id}/locations"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      it "shows scheme" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.wheelchair_adaptation)
+        end
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
+
+      it "has correct title" do
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
+      end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).not_to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 2 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).not_to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      it "shows scheme" do
+        locations.each do |location|
+          expect(page).to have_content(location.id)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.wheelchair_adaptation)
+        end
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
+
+      it "has correct title" do
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
+      end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).not_to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).not_to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
+      end
+    end
+  end
 end
