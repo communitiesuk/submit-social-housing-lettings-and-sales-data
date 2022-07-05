@@ -1041,11 +1041,6 @@
       "subsections": {
         "household_characteristics": {
           "label": "Household characteristics",
-          "depends_on": [
-            {
-              "setup": "completed"
-            }
-          ],
           "pages": {
             "declaration": {
               "header": "Department for Levelling Up, Housing & Communities privacy notice",
@@ -1079,7 +1074,7 @@
                   "step": 1,
                   "width": 2
                 }
-              }, "depends_on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1,  "setup": "completed"}]
             },
             "no_females_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
@@ -1317,7 +1312,7 @@
                     "R": {
                       "value": "Tenant prefers not to say"
                     }
-                  }, "depends_on": [{"declaration": 1}]
+                  }
                 }
               }, "depends_on": [{ "declaration": 1 }]
             },
@@ -1488,7 +1483,7 @@
                     "11": {
                       "value": "Any other Asian or Asian British background"
                     }
-                  }, "depends_on": [{"declaration": 1}]
+                  }
                 }
               },
               "depends_on": [
@@ -1711,7 +1706,6 @@
               ]
             },
             "lead_tenant_under_retirement_value_check": {
-              "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -1752,12 +1746,9 @@
                     }
                   } 
                 }
-              },"depends on": [{"declaration": 1}]
+              },"depends_on": [{"declaration": 1, "person_1_retired_under_soft_min_age?": true}]
             },
             "lead_tenant_over_retirement_value_check": {
-              "depends_on": [
-                { "person_1_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -1796,9 +1787,9 @@
                     "1": {
                       "value": "No"
                     }
-                  },"depends_on": [{"declaration": 1}]
+                  }
                 }
-              },"depends on": [{"declaration": 1}]
+              },"depends_on": [{"declaration": 1, "person_1_not_retired_over_soft_max_age?": true}]
             },
             "person_2_known": {
               "header": "You’ve given us the details for 1 person in the household",
@@ -2500,15 +2491,9 @@
                       "declaration": 1
                     }]
                 }
-              }, "depends on": [{"declaration": 1}]
+              }
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age3_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -2544,7 +2529,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age3_known": 0}]
             },
             "person_3_gender_identity": {
               "header": "",
@@ -2582,12 +2568,6 @@
               ]
             },
             "no_females_pregnant_household_person_3_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_3": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -2623,15 +2603,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_3": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_3_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_3": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -2667,7 +2642,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_3": 0}]
             },
             "person_3_working_situation": {
               "header": "",
@@ -2738,7 +2714,6 @@
               ]
             },
             "person_3_under_retirement_value_check": {
-              "depends_on": [{ "person_3_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -2779,12 +2754,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_3_retired_under_soft_min_age?": true}]
             },
             "person_3_over_retirement_value_check": {
-              "depends_on": [
-                { "person_3_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -2825,7 +2797,7 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_3_not_retired_over_soft_max_age?": true}]
             },
             "person_4_known": {
               "header": "You’ve given us the details for 3 people in the household",
@@ -2955,9 +2927,6 @@
               ]
             },
             "no_females_pregnant_household_person_4_age_value_check": {
-              "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age4_known": 0 }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -2993,15 +2962,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true, "age4_known": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age4_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3037,7 +3000,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age4_known": 0}]
             },
             "person_4_gender_identity": {
               "header": "",
@@ -3075,12 +3039,6 @@
               ]
             },
             "no_females_pregnant_household_person_4_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_4": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3116,15 +3074,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_4": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_4_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_4": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3160,7 +3113,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_4": 0}]
             },
             "person_4_working_situation": {
               "header": "",
@@ -3231,7 +3185,6 @@
               ]
             },
             "person_4_under_retirement_value_check": {
-              "depends_on": [{ "person_4_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3272,12 +3225,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_4_retired_under_soft_min_age?": true}]
             },
             "person_4_over_retirement_value_check": {
-              "depends_on": [
-                { "person_4_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -3318,7 +3268,7 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_4_not_retired_over_soft_max_age?": true }]
             },
             "person_5_known": {
               "header": "You’ve given us the details for 4 people in the household",
@@ -3445,9 +3395,6 @@
               ]
             },
             "no_females_pregnant_household_person_5_age_value_check": {
-              "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age5_known": 0 }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3483,15 +3430,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true, "age5_known": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age5_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3527,7 +3468,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age5_known": 0}]
             },
             "person_5_gender_identity": {
               "header": "",
@@ -3565,12 +3507,6 @@
               ]
             },
             "no_females_pregnant_household_person_5_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_5": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3606,15 +3542,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_5": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_5_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_5": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3650,7 +3581,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_5": 0}]
             },
             "person_5_working_situation": {
               "header": "",
@@ -3721,7 +3653,6 @@
               ]
             },
             "person_5_under_retirement_value_check": {
-              "depends_on": [{ "person_5_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -3762,12 +3693,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_5_retired_under_soft_min_age?": true}]
             },
             "person_5_over_retirement_value_check": {
-              "depends_on": [
-                { "person_5_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -3808,7 +3736,7 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_5_not_retired_over_soft_max_age?": true }]
             },
             "person_6_known": {
               "header": "You’ve given us the details for 5 people in the household",
@@ -3932,9 +3860,6 @@
               ]
             },
             "no_females_pregnant_household_person_6_age_value_check": {
-              "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age6_known": 0 }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -3970,15 +3895,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true, "age6_known": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age6_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4014,7 +3933,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age6_known": 0}]
             },
             "person_6_gender_identity": {
               "header": "",
@@ -4052,12 +3972,6 @@
               ]
             },
             "no_females_pregnant_household_person_6_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_6": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4093,15 +4007,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_6": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_6_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_6": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4137,7 +4046,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_6": 0}]
             },
             "person_6_working_situation": {
               "header": "",
@@ -4208,7 +4118,6 @@
               ]
             },
             "person_6_under_retirement_value_check": {
-              "depends_on": [{ "person_6_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4249,12 +4158,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_6_retired_under_soft_min_age?": true}]
             },
             "person_6_over_retirement_value_check": {
-              "depends_on": [
-                { "person_6_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -4295,7 +4201,7 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_6_not_retired_over_soft_max_age?": true}]
             },
             "person_7_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -4416,9 +4322,6 @@
               ]
             },
             "no_females_pregnant_household_person_7_age_value_check": {
-              "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age7_known": 0 }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4454,15 +4357,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true, "age7_known": 0 }]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age7_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4498,7 +4395,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age7_known": 0}]
             },
             "person_7_gender_identity": {
               "header": "",
@@ -4535,12 +4433,6 @@
               ]
             },
             "no_females_pregnant_household_person_7_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_7": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4576,15 +4468,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_7": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_7_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_7": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4620,7 +4507,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_7": 0}]
             },
             "person_7_working_situation": {
               "header": "",
@@ -4691,7 +4579,6 @@
               ]
             },
             "person_7_under_retirement_value_check": {
-              "depends_on": [{ "person_7_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -4732,12 +4619,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_7_retired_under_soft_min_age?": true}]
             },
             "person_7_over_retirement_value_check": {
-              "depends_on": [
-                { "person_7_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -4778,7 +4662,7 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_7_not_retired_over_soft_max_age?": true}]
             },
             "person_8_known": {
               "header": "You’ve given us the details for 7 people in the household",
@@ -4896,9 +4780,6 @@
               ]
             },
             "no_females_pregnant_household_person_8_age_value_check": {
-              "depends_on": [
-                { "no_females_in_a_pregnant_household?": true, "age8_known": 0 }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4934,15 +4815,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true, "age8_known": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "age8_known": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -4978,7 +4853,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "age8_known": 0}]
             },
             "person_8_gender_identity": {
               "header": "",
@@ -5016,12 +4892,6 @@
               ]
             },
             "no_females_pregnant_household_person_8_value_check": {
-              "depends_on": [
-                {
-                  "no_females_in_a_pregnant_household?": true,
-                  "details_known_8": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -5057,15 +4927,10 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "no_females_in_a_pregnant_household?": true,
+                "details_known_8": 0}]
             },
             "females_in_soft_age_range_in_pregnant_household_person_8_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true,
-                  "details_known_8": 0
-                }
-              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -5101,7 +4966,8 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "female_in_pregnant_household_in_soft_validation_range?": true,
+                "details_known_8": 0}]
             },
             "person_8_working_situation": {
               "header": "",
@@ -5172,7 +5038,6 @@
               ]
             },
             "person_8_under_retirement_value_check": {
-              "depends_on": [{ "person_8_retired_under_soft_min_age?": true }],
               "title_text": {
                 "translation": "soft_validations.retirement.min.title",
                 "arguments": [
@@ -5213,12 +5078,9 @@
                     }
                   }
                 }
-              }, "depends on": [{"declaration": 1}]
+              }, "depends_on": [{"declaration": 1, "person_8_retired_under_soft_min_age?": true}]
             },
             "person_8_over_retirement_value_check": {
-              "depends_on": [
-                { "person_8_not_retired_over_soft_max_age?": true }
-              ],
               "title_text": {
                 "translation": "soft_validations.retirement.max.title",
                 "arguments": [
@@ -5261,7 +5123,7 @@
                 }
               }
             }
-          }, "depends on": [{"declaration": 1}]
+          }, "depends_on": [{"declaration": 1, "person_8_not_retired_over_soft_max_age?": true}]
         },
         "household_needs": {
           "label": "Household needs",
