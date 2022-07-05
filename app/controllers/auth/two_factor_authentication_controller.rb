@@ -25,7 +25,7 @@ private
 
   def after_two_factor_success_for(resource)
     set_remember_two_factor_cookie(resource)
-    warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
+    warden.session(resource_name)[DeviseTwoFactorAuthentication::NEED_AUTHENTICATION] = false
     bypass_sign_in(resource, scope: resource_name)
     resource.update!(second_factor_attempts_count: 0)
 
