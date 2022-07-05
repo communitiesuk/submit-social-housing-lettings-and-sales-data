@@ -6,12 +6,16 @@ class LocationsController < ApplicationController
   before_action :find_scheme
   before_action :authenticate_action!
 
+  def index
+    @pagy, @locations = pagy(@scheme.locations)
+    @total_count = @scheme.locations.size
+  end
+
   def new
     @location = Location.new
   end
 
   def create
-    debugger
     @location = Location.new(location_params)
 
     if @location.save
@@ -21,7 +25,7 @@ class LocationsController < ApplicationController
     end
   end
 
-  def details; end
+  def edit; end
 
   def update
     if @location.update(location_params)
@@ -31,16 +35,14 @@ class LocationsController < ApplicationController
     end
   end
 
-  def index
-    @scheme = Scheme.find_by(id: params[:id])
-    @pagy, @locations = pagy(@scheme.locations)
-    @total_count = @scheme.locations.size
-  end
-
 private
 
   def find_scheme
-    @scheme = params[:scheme_id] && params[:id] ? Scheme.find(params[:scheme_id]) : Scheme.find(params[:id])
+    if %w[new create].include?(action_name)
+      @scheme = Scheme.find(params[:id])
+    else
+      @scheme = @location.scheme
+    end
   end
 
   def find_location
@@ -52,7 +54,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new create details update].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+    if %w[details edit update].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
       render_not_found and return
     end
   end
