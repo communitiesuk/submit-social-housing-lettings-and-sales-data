@@ -191,9 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
+    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
-    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.integer "hhtype"
     t.integer "new_old"
@@ -246,7 +246,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.string "county"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name"
     t.integer "total_units"
     t.integer "type_of_unit"
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
@@ -254,7 +253,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
