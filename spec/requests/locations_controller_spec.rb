@@ -627,7 +627,7 @@ RSpec.describe LocationsController, type: :request do
         let!(:another_scheme) { FactoryBot.create(:scheme) }
 
         before do
-          FactoryBot.create(:location, scheme: scheme)
+          FactoryBot.create(:location, scheme:)
         end
 
         it "returns 404 not found" do
