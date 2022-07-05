@@ -36,7 +36,7 @@ class Location < ApplicationRecord
 private
 
   def validate_postcode
-    unless postcode.match(Validations::PropertyValidations::POSTCODE_REGEXP)
+    if postcode.nil? || !postcode&.match(Validations::PropertyValidations::POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     end
