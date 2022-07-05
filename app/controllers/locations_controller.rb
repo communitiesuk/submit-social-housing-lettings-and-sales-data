@@ -51,7 +51,7 @@ private
 
   def location_params
     required_params = params.require(:location).permit(:postcode, :name, :total_units, :type_of_unit, :wheelchair_adaptation, :add_another_location).merge(scheme_id: @scheme.id)
-    required_params[:postcode] = required_params[:postcode].gsub(" ", "").encode("ASCII", "UTF-8", invalid: :replace, undef: :replace, replace: "") if required_params[:postcode]
+    required_params[:postcode] = required_params[:postcode].gsub(" ", "").upcase.encode("ASCII", "UTF-8", invalid: :replace, undef: :replace, replace: "") if required_params[:postcode]
     required_params
   end
 end
