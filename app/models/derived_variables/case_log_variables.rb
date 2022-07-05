@@ -67,8 +67,19 @@ module DerivedVariables::CaseLogVariables
     self.new_old = new_or_existing_tenant
     self.vacdays = property_vacant_days
 
-    if is_supported_housing? && (scheme && scheme.locations.size == 1)
-      self.location = scheme.locations.first
+    if is_supported_housing? && scheme
+      if scheme.locations.size == 1
+        self.location = scheme.locations.first
+      end
+      self.la = location.county
+      self.postcode_full = location.postcode
+      self.unittype_gn = form.questions.find { |x| x.id == "unittype_gn" }.answer_options.select { |_key, value| value["value"] == location.type_of_unit }.keys.first
+      self.builtype = form.questions.find { |x| x.id == "builtype" }.answer_options.select { |_key, value| value["value"] == location.type_of_building }.keys.first
+      wheelchair_adaptation_map = { 1 => 1, 0 => 2 }
+      self.wchair = wheelchair_adaptation_map[location.wheelchair_adaptation.to_i]
+      if is_renewal?
+        self.voiddate = startdate
+      end
     end
   end
 
