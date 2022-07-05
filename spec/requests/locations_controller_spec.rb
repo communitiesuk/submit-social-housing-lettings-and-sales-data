@@ -298,4 +298,69 @@ RSpec.describe LocationsController, type: :request do
       end
     end
   end
+
+  describe "#details" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/location"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/location"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme: scheme) }
+
+      before do
+        sign_in user
+        get "/schemes/#{location.id}/location?scheme_id=#{scheme.id}"
+      end
+
+      it "returns a template for a new location" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Add a location to this scheme")
+      end
+
+      context "when trying to new location to a scheme that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{scheme.id}/location"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme: scheme) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{location.id}/location?scheme_id=#{scheme.id}"
+      end
+
+      it "returns a template for a new location" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Add a location to this scheme")
+      end
+    end
+  end
 end
