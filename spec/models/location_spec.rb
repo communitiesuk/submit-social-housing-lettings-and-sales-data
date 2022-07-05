@@ -20,9 +20,8 @@ RSpec.describe Location, type: :model do
 
     it "does add an error when the postcode is invalid" do
       location.postcode = "invalid"
-      location.save!
-      expect(location.errors).not_to be_empty
-      expect(location.errors["postcode"]).to include(match I18n.t("validations.postcode"))
+      expect { location.save! }
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode Enter a postcode in the correct format, for example AA1 1AA")
     end
   end
 end
