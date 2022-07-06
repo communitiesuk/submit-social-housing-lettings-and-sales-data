@@ -1702,7 +1702,7 @@ RSpec.describe CaseLog do
 
       context "and not renewal" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: "House", type_of_building: "Purpose built", wheelchair_adaptation: 0) }
+        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: 1, type_of_building: "Purpose built", wheelchair_adaptation: 0) }
 
         let!(:supported_housing_case_log) do
           described_class.create!({
@@ -1727,8 +1727,8 @@ RSpec.describe CaseLog do
         end
 
         it "correctly infers and saves type of unit" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT unittype_gn from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["unittype_gn"]).to eq(7)
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT unittype_sh from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["unittype_sh"]).to eq(1)
         end
 
         it "correctly infers and saves type of building" do
@@ -1744,7 +1744,7 @@ RSpec.describe CaseLog do
 
       context "and renewal" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: "House", type_of_building: "Purpose built", wheelchair_adaptation: 0) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
 
         let!(:supported_housing_case_log) do
           described_class.create!({

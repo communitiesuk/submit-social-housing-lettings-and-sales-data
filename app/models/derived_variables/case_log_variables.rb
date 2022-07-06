@@ -74,7 +74,15 @@ module DerivedVariables::CaseLogVariables
       if location
         self.la = location.county
         self.postcode_full = location.postcode
-        self.unittype_gn = form.questions.find { |x| x.id == "unittype_gn" }.answer_options.select { |_key, value| value["value"] == location.type_of_unit }.keys.first
+        type_of_unit_map = {
+          "Self-contained flat or bedsit" => 1,
+          "Self-contained flat or bedsit with common facilities" => 2,
+          "Shared flat" => 3,
+          "Shared house or hostel" => 4,
+          "Bungalow" => 5,
+          "Self-contained house" => 6,
+        }
+        self.unittype_sh = type_of_unit_map[location.type_of_unit]
         self.builtype = form.questions.find { |x| x.id == "builtype" }.answer_options.select { |_key, value| value["value"] == location.type_of_building }.keys.first
         wheelchair_adaptation_map = { 1 => 1, 0 => 2 }
         self.wchair = wheelchair_adaptation_map[location.wheelchair_adaptation.to_i]
