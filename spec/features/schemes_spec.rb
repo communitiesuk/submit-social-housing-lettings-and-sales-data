@@ -652,9 +652,9 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content "Supported housing schemes"
                         expect(page).to have_content scheme.id_to_display
                         expect(page).to have_content scheme.service_name
-                        expect(page).to have_content scheme.organisation.name
-                        expect(page).to have_content scheme.stock_owning_organisation.name
-                        expect(page).to have_content "#{scheme.organisation.name} has been created."
+                        expect(page).to have_content scheme.owning_organisation.name
+                        expect(page).to have_content scheme.managing_organisation.name
+                        expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
                       end
                     end
                   end
