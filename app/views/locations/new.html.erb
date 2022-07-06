@@ -1,0 +1,63 @@
+<% content_for :title, "Add a location to this scheme" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: "/schemes/#{@scheme.id}/support",
+      ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
+
+<%= form_for(@location, method: :post, url: locations_path) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :postcode,
+                             label: { size: "m" },
+                             hint: { text: "For example, SW1P 4DF." },
+                             width: 5 %>
+
+      <%= f.govuk_text_field :name,
+                             label: { text: "Name (optional)", size: "m" },
+                             hint: { text: "This is how you refer to this location within your organisation" } %>
+
+      <%= f.govuk_number_field :total_units,
+                               label: { text: "Total number of units at this location", size: "m" },
+                               width: 2,
+                               hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff.s" },
+                               autofocus: true %>
+
+      <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :type_of_unit,
+                                           type_of_units_selection,
+                                           :id,
+                                           :name,
+                                           legend: { text: "What is this type of scheme?", size: "m" } %>
+
+      <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
+                                           wheelchair_user_selection,
+                                           :id,
+                                           :name,
+                                           hint: { text: "This includes stairlifts, ramps, level-access showers or grab rails" },
+                                           legend: { text: "Are the majority of units in this location built or adapted to wheelchair-user standards?", size: "m" } %>
+
+      <%= govuk_section_break(visible: true, size: "m") %>
+
+      <% another_location_selection = %w[Yes No].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :add_another_location,
+                                           another_location_selection,
+                                           :id,
+                                           :name,
+                                           inline: true,
+                                           legend: { text: "Do you want to add another location?", size: "m" } %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

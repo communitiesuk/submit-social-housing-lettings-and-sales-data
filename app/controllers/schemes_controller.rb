@@ -20,12 +20,6 @@ class SchemesController < ApplicationController
     @scheme = Scheme.find_by(id: params[:id])
   end
 
-  def locations
-    @scheme = Scheme.find_by(id: params[:id])
-    @pagy, @locations = pagy(@scheme.locations)
-    @total_count = @scheme.locations.size
-  end
-
   def new
     @scheme = Scheme.new
   end
@@ -100,7 +94,7 @@ private
     when "secondary-client-group"
       scheme_support_path(@scheme)
     when "support"
-      scheme_check_answers_path(@scheme)
+      new_location_path
     when "details"
       scheme_primary_client_group_path(@scheme)
     end
@@ -113,7 +107,6 @@ private
                                                      :stock_owning_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
-                                                     :total_units,
                                                      :id,
                                                      :has_other_client_group,
                                                      :primary_client_group,
