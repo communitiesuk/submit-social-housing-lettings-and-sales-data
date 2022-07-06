@@ -4,8 +4,8 @@ RSpec.describe "Schemes scheme Features" do
   context "when viewing list of schemes" do
     context "when I am signed as a coordinator user and there are schemes in the database" do
       let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:schemes) { FactoryBot.create_list(:scheme, 5, organisation: user.organisation) }
-      let!(:scheme_to_search) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
+      let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         visit("/logs")

@@ -47,7 +47,7 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     let(:case_log) { FactoryBot.create(:case_log, created_by: user) }
 
     before do
-      FactoryBot.create(:scheme, organisation_id: organisation_2.id)
+      FactoryBot.create(:scheme, owning_organisation: organisation_2)
     end
 
     it "has the correct answer_options based on the schemes the user's organisation owns or manages" do

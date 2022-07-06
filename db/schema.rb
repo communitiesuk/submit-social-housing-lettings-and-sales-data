@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -300,7 +300,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
 
   create_table "schemes", force: :cascade do |t|
     t.string "service_name"
-    t.bigint "organisation_id", null: false
+    t.bigint "owning_organisation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "primary_client_group"
@@ -312,9 +312,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
     t.string "intended_stay"
     t.datetime "end_date"
     t.integer "has_other_client_group"
-    t.bigint "stock_owning_organisation_id"
-    t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
-    t.index ["stock_owning_organisation_id"], name: "index_schemes_on_stock_owning_organisation_id"
+    t.bigint "managing_organisation_id"
+    t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
+    t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -373,6 +373,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_04_135746) do
   add_foreign_key "case_logs", "locations"
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
-  add_foreign_key "schemes", "organisations"
-  add_foreign_key "schemes", "organisations", column: "stock_owning_organisation_id"
+  add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
+  add_foreign_key "schemes", "organisations", column: "owning_organisation_id"
 end

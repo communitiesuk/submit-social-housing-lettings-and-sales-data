@@ -203,7 +203,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:specific_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:specific_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -257,6 +257,205 @@ RSpec.describe SchemesController, type: :request do
         expect(page).to have_content(specific_scheme.secondary_client_group)
         expect(page).to have_content(specific_scheme.support_type)
         expect(page).to have_content(specific_scheme.intended_stay)
+      end
+    end
+  end
+
+  describe "#locations" do
+    let(:specific_scheme) { schemes.first }
+
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/#{specific_scheme.id}/locations"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider user" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/#{specific_scheme.id}/locations"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator user" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      context "when coordinator attempts to see scheme belonging to a different organisation" do
+        let!(:specific_scheme) { FactoryBot.create(:scheme) }
+
+        before do
+          FactoryBot.create(:location, scheme: specific_scheme)
+        end
+
+        it "returns 404 not found" do
+          get "/schemes/#{specific_scheme.id}/locations"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      it "shows scheme" do
+        locations.each do |location|
+          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.county)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.type_of_building)
+          expect(page).to have_content(location.wheelchair_adaptation)
+          expect(page).to have_content(location.name)
+        end
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
+
+      it "has correct title" do
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
+      end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).not_to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 2 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).not_to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations"
+      end
+
+      it "shows scheme" do
+        locations.each do |location|
+          expect(page).to have_content(location.location_code)
+          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.county)
+          expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.type_of_building)
+          expect(page).to have_content(location.wheelchair_adaptation)
+          expect(page).to have_content(location.name)
+        end
+      end
+
+      it "has page heading" do
+        expect(page).to have_content(scheme.service_name)
+      end
+
+      it "has correct title" do
+        expected_title = CGI.escapeHTML("#{scheme.service_name} - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        expect(page).to have_title(expected_title)
+      end
+
+      context "when paginating over 20 results" do
+        let!(:locations) { FactoryBot.create_list(:location, 25, scheme:) }
+
+        context "when on the first page" do
+          before do
+            get "/schemes/#{scheme.id}/locations"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>1</b> to <b>20</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).not_to have_content("Previous")
+            expect(page).not_to have_link("Previous")
+            expect(page).to have_content("Next")
+            expect(page).to have_link("Next")
+          end
+        end
+
+        context "when on the second page" do
+          before do
+            get "/schemes/#{scheme.id}/locations?page=2"
+          end
+
+          it "shows which schemes are being shown on the current page" do
+            expect(CGI.unescape_html(response.body)).to match("Showing <b>21</b> to <b>25</b> of <b>#{locations.count}</b> locations")
+          end
+
+          it "has correct page 1 of 2 title" do
+            expected_title = CGI.escapeHTML("#{scheme.service_name} (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+            expect(page).to have_title(expected_title)
+          end
+
+          it "has pagination links" do
+            expect(page).to have_content("Previous")
+            expect(page).to have_link("Previous")
+            expect(page).not_to have_content("Next")
+            expect(page).not_to have_link("Next")
+          end
+        end
       end
     end
   end
@@ -401,7 +600,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
+        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home", "total_units" => "1" } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
@@ -436,7 +635,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -619,7 +818,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -837,7 +1036,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -903,7 +1102,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -969,7 +1168,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1035,7 +1234,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1101,7 +1300,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1167,7 +1366,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
