@@ -14,12 +14,13 @@ class CaseLogsController < ApplicationController
     all_logs = current_user.case_logs
     unpaginated_filtered_logs = filtered_case_logs(filtered_collection(all_logs, search_term))
 
-    @pagy, @case_logs = pagy(unpaginated_filtered_logs)
-    @searched = search_term.presence
-    @total_count = all_logs.size
-
     respond_to do |format|
-      format.html
+      format.html do
+        @pagy, @case_logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = all_logs.size
+      end
+      
       format.csv do
         send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
       end
