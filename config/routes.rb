@@ -44,7 +44,7 @@ Rails.application.routes.draw do
     get "check-answers", to: "schemes#check_answers"
 
     member do
-      get "locations", to: "schemes#locations"
+      resources :locations
     end
   end
 

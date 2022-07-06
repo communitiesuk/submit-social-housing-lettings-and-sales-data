@@ -1,0 +1,49 @@
+<% title = @scheme.service_name %>
+<% content_for :title, title %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+        text: "Back",
+        href: "/schemes/#{@scheme.id}",
+      ) %>
+<% end %>
+<%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
+<% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
+<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, location_caption)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <%= govuk_table do |table| %>
+      <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+        <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>.
+      <% end %>
+      <%= table.head do |head| %>
+        <%= head.row do |row| %>
+          <% row.cell(header: true, text: "Code", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Postcode", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Units", html_attributes: {
+            scope: "col",
+          }) %>
+          <% row.cell(header: true, text: "Common unit type", html_attributes: {
+            scope: "col",
+          }) %>
+        <% end %>
+      <% end %>
+      <% @locations.each do |location| %>
+        <%= table.body do |body| %>
+          <%= body.row do |row| %>
+            <% row.cell(text: location.id) %>
+            <% row.cell(text: location.postcode) %>
+            <% row.cell(text: location.total_units) %>
+            <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == 'Yes' ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ''}")) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>

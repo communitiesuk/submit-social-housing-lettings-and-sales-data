@@ -55,7 +55,7 @@ protected
     return unless resource.respond_to?(:need_two_factor_authentication?) &&
       resource.need_two_factor_authentication?(request)
 
-    warden.session(resource_class.name.underscore)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+    warden.session(resource_class.name.underscore)[DeviseTwoFactorAuthentication::NEED_AUTHENTICATION] = true
   end
 
   def password_update_flash_message

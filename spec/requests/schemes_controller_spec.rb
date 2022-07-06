@@ -536,7 +536,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1" } } }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No" } } }
 
       before do
         sign_in user
@@ -569,7 +569,7 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a support user" do
       let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", owning_organisation_id: organisation.id } } }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", owning_organisation_id: organisation.id } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -600,7 +600,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home", "total_units" => "1" } } }
+        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
@@ -662,7 +662,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -707,7 +707,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -737,7 +737,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -750,10 +750,10 @@ RSpec.describe SchemesController, type: :request do
       context "when updating support" do
         let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
 
-        it "renders confirm secondary group after successful update" do
+        it "renders add location to this scheme successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Check your changes before updating this scheme")
+          expect(page).to have_content("Add a location to this scheme")
         end
 
         it "updates a scheme with valid params" do
@@ -768,7 +768,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -780,7 +780,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating details" do
-        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details" } } }
+        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", page: "details" } } }
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -794,16 +794,15 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-          expect(scheme_to_update.reload.total_units).to eq(1)
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", page: "details", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -812,7 +811,6 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-            expect(scheme_to_update.reload.total_units).to eq(1)
           end
         end
       end
@@ -848,7 +846,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -893,7 +891,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -923,7 +921,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -939,7 +937,7 @@ RSpec.describe SchemesController, type: :request do
         it "renders confirm secondary group after successful update" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("Check your changes before updating this scheme")
+          expect(page).to have_content("Add a location to this scheme")
         end
 
         it "updates a scheme with valid params" do
@@ -954,7 +952,7 @@ RSpec.describe SchemesController, type: :request do
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -972,7 +970,6 @@ RSpec.describe SchemesController, type: :request do
                       sensitive: "1",
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
-                      total_units: "1",
                       page: "details",
                       owning_organisation_id: another_organisation.id,
                       managing_organisation_id: another_organisation.id } }
@@ -990,18 +987,17 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-          expect(scheme_to_update.reload.total_units).to eq(1)
           expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
           expect(scheme_to_update.reload.managing_organisation_id).to eq(another_organisation.id)
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", total_units: "1", page: "details", check_answers: "true" } } }
+          let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", page: "details", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
             expect(response).to have_http_status(:ok)
-            expect(page).to have_content("Check your changes before updating this scheme")
+            expect(page).to have_content("Check your changes before creating this scheme")
           end
 
           it "updates a scheme with valid params" do
@@ -1010,7 +1006,6 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-            expect(scheme_to_update.reload.total_units).to eq(1)
           end
         end
       end
@@ -1315,7 +1310,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before updating this scheme")
+        expect(page).to have_content("Check your changes before creating this scheme")
       end
 
       context "when attempting to access check-answers scheme page for another organisation" do
@@ -1342,7 +1337,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "returns a template for a support" do
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before updating this scheme")
+        expect(page).to have_content("Check your changes before creating this scheme")
       end
     end
   end

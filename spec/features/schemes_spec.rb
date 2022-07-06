@@ -208,7 +208,7 @@ RSpec.describe "Schemes scheme Features" do
 
               it "shows details of those locations" do
                 locations.each do |location|
-                  expect(page).to have_content(location.location_code)
+                  expect(page).to have_content(location.id)
                 end
               end
             end
@@ -375,173 +375,286 @@ RSpec.describe "Schemes scheme Features" do
                     click_button "Save and continue"
                   end
 
-                  it "lets me check my answers" do
-                    expect(page).to have_content "Check your changes before updating this scheme"
+                  it "lets me add location" do
+                    expect(page).to have_content "Add a location to this scheme"
                   end
 
-                  context "when changing answers" do
-                    it "displays change links" do
-                      assert_selector "a", text: "Change", count: 12
+                  context "when I press the back button" do
+                    before do
+                      click_link "Back"
                     end
 
-                    context "when changing details" do
-                      before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
-                      end
+                    it "lets me select the secondary group" do
+                      expect(page).to have_current_path("/schemes/#{scheme.id}/support")
+                      expect(page).to have_content "What support does this scheme provide?"
+                    end
 
-                      it "allows changing details questions" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
-
-                        fill_in "Scheme name", with: "Example"
-                        choose "Direct access hostel"
-                        choose "Yes – registered care home providing nursing care"
+                    context "when I amend support" do
+                      it "returns to the add location page" do
                         click_button "Save and continue"
+                        expect(page).to have_current_path("/schemes/#{scheme.id}/locations/new")
+                      end
+                    end
+                  end
 
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).to have_content "Example"
-                        expect(page).to have_content "Yes – registered care home providing nursing care"
+                  context "when I add location to the scheme" do
+                    before do
+                      fill_in "Postcode", with: "SW1P 4DF"
+                      fill_in "Name (optional)", with: "Some name"
+                      fill_in "Total number of units at this location", with: 1
+                      choose "Self-contained house"
+                      choose "location-wheelchair-adaptation-no-field"
+                      choose "location-add-another-location-no-field"
+                      click_button "Save and continue"
+                    end
+
+                    it "lets me check my answers" do
+                      expect(page).to have_content "Check your changes before creating this scheme"
+                    end
+
+                    context "when I select to view locations" do
+                      before do
+                        click_link "Locations"
                       end
 
-                      context "when I press the back button" do
+                      it "displays information about locations" do
+                        expect(page).to have_content "Locations"
+                        expect(page).to have_content "#{scheme.locations.count} location"
+                      end
+
+                      it "displays information about newly created location" do
+                        expect(page).to have_content "SW1P4DF"
+                        expect(page).to have_content "Some name"
+                        expect(page).to have_content "Self-contained house"
+                      end
+                    end
+
+                    context "and I select to add another location a scheme" do
+                      before do
+                        click_link "Add a location"
+                        fill_in "Postcode", with: "XX1 1XX"
+                        fill_in "Name (optional)", with: "Other name"
+                        fill_in "Total number of units at this location", with: 2
+                        choose "Self-contained house"
+                        choose "location-wheelchair-adaptation-no-field"
+                        choose "location-add-another-location-no-field"
+                        click_button "Save and continue"
+                      end
+
+                      it "lets me check my answers" do
+                        expect(page).to have_content "Check your changes before creating this scheme"
+                      end
+
+                      context "when I select to view locations" do
                         before do
-                          click_link "Back"
+                          click_link "Locations"
                         end
 
-                        it "lets me select the support answers" do
-                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                          expect(page).to have_content "Check your changes before updating this scheme"
+                        it "displays information about another location" do
+                          expect(page).to have_content "Locations"
+                          expect(page).to have_content "#{scheme.locations.count} location"
+                        end
+
+                        it "displays information about newly created location" do
+                          expect(page).to have_content "XX11XX"
+                          expect(page).to have_content "Other name"
+                          expect(page).to have_content "Self-contained house"
+                        end
+
+                        context "when changing location details" do
+                          before do
+                            click_link "XX11XX"
+                            fill_in "Postcode", with: "ZZ1 1ZZ"
+                            click_button "Save and continue"
+                          end
+
+                          it "displays changed location" do
+                            expect(page).to have_content "Locations"
+                            expect(page).to have_content "#{scheme.locations.count} location"
+                            expect(page).to have_content "ZZ11ZZ"
+                          end
                         end
                       end
                     end
 
-                    context "when changing primary client group" do
-                      before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+                    context "when changing answers" do
+                      it "displays change links" do
+                        assert_selector "a", text: "Change", count: 12
                       end
 
-                      it "allows changing primary-client-group question" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
-
-                        choose "Older people with support needs"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).to have_content "Older people with support needs"
-                      end
-
-                      context "when I press the back button" do
+                      context "when changing details" do
                         before do
-                          click_link "Back"
+                          click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
                         end
 
-                        it "lets me select the support answers" do
+                        it "allows changing details questions" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
+
+                          fill_in "Scheme name", with: "Example"
+                          choose "Direct access hostel"
+                          choose "Yes – registered care home providing nursing care"
+                          click_button "Save and continue"
+
                           expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                          expect(page).to have_content "Check your changes before updating this scheme"
+                          expect(page).to have_content "Example"
+                          expect(page).to have_content "Yes – registered care home providing nursing care"
+                        end
+
+                        context "when I press the back button" do
+                          before do
+                            click_link "Back"
+                          end
+
+                          it "lets me select the support answers" do
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                            expect(page).to have_content "Check your changes before creating this scheme"
+                          end
                         end
                       end
-                    end
 
-                    context "when changing confirm secondary group answer" do
-                      before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-                      end
-
-                      it "allows changing confirm-secondary-client-group question to yes" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-                        choose "Yes"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-
-                        choose "People at risk of domestic violence"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).to have_content "People at risk of domestic violence"
-                      end
-
-                      context "when I press the back button" do
+                      context "when changing primary client group" do
                         before do
-                          click_link "Back"
+                          click_link("Change", href: "/schemes/#{scheme.id}/primary-client-group?check_answers=true")
                         end
 
-                        it "lets me select the support answers" do
+                        it "allows changing primary-client-group question" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/primary-client-group?check_answers=true")
+
+                          choose "Older people with support needs"
+                          click_button "Save and continue"
+
                           expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                          expect(page).to have_content "Check your changes before updating this scheme"
+                          expect(page).to have_content "Older people with support needs"
+                        end
+
+                        context "when I press the back button" do
+                          before do
+                            click_link "Back"
+                          end
+
+                          it "lets me select the support answers" do
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                            expect(page).to have_content "Check your changes before creating this scheme"
+                          end
                         end
                       end
-                    end
 
-                    context "when allows changing confirm-secondary-client-group question to no" do
-                      before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-                      end
-
-                      it "allows changing confirm-secondary-client-group question to no" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
-
-                        choose "No"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).not_to have_content "Secondary client group"
-                      end
-                    end
-
-                    context "when changing secondary-client-group question" do
-                      before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-                      end
-
-                      it "allows changing secondary-client-group question" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
-
-                        choose "People at risk of domestic violence"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).to have_content "People at risk of domestic violence"
-                      end
-
-                      context "when I press the back button" do
+                      context "when changing confirm secondary group answer" do
                         before do
-                          click_link "Back"
+                          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
                         end
 
-                        it "lets me select the support answers" do
+                        it "allows changing confirm-secondary-client-group question to yes" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                          choose "Yes"
+                          click_button "Save and continue"
+
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+                          choose "People at risk of domestic violence"
+                          click_button "Save and continue"
+
                           expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                          expect(page).to have_content "Check your changes before updating this scheme"
+                          expect(page).to have_content "People at risk of domestic violence"
+                        end
+
+                        context "when I press the back button" do
+                          before do
+                            click_link "Back"
+                          end
+
+                          it "lets me select the support answers" do
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                            expect(page).to have_content "Check your changes before creating this scheme"
+                          end
+                        end
+                      end
+
+                      context "when allows changing confirm-secondary-client-group question to no" do
+                        before do
+                          click_link("Change", href: "/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+                        end
+
+                        it "allows changing confirm-secondary-client-group question to no" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/confirm-secondary-client-group?check_answers=true")
+
+                          choose "No"
+                          click_button "Save and continue"
+
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).not_to have_content "Secondary client group"
+                        end
+                      end
+
+                      context "when changing secondary-client-group question" do
+                        before do
+                          click_link("Change", href: "/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+                        end
+
+                        it "allows changing secondary-client-group question" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/secondary-client-group?check_answers=true")
+
+                          choose "People at risk of domestic violence"
+                          click_button "Save and continue"
+
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                          expect(page).to have_content "People at risk of domestic violence"
+                        end
+
+                        context "when I press the back button" do
+                          before do
+                            click_link "Back"
+                          end
+
+                          it "lets me select the support answers" do
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                            expect(page).to have_content "Check your changes before creating this scheme"
+                          end
+                        end
+                      end
+
+                      context "when changing support questions" do
+                        before do
+                          click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
+                        end
+
+                        it "allows changing support questions" do
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
+
+                          choose "Resettlement support"
+                          choose "Medium stay"
+                          click_button "Save and continue"
+
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/locations/new")
+                          expect(page).to have_content "Add a location to this scheme"
+                        end
+
+                        context "when I press the back button" do
+                          before do
+                            click_link "Back"
+                          end
+
+                          it "lets me select the support answers" do
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                            expect(page).to have_content "Check your changes before creating this scheme"
+                          end
                         end
                       end
                     end
 
-                    context "when changing support questions" do
+                    context "and I select to create a scheme" do
                       before do
-                        click_link("Change", href: "/schemes/#{scheme.id}/support?check_answers=true", match: :first)
+                        click_link "Create scheme"
                       end
 
-                      it "allows changing support questions" do
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/support?check_answers=true")
-
-                        choose "Resettlement support"
-                        choose "Medium stay"
-                        click_button "Save and continue"
-
-                        expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                        expect(page).to have_content "Resettlement support"
-                        expect(page).to have_content "Medium stay"
-                      end
-
-                      context "when I press the back button" do
-                        before do
-                          click_link "Back"
-                        end
-
-                        it "lets me select the support answers" do
-                          expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
-                          expect(page).to have_content "Check your changes before updating this scheme"
-                        end
+                      it "adds scheme to the list of schemes" do
+                        expect(page).to have_content "Supported housing schemes"
+                        expect(page).to have_content scheme.id_to_display
+                        expect(page).to have_content scheme.service_name
+                        expect(page).to have_content scheme.organisation.name
+                        expect(page).to have_content scheme.stock_owning_organisation.name
+                        expect(page).to have_content "#{scheme.organisation.name} has been created."
                       end
                     end
                   end

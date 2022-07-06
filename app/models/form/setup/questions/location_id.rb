@@ -22,8 +22,8 @@ class Form::Setup::Questions::LocationId < ::Form::Question
   def displayed_answer_options(case_log)
     return {} unless case_log.scheme
 
-    scheme_location_ids = Location.where(scheme_id: case_log.scheme.id).map(&:id).map(&:to_s)
-    answer_options.select { |k, _v| scheme_location_ids.include?(k) }
+    scheme_location_ids = case_log.scheme.locations.pluck(:id)
+    answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
   end
 
   def hidden_in_check_answers?(case_log, _current_user = nil)
@@ -34,5 +34,9 @@ private
 
   def supported_housing_selected?(case_log)
     case_log.needstype == 2
+  end
+
+  def selected_answer_option_is_derived?(_case_log)
+    false
   end
 end
