@@ -6,9 +6,9 @@ module TasklistHelper
   end
 
   def get_subsections_count(case_log, status = :all)
-    return case_log.form.subsections.count if status == :all
+    return case_log.form.subsections.count { |subsection| subsection.applicable_questions(case_log).count.positive? } if status == :all
 
-    case_log.form.subsections.count { |subsection| subsection.status(case_log) == status }
+    case_log.form.subsections.count { |subsection| subsection.status(case_log) == status && subsection.applicable_questions(case_log).count.positive? }
   end
 
   def next_page_or_check_answers(subsection, case_log, current_user)
