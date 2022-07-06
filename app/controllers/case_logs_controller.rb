@@ -20,7 +20,7 @@ class CaseLogsController < ApplicationController
         @searched = search_term.presence
         @total_count = all_logs.size
       end
-      
+
       format.csv do
         send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
       end
