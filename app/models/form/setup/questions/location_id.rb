@@ -35,4 +35,8 @@ private
   def supported_housing_selected?(case_log)
     case_log.needstype == 2
   end
+
+  def selected_answer_option_is_derived?(_case_log)
+    false
+  end
 end
