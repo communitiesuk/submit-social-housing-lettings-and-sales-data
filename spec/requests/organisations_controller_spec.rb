@@ -43,7 +43,7 @@ RSpec.describe OrganisationsController, type: :request do
       context "when support user" do
         let(:user) { FactoryBot.create(:user, :support) }
         let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
         before do
           allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -72,7 +72,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+          let!(:searched_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
           let(:search_param) { searched_scheme.id }
 
           before do
@@ -101,7 +101,7 @@ RSpec.describe OrganisationsController, type: :request do
       context "when data coordinator user" do
         let(:user) { FactoryBot.create(:user, :data_coordinator) }
         let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
-        let!(:same_org_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+        let!(:same_org_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
         before do
           sign_in user
@@ -141,7 +141,7 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when searching" do
-          let!(:searched_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+          let!(:searched_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
           let(:search_param) { searched_scheme.id_to_display }
 
           before do

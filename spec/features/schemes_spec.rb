@@ -253,8 +253,8 @@ RSpec.describe "Schemes scheme Features" do
             check "This scheme contains confidential information"
             choose "Direct access hostel"
             choose "Yes – registered care home providing nursing care"
-            select organisation.name, from: "scheme-organisation-id-field"
-            select organisation.name, from: "scheme-stock-owning-organisation-id-field"
+            select organisation.name, from: "scheme-managing-organisation-id-field"
+            select organisation.name, from: "scheme-owning-organisation-id-field"
             click_button "Save and continue"
           end
 
