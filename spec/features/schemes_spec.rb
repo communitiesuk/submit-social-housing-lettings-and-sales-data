@@ -665,5 +665,49 @@ RSpec.describe "Schemes scheme Features" do
         end
       end
     end
+
+    context "when editing a scheme" do
+      context "when I visit schemes page" do
+        before do
+          visit("schemes")
+        end
+
+        it "shows list of links to schemes" do
+          schemes.each do |scheme|
+            expect(page).to have_link(scheme.service_name)
+            expect(page).to have_content(scheme.primary_client_group)
+          end
+        end
+
+        context "when I click to see individual scheme" do
+          let(:scheme) { schemes.first }
+
+          before do
+            click_link(scheme.service_name)
+          end
+
+          it "shows me details about the selected scheme" do
+            expect(page).to have_content(schemes.first.id_to_display)
+            expect(page).to have_content(schemes.first.service_name)
+            expect(page).to have_content(schemes.first.sensitive)
+            expect(page).to have_content(schemes.first.scheme_type)
+            expect(page).to have_content(schemes.first.registered_under_care_act)
+            expect(page).to have_content(schemes.first.primary_client_group)
+            expect(page).to have_content(schemes.first.secondary_client_group)
+            expect(page).to have_content(schemes.first.support_type)
+            expect(page).to have_content(schemes.first.intended_stay)
+          end
+
+          context "when I click to change scheme name" do
+            before do
+              click_link("Change")
+            end
+
+            it "shows list of links to schemes" do
+            end
+          end
+        end
+      end
+    end
   end
 end
