@@ -10,7 +10,7 @@
       <% component.tab(label: "Scheme") do %>
         <%= govuk_summary_list do |summary_list| %>
           <% @scheme.check_details_attributes.each do |attr| %>
-            <% next if current_user.data_coordinator? && attr[:name] == ("Managed by") %>
+            <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
