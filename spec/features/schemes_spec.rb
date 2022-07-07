@@ -707,6 +707,19 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name")
               expect(page).to have_content "Scheme details"
             end
+
+            context "when I edit details" do
+              before do
+                fill_in "Scheme name", with: "FooBar"
+                check "This scheme contains confidential information"
+                click_button "Save and continue"
+              end
+
+              it "lets me see amended details on the show page" do
+                expect(page).to have_content "FooBar"
+                expect(page).to have_current_path("/schemes/#{scheme.id}")
+              end
+            end
           end
         end
       end

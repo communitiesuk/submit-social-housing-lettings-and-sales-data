@@ -832,7 +832,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "testy",
                       sensitive: "1",
                       page: "edit-name",
-                      owning_organisation_id: another_organisation.id} }
+                      owning_organisation_id: another_organisation.id } }
         end
 
         it "renders scheme show page after successful update" do

@@ -130,7 +130,7 @@ class Scheme < ApplicationRecord
   def display_attributes
     [
       { name: "Service code", value: id_to_display },
-      { name: "Name", value: service_name, edit: true},
+      { name: "Name", value: service_name, edit: true },
       { name: "Confidential information", value: sensitive, edit: true },
       { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
       { name: "Managed by", value: managing_organisation&.name },
