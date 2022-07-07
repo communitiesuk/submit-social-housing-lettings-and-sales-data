@@ -79,6 +79,10 @@ class SchemesController < ApplicationController
     render "schemes/check_answers"
   end
 
+  def edit_name
+    render "schemes/edit_name"
+  end
+
 private
 
   def confirm_secondary_page?(page)
