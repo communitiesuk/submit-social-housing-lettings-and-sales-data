@@ -20,11 +20,14 @@
         label: { text: "Scheme name", size: "m" },
         hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
-      <%= f.govuk_check_box :sensitive,
-        "Yes",
-        checked: @scheme.sensitive?,
-        multiple: false,
-        label: { text: "This scheme contains confidential information" } %>
+      <%= f.govuk_check_boxes_fieldset :sensitive,
+                                       legend: nil do %>
+        <%= f.govuk_check_box :sensitive,
+                              1,
+                              0,
+                              multiple: false,
+                              label: { text: "This scheme contains confidential information" } %>
+      <% end %>
 
       <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>

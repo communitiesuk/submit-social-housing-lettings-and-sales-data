@@ -79,6 +79,10 @@ class SchemesController < ApplicationController
     render "schemes/check_answers"
   end
 
+  def edit_name
+    render "schemes/edit_name"
+  end
+
 private
 
   def confirm_secondary_page?(page)
@@ -97,6 +101,8 @@ private
       new_location_path
     when "details"
       scheme_primary_client_group_path(@scheme)
+    when "edit-name"
+      scheme_path(@scheme)
     end
   end
 
@@ -132,7 +138,7 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
