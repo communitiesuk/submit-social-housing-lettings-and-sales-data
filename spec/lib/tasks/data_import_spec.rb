@@ -22,7 +22,7 @@ describe "rake core:data_import", type: :task do
   context "when importing organisation data" do
     let(:type) { "organisation" }
     let(:import_service) { instance_double(Imports::OrganisationImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/organisations" }
+    let(:fixture_path) { "spec/fixtures/imports/organisations" }
 
     before do
       allow(Imports::OrganisationImportService).to receive(:new).and_return(import_service)
@@ -40,7 +40,7 @@ describe "rake core:data_import", type: :task do
   context "when importing user data" do
     let(:type) { "user" }
     let(:import_service) { instance_double(Imports::UserImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/users" }
+    let(:fixture_path) { "spec/fixtures/imports/users" }
 
     before do
       allow(Imports::UserImportService).to receive(:new).and_return(import_service)
@@ -58,7 +58,7 @@ describe "rake core:data_import", type: :task do
   context "when importing data protection confirmation data" do
     let(:type) { "data-protection-confirmation" }
     let(:import_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/data_protection_confirmations" }
+    let(:fixture_path) { "spec/fixtures/imports/data_protection_confirmations" }
 
     before do
       allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(import_service)
@@ -76,7 +76,7 @@ describe "rake core:data_import", type: :task do
   context "when importing organisation rent period data" do
     let(:type) { "organisation-rent-periods" }
     let(:import_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/organisation_rent_periods" }
+    let(:fixture_path) { "spec/fixtures/imports/organisation_rent_periods" }
 
     before do
       allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(import_service)
@@ -94,7 +94,7 @@ describe "rake core:data_import", type: :task do
   context "when importing case logs" do
     let(:type) { "case-logs" }
     let(:import_service) { instance_double(Imports::CaseLogsImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/case_logs" }
+    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
 
     before do
       allow(Imports::CaseLogsImportService).to receive(:new).and_return(import_service)
@@ -104,6 +104,42 @@ describe "rake core:data_import", type: :task do
       expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::CaseLogsImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_logs).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
+  context "when importing scheme data" do
+    let(:type) { "scheme" }
+    let(:import_service) { instance_double(Imports::SchemeImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/schemes" }
+
+    before do
+      allow(Imports::SchemeImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates a scheme from the given XML file" do
+      expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::SchemeImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_schemes).with(fixture_path)
+
+      task.invoke(type, fixture_path)
+    end
+  end
+
+  context "when importing scheme location data" do
+    let(:type) { "scheme-location" }
+    let(:import_service) { instance_double(Imports::SchemeLocationImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/organisations" }
+
+    before do
+      allow(Imports::SchemeLocationImportService).to receive(:new).and_return(import_service)
+    end
+
+    it "creates a scheme location from the given XML file" do
+      expect(StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::SchemeLocationImportService).to receive(:new).with(storage_service)
+      expect(import_service).to receive(:create_scheme_locations).with(fixture_path)
 
       task.invoke(type, fixture_path)
     end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Imports::OrganisationRentPeriodImportService do
-  let(:fixture_directory) { "spec/fixtures/softwire_imports/organisation_rent_periods" }
+  let(:fixture_directory) { "spec/fixtures/imports/organisation_rent_periods" }
   let(:old_org_id) { "44026acc7ed5c29516b26f2a5deb639e5e37966d" }
   let(:old_id) { "ebd22326d33e389e9f1bfd546979d2c05f9e68d6" }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }

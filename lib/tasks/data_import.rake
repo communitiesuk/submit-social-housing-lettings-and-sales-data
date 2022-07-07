@@ -10,12 +10,14 @@ namespace :core do
     case type
     when "organisation"
       Imports::OrganisationImportService.new(storage_service).create_organisations(path)
+    when "scheme"
+      Imports::SchemeImportService.new(storage_service).create_schemes(path)
+    when "scheme-location"
+      Imports::SchemeLocationImportService.new(storage_service).create_scheme_locations(path)
     when "user"
       Imports::UserImportService.new(storage_service).create_users(path)
     when "data-protection-confirmation"
       Imports::DataProtectionConfirmationImportService.new(storage_service).create_data_protection_confirmations(path)
-    when "organisation-las"
-      Imports::OrganisationLaImportService.new(storage_service).create_organisation_las(path)
     when "organisation-rent-periods"
       Imports::OrganisationRentPeriodImportService.new(storage_service).create_organisation_rent_periods(path)
     when "case-logs"
