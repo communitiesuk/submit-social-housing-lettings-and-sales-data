@@ -712,7 +712,7 @@ RSpec.describe "Schemes scheme Features" do
               before do
                 fill_in "Scheme name", with: "FooBar"
                 check "This scheme contains confidential information"
-                click_button "Save and continue"
+                click_button "Continue"
               end
 
               it "lets me see amended details on the show page" do
