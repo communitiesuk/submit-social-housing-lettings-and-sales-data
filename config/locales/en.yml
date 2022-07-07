@@ -43,8 +43,9 @@ en:
       models:
         scheme:
           attributes:
-            owning_organisation:
+            owninggit st  _organisation_id:
               required: "Enter the existing organisation’s name"
+              invalid: "Enter the existing organisation’s name"
 
   validations:
     organisation:
