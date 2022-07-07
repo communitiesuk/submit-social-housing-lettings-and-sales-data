@@ -102,7 +102,7 @@ private
     when "details"
       scheme_primary_client_group_path(@scheme)
     when "edit-name"
-      schemes_path(@scheme)
+      scheme_path(@scheme)
     end
   end
 
