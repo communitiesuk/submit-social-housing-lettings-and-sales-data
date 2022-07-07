@@ -615,6 +615,22 @@ RSpec.describe SchemesController, type: :request do
           end
         end
       end
+
+      context "when editing scheme name details" do
+        let(:params) { { scheme: { service_name: "testy", sensitive: "1", page: "edit-name" } } }
+
+        it "renders scheme show page after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content(scheme_to_update.reload.service_name)
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
+        end
+      end
     end
 
     context "when signed in as a support" do
@@ -1244,6 +1260,7 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a edit-name" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
+        expect(page).to have_content("This scheme contains confidential information")
         expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
       end
 
@@ -1272,6 +1289,7 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
+        expect(page).to have_content("This scheme contains confidential information")
         expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
       end
     end
