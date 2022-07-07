@@ -1244,6 +1244,7 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a edit-name" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
+        expect(page).not_to have_content("Which organisation owns the housing stock for this scheme?")
       end
 
       context "when attempting to access secondary-client-group scheme page for another organisation" do
@@ -1271,6 +1272,7 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Scheme details")
+        expect(page).to have_content("Which organisation owns the housing stock for this scheme?")
       end
     end
   end
