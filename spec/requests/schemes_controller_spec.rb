@@ -203,7 +203,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:specific_scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:specific_scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -213,7 +213,7 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes/#{specific_scheme.id}"
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.organisation.name)
+        expect(page).to have_content(specific_scheme.owning_organisation.name)
         expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
@@ -246,7 +246,7 @@ RSpec.describe SchemesController, type: :request do
       it "has page heading" do
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.organisation.name)
+        expect(page).to have_content(specific_scheme.owning_organisation.name)
         expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
@@ -352,7 +352,7 @@ RSpec.describe SchemesController, type: :request do
       it "creates a new scheme for user organisation with valid params" do
         post "/schemes", params: params
 
-        expect(Scheme.last.organisation_id).to eq(user.organisation_id)
+        expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
         expect(Scheme.last.service_name).to eq("testy")
         expect(Scheme.last.scheme_type).to eq("Foyer")
         expect(Scheme.last.sensitive).to eq("Yes")
@@ -370,7 +370,7 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a support user" do
       let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", organisation_id: organisation.id } } }
+      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", owning_organisation_id: organisation.id } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -386,7 +386,7 @@ RSpec.describe SchemesController, type: :request do
       it "creates a new scheme for user organisation with valid params" do
         post "/schemes", params: params
 
-        expect(Scheme.last.organisation_id).to eq(organisation.id)
+        expect(Scheme.last.owning_organisation_id).to eq(organisation.id)
         expect(Scheme.last.service_name).to eq("testy")
         expect(Scheme.last.scheme_type).to eq("Foyer")
         expect(Scheme.last.sensitive).to eq("Yes")
@@ -401,12 +401,12 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when required organisation id param is missing" do
-        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
+        let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.organisation.required"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation.required"))
         end
       end
     end
@@ -436,7 +436,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -619,7 +619,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -772,8 +772,8 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      organisation_id: another_organisation.id,
-                      stock_owning_organisation_id: another_organisation.id } }
+                      owning_organisation_id: another_organisation.id,
+                      managing_organisation_id: another_organisation.id } }
         end
 
         it "renders confirm secondary group after successful update" do
@@ -788,8 +788,8 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
-          expect(scheme_to_update.reload.organisation_id).to eq(another_organisation.id)
-          expect(scheme_to_update.reload.stock_owning_organisation_id).to eq(another_organisation.id)
+          expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(another_organisation.id)
         end
 
         context "when updating from check answers page" do
@@ -837,7 +837,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -903,7 +903,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -969,7 +969,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1035,7 +1035,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1101,7 +1101,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1167,7 +1167,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do

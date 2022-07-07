@@ -5,7 +5,7 @@ RSpec.describe Scheme, type: :model do
     let(:scheme) { FactoryBot.create(:scheme) }
 
     it "belongs to an organisation" do
-      expect(scheme.organisation).to be_a(Organisation)
+      expect(scheme.owning_organisation).to be_a(Organisation)
     end
 
     describe "scopes" do

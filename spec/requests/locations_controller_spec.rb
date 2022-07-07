@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe LocationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :support) }
-  let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+  let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
   describe "#new" do
     context "when not signed in" do
@@ -29,7 +29,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
         sign_in user
@@ -89,7 +89,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
       before do
@@ -105,7 +105,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "creates a new location for scheme with valid params" do
-        expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+        expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
         expect(Location.last.name).to eq("Test")
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.total_units).to eq(5)
@@ -151,7 +151,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "creates a new location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -170,7 +170,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "creates a new location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -189,7 +189,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "creates a new location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -322,7 +322,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
 
       before do
@@ -348,7 +348,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
 
       before do
@@ -388,7 +388,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location)  { FactoryBot.create(:location, scheme:) }
       let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
@@ -404,7 +404,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       it "updates existing location for scheme with valid params" do
-        expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+        expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
         expect(Location.last.name).to eq("Test")
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.total_units).to eq(5)
@@ -450,7 +450,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "updates existing location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -468,7 +468,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "updates existing location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -486,7 +486,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "updates existing location for scheme with valid params" do
-          expect(Location.last.scheme.organisation_id).to eq(user.organisation_id)
+          expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
           expect(Location.last.name).to eq("Test")
           expect(Location.last.total_units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
@@ -497,7 +497,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location)  { FactoryBot.create(:location, scheme:) }
       let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
@@ -615,7 +615,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
 
       before do

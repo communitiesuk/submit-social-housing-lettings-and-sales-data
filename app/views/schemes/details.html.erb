@@ -29,25 +29,25 @@
        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
        <% stock_org_answer_options = null_option + organisations %>
 
-       <%= f.govuk_collection_select :stock_owning_organisation_id,
-                                     stock_org_answer_options,
+       <%= f.govuk_collection_select :managing_organisation_id,
+                                     organisations,
                                      :id,
                                      :name,
-                                     label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
+                                     label: { text: "Which organisation manages this scheme?", size: "m" },
+                                     options: { required: true },
                                      "data-controller": %w[accessible-autocomplete conditional-filter] %>
 
        <% if current_user.support? %>
-         <%= f.govuk_collection_select :organisation_id,
-                                       organisations,
+         <%= f.govuk_collection_select :owning_organisation_id,
+                                       stock_org_answer_options,
                                        :id,
                                        :name,
-                                       label: { text: "Which organisation manages this scheme?", size: "m" },
-                                       options: { required: true },
+                                       label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
                                        "data-controller": %w[accessible-autocomplete conditional-filter] %>
        <% end %>
 
        <% if current_user.data_coordinator? %>
-         <%= f.hidden_field :organisation_id, value: current_user.organisation.id %>
+         <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
        <% end %>
 
        <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
