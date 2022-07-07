@@ -130,9 +130,9 @@ class Scheme < ApplicationRecord
   def display_attributes
     [
       { name: "Service code", value: id_to_display },
-      { name: "Name", value: service_name },
-      { name: "Confidential information", value: sensitive },
-      { name: "Housing stock owned by", value: owning_organisation.name },
+      { name: "Name", value: service_name, edit: true},
+      { name: "Confidential information", value: sensitive, edit: true },
+      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
       { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
