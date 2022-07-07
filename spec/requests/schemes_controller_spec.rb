@@ -213,7 +213,6 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes/#{specific_scheme.id}"
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
-        expect(page).to have_content(specific_scheme.owning_organisation.name)
         expect(page).to have_content(specific_scheme.sensitive)
         expect(page).to have_content(specific_scheme.id_to_display)
         expect(page).to have_content(specific_scheme.service_name)
@@ -824,6 +823,29 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
           end
+        end
+      end
+
+      context "when editing scheme name details" do
+        let(:another_organisation) { FactoryBot.create(:organisation) }
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      page: "edit-name",
+                      owning_organisation_id: another_organisation.id} }
+        end
+
+        it "renders scheme show page after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content(scheme_to_update.reload.service_name)
+          expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.service_name).to eq("testy")
+          expect(scheme_to_update.reload.sensitive).to eq("Yes")
         end
       end
     end
