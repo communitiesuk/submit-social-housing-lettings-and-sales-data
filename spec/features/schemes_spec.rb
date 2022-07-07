@@ -700,10 +700,12 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I click to change scheme name" do
             before do
-              click_link("Change")
+              click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
             end
 
-            it "shows list of links to schemes" do
+            it "shows available fields to edit" do
+              expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name")
+              expect(page).to have_content "Scheme details"
             end
           end
         end

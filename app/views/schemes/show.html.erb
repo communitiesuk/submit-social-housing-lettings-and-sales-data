@@ -19,7 +19,7 @@
         <%= summary_list.row do |row| %>
           <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
           <% row.value { details_html(attr) } %>
-          <% row.action(text: "Change", href: scheme_primary_client_group_path(scheme_id: @scheme.id, check_answers: true)) if attr[:edit] %>
+          <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
         <% end %>
       <% end %>
     <% end %>
