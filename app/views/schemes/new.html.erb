@@ -21,7 +21,7 @@
         hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
       <%= f.govuk_check_boxes_fieldset :sensitive,
-                                       legend: { text: "This scheme contains confidential information" } do %>
+                                       legend: nil do %>
         <%= f.govuk_check_box :sensitive,
                               1,
                               0,
