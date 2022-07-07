@@ -30,7 +30,7 @@ class SchemesController < ApplicationController
       render "schemes/primary_client_group"
     else
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
-      @scheme.errors.delete(:organisation)
+      @scheme.errors.delete(:owning_organisation)
       render :new, status: :unprocessable_entity
     end
   end
