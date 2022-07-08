@@ -1761,7 +1761,7 @@ RSpec.describe CaseLog do
 
         it "correcly infers and saves the renewal date" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from case_logs where id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["voiddate"]).to eq(supported_housing_case_log.startdate)
+          expect(record_from_db["voiddate"].to_i).to eq(supported_housing_case_log.startdate.to_i)
         end
       end
     end
