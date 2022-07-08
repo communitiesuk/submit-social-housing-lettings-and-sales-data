@@ -10,7 +10,7 @@ module Imports
       old_visible_id = location_field_value(xml_document, "visible-id")
       Scheme.create!(
         old_id: location_field_value(xml_document, "id"),
-        old_visible_id:
+        old_visible_id:,
       )
     rescue ActiveRecord::RecordNotUnique
       name = location_field_value(xml_document, "name")

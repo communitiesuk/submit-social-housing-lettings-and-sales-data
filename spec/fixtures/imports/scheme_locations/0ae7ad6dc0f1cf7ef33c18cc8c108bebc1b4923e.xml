@@ -1,0 +1,25 @@
+<scheme:scheme xmlns:scheme="dclg:scheme">
+  <scheme:id>0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e</scheme:id>
+  <scheme:name id-field="Y">Location 1</scheme:name>
+  <scheme:local-authority-name>134</scheme:local-authority-name>
+  <scheme:postcode>S44 6EJ</scheme:postcode>
+  <scheme:required>true</scheme:required>
+  <scheme:sensitive>false</scheme:sensitive>
+  <scheme:total-units>5</scheme:total-units>
+  <scheme:sp-grant>True</scheme:sp-grant>
+  <scheme:scheme-type>7</scheme:scheme-type>
+  <scheme:unit-type>6</scheme:unit-type>
+  <scheme:reg-home-type>1</scheme:reg-home-type>
+  <scheme:support-type>2</scheme:support-type>
+  <scheme:mobility-type>A</scheme:mobility-type>
+  <scheme:intended-stay>P</scheme:intended-stay>
+  <scheme:client-group-1>M</scheme:client-group-1>
+  <scheme:client-group-2/>
+  <scheme:start-date>1900-01-01</scheme:start-date>
+  <scheme:end-date>2050-12-31</scheme:end-date>
+  <scheme:mgmtgroup>6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d</scheme:mgmtgroup>
+  <scheme:status>Approved</scheme:status>
+  <scheme:visible-id>10</scheme:visible-id>
+  <scheme:user-stamp>1</scheme:user-stamp>
+  <scheme:date-stamp>08:12.0</scheme:date-stamp>
+</scheme:scheme>

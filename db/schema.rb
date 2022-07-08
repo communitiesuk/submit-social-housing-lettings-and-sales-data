@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_08_112603) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -191,9 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
-    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
+    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.integer "hhtype"
     t.integer "new_old"
@@ -253,7 +253,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", null: false
+    t.datetime "started_at", precision: nil, null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
@@ -313,6 +313,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
     t.datetime "end_date"
     t.integer "has_other_client_group"
     t.bigint "managing_organisation_id"
+    t.string "arrangement_type"
+    t.string "old_id"
+    t.integer "old_visible_id"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
