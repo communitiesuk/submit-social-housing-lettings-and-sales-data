@@ -681,6 +681,7 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I click to see individual scheme" do
           let(:scheme) { schemes.first }
+          let!(:location) { FactoryBot.create(:location, scheme: scheme) }
 
           before do
             click_link(scheme.service_name)
@@ -719,6 +720,17 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_content "FooBar"
                 expect(page).to have_current_path("/schemes/#{scheme.id}")
               end
+            end
+          end
+
+          context "when I click to see locations" do
+            before do
+              click_link "1 location"
+            end
+
+            it "I see location details" do
+              expect(page).to have_content scheme.locations.first.id
+              expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
             end
           end
         end

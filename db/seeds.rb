@@ -79,7 +79,7 @@ unless Rails.env.test?
       intended_stay: "M",
       primary_client_group: "O",
       secondary_client_group: "H",
-      organisation: org,
+      owning_organisation: org,
       created_at: Time.zone.now,
     )
 
@@ -92,7 +92,7 @@ unless Rails.env.test?
       intended_stay: "S",
       primary_client_group: "D",
       secondary_client_group: "E",
-      organisation: org,
+      owning_organisation: org,
       created_at: Time.zone.now,
     )
 
@@ -105,7 +105,7 @@ unless Rails.env.test?
       intended_stay: "X",
       primary_client_group: "G",
       secondary_client_group: "R",
-      organisation: dummy_org,
+      owning_organisation: dummy_org,
       created_at: Time.zone.now,
     )
 
