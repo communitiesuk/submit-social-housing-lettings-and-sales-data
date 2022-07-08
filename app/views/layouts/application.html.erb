@@ -33,6 +33,10 @@
         console.log(<%= session.to_json.html_safe %>)
       </script>
     <% end %>
+
+    <% if Rails.env.production? %>
+      <script defer data-domain=<% ENV["APP_HOST"].split("https://")[1] %>src="https://plausible.io/js/plausible.js"></script>
+    <% end %>
   </head>
 
   <body class="govuk-template__body app-template--wide">
