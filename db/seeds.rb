@@ -112,7 +112,7 @@ unless Rails.env.test?
     Location.create!(
       scheme: scheme1,
       location_code: "S254-CU193AA",
-      postcode: "CU19 3AA",
+      postcode: "CU193AA",
       name: "Rectory Road",
       type_of_unit: 4,
       type_of_building: "Purpose-built",
@@ -123,7 +123,7 @@ unless Rails.env.test?
     Location.create!(
       scheme: scheme1,
       location_code: "S254-DM250DC",
-      postcode: "DM25 0DC",
+      postcode: "DM250DC",
       name: "Smithy Lane",
       type_of_unit: 1,
       type_of_building: "Converted from previous residential or non-residential property",
@@ -134,7 +134,7 @@ unless Rails.env.test?
     Location.create!(
       scheme: scheme2,
       location_code: "S254-YX130WP",
-      postcode: "YX13 0WP",
+      postcode: "YX130WP",
       name: "Smithy Lane",
       type_of_unit: 2,
       type_of_building: "Converted from previous residential or non-residential property",
