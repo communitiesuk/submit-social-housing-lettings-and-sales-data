@@ -57,6 +57,8 @@
                                            inline: true,
                                            legend: { text: "Do you want to add another location?", size: "m" } %>
 
+      <%= f.hidden_field :page, value: "edit" %>
+
       <%= f.govuk_submit "Save and continue" %>
     </div>
   </div>
