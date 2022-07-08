@@ -413,7 +413,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when updating from edit-name page" do
-          let(:params) { { location: { name: "Test", page: "edit-name" } } }
+        let(:params) { { location: { name: "Test", page: "edit-name" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
