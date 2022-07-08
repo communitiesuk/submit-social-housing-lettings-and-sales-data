@@ -412,6 +412,20 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.wheelchair_adaptation).to eq("No")
       end
 
+      context "when updating from edit-name page" do
+          let(:params) { { location: { name: "Test", page: "edit-name" } } }
+
+        it "updates existing location for scheme with valid params and redirects to correct page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("1 location")
+        end
+
+        it "updates existing location for scheme with valid params" do
+          expect(Location.last.name).to eq("Test")
+        end
+      end
+
       context "when postcode is submitted with lower case" do
         let(:params) { { location: { name: "Test", total_units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
 
@@ -519,6 +533,20 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.total_units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.wheelchair_adaptation).to eq("No")
+      end
+
+      context "when updating from edit-name page" do
+        let(:params) { { location: { name: "Test", page: "edit-name" } } }
+
+        it "updates existing location for scheme with valid params and redirects to correct page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("1 location")
+        end
+
+        it "updates existing location for scheme with valid params" do
+          expect(Location.last.name).to eq("Test")
+        end
       end
 
       context "when postcode is submitted with lower case" do
