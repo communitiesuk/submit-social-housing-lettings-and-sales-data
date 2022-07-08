@@ -732,6 +732,17 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_content scheme.locations.first.id
               expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
             end
+
+            context "when I click to change location name" do
+              before do
+                click_link(scheme.locations.first.postcode)
+              end
+
+              it "shows available fields to edit" do
+                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/1/edit-name")
+                expect(page).to have_content "Location name for #{scheme.locations.first.postcode}"
+              end
+            end
           end
         end
       end
