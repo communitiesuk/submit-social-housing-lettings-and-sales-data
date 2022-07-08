@@ -79,7 +79,7 @@ unless Rails.env.test?
       intended_stay: "M",
       primary_client_group: "O",
       secondary_client_group: "H",
-      organisation: org,
+      owning_organisation: org,
       created_at: Time.zone.now,
     )
 
@@ -92,7 +92,7 @@ unless Rails.env.test?
       intended_stay: "S",
       primary_client_group: "D",
       secondary_client_group: "E",
-      organisation: org,
+      owning_organisation: org,
       created_at: Time.zone.now,
     )
 
@@ -105,14 +105,14 @@ unless Rails.env.test?
       intended_stay: "X",
       primary_client_group: "G",
       secondary_client_group: "R",
-      organisation: dummy_org,
+      owning_organisation: dummy_org,
       created_at: Time.zone.now,
     )
 
     Location.create!(
       scheme: scheme1,
       location_code: "S254-CU193AA",
-      postcode: "CU19 3AA",
+      postcode: "CU193AA",
       name: "Rectory Road",
       type_of_unit: 4,
       type_of_building: "Purpose-built",
@@ -123,7 +123,7 @@ unless Rails.env.test?
     Location.create!(
       scheme: scheme1,
       location_code: "S254-DM250DC",
-      postcode: "DM25 0DC",
+      postcode: "DM250DC",
       name: "Smithy Lane",
       type_of_unit: 1,
       type_of_building: "Converted from previous residential or non-residential property",
@@ -134,7 +134,7 @@ unless Rails.env.test?
     Location.create!(
       scheme: scheme2,
       location_code: "S254-YX130WP",
-      postcode: "YX13 0WP",
+      postcode: "YX130WP",
       name: "Smithy Lane",
       type_of_unit: 2,
       type_of_building: "Converted from previous residential or non-residential property",

@@ -45,7 +45,9 @@ Rails.application.routes.draw do
     get "edit-name", to: "schemes#edit_name"
 
     member do
-      resources :locations
+      resources :locations do
+        get "edit-name", to: "locations#edit_name"
+      end
     end
   end
 

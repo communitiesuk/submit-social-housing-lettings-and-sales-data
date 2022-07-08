@@ -11,6 +11,11 @@ module TabNavHelper
     [govuk_link_to(link_text, "/schemes/#{location.scheme.id}/locations/#{location.id}/edit", method: :patch), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"].join("\n")
   end
 
+  def edit_location_name_cell(location)
+    link_text = location.postcode
+    [govuk_link_to(link_text, "/schemes/#{location.scheme.id}/locations/#{location.id}/edit-name", method: :patch), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"].join("\n")
+  end
+
   def scheme_cell(scheme)
     link_text = scheme.service_name
     [govuk_link_to(link_text, scheme), "<span class=\"govuk-visually-hidden\">Scheme </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{scheme.primary_client_group}</span>"].join("\n")
