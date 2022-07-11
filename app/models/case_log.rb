@@ -585,7 +585,7 @@ private
 
   def get_inferred_la(postcode)
     # Avoid network calls when postcode is invalid
-    return unless postcode.match(Validations::PropertyValidations::POSTCODE_REGEXP)
+    return unless postcode.match(POSTCODE_REGEXP)
 
     postcode_lookup = nil
     begin

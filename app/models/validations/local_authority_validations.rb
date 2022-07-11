@@ -1,5 +1,4 @@
 module Validations::LocalAuthorityValidations
-  POSTCODE_REGEXP = Validations::PropertyValidations::POSTCODE_REGEXP
 
   def validate_previous_accommodation_postcode(record)
     postcode = record.ppostcode_full
