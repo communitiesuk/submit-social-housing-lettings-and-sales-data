@@ -2,8 +2,6 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
-<% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
     <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>

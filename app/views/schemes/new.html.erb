@@ -53,7 +53,6 @@
       <% end %>
 
       <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :scheme_type,
         scheme_types_selection,
         :id,
@@ -61,7 +60,6 @@
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
       <% care_acts_selection = Scheme.registered_under_care_acts.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :registered_under_care_act,
         care_acts_selection,
         :id,

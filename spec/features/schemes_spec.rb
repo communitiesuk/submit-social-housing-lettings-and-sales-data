@@ -198,12 +198,12 @@ RSpec.describe "Schemes scheme Features" do
 
             it "shows service and locations tab" do
               expect(page).to have_link("Scheme")
-              expect(page).to have_link("#{scheme.locations.count} locations")
+              expect(page).to have_link("Locations")
             end
 
             context "when I click locations link" do
               before do
-                click_link("#{scheme.locations.count} locations")
+                click_link("Locations")
               end
 
               it "shows details of those locations" do
@@ -725,7 +725,7 @@ RSpec.describe "Schemes scheme Features" do
 
           context "when I click to see locations" do
             before do
-              click_link "1 location"
+              click_link "Locations"
             end
 
             it "I see location details" do
