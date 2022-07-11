@@ -55,6 +55,7 @@ RSpec.describe Imports::SchemeImportService do
       before { scheme_xml.at_xpath("//mgmtgroup:status").content = "Temporary" }
 
       it "does not create the scheme" do
+        expect(logger).to receive(:warn).with("Scheme with legacy ID 6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d is not approved (Temporary), skipping")
         expect { scheme_service.create_scheme(scheme_xml) }
           .not_to change(Scheme, :count)
       end

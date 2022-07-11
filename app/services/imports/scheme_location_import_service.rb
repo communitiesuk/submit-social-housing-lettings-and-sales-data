@@ -9,7 +9,7 @@ module Imports
       schemes = Scheme.where(old_id: management_group)
       raise "Scheme not found with legacy ID #{management_group}" if schemes.empty?
 
-      if schemes.size == 1 && schemes.first&.locations&.empty?
+      if schemes.size == 1 && schemes.first.locations&.empty?
         scheme = update_scheme(schemes.first, xml_document)
       else
         scheme = find_scheme_to_merge(schemes, xml_document)

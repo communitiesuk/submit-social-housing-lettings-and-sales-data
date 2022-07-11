@@ -8,19 +8,18 @@ module Imports
       old_id = string_or_nil(xml_document, "id")
       status = string_or_nil(xml_document, "status")
 
-      return unless status == "Approved"
-
-      Scheme.create!(
-        owning_organisation_id: find_owning_organisation_id(xml_document),
-        managing_organisation_id: find_managing_organisation_id(xml_document),
-        service_name: string_or_nil(xml_document, "name"),
-        arrangement_type: string_or_nil(xml_document, "arrangement_type"),
-        old_id:,
-        old_visible_id: safe_string_as_integer(xml_document, "visible-id"),
-      )
-    rescue ActiveRecord::RecordNotUnique
-      name = string_or_nil(xml_document, "name")
-      @logger.warn("Scheme #{name} is already present with legacy ID #{old_id}, skipping.")
+      if status == "Approved"
+        Scheme.create!(
+          owning_organisation_id: find_owning_organisation_id(xml_document),
+          managing_organisation_id: find_managing_organisation_id(xml_document),
+          service_name: string_or_nil(xml_document, "name"),
+          arrangement_type: string_or_nil(xml_document, "arrangement_type"),
+          old_id:,
+          old_visible_id: safe_string_as_integer(xml_document, "visible-id"),
+        )
+      else
+        @logger.warn("Scheme with legacy ID #{old_id} is not approved (#{status}), skipping")
+      end
     end
 
   private
