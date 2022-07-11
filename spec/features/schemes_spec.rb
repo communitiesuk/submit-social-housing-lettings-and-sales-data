@@ -243,6 +243,7 @@ RSpec.describe "Schemes scheme Features" do
           expect(page).to have_content "Which organisation manages this scheme?"
           expect(page).to have_content "What is this type of scheme?"
           expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
+          expect(page).to have_content "Who provides the support services used by this scheme?"
         end
 
         context "when I fill in scheme details and I press save I see primary client group section" do
@@ -256,6 +257,7 @@ RSpec.describe "Schemes scheme Features" do
             select organisation.name, from: "scheme-managing-organisation-id-field"
             select organisation.name, from: "scheme-owning-organisation-id-field"
             click_button "Save and continue"
+            choose "The same organisation that owns the housing stock"
           end
 
           it "lets me fill in the scheme details" do
