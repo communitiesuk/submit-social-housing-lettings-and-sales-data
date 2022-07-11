@@ -590,7 +590,7 @@ private
     postcode_lookup = nil
     begin
       # URI encoding only supports ASCII characters
-      ascii_postcode = postcode.encode("ASCII", "UTF-8", invalid: :replace, undef: :replace, replace: "")
+      ascii_postcode = PostcodeService.clean(postcode)
       Timeout.timeout(5) { postcode_lookup = PIO.lookup(ascii_postcode) }
     rescue Timeout::Error
       Rails.logger.warn("Postcodes.io lookup timed out")
