@@ -14,9 +14,6 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <legend class="govuk-fieldset__legend">
-      </legend>
-
       <% support_type_selection = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :support_type,
         support_type_selection,
