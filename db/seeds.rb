@@ -115,7 +115,7 @@ unless Rails.env.test?
       postcode: "CU193AA",
       name: "Rectory Road",
       type_of_unit: 4,
-      type_of_building: "Purpose-built",
+      type_of_building: "Purpose built",
       county: "Mid Sussex",
       wheelchair_adaptation: 0,
     )
