@@ -1,4 +1,8 @@
-### ADR - 014: Annual form changes
+---
+parent: Architecture decisions
+---
+
+# 014: Annual form changes
 
 Given that the data collection form changes annually and that the data collection windows overlap by several months to allow for late submissions of data from the previous year, we need to be able to run at least two different versions of a form concurrently. We can do this in one of at least two ways:
 

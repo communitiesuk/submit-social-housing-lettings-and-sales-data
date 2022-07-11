@@ -28,6 +28,12 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
+# Ignore generated documentation files
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+
 /public/packs
 /public/packs-test
 /node_modules
@@ -40,7 +46,7 @@ yarn-debug.log*
 # Code coverage results
 /coverage
 
-#IDE specific files
+# IDE specific files
 /.idea
 /.idea/*
 .DS_Store

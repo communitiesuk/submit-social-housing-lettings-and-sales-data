@@ -1,12 +1,17 @@
-# Form Runner
+---
+parent: Generating forms
+nav_order: 2
+---
 
-The Form Runner is composed of:
+# Form runner
 
-Ruby Classes:
+The Form runner is composed of:
+
+Ruby classes:
 
 - A singleton form handler that instantiates an instances of each form definition (config file we have) combined with the setup section that is common to all forms. This is created at rails boot time. (`app/models/form_handler.rb`)
 - A `Form` class that is the entry point for parsing a form definition and handles most of the associated logic (`app/models/form.rb`)
-- `Section`, `Subsection`, `Page` and `Question` classes (`app/models/form/`)
+- [`Section`](section), [`Subsection`](subsection), [`Page`](page) and [`Question`](question) classes (`app/models/form/`)
 - Setup subsection specific instances (subclasses) of `Section`, `Subsection`, `Pages` and `Questions` (`app/form/setup/`)
 
 ERB templates:
@@ -22,4 +27,4 @@ All form pages submit to the same controller method (`app/controllers/form_contr
 
 ## Form models and definition
 
-For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](/docs/form/form.md)
+For information about the form model and related models (section, subsection, page, question) and how these relate to each other see [form definition](/form/definition).

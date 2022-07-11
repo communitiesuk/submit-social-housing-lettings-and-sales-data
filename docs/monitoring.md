@@ -1,6 +1,10 @@
+---
+nav_order: 6
+---
+
 # Monitoring
 
-We use self-hosted Prometheus and Grafana for monitoring infrastructure metrics. These are run in a dedicated Gov PaaS space called "monitoring" and are deployed as Docker images using Github action pipelines. The repository for these and more information is here: [dluhc-data-collection-monitoring](https://github.com/communitiesuk/dluhc-data-collection-monitoring).
+We use self-hosted Prometheus and Grafana for monitoring infrastructure metrics. These are run in a dedicated Gov PaaS space called "monitoring" and are deployed as Docker images using GitHub action pipelines. The repository for these and more information is here: [dluhc-data-collection-monitoring](https://github.com/communitiesuk/dluhc-data-collection-monitoring).
 
 ## Performance monitoring and alerting
 

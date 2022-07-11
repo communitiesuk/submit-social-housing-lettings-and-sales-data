@@ -1,4 +1,8 @@
-### ADR - 012: Controller HTTP return statuses
+---
+parent: Architecture decisions
+---
+
+# 012: Controller HTTP return statuses
 
 Controllers assess authentication by 3 criteria:
 
@@ -6,7 +10,7 @@ Controllers assess authentication by 3 criteria:
 2. Are you signed in and requesting an action that your role/user type has access to?
 3. Are you signed in, requesting an action that your role/user type has access to and requesting a resource that your user has access to.
 
-When these aren't met they fail with the following response types:
+When these aren’t met they fail with the following response types:
 
 1. 401: Unauthorized. Redirect to sign-in page.
 2. 401: Unauthorized

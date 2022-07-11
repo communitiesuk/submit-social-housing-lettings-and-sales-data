@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "DLUHC CORE Data",
+    "title": "DLUHC CORE Data Collection API",
     "version": "1.0",
-    "description": "Submit or Update CORE Case Log Data on Lettings and Sales of Social Housing in England"
+    "description": "Submit social housing lettings and sales data (CORE)"
   },
   "servers": [
     {
-      "url": "https://dluhc-core.london.cloudapps.digital",
+      "url": "https://dluhc-core-staging.london.cloudapps.digital/logs",
       "description": "Staging"
     }
   ],

@@ -1,4 +1,8 @@
-# Testing strategy
+---
+nav_order: 4
+---
+
+# Testing
 
 - We use [RSpec](https://rspec.info/) and [Capybara](https://teamcapybara.github.io/capybara/)
 
