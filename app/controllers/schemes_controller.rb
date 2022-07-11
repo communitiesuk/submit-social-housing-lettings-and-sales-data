@@ -27,7 +27,11 @@ class SchemesController < ApplicationController
   def create
     @scheme = Scheme.new(scheme_params)
     if @scheme.save
-      redirect_to scheme_primary_client_group_path(@scheme)
+      if @scheme.support_services_provider.eql?"The same organisation that owns the housing stock"
+        redirect_to scheme_primary_client_group_path(@scheme)
+      else
+        redirect_to scheme_support_services_provider_path(@scheme)
+      end
     else
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
       @scheme.errors.delete(:owning_organisation)
@@ -135,6 +139,7 @@ private
                                                      :primary_client_group,
                                                      :secondary_client_group,
                                                      :support_type,
+                                                     :support_services_provider,
                                                      :intended_stay)
 
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
