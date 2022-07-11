@@ -8,7 +8,8 @@ module DerivedVariables::CaseLogVariables
   def scheme_has_multiple_locations?
     return false unless scheme
 
-    scheme.locations.size > 1
+    @scheme_locations_count ||= scheme.locations.size
+    @scheme_locations_count > 1
   end
 
   def set_derived_fields!
