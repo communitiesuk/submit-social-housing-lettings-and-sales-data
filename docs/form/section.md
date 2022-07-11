@@ -23,4 +23,4 @@ In the above example the section id would be `tenancy_and_property` and its subs
 
 The label contains the text that users will see for that section in the tasklist page of a case log.
 
-Sections can contain one or more subsections. For more information about subsections follow this link.
+Sections can contain one or more subsections.

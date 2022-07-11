@@ -3,7 +3,7 @@
 The current system is built around a form definition written in JSON. At the top level every form will expect to have the following attributes:
 
 - Form type: this is to define whether the form is a lettings form or a sales form. The questions will differ between the types.
-- Start date: the start of the collection window for the form, this will usually be in April
+- Start date: the start of the collection window for the form, this will usually be in April.
 - End date: the end date of the collection window for the form, this will usually be in July, a year after the start date.
 - Sections: the sections in the form, this block is where the bulk of the form definition will be.
 
@@ -19,7 +19,7 @@ An example of this might look like the following:
 }
 ```
 
-Note that the end date of one form will overlap the start date of another to allow for late submissions. This means that every year there will be a period of time in which two forms are running simultaneously
+Note that the end date of one form will overlap the start date of another to allow for late submissions. This means that every year there will be a period of time in which two forms are running simultaneously.
 
 ### How is the form split up?
 
@@ -32,10 +32,10 @@ A summary of how the form is split up is as follows:
 
 More information about these form elements can be found in the following links:
 
-- Section
-- Subsections
-- Page
-- Question
+- [Section](docs/form/section.md)
+- [Subsection](docs/form/subsection.md)
+- [Page](docs/form/page.md)
+- [Question](docs/form/question.md)
 
 ### The Form Model, Views and Controller
 
