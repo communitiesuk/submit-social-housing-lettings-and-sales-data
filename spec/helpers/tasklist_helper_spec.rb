@@ -17,7 +17,7 @@ RSpec.describe TasklistHelper do
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_subsections_count(empty_case_log)).to eq(9)
+      expect(get_subsections_count(empty_case_log)).to eq(8)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do

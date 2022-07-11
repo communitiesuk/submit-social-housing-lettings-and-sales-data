@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -200,6 +200,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_130923) do
     t.integer "vacdays"
     t.bigint "scheme_id"
     t.bigint "location_id"
+    t.integer "unittype_sh"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["location_id"], name: "index_case_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
