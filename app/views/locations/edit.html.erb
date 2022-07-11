@@ -2,9 +2,9 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-        text: "Back",
-        href: "/schemes/#{@scheme.id}/support",
-      ) %>
+    text: "Back",
+    href: "/schemes/#{@scheme.id}/support",
+  ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
@@ -30,7 +30,6 @@
                                autofocus: true %>
 
       <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :type_of_unit,
                                            type_of_units_selection,
                                            :id,
@@ -38,7 +37,6 @@
                                            legend: { text: "What is this type of scheme?", size: "m" } %>
 
       <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
                                            wheelchair_user_selection,
                                            :id,
@@ -49,13 +47,14 @@
       <%= govuk_section_break(visible: true, size: "m") %>
 
       <% another_location_selection = %w[Yes no].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :add_another_location,
                                            another_location_selection,
                                            :id,
                                            :name,
                                            inline: true,
                                            legend: { text: "Do you want to add another location?", size: "m" } %>
+
+      <%= f.hidden_field :page, value: "edit" %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>

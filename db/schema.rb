@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2022_07_07_133909) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
+>>>>>>> 34b57577d7a407bdbb6d5b17a0883c984d66ed78
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -200,7 +204,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_07_133909) do
     t.integer "vacdays"
     t.bigint "scheme_id"
     t.bigint "location_id"
+<<<<<<< HEAD
     t.bigint "organisations_id"
+=======
+    t.integer "unittype_sh"
+>>>>>>> 34b57577d7a407bdbb6d5b17a0883c984d66ed78
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["location_id"], name: "index_case_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
@@ -302,7 +310,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_07_133909) do
 
   create_table "schemes", force: :cascade do |t|
     t.string "service_name"
-    t.bigint "organisation_id", null: false
+    t.bigint "owning_organisation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "primary_client_group"
@@ -314,9 +322,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_07_133909) do
     t.string "intended_stay"
     t.datetime "end_date"
     t.integer "has_other_client_group"
-    t.bigint "stock_owning_organisation_id"
-    t.index ["organisation_id"], name: "index_schemes_on_organisation_id"
-    t.index ["stock_owning_organisation_id"], name: "index_schemes_on_stock_owning_organisation_id"
+    t.bigint "managing_organisation_id"
+    t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
+    t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -378,7 +386,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_07_133909) do
   add_foreign_key "case_logs", "organisations", column: "organisations_id"
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
+<<<<<<< HEAD
   add_foreign_key "schemes", "organisations"
   add_foreign_key "schemes", "organisations", column: "stock_owning_organisation_id"
   add_foreign_key "users", "organisations", column: "organisations_id"
+=======
+  add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
+  add_foreign_key "schemes", "organisations", column: "owning_organisation_id"
+>>>>>>> 34b57577d7a407bdbb6d5b17a0883c984d66ed78
 end

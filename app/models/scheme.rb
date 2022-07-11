@@ -1,6 +1,6 @@
 class Scheme < ApplicationRecord
-  belongs_to :organisation
-  belongs_to :stock_owning_organisation, optional: true, class_name: "Organisation"
+  belongs_to :owning_organisation, class_name: "Organisation"
+  belongs_to :managing_organisation, optional: true, class_name: "Organisation"
   has_many :locations
   has_many :case_logs
 
@@ -95,8 +95,8 @@ class Scheme < ApplicationRecord
       { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
-      { name: "Housing stock owned by", value: stock_owning_organisation&.name },
-      { name: "Managed by", value: organisation.name },
+      { name: "Housing stock owned by", value: owning_organisation.name },
+      { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
     ]
@@ -130,10 +130,10 @@ class Scheme < ApplicationRecord
   def display_attributes
     [
       { name: "Service code", value: id_to_display },
-      { name: "Name", value: service_name },
-      { name: "Confidential information", value: sensitive },
-      { name: "Housing stock owned by", value: stock_owning_organisation&.name },
-      { name: "Managed by", value: organisation.name },
+      { name: "Name", value: service_name, edit: true },
+      { name: "Confidential information", value: sensitive, edit: true },
+      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
+      { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
       { name: "Primary client group", value: primary_client_group },

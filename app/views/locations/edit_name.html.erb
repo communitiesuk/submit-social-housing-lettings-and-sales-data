@@ -1,0 +1,26 @@
+<% content_for :title, "Location name for #{@location.postcode}" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: "/schemes/#{@scheme.id}/locations",
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "Location name for #{@location.postcode}", sub: @scheme.service_name } %>
+
+<%= form_for(@location, method: :patch, url: location_path(location_id: @location.id)) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <%= f.govuk_text_field :name,
+                             label: { hidden: true },
+                             hint: { text: "This is how you refer to this location within your organisation" } %>
+
+      <%= f.hidden_field :page, value: "edit-name" %>
+
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

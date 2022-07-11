@@ -1680,7 +1680,12 @@ RSpec.describe CaseLog do
     end
 
     context "when a case log is a supported housing log" do
-      before { case_log.needstype = 2 }
+      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+
+      before do
+        case_log.needstype = 2
+        allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
+      end
 
       context "and a scheme with a single log is selected" do
         let(:scheme) { FactoryBot.create(:scheme) }
@@ -1692,6 +1697,71 @@ RSpec.describe CaseLog do
           record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
           expect(record_from_db["location_id"]).to eq(location.id)
           expect(case_log["location_id"]).to eq(location.id)
+        end
+      end
+
+      context "and not renewal" do
+        let(:scheme) { FactoryBot.create(:scheme) }
+        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: 1, type_of_building: "Purpose built", wheelchair_adaptation: 0) }
+
+        let!(:supported_housing_case_log) do
+          described_class.create!({
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            needstype: 2,
+            scheme_id: scheme.id,
+            location_id: location.id,
+            renewal: 0,
+          })
+        end
+
+        it "correctly infers and saves la" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT la from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["la"]).to eq(location.county)
+        end
+
+        it "correctly infers and saves postcode" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT postcode_full from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["postcode_full"]).to eq(location.postcode)
+        end
+
+        it "correctly infers and saves type of unit" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT unittype_sh from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["unittype_sh"]).to eq(1)
+        end
+
+        it "correctly infers and saves type of building" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT builtype from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["builtype"]).to eq(1)
+        end
+
+        it "correctly infers and saves wchair" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT wchair from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["wchair"]).to eq(2)
+        end
+      end
+
+      context "and renewal" do
+        let(:scheme) { FactoryBot.create(:scheme) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
+
+        let!(:supported_housing_case_log) do
+          described_class.create!({
+            managing_organisation: owning_organisation,
+            owning_organisation:,
+            created_by: created_by_user,
+            needstype: 2,
+            scheme_id: scheme.id,
+            location_id: location.id,
+            renewal: 1,
+            startdate: Time.zone.now,
+          })
+        end
+
+        it "correcly infers and saves the renewal date" do
+          record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from case_logs where id=#{supported_housing_case_log.id}").to_a[0]
+          expect(record_from_db["voiddate"].to_i).to eq(supported_housing_case_log.startdate.to_i)
         end
       end
     end

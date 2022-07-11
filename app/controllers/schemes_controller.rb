@@ -29,8 +29,8 @@ class SchemesController < ApplicationController
     if @scheme.save
       render "schemes/primary_client_group"
     else
-      @scheme.errors.add(:organisation_id, message: @scheme.errors[:organisation])
-      @scheme.errors.delete(:organisation)
+      @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
+      @scheme.errors.delete(:owning_organisation)
       render :new, status: :unprocessable_entity
     end
   end
@@ -79,6 +79,10 @@ class SchemesController < ApplicationController
     render "schemes/check_answers"
   end
 
+  def edit_name
+    render "schemes/edit_name"
+  end
+
 private
 
   def confirm_secondary_page?(page)
@@ -97,14 +101,16 @@ private
       new_location_path
     when "details"
       scheme_primary_client_group_path(@scheme)
+    when "edit-name"
+      scheme_path(@scheme)
     end
   end
 
   def scheme_params
     required_params = params.require(:scheme).permit(:service_name,
                                                      :sensitive,
-                                                     :organisation_id,
-                                                     :stock_owning_organisation_id,
+                                                     :owning_organisation_id,
+                                                     :managing_organisation_id,
                                                      :scheme_type,
                                                      :registered_under_care_act,
                                                      :id,
@@ -116,7 +122,7 @@ private
 
     required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
     if current_user.data_coordinator?
-      required_params[:organisation_id] = current_user.organisation_id
+      required_params[:owning_organisation_id] = current_user.organisation_id
     end
     required_params
   end
@@ -132,7 +138,7 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end

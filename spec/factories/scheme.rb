@@ -8,7 +8,7 @@ FactoryBot.define do
     intended_stay { %w[M P S V X].sample }
     primary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
     secondary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
-    organisation
+    owning_organisation { FactoryBot.create(:organisation) }
     created_at { Time.zone.now }
   end
 end
