@@ -4,10 +4,10 @@ class Scheme < ApplicationRecord
   has_many :locations
   has_many :case_logs
 
-  validates_presence_of :service_name
-  validates_presence_of :scheme_type
-  validates_presence_of :registered_under_care_act
-  validates :primary_client_group, presence: true, on: :update
+  # validates_presence_of :service_name
+  # validates_presence_of :scheme_type
+  # validates_presence_of :registered_under_care_act
+  # validates :primary_client_group, presence: true, on: :update
 
   scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..] : id)) }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }

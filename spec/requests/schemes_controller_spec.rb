@@ -344,6 +344,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
       end
@@ -378,6 +379,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
       end

@@ -29,7 +29,6 @@ class SchemesController < ApplicationController
     if @scheme.save
       redirect_to scheme_primary_client_group_path(@scheme)
     else
-      debugger
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
       @scheme.errors.delete(:owning_organisation)
       render :new, status: :unprocessable_entity
@@ -94,6 +93,16 @@ private
     case
     when page.include?("primary")
       "schemes/primary_client_group"
+    when page.include?("primary")
+      "schemes/confirm_secondary"
+    when page.include?("primary")
+      "schemes/secondary_client_group"
+    when page.include?("primary")
+      "schemes/support"
+    when page.include?("primary")
+      "schemes/details"
+    when page.include?("primary")
+      "schemes/edit_name"
     end
   end
 
