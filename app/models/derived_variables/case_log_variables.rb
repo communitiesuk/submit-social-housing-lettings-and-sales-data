@@ -7,7 +7,7 @@ module DerivedVariables::CaseLogVariables
     "Shared house or hostel" => 4,
     "Bungalow" => 5,
     "Self-contained house" => 6,
-}.freeze
+  }.freeze
 
   def supported_housing_schemes_enabled?
     FeatureToggle.supported_housing_schemes_enabled?
