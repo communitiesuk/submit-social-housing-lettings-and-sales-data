@@ -32,10 +32,10 @@ A summary of how the form is split up is as follows:
 
 More information about these form elements can be found in the following links:
 
-- [Section](docs/form/section.md)
-- [Subsection](docs/form/subsection.md)
-- [Page](docs/form/page.md)
-- [Question](docs/form/question.md)
+- [Section](/docs/form/section.md)
+- [Subsection](/docs/form/subsection.md)
+- [Page](/docs/form/page.md)
+- [Question](/docs/form/question.md)
 
 ### The Form Model, Views and Controller
 
