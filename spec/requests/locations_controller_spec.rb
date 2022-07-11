@@ -418,7 +418,7 @@ RSpec.describe LocationsController, type: :request do
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("1 location")
+          expect(page).to have_content("Locations")
         end
 
         it "updates existing location for scheme with valid params" do
@@ -541,7 +541,7 @@ RSpec.describe LocationsController, type: :request do
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
           expect(response).to have_http_status(:ok)
-          expect(page).to have_content("1 location")
+          expect(page).to have_content("Locations")
         end
 
         it "updates existing location for scheme with valid params" do

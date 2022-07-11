@@ -10,7 +10,7 @@
 
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
 
-<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations")) %>
+<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">

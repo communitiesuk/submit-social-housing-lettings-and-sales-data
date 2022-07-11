@@ -7,8 +7,7 @@
       ) %>
 <% end %>
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
-<% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
-<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, location_caption)) %>
+<%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
 <%= govuk_table do |table| %>
   <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>

@@ -190,13 +190,13 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_scheme_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Scheme", "/schemes/1", true),
-            NavigationItemsHelper::NavigationItem.new("1 location", "/schemes/1/locations", false),
+            NavigationItemsHelper::NavigationItem.new("Locations", "/schemes/1/locations", false),
           ]
         end
 
         it "returns navigation items with Schemes item set as current" do
           expect(primary_items("/schemes/1", current_user)).to eq(expected_navigation_items)
-          expect(scheme_items("/schemes/1", 1, "1 location")).to eq(expected_scheme_items)
+          expect(scheme_items("/schemes/1", 1, "Locations")).to eq(expected_scheme_items)
         end
       end
 
@@ -213,13 +213,13 @@ RSpec.describe NavigationItemsHelper do
         let(:expected_scheme_items) do
           [
             NavigationItemsHelper::NavigationItem.new("Scheme", "/schemes/1", false),
-            NavigationItemsHelper::NavigationItem.new("1 location", "/schemes/1/locations", true),
+            NavigationItemsHelper::NavigationItem.new("Locations", "/schemes/1/locations", true),
           ]
         end
 
         it "returns navigation items with Schemes item set as current" do
           expect(primary_items("/schemes/1/locations", current_user)).to eq(expected_navigation_items)
-          expect(scheme_items("/schemes/1/locations", 1, "1 location")).to eq(expected_scheme_items)
+          expect(scheme_items("/schemes/1/locations", 1, "Locations")).to eq(expected_scheme_items)
         end
       end
 
