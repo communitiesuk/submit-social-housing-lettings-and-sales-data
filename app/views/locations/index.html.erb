@@ -1,12 +1,15 @@
 <% title = @scheme.service_name %>
 <% content_for :title, title %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
     href: "/schemes/#{@scheme.id}",
   ) %>
 <% end %>
+
 <%= render partial: "organisations/headings", locals: { main: @scheme.service_name, sub: nil } %>
+
 <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
 <%= govuk_table do |table| %>

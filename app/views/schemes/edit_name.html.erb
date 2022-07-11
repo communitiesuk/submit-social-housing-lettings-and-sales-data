@@ -1,46 +1,46 @@
 <% content_for :title, "Scheme details" %>
 
- <% content_for :before_content do %>
-   <%= govuk_back_link(
-     text: "Back",
-     href: :back,
-   ) %>
- <% end %>
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: :back,
+  ) %>
+<% end %>
 
- <%= render partial: "organisations/headings", locals: { main: "Scheme details", sub: @scheme.service_name } %>
+<%= render partial: "organisations/headings", locals: { main: "Scheme details", sub: @scheme.service_name } %>
 
- <%= form_for(@scheme, method: :patch) do |f| %>
-   <div class="govuk-grid-row">
-     <div class="govuk-grid-column-two-thirds">
-       <%= f.govuk_error_summary %>
+<%= form_for(@scheme, method: :patch) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
 
-       <%= f.govuk_text_field :service_name,
-         label: { text: "Scheme name", size: "m" },
-         hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
+      <%= f.govuk_text_field :service_name,
+        label: { text: "Scheme name", size: "m" },
+        hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
-       <%= f.govuk_check_boxes_fieldset :sensitive,
-                                           legend: nil do %>
-         <%= f.govuk_check_box :sensitive,
-                               1,
-                               0,
-                               multiple: false,
-                               checked: @scheme.sensitive == "Yes",
-                               label: { text: "This scheme contains confidential information" } %>
-       <% end %>
+      <%= f.govuk_check_boxes_fieldset :sensitive,
+                                          legend: nil do %>
+        <%= f.govuk_check_box :sensitive,
+                              1,
+                              0,
+                              multiple: false,
+                              checked: @scheme.sensitive == "Yes",
+                              label: { text: "This scheme contains confidential information" } %>
+      <% end %>
 
-       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-       <% if current_user.support? %>
-         <%= f.govuk_collection_select :owning_organisation_id,
-                                       organisations,
-                                       :id,
-                                       :name,
-                                       label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
-                                       "data-controller": %w[accessible-autocomplete conditional-filter] %>
-       <% end %>
+      <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+      <% if current_user.support? %>
+        <%= f.govuk_collection_select :owning_organisation_id,
+                                      organisations,
+                                      :id,
+                                      :name,
+                                      label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
+                                      "data-controller": %w[accessible-autocomplete conditional-filter] %>
+      <% end %>
 
-       <%= f.hidden_field :page, value: "edit-name" %>
+      <%= f.hidden_field :page, value: "edit-name" %>
 
-       <%= f.govuk_submit "Save changes" %>
-     </div>
-   </div>
- <% end %>
+      <%= f.govuk_submit "Save changes" %>
+    </div>
+  </div>
+<% end %>

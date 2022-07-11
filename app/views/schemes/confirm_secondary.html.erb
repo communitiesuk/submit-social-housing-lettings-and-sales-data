@@ -12,9 +12,7 @@
 <%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
       <% selection = [OpenStruct.new(id: "Yes", name: "Yes"), OpenStruct.new(id: "No", name: "No")] %>
-
       <%= f.govuk_collection_radio_buttons :has_other_client_group,
         selection,
         :id,
