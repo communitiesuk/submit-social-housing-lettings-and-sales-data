@@ -53,6 +53,9 @@ en:
               blank: "Select the scheme’s type"
             registered_under_care_act:
               blank: "You must tell us if this scheme is registered under the Care Standards Act 2000"
+            primary_client_group:
+              blank: "Select what client group is this scheme intended for"
+
 
   validations:
     organisation:
