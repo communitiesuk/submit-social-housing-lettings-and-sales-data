@@ -42,12 +42,12 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
   context "when a user is signed in" do
     let(:organisation) { FactoryBot.create(:organisation) }
     let(:organisation_2) { FactoryBot.create(:organisation) }
-    let(:user) { FactoryBot.create(:user, organisation_id: organisation.id) }
-    let(:scheme) { FactoryBot.create(:scheme, organisation_id: organisation.id) }
+    let(:user) { FactoryBot.create(:user, organisation:) }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
     let(:case_log) { FactoryBot.create(:case_log, created_by: user) }
 
     before do
-      FactoryBot.create(:scheme, organisation_id: organisation_2.id)
+      FactoryBot.create(:scheme, owning_organisation: organisation_2)
     end
 
     it "has the correct answer_options based on the schemes the user's organisation owns or manages" do

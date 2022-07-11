@@ -54,7 +54,7 @@ RSpec.describe "Task List" do
 
   it "shows number of completed sections if one section is completed" do
     visit("/logs/#{setup_completed_log.id}")
-    expect(page).to have_content("1 of 9 sections completed.")
+    expect(page).to have_content("1 of 8 sections completed.")
   end
 
   it "show skip link for next incomplete section" do

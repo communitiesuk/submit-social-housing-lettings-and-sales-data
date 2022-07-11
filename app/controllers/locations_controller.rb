@@ -27,9 +27,18 @@ class LocationsController < ApplicationController
 
   def edit; end
 
+  def edit_name; end
+
   def update
+    page = params[:location][:page]
+
     if @location.update(location_params)
-      location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+      case page
+      when "edit"
+        location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+      when "edit-name"
+        redirect_to(locations_path(@scheme))
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -38,7 +47,7 @@ class LocationsController < ApplicationController
 private
 
   def find_scheme
-    @scheme = if %w[new create index].include?(action_name)
+    @scheme = if %w[new create index edit_name].include?(action_name)
                 Scheme.find(params[:id])
               else
                 @location.scheme
@@ -46,7 +55,7 @@ private
   end
 
   def find_location
-    @location = Location.find(params[:id])
+    @location = params[:location_id].present? ? Location.find(params[:location_id]) : Location.find(params[:id])
   end
 
   def authenticate_scope!
@@ -54,14 +63,14 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index].include?(action_name) && !((current_user.organisation == @scheme.organisation) || current_user.support?)
+    if %w[new edit update create index edit_name].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
 
   def location_params
     required_params = params.require(:location).permit(:postcode, :name, :total_units, :type_of_unit, :wheelchair_adaptation, :add_another_location).merge(scheme_id: @scheme.id)
-    required_params[:postcode] = required_params[:postcode].delete(" ").upcase.encode("ASCII", "UTF-8", invalid: :replace, undef: :replace, replace: "") if required_params[:postcode]
+    required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params
   end
 end

@@ -1,5 +1,13 @@
 module DerivedVariables::CaseLogVariables
   RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
+  TYPE_OF_UNIT_MAP = {
+    "Self-contained flat or bedsit" => 1,
+    "Self-contained flat or bedsit with common facilities" => 2,
+    "Shared flat" => 3,
+    "Shared house or hostel" => 4,
+    "Bungalow" => 5,
+    "Self-contained house" => 6,
+  }.freeze
 
   def supported_housing_schemes_enabled?
     FeatureToggle.supported_housing_schemes_enabled?
@@ -8,7 +16,8 @@ module DerivedVariables::CaseLogVariables
   def scheme_has_multiple_locations?
     return false unless scheme
 
-    scheme.locations.size > 1
+    @scheme_locations_count ||= scheme.locations.size
+    @scheme_locations_count > 1
   end
 
   def set_derived_fields!
@@ -67,8 +76,21 @@ module DerivedVariables::CaseLogVariables
     self.new_old = new_or_existing_tenant
     self.vacdays = property_vacant_days
 
-    if is_supported_housing? && (scheme && scheme.locations.size == 1)
-      self.location = scheme.locations.first
+    if is_supported_housing? && scheme
+      if scheme.locations.size == 1
+        self.location = scheme.locations.first
+      end
+      if location
+        self.la = location.county
+        self.postcode_full = location.postcode
+        self.unittype_sh = TYPE_OF_UNIT_MAP[location.type_of_unit]
+        self.builtype = form.questions.find { |x| x.id == "builtype" }.answer_options.find { |_key, value| value["value"] == location.type_of_building }.first
+        wheelchair_adaptation_map = { 1 => 1, 0 => 2 }
+        self.wchair = wheelchair_adaptation_map[location.wheelchair_adaptation.to_i]
+      end
+      if is_renewal?
+        self.voiddate = startdate
+      end
     end
   end
 

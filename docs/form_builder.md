@@ -181,6 +181,10 @@ rake form_definition:validate_all
 
 This will validate all forms in directories `["config/forms", "spec/fixtures/forms"]`
 
+## Form models and definition
+
+For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](docs/form/form.md)
+
 ## Improvements that could be made
 
 - JSON schema definition could be expanded such that we can better automatically validate that a given config is valid and internally consistent

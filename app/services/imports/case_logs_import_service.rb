@@ -417,7 +417,6 @@ module Imports
       end
     end
 
-    POSTCODE_REGEXP = Validations::PropertyValidations::POSTCODE_REGEXP
     def compose_postcode(xml_doc, outcode, incode)
       outcode_value = string_or_nil(xml_doc, outcode)
       incode_value = string_or_nil(xml_doc, incode)
