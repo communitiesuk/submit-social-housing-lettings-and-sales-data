@@ -27,8 +27,9 @@ class SchemesController < ApplicationController
   def create
     @scheme = Scheme.new(scheme_params)
     if @scheme.save
-      render "schemes/primary_client_group"
+      redirect_to scheme_primary_client_group_path(@scheme)
     else
+      debugger
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
       @scheme.errors.delete(:owning_organisation)
       render :new, status: :unprocessable_entity
@@ -51,7 +52,7 @@ class SchemesController < ApplicationController
         redirect_to next_page_path params[:scheme][:page]
       end
     else
-      render request.current_url, status: :unprocessable_entity
+      render current_template(request.referer), status: :unprocessable_entity
     end
   end
 
@@ -87,6 +88,13 @@ private
 
   def confirm_secondary_page?(page)
     page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
+  end
+
+  def current_template(page)
+    case
+    when page.include?("primary")
+      "schemes/primary_client_group"
+    end
   end
 
   def next_page_path(page)
