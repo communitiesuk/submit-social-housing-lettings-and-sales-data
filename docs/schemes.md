@@ -1,9 +1,7 @@
 # Supported housing schemes
 
-## Schemes
+A supported housing scheme (or service) provides shared or self-contained housing for a particular client group, for example younger or vulnerable people. A scheme can be run at multiple locations, and a single location may contain multiple units (for example bedrooms in shared houses or a bungalow with 3 bedrooms).
 
-Groups of similar properties in the same location, intended for similar tenants with the same type of support needs, managed in the same way. As some of the information we need about a new tenancy is the same for all new tenancies in the ‘scheme’, users can set up a ‘scheme’ in the CORE system by completing the information once. In Supported Housing forms, the user just supplies the appropriate scheme. This means providers do not have to complete identical information multiple times in each CORE form. Effectively we model these as templates or predefined answer sets.
+Logs for supported housing will share a number of similar characteristics at this location. Additional data also needs to be collected specifically regarding the supported housing scheme, such as the type of client groups served and type of support provided.
 
-## Management groups
-
-Schemes are often managed together as part of a ‘management group’. An organisation may have multiple management groups, and each management group may have multiple schemes. For Supported Housing logs, users must select the management group first, then select scheme.
+Asking these questions would require data inputters to re-enter the same information repeatedly and answer more questions than those asked for general needs lettings. Schemes exist in CORE to reduce this burden, and effectively act as predefined answer sets.
