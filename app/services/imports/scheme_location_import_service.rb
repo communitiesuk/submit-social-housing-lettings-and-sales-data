@@ -55,6 +55,7 @@ module Imports
         # wheelchair_adaptation: string_or_nil(xml_doc, "mobility-type"),
         begin
           Location.create!(
+            name: string_or_nil(xml_doc, "name"),
             postcode: string_or_nil(xml_doc, "postcode"),
             units: safe_string_as_integer(xml_doc, "total-units"),
             type_of_unit: safe_string_as_integer(xml_doc, "unit-type"),

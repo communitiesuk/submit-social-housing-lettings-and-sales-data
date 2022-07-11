@@ -129,6 +129,29 @@ RSpec.describe Imports::SchemeLocationImportService do
   context "when importing a specific scheme location" do
     let(:location_xml) { Nokogiri::XML(open_file(fixture_directory, first_location_id)) }
 
+    it "matches expected location values" do
+      location = location_service.create_scheme_location(location_xml)
+      expect(location.name).to eq("Location 1")
+      expect(location.postcode).to eq("S44 6EJ")
+      expect(location.units).to eq(5)
+      expect(location.type_of_unit).to eq("Bungalow")
+      expect(location.old_id).to eq(first_location_id)
+      expect(location.old_visible_id).to eq(10)
+      expect(location.scheme).to eq(scheme)
+    end
+
+    it "matches expected schemes values" do
+      location = location_service.create_scheme_location(location_xml)
+      expect(location.scheme.scheme_type).to eq("Housing for older people")
+      expect(location.scheme.registered_under_care_act).to eq("No")
+      expect(location.scheme.support_type).to eq("Low levels of support")
+      expect(location.scheme.intended_stay).to eq("Permanent")
+      expect(location.scheme.primary_client_group).to eq("Older people with support needs")
+      expect(location.scheme.secondary_client_group).to be_nil
+      expect(location.scheme.sensitive).to eq("No")
+      expect(location.scheme.end_date).to eq("2050-12-31")
+    end
+
     context "and the end date is before the current date" do
       before do
         Timecop.freeze(2022, 6, 1)
