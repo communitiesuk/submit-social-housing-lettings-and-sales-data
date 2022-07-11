@@ -183,7 +183,7 @@ This will validate all forms in directories `["config/forms", "spec/fixtures/for
 
 ## Form models and definition
 
-For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](docs/form/form.md)
+For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](/docs/form/form.md)
 
 ## Improvements that could be made
 

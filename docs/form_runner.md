@@ -22,4 +22,4 @@ All form pages submit to the same controller method (`app/controllers/form_contr
 
 ## Form models and definition
 
-For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](docs/form/form.md)
+For information about the form model and related models (section, subsection, page, question) and how these relate to each other follow [this link](/docs/form/form.md)
