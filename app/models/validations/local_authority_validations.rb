@@ -1,5 +1,4 @@
 module Validations::LocalAuthorityValidations
-
   def validate_previous_accommodation_postcode(record)
     postcode = record.ppostcode_full
     if record.previous_postcode_known? && (postcode.blank? || !postcode.match(POSTCODE_REGEXP))
