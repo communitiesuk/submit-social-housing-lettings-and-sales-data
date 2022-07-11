@@ -16,7 +16,7 @@ RSpec.describe Imports::SchemeImportService do
     File.open("#{directory}/#{filename}.xml")
   end
 
-  context "when importing case logs" do
+  context "when importing schemes" do
     let(:remote_folder) { "mgmtgroups" }
 
     before do
@@ -25,10 +25,10 @@ RSpec.describe Imports::SchemeImportService do
                                   .and_return(%W[#{remote_folder}/#{scheme_id}.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{scheme_id}.xml")
-                                  .and_return(open_file(fixture_directory, scheme_id), open_file(fixture_directory, scheme_id))
+                                  .and_return(open_file(fixture_directory, scheme_id))
     end
 
-    it "successfully create all case logs" do
+    it "successfully create all schemes" do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
       expect(logger).not_to receive(:info)
@@ -55,8 +55,8 @@ RSpec.describe Imports::SchemeImportService do
       before { scheme_xml.at_xpath("//mgmtgroup:status").content = "Temporary" }
 
       it "does not create the scheme" do
-        scheme = scheme_service.create_scheme(scheme_xml)
-        expect(scheme).to be_nil
+        expect { scheme_service.create_scheme(scheme_xml) }
+          .not_to change(Scheme, :count)
       end
     end
   end

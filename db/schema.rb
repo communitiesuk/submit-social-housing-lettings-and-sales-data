@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_08_112603) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_11_081400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -246,8 +246,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_112603) do
     t.string "county"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "total_units"
+    t.integer "units"
     t.integer "type_of_unit"
+    t.string "old_id"
+    t.integer "old_visible_id"
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
 
@@ -316,6 +318,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_08_112603) do
     t.string "arrangement_type"
     t.string "old_id"
     t.integer "old_visible_id"
+    t.integer "total_units"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end

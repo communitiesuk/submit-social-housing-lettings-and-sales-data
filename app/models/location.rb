@@ -17,8 +17,8 @@ class Location < ApplicationRecord
     "Self-contained flat or bedsit with common facilities": 2,
     "Shared flat": 3,
     "Shared house or hostel": 4,
-    "Bungalow": 5,
-    "Self-contained house": 6,
+    "Bungalow": 6,
+    "Self-contained house": 7,
   }.freeze
 
   enum type_of_unit: TYPE_OF_UNIT
