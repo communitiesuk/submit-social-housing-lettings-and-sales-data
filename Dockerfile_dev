@@ -23,6 +23,14 @@ RUN bundle install ${BUNDLE_FLAGS}
 COPY package.json yarn.lock /app/
 RUN yarn install --frozen-lockfile
 
+# Install gecko driver for Capybara tests
+RUN apk add firefox
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz \
+  && tar -xvzf geckodriver-v0.31.0-linux64.tar.gz \
+  && rm geckodriver-v0.31.0-linux64.tar.gz \
+  && chmod +x geckodriver \
+  && mv geckodriver /usr/local/bin/
+
 # Copy all files to /app (except what is defined in .dockerignore)
 COPY . /app/
 
