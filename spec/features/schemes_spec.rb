@@ -198,12 +198,12 @@ RSpec.describe "Schemes scheme Features" do
 
             it "shows service and locations tab" do
               expect(page).to have_link("Scheme")
-              expect(page).to have_link("#{scheme.locations.count} locations")
+              expect(page).to have_link("Locations")
             end
 
             context "when I click locations link" do
               before do
-                click_link("#{scheme.locations.count} locations")
+                click_link("Locations")
               end
 
               it "shows details of those locations" do
@@ -658,6 +658,112 @@ RSpec.describe "Schemes scheme Features" do
                       end
                     end
                   end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
+    context "when editing a scheme" do
+      context "when I visit schemes page" do
+        before do
+          visit("schemes")
+        end
+
+        it "shows list of links to schemes" do
+          schemes.each do |scheme|
+            expect(page).to have_link(scheme.service_name)
+            expect(page).to have_content(scheme.primary_client_group)
+          end
+        end
+
+        context "when I click to see individual scheme" do
+          let(:scheme) { schemes.first }
+          let!(:location) { FactoryBot.create(:location, scheme:) }
+
+          before do
+            click_link(scheme.service_name)
+          end
+
+          it "shows me details about the selected scheme" do
+            expect(page).to have_content(schemes.first.id_to_display)
+            expect(page).to have_content(schemes.first.service_name)
+            expect(page).to have_content(schemes.first.sensitive)
+            expect(page).to have_content(schemes.first.scheme_type)
+            expect(page).to have_content(schemes.first.registered_under_care_act)
+            expect(page).to have_content(schemes.first.primary_client_group)
+            expect(page).to have_content(schemes.first.secondary_client_group)
+            expect(page).to have_content(schemes.first.support_type)
+            expect(page).to have_content(schemes.first.intended_stay)
+          end
+
+          context "when I click to change scheme name" do
+            before do
+              click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
+            end
+
+            it "shows available fields to edit" do
+              expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name")
+              expect(page).to have_content "Scheme details"
+            end
+
+            context "when I edit details" do
+              before do
+                fill_in "Scheme name", with: "FooBar"
+                check "This scheme contains confidential information"
+                click_button "Save changes"
+              end
+
+              it "lets me see amended details on the show page" do
+                expect(page).to have_content "FooBar"
+                expect(page).to have_current_path("/schemes/#{scheme.id}")
+              end
+            end
+          end
+
+          context "when I click to see locations" do
+            before do
+              click_link "Locations"
+            end
+
+            it "I see location details" do
+              expect(page).to have_content scheme.locations.first.id
+              expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
+            end
+
+            context "when I click to change location name" do
+              before do
+                click_link(location.postcode)
+              end
+
+              it "shows available fields to edit" do
+                expect(page).to have_current_path("/schemes/#{scheme.id}/locations/#{location.id}/edit-name")
+                expect(page).to have_content "Location name for #{location.postcode}"
+              end
+
+              context "when I press the back button" do
+                before do
+                  click_link "Back"
+                end
+
+                it "I see location details" do
+                  expect(page).to have_content scheme.locations.first.id
+                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
+                end
+              end
+
+              context "and I change the location name" do
+                before do
+                  fill_in "location-name-field", with: "NewName"
+                  click_button "Save and continue"
+                end
+
+                it "returns to locations page and shows the new name" do
+                  expect(page).to have_content location.id
+                  expect(page).to have_content "NewName"
+                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
                 end
               end
             end

@@ -193,3 +193,9 @@ We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versio
 If this is not needed you can run `docker-compose up` as normal
 
 The Rails server will start on <http://localhost:8080>.
+
+5. To run the test suite in docker:
+
+    ```bash
+    docker-compose run --rm app /bin/bash -c ' RAILS_ENV=test rspec'
+    ```

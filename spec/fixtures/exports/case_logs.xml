@@ -135,6 +135,7 @@
     <hhtype>4</hhtype>
     <new_old>2</new_old>
     <vacdays>638</vacdays>
+    <unittype_sh/>
     <form>{id}</form>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>

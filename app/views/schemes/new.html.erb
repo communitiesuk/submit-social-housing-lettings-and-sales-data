@@ -20,11 +20,14 @@
         label: { text: "Scheme name", size: "m" },
         hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
-      <%= f.govuk_check_box :sensitive,
-        "Yes",
-        checked: @scheme.sensitive?,
-        multiple: false,
-        label: { text: "This scheme contains confidential information" } %>
+      <%= f.govuk_check_boxes_fieldset :sensitive,
+                                       legend: nil do %>
+        <%= f.govuk_check_box :sensitive,
+                              1,
+                              0,
+                              multiple: false,
+                              label: { text: "This scheme contains confidential information" } %>
+      <% end %>
 
       <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
@@ -50,7 +53,6 @@
       <% end %>
 
       <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :scheme_type,
         scheme_types_selection,
         :id,
@@ -58,7 +60,6 @@
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
       <% care_acts_selection = Scheme.registered_under_care_acts.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :registered_under_care_act,
         care_acts_selection,
         :id,

@@ -42,9 +42,12 @@ Rails.application.routes.draw do
     get "support", to: "schemes#support"
     get "details", to: "schemes#details"
     get "check-answers", to: "schemes#check_answers"
+    get "edit-name", to: "schemes#edit_name"
 
     member do
-      resources :locations
+      resources :locations do
+        get "edit-name", to: "locations#edit_name"
+      end
     end
   end
 

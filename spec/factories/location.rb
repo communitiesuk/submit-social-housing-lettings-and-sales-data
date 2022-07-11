@@ -4,7 +4,7 @@ FactoryBot.define do
     postcode { Faker::Address.postcode.delete(" ") }
     name { Faker::Address.street_name }
     type_of_unit { [1, 2, 3, 4, 6, 7].sample }
-    type_of_building { Faker::Lorem.word }
+    type_of_building { "Purpose built" }
     wheelchair_adaptation { 0 }
     county { Faker::Address.state }
     scheme

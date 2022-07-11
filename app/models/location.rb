@@ -1,5 +1,4 @@
 class Location < ApplicationRecord
-  include Validations::PropertyValidations
   validate :validate_postcode
   belongs_to :scheme
 
@@ -36,7 +35,7 @@ class Location < ApplicationRecord
 private
 
   def validate_postcode
-    if postcode.nil? || !postcode&.match(Validations::PropertyValidations::POSTCODE_REGEXP)
+    if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     end

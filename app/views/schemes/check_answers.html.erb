@@ -2,8 +2,6 @@
 
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
-<% location_caption = @scheme.locations.count.eql?(1) ? "1 location" : "#{@scheme.locations.count} locations" %>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters-from-desktop">
     <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
@@ -89,7 +87,7 @@
             <%= table.body do |body| %>
               <%= body.row do |row| %>
                 <% row.cell(text: location.id) %>
-                <% row.cell(text: simple_format(location_cell(location), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+                <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
                 <% row.cell(text: location.units) %>
                 <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == 'Yes' ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ''}")) %>
               <% end %>
