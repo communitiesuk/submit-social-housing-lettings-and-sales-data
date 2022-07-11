@@ -2,9 +2,9 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-        text: "Back",
-        href: "/schemes/#{@scheme.id}/locations",
-      ) %>
+    text: "Back",
+    href: "/schemes/#{@scheme.id}/locations",
+  ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Location name for #{@location.postcode}", sub: @scheme.service_name } %>
