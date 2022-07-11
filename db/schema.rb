@@ -321,6 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_13_095713) do
     t.string "old_id"
     t.integer "old_visible_id"
     t.integer "total_units"
+    t.integer "support_services_provider"
     t.index ["managing_organisation_id"], name: "index_schemes_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_schemes_on_owning_organisation_id"
   end

@@ -91,6 +91,15 @@ class Scheme < ApplicationRecord
   enum intended_stay: INTENDED_STAY, _suffix: true
   enum has_other_client_group: HAS_OTHER_CLIENT_GROUP, _suffix: true
 
+  SUPPORT_SERVICES_PROVIDER = {
+    "The same organisation that owns the housing stock": 0,
+    "Another registered housing provider": 1,
+    "A registered charity or voluntary organisation": 2,
+    "Another organisation": 3,
+  }.freeze
+
+  enum support_services_provider: SUPPORT_SERVICES_PROVIDER
+
   def id_to_display
     "S#{id}"
   end
