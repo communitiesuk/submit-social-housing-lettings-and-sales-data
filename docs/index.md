@@ -12,7 +12,7 @@ Each data collection window runs from 1 April to 1 April the following year (plu
 
 ADD (Analytics & Data Directorate) statisticians are the other primary users of the service. The data collected is transferred to DLUHCs consolidated data store (CDS) via nightly XML exports to an S3 bucket. CDS ingests and transforms this data, ultimately storing it in a MS SQL database and exposing it to analysts and statisticians via Amazon Workspaces.
 
-![Diagram of the CORE system architecture](../images/architecture.drawio.png)
+![Diagram of the CORE system architecture](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/architecture.drawio.png)
 
 ## Users
 
@@ -42,7 +42,7 @@ Organisations that own stock can contract out the management of that stock to an
 
 This is a useful analogy as a parent can have multiple children, and a child can have many parents. A child organisation can also be a parent, and a parent organisation can also be a child organisation:
 
-![Organisational relationships](../images/organisational_relationships.png)
+![Organisational relationships](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/organisational_relationships.png)
 
 ### User permissions within organisations
 
@@ -56,7 +56,7 @@ The case logs that a user can see depends on their role:
 
 Taking the relationships from the above diagram, and looking at which logs each user can access:
 
-![User log access permissions](../images/user_log_permissions.png)
+![User log access permissions](https://raw.githubusercontent.com/communitiesuk/submit-social-housing-lettings-and-sales-data/main/docs/images/user_log_permissions.png)
 
 ## Supported housing schemes
 
