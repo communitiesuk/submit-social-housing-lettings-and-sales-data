@@ -9,7 +9,7 @@ class SchemesController < ApplicationController
   def index
     flash[:notice] = "#{Scheme.find(params[:scheme_id].to_i).service_name} has been created." if params[:scheme_id]
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.all
+    all_schemes = Scheme.all.order("service_name ASC")
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
