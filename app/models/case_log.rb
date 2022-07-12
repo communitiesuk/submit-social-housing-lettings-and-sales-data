@@ -460,6 +460,10 @@ class CaseLog < ApplicationRecord
     public_send("age#{person_num}_known") == 1
   end
 
+  def unittype_sh
+    return location.type_of_unit_before_type_cast if location
+  end
+
 private
 
   PIO = Postcodes::IO.new

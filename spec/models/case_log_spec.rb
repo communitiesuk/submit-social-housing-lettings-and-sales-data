@@ -1726,9 +1726,8 @@ RSpec.describe CaseLog do
           expect(record_from_db["postcode_full"]).to eq(location.postcode)
         end
 
-        it "correctly infers and saves type of unit" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT unittype_sh from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["unittype_sh"]).to eq(1)
+        it "unittype_sh method returns the type_of_unit of the location" do
+          expect(supported_housing_case_log.unittype_sh).to eq(1)
         end
 
         it "correctly infers and saves type of building" do

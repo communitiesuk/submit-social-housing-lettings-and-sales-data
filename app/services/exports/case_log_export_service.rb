@@ -189,6 +189,8 @@ module Exports
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
       end
 
+      attribute_hash["unittype_sh"] = case_log.unittype_sh
+
       attribute_hash
     end
 
