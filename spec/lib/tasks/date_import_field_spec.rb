@@ -21,7 +21,7 @@ describe "rake core:data_import_field", type: :task do
 
   context "when importing a case log field" do
     let(:import_service) { instance_double(Imports::CaseLogsFieldImportService) }
-    let(:fixture_path) { "spec/fixtures/softwire_imports/case_logs" }
+    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
 
     before do
       allow(Imports::CaseLogsFieldImportService).to receive(:new).and_return(import_service)

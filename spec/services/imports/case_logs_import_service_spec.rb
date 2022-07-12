@@ -8,7 +8,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
-  let(:fixture_directory) { "spec/fixtures/softwire_imports/case_logs" }
+  let(:fixture_directory) { "spec/fixtures/imports/case_logs" }
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
 
   def open_file(directory, filename)

@@ -5,7 +5,7 @@ RSpec.describe Imports::OrganisationImportService do
   let(:logger) { instance_double(Rails::Rack::Logger) }
   let(:folder_name) { "organisations" }
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
-  let(:fixture_directory) { "spec/fixtures/softwire_imports/organisations" }
+  let(:fixture_directory) { "spec/fixtures/imports/organisations" }
 
   def create_organisation_file(fixture_directory, visible_id, name = nil)
     file = File.open("#{fixture_directory}/7c5bd5fb549c09a2c55d7cb90d7ba84927e64618.xml")

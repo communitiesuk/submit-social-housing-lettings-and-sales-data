@@ -17,10 +17,10 @@ class Scheme < ApplicationRecord
   enum sensitive: SENSITIVE, _suffix: true
 
   REGISTERED_UNDER_CARE_ACT = {
-    "No": 0,
-    "Yes – registered care home providing nursing care": 1,
-    "Yes – registered care home providing personal care": 2,
-    "Yes – part registered as a care home": 3,
+    "No": 1,
+    "Yes – registered care home providing nursing care": 4,
+    "Yes – registered care home providing personal care": 3,
+    "Yes – part registered as a care home": 2,
   }.freeze
 
   enum registered_under_care_act: REGISTERED_UNDER_CARE_ACT

@@ -1,0 +1,9 @@
+<mgmtgroup:mgmtgroup xmlns:mgmtgroup="dclg:mgmtgroup">
+    <mgmtgroup:id>6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d</mgmtgroup:id>
+    <mgmtgroup:name id-field="Y">Management Group</mgmtgroup:name>
+    <mgmtgroup:arrangement_type>O</mgmtgroup:arrangement_type>
+    <mgmtgroup:agent>456</mgmtgroup:agent>
+    <mgmtgroup:institution>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</mgmtgroup:institution>
+    <mgmtgroup:status>Approved</mgmtgroup:status>
+    <mgmtgroup:visible-id>123</mgmtgroup:visible-id>
+</mgmtgroup:mgmtgroup>
