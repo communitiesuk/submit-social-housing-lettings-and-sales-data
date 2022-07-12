@@ -461,7 +461,7 @@ class CaseLog < ApplicationRecord
   end
 
   def unittype_sh
-    return location.type_of_unit_before_type_cast if location
+    location.type_of_unit_before_type_cast if location
   end
 
 private
