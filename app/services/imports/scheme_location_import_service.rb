@@ -7,7 +7,7 @@ module Imports
     def create_scheme_location(xml_document)
       attributes = scheme_attributes(xml_document)
       schemes = Scheme.where(old_id: attributes["scheme_old_id"])
-      raise "Scheme not found with legacy ID #{attributes["scheme_old_id"]}" if schemes.empty?
+      raise "Scheme not found with legacy ID #{attributes['scheme_old_id']}" if schemes.empty?
 
       if schemes.size == 1 && schemes.first.locations&.empty?
         scheme = update_scheme(schemes.first, attributes)
@@ -55,7 +55,7 @@ module Imports
         primary_client_group: attributes["primary_client_group"],
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
-        end_date: attributes["end_date"]
+        end_date: attributes["end_date"],
       )
       scheme
     end
@@ -93,13 +93,13 @@ module Imports
             type_of_unit: attributes["type_of_unit"],
             old_visible_id: attributes["location_old_visible_id"],
             old_id: attributes["location_old_id"],
-            scheme: scheme,
+            scheme:,
           )
         rescue ActiveRecord::RecordNotUnique
-          @logger.warn("Location is already present with legacy ID #{attributes["location_old_id"]}, skipping")
+          @logger.warn("Location is already present with legacy ID #{attributes['location_old_id']}, skipping")
         end
       else
-        @logger.warn("Location with legacy ID #{attributes["location_old_id"]} is expired (#{attributes["end_date"]}), skipping")
+        @logger.warn("Location with legacy ID #{attributes['location_old_id']} is expired (#{attributes['end_date']}), skipping")
       end
     end
 
