@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/details",
+    href: @back_button_path,
   ) %>
 <% end %>
 
@@ -23,6 +23,9 @@
 
       <%= f.hidden_field :page, value: "primary-client-group" %>
       <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
+      <% if request.query_parameters["select_managing_org"] == "true" %>
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 

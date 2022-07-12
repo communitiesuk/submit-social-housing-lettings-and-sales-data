@@ -33,13 +33,6 @@
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
       <% answer_options = null_option + organisations %>
 
-      <%= f.govuk_collection_select :managing_organisation_id,
-                                    answer_options,
-                                    :id,
-                                    :name,
-                                    label: { text: "Which organisation manages this scheme?", size: "m" },
-                                    "data-controller": %w[accessible-autocomplete conditional-filter] %>
-
       <% if current_user.data_coordinator? %>
         <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
       <% end %>

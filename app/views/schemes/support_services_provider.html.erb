@@ -1,0 +1,36 @@
+<% content_for :title, "Which organisation provides the support services used by this scheme?" %>
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+    text: "Back",
+    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/details",
+  ) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "Which organisation provides the support services used by this scheme?", sub: @scheme.service_name } %>
+
+<%= form_for(@scheme, method: :patch) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+      <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+      <% managing_org_answer_options = null_option + organisations %>
+
+      <%= f.govuk_collection_select :managing_organisation_id,
+                                    managing_org_answer_options,
+                                    :id,
+                                    :name,
+                                    label: { text: "Which organisation manages this scheme?", size: "m" },
+                                    options: { required: true },
+                                    "data-controller": %w[accessible-autocomplete conditional-filter] %>
+
+      <%= f.hidden_field :page, value: "support-services-provider" %>
+      <% if request.query_parameters["check_answers"] %>
+          <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
+      <%= f.govuk_submit "Save and continue" %>
+    </div>
+  </div>
+<% end %>

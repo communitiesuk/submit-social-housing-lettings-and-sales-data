@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     get "details", to: "schemes#details"
     get "check-answers", to: "schemes#check_answers"
     get "edit-name", to: "schemes#edit_name"
+    get "support-services-provider", to: "schemes#support_services_provider"
 
     member do
       resources :locations do

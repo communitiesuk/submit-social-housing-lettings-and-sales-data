@@ -7,57 +7,13 @@
     <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
       <% component.tab(label: "Scheme") do %>
         <%= govuk_summary_list do |summary_list| %>
-          <% @scheme.check_details_attributes.each do |attr| %>
-            <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
+          <% @scheme.display_attributes.each do |attr| %>
+            <% next if current_user.data_coordinator? && attr[:name] == ("Housing stock owned by") %>
+            <% next if @scheme.has_other_client_group == "No" && attr[:name] == ("Secondary client group") %>
             <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
+              <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
-            <% end %>
-          <% end %>
-          <% @scheme.check_primary_client_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_primary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
-            <% end %>
-          <% end %>
-          <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
-            <% end %>
-          <% end %>
-          <% if @scheme.has_other_client_group == "Yes" %>
-            <% @scheme.check_secondary_client_attributes.each do |attr| %>
-              <%= summary_list.row do |row| %>
-                <% row.key { attr[:name].to_s } %>
-                <% row.value { details_html(attr) } %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
-              <% end %>
-            <% end %>
-          <% end %>
-          <% @scheme.check_support_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_support_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
             <% end %>
           <% end %>
         <% end %>

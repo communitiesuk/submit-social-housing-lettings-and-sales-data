@@ -60,6 +60,14 @@ class SchemesController < ApplicationController
   end
 
   def primary_client_group
+    case
+    when request.referrer.include?("new") || request.referrer.include?("details")
+      @back_button_path = scheme_details_path(@scheme)
+    when request.referrer.include?("provider")
+      @back_button_path = scheme_support_services_provider_path(@scheme)
+    when request.query_parameters["check_answers"]
+      @back_button_path = scheme_check_asnwers_path(@scheme)
+    end
     render "schemes/primary_client_group"
   end
 
@@ -87,6 +95,10 @@ class SchemesController < ApplicationController
     render "schemes/edit_name"
   end
 
+  def support_services_provider
+    render "schemes/support_services_provider"
+  end
+
 private
 
   def confirm_secondary_page?(page)
@@ -97,21 +109,23 @@ private
     case
     when page.include?("primary")
       "schemes/primary_client_group"
-    when page.include?("primary")
+    when page.include?("confirm")
       "schemes/confirm_secondary"
-    when page.include?("primary")
+    when page.include?("secondary-client")
       "schemes/secondary_client_group"
-    when page.include?("primary")
+    when page.include?("support")
       "schemes/support"
-    when page.include?("primary")
+    when page.include?("details")
       "schemes/details"
-    when page.include?("primary")
+    when page.include?("edit")
       "schemes/edit_name"
     end
   end
 
   def next_page_path(page)
     case page
+    when "support-services-provider"
+      scheme_primary_client_group_path(@scheme)
     when "primary-client-group"
       scheme_confirm_secondary_client_group_path(@scheme)
     when "confirm-secondary"
@@ -121,7 +135,7 @@ private
     when "support"
       new_location_path
     when "details"
-      scheme_primary_client_group_path(@scheme)
+      scheme_support_services_provider_path(@scheme)
     when "edit-name"
       scheme_path(@scheme)
     end

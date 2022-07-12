@@ -691,7 +691,6 @@ RSpec.describe "Schemes scheme Features" do
               expect(page).to have_current_path("/schemes/#{scheme.id}/details")
               expect(page).to have_content "Scheme name"
               expect(page).to have_content "This scheme contains confidential information"
-              expect(page).to have_content "Which organisation manages this scheme"
               expect(page).to have_content "What is this type of scheme?"
               expect(page).to have_content "Who provides the support services used by this scheme?"
               expect(page).to have_content "Is this scheme registered under the Care Standards Act 2000?"
