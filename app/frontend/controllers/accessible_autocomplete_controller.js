@@ -10,7 +10,7 @@ export default class extends Controller {
     const options = selectOptions.map((o) => enhanceOption(o))
 
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
-    const rawFieldName = `${matches[1]}[${matches[2]}_raw]`
+    const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
 
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
