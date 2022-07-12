@@ -15,7 +15,7 @@
       <%= f.govuk_error_summary %>
 
       <%= f.govuk_text_field :name,
-                             label: { text: "Location name", size: "m" },
+                             label: { hidden: true },
                              hint: { text: "This is how you refer to this location within your organisation" } %>
 
       <%= f.hidden_field :page, value: "edit-name" %>
