@@ -26,8 +26,9 @@ class SchemesController < ApplicationController
 
   def create
     @scheme = Scheme.new(scheme_params)
+
     if @scheme.save
-      if @scheme.support_services_provider.eql?"The same organisation that owns the housing stock"
+      if scheme_params[:support_services_provider] == "The same organisation that owns the housing stock"
         redirect_to scheme_primary_client_group_path(@scheme)
       else
         redirect_to scheme_support_services_provider_path(@scheme)
@@ -135,7 +136,11 @@ private
     when "support"
       new_location_path
     when "details"
-      scheme_support_services_provider_path(@scheme)
+      if @scheme.support_services_provider.eql?"The same organisation that owns the housing stock"
+        scheme_primary_client_group_path(@scheme)
+      else
+        scheme_support_services_provider_path(@scheme)
+      end
     when "edit-name"
       scheme_path(@scheme)
     end
@@ -156,11 +161,15 @@ private
                                                      :support_services_provider,
                                                      :intended_stay)
 
-    required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
+    same_org_providing_support = required_params[:support_services_provider] == "The same organisation that owns the housing stock"
+
+    full_params = same_org_providing_support ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+
+    full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
     if current_user.data_coordinator?
-      required_params[:owning_organisation_id] = current_user.organisation_id
+      full_params[:owning_organisation_id] = current_user.organisation_id
     end
-    required_params
+    full_params
   end
 
   def search_term
