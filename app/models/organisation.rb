@@ -5,8 +5,8 @@ class Organisation < ApplicationRecord
   has_many :data_protection_confirmations
   has_many :organisation_rent_periods
 
-  has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :destroy
-  has_many :managed_schemes, class_name: "Scheme", foreign_key: "managing_organisation_id", dependent: :destroy
+  has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id"
+  has_many :managed_schemes, class_name: "Scheme", foreign_key: "managing_organisation_id"
 
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
