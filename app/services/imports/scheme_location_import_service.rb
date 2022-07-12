@@ -77,7 +77,7 @@ module Imports
       attributes["units"] = safe_string_as_integer(xml_doc, "total-units")
       attributes["type_of_unit"] = safe_string_as_integer(xml_doc, "unit-type")
       attributes["location_old_id"] = string_or_nil(xml_doc, "id")
-      attributes["location_old_visible_id"] = string_or_nil(xml_doc, "visible-id")
+      attributes["location_old_visible_id"] = safe_string_as_integer(xml_doc, "visible-id")
       attributes["scheme_old_id"] = string_or_nil(xml_doc, "mgmtgroup")
       attributes
     end
