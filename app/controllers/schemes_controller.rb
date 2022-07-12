@@ -65,12 +65,11 @@ class SchemesController < ApplicationController
   end
 
   def primary_client_group
-    case
-    when request.referrer.include?("new") || request.referrer.include?("details")
+    if request.referer&.include?("new") || request.referer&.include?("details")
       @back_button_path = scheme_details_path(@scheme)
-    when request.referrer.include?("provider")
+    elsif request.referer&.include?("provider")
       @back_button_path = scheme_support_services_provider_path(@scheme)
-    when request.query_parameters["check_answers"]
+    elsif request.query_parameters["check_answers"]
       @back_button_path = scheme_check_asnwers_path(@scheme)
     end
     render "schemes/primary_client_group"
@@ -106,8 +105,8 @@ class SchemesController < ApplicationController
 
 private
 
-  def validation_errors scheme_params
-    scheme_params.keys.each do |key|
+  def validation_errors(scheme_params)
+    scheme_params.each_key do |key|
       @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
     end
   end
@@ -117,18 +116,17 @@ private
   end
 
   def current_template(page)
-    case
-    when page.include?("primary")
+    if page.include?("primary")
       "schemes/primary_client_group"
-    when page.include?("confirm")
+    elsif page.include?("confirm")
       "schemes/confirm_secondary"
-    when page.include?("secondary-client")
+    elsif page.include?("secondary-client")
       "schemes/secondary_client_group"
-    when page.include?("support")
+    elsif page.include?("support")
       "schemes/support"
-    when page.include?("details")
+    elsif page.include?("details")
       "schemes/details"
-    when page.include?("edit")
+    elsif page.include?("edit")
       "schemes/edit_name"
     end
   end
@@ -146,7 +144,7 @@ private
     when "support"
       new_location_path
     when "details"
-      if @scheme.support_services_provider.eql?"The same organisation that owns the housing stock"
+      if @scheme.support_services_provider.eql? "The same organisation that owns the housing stock"
         scheme_primary_client_group_path(@scheme)
       else
         scheme_support_services_provider_path(@scheme)
@@ -173,7 +171,7 @@ private
 
     same_org_providing_support = required_params[:support_services_provider] == "The same organisation that owns the housing stock"
 
-    full_params = same_org_providing_support ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    full_params = same_org_providing_support && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
     if current_user.data_coordinator?

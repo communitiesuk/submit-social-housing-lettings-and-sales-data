@@ -336,7 +336,13 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No" } } }
+      let(:params) do
+        { scheme: { service_name: "testy",
+                    sensitive: "1",
+                    scheme_type: "Foyer",
+                    registered_under_care_act: "No",
+                    support_services_provider: "The same organisation that owns the housing stock" } }
+      end
 
       before do
         sign_in user
@@ -370,7 +376,14 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a support user" do
       let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", owning_organisation_id: organisation.id } } }
+      let(:params) do
+        { scheme: { service_name: "testy",
+                    sensitive: "1",
+                    scheme_type: "Foyer",
+                    registered_under_care_act: "No",
+                    owning_organisation_id: organisation.id,
+                    support_services_provider: "The same organisation that owns the housing stock" } }
+      end
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -582,7 +595,15 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating details" do
-        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", page: "details" } } }
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      page: "details",
+                      owning_organisation_id: organisation.id,
+                      support_services_provider: "The same organisation that owns the housing stock" } }
+        end
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -789,8 +810,8 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      owning_organisation_id: another_organisation.id,
-                      managing_organisation_id: another_organisation.id } }
+                      support_services_provider: "The same organisation that owns the housing stock",
+                      owning_organisation_id: another_organisation.id } }
         end
 
         it "renders confirm secondary group after successful update" do
