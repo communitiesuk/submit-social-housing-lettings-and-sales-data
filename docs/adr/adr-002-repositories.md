@@ -1,6 +1,8 @@
-### ADR - 002: Initial Architecture Decisions
+---
+parent: Architecture decisions
+---
 
-#### Repositories
+# 002: Repositories
 
 There will be two git repositories for this project.
 

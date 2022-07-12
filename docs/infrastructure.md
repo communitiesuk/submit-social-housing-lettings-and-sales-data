@@ -1,3 +1,7 @@
+---
+nav_order: 5
+---
+
 # Infrastructure
 
 ## Deployment
@@ -26,7 +30,7 @@ This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/).
     cf push dluhc-core --strategy rolling
     ```
 
-    This will use the [manifest file](staging_manifest.yml)
+    This will use the [manifest file](https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data/blob/main/manifest.yml)
 
 Once the app is deployed:
 

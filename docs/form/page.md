@@ -1,8 +1,16 @@
-## Page
+---
+parent: Form definition
+grand_parent: Generating forms
+nav_order: 3
+---
 
-Pages are under the subsection level of the form definition. A example page might look something like this:
+# Page
 
-```JSON
+Pages sit below the [`Subsection`](subsection) level of a form definition.
+
+An example page might look something like this:
+
+```json
 "property_postcode": {
   "header": "",
   "description": "",
@@ -23,6 +31,6 @@ The header is optional but if provided is used for the heading displayed on the 
 
 The description is optional but if provided is used for a paragraph displayed under the page header.
 
-It's worth noting that like subsections a page can also have a `depends_on` which contains the set of conditions that must be met for the section to be accessibile to a data provider. If the conditions are not met then the page is not routed to as part of the form flow. The `depends_on` for a page will usually depend on answers given to questions, most likely to be questions in the setup section. In the above example the page is dependent on the answer to the `needstype` question being `1`, which corresponds to picking `General needs` on that question as displayed to the data provider.
+It’s worth noting that like subsections a page can also have a `depends_on` which contains the set of conditions that must be met for the section to be accessible to a data provider. If the conditions are not met then the page is not routed to as part of the form flow. The `depends_on` for a page will usually depend on answers given to questions, most likely to be questions in the setup section. In the above example the page is dependent on the answer to the `needstype` question being `1`, which corresponds to picking `General needs` on that question as displayed to the data provider.
 
-Pages can contain one or more questions.
+Pages can contain one or more [questions](question).
