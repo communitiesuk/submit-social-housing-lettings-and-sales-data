@@ -12,7 +12,7 @@ module Imports
       if schemes.size == 1 && schemes.first.locations&.empty?
         scheme = update_scheme(schemes.first, xml_document)
       else
-        scheme = find_scheme_to_merge(schemes, xml_document)
+        scheme = find_scheme_to_merge(xml_document)
         scheme ||= duplicate_scheme(schemes, xml_document)
       end
       add_location(scheme, xml_document)
@@ -25,6 +25,17 @@ module Imports
       3 => "(Registered personal care home)",
       4 => "(Registered nursing care home)",
     }.freeze
+
+    def create_scheme(source_scheme, xml_doc)
+      attributes = scheme_attributes(xml_doc)
+      attributes["owning_organisation_id"] = source_scheme.owning_organisation_id
+      attributes["managing_organisation_id"] = source_scheme.managing_organisation_id
+      attributes["service_name"] = source_scheme.service_name
+      attributes["arrangement_type"] = source_scheme.arrangement_type
+      attributes["old_id"] = source_scheme.old_id
+      attributes["old_visible_id"] = source_scheme.old_visible_id
+      Scheme.create!(attributes)
+    end
 
     def update_scheme(scheme, xml_doc)
       attributes = scheme_attributes(xml_doc)
@@ -71,29 +82,24 @@ module Imports
       end
     end
 
-    def find_scheme_to_merge(schemes, xml_doc)
+    def find_scheme_to_merge(xml_doc)
       attributes = scheme_attributes(xml_doc)
 
-      schemes.each do |scheme|
-        if scheme.scheme_type_before_type_cast == attributes["scheme_type"] &&
-            scheme.registered_under_care_act_before_type_cast == attributes["registered_under_care_act"] &&
-            scheme.support_type_before_type_cast == attributes["support_type"] &&
-            scheme.intended_stay_before_type_cast == attributes["intended_stay"] &&
-            scheme.primary_client_group_before_type_cast == attributes["primary_client_group"] &&
-            scheme.secondary_client_group_before_type_cast == attributes["secondary_client_group"]
-          return scheme
-        end
-      end
-
-      nil
+      Scheme.find_by(
+        scheme_type: attributes["scheme_type"],
+        registered_under_care_act: attributes["registered_under_care_act"],
+        support_type: attributes["support_type"],
+        intended_stay: attributes["intended_stay"],
+        primary_client_group: attributes["primary_client_group"],
+        secondary_client_group: attributes["secondary_client_group"],
+      )
     end
 
     def duplicate_scheme(schemes, xml_doc)
       # Since all schemes in the array are different, pick the first one
       # In the future, consider a better selection method if needed
       old_scheme = schemes.first
-      new_scheme = old_scheme.dup
-      update_scheme(new_scheme, xml_doc)
+      new_scheme = create_scheme(old_scheme, xml_doc)
 
       if old_scheme.scheme_type != new_scheme.scheme_type
         rename_schemes(old_scheme, new_scheme, :scheme_type)
