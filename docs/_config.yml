@@ -5,7 +5,7 @@ permalink: pretty
 color_scheme: govuk
 aux_links:
   "API browser":
-    - /api
+    - https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api
   "Design history":
     - https://core-design-history.herokuapp.com
   "GitHub":
