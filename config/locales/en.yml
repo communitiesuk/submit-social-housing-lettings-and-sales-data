@@ -49,12 +49,25 @@ en:
               blank: "Enter the existing organisation’s name"
             service_name:
               blank: "Enter the scheme’s name"
+              invalid: "Enter the scheme’s name"
             scheme_type:
               blank: "Select the scheme’s type"
+              invalid: "Select the scheme’s type"
             registered_under_care_act:
-              blank: "You must tell us if this scheme is registered under the Care Standards Act 2000"
+              blank: "Select if this scheme is registered under the Care Standards Act 2000"
+              invalid: "Select if this scheme is registered under the Care Standards Act 2000"
             primary_client_group:
-              blank: "Select what client group is this scheme intended for"
+              invalid: "Select what client group is this scheme intended for"
+            secondary_client_group:
+              invalid: "Select what is the other client group"
+            support_type:
+              invalid: "Select level of support given"
+            intended_stay:
+              invalid: "Select intended length of stay"
+            has_other_client_group:
+              invalid: "Select if this scheme provides for another client group"
+            support_services_provider:
+              invalid: "Select who provides the support services used by this scheme"
 
 
   validations:
