@@ -5,17 +5,17 @@ module Imports
     end
 
     def create_scheme_location(xml_document)
-      management_group = location_field_value(xml_document, "mgmtgroup")
-      schemes = Scheme.where(old_id: management_group)
-      raise "Scheme not found with legacy ID #{management_group}" if schemes.empty?
+      attributes = scheme_attributes(xml_document)
+      schemes = Scheme.where(old_id: attributes["scheme_old_id"])
+      raise "Scheme not found with legacy ID #{attributes["scheme_old_id"]}" if schemes.empty?
 
       if schemes.size == 1 && schemes.first.locations&.empty?
-        scheme = update_scheme(schemes.first, xml_document)
+        scheme = update_scheme(schemes.first, attributes)
       else
-        scheme = find_scheme_to_merge(xml_document)
-        scheme ||= duplicate_scheme(schemes, xml_document)
+        scheme = find_scheme_to_merge(attributes)
+        scheme ||= duplicate_scheme(schemes, attributes)
       end
-      add_location(scheme, xml_document)
+      add_location(scheme, attributes)
     end
 
   private
@@ -26,20 +26,37 @@ module Imports
       4 => "(Registered nursing care home)",
     }.freeze
 
-    def create_scheme(source_scheme, xml_doc)
-      attributes = scheme_attributes(xml_doc)
-      attributes["owning_organisation_id"] = source_scheme.owning_organisation_id
-      attributes["managing_organisation_id"] = source_scheme.managing_organisation_id
-      attributes["service_name"] = source_scheme.service_name
-      attributes["arrangement_type"] = source_scheme.arrangement_type
-      attributes["old_id"] = source_scheme.old_id
-      attributes["old_visible_id"] = source_scheme.old_visible_id
-      Scheme.create!(attributes)
+    def create_scheme(source_scheme, attributes)
+      Scheme.create!(
+        scheme_type: attributes["scheme_type"],
+        registered_under_care_act: attributes["registered_under_care_act"],
+        support_type: attributes["support_type"],
+        intended_stay: attributes["intended_stay"],
+        primary_client_group: attributes["primary_client_group"],
+        secondary_client_group: attributes["secondary_client_group"],
+        sensitive: attributes["sensitive"],
+        end_date: attributes["end_date"],
+        # These values were set by the scheme import (management groups)
+        owning_organisation_id: source_scheme.owning_organisation_id,
+        managing_organisation_id: source_scheme.managing_organisation_id,
+        service_name: source_scheme.service_name,
+        arrangement_type: source_scheme.arrangement_type,
+        old_id: source_scheme.old_id,
+        old_visible_id: source_scheme.old_visible_id,
+      )
     end
 
-    def update_scheme(scheme, xml_doc)
-      attributes = scheme_attributes(xml_doc)
-      scheme.update!(attributes)
+    def update_scheme(scheme, attributes)
+      scheme.update!(
+        scheme_type: attributes["scheme_type"],
+        registered_under_care_act: attributes["registered_under_care_act"],
+        support_type: attributes["support_type"],
+        intended_stay: attributes["intended_stay"],
+        primary_client_group: attributes["primary_client_group"],
+        secondary_client_group: attributes["secondary_client_group"],
+        sensitive: attributes["sensitive"],
+        end_date: attributes["end_date"]
+      )
       scheme
     end
 
@@ -55,37 +72,40 @@ module Imports
       attributes["secondary_client_group"] = nil if attributes["primary_client_group"] == attributes["secondary_client_group"]
       attributes["sensitive"] = sensitive(xml_doc)
       attributes["end_date"] = parse_end_date(xml_doc)
+      attributes["location_name"] = string_or_nil(xml_doc, "name")
+      attributes["postcode"] = string_or_nil(xml_doc, "postcode")
+      attributes["units"] = safe_string_as_integer(xml_doc, "total-units")
+      attributes["type_of_unit"] = safe_string_as_integer(xml_doc, "unit-type")
+      attributes["location_old_id"] = string_or_nil(xml_doc, "id")
+      attributes["location_old_visible_id"] = string_or_nil(xml_doc, "visible-id")
+      attributes["scheme_old_id"] = string_or_nil(xml_doc, "mgmtgroup")
       attributes
     end
 
-    def add_location(scheme, xml_doc)
-      end_date = parse_end_date(xml_doc)
-      old_id = string_or_nil(xml_doc, "id")
-
-      if end_date.nil? || end_date >= Time.zone.now
+    def add_location(scheme, attributes)
+      if attributes["end_date"].nil? || attributes["end_date"] >= Time.zone.now
         # wheelchair_adaptation: string_or_nil(xml_doc, "mobility-type"),
         begin
           Location.create!(
-            name: string_or_nil(xml_doc, "name"),
-            postcode: string_or_nil(xml_doc, "postcode"),
-            units: safe_string_as_integer(xml_doc, "total-units"),
-            type_of_unit: safe_string_as_integer(xml_doc, "unit-type"),
-            old_visible_id: safe_string_as_integer(xml_doc, "visible-id"),
-            old_id:,
-            scheme:,
+            name: attributes["location_name"],
+            postcode: attributes["postcode"],
+            units: attributes["units"],
+            type_of_unit: attributes["type_of_unit"],
+            old_visible_id: attributes["location_old_visible_id"],
+            old_id: attributes["location_old_id"],
+            scheme: scheme,
           )
         rescue ActiveRecord::RecordNotUnique
-          @logger.warn("Location is already present with legacy ID #{old_id}, skipping")
+          @logger.warn("Location is already present with legacy ID #{attributes["location_old_id"]}, skipping")
         end
       else
-        @logger.warn("Location with legacy ID #{old_id} is expired (#{end_date}), skipping")
+        @logger.warn("Location with legacy ID #{attributes["location_old_id"]} is expired (#{attributes["end_date"]}), skipping")
       end
     end
 
-    def find_scheme_to_merge(xml_doc)
-      attributes = scheme_attributes(xml_doc)
-
+    def find_scheme_to_merge(attributes)
       Scheme.find_by(
+        old_id: attributes["scheme_old_id"],
         scheme_type: attributes["scheme_type"],
         registered_under_care_act: attributes["registered_under_care_act"],
         support_type: attributes["support_type"],
@@ -95,11 +115,11 @@ module Imports
       )
     end
 
-    def duplicate_scheme(schemes, xml_doc)
+    def duplicate_scheme(schemes, attributes)
       # Since all schemes in the array are different, pick the first one
       # In the future, consider a better selection method if needed
       old_scheme = schemes.first
-      new_scheme = create_scheme(old_scheme, xml_doc)
+      new_scheme = create_scheme(old_scheme, attributes)
 
       if old_scheme.scheme_type != new_scheme.scheme_type
         rename_schemes(old_scheme, new_scheme, :scheme_type)
