@@ -27,7 +27,9 @@ class SchemesController < ApplicationController
   def create
     @scheme = Scheme.new(scheme_params)
 
-    if @scheme.save
+    validation_errors scheme_params
+
+    if @scheme.errors.empty? && @scheme.save
       if scheme_params[:support_services_provider] == "The same organisation that owns the housing stock"
         redirect_to scheme_primary_client_group_path(@scheme)
       else
@@ -44,7 +46,9 @@ class SchemesController < ApplicationController
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
-    if @scheme.update(scheme_params)
+    validation_errors scheme_params
+
+    if @scheme.errors.empty? && @scheme.update(scheme_params)
       if check_answers
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
@@ -56,7 +60,7 @@ class SchemesController < ApplicationController
         redirect_to next_page_path params[:scheme][:page]
       end
     else
-      render current_template(request.referer), status: :unprocessable_entity
+      render current_template(page), status: :unprocessable_entity
     end
   end
 
@@ -101,6 +105,12 @@ class SchemesController < ApplicationController
   end
 
 private
+
+  def validation_errors scheme_params
+    scheme_params.keys.each do |key|
+      @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+    end
+  end
 
   def confirm_secondary_page?(page)
     page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
