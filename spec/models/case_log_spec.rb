@@ -1730,11 +1730,6 @@ RSpec.describe CaseLog do
           expect(supported_housing_case_log.unittype_sh).to eq(1)
         end
 
-        it "correctly infers and saves type of building" do
-          record_from_db = ActiveRecord::Base.connection.execute("SELECT builtype from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["builtype"]).to eq(1)
-        end
-
         it "correctly infers and saves wchair" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT wchair from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
           expect(record_from_db["wchair"]).to eq(2)

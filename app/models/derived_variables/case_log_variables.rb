@@ -75,7 +75,6 @@ module DerivedVariables::CaseLogVariables
       if location
         self.la = location.county
         self.postcode_full = location.postcode
-        self.builtype = form.questions.find { |x| x.id == "builtype" }.answer_options.find { |_key, value| value["value"] == location.type_of_building }.first
         wheelchair_adaptation_map = { 1 => 1, 0 => 2 }
         self.wchair = wheelchair_adaptation_map[location.wheelchair_adaptation.to_i]
       end
