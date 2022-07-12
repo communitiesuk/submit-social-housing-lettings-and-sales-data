@@ -143,14 +143,16 @@ class Scheme < ApplicationRecord
 
   def display_attributes
     [
-      { name: "Service code", value: id_to_display },
+      { name: "Scheme code", value: id_to_display },
       { name: "Name", value: service_name, edit: true },
       { name: "Confidential information", value: sensitive, edit: true },
-      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
-      { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
+      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
+      { name: "Support services provided by", value: support_services_provider },
+      { name: "Organisation providing support", value: managing_organisation&.name },
       { name: "Primary client group", value: primary_client_group },
+      { name: "Has another client group", value: has_other_client_group },
       { name: "Secondary client group", value: secondary_client_group },
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },

@@ -30,24 +30,7 @@
 
       <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-      <% managing_org_answer_options = null_option + organisations %>
 
-      <%= f.govuk_collection_select :managing_organisation_id,
-                                    managing_org_answer_options,
-                                    :id,
-                                    :name,
-                                    label: { text: "Which organisation manages this scheme?", size: "m" },
-                                    options: { required: true },
-                                    "data-controller": %w[accessible-autocomplete conditional-filter] %>
-
-      <% if current_user.support? %>
-        <%= f.govuk_collection_select :owning_organisation_id,
-                                      organisations,
-                                      :id,
-                                      :name,
-                                      label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
-                                      "data-controller": %w[accessible-autocomplete conditional-filter] %>
-      <% end %>
 
       <% if current_user.data_coordinator? %>
         <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
@@ -68,6 +51,23 @@
         :id,
         :name,
         legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
+
+      <% if current_user.support? %>
+        <%= f.govuk_collection_select :owning_organisation_id,
+                                      organisations,
+                                      :id,
+                                      :name,
+                                      label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
+                                      "data-controller": %w[accessible-autocomplete conditional-filter] %>
+      <% end %>
+
+      <% support_services_provider_selection = Scheme.support_services_providers.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <%= f.govuk_collection_radio_buttons :support_services_provider,
+                                           support_services_provider_selection,
+                                           :id,
+                                           :name,
+                                           legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.hidden_field :page, value: "details" %>
       <% if request.query_parameters["check_answers"] %>
