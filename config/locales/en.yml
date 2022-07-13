@@ -44,17 +44,12 @@ en:
         scheme:
           attributes:
             owning_organisation_id:
-              required: "Enter the existing organisation’s name"
               invalid: "Enter the existing organisation’s name"
-              blank: "Enter the existing organisation’s name"
             service_name:
-              blank: "Enter the scheme’s name"
               invalid: "Enter the scheme’s name"
             scheme_type:
-              blank: "Select the scheme’s type"
               invalid: "Select the scheme’s type"
             registered_under_care_act:
-              blank: "Select if this scheme is registered under the Care Standards Act 2000"
               invalid: "Select if this scheme is registered under the Care Standards Act 2000"
             primary_client_group:
               invalid: "Select what client group is this scheme intended for"
