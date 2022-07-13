@@ -404,7 +404,6 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.intended_stay).to eq(nil)
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
-
       end
 
       context "when missing required scheme params" do
@@ -413,7 +412,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "",
                       registered_under_care_act: "",
                       support_services_provider: "" } }
-          end
+        end
 
         it "renders the same page with error message" do
           post "/schemes", params: params
@@ -487,7 +486,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "creates a new scheme for user organisation with valid params" do
           post "/schemes", params: params
-          expect(Scheme.last.owning_organisation_id).to eq(organisation.id,)
+          expect(Scheme.last.owning_organisation_id).to eq(organisation.id)
           expect(Scheme.last.service_name).to eq("testy")
           expect(Scheme.last.scheme_type).to eq("Foyer")
           expect(Scheme.last.sensitive).to eq("Yes")
@@ -500,10 +499,9 @@ RSpec.describe SchemesController, type: :request do
           expect(Scheme.last.intended_stay).to eq(nil)
           expect(Scheme.last.id_to_display).to match(/S*/)
         end
-
       end
 
-      context "missing required scheme params" do
+      context "when missing required scheme params" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -567,19 +565,21 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when params are missing" do
-        let(:params) do { scheme: {
-          service_name: "",
-          managing_organisation_id: "",
-          owning_organisation_id: "",
-          primary_client_group: "",
-          secondary_client_group: "",
-          scheme_type: "",
-          registered_under_care_act: "",
-          support_type: "",
-          intended_stay: "",
-          support_services_provider: "",
-          has_other_client_group: "",
-          page: "details" } }
+        let(:params) do
+          { scheme: {
+            service_name: "",
+            managing_organisation_id: "",
+            owning_organisation_id: "",
+            primary_client_group: "",
+            secondary_client_group: "",
+            scheme_type: "",
+            registered_under_care_act: "",
+            support_type: "",
+            intended_stay: "",
+            support_services_provider: "",
+            has_other_client_group: "",
+            page: "details",
+          } }
         end
 
         it "renders primary client group after successful update" do
@@ -856,19 +856,21 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when params are missing" do
-        let(:params) do { scheme: {
-          service_name: "",
-          managing_organisation_id: "",
-          owning_organisation_id: "",
-          primary_client_group: "",
-          secondary_client_group: "",
-          scheme_type: "",
-          registered_under_care_act: "",
-          support_type: "",
-          intended_stay: "",
-          support_services_provider: "",
-          has_other_client_group: "",
-          page: "details" } }
+        let(:params) do
+          { scheme: {
+            service_name: "",
+            managing_organisation_id: "",
+            owning_organisation_id: "",
+            primary_client_group: "",
+            secondary_client_group: "",
+            scheme_type: "",
+            registered_under_care_act: "",
+            support_type: "",
+            intended_stay: "",
+            support_services_provider: "",
+            has_other_client_group: "",
+            page: "details",
+          } }
         end
 
         it "renders primary client group after successful update" do

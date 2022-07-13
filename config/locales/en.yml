@@ -65,8 +65,6 @@ en:
               invalid: "Select who provides the support services used by this scheme"
         location:
           attributes:
-            wheelchair_adaptation:
-              blank: "Select if majority of units in this location built or adapted to wheelchair-user standards"
             units:
               blank: "Enter total number of units at this location"
             type_of_unit:

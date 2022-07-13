@@ -189,11 +189,13 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when required param are missing" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.postcode"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
         end
       end
     end
@@ -293,6 +295,17 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
           expect(Location.last.wheelchair_adaptation).to eq("No")
+        end
+      end
+
+      context "when required param are missing" do
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.postcode"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
         end
       end
     end
@@ -507,6 +520,17 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
+
+      context "when required param are missing" do
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.postcode"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -614,6 +638,17 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
           expect(Location.last.wheelchair_adaptation).to eq("No")
+        end
+      end
+
+      context "when required param are missing" do
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.postcode"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
         end
       end
     end
