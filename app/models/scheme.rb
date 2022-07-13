@@ -49,7 +49,7 @@ class Scheme < ApplicationRecord
 
   PRIMARY_CLIENT_GROUP = {
     "Homeless families with support needs": "O",
-    "Offenders & people at risk of offending": "H",
+    "Offenders and people at risk of offending": "H",
     "Older people with support needs": "M",
     "People at risk of domestic violence": "L",
     "People with a physical or sensory disability": "A",

@@ -40,13 +40,13 @@
         :name,
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
-      <% care_acts_selection = Scheme.registered_under_care_acts.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-
       <%= f.govuk_collection_radio_buttons :registered_under_care_act,
-        care_acts_selection,
-        :id,
-        :name,
-        legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
+                                           @scheme.care_acts_options_with_hint,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" },
+                                           bold_labels: false %>
 
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
 
