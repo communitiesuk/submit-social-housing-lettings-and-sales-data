@@ -35,7 +35,7 @@
                                            type_of_units_selection,
                                            :id,
                                            :name,
-                                           legend: { text: "What is this type of scheme?", size: "m" } %>
+                                           legend: { text: "What is the most common type of unit at this location?", size: "m" } %>
 
       <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
