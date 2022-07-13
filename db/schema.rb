@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_07_125124) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -191,9 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
+    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
-    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.integer "hhtype"
     t.integer "new_old"
@@ -205,7 +205,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
     t.index ["location_id"], name: "index_case_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
     t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
-    t.index ["organisations_id"], name: "index_case_logs_on_organisations_id"
     t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
     t.index ["scheme_id"], name: "index_case_logs_on_scheme_id"
   end
@@ -255,7 +254,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
@@ -297,7 +296,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
     t.integer "unspecified_units"
     t.string "old_org_id"
     t.integer "old_visible_id"
+    t.bigint "user_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
+    t.index ["user_id"], name: "index_organisations_on_user_id"
   end
 
   create_table "schemes", force: :cascade do |t|
@@ -354,12 +355,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
     t.datetime "confirmed_at", precision: nil
     t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email"
-    t.bigint "organisations_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
-    t.index ["organisations_id"], name: "index_users_on_organisations_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
@@ -375,9 +374,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_104313) do
   end
 
   add_foreign_key "case_logs", "locations"
-  add_foreign_key "case_logs", "organisations", column: "organisations_id"
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "organisations", "users"
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id"
 end
