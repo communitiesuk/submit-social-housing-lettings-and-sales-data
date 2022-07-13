@@ -15,7 +15,7 @@ export default class extends Controller {
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: selectEl,
-      minLength: 2,
+      minLength: 1,
       source: (query, populateResults) => {
         if (/\S/.test(query)) {
           populateResults(sort(query, options))
