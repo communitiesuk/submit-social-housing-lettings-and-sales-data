@@ -68,6 +68,14 @@ en:
               invalid: "Select if this scheme provides for another client group"
             support_services_provider:
               invalid: "Select who provides the support services used by this scheme"
+        location:
+          attributes:
+            wheelchair_adaptation:
+              blank: "Enter the existing organisation’s name"
+            total_units:
+              blank: "Enter the existing organisation’s name"
+            type_of_unit:
+              blank: "Enter the existing organisation’s name"
 
 
   validations:
