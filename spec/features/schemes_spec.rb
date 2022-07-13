@@ -667,12 +667,6 @@ RSpec.describe "Schemes scheme Features" do
 
                   context "when I select the support answers" do
                     before do
-                      fill_in "Postcode", with: "SW1P 4DF"
-                      fill_in "Location name (optional)", with: "Some name"
-                      fill_in "Total number of units at this location", with: 1
-                      choose "Self-contained house"
-                      choose "location-wheelchair-adaptation-no-field"
-                      choose "location-add-another-location-no-field"
                       choose "Floating support"
                       choose "Very short stay"
                       click_button "Save and continue"
@@ -702,7 +696,6 @@ RSpec.describe "Schemes scheme Features" do
 
                     context "when I add location to the scheme" do
                       before do
-                        click_link "Add a location"
                         fill_in "Postcode", with: "SW1P 4DF"
                         fill_in "Name (optional)", with: "Some name"
                         fill_in "Total number of units at this location", with: 1

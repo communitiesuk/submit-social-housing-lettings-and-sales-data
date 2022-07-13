@@ -77,7 +77,6 @@ en:
             type_of_unit:
               blank: "Select the most common type of unit at this location"
 
-
   validations:
     organisation:
       name_missing: "Enter the organisation’s name"
