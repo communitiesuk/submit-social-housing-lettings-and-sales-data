@@ -13,22 +13,6 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 * [API browser](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api) (using this [OpenAPI specification](docs/api/v1.json))
 * [Design history](https://core-design-history.herokuapp.com)
 
-### Running documentation locally
-
-The documentation website can be generated and served locally using Jekyll.
-
-1. Change into the `/docs/` directory:\
-`cd docs`
-
-2. Install Jekyll and its dependencies:\
-`bundle install`
-
-3. Start the Jekyll server:\
-`bundle exec jekyll serve`
-
-4. View the website:\
-<http://localhost:4000>
-
 ## System architecture
 
 ![View of system architecture](docs/images/architecture.drawio.png)
