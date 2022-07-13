@@ -26,11 +26,11 @@ class Scheme < ApplicationRecord
   enum registered_under_care_act: REGISTERED_UNDER_CARE_ACT
 
   SCHEME_TYPE = {
-    "Missing": 0,
-    "Foyer": 4,
     "Direct Access Hostel": 5,
-    "Other Supported Housing": 6,
+    "Foyer": 4,
     "Housing for older people": 7,
+    "Other Supported Housing": 6,
+    "Missing": 0,
   }.freeze
 
   enum scheme_type: SCHEME_TYPE, _suffix: true
