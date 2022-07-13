@@ -148,10 +148,10 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    "(" + locations.count.to_s + " locations)"
+    "(#{locations.count} locations)"
   end
 
   def hint
-    [primary_client_group, secondary_client_group].filter { |x| x.present? }.join(", ")
+    [primary_client_group, secondary_client_group].filter(&:present?).join(", ")
   end
 end

@@ -2,7 +2,7 @@
 
 <% selected = @case_log.public_send(question.id) || "" %>
 <% answers = question.displayed_answer_options(@case_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
-  <%= f.govuk_select(question.id.to_sym,
+<%= f.govuk_select(question.id.to_sym,
   label: legend(question, page_header, conditional),
   "data-controller": "accessible-autocomplete",
   caption: caption(caption_text, page_header, conditional),

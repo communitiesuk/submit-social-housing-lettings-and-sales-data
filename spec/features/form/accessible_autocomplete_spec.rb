@@ -14,6 +14,7 @@ RSpec.describe "Accessible Automcomplete" do
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
 
@@ -23,12 +24,6 @@ RSpec.describe "Accessible Automcomplete" do
 
   context "when using accessible autocomplete" do
     before do
-      allow_any_instance_of(Form::Question).to receive(:answer_option_synonyms).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_synonyms).with("Manchester").and_return("synonym")
-      allow_any_instance_of(Form::Question).to receive(:answer_option_append).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_append).with("Manchester").and_return(" (append)")
-      allow_any_instance_of(Form::Question).to receive(:answer_option_hint).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_hint).with("Manchester").and_return("hint")
       visit("/logs/#{case_log.id}/accessible-select")
     end
 
@@ -52,21 +47,6 @@ RSpec.describe "Accessible Automcomplete" do
       expect(find("#case-log-prevloc-field").value).to eq("The one and only york town")
     end
 
-    it "can match on synonyms", js: true do
-      find("#case-log-prevloc-field").click.native.send_keys("s", "y", "n", "o", "n", :down, :enter)
-      expect(find("#case-log-prevloc-field").value).to eq("Manchester")
-    end
-
-    it "displays appended text next to the options", js: true do
-      find("#case-log-prevloc-field").click.native.send_keys("m", "a", "n", :down, :enter)
-      expect(find(".autocomplete__option__append", visible: :hidden, text: /(append)/)).to be_present
-    end
-
-    it "displays hint text under the options", js: true do
-      find("#case-log-prevloc-field").click.native.send_keys("m", "a", "n", :down, :enter)
-      expect(find(".autocomplete__option__hint", visible: :hidden, text: /hint/)).to be_present
-    end
-
     it "maintains enhancement state across back navigation", js: true do
       find("#case-log-prevloc-field").click.native.send_keys("T", "h", "a", "n", :down, :enter)
       click_button("Save and continue")
@@ -76,6 +56,32 @@ RSpec.describe "Accessible Automcomplete" do
 
     it "has a disabled null option" do
       expect(page).to have_select("case-log-prevloc-field", disabled_options: ["Select an option"])
+    end
+  end
+
+  context "when searching schemes" do
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
+
+    before do
+      FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
+      FactoryBot.create(:location, scheme:, postcode: "SE6 1LB")
+      case_log.update!(needstype: 2)
+      visit("/logs/#{case_log.id}/scheme")
+    end
+
+    it "can match on synonyms", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find("#case-log-scheme-id-field").value).to eq(scheme.service_name)
+    end
+
+    it "displays appended text next to the options", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find(".autocomplete__option__append", visible: :hidden, text: /(2 locations)/)).to be_present
+    end
+
+    it "displays hint text under the options", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find(".autocomplete__option__hint", visible: :hidden, text: /Young people at risk, Young people leaving care/)).to be_present
     end
   end
 
