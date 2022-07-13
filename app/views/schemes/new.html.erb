@@ -44,14 +44,13 @@
         :name,
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
-      <% care_acts_selection = @scheme.care_acts_options_with_hints %>
-
       <%= f.govuk_collection_radio_buttons :registered_under_care_act,
-        care_acts_selection,
-        :id,
-        :name,
+                                           @scheme.care_acts_options_with_hint,
+                                           :id,
+                                           :name,
                                            :description,
-        legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
+                                           legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" },
+                                           bold_labels: false %>
 
       <% if current_user.support? %>
         <%= f.govuk_collection_select :owning_organisation_id,

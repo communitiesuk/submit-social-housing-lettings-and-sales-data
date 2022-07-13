@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key) } %>
       <%= f.govuk_collection_radio_buttons :secondary_client_group,
         secondary_client_group_selection,
         :id,
