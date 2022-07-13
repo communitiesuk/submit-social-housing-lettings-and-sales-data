@@ -73,7 +73,7 @@ unless Rails.env.test?
     scheme1 = Scheme.create!(
       service_name: "Beulahside Care",
       sensitive: 0,
-      registered_under_care_act: 0,
+      registered_under_care_act: 1,
       support_type: 1,
       scheme_type: 4,
       intended_stay: "M",

@@ -257,7 +257,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
