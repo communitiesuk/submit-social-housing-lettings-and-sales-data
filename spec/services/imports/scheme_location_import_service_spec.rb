@@ -81,8 +81,8 @@ RSpec.describe Imports::SchemeLocationImportService do
         old_scheme = Scheme.find(scheme.id)
         new_scheme = location.scheme
 
-        expect(old_scheme.service_name).to eq("Management Group - Low levels of support")
-        expect(new_scheme.service_name).to eq("Management Group - Medium levels of support")
+        expect(old_scheme.service_name).to eq("Management Group - Low level")
+        expect(new_scheme.service_name).to eq("Management Group - Medium level")
       end
     end
 
@@ -145,7 +145,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       location = location_service.create_scheme_location(location_xml)
       expect(location.scheme.scheme_type).to eq("Housing for older people")
       expect(location.scheme.registered_under_care_act).to eq("No")
-      expect(location.scheme.support_type).to eq("Low levels of support")
+      expect(location.scheme.support_type).to eq("Low level")
       expect(location.scheme.intended_stay).to eq("Permanent")
       expect(location.scheme.primary_client_group).to eq("Older people with support needs")
       expect(location.scheme.secondary_client_group).to be_nil

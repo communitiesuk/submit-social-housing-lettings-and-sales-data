@@ -26,7 +26,7 @@
       <%= f.govuk_number_field :units,
                                label: { text: "Total number of units at this location", size: "m" },
                                width: 2,
-                               hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff.s" },
+                               hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff" },
                                autofocus: true %>
 
       <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>

@@ -37,12 +37,10 @@ class Scheme < ApplicationRecord
 
   SUPPORT_TYPE = {
     "Missing": 0,
-    "Resettlement support": 1,
-    "Low levels of support": 2,
-    "Medium levels of support": 3,
-    "High levels of care and support": 4,
-    "Nursing care services to a care home": 5,
-    "Floating Support": 6,
+    "Low level": 2,
+    "Medium level": 3,
+    "High level": 4,
+    "Nursing care in a care home": 5,
   }.freeze
 
   enum support_type: SUPPORT_TYPE, _suffix: true
@@ -71,10 +69,10 @@ class Scheme < ApplicationRecord
   enum secondary_client_group: PRIMARY_CLIENT_GROUP, _suffix: true
 
   INTENDED_STAY = {
+    "Very short stay": "V",
+    "Short stay": "S",
     "Medium stay": "M",
     "Permanent": "P",
-    "Short stay": "S",
-    "Very short stay": "V",
     "Missing": "X",
   }.freeze
 
@@ -158,5 +156,25 @@ class Scheme < ApplicationRecord
     hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
 
     Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  end
+
+  def support_level_options_with_hints
+    hints = {
+      "Low level": "Staff visiting once a week, fortnightly or less.",
+      "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.",
+      "High level": "Intensive level of staffing provided on a 24-hour basis.",
+    }
+    Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  end
+
+  def intended_length_of_stay_options_with_hints
+    hints = {
+      "Very short stay": "Up to one month.",
+      "Short stay": "Up to one year.",
+      "Medium stay": "More than one year but with an expectation to move on.",
+      "Permanent": "Provides a home for life with no requirement for the tenant to move.",
+
+    }
+    Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
 end

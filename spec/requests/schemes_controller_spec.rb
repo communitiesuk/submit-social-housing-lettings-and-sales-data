@@ -527,7 +527,7 @@ RSpec.describe SchemesController, type: :request do
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.required"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
       end
     end
@@ -594,11 +594,6 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
-        end
-
-        it "updates a scheme with valid params" do
-          follow_redirect!
-          expect(scheme_to_update.reload.managing_organisation_id).to eq(organisation.id)
         end
 
         context "when updating from check answers page" do
@@ -753,7 +748,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support" do
-        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
         it "renders add location to this scheme successful update" do
           follow_redirect!
@@ -764,11 +759,11 @@ RSpec.describe SchemesController, type: :request do
         it "updates a scheme with valid params" do
           follow_redirect!
           expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          expect(scheme_to_update.reload.support_type).to eq("Low level")
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
@@ -779,7 +774,7 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+            expect(scheme_to_update.reload.support_type).to eq("Low level")
           end
         end
       end
@@ -1010,7 +1005,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support" do
-        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -1021,11 +1016,11 @@ RSpec.describe SchemesController, type: :request do
         it "updates a scheme with valid params" do
           follow_redirect!
           expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          expect(scheme_to_update.reload.support_type).to eq("Low level")
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
@@ -1036,7 +1031,7 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+            expect(scheme_to_update.reload.support_type).to eq("Low level")
           end
         end
       end
