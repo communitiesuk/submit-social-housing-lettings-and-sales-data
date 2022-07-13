@@ -370,7 +370,7 @@ RSpec.describe "Schemes scheme Features" do
 
                 context "when I select the support answers" do
                   before do
-                    choose "Floating support"
+                    choose "Low level"
                     choose "Very short stay"
                     click_button "Save and continue"
                   end
@@ -667,7 +667,7 @@ RSpec.describe "Schemes scheme Features" do
 
                   context "when I select the support answers" do
                     before do
-                      choose "Floating support"
+                      choose "Low level"
                       choose "Very short stay"
                       click_button "Save and continue"
                     end

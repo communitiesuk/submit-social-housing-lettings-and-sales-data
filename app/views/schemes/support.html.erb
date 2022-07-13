@@ -14,19 +14,22 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <% support_type_selection = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :support_type,
-        support_type_selection,
-        :id,
-        :name,
-        legend: { text: "Level of support given", size: "m" } %>
+                                           @scheme.support_level_options_with_hints,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Level of support given", size: "m" },
+                                           bold_labels: false %>
 
       <% intended_stay_selection = Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :intended_stay,
-        intended_stay_selection,
-        :id,
-        :name,
-        legend: { text: "Intended length of stay", size: "m" } %>
+                                           @scheme.intended_length_of_stay_options_with_hints,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Intended length of stay", size: "m" },
+                                           bold_labels: false %>
 
       <%= f.hidden_field :page, value: "support" %>
 
