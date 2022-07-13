@@ -135,7 +135,6 @@
     <hhtype>4</hhtype>
     <new_old>2</new_old>
     <vacdays>638</vacdays>
-    <unittype_sh/>
     <form>{id}</form>
     <owningorgid>{owning_org_id}</owningorgid>
     <owningorgname>DLUHC</owningorgname>
@@ -145,6 +144,7 @@
     <manhcnum>1234</manhcnum>
     <createddate>2022-02-08 16:52:15 UTC</createddate>
     <uploaddate>2022-02-08 16:52:15 UTC</uploaddate>
+    <unittype_sh/>
     <providertype>1</providertype>
   </form>
 </forms>

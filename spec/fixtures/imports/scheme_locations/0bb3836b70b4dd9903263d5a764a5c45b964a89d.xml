@@ -1,0 +1,23 @@
+<scheme:scheme xmlns:scheme="dclg:scheme">
+  <scheme:id>0bb3836b70b4dd9903263d5a764a5c45b964a89d</scheme:id>
+  <scheme:name id-field="Y">Location 2</scheme:name>
+  <scheme:local-authority-name>134</scheme:local-authority-name>
+  <scheme:postcode>NG19 8SW</scheme:postcode>
+  <scheme:required>false</scheme:required>
+  <scheme:sensitive>false</scheme:sensitive>
+  <scheme:total-units>11</scheme:total-units>
+  <scheme:scheme-type>7</scheme:scheme-type>
+  <scheme:unit-type>6</scheme:unit-type>
+  <scheme:reg-home-type>1</scheme:reg-home-type>
+  <scheme:support-type>2</scheme:support-type>
+  <scheme:mobility-type>W</scheme:mobility-type>
+  <scheme:sp-grant>False</scheme:sp-grant>
+  <scheme:intended-stay>P</scheme:intended-stay>
+  <scheme:client-group-1>M</scheme:client-group-1>
+  <scheme:client-group-2/>
+  <scheme:start-date>2014-04-07</scheme:start-date>
+  <scheme:end-date/>
+  <scheme:mgmtgroup>6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d</scheme:mgmtgroup>
+  <scheme:status>Approved</scheme:status>
+  <scheme:visible-id>001</scheme:visible-id>
+</scheme:scheme>

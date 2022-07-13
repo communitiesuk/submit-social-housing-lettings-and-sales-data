@@ -7,26 +7,11 @@ Ruby on Rails app that handles the submission of lettings and sales of social ho
 
 ## Domain documentation
 
-- [Service overview](docs/service_overview.md)
-- [Organisations](docs/organisations.md)
-- [Users and roles](docs/users.md)
-- [Supported housing schemes](docs/schemes.md)
-
-## Technical Documentation
-
-- [Developer setup](docs/developer_setup.md)
-- [Frontend](docs/frontend.md)
-- [Testing strategy](docs/testing.md)
-- [Form Builder](docs/form_builder.md)
-- [Form Runner](docs/form_runner.md)
-- [Infrastructure](docs/infrastructure.md)
-- [Monitoring](docs/monitoring.md)
-- [Exporting to CDS](docs/exports.md)
-- [Architecture decision records](docs/adr)
-
-## API documentation
-
-API documentation can be found here: <https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data>. This is driven by [OpenAPI docs](docs/api/DLUHC-CORE-Data.v1.json)
+* [Domain and technical documentation](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data)
+  * [Local development setup](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/setup)
+  * [Architecture decision records](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/adr)
+* [API browser](https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api) (using this [OpenAPI specification](docs/api/v1.json))
+* [Design history](https://core-design-history.herokuapp.com)
 
 ## System architecture
 

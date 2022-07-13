@@ -1,0 +1,12 @@
+title: "CORE Tech Docs"
+remote_theme: just-the-docs/just-the-docs
+lang: en-GB
+permalink: pretty
+color_scheme: govuk
+aux_links:
+  "API browser":
+    - https://communitiesuk.github.io/submit-social-housing-lettings-and-sales-data/api
+  "Design history":
+    - https://core-design-history.herokuapp.com
+  "GitHub":
+    - https://github.com/communitiesuk/submit-social-housing-lettings-and-sales-data

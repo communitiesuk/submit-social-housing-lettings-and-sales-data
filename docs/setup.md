@@ -1,4 +1,8 @@
-# Developing locally on host machine
+---
+nav_order: 2
+---
+
+# Local development
 
 The most common way to run a development version of the application is run with local dependencies.
 
@@ -8,7 +12,7 @@ Dependencies:
 - [Rails](https://rubyonrails.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [NodeJS](https://nodejs.org/en/)
-- [Gecko driver](https://github.com/mozilla/geckodriver/releases) [for running Selenium tests]
+- [Gecko driver](https://github.com/mozilla/geckodriver/releases) (for running Selenium tests)
 
 We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versions.
 
@@ -34,7 +38,7 @@ We recommend using [RBenv](https://github.com/rbenv/rbenv) to manage Ruby versio
     sudo su - postgres -c "createuser <username> -s -P"
     ```
 
-3. Install RBenv & Ruby-build
+3. Install RBenv and Ruby-build
 
     macOS:
 

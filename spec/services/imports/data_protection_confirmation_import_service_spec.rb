@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Imports::DataProtectionConfirmationImportService do
-  let(:fixture_directory) { "spec/fixtures/softwire_imports/data_protection_confirmations" }
+  let(:fixture_directory) { "spec/fixtures/imports/data_protection_confirmations" }
   let(:old_org_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
   let(:old_id) { old_org_id }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }

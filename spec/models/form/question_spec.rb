@@ -158,7 +158,7 @@ RSpec.describe Form::Question, type: :model do
     end
 
     it "can map label from value" do
-      expect(question.label_from_value("E06000014")).to eq("York")
+      expect(question.label_from_value("E09000033")).to eq("Westminster")
     end
 
     context "when the saved answer is not in the value map" do
