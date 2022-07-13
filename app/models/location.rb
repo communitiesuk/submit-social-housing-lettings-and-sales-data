@@ -11,6 +11,16 @@ class Location < ApplicationRecord
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
 
+  MOBILITY_TYPE = {
+    "Property fitted with equipment and adaptations (if not designed to above standards)": "A",
+    "Property designed to accessible general standard": "M",
+    "None": "N",
+    "Property designed to wheelchair user standard": "W",
+    "Missing": "X",
+  }.freeze
+
+  enum mobility_type: MOBILITY_TYPE
+
   TYPE_OF_UNIT = {
     "Self-contained flat or bedsit": 1,
     "Self-contained flat or bedsit with common facilities": 2,

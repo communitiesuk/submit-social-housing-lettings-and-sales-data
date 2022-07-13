@@ -1702,7 +1702,7 @@ RSpec.describe CaseLog do
 
       context "and not renewal" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: 1, type_of_building: "Purpose built", wheelchair_adaptation: 0) }
+        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: 1, type_of_building: "Purpose built") }
 
         let!(:supported_housing_case_log) do
           described_class.create!({
