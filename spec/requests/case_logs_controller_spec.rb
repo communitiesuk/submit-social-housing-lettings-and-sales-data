@@ -778,7 +778,7 @@ RSpec.describe CaseLogsController, type: :request do
       it "dowloads searched logs" do
         get "/logs?search=#{case_log.id}", headers:, params: {}
         csv = CSV.parse(response.body)
-        expect(csv.count).to eq(2)
+        expect(csv.count).to eq(CaseLog.search_by(case_log.id.to_s).count + 1)
       end
 
       context "when both filter and search applied" do
