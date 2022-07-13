@@ -28,13 +28,11 @@
                               label: { text: "This scheme contains confidential information" } %>
       <% end %>
 
-      <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-      <% answer_options = null_option + organisations %>
 
       <% if current_user.support? %>
         <%= f.govuk_collection_select :owning_organisation_id,
-                                      answer_options,
+                                      organisations,
                                       :id,
                                       :name,
                                       label: { text: "Which organisation owns the housing stock for this scheme?", size: "m" },
