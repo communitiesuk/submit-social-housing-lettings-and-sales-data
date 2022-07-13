@@ -67,6 +67,7 @@ module Imports
       attributes["registered_under_care_act"] = registered_under_care_act.zero? ? nil : registered_under_care_act
       attributes["support_type"] = safe_string_as_integer(xml_doc, "support-type")
       attributes["intended_stay"] = string_or_nil(xml_doc, "intended-stay")
+      attributes["mobility_type"] = string_or_nil(xml_doc, "mobility-type")
       attributes["primary_client_group"] = string_or_nil(xml_doc, "client-group-1")
       attributes["secondary_client_group"] = string_or_nil(xml_doc, "client-group-2")
       attributes["secondary_client_group"] = nil if attributes["primary_client_group"] == attributes["secondary_client_group"]
@@ -84,11 +85,11 @@ module Imports
 
     def add_location(scheme, attributes)
       if attributes["end_date"].nil? || attributes["end_date"] >= Time.zone.now
-        # wheelchair_adaptation: string_or_nil(xml_doc, "mobility-type"),
         begin
           Location.create!(
             name: attributes["location_name"],
             postcode: attributes["postcode"],
+            mobility_type: attributes["mobility_type"],
             units: attributes["units"],
             type_of_unit: attributes["type_of_unit"],
             old_visible_id: attributes["location_old_visible_id"],
