@@ -4,9 +4,7 @@ nav_order: 10
 
 # This documentation website
 
-## Running this technical documentation site locally
-
-The documentation website can be generated and served locally using Jekyll.
+The documentation website can be generated and run locally using Jekyll.
 
 1. Change into the `/docs/` directory:\
 `cd docs`
