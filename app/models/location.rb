@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
   validate :validate_postcode
-  validates :units, :type_of_unit, :wheelchair_adaptation, presence: true
+  validates :units, :type_of_unit, presence: true
   belongs_to :scheme
 
   before_save :infer_la!, if: :postcode_changed?

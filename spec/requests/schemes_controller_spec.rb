@@ -371,6 +371,25 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.id_to_display).to match(/S*/)
       end
+
+      context "missing required scheme params" do
+        let(:params) do
+          { scheme: { service_name: "",
+                      scheme_type: "",
+                      registered_under_care_act: "",
+                      support_services_provider: "" } }
+          end
+
+        it "renders the same page with error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content("Select the scheme’s type")
+          expect(page).to have_content("Select if this scheme is registered under the Care Standards Act 2000")
+          expect(page).to have_content("Select who provides the support services used by this scheme")
+          expect(page).to have_content("Enter the scheme’s name")
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -412,6 +431,26 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.support_type).to eq(nil)
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.id_to_display).to match(/S*/)
+      end
+
+      context "missing required scheme params" do
+        let(:params) do
+          { scheme: { service_name: "",
+                      scheme_type: "",
+                      registered_under_care_act: "",
+                      support_services_provider: "" } }
+        end
+
+        it "renders the same page with error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content("Select the scheme’s type")
+          expect(page).to have_content("Select if this scheme is registered under the Care Standards Act 2000")
+          expect(page).to have_content("Select who provides the support services used by this scheme")
+          expect(page).to have_content("Enter the existing organisation’s name")
+          expect(page).to have_content("Enter the scheme’s name")
+        end
       end
 
       context "when required organisation id param is missing" do
