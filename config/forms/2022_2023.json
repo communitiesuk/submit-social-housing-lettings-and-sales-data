@@ -54,7 +54,12 @@
                     "value": "Not known"
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "needstype": 1
+                }
+              ]
             },
             "property_local_authority": {
               "header": "",
@@ -388,7 +393,8 @@
               },
               "depends_on": [
                 {
-                  "is_la_inferred": false
+                  "is_la_inferred": false,
+                  "needstype": 1
                 }
               ]
             },
@@ -617,7 +623,12 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "needstype": 1
+                }
+              ]
             },
             "property_building_type": {
               "header": "",
@@ -637,7 +648,12 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "needstype": 1
+                }
+              ]
             },
             "property_wheelchair_accessible": {
               "header": "",
@@ -657,7 +673,12 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [
+                {
+                  "needstype": 1
+                }
+              ]
             },
             "property_number_of_bedrooms": {
               "header": "",
