@@ -372,7 +372,42 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.id_to_display).to match(/S*/)
       end
 
-      context "missing required scheme params" do
+      context "when support services provider is selected" do
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      support_services_provider: "Another registered housing provider" } }
+        end
+
+        it "creates a new scheme for user organisation with valid params and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+        end
+
+        it "creates a new scheme for user organisation with valid params" do
+          post "/schemes", params: params
+
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+          expect(Scheme.last.service_name).to eq("testy")
+          expect(Scheme.last.scheme_type).to eq("Foyer")
+          expect(Scheme.last.sensitive).to eq("Yes")
+          expect(Scheme.last.registered_under_care_act).to eq("No")
+          expect(Scheme.last.id).not_to eq(nil)
+          expect(Scheme.last.has_other_client_group).to eq(nil)
+          expect(Scheme.last.primary_client_group).to eq(nil)
+          expect(Scheme.last.secondary_client_group).to eq(nil)
+          expect(Scheme.last.support_type).to eq(nil)
+          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id_to_display).to match(/S*/)
+        end
+
+      end
+
+      context "when missing required scheme params" do
         let(:params) do
           { scheme: { service_name: "",
                       scheme_type: "",
@@ -431,6 +466,41 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.support_type).to eq(nil)
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.id_to_display).to match(/S*/)
+      end
+
+      context "when support services provider is selected" do
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      owning_organisation_id: organisation.id,
+                      support_services_provider: "Another registered housing provider" } }
+        end
+
+        it "creates a new scheme for user organisation with valid params and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+        end
+
+        it "creates a new scheme for user organisation with valid params" do
+          post "/schemes", params: params
+          expect(Scheme.last.owning_organisation_id).to eq(organisation.id,)
+          expect(Scheme.last.service_name).to eq("testy")
+          expect(Scheme.last.scheme_type).to eq("Foyer")
+          expect(Scheme.last.sensitive).to eq("Yes")
+          expect(Scheme.last.registered_under_care_act).to eq("No")
+          expect(Scheme.last.id).not_to eq(nil)
+          expect(Scheme.last.has_other_client_group).to eq(nil)
+          expect(Scheme.last.primary_client_group).to eq(nil)
+          expect(Scheme.last.secondary_client_group).to eq(nil)
+          expect(Scheme.last.support_type).to eq(nil)
+          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id_to_display).to match(/S*/)
+        end
+
       end
 
       context "missing required scheme params" do
@@ -494,6 +564,36 @@ RSpec.describe SchemesController, type: :request do
       before do
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when updating support services provider" do
+        let(:params) { { scheme: { managing_organisation_id: organisation.id, page: "support-services-provider" } } }
+
+        it "renders primary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(organisation.id)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
       end
 
       context "when updating primary client group" do
