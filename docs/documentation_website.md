@@ -4,7 +4,7 @@ nav_order: 10
 
 # This documentation website
 
-### Running documentation locally
+## Running this technical documentation site locally
 
 The documentation website can be generated and served locally using Jekyll.
 
