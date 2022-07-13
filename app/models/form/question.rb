@@ -136,7 +136,11 @@ class Form::Question
               labels = answer_options[value.to_s]
               labels["value"] if labels
             when "select"
-              answer_options[value.to_s]
+              if answer_options[value.to_s].respond_to?(:service_name)
+                answer_options[value.to_s].service_name
+              else
+                answer_options[value.to_s]
+              end
             else
               value.to_s
             end
@@ -191,23 +195,22 @@ class Form::Question
     label
   end
 
-  def answer_option_synonyms(answer_id)
-    if id == "scheme_id"
-      Scheme.find(answer_id).locations.map(&:postcode).join(",")
-    end
+  def answer_option_synonyms(resource)
+    return unless resource.respond_to?(:synonyms)
+
+    resource.synonyms
   end
 
-  def answer_option_append(answer_id)
-    if id == "scheme_id"
-      "(" + Scheme.find(answer_id).locations.count.to_s + " locations)"
-    end
+  def answer_option_append(resource)
+    return unless resource.respond_to?(:appended_text)
+
+    resource.appended_text
   end
 
-  def answer_option_hint(answer_id)
-    if id == "scheme_id"
-      scheme = Scheme.find(answer_id)
-      [scheme.primary_client_group, scheme.secondary_client_group].filter { |x| x.present? }.join(", ")
-    end
+  def answer_option_hint(resource)
+    return unless resource.respond_to?(:hint)
+
+    resource.hint
   end
 
 private

@@ -51,7 +51,7 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     end
 
     it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
-      expected_answer = { scheme.id.to_s => scheme.service_name }
+      expected_answer = { scheme.id.to_s => scheme }
       expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
     end
   end

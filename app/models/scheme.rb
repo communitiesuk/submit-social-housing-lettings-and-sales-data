@@ -142,4 +142,16 @@ class Scheme < ApplicationRecord
       { name: "Intended length of stay", value: intended_stay },
     ]
   end
+
+  def synonyms
+    locations.map(&:postcode).join(",")
+  end
+
+  def appended_text
+    "(" + locations.count.to_s + " locations)"
+  end
+
+  def hint
+    [primary_client_group, secondary_client_group].filter { |x| x.present? }.join(", ")
+  end
 end

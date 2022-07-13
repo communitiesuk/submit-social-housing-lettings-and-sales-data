@@ -24,11 +24,11 @@ RSpec.describe "Accessible Automcomplete" do
   context "when using accessible autocomplete" do
     before do
       allow_any_instance_of(Form::Question).to receive(:answer_option_synonyms).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_synonyms).with("E08000003").and_return("synonym")
+      allow_any_instance_of(Form::Question).to receive(:answer_option_synonyms).with("Manchester").and_return("synonym")
       allow_any_instance_of(Form::Question).to receive(:answer_option_append).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_append).with("E08000003").and_return(" (append)")
+      allow_any_instance_of(Form::Question).to receive(:answer_option_append).with("Manchester").and_return(" (append)")
       allow_any_instance_of(Form::Question).to receive(:answer_option_hint).and_call_original
-      allow_any_instance_of(Form::Question).to receive(:answer_option_hint).with("E08000003").and_return("hint")
+      allow_any_instance_of(Form::Question).to receive(:answer_option_hint).with("Manchester").and_return("hint")
       visit("/logs/#{case_log.id}/accessible-select")
     end
 
