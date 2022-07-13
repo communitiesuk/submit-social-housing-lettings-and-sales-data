@@ -49,7 +49,7 @@ RSpec.describe Scheme, type: :model do
         before do
           location_2.update!(postcode: location_2.postcode.gsub(scheme_1.id.to_s, "0"))
         end
-        
+
         it "returns case insensitive matching records" do
           expect(described_class.search_by(scheme_1.id.to_s).count).to eq(1)
           expect(described_class.search_by(scheme_1.id.to_s).first.id).to eq(scheme_1.id)
