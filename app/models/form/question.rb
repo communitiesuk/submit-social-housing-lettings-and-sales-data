@@ -191,6 +191,25 @@ class Form::Question
     label
   end
 
+  def answer_option_synonyms(answer_id)
+    if id == "scheme_id"
+      Scheme.find(answer_id).locations.map(&:postcode).join(",")
+    end
+  end
+
+  def answer_option_append(answer_id)
+    if id == "scheme_id"
+      "(" + Scheme.find(answer_id).locations.count.to_s + " locations)"
+    end
+  end
+
+  def answer_option_hint(answer_id)
+    if id == "scheme_id"
+      scheme = Scheme.find(answer_id)
+      [scheme.primary_client_group, scheme.secondary_client_group].filter { |x| x.present? }.join(", ")
+    end
+  end
+
 private
 
   def selected_answer_option_is_derived?(case_log)
