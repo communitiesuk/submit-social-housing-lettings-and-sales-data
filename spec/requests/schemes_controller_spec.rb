@@ -419,10 +419,10 @@ RSpec.describe SchemesController, type: :request do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
-          expect(page).to have_content("Select the scheme’s type")
-          expect(page).to have_content("Select if this scheme is registered under the Care Standards Act 2000")
-          expect(page).to have_content("Select who provides the support services used by this scheme")
-          expect(page).to have_content("Enter the scheme’s name")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
         end
       end
     end
@@ -515,11 +515,11 @@ RSpec.describe SchemesController, type: :request do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content("Create a new supported housing scheme")
-          expect(page).to have_content("Select the scheme’s type")
-          expect(page).to have_content("Select if this scheme is registered under the Care Standards Act 2000")
-          expect(page).to have_content("Select who provides the support services used by this scheme")
-          expect(page).to have_content("Enter the existing organisation’s name")
-          expect(page).to have_content("Enter the scheme’s name")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
       end
 
@@ -564,6 +564,57 @@ RSpec.describe SchemesController, type: :request do
       before do
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when params are missing" do
+        let(:params) do { scheme: {
+          service_name: "",
+          managing_organisation_id: "",
+          owning_organisation_id: "",
+          primary_client_group: "",
+          secondary_client_group: "",
+          scheme_type: "",
+          registered_under_care_act: "",
+          support_type: "",
+          intended_stay: "",
+          support_services_provider: "",
+          has_other_client_group: "",
+          page: "details" } }
+        end
+
+        it "renders primary client group after successful update" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.primary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.secondary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(organisation.id)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
       end
 
       context "when updating support services provider" do
@@ -802,6 +853,53 @@ RSpec.describe SchemesController, type: :request do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when params are missing" do
+        let(:params) do { scheme: {
+          service_name: "",
+          managing_organisation_id: "",
+          owning_organisation_id: "",
+          primary_client_group: "",
+          secondary_client_group: "",
+          scheme_type: "",
+          registered_under_care_act: "",
+          support_type: "",
+          intended_stay: "",
+          support_services_provider: "",
+          has_other_client_group: "",
+          page: "details" } }
+        end
+
+        it "renders primary client group after successful update" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.primary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.secondary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
       end
 
       context "when updating primary client group" do
