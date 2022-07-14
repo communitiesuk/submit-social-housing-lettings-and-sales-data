@@ -65,13 +65,6 @@ class SchemesController < ApplicationController
   end
 
   def primary_client_group
-    if request.referer&.include?("new") || request.referer&.include?("details")
-      @back_button_path = scheme_details_path(@scheme)
-    elsif request.referer&.include?("provider")
-      @back_button_path = scheme_support_services_provider_path(@scheme)
-    elsif request.query_parameters["check_answers"]
-      @back_button_path = scheme_check_asnwers_path(@scheme)
-    end
     render "schemes/primary_client_group"
   end
 

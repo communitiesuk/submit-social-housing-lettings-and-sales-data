@@ -1,9 +1,17 @@
 <% content_for :title, "What client group is this scheme intended for?" %>
 
+<% if request.referer&.include?("new") || request.referer&.include?("details") %>
+  <% back_button_path = scheme_details_path(@scheme) %>
+  <% elsif request.referer&.include?("provider") %>
+  <% back_button_path = scheme_support_services_provider_path(@scheme) %>
+  <% elsif request.query_parameters["check_answers"] %>
+  <% back_button_path = scheme_check_asnwers_path(@scheme) %>
+<% end %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: @back_button_path,
+    href: back_button_path,
   ) %>
 <% end %>
 
