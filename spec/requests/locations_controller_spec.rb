@@ -90,7 +90,8 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+      let(:startdate) { Time.utc(2022, 2, 2) }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate: } } }
 
       before do
         sign_in user
@@ -111,6 +112,7 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.wheelchair_adaptation).to eq("No")
+        expect(Location.last.startdate).to eq(startdate)
       end
 
       context "when postcode is submitted with lower case" do
@@ -389,8 +391,9 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-      let!(:location)  { FactoryBot.create(:location, scheme:) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+      let(:startdate) { Time.utc(2021, 1, 2) }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, page: "edit" } } }
 
       before do
         sign_in user
@@ -410,6 +413,7 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.wheelchair_adaptation).to eq("No")
+        expect(Location.last.startdate).to eq(startdate)
       end
 
       context "when updating from edit-name page" do

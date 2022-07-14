@@ -44,6 +44,10 @@
                                            hint: { text: "This includes stairlifts, ramps, level-access showers or grab rails" },
                                            legend: { text: "Are the majority of units in this location built or adapted to wheelchair-user standards?", size: "m" } %>
 
+      <%= f.govuk_date_field :startdate,
+                              legend: { text: "When did the first property in this location become available?", size: "m" },
+                              width: 20 %>
+                              
       <%= govuk_section_break(visible: true, size: "m") %>
 
       <% another_location_selection = %w[Yes no].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
