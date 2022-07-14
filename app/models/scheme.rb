@@ -151,30 +151,4 @@ class Scheme < ApplicationRecord
       { name: "Intended length of stay", value: intended_stay },
     ]
   end
-
-  def care_acts_options_with_hints
-    hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
-
-    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
-  end
-
-  def support_level_options_with_hints
-    hints = {
-      "Low level": "Staff visiting once a week, fortnightly or less.",
-      "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.",
-      "High level": "Intensive level of staffing provided on a 24-hour basis.",
-    }
-    Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
-  end
-
-  def intended_length_of_stay_options_with_hints
-    hints = {
-      "Very short stay": "Up to one month.",
-      "Short stay": "Up to one year.",
-      "Medium stay": "More than one year but with an expectation to move on.",
-      "Permanent": "Provides a home for life with no requirement for the tenant to move.",
-
-    }
-    Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
-  end
 end

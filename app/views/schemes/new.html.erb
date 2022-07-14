@@ -44,8 +44,12 @@
         :name,
         legend: { text: "What is this type of scheme?", size: "m" } %>
 
+      <% care_acts_options_hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." } %>
+
+      <% care_acts_options_with_hints = Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: care_acts_options_hints[key.to_sym]) } %>
+
       <%= f.govuk_collection_radio_buttons :registered_under_care_act,
-                                           @scheme.care_acts_options_with_hints,
+                                           care_acts_options_with_hints,
                                            :id,
                                            :name,
                                            :description,
