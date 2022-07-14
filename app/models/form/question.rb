@@ -136,7 +136,11 @@ class Form::Question
               labels = answer_options[value.to_s]
               labels["value"] if labels
             when "select"
-              answer_options[value.to_s]
+              if answer_options[value.to_s].respond_to?(:service_name)
+                answer_options[value.to_s].service_name
+              else
+                answer_options[value.to_s]
+              end
             else
               value.to_s
             end
@@ -189,6 +193,24 @@ class Form::Question
       end
     end
     label
+  end
+
+  def answer_option_synonyms(resource)
+    return unless resource.respond_to?(:synonyms)
+
+    resource.synonyms
+  end
+
+  def answer_option_append(resource)
+    return unless resource.respond_to?(:appended_text)
+
+    resource.appended_text
+  end
+
+  def answer_option_hint(resource)
+    return unless resource.respond_to?(:hint)
+
+    resource.hint
   end
 
 private

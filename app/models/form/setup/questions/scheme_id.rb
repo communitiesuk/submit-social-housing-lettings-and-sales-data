@@ -13,8 +13,8 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     answer_opts = {}
     return answer_opts unless ActiveRecord::Base.connected?
 
-    Scheme.select(:id, :service_name).each_with_object(answer_opts) do |scheme, hsh|
-      hsh[scheme.id.to_s] = scheme.service_name
+    Scheme.select(:id, :service_name, :primary_client_group, :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
+      hsh[scheme.id.to_s] = scheme
       hsh
     end
   end
