@@ -45,6 +45,8 @@ en:
           attributes:
             owning_organisation_id:
               invalid: "Enter the existing organisation’s name"
+            managing_organisation_id:
+              invalid: "Enter the existing organisation’s name"
             service_name:
               invalid: "Enter the scheme’s name"
             scheme_type:
