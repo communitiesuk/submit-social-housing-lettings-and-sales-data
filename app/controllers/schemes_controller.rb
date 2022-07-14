@@ -111,6 +111,8 @@ private
   def current_template(page)
     if page.include?("primary")
       "schemes/primary_client_group"
+    elsif page.include?("support-services-provider")
+      "schemes/support_services_provider"
     elsif page.include?("confirm")
       "schemes/confirm_secondary"
     elsif page.include?("secondary-client")
