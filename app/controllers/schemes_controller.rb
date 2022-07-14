@@ -30,7 +30,7 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
-      if scheme_params[:support_services_provider] == "The same organisation that owns the housing stock"
+      if scheme_params[:support_services_provider].zero?
         redirect_to scheme_primary_client_group_path(@scheme)
       else
         redirect_to scheme_support_services_provider_path(@scheme)
@@ -139,7 +139,7 @@ private
     when "support"
       new_location_path
     when "details"
-      if @scheme.support_services_provider.eql? "The same organisation that owns the housing stock"
+      if @scheme.support_services_provider.eql? "0"
         scheme_primary_client_group_path(@scheme)
       else
         scheme_support_services_provider_path(@scheme)
@@ -164,11 +164,12 @@ private
                                                      :support_services_provider,
                                                      :intended_stay)
 
-    same_org_providing_support = required_params[:support_services_provider] == "The same organisation that owns the housing stock"
+    same_org_providing_support = required_params[:support_services_provider] == "0"
 
     full_params = same_org_providing_support && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
+    full_params[:support_services_provider] = full_params[:support_services_provider].to_i if full_params[:support_services_provider]
     if current_user.data_coordinator?
       full_params[:owning_organisation_id] = current_user.organisation_id
     end
