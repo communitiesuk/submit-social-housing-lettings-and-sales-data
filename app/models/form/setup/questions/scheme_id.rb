@@ -22,7 +22,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
   def displayed_answer_options(case_log)
     return {} unless case_log.created_by
 
-    user_org_scheme_ids = Scheme.select(:id).where(owning_organisation_id: case_log.created_by.organisation_id).joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL", Date.today)).map(&:id)
+    user_org_scheme_ids = Scheme.select(:id).where(owning_organisation_id: case_log.created_by.organisation_id).joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL", Time.zone.today)).map(&:id)
     answer_options.select do |k, _v|
       user_org_scheme_ids.include?(k.to_i)
     end

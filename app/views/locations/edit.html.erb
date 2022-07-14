@@ -21,7 +21,7 @@
 
       <%= f.govuk_text_field :name,
                              label: { text: I18n.t("questions.location.name"), size: "m" },
-                             hint: { text: I18n.t("hints.location.name")} %>
+                             hint: { text: I18n.t("hints.location.name") } %>
 
       <%= f.govuk_number_field :units,
                                label: { text: I18n.t("questions.location.units"), size: "m" },
@@ -45,7 +45,7 @@
                                            legend: { text: I18n.t("questions.location.wheelchair_adaptation"), size: "m" } %>
 
       <%= f.govuk_date_field :startdate,
-                              legend: { text:I18n.t("questions.location.startdate"), size: "m" },
+                              legend: { text: I18n.t("questions.location.startdate"), size: "m" },
                               width: 20 %>
 
       <%= govuk_section_break(visible: true, size: "m") %>
