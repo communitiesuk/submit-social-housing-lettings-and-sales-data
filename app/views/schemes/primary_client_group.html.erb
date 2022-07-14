@@ -5,7 +5,7 @@
   <% elsif request.referer&.include?("provider") %>
   <% back_button_path = scheme_support_services_provider_path(@scheme) %>
   <% elsif request.query_parameters["check_answers"] %>
-  <% back_button_path = scheme_check_asnwers_path(@scheme) %>
+  <% back_button_path = scheme_check_answers_path(@scheme) %>
 <% end %>
 
 <% content_for :before_content do %>

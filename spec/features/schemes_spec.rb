@@ -479,19 +479,19 @@ RSpec.describe "Schemes scheme Features" do
 
                     context "when changing answers" do
                       it "displays change links" do
-                        assert_selector "a", text: "Change", count: 3
+                        assert_selector "a", text: "Change", count: 13
                       end
 
                       context "when changing details" do
                         before do
-                          click_link("Change", href: "/schemes/#{scheme.id}/edit-name?check_answers=true", match: :first)
+                          click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
                         end
 
                         it "allows changing details questions" do
-                          expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name?check_answers=true")
+                          expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
 
                           fill_in "Scheme name", with: "Example"
-                          click_button "Save changes"
+                          click_button "Save and continue"
 
                           expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
                           expect(page).to have_content "Example"
@@ -776,19 +776,19 @@ RSpec.describe "Schemes scheme Features" do
 
                       context "when changing answers" do
                         it "displays change links" do
-                          assert_selector "a", text: "Change", count: 3
+                          assert_selector "a", text: "Change", count: 13
                         end
 
                         context "when changing details" do
                           before do
-                            click_link("Change", href: "/schemes/#{scheme.id}/edit-name?check_answers=true", match: :first)
+                            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
                           end
 
                           it "allows changing details questions" do
-                            expect(page).to have_current_path("/schemes/#{scheme.id}/edit-name?check_answers=true")
+                            expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
 
                             fill_in "Scheme name", with: "Example"
-                            click_button "Save changes"
+                            click_button "Save and continue"
 
                             expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
                             expect(page).to have_content "Example"
