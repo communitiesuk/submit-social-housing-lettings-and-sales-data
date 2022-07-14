@@ -16,17 +16,17 @@
 
       <%= f.govuk_text_field :postcode,
                              label: { size: "m" },
-                             hint: { text: "For example, SW1P 4DF." },
+                             hint: { text: I18n.t("hints.location.postcode") },
                              width: 5 %>
 
       <%= f.govuk_text_field :name,
-                             label: { text: "Location name (optional)", size: "m" },
-                             hint: { text: "This is how you refer to this location within your organisation" } %>
+                             label: { text: I18n.t("questions.location.name"), size: "m" },
+                             hint: { text: I18n.t("hints.location.name")} %>
 
       <%= f.govuk_number_field :units,
-                               label: { text: "Total number of units at this location", size: "m" },
+                               label: { text: I18n.t("questions.location.units"), size: "m" },
                                width: 2,
-                               hint: { text: "A unit can be a bedroom in a shared house or flat, or a house with 4 bedrooms. Do not include bedrooms used for wardens, managers, volunteers or sleep-in staff.s" },
+                               hint: { text: I18n.t("hints.location.units") },
                                autofocus: true %>
 
       <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
@@ -34,20 +34,20 @@
                                            type_of_units_selection,
                                            :id,
                                            :name,
-                                           legend: { text: "What is this type of scheme?", size: "m" } %>
+                                           legend: { text: I18n.t("questions.location.type_of_unit"), size: "m" } %>
 
       <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
                                            wheelchair_user_selection,
                                            :id,
                                            :name,
-                                           hint: { text: "This includes stairlifts, ramps, level-access showers or grab rails" },
-                                           legend: { text: "Are the majority of units in this location built or adapted to wheelchair-user standards?", size: "m" } %>
+                                           hint: { text: I18n.t("hints.location.wheelchair_adaptation") },
+                                           legend: { text: I18n.t("questions.location.wheelchair_adaptation"), size: "m" } %>
 
       <%= f.govuk_date_field :startdate,
-                              legend: { text: "When did the first property in this location become available?", size: "m" },
+                              legend: { text:I18n.t("questions.location.startdate"), size: "m" },
                               width: 20 %>
-                              
+
       <%= govuk_section_break(visible: true, size: "m") %>
 
       <% another_location_selection = %w[Yes no].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
@@ -56,7 +56,7 @@
                                            :id,
                                            :name,
                                            inline: true,
-                                           legend: { text: "Do you want to add another location?", size: "m" } %>
+                                           legend: { text: I18n.t("questions.location.add_another_location"), size: "m" } %>
 
       <%= f.hidden_field :page, value: "edit" %>
 
