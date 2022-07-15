@@ -66,18 +66,18 @@
       <% end %>
 
       <% support_services_provider_selection = Scheme.support_services_providers.map do |key, value| %>
-        <% if value.zero? %>
-          <% selection_value = current_user.support? ? "The same organisation that owns the housing stock" : "Your organisation" %>
-          <% OpenStruct.new(id: value, name: selection_value)  %>
-        <% else %>
-            <% OpenStruct.new(id: value, name: key.to_s.humanize)  %>
-        <% end %>
+          <% OpenStruct.new(id: value, name: key.to_s.humanize)  %>
       <% end %>
 
       <%= f.govuk_collection_radio_buttons :support_services_provider,
                                            support_services_provider_selection,
                                            :id,
-                                           :name,
+                                           ->(option) do 
+                                              if option.id.zero? && !current_user.support?
+                                                "Your organisation"
+                                              else 
+                                                option.name
+                                              end
                                            legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.govuk_submit "Save and continue" %>
