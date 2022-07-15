@@ -191,9 +191,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
     t.integer "joint"
     t.bigint "created_by_id"
     t.integer "illness_type_0"
+    t.integer "retirement_value_check"
     t.integer "tshortfall_known"
     t.integer "sheltered"
-    t.integer "retirement_value_check"
     t.integer "pregnancy_value_check"
     t.integer "hhtype"
     t.integer "new_old"
@@ -240,6 +240,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
     t.string "location_code"
     t.string "postcode"
     t.string "type_of_building"
+    t.integer "wheelchair_adaptation"
     t.bigint "scheme_id", null: false
     t.string "name"
     t.datetime "created_at", null: false
@@ -248,7 +249,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
     t.integer "type_of_unit"
     t.string "old_id"
     t.integer "old_visible_id"
-    t.integer "wheelchair_adaptation"
     t.string "mobility_type"
     t.datetime "startdate", precision: nil
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true

@@ -1729,7 +1729,7 @@ RSpec.describe CaseLog do
 
         it "correctly infers and saves postcode" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT postcode_full from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["postcode_full"]).to eq(nil)
+          expect(record_from_db["postcode_full"]).to be_nil
           expect(supported_housing_case_log.postcode_full).to eq("M11AE")
         end
 
