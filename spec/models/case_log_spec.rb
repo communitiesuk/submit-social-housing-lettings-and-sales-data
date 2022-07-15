@@ -1702,9 +1702,9 @@ RSpec.describe CaseLog do
 
       context "and not renewal" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, county: "E07000041", type_of_unit: 1, type_of_building: "Purpose built") }
+        let(:location) { FactoryBot.create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, type_of_building: "Purpose built") }
 
-        let!(:supported_housing_case_log) do
+        let(:supported_housing_case_log) do
           described_class.create!({
             managing_organisation: owning_organisation,
             owning_organisation:,
@@ -1716,14 +1716,21 @@ RSpec.describe CaseLog do
           })
         end
 
+        before do
+          stub_request(:get, /api.postcodes.io/)
+            .to_return(status: 200, body: "{\"status\":200,\"result\":{\"admin_district\":\"Manchester\",\"codes\":{\"admin_district\": \"E08000003\"}}}", headers: {})
+        end
+
         it "correctly infers and saves la" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT la from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["la"]).to eq(location.county)
+          expect(record_from_db["la"]).to be_nil
+          expect(supported_housing_case_log.la).to eq("E08000003")
         end
 
         it "correctly infers and saves postcode" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT postcode_full from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["postcode_full"]).to eq(location.postcode)
+          expect(record_from_db["postcode_full"]).to be_nil
+          expect(supported_housing_case_log.postcode_full).to eq("M11AE")
         end
 
         it "unittype_sh method returns the type_of_unit of the location" do

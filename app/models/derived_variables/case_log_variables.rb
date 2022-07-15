@@ -73,10 +73,8 @@ module DerivedVariables::CaseLogVariables
         self.location = scheme.locations.first
       end
       if location
-        self.la = location.county
-        self.postcode_full = location.postcode
-        wheelchair_adaptation_map = { 1 => 1, 0 => 2 }
-        self.wchair = wheelchair_adaptation_map[location.wheelchair_adaptation.to_i]
+        # TODO: Remove and replace with mobility type
+        self.wchair = location.wheelchair_adaptation_before_type_cast
       end
       if is_renewal?
         self.voiddate = startdate

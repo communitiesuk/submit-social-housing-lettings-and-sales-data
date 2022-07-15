@@ -1,0 +1,524 @@
+<Group xmlns="http://data.gov.uk/core/logs/2021-CORE-SR-SH" xmlns:app="http://www.w3.org/2007/app" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:meta="http://data.gov.uk/core/metadata" xmlns:svc="http://www.w3.org/2007/app" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xfimpl="http://www.w3.org/2002/xforms/implementation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xxf="http://orbeon.org/oxf/xml/xforms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <meta:metadata xmlns:es="http://www.ecmascript.org/" xmlns:xqx="http://www.w3.org/2005/XQueryX" xmlns:XSLT="http://www.w3.org/1999/XSL/Transform/compile">
+    <meta:form-name>2021-CORE-SR-SH</meta:form-name>
+    <meta:document-id>0b4a68df-30cc-474a-93c0-a56ce8fdad3b</meta:document-id>
+    <meta:owner-user-id>c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa</meta:owner-user-id>
+    <meta:owner-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:owner-institution-id>
+    <meta:managing-institution-id>7c5bd5fb549c09z2c55d9cb90d7ba84927e64618</meta:managing-institution-id>
+    <meta:created-date>2022-01-05T12:50:20.39153Z</meta:created-date>
+    <meta:modified-date>2022-01-05T12:50:20.39153Z</meta:modified-date>
+    <meta:status>submitted-valid</meta:status>
+    <meta:reporting-year>2021</meta:reporting-year>
+    <meta:upload-method>Manual Entry</meta:upload-method>
+    <meta:schema assert-valid="true"/>
+    <meta:rules assert-valid="true"/>
+  </meta:metadata>
+  <Group>
+    <Qdp>Yes</Qdp>
+    <KeyDate>2021-11-05</KeyDate>
+    <FORM>123456</FORM>
+    <Landlord source-value="2">2 Local Authority</Landlord>
+    <Group>
+      <_1cmangroupcode>123</_1cmangroupcode>
+      <_1cschemecode>10</_1cschemecode>
+      <schPC/>
+      <Q1e>3 No</Q1e>
+    </Group>
+  </Group>
+  <Group>
+    <_2a>2 No</_2a>
+    <Q2b>1 Secure (inc flexible)</Q2b>
+    <Q2ba/>
+    <_2bTenCode>14044912001</_2bTenCode>
+    <_2cYears>2</_2cYears>
+  </Group>
+  <Group>
+    <P1Age override-field="">72</P1Age>
+    <P1AR/>
+    <P1Sex override-field="">Female</P1Sex>
+    <P1Eco>5) Retired</P1Eco>
+    <P1Eth>1 White: English/Scottish/Welsh/Northern Irish/British</P1Eth>
+    <P1Nat>1 UK national resident in UK</P1Nat>
+    <P2Age override-field="">74</P2Age>
+    <P2AR/>
+    <P2Sex override-field="">Male</P2Sex>
+    <P2Rel>Partner</P2Rel>
+    <P2Eco>5) Retired</P2Eco>
+    <P3Age override-field=""/>
+    <P3AR/>
+    <P3Sex override-field=""/>
+    <P3Rel/>
+    <P3Eco/>
+    <P4Age override-field=""/>
+    <P4AR/>
+    <P4Sex override-field=""/>
+    <P4Rel/>
+    <P4Eco/>
+    <P5Age override-field=""/>
+    <P5AR/>
+    <P5Sex override-field=""/>
+    <P5Rel/>
+    <P5Eco/>
+    <P6Age override-field=""/>
+    <P6AR/>
+    <P6Sex override-field=""/>
+    <P6Rel/>
+    <P6Eco/>
+    <P7Age override-field=""/>
+    <P7AR/>
+    <P7Sex override-field=""/>
+    <P7Rel/>
+    <P7Eco/>
+    <P8Age override-field=""/>
+    <P8AR/>
+    <P8Sex override-field=""/>
+    <P8Rel/>
+    <P8Eco/>
+    <Group>
+      <ArmedF>2 No</ArmedF>
+      <LeftAF/>
+      <Inj/>
+      <Preg override-field="">2 No</Preg>
+    </Group>
+    <Group>
+      <Q6Ben>9 Not in receipt of either UC or HB</Q6Ben>
+    </Group>
+    <Group>
+      <Q7Ben>2 Some</Q7Ben>
+      <Q8Refused>Refused</Q8Refused>
+      <Q8Money override-field=""/>
+      <Q8a/>
+    </Group>
+    <Group>
+      <Q9a>13 Property unsuitable because of ill health / disability</Q9a>
+      <Q9aa/>
+    </Group>
+    <Group>
+      <_9b override-field="">2 No</_9b>
+      <Q10-a/>
+      <Q10-b/>
+      <Q10-c/>
+      <Q10-f/>
+      <Q10-g>Yes</Q10-g>
+      <Q10-h/>
+      <Q10ia>1 Yes</Q10ia>
+      <Q10ib-1/>
+      <Q10ib-2/>
+      <Q10ib-3>Yes</Q10ib-3>
+      <Q10ib-4/>
+      <Q10ib-5/>
+      <Q10ib-6/>
+      <Q10ib-7/>
+      <Q10ib-8/>
+      <Q10ib-9/>
+      <Q10ib-10/>
+      <Q11 override-field="">26 Owner occupation (private)</Q11>
+      <Q12a>DLUHC</Q12a>
+      <Q12aONS>E08000035</Q12aONS>
+      <Q12b override-field="">S80 4DJ</Q12b>
+      <Q12bnot/>
+      <Q12c>5 5 years or more</Q12c>
+      <Q12d>9 3 years but under 4 years</Q12d>
+    </Group>
+    <Group>
+      <Q13>1 Not homeless</Q13>
+      <Q14a>2 No</Q14a>
+      <Q14b1/>
+      <Q14b2/>
+      <Q14b3/>
+      <Q14b4/>
+      <Q14b5/>
+    </Group>
+    <Group>
+      <Q15CBL>1 Yes</Q15CBL>
+      <Q15CHR>1 Yes</Q15CHR>
+      <Q15CAP>1 Yes</Q15CAP>
+    </Group>
+    <Group>
+      <Q16>2 Tenant applied direct (no referral or nomination)</Q16>
+    </Group>
+  </Group>
+  <Group>
+    <Q17>7 Weekly for 48 weeks</Q17>
+    <Q18ai override-field="true">125.00</Q18ai>
+    <Q18aii override-field=""/>
+    <Q18aiii override-field=""/>
+    <Q18aiv override-field="">7.00</Q18aiv>
+    <Q18av override-field="">132.00</Q18av>
+    <Q18b override-field=""/>
+    <Q18c/>
+    <Q18d/>
+    <Q18dyes override-field=""/>
+    <Q19void>2021-08-24</Q19void>
+    <Q19repair/>
+    <Q19supsch/>
+    <Q20 override-field="">0</Q20>
+    <Q21a>14044912</Q21a>
+  </Group>
+  <Group>
+    <Q25>1 Yes</Q25>
+    <Q27>15 First let of newbuild property</Q27>
+  </Group>
+  <Group>
+    <F1Age>0</F1Age>
+    <F2Age>0</F2Age>
+    <F3Age>0</F3Age>
+    <F4Age>0</F4Age>
+    <F5Age>0</F5Age>
+    <F6Age>0</F6Age>
+    <F7Age>0</F7Age>
+    <F8Age>0</F8Age>
+    <FAge>0</FAge>
+    <F1>1</F1>
+    <F2>0</F2>
+    <F3>0</F3>
+    <F4>0</F4>
+    <F5>0</F5>
+    <F6>0</F6>
+    <F7>0</F7>
+    <F8>0</F8>
+    <F>1</F>
+    <P1100>0</P1100>
+    <P2100>0</P2100>
+    <P3100>0</P3100>
+    <P4100>0</P4100>
+    <P5100>0</P5100>
+    <P6100>0</P6100>
+    <P7100>0</P7100>
+    <P8100>0</P8100>
+    <_100>0</_100>
+    <P170>1</P170>
+    <P270>1</P270>
+    <P370>0</P370>
+    <P470>0</P470>
+    <P570>0</P570>
+    <P670>0</P670>
+    <P770>0</P770>
+    <P870>0</P870>
+    <_70>1</_70>
+    <P1PT>0</P1PT>
+    <P2PT>0</P2PT>
+    <P3PT>0</P3PT>
+    <P4PT>0</P4PT>
+    <P5PT>0</P5PT>
+    <P6PT>0</P6PT>
+    <P7PT>0</P7PT>
+    <P8PT>0</P8PT>
+    <PT>0</PT>
+    <P1FT>0</P1FT>
+    <P2FT>0</P2FT>
+    <P3FT>0</P3FT>
+    <P4FT>0</P4FT>
+    <P5FT>0</P5FT>
+    <P6FT>0</P6FT>
+    <P7FT>0</P7FT>
+    <P8FT>0</P8FT>
+    <FT>0</FT>
+    <P1Stud>0</P1Stud>
+    <P2Stud>0</P2Stud>
+    <P3Stud>0</P3Stud>
+    <P4Stud>0</P4Stud>
+    <P5Stud>0</P5Stud>
+    <P6Stud>0</P6Stud>
+    <P7Stud>0</P7Stud>
+    <P8Stud>0</P8Stud>
+    <Stud>0</Stud>
+    <P2Child>0</P2Child>
+    <P3Child>0</P3Child>
+    <P4Child>0</P4Child>
+    <P5Child>0</P5Child>
+    <P6Child>0</P6Child>
+    <P7Child>0</P7Child>
+    <P8Child>0</P8Child>
+    <Child>0</Child>
+    <P2Partner>1</P2Partner>
+    <P3Partner>0</P3Partner>
+    <P4Partner>0</P4Partner>
+    <P5Partner>0</P5Partner>
+    <P6Partner>0</P6Partner>
+    <P7Partner>0</P7Partner>
+    <P8Partner>0</P8Partner>
+    <Partner>1</Partner>
+    <Q1cV1>1</Q1cV1>
+    <Q1cV2>1</Q1cV2>
+    <Q1cVT>2</Q1cVT>
+    <P1Adult>1</P1Adult>
+    <P2Adult>1</P2Adult>
+    <P3Adult>0</P3Adult>
+    <P4Adult>0</P4Adult>
+    <P5Adult>0</P5Adult>
+    <P6Adult>0</P6Adult>
+    <P7Adult>0</P7Adult>
+    <P8Adult>0</P8Adult>
+    <PAdultT>2</PAdultT>
+    <P2PAge>74</P2PAge>
+    <P3PAge>0</P3PAge>
+    <P4PAge>0</P4PAge>
+    <P5PAge>0</P5PAge>
+    <P6PAge>0</P6PAge>
+    <P7PAge>0</P7PAge>
+    <P8PAge>0</P8PAge>
+    <PAGE>74</PAGE>
+    <P2ChildAge>0</P2ChildAge>
+    <P3ChildAge>0</P3ChildAge>
+    <P4ChildAge>0</P4ChildAge>
+    <P5ChildAge>0</P5ChildAge>
+    <P6ChildAge>0</P6ChildAge>
+    <P7ChildAge>0</P7ChildAge>
+    <P8ChildAge>0</P8ChildAge>
+    <ChildAgeMin>0</ChildAgeMin>
+    <AgeDiff1>72</AgeDiff1>
+    <AgeDiff2>0</AgeDiff2>
+    <AgeDiff3>74</AgeDiff3>
+    <TODAY>2022-01-05Z</TODAY>
+    <FutureLimit>2022-01-20Z</FutureLimit>
+    <minmax1/>
+    <minmax2/>
+    <minmax3/>
+    <minmax4/>
+    <minmax5/>
+    <minmax6/>
+    <minmax7/>
+    <minmax8/>
+    <minmax9/>
+    <minmax0/>
+    <minmax10/>
+    <minmaxT/>
+    <Q10av>0</Q10av>
+    <Q10bv>0</Q10bv>
+    <Q10cv>0</Q10cv>
+    <Q10fv>0</Q10fv>
+    <Q10gv>20</Q10gv>
+    <Q10hv>0</Q10hv>
+    <Q10Validate>20</Q10Validate>
+    <Q2bv>A</Q2bv>
+    <P2Agev>1</P2Agev>
+    <P2Sexv>1</P2Sexv>
+    <P2Relv>1</P2Relv>
+    <P2Ecov>1</P2Ecov>
+    <P2valid>4</P2valid>
+    <P3Agev>0</P3Agev>
+    <P3Sexv>0</P3Sexv>
+    <P3Relv>0</P3Relv>
+    <P3Ecov>0</P3Ecov>
+    <P3valid>0</P3valid>
+    <P4Agev>0</P4Agev>
+    <P4Sexv>0</P4Sexv>
+    <P4Relv>0</P4Relv>
+    <P4Ecov>0</P4Ecov>
+    <P4valid>0</P4valid>
+    <P5Agev>0</P5Agev>
+    <P5Sexv>0</P5Sexv>
+    <P5Relv>0</P5Relv>
+    <P5Ecov>0</P5Ecov>
+    <P5valid>0</P5valid>
+    <P6Agev>0</P6Agev>
+    <P6Sexv>0</P6Sexv>
+    <P6Relv>0</P6Relv>
+    <P6Ecov>0</P6Ecov>
+    <P6valid>0</P6valid>
+    <P7Agev>0</P7Agev>
+    <P7Sexv>0</P7Sexv>
+    <P7Relv>0</P7Relv>
+    <P7Ecov>0</P7Ecov>
+    <P7valid>0</P7valid>
+    <P8Agev>0</P8Agev>
+    <P8Sexv>0</P8Sexv>
+    <P8Relv>0</P8Relv>
+    <P8Ecov>0</P8Ecov>
+    <P8valid>0</P8valid>
+    <Q14b1v>0</Q14b1v>
+    <Q14b2v>0</Q14b2v>
+    <Q14b3v>0</Q14b3v>
+    <Q14b4v>0</Q14b4v>
+    <Q14b5v>0</Q14b5v>
+    <Q14bv>0</Q14bv>
+    <P2Other>0</P2Other>
+    <P3Other>0</P3Other>
+    <P4Other>0</P4Other>
+    <P5Other>0</P5Other>
+    <P6Other>0</P6Other>
+    <P7Other>0</P7Other>
+    <P8Other>0</P8Other>
+    <Other>0</Other>
+    <P2ARefused>0</P2ARefused>
+    <P3ARefused>0</P3ARefused>
+    <P4ARefused>0</P4ARefused>
+    <P5ARefused>0</P5ARefused>
+    <P6ARefused>0</P6ARefused>
+    <P7ARefused>0</P7ARefused>
+    <P8ARefused>0</P8ARefused>
+    <TAREUSED>0</TAREUSED>
+    <P2RRefused>0</P2RRefused>
+    <P3RRefused>0</P3RRefused>
+    <P4RRefused>0</P4RRefused>
+    <P5RRefused>0</P5RRefused>
+    <P6RRefused>0</P6RRefused>
+    <P7RRefused>0</P7RRefused>
+    <P8RRefused>0</P8RRefused>
+    <TotRRefused>0</TotRRefused>
+    <TOTREFUSED>0</TOTREFUSED>
+  </Group>
+  <Group>
+    <ChildBen>0.00</ChildBen>
+    <TOTADULT>2</TOTADULT>
+    <NEW_OLD>1 New Tenant</NEW_OLD>
+    <WCHCHRG/>
+    <VACDAYS>73</VACDAYS>
+    <HHMEMB>2</HHMEMB>
+    <HHTYPEP1A>0</HHTYPEP1A>
+    <HHTYPEP2A>0</HHTYPEP2A>
+    <HHTYPEP3A>0</HHTYPEP3A>
+    <HHTYPEP4A>0</HHTYPEP4A>
+    <HHTYPEP5A>0</HHTYPEP5A>
+    <HHTYPEP6A>0</HHTYPEP6A>
+    <HHTYPEP7A>0</HHTYPEP7A>
+    <HHTYPEP8A>0</HHTYPEP8A>
+    <TADULT>0</TADULT>
+    <HHTYPEP1E>1</HHTYPEP1E>
+    <HHTYPEP2E>1</HHTYPEP2E>
+    <HHTYPEP3E>0</HHTYPEP3E>
+    <HHTYPEP4E>0</HHTYPEP4E>
+    <HHTYPEP5E>0</HHTYPEP5E>
+    <HHTYPEP6E>0</HHTYPEP6E>
+    <HHTYPEP7E>0</HHTYPEP7E>
+    <HHTYPEP8E>0</HHTYPEP8E>
+    <TELDER>2</TELDER>
+    <HHTYPEP1C>0</HHTYPEP1C>
+    <HHTYPEP2C>0</HHTYPEP2C>
+    <HHTYPEP3C>0</HHTYPEP3C>
+    <HHTYPEP4C>0</HHTYPEP4C>
+    <HHTYPEP5C>0</HHTYPEP5C>
+    <HHTYPEP6C>0</HHTYPEP6C>
+    <HHTYPEP7C>0</HHTYPEP7C>
+    <HHTYPEP8C>0</HHTYPEP8C>
+    <TCHILD>0</TCHILD>
+    <Q18aValid>1</Q18aValid>
+    <Q18bValid>0</Q18bValid>
+    <Q18cValid>0</Q18cValid>
+    <Q18Valid>1</Q18Valid>
+    <HHTYPE>2 = 2 Adults at least one is an Elder</HHTYPE>
+    <WEEKLYINC/>
+    <INCOME/>
+    <TYPEHB>15.00</TYPEHB>
+    <AFFRATE/>
+    <Weekinc/>
+    <LETTYPE>2 Local Authority</LETTYPE>
+    <PLOACODE/>
+    <OACODE/>
+    <GOVREG>E12000004</GOVREG>
+    <OWNINGORGID>1</OWNINGORGID>
+    <OWNINGORGNAME>DLUHC</OWNINGORGNAME>
+    <MANINGORGNAME>DLUHC</MANINGORGNAME>
+    <HCNUM>N/A</HCNUM>
+    <MANHCNUM>N/A</MANHCNUM>
+    <LAHA/>
+    <MANINGORGID>1</MANINGORGID>
+    <Q28same1>false</Q28same1>
+    <HBTYPE1/>
+    <HBTYPE2/>
+    <HBTYPE3/>
+    <HBTYPE4/>
+    <HBTYPE5/>
+    <HBTYPE6/>
+    <HBTYPE7/>
+    <HBTYPE8/>
+    <HBTYPE9/>
+    <HBTYPE10/>
+    <HBTYPE11/>
+    <HBTYPE12/>
+    <HBTYPE13/>
+    <HBTYPE14/>
+    <HBTYPE15>15</HBTYPE15>
+    <HBTYPE>15</HBTYPE>
+    <SCHEME>000001005048</SCHEME>
+    <MANTYPE>D</MANTYPE>
+    <UNITS>15</UNITS>
+    <UNITTYPE>6</UNITTYPE>
+    <SCHTYPE>7</SCHTYPE>
+    <REGHOME>1</REGHOME>
+    <SUPPORT>2</SUPPORT>
+    <MOBSTAND>A</MOBSTAND>
+    <INTSTAY>P</INTSTAY>
+    <CLIGRP1>M</CLIGRP1>
+    <CLIGRP2/>
+    <Q28Auth>DLUHC</Q28Auth>
+    <Q28ONS>E08000035</Q28ONS>
+    <Q28pc override-field="">S80 4QE</Q28pc>
+    <Q28same/>
+    <P1R>0</P1R>
+    <P2R>0</P2R>
+    <P3R>0</P3R>
+    <P4R>0</P4R>
+    <P5R>0</P5R>
+    <P6R>0</P6R>
+    <P7R>0</P7R>
+    <P8R>0</P8R>
+    <REFUSEDTOT>0</REFUSEDTOT>
+    <REFUSED/>
+    <WTSHORTFALL/>
+    <WTSHORTFALLHB/>
+    <WTSHORTFALLHE/>
+    <WRENT>115.38</WRENT>
+    <WTCHARGE>121.85</WTCHARGE>
+    <WSCHARGE/>
+    <WPSCHRGE/>
+    <WSUPCHRG>6.46</WSUPCHRG>
+    <WTSHORTFALL1/>
+    <WRENT1>115.38</WRENT1>
+    <WTCHARGE1>121.85</WTCHARGE1>
+    <WSCHARGE1/>
+    <WPSCHRGE1/>
+    <WSUPCHRG1>6.46</WSUPCHRG1>
+  </Group>
+  <Group>
+    <BSa>1</BSa>
+    <BSb>0</BSb>
+    <BSc>0</BSc>
+    <BScm>0</BScm>
+    <BScf>0</BScf>
+    <BSd>0</BSd>
+    <BSdm>0</BSdm>
+    <BSdf>0</BSdf>
+    <BSe>0</BSe>
+    <BSem>0</BSem>
+    <BSef>0</BSef>
+    <BSf>0</BSf>
+    <BSfm>0</BSfm>
+    <BSff>0</BSff>
+    <BSfmx>0</BSfmx>
+    <BSffx>0</BSffx>
+    <BEDROOMSTAND>1</BEDROOMSTAND>
+    <BEDMINUSBEDS/>
+    <WRENTreduced>115.38</WRENTreduced>
+    <NonDepDeduct>0</NonDepDeduct>
+    <RENTHB/>
+    <ChildAllowan>0</ChildAllowan>
+    <PrsnlAllowan>117.4</PrsnlAllowan>
+    <HousBenDisAl>10</HousBenDisAl>
+    <PAIDHB/>
+    <HCNETAF/>
+    <ChldAlloCat1>0</ChldAlloCat1>
+    <ChldAlloCat2>0</ChldAlloCat2>
+    <P2NnDepDedct>0</P2NnDepDedct>
+    <P3NnDepDedct>0</P3NnDepDedct>
+    <P4NnDepDedct>0</P4NnDepDedct>
+    <P5NnDepDedct>0</P5NnDepDedct>
+    <P6NnDepDedct>0</P6NnDepDedct>
+    <P7NnDepDedct>0</P7NnDepDedct>
+    <P8NnDepDedct>0</P8NnDepDedct>
+    <DAY>5</DAY>
+    <MONTH>11</MONTH>
+    <YEAR>2021</YEAR>
+    <VDAY>24</VDAY>
+    <VMONTH>8</VMONTH>
+    <VYEAR>2021</VYEAR>
+    <MRCDAY/>
+    <MRCMONTH/>
+    <MRCYEAR/>
+    <PPOSTC1>LS16</PPOSTC1>
+    <PPOSTC2>6FT</PPOSTC2>
+    <POSTCODE>LS16</POSTCODE>
+    <POSTCOD2>6FT</POSTCOD2>
+  </Group>
+</Group>
