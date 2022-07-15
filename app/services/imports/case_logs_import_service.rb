@@ -627,15 +627,6 @@ module Imports
       end
     end
 
-    def clear_household_charges(attributes)
-      attributes["period"] = nil
-      attributes["brent"] = nil
-      attributes["scharge"] = nil
-      attributes["pscharge"] = nil
-      attributes["supcharg"] = nil
-      attributes["tcharge"] = nil
-    end
-
     def is_carehome(scheme)
       return nil unless scheme
 

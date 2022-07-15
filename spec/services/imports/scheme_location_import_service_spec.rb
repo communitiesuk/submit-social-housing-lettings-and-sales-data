@@ -138,6 +138,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.type_of_unit).to eq("Bungalow")
       expect(location.old_id).to eq(first_location_id)
       expect(location.old_visible_id).to eq(10)
+      expect(location.startdate).to eq("1900-01-01")
       expect(location.scheme).to eq(scheme)
     end
 

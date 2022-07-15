@@ -16,6 +16,9 @@ RSpec.describe Imports::CaseLogsImportService do
   end
 
   before do
+    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
+           .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
+
     allow(Organisation).to receive(:find_by).and_return(nil)
     allow(Organisation).to receive(:find_by).with(old_visible_id: organisation.old_visible_id.to_i).and_return(organisation)
 
@@ -34,9 +37,6 @@ RSpec.describe Imports::CaseLogsImportService do
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
     allow(FormHandler.instance).to receive(:get_form).with("2022_2023").and_return(real_2022_2023_form)
-
-    WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
-           .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})
   end
 
   context "when importing case logs" do
@@ -69,45 +69,45 @@ RSpec.describe Imports::CaseLogsImportService do
       expect(logger).not_to receive(:warn)
       expect(logger).not_to receive(:info)
       expect { case_log_service.create_logs(remote_folder) }
-        .to change(CaseLog, :count).by(3)
+        .to change(CaseLog, :count).by(4)
     end
 
     it "only updates existing case logs" do
       expect(logger).not_to receive(:error)
       expect(logger).not_to receive(:warn)
-      expect(logger).to receive(:info).with(/Updating case log/).exactly(3).times
+      expect(logger).to receive(:info).with(/Updating case log/).exactly(4).times
       expect { 2.times { case_log_service.create_logs(remote_folder) } }
-        .to change(CaseLog, :count).by(3)
+        .to change(CaseLog, :count).by(4)
     end
 
     context "when there are status discrepancies" do
-      let(:case_log_id4) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
-      let(:case_log_id5) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
-      let(:case_log_file) { open_file(fixture_directory, case_log_id4) }
+      let(:case_log_id5) { "893ufj2s-lq77-42m4-rty6-ej09gh585uy1" }
+      let(:case_log_id6) { "5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd" }
+      let(:case_log_file) { open_file(fixture_directory, case_log_id5) }
       let(:case_log_xml) { Nokogiri::XML(case_log_file) }
 
       before do
         allow(storage_service).to receive(:get_file_io)
-          .with("#{remote_folder}/#{case_log_id4}.xml")
-          .and_return(open_file(fixture_directory, case_log_id4), open_file(fixture_directory, case_log_id4))
-        allow(storage_service).to receive(:get_file_io)
           .with("#{remote_folder}/#{case_log_id5}.xml")
           .and_return(open_file(fixture_directory, case_log_id5), open_file(fixture_directory, case_log_id5))
+        allow(storage_service).to receive(:get_file_io)
+          .with("#{remote_folder}/#{case_log_id6}.xml")
+          .and_return(open_file(fixture_directory, case_log_id6), open_file(fixture_directory, case_log_id6))
       end
 
       it "the logger logs a warning with the case log's old id/filename" do
         expect(logger).to receive(:warn).with(/is not completed/).once
-        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id4} is incomplete but status should be complete/).once
+        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id5} is incomplete but status should be complete/).once
 
         case_log_service.send(:create_log, case_log_xml)
       end
 
       it "on completion the ids of all logs with status discrepancies are logged in a warning" do
         allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{case_log_id4}.xml #{remote_folder}/#{case_log_id5}.xml])
-        allow(logger).to receive(:warn).with(/is not completed/)
-        allow(logger).to receive(:warn).with(/is incomplete but status should be complete/)
-        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/).once
+                                  .and_return(%W[#{remote_folder}/#{case_log_id5}.xml #{remote_folder}/#{case_log_id6}.xml])
+        expect(logger).to receive(:warn).with(/is not completed/).twice
+        expect(logger).to receive(:warn).with(/is incomplete but status should be complete/).twice
+        expect(logger).to receive(:warn).with(/The following case logs had status discrepancies: \[893ufj2s-lq77-42m4-rty6-ej09gh585uy1, 5ybz29dj-l33t-k1l0-hj86-n4k4ma77xkcd\]/)
 
         case_log_service.create_logs(remote_folder)
       end
@@ -220,11 +220,13 @@ RSpec.describe Imports::CaseLogsImportService do
       let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
       it "sets the scheme and location values" do
+        expect(logger).not_to receive(:warn)
         case_log_service.send(:create_log, case_log_xml)
         case_log = CaseLog.find_by(old_id: case_log_id)
 
         expect(case_log.scheme_id).not_to be_nil
         expect(case_log.location_id).not_to be_nil
+        expect(case_log.status).to eq("completed")
       end
     end
   end

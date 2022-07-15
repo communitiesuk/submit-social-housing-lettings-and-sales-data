@@ -73,7 +73,6 @@ module DerivedVariables::CaseLogVariables
         self.location = scheme.locations.first
       end
       if location
-        self.postcode_full = location.postcode
         # TODO: Remove and replace with mobility type
         self.wchair = location.wheelchair_adaptation_before_type_cast
       end
