@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_13_095713) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_14_080044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -251,6 +251,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_13_095713) do
     t.string "old_id"
     t.integer "old_visible_id"
     t.string "mobility_type"
+    t.datetime "startdate", precision: nil
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
