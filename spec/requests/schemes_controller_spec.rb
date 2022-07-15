@@ -341,7 +341,7 @@ RSpec.describe SchemesController, type: :request do
                     sensitive: "1",
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
-                    support_services_provider: "The same organisation that owns the housing stock" } }
+                    support_services_provider_before_type_cast: "0" } }
       end
 
       before do
@@ -378,7 +378,7 @@ RSpec.describe SchemesController, type: :request do
                       sensitive: "1",
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
-                      support_services_provider: "Another registered housing provider" } }
+                      support_services_provider_before_type_cast: "1" } }
         end
 
         it "creates a new scheme for user organisation with valid params and renders correct page" do
@@ -411,7 +411,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "",
                       scheme_type: "",
                       registered_under_care_act: "",
-                      support_services_provider: "" } }
+                      support_services_provider_before_type_cast: "" } }
         end
 
         it "renders the same page with error message" do
@@ -435,7 +435,7 @@ RSpec.describe SchemesController, type: :request do
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
                     owning_organisation_id: organisation.id,
-                    support_services_provider: "The same organisation that owns the housing stock" } }
+                    support_services_provider_before_type_cast: "0" } }
       end
 
       before do
@@ -474,7 +474,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       owning_organisation_id: organisation.id,
-                      support_services_provider: "Another registered housing provider" } }
+                      support_services_provider_before_type_cast: "1" } }
         end
 
         it "creates a new scheme for user organisation with valid params and renders correct page" do
@@ -506,7 +506,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "",
                       scheme_type: "",
                       registered_under_care_act: "",
-                      support_services_provider: "" } }
+                      support_services_provider_before_type_cast: "" } }
         end
 
         it "renders the same page with error message" do
@@ -787,7 +787,7 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
-                      support_services_provider: "The same organisation that owns the housing stock" } }
+                      support_services_provider_before_type_cast: "0" } }
         end
 
         it "renders confirm secondary group after successful update" do
