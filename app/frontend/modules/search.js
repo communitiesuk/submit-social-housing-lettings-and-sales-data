@@ -12,9 +12,13 @@ const clean = (text) =>
     .toLowerCase()
 
 const cleanseOption = (option) => {
+  const synonyms = (option.synonyms || []).map(clean)
+
   option.clean = {
     name: clean(option.name),
     nameWithoutStopWords: removeStopWords(option.name),
+    synonyms,
+    synonymsWithoutStopWords: synonyms.map(removeStopWords),
     boost: option.boost || 1
   }
 
@@ -41,19 +45,34 @@ const startsWith = (word, query) => word.search(startsWithRegExp(query)) === 0
 const wordsStartsWithQuery = (word, regExps) =>
   regExps.every((regExp) => word.search(regExp) >= 0)
 
-const calculateWeight = ({ name, nameWithoutStopWords }, query) => {
+const anyMatch = (words, query, evaluatorFunc) => words.some((word) => evaluatorFunc(word, query))
+const synonymsExactMatch = (synonyms, query) => anyMatch(synonyms, query, exactMatch)
+const synonymsStartsWith = (synonyms, query) => anyMatch(synonyms, query, startsWith)
+
+const wordInSynonymStartsWithQuery = (synonyms, startsWithQueryWordsRegexes) =>
+  anyMatch(synonyms, startsWithQueryWordsRegexes, wordsStartsWithQuery)
+
+const calculateWeight = ({ name, synonyms, nameWithoutStopWords, synonymsWithoutStopWords }, query) => {
   const queryWithoutStopWords = removeStopWords(query)
 
   if (exactMatch(name, query)) return 100
   if (exactMatch(nameWithoutStopWords, queryWithoutStopWords)) return 95
 
+  if (synonymsExactMatch(synonyms, query)) return 75
+  if (synonymsExactMatch(synonymsWithoutStopWords, queryWithoutStopWords)) return 70
+
   if (startsWith(name, query)) return 60
   if (startsWith(nameWithoutStopWords, queryWithoutStopWords)) return 55
+
+  if (synonymsStartsWith(synonyms, query)) return 50
+  if (synonymsStartsWith(synonyms, queryWithoutStopWords)) return 40
+
   const startsWithRegExps = queryWithoutStopWords
     .split(/\s+/)
     .map(startsWithRegExp)
 
   if (wordsStartsWithQuery(nameWithoutStopWords, startsWithRegExps)) return 25
+  if (wordInSynonymStartsWithQuery(synonymsWithoutStopWords, startsWithRegExps)) return 10
 
   return 0
 }
@@ -91,8 +110,8 @@ export const sort = (query, options) => {
 export const suggestion = (value, options) => {
   const option = options.find((o) => o.name === value)
   if (option) {
-    const html = `<span>${value}</span>`
-    return html
+    const html = option.append ? `<span>${value}</span> <span class="autocomplete__option__append">${option.append}</span>` : `<span>${value}</span>`
+    return option.hint ? `${html}<div class="autocomplete__option__hint">${option.hint}</div>` : html
   } else {
     return '<span>No results found</span>'
   }
@@ -101,6 +120,9 @@ export const suggestion = (value, options) => {
 export const enhanceOption = (option) => {
   return {
     name: option.label,
+    synonyms: (option.getAttribute('data-synonyms') ? option.getAttribute('data-synonyms').split('|') : []),
+    append: option.getAttribute('data-append'),
+    hint: option.getAttribute('data-hint'),
     boost: parseFloat(option.getAttribute('data-boost')) || 1
   }
 }

@@ -14,6 +14,7 @@ RSpec.describe "Accessible Automcomplete" do
       is_la_inferred: false,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      created_by: user,
     )
   end
 
@@ -55,6 +56,32 @@ RSpec.describe "Accessible Automcomplete" do
 
     it "has a disabled null option" do
       expect(page).to have_select("case-log-prevloc-field", disabled_options: ["Select an option"])
+    end
+  end
+
+  context "when searching schemes" do
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
+
+    before do
+      FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
+      FactoryBot.create(:location, scheme:, postcode: "SE6 1LB")
+      case_log.update!(needstype: 2)
+      visit("/logs/#{case_log.id}/scheme")
+    end
+
+    it "can match on synonyms", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find("#case-log-scheme-id-field").value).to eq(scheme.service_name)
+    end
+
+    it "displays appended text next to the options", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find(".autocomplete__option__append", visible: :hidden, text: /(2 locations)/)).to be_present
+    end
+
+    it "displays hint text under the options", js: true do
+      find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
+      expect(find(".autocomplete__option__hint", visible: :hidden, text: /Young people at risk, Young people leaving care/)).to be_present
     end
   end
 
