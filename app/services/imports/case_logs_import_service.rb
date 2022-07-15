@@ -18,7 +18,7 @@ module Imports
     FORM_NAME_INDEX = {
       start_year: 0,
       rent_type: 2,
-      needs_type: 3
+      needs_type: 3,
     }.freeze
 
     GN_SH = {
@@ -617,9 +617,9 @@ module Imports
 
     def set_partial_charges_to_zero(attributes)
       unless attributes["brent"].nil? &&
-        attributes["scharge"].nil? &&
-        attributes["pscharge"].nil? &&
-        attributes["supcharg"].nil?
+          attributes["scharge"].nil? &&
+          attributes["pscharge"].nil? &&
+          attributes["supcharg"].nil?
         attributes["brent"] ||= BigDecimal("0.0")
         attributes["scharge"] ||= BigDecimal("0.0")
         attributes["pscharge"] ||= BigDecimal("0.0")
