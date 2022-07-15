@@ -69,15 +69,16 @@
           <% OpenStruct.new(id: value, name: key.to_s.humanize)  %>
       <% end %>
 
-      <%= f.govuk_collection_radio_buttons :support_services_provider,
+      <%= f.govuk_collection_radio_buttons :support_services_provider_before_type_cast,
                                            support_services_provider_selection,
                                            :id,
-                                           ->(option) do 
+                                           ->(option) do
                                               if option.id.zero? && !current_user.support?
                                                 "Your organisation"
-                                              else 
+                                              else
                                                 option.name
                                               end
+                                           end,
                                            legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.govuk_submit "Save and continue" %>
