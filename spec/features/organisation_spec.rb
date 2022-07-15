@@ -236,7 +236,7 @@ RSpec.describe "User Features" do
           expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
           expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
           expect { CaseLog.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
-          expect { CaseLog.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)     
+          expect { CaseLog.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
