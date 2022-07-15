@@ -15,6 +15,12 @@ module Imports
 
   private
 
+    FORM_NAME_INDEX = {
+      start_year: 0,
+      rent_type: 2,
+      needs_type: 3
+    }.freeze
+
     GN_SH = {
       general_needs: 1,
       supported_housing: 2,
@@ -175,15 +181,20 @@ module Imports
       attributes["first_time_property_let_as_social_housing"] = first_time_let(attributes["rsnvac"])
       attributes["declaration"] = declaration(xml_doc)
 
-      # Set charges to 0 if others are partially populated
-      unless attributes["brent"].nil? &&
-          attributes["scharge"].nil? &&
-          attributes["pscharge"].nil? &&
-          attributes["supcharg"].nil?
-        attributes["brent"] ||= BigDecimal("0.0")
-        attributes["scharge"] ||= BigDecimal("0.0")
-        attributes["pscharge"] ||= BigDecimal("0.0")
-        attributes["supcharg"] ||= BigDecimal("0.0")
+      set_partial_charges_to_zero(attributes)
+
+      # Supported Housing fields
+      if attributes["needstype"] == GN_SH[:supported_housing]
+        old_visible_id = safe_string_as_integer(xml_doc, "_1cschemecode")
+        location = Location.find_by(old_visible_id:)
+        scheme = location.scheme
+        # Set the scheme via location, because the scheme old visible ID is not unique
+        attributes["location_id"] = location.id
+        attributes["scheme_id"] = scheme.id
+        attributes["sheltered"] = unsafe_string_as_integer(xml_doc, "Q1e")
+        attributes["chcharge"] = safe_string_as_decimal(xml_doc, "Q18b")
+        attributes["household_charge"] = household_charge(xml_doc)
+        attributes["is_carehome"] = is_carehome(scheme)
       end
 
       # Handles confidential schemes
@@ -306,7 +317,7 @@ module Imports
     end
 
     def needs_type(xml_doc)
-      gn_sh = get_form_name_component(xml_doc, -1)
+      gn_sh = get_form_name_component(xml_doc, FORM_NAME_INDEX[:needs_type])
       case gn_sh
       when "GN"
         GN_SH[:general_needs]
@@ -319,7 +330,7 @@ module Imports
 
     # This does not match renttype (CDS) which is derived by case log logic
     def rent_type(xml_doc, lar, irproduct)
-      sr_ar_ir = get_form_name_component(xml_doc, -2)
+      sr_ar_ir = get_form_name_component(xml_doc, FORM_NAME_INDEX[:rent_type])
 
       case sr_ar_ir
       when "SR"
@@ -588,6 +599,50 @@ module Imports
         if attributes["age#{index}"] < 16 && attributes["relat#{index}"] == "R"
           attributes["relat#{index}"] = "C"
         end
+      end
+    end
+
+    def household_charge(xml_doc)
+      value = string_or_nil(xml_doc, "Q18c")
+      start_year = Integer(get_form_name_component(xml_doc, FORM_NAME_INDEX[:start_year]))
+
+      if start_year <= 2021
+        # Yes means that there are no charges (2021 or earlier)
+        value && value.include?("Yes") ? 1 : 0
+      else
+        # Yes means that there are charges (2022 onwards)
+        value && value.include?("Yes") ? 0 : 1
+      end
+    end
+
+    def set_partial_charges_to_zero(attributes)
+      unless attributes["brent"].nil? &&
+        attributes["scharge"].nil? &&
+        attributes["pscharge"].nil? &&
+        attributes["supcharg"].nil?
+        attributes["brent"] ||= BigDecimal("0.0")
+        attributes["scharge"] ||= BigDecimal("0.0")
+        attributes["pscharge"] ||= BigDecimal("0.0")
+        attributes["supcharg"] ||= BigDecimal("0.0")
+      end
+    end
+
+    def clear_household_charges(attributes)
+      attributes["period"] = nil
+      attributes["brent"] = nil
+      attributes["scharge"] = nil
+      attributes["pscharge"] = nil
+      attributes["supcharg"] = nil
+      attributes["tcharge"] = nil
+    end
+
+    def is_carehome(scheme)
+      return nil unless scheme
+
+      if [2, 3, 4].include?(scheme.registered_under_care_act_before_type_cast)
+        1
+      else
+        0
       end
     end
   end

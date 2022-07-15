@@ -23,6 +23,14 @@ RSpec.describe Imports::CaseLogsImportService do
     FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
     FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
 
+    # Scheme and Location
+    scheme = FactoryBot.create(:scheme, old_visible_id: 123)
+    FactoryBot.create(:location,
+                      old_visible_id: 10,
+                      scheme_id: scheme.id,
+                      wheelchair_adaptation: 1,
+                      postcode: "LS166FT")
+
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
     allow(FormHandler.instance).to receive(:get_form).with("2022_2023").and_return(real_2022_2023_form)
@@ -36,11 +44,12 @@ RSpec.describe Imports::CaseLogsImportService do
     let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
     let(:case_log_id2) { "166fc004-392e-47a8-acb8-1c018734882b" }
     let(:case_log_id3) { "00d2343e-d5fa-4c89-8400-ec3854b0f2b4" }
+    let(:case_log_id4) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
     before do
       # Stub the S3 file listing and download
       allow(storage_service).to receive(:list_files)
-                                  .and_return(%W[#{remote_folder}/#{case_log_id}.xml #{remote_folder}/#{case_log_id2}.xml #{remote_folder}/#{case_log_id3}.xml])
+                                  .and_return(%W[#{remote_folder}/#{case_log_id}.xml #{remote_folder}/#{case_log_id2}.xml #{remote_folder}/#{case_log_id3}.xml #{remote_folder}/#{case_log_id4}.xml])
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{case_log_id}.xml")
                                   .and_return(open_file(fixture_directory, case_log_id), open_file(fixture_directory, case_log_id))
@@ -50,6 +59,9 @@ RSpec.describe Imports::CaseLogsImportService do
       allow(storage_service).to receive(:get_file_io)
                                   .with("#{remote_folder}/#{case_log_id3}.xml")
                                   .and_return(open_file(fixture_directory, case_log_id3), open_file(fixture_directory, case_log_id3))
+      allow(storage_service).to receive(:get_file_io)
+                                  .with("#{remote_folder}/#{case_log_id4}.xml")
+                                  .and_return(open_file(fixture_directory, case_log_id4), open_file(fixture_directory, case_log_id4))
     end
 
     it "successfully create all case logs" do
@@ -111,8 +123,8 @@ RSpec.describe Imports::CaseLogsImportService do
       before { case_log_xml.at_xpath("//xmlns:VYEAR").content = 2023 }
 
       it "does not import the voiddate" do
-        allow(logger).to receive(:warn).with(/is not completed/)
-        allow(logger).to receive(:warn).with(/Case log with old id:#{case_log_id} is incomplete but status should be complete/)
+        expect(logger).to receive(:warn).with(/is not completed/)
+        expect(logger).to receive(:warn).with(/Case log with old id:#{case_log_id} is incomplete but status should be complete/)
 
         case_log_service.send(:create_log, case_log_xml)
 
@@ -138,7 +150,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
         it "sets the economic status to child under 16" do
           # The update is done when calculating derived variables
-          allow(logger).to receive(:warn).with(/Differences found when saving log/)
+          expect(logger).to receive(:warn).with(/Differences found when saving log/)
           case_log_service.send(:create_log, case_log_xml)
 
           case_log = CaseLog.where(old_id: case_log_id).first
@@ -201,6 +213,18 @@ RSpec.describe Imports::CaseLogsImportService do
           expect(case_log).not_to be_nil
           expect(case_log.referral).to be_nil
         end
+      end
+    end
+
+    context "and this is a supported housing log" do
+      let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      it "sets the scheme and location values" do
+        case_log_service.send(:create_log, case_log_xml)
+        case_log = CaseLog.find_by(old_id: case_log_id)
+
+        expect(case_log.scheme_id).not_to be_nil
+        expect(case_log.location_id).not_to be_nil
       end
     end
   end
