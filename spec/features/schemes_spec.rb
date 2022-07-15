@@ -772,4 +772,51 @@ RSpec.describe "Schemes scheme Features" do
       end
     end
   end
+
+  context "when selecting a scheme" do
+    let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
+    let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
+    let!(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
+
+    before do
+      Timecop.freeze(Time.utc(2022, 6, 3))
+      location.update!(startdate: nil)
+      FactoryBot.create(:location, scheme: schemes[0], startdate: nil)
+      FactoryBot.create(:location, scheme: schemes[1], startdate: nil)
+      FactoryBot.create(:location, scheme: schemes[1], startdate: nil)
+      FactoryBot.create(:location, scheme: schemes[1], startdate: Time.utc(2023, 6, 3))
+      visit("/logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    it "does not display the schemes without a location" do
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+    end
+
+    it "does not display the schemes with a location with a startdate in the future" do
+      location.update!(startdate: Time.utc(2022, 7, 4))
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(2)
+    end
+
+    it "does display the schemes with a location with a startdate in the past" do
+      location.update!(startdate: Time.utc(2022, 5, 2))
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+    end
+
+    it "does display the schemes with a location with a startdate being today" do
+      location.update!(startdate: Time.utc(2022, 6, 3))
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+    end
+  end
 end

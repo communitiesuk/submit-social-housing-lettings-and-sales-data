@@ -60,5 +60,18 @@ RSpec.describe Imports::SchemeImportService do
           .not_to change(Scheme, :count)
       end
     end
+
+    context "and the scheme arrange type is direct" do
+      before do
+        scheme_xml.at_xpath("//mgmtgroup:arrangement_type").content = "D"
+        scheme_xml.at_xpath("//mgmtgroup:agent").content = ""
+      end
+
+      it "assigns both owning and managing organisation to the same one" do
+        scheme = scheme_service.create_scheme(scheme_xml)
+        expect(scheme.owning_organisation).to eq(owning_org)
+        expect(scheme.managing_organisation).to eq(owning_org)
+      end
+    end
   end
 end
