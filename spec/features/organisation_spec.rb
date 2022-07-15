@@ -222,4 +222,23 @@ RSpec.describe "User Features" do
       end
     end
   end
+
+  describe "delete cascade" do
+    context "when the organisation is deleted" do
+      let!(:organisation) { user.organisation }
+      let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+      let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:log_to_delete) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+
+      context "when organisation is deleted" do
+        it "child relationships ie logs, schemes and users are deleted too" do
+          organisation.destroy
+          expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { CaseLog.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { CaseLog.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)     
+        end
+      end
+    end
+  end
 end
