@@ -33,6 +33,7 @@ RSpec.describe "Accessible Automcomplete" do
 
   it "total displays despite error message", js: true do
     visit("/logs/#{case_log.id}/rent")
+    choose("case-log-period-1-field", allow_label_click: true)
     fill_in("case-log-brent-field", with: 500)
     fill_in("case-log-scharge-field", with: 50)
     fill_in("case-log-pscharge-field", with: 50)
@@ -40,6 +41,9 @@ RSpec.describe "Accessible Automcomplete" do
     expect(find("#case-log-tcharge-field").value).to eq("5600.00")
     click_button("Save and continue")
     expect(page).to have_selector(".govuk-error-summary")
+    fill_in("case-log-scharge-field", with: nil)
+    fill_in("case-log-pscharge-field", with: nil)
+    fill_in("case-log-supcharg-field-error", with: nil)
     fill_in("case-log-brent-field", with: 500)
     expect(find("#case-log-tcharge-field").value).to eq("500.00")
     fill_in("case-log-supcharg-field-error", with: 50)

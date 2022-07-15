@@ -50,9 +50,21 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
       FactoryBot.create(:scheme, owning_organisation: organisation_2)
     end
 
-    it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
-      expected_answer = { scheme.id.to_s => scheme.service_name }
-      expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
+    context "when a scheme with at least 1 location exists" do
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
+
+      it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
+        expected_answer = { scheme.id.to_s => scheme }
+        expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
+      end
+    end
+
+    context "when there are no schemes with locations" do
+      it "returns an empty hash" do
+        expect(question.displayed_answer_options(case_log)).to eq({})
+      end
     end
   end
 end

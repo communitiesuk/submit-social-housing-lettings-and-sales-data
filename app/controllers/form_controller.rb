@@ -7,11 +7,16 @@ class FormController < ApplicationController
     if @case_log
       @page = @case_log.form.get_page(params[:case_log][:page])
       responses_for_page = responses_for_page(@page)
-      if @case_log.update(responses_for_page)
-        session[:errors] = nil
+      mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
+
+      if mandatory_questions_with_no_response.empty? && @case_log.update(responses_for_page)
+        session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
         redirect_path = "case_log_#{@page.id}_path"
+        mandatory_questions_with_no_response.map do |question|
+          @case_log.errors.add question.id.to_sym, question.unanswered_error_message
+        end
         session[:errors] = @case_log.errors.to_json
         Rails.logger.info "User triggered validation(s) on: #{@case_log.errors.map(&:attribute).join(', ')}"
         redirect_to(send(redirect_path, @case_log))
@@ -48,6 +53,7 @@ class FormController < ApplicationController
               messages.each { |message| @case_log.errors.add field.to_sym, message }
             end
           end
+          session["fields"].each { |field, value| @case_log[field] = value } if session["fields"]
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
           if @page.routed_to?(@case_log, current_user)
@@ -119,5 +125,32 @@ private
     end
     redirect_path = @case_log.form.next_page_redirect_path(@page, @case_log, current_user)
     send(redirect_path, @case_log)
+  end
+
+  def mandatory_questions_with_no_response(responses_for_page)
+    session["fields"] = {}
+    calc_questions = @page.questions.map(&:result_field)
+    @page.questions.select do |question|
+      next if calc_questions.include?(question.id)
+
+      question_is_required?(question) && question_missing_response?(responses_for_page, question)
+    end
+  end
+
+  def question_is_required?(question)
+    CaseLog::OPTIONAL_FIELDS.exclude?(question.id) &&
+      @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id)
+  end
+
+  def question_missing_response?(responses_for_page, question)
+    if %w[checkbox validation_override].include?(question.type)
+      question.answer_options.keys.reject { |x| x.match(/divider/) }.all? do |option|
+        session["fields"][option] = @case_log[option] = params["case_log"][question.id].include?(option) ? 1 : 0
+        params["case_log"][question.id].exclude?(option)
+      end
+    else
+      session["fields"][question.id] = @case_log[question.id] = responses_for_page[question.id]
+      responses_for_page[question.id].nil? || responses_for_page[question.id].blank?
+    end
   end
 end

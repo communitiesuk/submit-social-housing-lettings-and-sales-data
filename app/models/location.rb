@@ -2,14 +2,26 @@ class Location < ApplicationRecord
   validate :validate_postcode
   belongs_to :scheme
 
+  before_save :infer_la!, if: :postcode_changed?
+
   attr_accessor :add_another_location
 
   WHEELCHAIR_ADAPTATIONS = {
     Yes: 1,
-    No: 0,
+    No: 2,
   }.freeze
 
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
+
+  MOBILITY_TYPE = {
+    "Property fitted with equipment and adaptations (if not designed to above standards)": "A",
+    "Property designed to accessible general standard": "M",
+    "None": "N",
+    "Property designed to wheelchair user standard": "W",
+    "Missing": "X",
+  }.freeze
+
+  enum mobility_type: MOBILITY_TYPE
 
   TYPE_OF_UNIT = {
     "Self-contained flat or bedsit": 1,
@@ -34,10 +46,16 @@ class Location < ApplicationRecord
 
 private
 
+  PIO = PostcodeService.new
+
   def validate_postcode
     if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)
       error_message = I18n.t("validations.postcode")
       errors.add :postcode, error_message
     end
+  end
+
+  def infer_la!
+    self.location_code = PIO.infer_la(postcode)
   end
 end

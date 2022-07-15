@@ -5,7 +5,6 @@
 <% end %>
 
 <div data-controller="govukfrontend"></div>
-
 <%= form_with model: @case_log, url: form_case_log_path(@case_log), method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
@@ -39,9 +38,17 @@
       <% end %>
 
       <%= f.hidden_field :page, value: @page.id %>
-      <% if !@page.id.include?("value_check") %>
-        <%= f.govuk_submit "Save and continue" %>
-      <% end %>
+
+      <div class="govuk-button-group">
+        <% if !@page.id.include?("value_check") && if request.query_parameters["referrer"] != "check_answers" %>
+          <%= f.govuk_submit "Save and continue" %>
+          <%= govuk_link_to "Skip for now", send(@case_log.form.next_page_redirect_path(@page, @case_log, current_user), @case_log) %>
+          <% else %>
+          <%= f.govuk_submit "Save changes" %>
+            <%= govuk_link_to "Cancel", "/logs/#{@case_log.id}/setup/check-answers" %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

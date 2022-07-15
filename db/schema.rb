@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_12_143943) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -245,13 +245,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_12_143943) do
     t.integer "wheelchair_adaptation"
     t.bigint "scheme_id", null: false
     t.string "name"
-    t.string "county"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "units"
     t.integer "type_of_unit"
     t.string "old_id"
     t.integer "old_visible_id"
+    t.string "mobility_type"
+    t.datetime "startdate", precision: nil
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end

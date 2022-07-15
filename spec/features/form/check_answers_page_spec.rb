@@ -136,7 +136,7 @@ RSpec.describe "Form Check Answers Page" do
         first("a", text: /Change/).click
         uncheck("case-log-accessibility-requirements-housingneeds-c-field")
         check("case-log-accessibility-requirements-housingneeds-b-field")
-        click_button("Save and continue")
+        click_button("Save changes")
         expect(page).to have_current_path("/logs/#{empty_case_log.id}/household-needs/check-answers")
       end
     end

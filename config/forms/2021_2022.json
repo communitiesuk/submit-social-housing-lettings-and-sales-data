@@ -1078,7 +1078,8 @@
                   "step": 1,
                   "width": 2
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "no_females_pregnant_household_lead_hhmemb_value_check": {
               "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
@@ -1120,11 +1121,7 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
-              ],
+              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1207,7 +1204,8 @@
                     "value": "Not known"
                   }
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "no_females_pregnant_household_lead_age_value_check": {
               "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
@@ -1249,11 +1247,7 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
-              ],
+              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1318,7 +1312,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "no_females_pregnant_household_lead_value_check": {
               "depends_on": [{ "no_females_in_a_pregnant_household?": true }],
@@ -1360,11 +1355,7 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
-              "depends_on": [
-                {
-                  "female_in_pregnant_household_in_soft_validation_range?": true
-                }
-              ],
+              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1435,7 +1426,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "lead_tenant_ethnic_background_arab": {
               "header": "",
@@ -1456,11 +1448,7 @@
                   }
                 }
               },
-              "depends_on": [
-                {
-                  "ethnic_group": 4
-                }
-              ]
+              "depends_on": [{ "ethnic_group": 4 }]
             },
             "lead_tenant_ethnic_background_asian": {
               "header": "",
@@ -1490,11 +1478,7 @@
                   }
                 }
               },
-              "depends_on": [
-                {
-                  "ethnic_group": 2
-                }
-              ]
+              "depends_on": [{ "ethnic_group": 2 }]
             },
             "lead_tenant_ethnic_background_black": {
               "header": "",
@@ -1518,11 +1502,7 @@
                   }
                 }
               },
-              "depends_on": [
-                {
-                  "ethnic_group": 3
-                }
-              ]
+              "depends_on": [{ "ethnic_group": 3 }]
             },
             "lead_tenant_ethnic_background_mixed": {
               "header": "",
@@ -1549,11 +1529,7 @@
                   }
                 }
               },
-              "depends_on": [
-                {
-                  "ethnic_group": 1
-                }
-              ]
+              "depends_on": [{ "ethnic_group": 1 }]
             },
             "lead_tenant_ethnic_background_white": {
               "header": "",
@@ -1580,11 +1556,7 @@
                   }
                 }
               },
-              "depends_on": [
-                {
-                  "ethnic_group": 0
-                }
-              ]
+              "depends_on": [{ "ethnic_group": 0 }]
             },
             "lead_tenant_nationality": {
               "header": "",
@@ -1650,7 +1622,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "lead_tenant_working_situation": {
               "header": "",
@@ -1697,7 +1670,8 @@
                     }
                   }
                 }
-              }
+              },
+              "depends_on": [{ "declaration": 1 }]
             },
             "lead_tenant_under_retirement_value_check": {
               "depends_on": [{ "person_1_retired_under_soft_min_age?": true }],

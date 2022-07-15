@@ -67,11 +67,13 @@ module Imports
       attributes["registered_under_care_act"] = registered_under_care_act.zero? ? nil : registered_under_care_act
       attributes["support_type"] = safe_string_as_integer(xml_doc, "support-type")
       attributes["intended_stay"] = string_or_nil(xml_doc, "intended-stay")
+      attributes["mobility_type"] = string_or_nil(xml_doc, "mobility-type")
       attributes["primary_client_group"] = string_or_nil(xml_doc, "client-group-1")
       attributes["secondary_client_group"] = string_or_nil(xml_doc, "client-group-2")
       attributes["secondary_client_group"] = nil if attributes["primary_client_group"] == attributes["secondary_client_group"]
       attributes["sensitive"] = sensitive(xml_doc)
-      attributes["end_date"] = parse_end_date(xml_doc)
+      attributes["start_date"] = parse_date(xml_doc, "start-date")
+      attributes["end_date"] = parse_date(xml_doc, "end-date")
       attributes["location_name"] = string_or_nil(xml_doc, "name")
       attributes["postcode"] = string_or_nil(xml_doc, "postcode")
       attributes["units"] = safe_string_as_integer(xml_doc, "total-units")
@@ -84,15 +86,16 @@ module Imports
 
     def add_location(scheme, attributes)
       if attributes["end_date"].nil? || attributes["end_date"] >= Time.zone.now
-        # wheelchair_adaptation: string_or_nil(xml_doc, "mobility-type"),
         begin
           Location.create!(
             name: attributes["location_name"],
             postcode: attributes["postcode"],
+            mobility_type: attributes["mobility_type"],
             units: attributes["units"],
             type_of_unit: attributes["type_of_unit"],
             old_visible_id: attributes["location_old_visible_id"],
             old_id: attributes["location_old_id"],
+            startdate: attributes["start_date"],
             scheme:,
           )
         rescue ActiveRecord::RecordNotUnique
@@ -185,9 +188,9 @@ module Imports
       end
     end
 
-    def parse_end_date(xml_doc)
-      end_date = string_or_nil(xml_doc, "end-date")
-      Time.zone.parse(end_date) if end_date
+    def parse_date(xml_doc, attribute)
+      date = string_or_nil(xml_doc, attribute)
+      Time.zone.parse(date) if date
     end
   end
 end
