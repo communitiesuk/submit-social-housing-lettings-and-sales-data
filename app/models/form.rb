@@ -127,9 +127,9 @@ class Form
   end
 
   def invalidated_page_questions(case_log, current_user = nil)
-    # we're already treating address fields as a special case and reset their values upon saving a case_log
-    address_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full]
-    questions.reject { |q| q.page.routed_to?(case_log, current_user) || q.derived? || address_questions.include?(q.id) } || []
+    # we're already treating these fields as a special case and reset their values upon saving a case_log
+    callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id]
+    questions.reject { |q| q.page.routed_to?(case_log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
   end
 
   def enabled_page_questions(case_log)

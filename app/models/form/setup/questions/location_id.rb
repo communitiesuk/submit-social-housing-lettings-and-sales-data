@@ -5,7 +5,6 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     @header = "Which location is this log for?"
     @hint_text = ""
     @type = "radio"
-    @derived = true
     @answer_options = answer_options
   end
 
