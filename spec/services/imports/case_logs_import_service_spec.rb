@@ -9,7 +9,10 @@ RSpec.describe Imports::CaseLogsImportService do
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
   let(:fixture_directory) { "spec/fixtures/imports/case_logs" }
+
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
+  let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: 123, owning_organisation: organisation) }
+  let(:scheme2) { FactoryBot.create(:scheme, old_visible_id: 456, owning_organisation: organisation) }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
@@ -26,13 +29,10 @@ RSpec.describe Imports::CaseLogsImportService do
     FactoryBot.create(:user, old_user_id: "c3061a2e6ea0b702e6f6210d5c52d2a92612d2aa", organisation:)
     FactoryBot.create(:user, old_user_id: "e29c492473446dca4d50224f2bb7cf965a261d6f", organisation:)
 
-    # Scheme and Location
-    scheme = FactoryBot.create(:scheme, old_visible_id: 123)
-    FactoryBot.create(:location,
-                      old_visible_id: 10,
-                      scheme_id: scheme.id,
-                      wheelchair_adaptation: 1,
-                      postcode: "LS166FT")
+    # Location setup
+    FactoryBot.create(:location, old_visible_id: 10, wheelchair_adaptation: 1, postcode: "LS166FT", scheme_id: scheme1.id)
+    FactoryBot.create(:location, scheme_id: scheme1.id)
+    FactoryBot.create(:location, old_visible_id: 10, wheelchair_adaptation: 1, postcode: "LS166FT", scheme_id: scheme2.id)
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
@@ -216,8 +216,24 @@ RSpec.describe Imports::CaseLogsImportService do
       end
     end
 
-    context "and this is a supported housing log" do
+    context "and this is a supported housing log with multiple locations under a scheme" do
       let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      it "sets the scheme and location values" do
+        expect(logger).not_to receive(:warn)
+        case_log_service.send(:create_log, case_log_xml)
+        case_log = CaseLog.find_by(old_id: case_log_id)
+
+        expect(case_log.scheme_id).not_to be_nil
+        expect(case_log.location_id).not_to be_nil
+        expect(case_log.status).to eq("completed")
+      end
+    end
+
+    context "and this is a supported housing log with a single location under a scheme" do
+      let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
+
+      before { case_log_xml.at_xpath("//xmlns:_1cmangroupcode").content = scheme2.old_visible_id }
 
       it "sets the scheme and location values" do
         expect(logger).not_to receive(:warn)

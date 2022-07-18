@@ -5,7 +5,6 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     @header = "Which location is this log for?"
     @hint_text = ""
     @type = "radio"
-    @derived = true unless FeatureToggle.supported_housing_schemes_enabled?
     @answer_options = answer_options
   end
 

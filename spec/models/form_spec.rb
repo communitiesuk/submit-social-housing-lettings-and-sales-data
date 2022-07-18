@@ -178,18 +178,15 @@ RSpec.describe Form, type: :model do
 
   describe "invalidated_page_questions" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress, needstype: 1) }
+    let(:expected_invalid) { %w[scheme_id condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
 
     context "when dependencies are not met" do
-      let(:expected_invalid) { %w[scheme_id location_id condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
-
       it "returns an array of question keys whose pages conditions are not met" do
         expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
       end
     end
 
     context "with two pages having the same question and only one has dependencies met" do
-      let(:expected_invalid) { %w[scheme_id location_id condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
-
       it "returns an array of question keys whose pages conditions are not met" do
         case_log["preg_occ"] = "No"
         expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)

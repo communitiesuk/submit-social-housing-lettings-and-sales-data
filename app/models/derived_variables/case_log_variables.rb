@@ -68,10 +68,7 @@ module DerivedVariables::CaseLogVariables
     self.new_old = new_or_existing_tenant
     self.vacdays = property_vacant_days
 
-    if is_supported_housing? && scheme
-      if scheme.locations.size == 1
-        self.location = scheme.locations.first
-      end
+    if is_supported_housing?
       if location
         # TODO: Remove and replace with mobility type
         self.wchair = location.wheelchair_adaptation_before_type_cast
@@ -187,6 +184,13 @@ private
       (startdate - mrcdate).to_i / 1.day
     elsif voiddate.present?
       (startdate - voiddate).to_i / 1.day
+    end
+  end
+
+  def reset_scheme_location!
+    self.location = nil
+    if scheme && scheme.locations.size == 1
+      self.location = scheme.locations.first
     end
   end
 end

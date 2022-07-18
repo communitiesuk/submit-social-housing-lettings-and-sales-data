@@ -185,16 +185,20 @@ module Imports
 
       # Supported Housing fields
       if attributes["needstype"] == GN_SH[:supported_housing]
-        old_visible_id = safe_string_as_integer(xml_doc, "_1cschemecode")
-        location = Location.find_by(old_visible_id:)
-        scheme = location.scheme
-        # Set the scheme via location, because the scheme old visible ID is not unique
+        location_old_visible_id = safe_string_as_integer(xml_doc, "_1cschemecode")
+        scheme_old_visible_id = safe_string_as_integer(xml_doc, "_1cmangroupcode")
+
+        schemes = Scheme.where(old_visible_id: scheme_old_visible_id, owning_organisation_id: attributes["owning_organisation_id"])
+        location = Location.find_by(old_visible_id: location_old_visible_id, scheme: schemes)
+        raise "No matching location for scheme #{scheme_old_visible_id} and location #{location_old_visible_id} (visible IDs)" if location.nil?
+
+        # Set the scheme via location, because the scheme old visible ID can be duplicated at import
         attributes["location_id"] = location.id
-        attributes["scheme_id"] = scheme.id
+        attributes["scheme_id"] = location.scheme.id
         attributes["sheltered"] = unsafe_string_as_integer(xml_doc, "Q1e")
         attributes["chcharge"] = safe_string_as_decimal(xml_doc, "Q18b")
         attributes["household_charge"] = household_charge(xml_doc)
-        attributes["is_carehome"] = is_carehome(scheme)
+        attributes["is_carehome"] = is_carehome(location.scheme)
       end
 
       # Handles confidential schemes
