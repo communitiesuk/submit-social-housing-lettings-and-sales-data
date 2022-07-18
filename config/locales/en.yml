@@ -65,6 +65,8 @@ en:
               invalid: "Select if this scheme provides for another client group"
             support_services_provider:
               invalid: "Select who provides the support services used by this scheme"
+            support_services_provider_before_type_cast:
+              invalid: "Select who provides the support services used by this scheme"
         location:
           attributes:
             units:
