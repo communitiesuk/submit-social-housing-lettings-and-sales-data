@@ -46,7 +46,7 @@ class SchemesController < ApplicationController
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
-    validation_errors scheme_params
+    validation_errors scheme_params.except(:support_services_provider)
 
     if @scheme.errors.empty? && @scheme.update(scheme_params.except(:support_services_provider_before_type_cast))
       if check_answers
@@ -139,7 +139,7 @@ class SchemesController < ApplicationController
     when "support"
       new_location_path
     when "details"
-      if @scheme.support_services_provider.eql? "0"
+      if @scheme.support_services_provider_before_type_cast.zero?
         scheme_primary_client_group_path(@scheme)
       else
         scheme_support_services_provider_path(@scheme)
