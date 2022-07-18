@@ -1044,7 +1044,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      support_services_provider_before_type_cast: "The same organisation that owns the housing stock",
+                      support_services_provider_before_type_cast: "0",
                       owning_organisation_id: another_organisation.id } }
         end
 
