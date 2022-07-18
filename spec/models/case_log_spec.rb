@@ -2237,7 +2237,7 @@ RSpec.describe CaseLog do
   end
 
   describe "csv download" do
-    let(:csv_export_file) { File.open("/Users/kat/MHCLG/mhclg-data-collection-beta/spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
+    let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
     let(:scheme) { FactoryBot.create(:scheme) }
     let(:location) { FactoryBot.create(:location, scheme:, type_of_unit: 6, postcode: "SE11TE") }
 
