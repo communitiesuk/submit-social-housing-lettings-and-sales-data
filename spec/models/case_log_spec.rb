@@ -2235,4 +2235,23 @@ RSpec.describe CaseLog do
       end
     end
   end
+
+  describe "csv download" do
+    let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
+    let(:scheme) { FactoryBot.create(:scheme) }
+    let(:location) { FactoryBot.create(:location, scheme:, type_of_unit: 6, postcode: "SE11TE") }
+
+    before do
+      Timecop.freeze(Time.utc(2022, 6, 5))
+    end
+
+    it "generates a correct csv from a case log" do
+      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:)
+      expected_content = csv_export_file.read
+      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
+      expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
+      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
+      expect(described_class.to_csv).to eq(expected_content)
+    end
+  end
 end
