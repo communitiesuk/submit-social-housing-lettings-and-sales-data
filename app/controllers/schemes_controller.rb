@@ -171,7 +171,7 @@ private
                                                      :support_services_provider_before_type_cast,
                                                      :intended_stay).merge(support_services_provider: params[:scheme][:support_services_provider_before_type_cast])
 
-    full_params = Scheme.support_services_providers.key?(required_params[:support_services_provider]) && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    full_params = required_params[:support_services_provider] == "0" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
     full_params[:support_services_provider] = full_params[:support_services_provider].to_i unless full_params[:support_services_provider] && full_params[:support_services_provider].empty?

@@ -74,7 +74,7 @@ unless Rails.env.test?
       service_name: "Beulahside Care",
       sensitive: 0,
       registered_under_care_act: 1,
-      support_type: 1,
+      support_type: 2,
       scheme_type: 4,
       intended_stay: "M",
       primary_client_group: "O",
@@ -87,7 +87,7 @@ unless Rails.env.test?
       service_name: "Abdullahview Point",
       sensitive: 0,
       registered_under_care_act: 1,
-      support_type: 1,
+      support_type: 2,
       scheme_type: 5,
       intended_stay: "S",
       primary_client_group: "D",
@@ -115,9 +115,9 @@ unless Rails.env.test?
       postcode: "CU193AA",
       name: "Rectory Road",
       type_of_unit: 4,
+      units: 1,
       type_of_building: "Purpose built",
-      county: "Mid Sussex",
-      wheelchair_adaptation: 0,
+      wheelchair_adaptation: 2,
     )
 
     Location.create!(
@@ -126,8 +126,8 @@ unless Rails.env.test?
       postcode: "DM250DC",
       name: "Smithy Lane",
       type_of_unit: 1,
+      units: 1,
       type_of_building: "Converted from previous residential or non-residential property",
-      county: "Fife",
       wheelchair_adaptation: 1,
     )
 
@@ -137,8 +137,8 @@ unless Rails.env.test?
       postcode: "YX130WP",
       name: "Smithy Lane",
       type_of_unit: 2,
+      units: 1,
       type_of_building: "Converted from previous residential or non-residential property",
-      county: "Rochford",
       wheelchair_adaptation: 1,
     )
   end
