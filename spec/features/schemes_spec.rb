@@ -400,7 +400,7 @@ RSpec.describe "Schemes scheme Features" do
                   context "when I add location to the scheme" do
                     before do
                       fill_in "Postcode", with: "SW1P 4DF"
-                      fill_in "Name (optional)", with: "Some name"
+                      fill_in "Location name (optional)", with: "Some name"
                       fill_in "Total number of units at this location", with: 1
                       choose "Self-contained house"
                       choose "location-wheelchair-adaptation-no-field"
@@ -433,7 +433,7 @@ RSpec.describe "Schemes scheme Features" do
                       before do
                         click_link "Add a location"
                         fill_in "Postcode", with: "XX1 1XX"
-                        fill_in "Name (optional)", with: "Other name"
+                        fill_in "Location name (optional)", with: "Other name"
                         fill_in "Total number of units at this location", with: 2
                         choose "Self-contained house"
                         choose "location-wheelchair-adaptation-no-field"
@@ -520,7 +520,6 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content scheme.id_to_display
                         expect(page).to have_content scheme.service_name
                         expect(page).to have_content scheme.owning_organisation.name
-                        expect(page).to have_content scheme.managing_organisation.name
                         expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
                       end
                     end
@@ -697,7 +696,7 @@ RSpec.describe "Schemes scheme Features" do
                     context "when I add location to the scheme" do
                       before do
                         fill_in "Postcode", with: "SW1P 4DF"
-                        fill_in "Name (optional)", with: "Some name"
+                        fill_in "Location name (optional)", with: "Some name"
                         fill_in "Total number of units at this location", with: 1
                         choose "Self-contained house"
                         choose "location-wheelchair-adaptation-no-field"
@@ -730,7 +729,7 @@ RSpec.describe "Schemes scheme Features" do
                         before do
                           click_link "Add a location"
                           fill_in "Postcode", with: "XX1 1XX"
-                          fill_in "Name (optional)", with: "Other name"
+                          fill_in "Location name (optional)", with: "Other name"
                           fill_in "Total number of units at this location", with: 2
                           choose "Self-contained house"
                           choose "location-wheelchair-adaptation-no-field"

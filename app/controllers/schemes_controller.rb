@@ -100,7 +100,11 @@ private
 
   def validation_errors(scheme_params)
     scheme_params.each_key do |key|
-      @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+      if key == "support_services_provider"
+        @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
+      else
+        @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+      end
     end
   end
 
