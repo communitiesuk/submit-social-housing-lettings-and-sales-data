@@ -23,7 +23,7 @@ class CaseLog < ApplicationRecord
 
   validates_with CaseLogValidator
   before_validation :recalculate_start_year!, if: :startdate_changed?
-  before_validation :reset_scheme_location!, if: :scheme_changed?
+  before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
   before_validation :reset_invalidated_dependent_fields!
@@ -695,9 +695,5 @@ private
 
   def upcase_and_remove_whitespace(string)
     string.present? ? string.upcase.gsub(/\s+/, "") : string
-  end
-
-  def reset_scheme_location!
-    self.location = nil
   end
 end

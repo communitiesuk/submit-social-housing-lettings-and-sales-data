@@ -28,11 +28,12 @@ RSpec.describe Imports::CaseLogsImportService do
 
     # Scheme and Location
     scheme = FactoryBot.create(:scheme, old_visible_id: 123)
-    FactoryBot.create(:location,
-                      old_visible_id: 10,
-                      scheme_id: scheme.id,
-                      wheelchair_adaptation: 1,
-                      postcode: "LS166FT")
+    locations =  FactoryBot.create_list(:location, 3, scheme_id: scheme.id)
+    locations[0].update!(
+      old_visible_id: 10,
+      wheelchair_adaptation: 1,
+      postcode: "LS166FT"
+    )
 
     # Stub the form handler to use the real form
     allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
