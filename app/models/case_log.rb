@@ -411,10 +411,10 @@ class CaseLog < ApplicationRecord
 
   def self.to_csv
     CSV.generate(headers: true) do |csv|
-      csv << attribute_names
+      csv << attribute_names + %w[unittype_sh]
 
       all.find_each do |record|
-        csv << record.attributes.map do |att, val|
+        csv << record.attributes.merge({ "unittype_sh" => record.unittype_sh }).map do |att, val|
           record.form.get_question(att, record)&.label_from_value(val) || val
         end
       end
