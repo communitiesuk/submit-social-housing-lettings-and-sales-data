@@ -25,9 +25,9 @@ class SchemesController < ApplicationController
   end
 
   def create
-    @scheme = Scheme.new(scheme_params.except(:support_services_provider_before_type_cast))
+    @scheme = Scheme.new(scheme_params)
 
-    validation_errors scheme_params.except(:support_services_provider_before_type_cast)
+    validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
       if scheme_params[:support_services_provider].zero?
@@ -46,7 +46,7 @@ class SchemesController < ApplicationController
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
-    validation_errors scheme_params.except(:support_services_provider_before_type_cast)
+    validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.update(scheme_params.except(:support_services_provider_before_type_cast))
       if check_answers
@@ -100,7 +100,11 @@ class SchemesController < ApplicationController
 
   def validation_errors(scheme_params)
     scheme_params.each_key do |key|
-      @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+      if scheme_params[key] == "support_services_provider"
+        @scheme.errors.add("support_services_provider_before_type_cast") if scheme_params[key].to_s.empty?
+      else
+        @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+      end
     end
   end
 
@@ -163,23 +167,19 @@ class SchemesController < ApplicationController
                                                      :support_type,
                                                      :support_services_provider,
                                                      :support_services_provider_before_type_cast,
-                                                     :intended_stay)
+                                                     :intended_stay).merge(support_services_provider: params[:scheme][:support_services_provider_before_type_cast])
 
-    same_org_providing_support = required_params[:support_services_provider_before_type_cast] == "0"
+    required_params.delete(:support_services_provider_before_type_cast)
 
-    full_params = same_org_providing_support && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    full_params = required_params[:support_services_provider] == "0" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
+    full_params[:support_services_provider] = full_params[:support_services_provider].to_i if !full_params[:support_services_provider].empty?
 
-    if full_params[:support_services_provider_before_type_cast]
-      translated_params = full_params.merge(support_services_provider: full_params[:support_services_provider_before_type_cast].to_i)
-    else
-      translated_params = full_params
-    end
     if current_user.data_coordinator?
-      translated_params[:owning_organisation_id] = current_user.organisation_id
+      full_params[:owning_organisation_id] = current_user.organisation_id
     end
-    translated_params
+    full_params
   end
 
   def search_term
