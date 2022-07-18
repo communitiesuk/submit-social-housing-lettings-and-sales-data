@@ -102,8 +102,8 @@ private
     scheme_params.each_key do |key|
       if key == "support_services_provider"
         @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
-      else
-        @scheme.errors.add(key.to_sym) if scheme_params[key].to_s.empty?
+      elsif scheme_params[key].to_s.empty?
+        @scheme.errors.add(key.to_sym)
       end
     end
   end
