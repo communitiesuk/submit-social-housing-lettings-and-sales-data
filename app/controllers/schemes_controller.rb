@@ -25,9 +25,9 @@ class SchemesController < ApplicationController
   end
 
   def create
-    @scheme = Scheme.new(scheme_params.except(:support_services_provider_before_type_cast))
+    @scheme = Scheme.new(scheme_params)
 
-    validation_errors scheme_params.except(:support_services_provider)
+    validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
       if scheme_params[:support_services_provider].zero?
@@ -46,9 +46,9 @@ class SchemesController < ApplicationController
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
-    validation_errors scheme_params.except(:support_services_provider)
+    validation_errors scheme_params
 
-    if @scheme.errors.empty? && @scheme.update(scheme_params.except(:support_services_provider_before_type_cast))
+    if @scheme.errors.empty? && @scheme.update(scheme_params)
       if check_answers
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
@@ -175,7 +175,7 @@ private
     if current_user.data_coordinator?
       full_params[:owning_organisation_id] = current_user.organisation_id
     end
-    full_params
+    full_params.except(:support_services_provider_before_type_cast)
   end
 
   def search_term
