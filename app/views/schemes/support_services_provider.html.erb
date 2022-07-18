@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "Which organisation provides the support services used by this scheme?", sub: @scheme.service_name } %>
+<%= render partial: "organisations/headings", locals: { main: "Which organisation provides the support services used by this scheme?", sub: nil } %>
 
 <%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
