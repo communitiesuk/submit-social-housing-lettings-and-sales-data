@@ -2,9 +2,9 @@
 
 <% content_for :before_content do %>
   <%= govuk_back_link(
-    text: "Back",
-    href: "javascript:history.go(-1);",
-  ) %>
+        text: "Back",
+        href: "javascript:history.go(-1);",
+      ) %>
 <% end %>
 
 <%= form_for(@scheme, as: :scheme, method: :post) do |f| %>
@@ -17,8 +17,8 @@
       </h1>
 
       <%= f.govuk_text_field :service_name,
-        label: { text: "Scheme name", size: "m" },
-        hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
+                             label: { text: "Scheme name", size: "m" },
+                             hint: { text: "This is how you refer to this supported housing scheme within your organisation. For example, the name could relate to the address or location. You’ll be able to see the client group when selecting it." } %>
 
       <%= f.govuk_check_boxes_fieldset :sensitive,
                                        legend: nil do %>
@@ -33,12 +33,29 @@
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
       <% answer_options = null_option + organisations %>
 
-      <%= f.govuk_collection_select :managing_organisation_id,
-                                    answer_options,
-                                    :id,
-                                    :name,
-                                    label: { text: "Which organisation manages this scheme?", size: "m" },
-                                    "data-controller": %w[accessible-autocomplete conditional-filter] %>
+      <% if current_user.data_coordinator? %>
+        <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
+      <% end %>
+
+      <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <%= f.govuk_collection_radio_buttons :scheme_type,
+                                           scheme_types_selection,
+                                           :id,
+                                           :name,
+                                           legend: { text: "What is this type of scheme?", size: "m" } %>
+
+      <% care_acts_options_hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." } %>
+
+      <% care_acts_options_with_hints = Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: care_acts_options_hints[key.to_sym]) } %>
+
+      <%= f.govuk_collection_radio_buttons :registered_under_care_act,
+                                           care_acts_options_with_hints,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" },
+                                           bold_labels: false %>
+
       <% if current_user.support? %>
         <%= f.govuk_collection_select :owning_organisation_id,
                                       answer_options,
@@ -48,23 +65,21 @@
                                       "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
-      <% if current_user.data_coordinator? %>
-        <%= f.hidden_field :owning_organisation_id, value: current_user.organisation.id %>
+      <% support_services_provider_selection = Scheme.support_services_providers.map do |key, value| %>
+        <% OpenStruct.new(id: value, name: key.to_s.humanize) %>
       <% end %>
 
-      <% scheme_types_selection = Scheme.scheme_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      <%= f.govuk_collection_radio_buttons :scheme_type,
-        scheme_types_selection,
-        :id,
-        :name,
-        legend: { text: "What is this type of scheme?", size: "m" } %>
-
-      <% care_acts_selection = Scheme.registered_under_care_acts.keys.reverse.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      <%= f.govuk_collection_radio_buttons :registered_under_care_act,
-        care_acts_selection,
-        :id,
-        :name,
-        legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
+      <%= f.govuk_collection_radio_buttons :support_services_provider_before_type_cast,
+                                           support_services_provider_selection,
+                                           :id,
+                                           lambda { |option|
+                                             if option.id.zero? && !current_user.support?
+                                               "Your organisation"
+                                             else
+                                               option.name
+                                             end
+                                           },
+                                           legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.govuk_submit "Save and continue" %>
     </div>

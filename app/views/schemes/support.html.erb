@@ -14,19 +14,29 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <% support_type_selection = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      <%= f.govuk_collection_radio_buttons :support_type,
-        support_type_selection,
-        :id,
-        :name,
-        legend: { text: "Level of support given", size: "m" } %>
+      <% support_level_options_hints = { "Low level": "Staff visiting once a week, fortnightly or less.", "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.", "High level": "Intensive level of staffing provided on a 24-hour basis." } %>
 
-      <% intended_stay_selection = Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% support_level_options_with_hints = Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: support_level_options_hints[key.to_sym]) } %>
+
+      <%= f.govuk_collection_radio_buttons :support_type,
+                                           support_level_options_with_hints,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Level of support given", size: "m" },
+                                           bold_labels: false %>
+
+      <% intended_length_of_stay_options_hints = { "Very short stay": "Up to one month.", "Short stay": "Up to one year.", "Medium stay": "More than one year but with an expectation to move on.", "Permanent": "Provides a home for life with no requirement for the tenant to move." } %>
+
+      <% intended_length_of_stay_options_with_hints = Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: intended_length_of_stay_options_hints[key.to_sym]) } %>
+
       <%= f.govuk_collection_radio_buttons :intended_stay,
-        intended_stay_selection,
-        :id,
-        :name,
-        legend: { text: "Intended length of stay", size: "m" } %>
+                                           intended_length_of_stay_options_with_hints,
+                                           :id,
+                                           :name,
+                                           :description,
+                                           legend: { text: "Intended length of stay", size: "m" },
+                                           bold_labels: false %>
 
       <%= f.hidden_field :page, value: "support" %>
 

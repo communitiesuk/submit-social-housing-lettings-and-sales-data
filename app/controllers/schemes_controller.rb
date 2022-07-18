@@ -9,7 +9,7 @@ class SchemesController < ApplicationController
   def index
     flash[:notice] = "#{Scheme.find(params[:scheme_id].to_i).service_name} has been created." if params[:scheme_id]
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
-    all_schemes = Scheme.all
+    all_schemes = Scheme.all.order("service_name ASC")
 
     @pagy, @schemes = pagy(filtered_collection(all_schemes, search_term))
     @searched = search_term.presence
@@ -26,8 +26,15 @@ class SchemesController < ApplicationController
 
   def create
     @scheme = Scheme.new(scheme_params)
-    if @scheme.save
-      render "schemes/primary_client_group"
+
+    validation_errors scheme_params
+
+    if @scheme.errors.empty? && @scheme.save
+      if scheme_params[:support_services_provider].zero?
+        redirect_to scheme_primary_client_group_path(@scheme)
+      else
+        redirect_to scheme_support_services_provider_path(@scheme)
+      end
     else
       @scheme.errors.add(:owning_organisation_id, message: @scheme.errors[:organisation])
       @scheme.errors.delete(:owning_organisation)
@@ -39,7 +46,9 @@ class SchemesController < ApplicationController
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
-    if @scheme.update(scheme_params)
+    validation_errors scheme_params
+
+    if @scheme.errors.empty? && @scheme.update(scheme_params)
       if check_answers
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
@@ -51,7 +60,7 @@ class SchemesController < ApplicationController
         redirect_to next_page_path params[:scheme][:page]
       end
     else
-      render request.current_url, status: :unprocessable_entity
+      render current_template(page), status: :unprocessable_entity
     end
   end
 
@@ -83,14 +92,48 @@ class SchemesController < ApplicationController
     render "schemes/edit_name"
   end
 
+  def support_services_provider
+    render "schemes/support_services_provider"
+  end
+
 private
+
+  def validation_errors(scheme_params)
+    scheme_params.each_key do |key|
+      if key == "support_services_provider"
+        @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
+      elsif scheme_params[key].to_s.empty?
+        @scheme.errors.add(key.to_sym)
+      end
+    end
+  end
 
   def confirm_secondary_page?(page)
     page == "confirm-secondary" && @scheme.has_other_client_group == "Yes"
   end
 
+  def current_template(page)
+    if page.include?("primary")
+      "schemes/primary_client_group"
+    elsif page.include?("support-services-provider")
+      "schemes/support_services_provider"
+    elsif page.include?("confirm")
+      "schemes/confirm_secondary"
+    elsif page.include?("secondary-client")
+      "schemes/secondary_client_group"
+    elsif page.include?("support")
+      "schemes/support"
+    elsif page.include?("details")
+      "schemes/details"
+    elsif page.include?("edit")
+      "schemes/edit_name"
+    end
+  end
+
   def next_page_path(page)
     case page
+    when "support-services-provider"
+      scheme_primary_client_group_path(@scheme)
     when "primary-client-group"
       scheme_confirm_secondary_client_group_path(@scheme)
     when "confirm-secondary"
@@ -100,7 +143,13 @@ private
     when "support"
       new_location_path
     when "details"
-      scheme_primary_client_group_path(@scheme)
+      if @scheme.support_services_provider_before_type_cast&.zero?
+        scheme_primary_client_group_path(@scheme)
+      elsif @scheme.support_services_provider_before_type_cast.positive?
+        scheme_support_services_provider_path(@scheme)
+      else
+        scheme_details_path(@scheme)
+      end
     when "edit-name"
       scheme_path(@scheme)
     end
@@ -118,13 +167,19 @@ private
                                                      :primary_client_group,
                                                      :secondary_client_group,
                                                      :support_type,
-                                                     :intended_stay)
+                                                     :support_services_provider,
+                                                     :support_services_provider_before_type_cast,
+                                                     :intended_stay).merge(support_services_provider: params[:scheme][:support_services_provider_before_type_cast])
 
-    required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
+    full_params = required_params[:support_services_provider] == "0" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+
+    full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
+    full_params[:support_services_provider] = full_params[:support_services_provider].to_i unless full_params[:support_services_provider] && full_params[:support_services_provider].empty?
+
     if current_user.data_coordinator?
-      required_params[:owning_organisation_id] = current_user.organisation_id
+      full_params[:owning_organisation_id] = current_user.organisation_id
     end
-    required_params
+    full_params.except(:support_services_provider_before_type_cast)
   end
 
   def search_term

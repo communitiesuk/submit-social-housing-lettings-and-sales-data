@@ -29,6 +29,7 @@
       <% end %>
 
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+
       <% if current_user.support? %>
         <%= f.govuk_collection_select :owning_organisation_id,
                                       organisations,
@@ -39,6 +40,10 @@
       <% end %>
 
       <%= f.hidden_field :page, value: "edit-name" %>
+
+      <% if request.query_parameters["check_answers"] %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
 
       <%= f.govuk_submit "Save changes" %>
     </div>

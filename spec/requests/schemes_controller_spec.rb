@@ -336,7 +336,13 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No" } } }
+      let(:params) do
+        { scheme: { service_name: "testy",
+                    sensitive: "1",
+                    scheme_type: "Foyer",
+                    registered_under_care_act: "No",
+                    support_services_provider_before_type_cast: "0" } }
+      end
 
       before do
         sign_in user
@@ -344,6 +350,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
       end
@@ -364,12 +371,72 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.intended_stay).to eq(nil)
         expect(Scheme.last.id_to_display).to match(/S*/)
       end
+
+      context "when support services provider is selected" do
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      support_services_provider_before_type_cast: "1" } }
+        end
+
+        it "creates a new scheme for user organisation with valid params and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+        end
+
+        it "creates a new scheme for user organisation with valid params" do
+          post "/schemes", params: params
+
+          expect(Scheme.last.owning_organisation_id).to eq(user.organisation_id)
+          expect(Scheme.last.service_name).to eq("testy")
+          expect(Scheme.last.scheme_type).to eq("Foyer")
+          expect(Scheme.last.sensitive).to eq("Yes")
+          expect(Scheme.last.registered_under_care_act).to eq("No")
+          expect(Scheme.last.id).not_to eq(nil)
+          expect(Scheme.last.has_other_client_group).to eq(nil)
+          expect(Scheme.last.primary_client_group).to eq(nil)
+          expect(Scheme.last.secondary_client_group).to eq(nil)
+          expect(Scheme.last.support_type).to eq(nil)
+          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id_to_display).to match(/S*/)
+        end
+      end
+
+      context "when missing required scheme params" do
+        let(:params) do
+          { scheme: { service_name: "",
+                      scheme_type: "",
+                      registered_under_care_act: "",
+                      support_services_provider_before_type_cast: "" } }
+        end
+
+        it "renders the same page with error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+        end
+      end
     end
 
     context "when signed in as a support user" do
       let(:organisation) { FactoryBot.create(:organisation) }
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", owning_organisation_id: organisation.id } } }
+      let(:params) do
+        { scheme: { service_name: "testy",
+                    sensitive: "1",
+                    scheme_type: "Foyer",
+                    registered_under_care_act: "No",
+                    owning_organisation_id: organisation.id,
+                    support_services_provider_before_type_cast: "0" } }
+      end
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -378,6 +445,7 @@ RSpec.describe SchemesController, type: :request do
 
       it "creates a new scheme for user organisation with valid params and renders correct page" do
         expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+        follow_redirect!
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
       end
@@ -399,13 +467,67 @@ RSpec.describe SchemesController, type: :request do
         expect(Scheme.last.id_to_display).to match(/S*/)
       end
 
+      context "when support services provider is selected" do
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      owning_organisation_id: organisation.id,
+                      support_services_provider_before_type_cast: "1" } }
+        end
+
+        it "creates a new scheme for user organisation with valid params and renders correct page" do
+          expect { post "/schemes", params: }.to change(Scheme, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Which organisation provides the support services used by this scheme?")
+        end
+
+        it "creates a new scheme for user organisation with valid params" do
+          post "/schemes", params: params
+          expect(Scheme.last.owning_organisation_id).to eq(organisation.id)
+          expect(Scheme.last.service_name).to eq("testy")
+          expect(Scheme.last.scheme_type).to eq("Foyer")
+          expect(Scheme.last.sensitive).to eq("Yes")
+          expect(Scheme.last.registered_under_care_act).to eq("No")
+          expect(Scheme.last.id).not_to eq(nil)
+          expect(Scheme.last.has_other_client_group).to eq(nil)
+          expect(Scheme.last.primary_client_group).to eq(nil)
+          expect(Scheme.last.secondary_client_group).to eq(nil)
+          expect(Scheme.last.support_type).to eq(nil)
+          expect(Scheme.last.intended_stay).to eq(nil)
+          expect(Scheme.last.id_to_display).to match(/S*/)
+        end
+      end
+
+      context "when missing required scheme params" do
+        let(:params) do
+          { scheme: { service_name: "",
+                      scheme_type: "",
+                      registered_under_care_act: "",
+                      support_services_provider_before_type_cast: "" } }
+        end
+
+        it "renders the same page with error message" do
+          post "/schemes", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+        end
+      end
+
       context "when required organisation id param is missing" do
         let(:params) { { "scheme" => { "service_name" => "qweqwer", "sensitive" => "Yes", "owning_organisation_id" => "", "scheme_type" => "Foyer", "registered_under_care_act" => "Yes – part registered as a care home" } } }
 
         it "displays the new page with an error message" do
           post "/schemes", params: params
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.required"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
       end
     end
@@ -440,6 +562,84 @@ RSpec.describe SchemesController, type: :request do
       before do
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when params are missing" do
+        let(:params) do
+          { scheme: {
+            service_name: "",
+            managing_organisation_id: "",
+            owning_organisation_id: "",
+            primary_client_group: "",
+            secondary_client_group: "",
+            scheme_type: "",
+            registered_under_care_act: "",
+            support_type: "",
+            intended_stay: "",
+            support_services_provider_before_type_cast: "",
+            has_other_client_group: "",
+            page: "details",
+          } }
+        end
+
+        it "renders primary client group after successful update" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.primary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.secondary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider_before_type_cast.invalid"))
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
+      context "when updating support services provider" do
+        let(:params) { { scheme: { managing_organisation_id: organisation.id, page: "support-services-provider" } } }
+
+        it "renders primary client group after successful update" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What client group is this scheme intended for?")
+        end
+
+        it "updates a scheme with valid params" do
+          follow_redirect!
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(organisation.id)
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
       end
 
       context "when updating primary client group" do
@@ -548,7 +748,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support" do
-        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
         it "renders add location to this scheme successful update" do
           follow_redirect!
@@ -559,11 +759,11 @@ RSpec.describe SchemesController, type: :request do
         it "updates a scheme with valid params" do
           follow_redirect!
           expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          expect(scheme_to_update.reload.support_type).to eq("Low level")
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
@@ -574,13 +774,21 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+            expect(scheme_to_update.reload.support_type).to eq("Low level")
           end
         end
       end
 
       context "when updating details" do
-        let(:params) { { scheme: { service_name: "testy", sensitive: "1", scheme_type: "Foyer", registered_under_care_act: "No", page: "details" } } }
+        let(:params) do
+          { scheme: { service_name: "testy",
+                      sensitive: "1",
+                      scheme_type: "Foyer",
+                      registered_under_care_act: "No",
+                      page: "details",
+                      owning_organisation_id: organisation.id,
+                      support_services_provider_before_type_cast: "0" } }
+        end
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -642,6 +850,55 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
+      context "when params are missing" do
+        let(:params) do
+          { scheme: {
+            service_name: "",
+            managing_organisation_id: "",
+            owning_organisation_id: "",
+            primary_client_group: "",
+            secondary_client_group: "",
+            scheme_type: "",
+            registered_under_care_act: "",
+            support_type: "",
+            intended_stay: "",
+            support_services_provider_before_type_cast: "",
+            has_other_client_group: "",
+            page: "details",
+          } }
+        end
+
+        it "renders primary client group after successful update" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content("Create a new supported housing scheme")
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.primary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.secondary_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider_before_type_cast.invalid"))
+        end
+
+        context "when updating from check answers page" do
+          let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group", check_answers: "true" } } }
+
+          it "renders check answers page after successful update" do
+            follow_redirect!
+            expect(response).to have_http_status(:ok)
+            expect(page).to have_content("Check your changes before creating this scheme")
+          end
+
+          it "updates a scheme with valid params" do
+            follow_redirect!
+            expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+      end
+
       context "when updating primary client group" do
         let(:params) { { scheme: { primary_client_group: "Homeless families with support needs", page: "primary-client-group" } } }
 
@@ -748,7 +1005,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support" do
-        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support" } } }
+        let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support" } } }
 
         it "renders confirm secondary group after successful update" do
           follow_redirect!
@@ -759,11 +1016,11 @@ RSpec.describe SchemesController, type: :request do
         it "updates a scheme with valid params" do
           follow_redirect!
           expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-          expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+          expect(scheme_to_update.reload.support_type).to eq("Low level")
         end
 
         context "when updating from check answers page" do
-          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Resettlement support", page: "support", check_answers: "true" } } }
+          let(:params) { { scheme: { intended_stay: "Medium stay", support_type: "Low level", page: "support", check_answers: "true" } } }
 
           it "renders check answers page after successful update" do
             follow_redirect!
@@ -774,7 +1031,7 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.intended_stay).to eq("Medium stay")
-            expect(scheme_to_update.reload.support_type).to eq("Resettlement support")
+            expect(scheme_to_update.reload.support_type).to eq("Low level")
           end
         end
       end
@@ -787,8 +1044,8 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      owning_organisation_id: another_organisation.id,
-                      managing_organisation_id: another_organisation.id } }
+                      support_services_provider_before_type_cast: "0",
+                      owning_organisation_id: another_organisation.id } }
         end
 
         it "renders confirm secondary group after successful update" do

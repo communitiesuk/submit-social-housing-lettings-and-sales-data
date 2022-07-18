@@ -1,5 +1,6 @@
 class Location < ApplicationRecord
   validate :validate_postcode
+  validates :units, :type_of_unit, presence: true
   belongs_to :scheme
 
   before_save :infer_la!, if: :postcode_changed?
@@ -24,12 +25,12 @@ class Location < ApplicationRecord
   enum mobility_type: MOBILITY_TYPE
 
   TYPE_OF_UNIT = {
+    "Bungalow": 6,
     "Self-contained flat or bedsit": 1,
     "Self-contained flat or bedsit with common facilities": 2,
+    "Self-contained house": 7,
     "Shared flat": 3,
     "Shared house or hostel": 4,
-    "Bungalow": 6,
-    "Self-contained house": 7,
   }.freeze
 
   enum type_of_unit: TYPE_OF_UNIT

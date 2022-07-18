@@ -1,9 +1,17 @@
 <% content_for :title, "What client group is this scheme intended for?" %>
 
+<% if request.referer&.include?("new") || request.referer&.include?("details") %>
+  <% back_button_path = scheme_details_path(@scheme) %>
+<% elsif request.referer&.include?("provider") %>
+  <% back_button_path = scheme_support_services_provider_path(@scheme) %>
+<% elsif request.query_parameters["check_answers"] %>
+  <% back_button_path = scheme_check_answers_path(@scheme) %>
+<% end %>
+
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: request.query_parameters["check_answers"] ? "/schemes/#{@scheme.id}/check-answers" : "/schemes/#{@scheme.id}/details",
+    href: back_button_path,
   ) %>
 <% end %>
 
@@ -14,7 +22,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <% primary_client_group_selection = Scheme.primary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% primary_client_group_selection = Scheme.primary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key) } %>
       <%= f.govuk_collection_radio_buttons :primary_client_group,
         primary_client_group_selection,
         :id,
@@ -23,6 +31,9 @@
 
       <%= f.hidden_field :page, value: "primary-client-group" %>
       <% if request.query_parameters["check_answers"] == "true" %>
+        <%= f.hidden_field :check_answers, value: "true" %>
+      <% end %>
+      <% if request.query_parameters["select_managing_org"] == "true" %>
         <%= f.hidden_field :check_answers, value: "true" %>
       <% end %>
 

@@ -17,39 +17,37 @@ class Scheme < ApplicationRecord
   enum sensitive: SENSITIVE, _suffix: true
 
   REGISTERED_UNDER_CARE_ACT = {
-    "No": 1,
     "Yes – registered care home providing nursing care": 4,
     "Yes – registered care home providing personal care": 3,
     "Yes – part registered as a care home": 2,
+    "No": 1,
   }.freeze
 
   enum registered_under_care_act: REGISTERED_UNDER_CARE_ACT
 
   SCHEME_TYPE = {
-    "Missing": 0,
-    "Foyer": 4,
     "Direct Access Hostel": 5,
-    "Other Supported Housing": 6,
+    "Foyer": 4,
     "Housing for older people": 7,
+    "Other Supported Housing": 6,
+    "Missing": 0,
   }.freeze
 
   enum scheme_type: SCHEME_TYPE, _suffix: true
 
   SUPPORT_TYPE = {
     "Missing": 0,
-    "Resettlement support": 1,
-    "Low levels of support": 2,
-    "Medium levels of support": 3,
-    "High levels of care and support": 4,
-    "Nursing care services to a care home": 5,
-    "Floating Support": 6,
+    "Low level": 2,
+    "Medium level": 3,
+    "High level": 4,
+    "Nursing care in a care home": 5,
   }.freeze
 
   enum support_type: SUPPORT_TYPE, _suffix: true
 
   PRIMARY_CLIENT_GROUP = {
     "Homeless families with support needs": "O",
-    "Offenders & people at risk of offending": "H",
+    "Offenders and people at risk of offending": "H",
     "Older people with support needs": "M",
     "People at risk of domestic violence": "L",
     "People with a physical or sensory disability": "A",
@@ -71,10 +69,10 @@ class Scheme < ApplicationRecord
   enum secondary_client_group: PRIMARY_CLIENT_GROUP, _suffix: true
 
   INTENDED_STAY = {
+    "Very short stay": "V",
+    "Short stay": "S",
     "Medium stay": "M",
     "Permanent": "P",
-    "Short stay": "S",
-    "Very short stay": "V",
     "Missing": "X",
   }.freeze
 
@@ -86,6 +84,15 @@ class Scheme < ApplicationRecord
   enum intended_stay: INTENDED_STAY, _suffix: true
   enum has_other_client_group: HAS_OTHER_CLIENT_GROUP, _suffix: true
 
+  SUPPORT_SERVICES_PROVIDER = {
+    "The same organisation that owns the housing stock": 0,
+    "Another registered housing provider": 1,
+    "A registered charity or voluntary organisation": 2,
+    "Another organisation": 3,
+  }.freeze
+
+  enum support_services_provider: SUPPORT_SERVICES_PROVIDER
+
   def id_to_display
     "S#{id}"
   end
@@ -95,10 +102,16 @@ class Scheme < ApplicationRecord
       { name: "Service code", value: id_to_display },
       { name: "Name", value: service_name },
       { name: "Confidential information", value: sensitive },
-      { name: "Housing stock owned by", value: owning_organisation.name },
-      { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
+      { name: "Housing stock owned by", value: owning_organisation.name },
+      { name: "Support provided by", value: support_services_provider },
+    ]
+  end
+
+  def check_support_services_provider_attributes
+    [
+      { name: "Organisation providing support", value: managing_organisation&.name },
     ]
   end
 
@@ -129,14 +142,16 @@ class Scheme < ApplicationRecord
 
   def display_attributes
     [
-      { name: "Service code", value: id_to_display },
+      { name: "Scheme code", value: id_to_display },
       { name: "Name", value: service_name, edit: true },
       { name: "Confidential information", value: sensitive, edit: true },
-      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
-      { name: "Managed by", value: managing_organisation&.name },
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
+      { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
+      { name: "Support services provided by", value: support_services_provider },
+      { name: "Organisation providing support", value: managing_organisation&.name },
       { name: "Primary client group", value: primary_client_group },
+      { name: "Has another client group", value: has_other_client_group },
       { name: "Secondary client group", value: secondary_client_group },
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
@@ -153,5 +168,31 @@ class Scheme < ApplicationRecord
 
   def hint
     [primary_client_group, secondary_client_group].filter(&:present?).join(", ")
+  end
+
+  def care_acts_options_with_hints
+    hints = { "Yes – part registered as a care home": "A proportion of units are registered as being a care home." }
+
+    Scheme.registered_under_care_acts.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  end
+
+  def support_level_options_with_hints
+    hints = {
+      "Low level": "Staff visiting once a week, fortnightly or less.",
+      "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.",
+      "High level": "Intensive level of staffing provided on a 24-hour basis.",
+    }
+    Scheme.support_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  end
+
+  def intended_length_of_stay_options_with_hints
+    hints = {
+      "Very short stay": "Up to one month.",
+      "Short stay": "Up to one year.",
+      "Medium stay": "More than one year but with an expectation to move on.",
+      "Permanent": "Provides a home for life with no requirement for the tenant to move.",
+
+    }
+    Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
 end

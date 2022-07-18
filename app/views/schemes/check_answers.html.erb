@@ -1,5 +1,4 @@
 <% content_for :title, "Check your answers before creating this scheme" %>
-
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
 <div class="govuk-grid-row">
@@ -15,6 +14,16 @@
               <% row.action(
                    text: "Change",
                    href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
+                 ) %>
+            <% end %>
+          <% end %>
+          <% @scheme.check_support_services_provider_attributes.each do |attr| %>
+            <%= summary_list.row do |row| %>
+              <% row.key { attr[:name].to_s } %>
+              <% row.value { details_html(attr) } %>
+              <% row.action(
+                   text: "Change",
+                   href: scheme_support_services_provider_path(scheme_id: @scheme.id, check_answers: true),
                  ) %>
             <% end %>
           <% end %>
