@@ -16,9 +16,10 @@
         <%= content_for(:title) %>
       </h1>
 
-      <%= f.govuk_email_field :email,
+      <%= f.govuk_text_field :email,
         label: { text: "Email address" },
         autocomplete: "email",
+        inputmode: "email",
         spellcheck: "false" %>
 
       <%= f.govuk_password_field :password,
