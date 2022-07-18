@@ -2242,7 +2242,6 @@ RSpec.describe CaseLog do
     let(:location) { FactoryBot.create(:location, scheme:, type_of_unit: 6, postcode: "SE11TE") }
 
     before do
-      described_class.destroy_all
       Timecop.freeze(Time.utc(2022, 6, 5))
     end
 
