@@ -106,6 +106,11 @@ class Scheme < ApplicationRecord
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
       { name: "Housing stock owned by", value: owning_organisation.name },
       { name: "Support provided by", value: support_services_provider },
+    ]
+  end
+
+  def check_support_services_provider_attributes
+    [
       { name: "Organisation providing support", value: managing_organisation&.name },
     ]
   end

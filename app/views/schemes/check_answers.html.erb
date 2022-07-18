@@ -17,6 +17,16 @@
                    ) %>
             <% end %>
           <% end %>
+          <% @scheme.check_support_services_provider_attributes.each do |attr| %>
+            <%= summary_list.row do |row| %>
+              <% row.key { attr[:name].to_s } %>
+              <% row.value { details_html(attr) } %>
+              <% row.action(
+                   text: "Change",
+                   href: scheme_support_services_provider_path(scheme_id: @scheme.id, check_answers: true),
+                   ) %>
+            <% end %>
+          <% end %>
           <% @scheme.check_primary_client_attributes.each do |attr| %>
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
