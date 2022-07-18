@@ -4,7 +4,7 @@
   <%= govuk_back_link(
         text: "Back",
         href: :back,
-        ) %>
+      ) %>
 <% end %>
 
 <%= render partial: "organisations/headings", locals: { main: "Create a new supported housing scheme", sub: nil } %>
@@ -64,18 +64,18 @@
       <% end %>
 
       <% support_services_provider_selection = Scheme.support_services_providers.map do |key, value| %>
-        <% OpenStruct.new(id: value, name: key.to_s.humanize)  %>
+        <% OpenStruct.new(id: value, name: key.to_s.humanize) %>
       <% end %>
       <%= f.govuk_collection_radio_buttons :support_services_provider_before_type_cast,
                                            support_services_provider_selection,
                                            :id,
-                                           ->(option) do
+                                           lambda { |option|
                                              if option.id.zero? && !current_user.support?
                                                "Your organisation"
                                              else
                                                option.name
                                              end
-                                           end,
+                                           },
                                            legend: { text: "Who provides the support services used by this scheme?", size: "m" } %>
 
       <%= f.hidden_field :page, value: "details" %>

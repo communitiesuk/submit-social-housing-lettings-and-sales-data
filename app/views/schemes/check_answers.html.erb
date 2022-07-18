@@ -14,7 +14,7 @@
               <% row.action(
                    text: "Change",
                    href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                 ) %>
             <% end %>
           <% end %>
           <% @scheme.check_support_services_provider_attributes.each do |attr| %>
@@ -24,7 +24,7 @@
               <% row.action(
                    text: "Change",
                    href: scheme_support_services_provider_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                 ) %>
             <% end %>
           <% end %>
           <% @scheme.check_primary_client_attributes.each do |attr| %>
@@ -34,7 +34,7 @@
               <% row.action(
                    text: "Change",
                    href: scheme_primary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                 ) %>
             <% end %>
           <% end %>
           <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
@@ -44,7 +44,7 @@
               <% row.action(
                    text: "Change",
                    href: scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                 ) %>
             <% end %>
           <% end %>
           <% if @scheme.has_other_client_group == "Yes" %>
@@ -55,7 +55,7 @@
                 <% row.action(
                      text: "Change",
                      href: scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                     ) %>
+                   ) %>
               <% end %>
             <% end %>
           <% end %>
@@ -66,7 +66,7 @@
               <% row.action(
                    text: "Change",
                    href: scheme_support_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                 ) %>
             <% end %>
           <% end %>
         <% end %>

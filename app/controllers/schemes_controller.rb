@@ -96,7 +96,7 @@ class SchemesController < ApplicationController
     render "schemes/support_services_provider"
   end
 
-  private
+private
 
   def validation_errors(scheme_params)
     scheme_params.each_key do |key|
@@ -139,10 +139,12 @@ class SchemesController < ApplicationController
     when "support"
       new_location_path
     when "details"
-      if @scheme.support_services_provider_before_type_cast.zero?
+      if @scheme.support_services_provider_before_type_cast&.zero?
         scheme_primary_client_group_path(@scheme)
-      else
+      elsif @scheme.support_services_provider_before_type_cast.positive?
         scheme_support_services_provider_path(@scheme)
+      else
+        scheme_details_path(@scheme)
       end
     when "edit-name"
       scheme_path(@scheme)
@@ -165,10 +167,10 @@ class SchemesController < ApplicationController
                                                      :support_services_provider_before_type_cast,
                                                      :intended_stay).merge(support_services_provider: params[:scheme][:support_services_provider_before_type_cast])
 
-    full_params = required_params[:support_services_provider] == "0" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    full_params = Scheme.support_services_providers.key?(required_params[:support_services_provider]) && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
-    full_params[:support_services_provider] = full_params[:support_services_provider].to_i if !full_params[:support_services_provider]&.empty?
+    full_params[:support_services_provider] = full_params[:support_services_provider].to_i unless full_params[:support_services_provider] && full_params[:support_services_provider].empty?
 
     if current_user.data_coordinator?
       full_params[:owning_organisation_id] = current_user.organisation_id
