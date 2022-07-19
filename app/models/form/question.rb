@@ -228,7 +228,7 @@ class Form::Question
     resource.hint
   end
 
-  def answer_selected(case_log, answer)
+  def answer_selected?(case_log, answer)
     case_log[id].to_s == answer.id.to_s
   end
 

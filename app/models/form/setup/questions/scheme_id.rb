@@ -32,7 +32,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     !supported_housing_selected?(case_log)
   end
 
-  def answer_selected(case_log, answer)
+  def answer_selected?(case_log, answer)
     case_log[id] == answer.name || case_log[id] == answer.resource
   end
 
