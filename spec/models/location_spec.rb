@@ -55,4 +55,32 @@ RSpec.describe Location, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit Select the most common type of unit at this location")
     end
   end
+
+  describe "scopes" do
+    before do
+      FactoryBot.create(:location, name: "ABC", postcode: "NW18RR")
+      FactoryBot.create(:location, name: "XYZ", postcode: "SE16HJ")
+    end
+
+    context "when searching by name" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by_name("abc").count).to eq(1)
+        expect(described_class.search_by_name("AbC").count).to eq(1)
+      end
+    end
+
+    context "when searching by postcode" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by_postcode("se1 6hj").count).to eq(1)
+        expect(described_class.search_by_postcode("SE1 6HJ").count).to eq(1)
+      end
+    end
+
+    context "when searching by all searchable field" do
+      it "returns case insensitive matching records" do
+        expect(described_class.search_by("aBc").count).to eq(1)
+        expect(described_class.search_by("nw18rr").count).to eq(1)
+      end
+    end
+  end
 end
