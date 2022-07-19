@@ -216,6 +216,19 @@ RSpec.describe Imports::CaseLogsImportService do
       end
     end
 
+    context "and the net income soft validation is triggered" do
+      before do
+        case_log_xml.at_xpath("//xmlns:Q8a").content = "1 Weekly"
+        case_log_xml.at_xpath("//xmlns:Q8Money").content = 890.00
+      end
+
+      it "should complete the log" do
+        case_log_service.send(:create_log, case_log_xml)
+        case_log = CaseLog.find_by(old_id: case_log_id)
+        expect(case_log.status).to eq("completed")
+      end
+    end
+
     context "and this is a supported housing log with multiple locations under a scheme" do
       let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
