@@ -243,6 +243,16 @@ RSpec.describe "Schemes scheme Features" do
               end
             end
 
+            context "when the user clicks add location" do
+              before do
+                click_link("Locations")
+                click_link("Add a location")
+              end
+
+              it "shows the new location form" do
+                expect(page).to have_content("Add a location to this scheme")
+              end
+            end
           end
         end
       end

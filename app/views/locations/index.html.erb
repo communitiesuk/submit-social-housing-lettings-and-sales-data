@@ -52,5 +52,6 @@
     <% end %>
   <% end %>
 <% end %>
+<%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
 
 <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "locations" } %>
