@@ -6,6 +6,11 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     @hint_text = ""
     @type = "radio"
     @answer_options = answer_options
+    @inferred_answers = {
+      "location.name": {
+        "needstype": 2,
+      },
+    }
   end
 
   def answer_options

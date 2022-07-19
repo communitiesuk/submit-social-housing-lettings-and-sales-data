@@ -6,12 +6,18 @@ RSpec.describe "Form Check Answers Page" do
   let(:user) { FactoryBot.create(:user) }
   let(:subsection) { "household-characteristics" }
   let(:conditional_subsection) { "conditional-question" }
+  let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+  let(:location) { FactoryBot.create(:location, scheme:) }
+
   let(:case_log) do
     FactoryBot.create(
       :case_log,
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      needstype: 2,
+      scheme:,
+      location:,
     )
   end
   let(:empty_case_log) do
@@ -124,6 +130,19 @@ RSpec.describe "Form Check Answers Page" do
       excluded_question_labels = ["Has the next condition been met?"]
       excluded_question_labels.each do |label|
         expect(page).not_to have_content(label)
+      end
+    end
+
+    context "when viewing setup section answers" do
+      before do
+        FactoryBot.create(:location, scheme:)
+      end
+
+      it "displays inferred postcode with the location id" do
+        case_log.update!(location:)
+        visit("/logs/#{id}/setup/check-answers")
+        expect(page).to have_content("Location")
+        expect(page).to have_content(location.name)
       end
     end
 
