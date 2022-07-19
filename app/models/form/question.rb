@@ -229,6 +229,7 @@ class Form::Question
   end
 
   def answer_selected?(case_log, answer)
+    return false unless type == "select"
     case_log[id].to_s == answer.id.to_s
   end
 

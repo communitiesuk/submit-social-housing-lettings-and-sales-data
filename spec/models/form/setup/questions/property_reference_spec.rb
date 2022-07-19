@@ -6,6 +6,7 @@ RSpec.describe Form::Setup::Questions::PropertyReference, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
+  let(:case_log) { FactoryBot.create(:case_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -37,5 +38,9 @@ RSpec.describe Form::Setup::Questions::PropertyReference, type: :model do
 
   it "is not marked as derived" do
     expect(question.derived?).to be false
+  end
+
+  it "returns false for answer_selected" do
+    expect(question.answer_selected?(case_log, {})).to be false
   end
 end
