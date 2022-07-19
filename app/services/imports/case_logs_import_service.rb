@@ -207,7 +207,7 @@ module Imports
         attributes["postcode_full"] = nil
       end
 
-      # Sets all soft validations to yes by default
+      # Soft validations can become required answers, set them to yes by default
       attributes["pregnancy_value_check"] = 0
       attributes["retirement_value_check"] = 0
       attributes["rent_value_check"] = 0
