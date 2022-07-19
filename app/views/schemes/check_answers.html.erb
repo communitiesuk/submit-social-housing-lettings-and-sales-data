@@ -113,4 +113,8 @@
   </div>
 </div>
 
-<%= govuk_button_link_to "Create scheme", schemes_path(scheme_id: @scheme.id), html: { method: :get } %>
+<%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
+  <%= f.hidden_field :page, value: "check-answers" %>
+  <%= f.hidden_field :confirmed, value: "true" %>
+  <%= f.govuk_submit "Create scheme" %>
+<% end %>
