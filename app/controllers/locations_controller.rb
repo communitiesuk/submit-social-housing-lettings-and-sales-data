@@ -16,7 +16,10 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.new(location_params)
+    @location = if Date.valid_date?(location_params["startdate(3i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(1i)"].to_i)
+                  Location.new(location_params.except("startdate(3i)", "startdate(2i)", "startdate(1i)"))
+                else
+                  Location.new(location_params) end
 
     if @location.save
       location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
