@@ -6,9 +6,12 @@ class LocationsController < ApplicationController
   before_action :find_scheme
   before_action :authenticate_action!
 
+  include Modules::SearchFilter
+
   def index
-    @pagy, @locations = pagy(@scheme.locations)
+    @pagy, @locations = pagy(filtered_collection(@scheme.locations, search_term))
     @total_count = @scheme.locations.size
+    @searched = search_term.presence
   end
 
   def new
@@ -19,7 +22,11 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
+      if  location_params[:add_another_location] == "Yes"
+        redirect_to(new_location_path(id: @scheme.id))
+      else
+        redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -72,5 +79,9 @@ private
     required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :wheelchair_adaptation, :add_another_location, :startdate).merge(scheme_id: @scheme.id)
     required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params
+  end
+
+  def search_term
+    params["search"]
   end
 end

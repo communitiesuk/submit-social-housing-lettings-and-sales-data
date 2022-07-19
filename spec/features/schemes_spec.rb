@@ -212,6 +212,57 @@ RSpec.describe "Schemes scheme Features" do
                 end
               end
             end
+
+            context "when I search for a specific location" do
+              before do
+                click_link("Locations")
+              end
+
+              it "there is a search bar with a message and search button for locations" do
+                expect(page).to have_field("search")
+                expect(page).to have_content("Search by location name or postcode")
+                expect(page).to have_button("Search")
+              end
+
+              context "when I fill in search information and press the search button" do
+                let(:postcode_to_search) { "NW38RR" }
+                let(:location_name_to_search) { "search name location" }
+                let(:location_to_search) { FactoryBot.create(:location, postcode: postcode_to_search, name: location_name_to_search, scheme:) }
+
+                before do
+                  fill_in("search", with: location_to_search.name)
+                  click_button("Search")
+                end
+
+                it "displays scheme matching the location name" do
+                  expect(page).to have_content(location_name_to_search)
+                end
+
+                context "when I want to clear results" do
+                  it "there is link to clear the search results" do
+                    expect(page).to have_link("Clear search")
+                  end
+
+                  it "displays all schemes after I clear the search results" do
+                    click_link("Clear search")
+                    Location.all.each do |location|
+                      expect(page).to have_content(location.name)
+                    end
+                  end
+                end
+              end
+            end
+
+            context "when the user clicks add location" do
+              before do
+                click_link("Locations")
+                click_link("Add a location")
+              end
+
+              it "shows the new location form" do
+                expect(page).to have_content("Add a location to this scheme")
+              end
+            end
           end
         end
       end
@@ -512,7 +563,7 @@ RSpec.describe "Schemes scheme Features" do
 
                     context "and I select to create a scheme" do
                       before do
-                        click_link "Create scheme"
+                        click_button "Create scheme"
                       end
 
                       it "adds scheme to the list of schemes" do
@@ -520,7 +571,8 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content scheme.id_to_display
                         expect(page).to have_content scheme.service_name
                         expect(page).to have_content scheme.owning_organisation.name
-                        expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
+                        expect(page).to have_content "#{scheme.service_name} has been created."
+                        expect(scheme.reload.confirmed).to be true
                       end
                     end
                   end
@@ -808,7 +860,7 @@ RSpec.describe "Schemes scheme Features" do
 
                       context "and I select to create a scheme" do
                         before do
-                          click_link "Create scheme"
+                          click_button "Create scheme"
                         end
 
                         it "adds scheme to the list of schemes" do
@@ -817,7 +869,8 @@ RSpec.describe "Schemes scheme Features" do
                           expect(page).to have_content scheme.service_name
                           expect(page).to have_content scheme.owning_organisation.name
                           expect(page).to have_content scheme.managing_organisation.name
-                          expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
+                          expect(page).to have_content "#{scheme.service_name} has been created."
+                          expect(scheme.reload.confirmed).to be true
                         end
                       end
                     end
