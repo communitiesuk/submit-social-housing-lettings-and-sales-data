@@ -7,6 +7,11 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     @type = "radio"
     @derived = true unless FeatureToggle.supported_housing_schemes_enabled?
     @answer_options = answer_options
+    @inferred_answers = {
+      "location.name": {
+        "needstype": 2,
+      },
+    }
   end
 
   def answer_options
