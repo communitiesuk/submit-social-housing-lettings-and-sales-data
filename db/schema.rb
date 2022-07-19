@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_07_19_122509) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -259,7 +257,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
 
   create_table "logs_exports", force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }
-    t.datetime "started_at", precision: nil, null: false
+    t.datetime "started_at", null: false
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
@@ -301,9 +299,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
     t.integer "unspecified_units"
     t.string "old_org_id"
     t.integer "old_visible_id"
-    t.bigint "user_id"
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
-    t.index ["user_id"], name: "index_organisations_on_user_id"
   end
 
   create_table "schemes", force: :cascade do |t|
@@ -385,7 +381,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_133937) do
   add_foreign_key "case_logs", "locations"
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
-  add_foreign_key "organisations", "users"
-  add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
-  add_foreign_key "schemes", "organisations", column: "owning_organisation_id"
+  add_foreign_key "schemes", "organisations", column: "managing_organisation_id", on_delete: :cascade
+  add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
+  add_foreign_key "users", "organisations", on_delete: :cascade
 end
