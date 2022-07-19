@@ -44,7 +44,7 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     let(:organisation_2) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, organisation:) }
     let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
-    let(:case_log) { FactoryBot.create(:case_log, created_by: user) }
+    let(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
 
     before do
       FactoryBot.create(:scheme, owning_organisation: organisation_2)
@@ -56,14 +56,42 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
       end
 
       it "has the correct answer_options based on the schemes the user's organisation owns or manages" do
-        expected_answer = { scheme.id.to_s => scheme }
+        expected_answer = { "" => "Select an option", scheme.id.to_s => scheme }
         expect(question.displayed_answer_options(case_log)).to eq(expected_answer)
       end
     end
 
     context "when there are no schemes with locations" do
-      it "returns an empty hash" do
-        expect(question.displayed_answer_options(case_log)).to eq({})
+      it "returns a hash with one empty option" do
+        expect(question.displayed_answer_options(case_log)).to eq({ "" => "Select an option" })
+      end
+    end
+
+    context "when the question is not answered" do
+      it "returns 'select an option' as selected answer" do
+        case_log.update!(scheme: nil)
+        answers = question.displayed_answer_options(case_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
+        answers.each do |answer|
+          if answer.resource == "Select an option"
+            expect(question.answer_selected?(case_log, answer)).to eq(true)
+          else
+            expect(question.answer_selected?(case_log, answer)).to eq(false)
+          end
+        end
+      end
+    end
+
+    context "when the question is answered" do
+      it "returns 'select an option' as selected answer" do
+        case_log.update!(scheme:)
+        answers = question.displayed_answer_options(case_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
+        answers.each do |answer|
+          if answer.id == scheme.id
+            expect(question.answer_selected?(case_log, answer)).to eq(true)
+          else
+            expect(question.answer_selected?(case_log, answer)).to eq(false)
+          end
+        end
       end
     end
   end

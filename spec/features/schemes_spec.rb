@@ -962,25 +962,25 @@ RSpec.describe "Schemes scheme Features" do
 
     it "does not display the schemes without a location" do
       visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does not display the schemes with a location with a startdate in the future" do
       location.update!(startdate: Time.utc(2022, 7, 4))
       visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(2)
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
     end
 
     it "does display the schemes with a location with a startdate in the past" do
       location.update!(startdate: Time.utc(2022, 5, 2))
       visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does display the schemes with a location with a startdate being today" do
       location.update!(startdate: Time.utc(2022, 6, 3))
       visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
     end
   end
 end

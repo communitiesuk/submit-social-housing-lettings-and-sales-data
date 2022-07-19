@@ -228,6 +228,12 @@ class Form::Question
     resource.hint
   end
 
+  def answer_selected?(case_log, answer)
+    return false unless type == "select"
+
+    case_log[id].to_s == answer.id.to_s
+  end
+
 private
 
   def selected_answer_option_is_derived?(case_log)
