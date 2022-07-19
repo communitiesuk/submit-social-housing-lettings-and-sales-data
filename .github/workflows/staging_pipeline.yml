@@ -75,7 +75,6 @@ jobs:
         run: |
           bundle exec rspec --exclude-pattern "features/*"
 
-jobs:
   feature_test:
     name: Feature Tests
     if: '!github.event.pull_request.draft'
