@@ -4,7 +4,7 @@ import { FilterToggle } from '../modules/filter_toggle.js'
 export default class extends Controller {
   connect () {
     const filterToggle = new FilterToggle({
-      bigModeMediaQuery: '(min-width: 48.0625em)',
+      bigModeMediaQuery: '(min-width: 57.5625em)', // 921px (wide breakpoint)
       closeButton: {
         container: this.element.querySelector('.app-filter__header'),
         text: 'Close'
