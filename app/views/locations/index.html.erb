@@ -1,3 +1,4 @@
+<% item_label = format_label(@pagy.count, "location") %>
 <% title = @scheme.service_name %>
 <% content_for :title, title %>
 
@@ -12,9 +13,13 @@
 
 <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
+<%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
+
+<%= govuk_section_break(visible: true, size: "m") %>
+
 <%= govuk_table do |table| %>
   <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-    <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
+    <%= render(SearchResultCaptionComponent.new(searched: @searched, count: @pagy.count, item_label:, total_count: @total_count, item: "locations", path: request.path)) %>
   <% end %>
   <%= table.head do |head| %>
     <%= head.row do |row| %>
