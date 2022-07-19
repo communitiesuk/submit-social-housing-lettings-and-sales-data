@@ -263,6 +263,33 @@ RSpec.describe FormController, type: :request do
             expect(whodunnit_actor.id).to eq(user.id)
           end
         end
+
+        context "when the question has a conditional question" do
+          context "and the conditional question is not enabled" do
+            context "but is applicable because it has an inferred check answers display value" do
+              let(:page_id) { "property_postcode" }
+              let(:valid_params) do
+                {
+                  id: case_log.id,
+                  case_log: {
+                    page: page_id,
+                    postcode_known: "0",
+                    postcode_full: "",
+                  },
+                }
+              end
+
+              before do
+                case_log.update!(postcode_known: 1, postcode_full: "NW1 8RR")
+                post "/logs/#{case_log.id}/form", params: valid_params
+              end
+
+              it "does not require you to answer that question" do
+                expect(response).to redirect_to("/logs/#{case_log.id}/do-you-know-the-local-authority")
+              end
+            end
+          end
+        end
       end
 
       context "with checkbox questions" do
