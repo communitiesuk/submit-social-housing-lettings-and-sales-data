@@ -222,7 +222,7 @@ RSpec.describe Imports::CaseLogsImportService do
         case_log_xml.at_xpath("//xmlns:Q8Money").content = 890.00
       end
 
-      it "should complete the log" do
+      it "completes the log" do
         case_log_service.send(:create_log, case_log_xml)
         case_log = CaseLog.find_by(old_id: case_log_id)
         expect(case_log.status).to eq("completed")
