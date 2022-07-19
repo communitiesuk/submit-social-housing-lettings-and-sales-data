@@ -138,8 +138,15 @@ private
   end
 
   def question_is_required?(question)
-    CaseLog::OPTIONAL_FIELDS.exclude?(question.id) &&
-      @page.subsection.applicable_questions(@case_log).map(&:id).include?(question.id)
+    CaseLog::OPTIONAL_FIELDS.exclude?(question.id) && required_questions.include?(question.id)
+  end
+
+  def required_questions
+    @required_questions ||= begin
+      log = @case_log
+      log.assign_attributes(responses_for_page(@page))
+      @page.subsection.applicable_questions(log).select { |q| q.enabled?(log) }.map(&:id)
+    end
   end
 
   def question_missing_response?(responses_for_page, question)
