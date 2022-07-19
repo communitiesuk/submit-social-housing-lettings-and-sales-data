@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   test:
-    name: Test
+    name: Tests
     if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
 
@@ -73,7 +73,67 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec
+          bundle exec rspec --exclude-pattern "features/*"
+
+jobs:
+  feature_test:
+    name: Feature Tests
+    if: '!github.event.pull_request.draft'
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13.5
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: data_collector
+        ports:
+          - 5432:5432
+        # Needed because the Postgres container does not provide a health check
+        # tmpfs makes database faster by using RAM
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      RAILS_ENV: test
+      GEMFILE_RUBY_VERSION: 3.1.1
+      DB_HOST: localhost
+      DB_DATABASE: data_collector
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 16
+
+      - name: Create database
+        run: |
+          bundle exec rake db:prepare
+
+      - name: Compile assets
+        run: |
+          bundle exec rake assets:precompile
+
+      - name: Run tests
+        run: |
+          bundle exec rspec spec/features
 
   lint:
     name: Lint
@@ -127,7 +187,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     if: github.ref == 'refs/heads/main'
-    needs: [lint, test, audit]
+    needs: [lint, test, feature_test, audit]
 
     steps:
       - name: Checkout code
