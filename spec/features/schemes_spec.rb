@@ -563,7 +563,7 @@ RSpec.describe "Schemes scheme Features" do
 
                     context "and I select to create a scheme" do
                       before do
-                        click_link "Create scheme"
+                        click_button "Create scheme"
                       end
 
                       it "adds scheme to the list of schemes" do
@@ -571,7 +571,8 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content scheme.id_to_display
                         expect(page).to have_content scheme.service_name
                         expect(page).to have_content scheme.owning_organisation.name
-                        expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
+                        expect(page).to have_content "#{scheme.service_name} has been created."
+                        expect(scheme.reload.confirmed).to be true
                       end
                     end
                   end
@@ -859,7 +860,7 @@ RSpec.describe "Schemes scheme Features" do
 
                       context "and I select to create a scheme" do
                         before do
-                          click_link "Create scheme"
+                          click_button "Create scheme"
                         end
 
                         it "adds scheme to the list of schemes" do
@@ -868,7 +869,8 @@ RSpec.describe "Schemes scheme Features" do
                           expect(page).to have_content scheme.service_name
                           expect(page).to have_content scheme.owning_organisation.name
                           expect(page).to have_content scheme.managing_organisation.name
-                          expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
+                          expect(page).to have_content "#{scheme.service_name} has been created."
+                          expect(scheme.reload.confirmed).to be true
                         end
                       end
                     end
