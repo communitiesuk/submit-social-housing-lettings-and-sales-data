@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
   belongs_to :organisation
-  has_many :owned_case_logs, through: :organisation
+  has_many :owned_case_logs, through: :organisation, dependent: :destroy
   has_many :managed_case_logs, through: :organisation
 
   has_paper_trail ignore: %w[last_sign_in_at

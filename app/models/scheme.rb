@@ -1,8 +1,8 @@
 class Scheme < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, optional: true, class_name: "Organisation"
-  has_many :locations
-  has_many :case_logs
+  has_many :locations, dependent: :delete_all
+  has_many :case_logs, dependent: :delete_all
 
   scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..] : id)) }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
