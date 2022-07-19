@@ -10,6 +10,7 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
   let(:form) { instance_double(Form) }
   let!(:organisation_1) { FactoryBot.create(:organisation, name: "first test org") }
   let!(:organisation_2) { FactoryBot.create(:organisation, name: "second test org") }
+  let(:case_log) { FactoryBot.create(:case_log) }
   let(:expected_answer_options) do
     {
       "" => "Select an option",
@@ -63,6 +64,34 @@ RSpec.describe Form::Setup::Questions::OwningOrganisationId, type: :model do
 
     it "is not shown in check answers" do
       expect(question.hidden_in_check_answers?(nil, user)).to be true
+    end
+  end
+
+  context "when the question is not answered" do
+    it "returns 'select an option' as selected answer" do
+      case_log.update!(owning_organisation: nil)
+      answers = question.displayed_answer_options(case_log).map { |key, value| OpenStruct.new(id: key, name: nil, resource: value) }
+      answers.each do |answer|
+        if answer.resource == "Select an option"
+          expect(question.answer_selected(case_log, answer)).to eq(true)
+        else
+          expect(question.answer_selected(case_log, answer)).to eq(false)
+        end
+      end
+    end
+  end
+
+  context "when the question is answered" do
+    it "returns 'select an option' as selected answer" do
+      case_log.update!(owning_organisation: organisation_1)
+      answers = question.displayed_answer_options(case_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) }
+      answers.each do |answer|
+        if answer.id == organisation_1.id
+          expect(question.answer_selected(case_log, answer)).to eq(true)
+        else
+          expect(question.answer_selected(case_log, answer)).to eq(false)
+        end
+      end
     end
   end
 end

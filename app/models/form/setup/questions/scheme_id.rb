@@ -10,7 +10,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
   end
 
   def answer_options
-    answer_opts = {}
+    answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
     Scheme.select(:id, :service_name, :primary_client_group, :secondary_client_group).each_with_object(answer_opts) do |scheme, hsh|
@@ -24,12 +24,16 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
 
     user_org_scheme_ids = Scheme.select(:id).where(owning_organisation_id: case_log.created_by.organisation_id).joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL", Time.zone.today)).map(&:id)
     answer_options.select do |k, _v|
-      user_org_scheme_ids.include?(k.to_i)
+      user_org_scheme_ids.include?(k.to_i) || k.blank?
     end
   end
 
   def hidden_in_check_answers?(case_log, _current_user = nil)
     !supported_housing_selected?(case_log)
+  end
+
+  def answer_selected(case_log, answer)
+    case_log[id] == answer.name || case_log[id] == answer.resource
   end
 
 private

@@ -12,7 +12,7 @@
       data-synonyms="<%= question.answer_option_synonyms(answer.resource) %>"
       data-append="<%= question.answer_option_append(answer.resource) %>"
       data-hint="<%= question.answer_option_hint(answer.resource) %>"
-      <%= @case_log[question.id] == answer.name || @case_log[question.id] == answer.resource || @case_log[question.id].to_s == answer.id ? "selected" : "" %>
+      <%= question.answer_selected(@case_log, answer) ? "selected" : "" %>
       <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
   <% end %>
   <% end %>
