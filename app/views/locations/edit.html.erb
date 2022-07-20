@@ -29,16 +29,11 @@
                                hint: { text: I18n.t("hints.location.units") },
                                autofocus: true %>
 
-      <% type_of_units_selection = Location.type_of_units.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :type_of_unit,
                                            type_of_units_selection,
                                            :id,
                                            :name,
                                            legend: { text: I18n.t("questions.location.type_of_unit"), size: "m" } %>
-
-      <% mobility_types_to_display = Location.mobility_types.excluding("Property designed to accessible general standard", "Missing") %>
-
-      <% mobility_type_selection = mobility_types_to_display.map { |key, value| OpenStruct.new(id: key, name: key.to_s.humanize, description: I18n.t("questions.descriptions.location.mobility_type.#{value}")) } %>
 
       <%= f.govuk_collection_radio_buttons :mobility_type,
                                             mobility_type_selection,
@@ -53,7 +48,6 @@
 
       <%= govuk_section_break(visible: true, size: "m") %>
 
-      <% another_location_selection = %w[Yes no].map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :add_another_location,
                                            another_location_selection,
                                            :id,
