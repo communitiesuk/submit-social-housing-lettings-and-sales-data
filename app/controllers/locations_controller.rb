@@ -21,7 +21,7 @@ class LocationsController < ApplicationController
       if @location.save
         location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
       else
-        @location.errors.add(:startdate) unless Date.valid_date?(location_params["startdate(3i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(1i)"].to_i)
+        @location.errors.add(:startdate)
         render :new, status: :unprocessable_entity
       end
     else
