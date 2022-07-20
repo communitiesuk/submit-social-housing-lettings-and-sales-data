@@ -341,7 +341,7 @@ RSpec.describe SchemesController, type: :request do
                     sensitive: "1",
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
-                    support_services_provider_before_type_cast: "0" } }
+                    arrangement_type: "The same organisation that owns the housing stock" } }
       end
 
       before do
@@ -411,7 +411,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "",
                       scheme_type: "",
                       registered_under_care_act: "",
-                      support_services_provider_before_type_cast: "" } }
+                      arrangement_type: "" } }
         end
 
         it "renders the same page with error message" do
@@ -420,7 +420,7 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
         end
       end
@@ -435,7 +435,7 @@ RSpec.describe SchemesController, type: :request do
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
                     owning_organisation_id: organisation.id,
-                    support_services_provider_before_type_cast: "0" } }
+                    arrangement_type: "The same organisation that owns the housing stock" } }
       end
 
       before do
@@ -506,7 +506,7 @@ RSpec.describe SchemesController, type: :request do
           { scheme: { service_name: "",
                       scheme_type: "",
                       registered_under_care_act: "",
-                      support_services_provider_before_type_cast: "" } }
+                      arrangement_type: "" } }
         end
 
         it "renders the same page with error message" do
@@ -515,7 +515,7 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content("Create a new supported housing scheme")
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.scheme_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.registered_under_care_act.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.service_name.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.owning_organisation_id.invalid"))
         end
@@ -576,7 +576,7 @@ RSpec.describe SchemesController, type: :request do
             registered_under_care_act: "",
             support_type: "",
             intended_stay: "",
-            support_services_provider_before_type_cast: "",
+            arrangement_type: "",
             has_other_client_group: "",
             page: "details",
           } }
@@ -593,7 +593,6 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider_before_type_cast.invalid"))
         end
 
         context "when updating from check answers page" do
@@ -787,7 +786,7 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
-                      support_services_provider_before_type_cast: "0" } }
+                      arrangement_type: "The same organisation that owns the housing stock" } }
         end
 
         it "renders confirm secondary group after successful update" do
@@ -862,7 +861,7 @@ RSpec.describe SchemesController, type: :request do
             registered_under_care_act: "",
             support_type: "",
             intended_stay: "",
-            support_services_provider_before_type_cast: "",
+            arrangement_type: "",
             has_other_client_group: "",
             page: "details",
           } }
@@ -880,7 +879,7 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_type.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.intended_stay.invalid"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.has_other_client_group.invalid"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.support_services_provider_before_type_cast.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.arrangement_type.invalid"))
         end
 
         context "when updating from check answers page" do
@@ -1044,7 +1043,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      support_services_provider_before_type_cast: "0",
+                      arrangement_type: "The same organisation that owns the housing stock",
                       owning_organisation_id: another_organisation.id } }
         end
 
@@ -1061,7 +1060,7 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
           expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
-          expect(scheme_to_update.reload.managing_organisation_id).to eq(another_organisation.id)
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(nil)
         end
 
         context "when updating from check answers page" do

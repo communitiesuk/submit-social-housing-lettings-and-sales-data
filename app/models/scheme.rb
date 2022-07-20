@@ -84,14 +84,15 @@ class Scheme < ApplicationRecord
   enum intended_stay: INTENDED_STAY, _suffix: true
   enum has_other_client_group: HAS_OTHER_CLIENT_GROUP, _suffix: true
 
-  SUPPORT_SERVICES_PROVIDER = {
-    "The same organisation that owns the housing stock": 0,
-    "Another registered housing provider": 1,
-    "A registered charity or voluntary organisation": 2,
-    "Another organisation": 3,
+  ARRANGEMENT_TYPE = {
+    "The same organisation that owns the housing stock": "D",
+    "Another registered housing provider": "R",
+    "A registered charity or voluntary organisation": "V",
+    "Another organisation": "O",
+    "Missing": "X",
   }.freeze
 
-  enum support_services_provider: SUPPORT_SERVICES_PROVIDER
+  enum arrangement_type: ARRANGEMENT_TYPE, _suffix: true
 
   def id_to_display
     "S#{id}"
@@ -105,7 +106,7 @@ class Scheme < ApplicationRecord
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
       { name: "Housing stock owned by", value: owning_organisation.name },
-      { name: "Support provided by", value: support_services_provider },
+      { name: "Support services provided by", value: arrangement_type },
     ]
   end
 
@@ -148,7 +149,7 @@ class Scheme < ApplicationRecord
       { name: "Type of scheme", value: scheme_type },
       { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
       { name: "Housing stock owned by", value: owning_organisation.name, edit: true },
-      { name: "Support services provided by", value: support_services_provider },
+      { name: "Support services provided by", value: arrangement_type },
       { name: "Organisation providing support", value: managing_organisation&.name },
       { name: "Primary client group", value: primary_client_group },
       { name: "Has another client group", value: has_other_client_group },

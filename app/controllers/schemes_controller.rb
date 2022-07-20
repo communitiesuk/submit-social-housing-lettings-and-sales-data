@@ -30,7 +30,7 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
-      if scheme_params[:support_services_provider].zero?
+      if scheme_params[:arrangement_type] == "The same organisation that owns the housing stock"
         redirect_to scheme_primary_client_group_path(@scheme)
       else
         redirect_to scheme_support_services_provider_path(@scheme)
@@ -143,9 +143,9 @@ private
     when "support"
       new_location_path
     when "details"
-      if @scheme.support_services_provider_before_type_cast&.zero?
+      if @scheme.arrangement_type == "The same organisation that owns the housing stock"
         scheme_primary_client_group_path(@scheme)
-      elsif @scheme.support_services_provider_before_type_cast.positive?
+      elsif @scheme.arrangement_type.present? && @scheme.arrangement_type != "The same organisation that owns the housing stock"
         scheme_support_services_provider_path(@scheme)
       else
         scheme_details_path(@scheme)
@@ -167,19 +167,18 @@ private
                                                      :primary_client_group,
                                                      :secondary_client_group,
                                                      :support_type,
-                                                     :support_services_provider,
-                                                     :support_services_provider_before_type_cast,
-                                                     :intended_stay).merge(support_services_provider: params[:scheme][:support_services_provider_before_type_cast])
+                                                     :arrangement_type,
+                                                     :intended_stay)
 
-    full_params = required_params[:support_services_provider] == "0" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    full_params = required_params[:arrangement_type] == "D" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 
     full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
-    full_params[:support_services_provider] = full_params[:support_services_provider].to_i unless full_params[:support_services_provider] && full_params[:support_services_provider].empty?
+    # full_params[:support_services_provider] = full_params[:support_services_provider].to_i unless full_params[:support_services_provider] && full_params[:support_services_provider].empty?
 
     if current_user.data_coordinator?
       full_params[:owning_organisation_id] = current_user.organisation_id
     end
-    full_params.except(:support_services_provider_before_type_cast)
+    full_params
   end
 
   def search_term
