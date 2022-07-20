@@ -249,11 +249,9 @@ RSpec.describe Exports::CaseLogExportService do
     let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
     let(:location) { FactoryBot.create(:location, :export) }
 
-    let(:case_log) { FactoryBot.create(:case_log, :completed, :export, :sh,  scheme: location.scheme, location:) }
+    let(:case_log) { FactoryBot.create(:case_log, :completed, :export, :sh, scheme: location.scheme, location:) }
 
     it "generates an XML export file with the expected content" do
-      # pp case_log.form.subsections.reject{|s| s.status(case_log) == :completed}.map{|s| s.id}
-      pp case_log.form.get_subsection("household_situation").applicable_questions(case_log).reject{|q| q.completed?(case_log)}.map{|q| q.id}
       expected_content = replace_entity_ids(case_log, export_file.read)
       expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
         entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)

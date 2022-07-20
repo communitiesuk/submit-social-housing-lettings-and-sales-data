@@ -211,7 +211,7 @@ module Exports
       attribute_hash["reghome"] = scheme.registered_under_care_act_before_type_cast
       attribute_hash["schtype"] = scheme.scheme_type_before_type_cast
       attribute_hash["support"] = scheme.support_type_before_type_cast
-      attribute_hash["units_scheme"] = scheme.locations.map{|location| location.units}.sum
+      attribute_hash["units_scheme"] = scheme.locations.map(&:units).sum
     end
 
     def add_location_fields!(location, attribute_hash)
