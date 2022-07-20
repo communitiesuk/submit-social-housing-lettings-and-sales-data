@@ -15,16 +15,6 @@ class LocationsController < ApplicationController
     @location = Location.new
   end
 
-  def validation_errors(scheme_params)
-    scheme_params.each_key do |key|
-      if key == "support_services_provider"
-        @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
-      elsif scheme_params[key].to_s.empty?
-        @scheme.errors.add(key.to_sym)
-      end
-    end
-  end
-
   def create
     if valid_date_params?(location_params)
       @location = Location.new(location_params)
