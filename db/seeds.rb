@@ -117,7 +117,7 @@ unless Rails.env.test?
       type_of_unit: 4,
       units: 1,
       type_of_building: "Purpose built",
-      wheelchair_adaptation: 2,
+      mobility_type: "N",
     )
 
     Location.create!(
@@ -128,7 +128,7 @@ unless Rails.env.test?
       type_of_unit: 1,
       units: 1,
       type_of_building: "Converted from previous residential or non-residential property",
-      wheelchair_adaptation: 1,
+      mobility_type: "W",
     )
 
     Location.create!(
@@ -139,7 +139,7 @@ unless Rails.env.test?
       type_of_unit: 2,
       units: 1,
       type_of_building: "Converted from previous residential or non-residential property",
-      wheelchair_adaptation: 1,
+      mobility_type: "W",
     )
   end
 

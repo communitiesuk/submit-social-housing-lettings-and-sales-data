@@ -47,14 +47,6 @@
                                             :description,
                                             legend: { text: I18n.t("questions.location.mobility_type"), size: "m" } %>
 
-      <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
-                                           wheelchair_user_selection,
-                                           :id,
-                                           :name,
-                                           hint: { text: I18n.t("hints.location.wheelchair_adaptation") },
-                                           legend: { text: I18n.t("questions.location.wheelchair_adaptation"), size: "m" } %>
-
       <%= f.govuk_date_field :startdate,
                               legend: { text: I18n.t("questions.location.startdate"), size: "m" },
                               width: 20 %>

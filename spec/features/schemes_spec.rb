@@ -407,7 +407,6 @@ RSpec.describe "Schemes scheme Features" do
                       fill_in "Location name (optional)", with: "Some name"
                       fill_in "Total number of units at this location", with: 1
                       choose "Self-contained house"
-                      choose "location-wheelchair-adaptation-no-field"
                       choose "location-add-another-location-no-field"
                       choose "location-mobility-type-none-field"
                       click_button "Save and continue"
@@ -442,7 +441,6 @@ RSpec.describe "Schemes scheme Features" do
                         fill_in "Location name (optional)", with: "Other name"
                         fill_in "Total number of units at this location", with: 2
                         choose "Self-contained house"
-                        choose "location-wheelchair-adaptation-no-field"
                         choose "location-add-another-location-no-field"
                         click_button "Save and continue"
                       end
@@ -707,7 +705,6 @@ RSpec.describe "Schemes scheme Features" do
                         fill_in "Location name (optional)", with: "Some name"
                         fill_in "Total number of units at this location", with: 1
                         choose "Self-contained house"
-                        choose "location-wheelchair-adaptation-no-field"
                         choose "location-add-another-location-no-field"
                         click_button "Save and continue"
                       end
@@ -740,7 +737,6 @@ RSpec.describe "Schemes scheme Features" do
                           fill_in "Location name (optional)", with: "Other name"
                           fill_in "Total number of units at this location", with: 2
                           choose "Self-contained house"
-                          choose "location-wheelchair-adaptation-no-field"
                           choose "location-add-another-location-no-field"
                           click_button "Save and continue"
                         end

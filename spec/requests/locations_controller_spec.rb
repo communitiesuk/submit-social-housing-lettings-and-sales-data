@@ -91,7 +91,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 2, 2) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, mobility_type: "A" } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, mobility_type: "A" } } }
 
       before do
         sign_in user
@@ -111,13 +111,12 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
-        expect(Location.last.wheelchair_adaptation).to eq("No")
         expect(Location.last.startdate).to eq(startdate)
         expect(Location.last.mobility_type).to eq("Fitted with equipment and adaptations")
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "zz1 1zz" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz" } } }
 
         it "creates a new location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -126,7 +125,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when trying to add location to a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "displays the new page with an error message" do
           post "/schemes/#{another_scheme.id}/locations", params: params
@@ -135,7 +134,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -149,13 +148,12 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
           expect(Location.last.mobility_type).to eq("None")
         end
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -169,12 +167,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ", mobility_type: "W" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ", mobility_type: "W" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -188,13 +185,12 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
           expect(Location.last.mobility_type).to eq("Wheelchair-user standard")
         end
       end
 
       context "when required param are missing" do
-        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -252,7 +248,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -272,11 +268,10 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
-        expect(Location.last.wheelchair_adaptation).to eq("No")
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "zz1 1zz" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz" } } }
 
         it "creates a new location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -284,7 +279,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when required postcode param is missing" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           post "/schemes/#{scheme.id}/locations", params: params
@@ -294,7 +289,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -307,12 +302,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -325,12 +319,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -343,12 +336,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when required param are missing" do
-        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -497,7 +489,7 @@ RSpec.describe LocationsController, type: :request do
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:startdate) { Time.utc(2021, 1, 2) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, page: "edit" } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, page: "edit" } } }
 
       before do
         sign_in user
@@ -516,7 +508,6 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
-        expect(Location.last.wheelchair_adaptation).to eq("No")
         expect(Location.last.startdate).to eq(startdate)
       end
 
@@ -535,7 +526,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
 
         it "updates existing location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -545,7 +536,7 @@ RSpec.describe LocationsController, type: :request do
       context "when trying to update location for a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:another_location) { FactoryBot.create(:location) }
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "displays the new page with an error message" do
           patch "/schemes/#{another_scheme.id}/locations/#{another_location.id}", params: params
@@ -554,7 +545,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when required postcode param is invalid" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "invalid", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "invalid", page: "edit" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -563,7 +554,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -576,12 +567,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -594,12 +584,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates existing location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -612,12 +601,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when required param are missing" do
-        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -632,7 +620,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let!(:location)  { FactoryBot.create(:location, scheme:) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -651,7 +639,6 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.postcode).to eq("ZZ11ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
-        expect(Location.last.wheelchair_adaptation).to eq("No")
       end
 
       context "when updating from edit-name page" do
@@ -669,7 +656,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
 
         it "updates a location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -677,7 +664,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when required postcode param is missing" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "invalid", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "invalid", page: "edit" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -686,7 +673,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -698,12 +685,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates a location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -715,12 +701,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
         it "updates a location for scheme with valid params and redirects to correct page" do
           follow_redirect!
@@ -732,12 +717,11 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.name).to eq("Test")
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
-          expect(Location.last.wheelchair_adaptation).to eq("No")
         end
       end
 
       context "when required param are missing" do
-        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", wheelchair_adaptation: "No", add_another_location: "No" } } }
+        let(:params) { { location: { postcode: "", name: "Test", units: "", type_of_unit: "", add_another_location: "No" } } }
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -799,7 +783,7 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.wheelchair_adaptation)
+          expect(page).to have_content(location.mobility_type)
         end
       end
 
@@ -877,7 +861,7 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
-          expect(page).to have_content(location.wheelchair_adaptation)
+          expect(page).to have_content(location.mobility_type)
         end
       end
 

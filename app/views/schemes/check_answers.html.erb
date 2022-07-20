@@ -101,7 +101,7 @@
                 <% row.cell(text: location.id) %>
                 <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
                 <% row.cell(text: location.units) %>
-                <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>#{location.wheelchair_adaptation == 'Yes' ? "\n<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">With wheelchair adaptations</span>" : ''}")) %>
+                <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
                 <% row.cell(text: location.mobility_type) %>
                 <% end %>
             <% end %>

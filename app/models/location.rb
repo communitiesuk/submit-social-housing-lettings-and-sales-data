@@ -7,13 +7,6 @@ class Location < ApplicationRecord
 
   attr_accessor :add_another_location
 
-  WHEELCHAIR_ADAPTATIONS = {
-    Yes: 1,
-    No: 2,
-  }.freeze
-
-  enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
-
   MOBILITY_TYPE = {
     "Wheelchair-user standard": "W",
     "Fitted with equipment and adaptations": "A",
@@ -41,7 +34,6 @@ class Location < ApplicationRecord
       { name: "Postcode", value: postcode, suffix: county },
       { name: "Type of unit", value: type_of_unit, suffix: false },
       { name: "Type of building", value: type_of_building, suffix: false },
-      { name: "Wheelchair adaptation", value: wheelchair_adaptation, suffix: false },
     ]
   end
 
