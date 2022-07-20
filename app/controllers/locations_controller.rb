@@ -16,12 +16,11 @@ class LocationsController < ApplicationController
   end
 
   def create
-    if valid_date_params?(location_params)
+    if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)
       if @location.save
         location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
       else
-        @location.errors.add(:startdate)
         render :new, status: :unprocessable_entity
       end
     else
@@ -56,6 +55,10 @@ private
   def valid_date_params?(location_params)
     is_integer?(location_params["startdate(1i)"]) && is_integer?(location_params["startdate(2i)"]) && is_integer?(location_params["startdate(3i)"]) &&
       Date.valid_date?(location_params["startdate(1i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(3i)"].to_i)
+  end
+
+  def date_params_missing?(location_params)
+    location_params["startdate(1i)"].empty? && location_params["startdate(2i)"].empty? && location_params["startdate(3i)"].empty?
   end
 
   def is_integer?(string)

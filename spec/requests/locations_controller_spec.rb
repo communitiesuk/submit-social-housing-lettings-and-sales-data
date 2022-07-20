@@ -221,6 +221,50 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("validations.date.invalid_date"))
         end
       end
+
+      context "when invalid time is supplied" do
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            wheelchair_adaptation: "No",
+            add_another_location: "No",
+            postcode: "ZZ1 1ZZ",
+            "startdate(3i)" => "1",
+            "startdate(2i)" => "1",
+            "startdate(1i)" => "w",
+          } }
+        end
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.date.invalid_date"))
+        end
+      end
+
+      context "when no startdate is supplied" do
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            wheelchair_adaptation: "No",
+            add_another_location: "No",
+            postcode: "ZZ1 1ZZ",
+            "startdate(3i)" => "",
+            "startdate(2i)" => "",
+            "startdate(1i)" => "",
+          } }
+        end
+
+        it "creates a new location for scheme with valid params and redirects to correct page" do
+          expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your answers before creating this scheme")
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -329,6 +373,50 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("validations.postcode"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
+        end
+      end
+
+      context "when invalid time is supplied" do
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            wheelchair_adaptation: "No",
+            add_another_location: "No",
+            postcode: "ZZ1 1ZZ",
+            "startdate(3i)" => "1",
+            "startdate(2i)" => "1",
+            "startdate(1i)" => "w",
+          } }
+        end
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.date.invalid_date"))
+        end
+      end
+
+      context "when no startdate is supplied" do
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            wheelchair_adaptation: "No",
+            add_another_location: "No",
+            postcode: "ZZ1 1ZZ",
+            "startdate(3i)" => "",
+            "startdate(2i)" => "",
+            "startdate(1i)" => "",
+          } }
+        end
+
+        it "creates a new location for scheme with valid params and redirects to correct page" do
+          expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your answers before creating this scheme")
         end
       end
     end
