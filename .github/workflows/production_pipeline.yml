@@ -79,7 +79,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec --exclude-pattern "features/*"
+          bundle exec rspec --exclude-pattern "features/*" --fail-fast
 
   feature_test:
     name: Feature Tests
@@ -138,7 +138,7 @@ jobs:
 
       - name: Run tests
         run: |
-          bundle exec rspec spec/features
+          bundle exec rspec spec/features --fail-fast
 
   lint:
     name: Lint
