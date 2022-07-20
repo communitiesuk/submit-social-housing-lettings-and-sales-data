@@ -69,6 +69,9 @@ en:
               invalid: "Select who provides the support services used by this scheme"
         location:
           attributes:
+            startdate:
+              invalid: "Enter a date in the correct format, for example 1 9 2022"
+
             units:
               blank: "Enter total number of units at this location"
             type_of_unit:
