@@ -64,12 +64,12 @@
       <% end %>
 
       <% mantype_selection = Scheme.arrangement_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
-      
+
       <%= f.govuk_collection_radio_buttons :arrangement_type,
                                            mantype_selection,
                                            :id,
                                            lambda { |option|
-                                             if option.id == "The same organisation that owns the housing stock"  && !current_user.support?
+                                             if option.id == "The same organisation that owns the housing stock" && !current_user.support?
                                                "Your organisation"
                                              else
                                                option.name
