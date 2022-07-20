@@ -200,6 +200,15 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
         end
       end
+
+      context "when invalid time is supplied" do
+        let(:params) { { location: { "startdate(3i)" => "1", "startdate(2i)" => "1", "startdate(1i)" => "w" } } }
+
+        it "displays the new page with an error message" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.date.invalid_date"))
+        end
+      end
     end
 
     context "when signed in as a support user" do
