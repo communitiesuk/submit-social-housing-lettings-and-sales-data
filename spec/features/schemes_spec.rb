@@ -209,6 +209,10 @@ RSpec.describe "Schemes scheme Features" do
               it "shows details of those locations" do
                 locations.each do |location|
                   expect(page).to have_content(location.id)
+                  expect(page).to have_content(location.postcode)
+                  expect(page).to have_content(location.units)
+                  expect(page).to have_content(location.type_of_unit)
+                  expect(page).to have_content(location.mobility_type)
                 end
               end
             end
@@ -403,8 +407,8 @@ RSpec.describe "Schemes scheme Features" do
                       fill_in "Location name (optional)", with: "Some name"
                       fill_in "Total number of units at this location", with: 1
                       choose "Self-contained house"
-                      choose "location-wheelchair-adaptation-no-field"
                       choose "location-add-another-location-no-field"
+                      choose "location-mobility-type-none-field"
                       click_button "Save and continue"
                     end
 
@@ -426,6 +430,7 @@ RSpec.describe "Schemes scheme Features" do
                         expect(page).to have_content "SW1P4DF"
                         expect(page).to have_content "Some name"
                         expect(page).to have_content "Self-contained house"
+                        expect(page).to have_content "None"
                       end
                     end
 
@@ -436,8 +441,8 @@ RSpec.describe "Schemes scheme Features" do
                         fill_in "Location name (optional)", with: "Other name"
                         fill_in "Total number of units at this location", with: 2
                         choose "Self-contained house"
-                        choose "location-wheelchair-adaptation-no-field"
                         choose "location-add-another-location-no-field"
+                        choose "location-mobility-type-none-field"
                         click_button "Save and continue"
                       end
 
@@ -465,6 +470,7 @@ RSpec.describe "Schemes scheme Features" do
                           before do
                             click_link "XX11XX"
                             fill_in "Postcode", with: "ZZ1 1ZZ"
+                            choose "location-mobility-type-wheelchair-user-standard-field"
                             click_button "Save and continue"
                           end
 
@@ -472,6 +478,7 @@ RSpec.describe "Schemes scheme Features" do
                             expect(page).to have_content "Locations"
                             expect(page).to have_content "#{scheme.locations.count} location"
                             expect(page).to have_content "ZZ11ZZ"
+                            expect(page).to have_content("Wheelchair-user standard")
                           end
                         end
                       end
@@ -699,8 +706,8 @@ RSpec.describe "Schemes scheme Features" do
                         fill_in "Location name (optional)", with: "Some name"
                         fill_in "Total number of units at this location", with: 1
                         choose "Self-contained house"
-                        choose "location-wheelchair-adaptation-no-field"
                         choose "location-add-another-location-no-field"
+                        choose "location-mobility-type-none-field"
                         click_button "Save and continue"
                       end
 
@@ -732,8 +739,8 @@ RSpec.describe "Schemes scheme Features" do
                           fill_in "Location name (optional)", with: "Other name"
                           fill_in "Total number of units at this location", with: 2
                           choose "Self-contained house"
-                          choose "location-wheelchair-adaptation-no-field"
                           choose "location-add-another-location-no-field"
+                          choose "location-mobility-type-none-field"
                           click_button "Save and continue"
                         end
 

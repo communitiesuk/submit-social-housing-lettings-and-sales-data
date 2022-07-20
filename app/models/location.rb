@@ -1,24 +1,17 @@
 class Location < ApplicationRecord
   validate :validate_postcode
-  validates :units, :type_of_unit, presence: true
+  validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
 
   before_save :infer_la!, if: :postcode_changed?
 
   attr_accessor :add_another_location
 
-  WHEELCHAIR_ADAPTATIONS = {
-    Yes: 1,
-    No: 2,
-  }.freeze
-
-  enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
-
   MOBILITY_TYPE = {
-    "Property fitted with equipment and adaptations (if not designed to above standards)": "A",
+    "Wheelchair-user standard": "W",
+    "Fitted with equipment and adaptations": "A",
     "Property designed to accessible general standard": "M",
     "None": "N",
-    "Property designed to wheelchair user standard": "W",
     "Missing": "X",
   }.freeze
 
@@ -41,7 +34,6 @@ class Location < ApplicationRecord
       { name: "Postcode", value: postcode, suffix: county },
       { name: "Type of unit", value: type_of_unit, suffix: false },
       { name: "Type of building", value: type_of_building, suffix: false },
-      { name: "Wheelchair adaptation", value: wheelchair_adaptation, suffix: false },
     ]
   end
 

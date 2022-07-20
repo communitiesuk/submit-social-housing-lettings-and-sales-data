@@ -70,8 +70,7 @@ module DerivedVariables::CaseLogVariables
 
     if is_supported_housing?
       if location
-        # TODO: Remove and replace with mobility type
-        self.wchair = location.wheelchair_adaptation_before_type_cast
+        self.wchair = location.mobility_type_before_type_cast == "W" ? 1 : 2
       end
       if is_renewal?
         self.voiddate = startdate

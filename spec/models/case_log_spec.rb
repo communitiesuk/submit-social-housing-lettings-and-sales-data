@@ -1702,7 +1702,7 @@ RSpec.describe CaseLog do
 
       context "and not renewal" do
         let(:scheme) { FactoryBot.create(:scheme) }
-        let(:location) { FactoryBot.create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, type_of_building: "Purpose built") }
+        let(:location) { FactoryBot.create(:location, scheme:, postcode: "M11AE", type_of_unit: 1, type_of_building: "Purpose built", mobility_type: "W") }
 
         let(:supported_housing_case_log) do
           described_class.create!({
@@ -1739,7 +1739,7 @@ RSpec.describe CaseLog do
 
         it "correctly infers and saves wchair" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT wchair from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
-          expect(record_from_db["wchair"]).to eq(2)
+          expect(record_from_db["wchair"]).to eq(1)
         end
       end
 

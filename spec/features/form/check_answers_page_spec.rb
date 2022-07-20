@@ -7,7 +7,7 @@ RSpec.describe "Form Check Answers Page" do
   let(:subsection) { "household-characteristics" }
   let(:conditional_subsection) { "conditional-question" }
   let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-  let(:location) { FactoryBot.create(:location, scheme:) }
+  let(:location) { FactoryBot.create(:location, scheme:, mobility_type: "N") }
 
   let(:case_log) do
     FactoryBot.create(
