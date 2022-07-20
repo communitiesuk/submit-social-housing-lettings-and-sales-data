@@ -38,14 +38,18 @@ FactoryBot.define do
     trait :completed do
       status { 2 }
       tenancycode { Faker::Name.initials(number: 10) }
+      age1_known { 0 }
       age1 { 35 }
       sex1 { "F" }
+      ethnic_group { 0 }
       ethnic { 2 }
       national { 4 }
       prevten { 6 }
       ecstat1 { 0 }
       hhmemb { 2 }
       relat2 { "P" }
+      age2_known { 0 }
+      details_known_2 { 0 }
       age2 { 32 }
       sex2 { "M" }
       ecstat2 { 6 }
@@ -55,7 +59,7 @@ FactoryBot.define do
       reservist { 0 }
       illness { 1 }
       preg_occ { 2 }
-      startertenancy { 0 }
+      startertenancy { 1 }
       tenancylength { 5 }
       tenancy { 1 }
       ppostcode_full { Faker::Address.postcode }
@@ -106,7 +110,7 @@ FactoryBot.define do
       rp_dontknow { 0 }
       tenancyother { nil }
       net_income_value_check { nil }
-      net_income_known { 1 }
+      net_income_known { 0 }
       previous_la_known { 1 }
       property_owner_organisation { "Test" }
       property_manager_organisation { "Test" }
@@ -132,8 +136,20 @@ FactoryBot.define do
       unitletas { 2 }
       has_benefits { 1 }
       is_carehome { 0 }
-      sheltered { 0 }
       declaration { 1 }
+      first_time_property_let_as_social_housing { 0 }
+      referral { 2 }
+    end
+    trait :export do
+      tenancycode { "987654" }
+      ppostcode_full { "LE5 1QP" }
+      propcode { "MYPROP" }
+      tenancylength { nil }
+    end
+    trait :sh do
+      needstype { 2 }
+      sheltered { 0 }
+      household_charge { 0 }
     end
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
     updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }

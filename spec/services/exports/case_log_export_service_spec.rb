@@ -5,12 +5,16 @@ RSpec.describe Exports::CaseLogExportService do
 
   let(:storage_service) { instance_double(StorageService) }
 
-  let(:xml_export_file) { File.open("spec/fixtures/exports/case_logs.xml", "r:UTF-8") }
+  let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
+
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
 
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }
   let(:expected_zip_filename) { "core_2021_2022_jan_mar_f0001_inc0001.zip" }
+  let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc0001_pt001.xml" }
   let(:expected_manifest_filename) { "manifest.xml" }
   let(:start_time) { Time.zone.local(2022, 5, 1) }
 
@@ -27,6 +31,10 @@ RSpec.describe Exports::CaseLogExportService do
   before do
     Timecop.freeze(start_time)
     allow(storage_service).to receive(:write_file)
+
+    # Stub the form handler to use the real form
+    allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("2022_2023").and_return(real_2022_2023_form)
   end
 
   context "when exporting daily case logs in XML" do
@@ -48,7 +56,6 @@ RSpec.describe Exports::CaseLogExportService do
 
     context "and one case log is available for export" do
       let!(:case_log) { FactoryBot.create(:case_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737") }
-      let(:expected_data_filename) { "core_2021_2022_jan_mar_f0001_inc0001_pt001.xml" }
 
       it "generates a ZIP export file with the expected filename" do
         expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args)
@@ -222,8 +229,8 @@ RSpec.describe Exports::CaseLogExportService do
     end
   end
 
-  context "when export case logs in CSV" do
-    let(:csv_export_file) { File.open("spec/fixtures/exports/case_logs.csv", "r:UTF-8") }
+  context "when exporting a general needs case logs in CSV" do
+    let(:csv_export_file) { File.open("spec/fixtures/exports/general_needs_log.csv", "r:UTF-8") }
     let(:expected_csv_filename) { "export_2022_05_01.csv" }
 
     let(:case_log) { FactoryBot.create(:case_log, :completed, propcode: "123", ppostcode_full: "SE2 6RT", postcode_full: "NW1 5TY", tenancycode: "BZ737") }
@@ -235,6 +242,25 @@ RSpec.describe Exports::CaseLogExportService do
         expect(content.read).to eq(expected_content)
       end
       export_service.export_csv_case_logs
+    end
+  end
+
+  context "when exporting a supporting housing case logs in XML" do
+    let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
+    let(:location) { FactoryBot.create(:location, :export) }
+
+    let(:case_log) { FactoryBot.create(:case_log, :completed, :export, :sh,  scheme: location.scheme, location:) }
+
+    it "generates an XML export file with the expected content" do
+      # pp case_log.form.subsections.reject{|s| s.status(case_log) == :completed}.map{|s| s.id}
+      pp case_log.form.get_subsection("household_situation").applicable_questions(case_log).reject{|q| q.completed?(case_log)}.map{|q| q.id}
+      expected_content = replace_entity_ids(case_log, export_file.read)
+      expect(storage_service).to receive(:write_file).with(expected_zip_filename, any_args) do |_, content|
+        entry = Zip::File.open_buffer(content).find_entry(expected_data_filename)
+        expect(entry).not_to be_nil
+        expect(entry.get_input_stream.read).to eq(expected_content)
+      end
+      export_service.export_xml_case_logs(full_update: true)
     end
   end
 end
