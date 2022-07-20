@@ -326,6 +326,13 @@ en:
       wheelchair_adaptation: "Are the majority of units in this location built or adapted to wheelchair-user standards?"
       startdate: "When did the first property in this location become available under this scheme?"
       add_another_location: "Do you want to add another location?"
+      mobility_type: "What are the mobility standards for the majority of units in this location?"
+    descriptions:
+      location:
+        mobility_type:
+          W: "The majority of units are suitable for someone who uses a wheelchair and offer the full use of all rooms and facilities."
+          A: "For example, the majority of units have been fitted with stairlifts, ramps, level access showers or grab rails."
+          N: "The majority of units are not designed to wheelchair-user standards or fitted with any equipment and adaptations."
 
   hints:
     location:

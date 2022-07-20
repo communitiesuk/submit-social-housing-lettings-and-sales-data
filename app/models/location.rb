@@ -15,10 +15,10 @@ class Location < ApplicationRecord
   enum wheelchair_adaptation: WHEELCHAIR_ADAPTATIONS
 
   MOBILITY_TYPE = {
-    "Property fitted with equipment and adaptations (if not designed to above standards)": "A",
+    "Wheelchair-user standard": "W",
+    "Fitted with equipment and adaptations": "A",
     "Property designed to accessible general standard": "M",
     "None": "N",
-    "Property designed to wheelchair user standard": "W",
     "Missing": "X",
   }.freeze
 

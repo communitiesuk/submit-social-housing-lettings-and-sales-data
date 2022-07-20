@@ -36,6 +36,17 @@
                                            :name,
                                            legend: { text: I18n.t("questions.location.type_of_unit"), size: "m" } %>
 
+      <% mobility_types_to_display = Location.mobility_types.excluding("Property designed to accessible general standard", "Missing") %>
+
+      <% mobility_type_selection = mobility_types_to_display.map { |key, value| OpenStruct.new(id: key, name: key.to_s.humanize, description: I18n.t("questions.descriptions.location.mobility_type.#{value}")) } %>
+
+      <%= f.govuk_collection_radio_buttons :mobility_type,
+                                            mobility_type_selection,
+                                            :id,
+                                            :name,
+                                            :description,
+                                            legend: { text: I18n.t("questions.location.mobility_type"), size: "m" } %>
+
       <% wheelchair_user_selection = Location.wheelchair_adaptations.keys.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
       <%= f.govuk_collection_radio_buttons :wheelchair_adaptation,
                                            wheelchair_user_selection,

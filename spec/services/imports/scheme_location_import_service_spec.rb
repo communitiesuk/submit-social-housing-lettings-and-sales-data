@@ -134,7 +134,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.name).to eq("Location 1")
       expect(location.postcode).to eq("S44 6EJ")
       expect(location.units).to eq(5)
-      expect(location.mobility_type).to eq("Property fitted with equipment and adaptations (if not designed to above standards)")
+      expect(location.mobility_type).to eq("Fitted with equipment and adaptations")
       expect(location.type_of_unit).to eq("Bungalow")
       expect(location.old_id).to eq(first_location_id)
       expect(location.old_visible_id).to eq(10)

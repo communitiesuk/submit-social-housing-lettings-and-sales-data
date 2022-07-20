@@ -91,7 +91,7 @@ RSpec.describe LocationsController, type: :request do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
       let(:startdate) { Time.utc(2022, 2, 2) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate: } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, mobility_type: "A" } } }
 
       before do
         sign_in user
@@ -113,6 +113,7 @@ RSpec.describe LocationsController, type: :request do
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.wheelchair_adaptation).to eq("No")
         expect(Location.last.startdate).to eq(startdate)
+        expect(Location.last.mobility_type).to eq("Fitted with equipment and adaptations")
       end
 
       context "when postcode is submitted with lower case" do
@@ -134,7 +135,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", add_another_location: "Yes", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -149,6 +150,7 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
           expect(Location.last.wheelchair_adaptation).to eq("No")
+          expect(Location.last.mobility_type).to eq("None")
         end
       end
 
@@ -172,7 +174,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", wheelchair_adaptation: "No", postcode: "ZZ1 1ZZ", mobility_type: "W" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -187,6 +189,7 @@ RSpec.describe LocationsController, type: :request do
           expect(Location.last.units).to eq(5)
           expect(Location.last.type_of_unit).to eq("Bungalow")
           expect(Location.last.wheelchair_adaptation).to eq("No")
+          expect(Location.last.mobility_type).to eq("Wheelchair-user standard")
         end
       end
 
