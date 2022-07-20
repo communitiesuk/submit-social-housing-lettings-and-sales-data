@@ -76,6 +76,8 @@ en:
               blank: "Enter total number of units at this location"
             type_of_unit:
               blank: "Select the most common type of unit at this location"
+            mobility_type:
+              blank: "Select the mobility standards for the majority of units in this location"
 
   validations:
     organisation:

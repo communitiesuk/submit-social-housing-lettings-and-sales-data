@@ -116,7 +116,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", mobility_type: "N" } } }
 
         it "creates a new location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -125,7 +125,7 @@ RSpec.describe LocationsController, type: :request do
 
       context "when trying to add location to a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "displays the new page with an error message" do
           post "/schemes/#{another_scheme.id}/locations", params: params
@@ -153,7 +153,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -197,6 +197,7 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("validations.postcode"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.mobility_type.blank"))
         end
       end
 
@@ -248,7 +249,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -271,7 +272,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcode is submitted with lower case" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", mobility_type: "N" } } }
 
         it "creates a new location for scheme with postcode " do
           expect(Location.last.postcode).to eq("ZZ11ZZ")
@@ -289,7 +290,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as yes" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "Yes", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -306,7 +307,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is selected as no" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
@@ -323,7 +324,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when do you want to add another location is not selected" do
-        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ" } } }
+        let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
         it "creates a new location for scheme with valid params and redirects to correct page" do
           expect { post "/schemes/#{scheme.id}/locations", params: }.to change(Location, :count).by(1)
