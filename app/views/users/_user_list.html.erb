@@ -30,16 +30,24 @@
             <% if user.is_data_protection_officer? || user.is_key_contact? %>
               <br>
             <% end %>
-            <%= user.is_data_protection_officer? ? govuk_tag(
-              classes: "app-tag--small",
-              colour: "turquoise",
-              text: "Data protection officer",
-            ) : "" %>
-            <%= user.is_key_contact? ? govuk_tag(
-              classes: "app-tag--small",
-              colour: "turquoise",
-              text: "Key contact",
-            ) : "" %>
+            <% if user.is_data_protection_officer? %>
+              <%= govuk_tag(
+                    classes: "app-tag--small",
+                    colour: "turquoise",
+                    text: "Data protection officer",
+                  ) %>
+            <% else %>
+              <%= "" %>
+            <% end %>
+            <% if user.is_key_contact? %>
+              <%= govuk_tag(
+                    classes: "app-tag--small",
+                    colour: "turquoise",
+                    text: "Key contact",
+                  ) %>
+            <% else %>
+              <%= "" %>
+            <% end %>
           <% end %>
           <% row.cell(text: simple_format(org_cell(user), {}, wrapper_tag: "div")) %>
           <% row.cell(text: user.active? ? user.last_sign_in_at&.to_formatted_s(:govuk_date) : "Deactivated") %>
