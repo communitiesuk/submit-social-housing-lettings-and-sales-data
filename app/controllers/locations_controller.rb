@@ -58,7 +58,7 @@ private
   end
 
   def date_params_missing?(location_params)
-    location_params["startdate(1i)"].empty? && location_params["startdate(2i)"].empty? && location_params["startdate(3i)"].empty?
+    location_params["startdate(1i)"].blank? && location_params["startdate(2i)"].blank? && location_params["startdate(3i)"].blank?
   end
 
   def is_integer?(string)
