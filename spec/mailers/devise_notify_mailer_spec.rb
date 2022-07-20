@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DeviseNotifyMailer do
-  xdescribe "Intercept mail" do
+  describe "Intercept mail" do
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:devise_notify_mailer) { described_class.new }
     let(:organisation) { FactoryBot.create(:organisation) }
