@@ -243,7 +243,7 @@ RSpec.describe "User Features" do
           let!(:organisation) { FactoryBot.create(:organisation) }
           let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
           let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-          let!(:log_to_delete) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+          let!(:log_to_delete) { FactoryBot.create(:case_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
 
           it "child relationships ie logs, schemes and users are deleted too - database" do
             ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
