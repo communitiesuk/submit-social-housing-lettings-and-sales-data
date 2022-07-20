@@ -15,15 +15,29 @@ class LocationsController < ApplicationController
     @location = Location.new
   end
 
-  def create
-    @location = if Date.valid_date?(location_params["startdate(3i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(1i)"].to_i)
-                  Location.new(location_params.except("startdate(3i)", "startdate(2i)", "startdate(1i)"))
-                else
-                  Location.new(location_params) end
+  def validation_errors(scheme_params)
+    scheme_params.each_key do |key|
+      if key == "support_services_provider"
+        @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
+      elsif scheme_params[key].to_s.empty?
+        @scheme.errors.add(key.to_sym)
+      end
+    end
+  end
 
-    if @location.save
-      location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
+  def create
+    if valid_date_params?(location_params)
+      @location = Location.new(location_params)
+      if @location.save
+        location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(id: @scheme.id)) : redirect_to(scheme_check_answers_path(scheme_id: @scheme.id))
+      else
+        @location.errors.add(:startdate) unless Date.valid_date?(location_params["startdate(3i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(1i)"].to_i)
+        render :new, status: :unprocessable_entity
+      end
     else
+      @location = Location.new(location_params.except("startdate(3i)", "startdate(2i)", "startdate(1i)"))
+      @location.valid?
+      @location.errors.add(:startdate)
       render :new, status: :unprocessable_entity
     end
   end
@@ -48,6 +62,15 @@ class LocationsController < ApplicationController
   end
 
 private
+
+  def valid_date_params?(location_params)
+    is_integer?(location_params["startdate(1i)"]) && is_integer?(location_params["startdate(2i)"]) && is_integer?(location_params["startdate(3i)"]) &&
+      Date.valid_date?(location_params["startdate(1i)"].to_i, location_params["startdate(2i)"].to_i, location_params["startdate(3i)"].to_i)
+  end
+
+  def is_integer?(string)
+    string.to_i.to_s == string
+  end
 
   def find_scheme
     @scheme = if %w[new create index edit_name].include?(action_name)

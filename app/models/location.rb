@@ -1,5 +1,5 @@
 class Location < ApplicationRecord
-  validate :validate_postcode, :validate_startdate
+  validate :validate_postcode
   validates :units, :type_of_unit, presence: true
   belongs_to :scheme
 
@@ -48,13 +48,6 @@ class Location < ApplicationRecord
 private
 
   PIO = PostcodeService.new
-
-  def validate_startdate
-    unless startdate.nil? || (startdate.is_a?(ActiveSupport::TimeWithZone) && !startdate.year.zero?)
-      error_message = I18n.t("validations.date.invalid_date")
-      errors.add :startdate, error_message
-    end
-  end
 
   def validate_postcode
     if postcode.nil? || !postcode&.match(POSTCODE_REGEXP)

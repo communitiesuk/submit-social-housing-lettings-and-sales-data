@@ -202,7 +202,19 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when invalid time is supplied" do
-        let(:params) { { location: { "startdate(3i)" => "1", "startdate(2i)" => "1", "startdate(1i)" => "w" } } }
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            wheelchair_adaptation: "No",
+            add_another_location: "No",
+            postcode: "ZZ1 1ZZ",
+            "startdate(3i)" => "1",
+            "startdate(2i)" => "1",
+            "startdate(1i)" => "w",
+          } }
+        end
 
         it "displays the new page with an error message" do
           expect(response).to have_http_status(:unprocessable_entity)
