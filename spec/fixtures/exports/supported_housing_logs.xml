@@ -2,7 +2,7 @@
 <forms>
   <form>
     <status>2</status>
-    <tenancycode>BZ737</tenancycode>
+    <tenancycode>987654</tenancycode>
     <age1>35</age1>
     <sex1>F</sex1>
     <ethnic>2</ethnic>
@@ -37,22 +37,21 @@
     <reservist>0</reservist>
     <illness>1</illness>
     <preg_occ>2</preg_occ>
-    <startertenancy>0</startertenancy>
-    <tenancylength>5</tenancylength>
+    <startertenancy>1</startertenancy>
+    <tenancylength/>
     <tenancy>1</tenancy>
-    <ppostcode_full>SE26RT</ppostcode_full>
+    <ppostcode_full>LE51QP</ppostcode_full>
     <rsnvac>6</rsnvac>
-    <unittype_gn>7</unittype_gn>
-    <beds>3</beds>
+    <beds/>
     <offered>2</offered>
-    <wchair>1</wchair>
+    <wchair>2</wchair>
     <earnings>68</earnings>
     <incfreq>1</incfreq>
     <benefits>1</benefits>
     <period>2</period>
     <layear>2</layear>
     <waityear>1</waityear>
-    <postcode_full>NW15TY</postcode_full>
+    <postcode_full>SW1A2AA</postcode_full>
     <reasonpref>1</reasonpref>
     <cbl>1</cbl>
     <chr>1</chr>
@@ -82,7 +81,7 @@
     <tenancyother/>
     <irproduct_other/>
     <reason>4</reason>
-    <propcode>123</propcode>
+    <propcode>MYPROP</propcode>
     <la>E09000003</la>
     <prevloc>E07000105</prevloc>
     <hb>6</hb>
@@ -91,17 +90,17 @@
     <incref>0</incref>
     <startdate>2022-02-02 10:36:49 UTC</startdate>
     <armedforces>1</armedforces>
-    <unitletas>2</unitletas>
-    <builtype>1</builtype>
+    <unitletas/>
+    <builtype/>
     <voiddate>2019-11-03 00:00:00 UTC</voiddate>
     <renttype>2</renttype>
-    <needstype>1</needstype>
-    <lettype>7</lettype>
+    <needstype>2</needstype>
+    <lettype>8</lettype>
     <totchild>0</totchild>
     <totelder>0</totelder>
     <totadult>2</totadult>
-    <nocharge>0</nocharge>
-    <referral/>
+    <nocharge/>
+    <referral>2</referral>
     <brent>200.0</brent>
     <scharge>50.0</scharge>
     <pscharge>40.0</pscharge>
@@ -144,7 +143,19 @@
     <manhcnum>1234</manhcnum>
     <createddate>2022-02-08 16:52:15 UTC</createddate>
     <uploaddate>2022-02-08 16:52:15 UTC</uploaddate>
-    <unittype_sh/>
+    <unittype_sh>7</unittype_sh>
+    <confidential>1</confidential>
+    <cligrp1>G</cligrp1>
+    <cligrp2>M</cligrp2>
+    <intstay>M</intstay>
+    <mantype/>
+    <reghome>1</reghome>
+    <schtype>7</schtype>
+    <support>4</support>
+    <units_scheme>20</units_scheme>
+    <mobstand>A</mobstand>
+    <scheme>111</scheme>
+    <units>20</units>
     <providertype>1</providertype>
   </form>
 </forms>

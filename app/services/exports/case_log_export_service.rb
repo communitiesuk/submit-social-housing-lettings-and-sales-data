@@ -165,12 +165,12 @@ module Exports
       end
 
       # Organisation fields
-      if case_log.owning_organisation.present?
+      if case_log.owning_organisation
         attribute_hash["owningorgid"] = case_log.owning_organisation.old_visible_id || (case_log.owning_organisation.id + LOG_ID_OFFSET)
         attribute_hash["owningorgname"] = case_log.owning_organisation.name
         attribute_hash["hcnum"] = case_log.owning_organisation.housing_registration_no
       end
-      if case_log.managing_organisation.present?
+      if case_log.managing_organisation
         attribute_hash["maningorgid"] = case_log.managing_organisation.old_visible_id || (case_log.managing_organisation.id + LOG_ID_OFFSET)
         attribute_hash["maningorgname"] = case_log.managing_organisation.name
         attribute_hash["manhcnum"] = case_log.managing_organisation.housing_registration_no
@@ -189,9 +189,35 @@ module Exports
         attribute_hash["age#{index}"] = -9 if attribute_hash["age#{index}_known"] == 1
       end
 
-      attribute_hash["unittype_sh"] = case_log.unittype_sh
-
+      # Supported housing fields
+      if case_log.is_supported_housing?
+        attribute_hash["unittype_sh"] = case_log.unittype_sh
+        attribute_hash["sheltered"] = case_log.sheltered
+        attribute_hash["nocharge"] = case_log.household_charge == 1 ? 1 : nil
+        attribute_hash["chcharge"] = case_log.chcharge
+        add_scheme_fields!(case_log.scheme, attribute_hash)
+        add_location_fields!(case_log.location, attribute_hash)
+        attribute_hash.delete("unittype_gn")
+      end
       attribute_hash
+    end
+
+    def add_scheme_fields!(scheme, attribute_hash)
+      attribute_hash["confidential"] = scheme.sensitive_before_type_cast == 1 ? 1 : nil
+      attribute_hash["cligrp1"] = scheme.primary_client_group_before_type_cast
+      attribute_hash["cligrp2"] = scheme.secondary_client_group_before_type_cast
+      attribute_hash["intstay"] = scheme.intended_stay_before_type_cast
+      attribute_hash["mantype"] = scheme.arrangement_type_before_type_cast
+      attribute_hash["reghome"] = scheme.registered_under_care_act_before_type_cast
+      attribute_hash["schtype"] = scheme.scheme_type_before_type_cast
+      attribute_hash["support"] = scheme.support_type_before_type_cast
+      attribute_hash["units_scheme"] = scheme.locations.map(&:units).sum
+    end
+
+    def add_location_fields!(location, attribute_hash)
+      attribute_hash["mobstand"] = location.mobility_type_before_type_cast
+      attribute_hash["scheme"] = location.old_visible_id || (location.id + LOG_ID_OFFSET)
+      attribute_hash["units"] = location.units
     end
 
     def filter_keys!(attributes)
