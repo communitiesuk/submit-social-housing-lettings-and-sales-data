@@ -110,7 +110,7 @@ export const sort = (query, options) => {
 export const suggestion = (value, options) => {
   const option = options.find((o) => o.name === value)
   if (option) {
-    const html = option.append ? `<span>${value}</span> <span class="autocomplete__option__append">${option.append}</span>` : `<span>${value}</span>`
+    const html = option.append ? `<span class="autocomplete__option__append">${value}</span> <span>${option.append}</span>` : `<span>${value}</span>`
     return option.hint ? `${html}<div class="autocomplete__option__hint">${option.hint}</div>` : html
   } else {
     return '<span>No results found</span>'
