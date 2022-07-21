@@ -23,13 +23,13 @@ module SchemesHelpers
     click_button("Sign in")
   end
 
-  def fill_in_and_save_scheme_details
+  def fill_in_and_save_scheme_details(answers = {})
     fill_in "Scheme name", with: "FooBar"
     check "This scheme contains confidential information"
     choose "Direct access hostel"
     choose "Yes – registered care home providing nursing care"
     select organisation.name, from: "scheme-owning-organisation-id-field"
-    choose "The same organisation that owns the housing stock"
+    choose answers["housing_stock_owners"].presence || "The same organisation that owns the housing stock"
     click_button "Save and continue"
   end
 
