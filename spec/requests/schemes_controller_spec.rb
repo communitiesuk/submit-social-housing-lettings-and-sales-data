@@ -341,7 +341,7 @@ RSpec.describe SchemesController, type: :request do
                     sensitive: "1",
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
-                    arrangement_type: "The same organisation that owns the housing stock" } }
+                    arrangement_type: "D" } }
       end
 
       before do
@@ -378,7 +378,7 @@ RSpec.describe SchemesController, type: :request do
                       sensitive: "1",
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
-                      support_services_provider_before_type_cast: "1" } }
+                      arrangement_type: "R" } }
         end
 
         it "creates a new scheme for user organisation with valid params and renders correct page" do
@@ -435,7 +435,7 @@ RSpec.describe SchemesController, type: :request do
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
                     owning_organisation_id: organisation.id,
-                    arrangement_type: "The same organisation that owns the housing stock" } }
+                    arrangement_type: "D" } }
       end
 
       before do
@@ -786,7 +786,7 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
-                      arrangement_type: "The same organisation that owns the housing stock" } }
+                      arrangement_type: "D" } }
         end
 
         it "renders confirm secondary group after successful update" do
@@ -1043,7 +1043,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      arrangement_type: "The same organisation that owns the housing stock",
+                      arrangement_type: "D",
                       owning_organisation_id: another_organisation.id } }
         end
 
@@ -1060,7 +1060,7 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
           expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
           expect(scheme_to_update.reload.owning_organisation_id).to eq(another_organisation.id)
-          expect(scheme_to_update.reload.managing_organisation_id).to eq(nil)
+          expect(scheme_to_update.reload.managing_organisation_id).to eq(another_organisation.id)
         end
 
         context "when updating from check answers page" do

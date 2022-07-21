@@ -30,7 +30,7 @@ class SchemesController < ApplicationController
     validation_errors scheme_params
 
     if @scheme.errors.empty? && @scheme.save
-      if scheme_params[:arrangement_type] == "The same organisation that owns the housing stock"
+      if @scheme.arrangement_type_before_type_cast == "D"
         redirect_to scheme_primary_client_group_path(@scheme)
       else
         redirect_to scheme_support_services_provider_path(@scheme)
@@ -100,9 +100,7 @@ private
 
   def validation_errors(scheme_params)
     scheme_params.each_key do |key|
-      if key == "support_services_provider"
-        @scheme.errors.add("support_services_provider_before_type_cast".to_sym) if scheme_params[key].to_s.empty?
-      elsif scheme_params[key].to_s.empty?
+      if scheme_params[key].to_s.empty?
         @scheme.errors.add(key.to_sym)
       end
     end
@@ -143,9 +141,9 @@ private
     when "support"
       new_location_path
     when "details"
-      if @scheme.arrangement_type == "The same organisation that owns the housing stock"
+      if @scheme.arrangement_type_before_type_cast == "D"
         scheme_primary_client_group_path(@scheme)
-      elsif @scheme.arrangement_type.present? && @scheme.arrangement_type != "The same organisation that owns the housing stock"
+      elsif @scheme.arrangement_type.present? && @scheme.arrangement_type_before_type_cast != "D"
         scheme_support_services_provider_path(@scheme)
       else
         scheme_details_path(@scheme)
