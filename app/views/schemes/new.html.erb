@@ -71,7 +71,7 @@
                                            mantype_selection,
                                            :id,
                                            lambda { |option|
-                                             if option.id == "The same organisation that owns the housing stock" && !current_user.support?
+                                             if Scheme::ARRANGEMENT_TYPE[option.id] == "D" && !current_user.support?
                                                "Your organisation"
                                              else
                                                option.name
