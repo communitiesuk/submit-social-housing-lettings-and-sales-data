@@ -1,8 +1,8 @@
 require "rails_helper"
-require_relative "form/helpers"
+require_relative "schemes_helpers"
 
 RSpec.describe "Schemes scheme Features" do
-  include Helpers
+  include SchemesHelpers
   context "when viewing list of schemes" do
     context "when I am signed as a coordinator user and there are schemes in the database" do
       let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
