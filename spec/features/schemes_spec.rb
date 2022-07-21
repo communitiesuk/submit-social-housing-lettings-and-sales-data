@@ -252,6 +252,25 @@ RSpec.describe "Schemes scheme Features" do
               it "shows the new location form" do
                 expect(page).to have_content("Add a location to this scheme")
               end
+
+              context "when the user completes the new location form" do
+                let(:location_name) { "Area 42" }
+
+                before do
+                  fill_in "Postcode", with: "NW1L 5DP"
+                  fill_in "Location name (optional)", with: location_name
+                  fill_in "Total number of units at this location", with: 1
+                  choose "Bungalow"
+                  choose "location-wheelchair-adaptation-no-field"
+                  choose "location-add-another-location-no-field"
+                  click_button "Save and continue"
+                end
+
+                it "shows the check answers page location tab" do
+                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page).to have_content(location_name)
+                end
+              end
             end
           end
         end
