@@ -208,10 +208,11 @@ RSpec.describe "Schemes scheme Features" do
     end
 
     context "when creating a new scheme" do
-      let!(:organisation) { FactoryBot.create(:organisation, name: "FooBar") }
+      let(:organisation_name) { "FooBar" }
       let(:scheme) { Scheme.first }
 
       before do
+        FactoryBot.create(:organisation, name: organisation_name)
         Scheme.destroy_all
         click_link "Schemes", href: "/schemes"
       end
@@ -222,8 +223,6 @@ RSpec.describe "Schemes scheme Features" do
       end
 
       context "when I press create a new scheme" do
-        let!(:organisation) { FactoryBot.create(:organisation, name: "FooBar") }
-
         before do
           click_link "Create a new supported housing scheme"
         end
@@ -470,13 +469,12 @@ RSpec.describe "Schemes scheme Features" do
           end
         end
 
-        
         context "when I fill in scheme details indicating that supported services provided by a different organisation and I press save I see primary client group section" do
           let(:scheme) { Scheme.first }
           let!(:another_organisation) { FactoryBot.create(:organisation, name: "Another Org") }
 
           before do
-            fill_in_and_save_scheme_details({"housing_stock_owners" => "Another registered housing provider"})
+            fill_in_and_save_scheme_details({ "housing_stock_owners" => "Another registered housing provider" })
           end
 
           it "lets me fill in the managing organisation details" do
@@ -515,22 +513,22 @@ RSpec.describe "Schemes scheme Features" do
               fill_in_and_save_support
               fill_in_and_save_location
             end
-  
+
             it "displays change links" do
               assert_selector "a", text: "Change", count: 13
             end
-  
+
             it "allows changing details questions" do
               click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
               expect(page).to have_current_path("/schemes/#{scheme.id}/details?check_answers=true")
-  
+
               fill_in "Scheme name", with: "Example"
               click_button "Save and continue"
-  
+
               expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
               expect(page).to have_content "Example"
             end
-  
+
             it "lets me select the support answers after navigating back" do
               click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
               click_link "Back"
