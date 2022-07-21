@@ -116,5 +116,6 @@
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
   <%= f.hidden_field :page, value: "check-answers" %>
   <%= f.hidden_field :confirmed, value: "true" %>
-  <%= f.govuk_submit "Create scheme" %>
+  <% button_label = @scheme.confirmed? ? "Save" : "Create scheme" %>
+  <%= f.govuk_submit button_label %>
 <% end %>

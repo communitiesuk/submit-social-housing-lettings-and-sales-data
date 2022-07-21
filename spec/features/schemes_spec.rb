@@ -270,6 +270,11 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page.current_url.split("/").last).to eq("check-answers#locations")
                   expect(page).to have_content(location_name)
                 end
+
+                it "has the correct action button text" do
+                  expect(page).to have_button("Save")
+                  expect(page).not_to have_button("Create scheme")
+                end
               end
             end
           end
