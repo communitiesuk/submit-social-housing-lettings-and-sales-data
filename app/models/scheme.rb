@@ -163,7 +163,7 @@ class Scheme < ApplicationRecord
   end
 
   def appended_text
-    "(#{locations.count { |location| location.startdate.blank? || location.startdate <= Time.zone.today }} locations)"
+    "#{locations.count { |location| location.startdate.blank? || location.startdate <= Time.zone.today }} locations"
   end
 
   def hint
