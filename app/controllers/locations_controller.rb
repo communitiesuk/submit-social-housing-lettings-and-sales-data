@@ -62,7 +62,7 @@ private
   end
 
   def is_integer?(string)
-    string.to_i.to_s == string
+    string.sub(/^0+/, "").to_i.to_s == string.sub(/^0+/, "")
   end
 
   def find_scheme
