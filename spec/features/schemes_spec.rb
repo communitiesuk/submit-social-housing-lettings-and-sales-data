@@ -275,6 +275,16 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_button("Save")
                   expect(page).not_to have_button("Create scheme")
                 end
+
+                context "when you click to view the scheme details" do
+                  before do
+                    click_link("Scheme")
+                  end
+
+                  it "does not let you change details other than the name" do
+                    assert_selector "a", text: "Change", count: 1
+                  end
+                end
               end
             end
           end
