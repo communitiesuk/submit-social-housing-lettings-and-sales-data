@@ -261,7 +261,7 @@ RSpec.describe "Schemes scheme Features" do
                   fill_in "Location name (optional)", with: location_name
                   fill_in "Total number of units at this location", with: 1
                   choose "Bungalow"
-                  choose "location-wheelchair-adaptation-no-field"
+                  choose "location-mobility-type-none-field"
                   choose "location-add-another-location-no-field"
                   click_button "Save and continue"
                 end
@@ -785,7 +785,7 @@ RSpec.describe "Schemes scheme Features" do
                   fill_in "Location name (optional)", with: location_name
                   fill_in "Total number of units at this location", with: 1
                   choose "Bungalow"
-                  choose "location-wheelchair-adaptation-no-field"
+                  choose "location-mobility-type-none-field"
                   choose "location-add-another-location-no-field"
                   click_button "Save and continue"
                 end
