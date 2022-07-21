@@ -63,9 +63,7 @@ en:
               invalid: "Select intended length of stay"
             has_other_client_group:
               invalid: "Select if this scheme provides for another client group"
-            support_services_provider:
-              invalid: "Select who provides the support services used by this scheme"
-            support_services_provider_before_type_cast:
+            arrangement_type:
               invalid: "Select who provides the support services used by this scheme"
         location:
           attributes:

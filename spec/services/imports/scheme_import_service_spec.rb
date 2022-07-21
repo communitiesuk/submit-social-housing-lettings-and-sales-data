@@ -48,7 +48,7 @@ RSpec.describe Imports::SchemeImportService do
       expect(scheme.old_id).to eq("6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d")
       expect(scheme.old_visible_id).to eq(123)
       expect(scheme.service_name).to eq("Management Group")
-      expect(scheme.arrangement_type).to eq("O")
+      expect(scheme.arrangement_type).to eq("Another organisation")
     end
 
     context "and the scheme status is not approved" do

@@ -65,15 +65,13 @@
                                       "data-controller": %w[accessible-autocomplete conditional-filter] %>
       <% end %>
 
-      <% support_services_provider_selection = Scheme.support_services_providers.map do |key, value| %>
-        <% OpenStruct.new(id: value, name: key.to_s.humanize) %>
-      <% end %>
+      <% mantype_selection = Scheme.arrangement_types.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
 
-      <%= f.govuk_collection_radio_buttons :support_services_provider_before_type_cast,
-                                           support_services_provider_selection,
+      <%= f.govuk_collection_radio_buttons :arrangement_type,
+                                           mantype_selection,
                                            :id,
                                            lambda { |option|
-                                             if option.id.zero? && !current_user.support?
+                                             if Scheme::ARRANGEMENT_TYPE[option.id] == "D" && !current_user.support?
                                                "Your organisation"
                                              else
                                                option.name
