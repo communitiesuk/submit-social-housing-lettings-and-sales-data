@@ -123,6 +123,26 @@ RSpec.describe LocationsController, type: :request do
         end
       end
 
+      context "when startdate is submitted with leading zeroes" do
+        let(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            add_another_location: "No",
+            postcode: "zz1 1zz",
+            mobility_type: "N",
+            "startdate(3i)" => "01",
+            "startdate(2i)" => "01",
+            "startdate(1i)" => "2022",
+          } }
+        end
+
+        it "creates a new location for scheme with postcode " do
+          expect(Location.last.startdate).to eq(Time.utc(2022, 1, 1))
+        end
+      end
+
       context "when trying to add location to a scheme that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
