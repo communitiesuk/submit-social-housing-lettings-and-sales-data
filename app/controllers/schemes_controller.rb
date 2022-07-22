@@ -47,7 +47,6 @@ class SchemesController < ApplicationController
     page = params[:scheme][:page]
 
     validation_errors scheme_params
-
     if @scheme.errors.empty? && @scheme.update(scheme_params)
       if check_answers
         if confirm_secondary_page? page
@@ -150,6 +149,8 @@ private
       end
     when "edit-name"
       scheme_path(@scheme)
+    when "check-answers"
+      schemes_path(scheme_id: @scheme.id)
     end
   end
 
@@ -166,7 +167,8 @@ private
                                                      :secondary_client_group,
                                                      :support_type,
                                                      :arrangement_type,
-                                                     :intended_stay)
+                                                     :intended_stay,
+                                                     :confirmed)
 
     full_params = required_params[:arrangement_type] == "D" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
 

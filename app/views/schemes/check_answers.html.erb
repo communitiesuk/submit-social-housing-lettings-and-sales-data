@@ -11,40 +11,48 @@
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_details_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% unless @scheme.confirmed? && attr[:name] != "Name" %>
+                <% row.action(
+                     text: "Change",
+                     href: scheme_details_path(@scheme, check_answers: true),
+                   ) %>
+                <% end %>
             <% end %>
           <% end %>
           <% @scheme.check_support_services_provider_attributes.each do |attr| %>
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_support_services_provider_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% unless @scheme.confirmed? %>
+                <% row.action(
+                     text: "Change",
+                     href: scheme_support_services_provider_path(@scheme, check_answers: true),
+                   ) %>
+                <% end %>
             <% end %>
           <% end %>
           <% @scheme.check_primary_client_attributes.each do |attr| %>
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_primary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% unless @scheme.confirmed? %>
+                <% row.action(
+                     text: "Change",
+                     href: scheme_primary_client_group_path(@scheme, check_answers: true),
+                   ) %>
+                <% end %>
             <% end %>
           <% end %>
           <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_confirm_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% unless @scheme.confirmed? %>
+                <% row.action(
+                     text: "Change",
+                     href: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true),
+                   ) %>
+              <% end %>
             <% end %>
           <% end %>
           <% if @scheme.has_other_client_group == "Yes" %>
@@ -52,10 +60,12 @@
               <%= summary_list.row do |row| %>
                 <% row.key { attr[:name].to_s } %>
                 <% row.value { details_html(attr) } %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_secondary_client_group_path(scheme_id: @scheme.id, check_answers: true),
-                   ) %>
+                <% unless @scheme.confirmed? %>
+                  <% row.action(
+                       text: "Change",
+                       href: scheme_secondary_client_group_path(@scheme, check_answers: true),
+                     ) %>
+                  <% end %>
               <% end %>
             <% end %>
           <% end %>
@@ -63,10 +73,12 @@
             <%= summary_list.row do |row| %>
               <% row.key { attr[:name].to_s } %>
               <% row.value { details_html(attr) } %>
-              <% row.action(
-                   text: "Change",
-                   href: scheme_support_path(scheme_id: @scheme.id, check_answers: true),
-                 ) %>
+              <% unless @scheme.confirmed? %>
+                <% row.action(
+                     text: "Change",
+                     href: scheme_support_path(@scheme, check_answers: true),
+                   ) %>
+              <% end %>
             <% end %>
           <% end %>
         <% end %>
@@ -113,4 +125,9 @@
   </div>
 </div>
 
-<%= govuk_button_link_to "Create scheme", schemes_path(scheme_id: @scheme.id), html: { method: :get } %>
+<%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
+  <%= f.hidden_field :page, value: "check-answers" %>
+  <%= f.hidden_field :confirmed, value: "true" %>
+  <% button_label = @scheme.confirmed? ? "Save" : "Create scheme" %>
+  <%= f.govuk_submit button_label %>
+<% end %>

@@ -7,6 +7,10 @@ class Location < ApplicationRecord
 
   attr_accessor :add_another_location
 
+  scope :search_by_postcode, ->(postcode) { where("postcode ILIKE ?", "%#{postcode.gsub(/\s+/, '')}%") }
+  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
+
   MOBILITY_TYPE = {
     "Wheelchair-user standard": "W",
     "Fitted with equipment and adaptations": "A",
