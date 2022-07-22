@@ -178,7 +178,7 @@ private
       required_params[:managing_organisation_id] = nil
     end
 
-    if required_params[:arrangement_type] == "The same organisation that owns the housing stock"
+    if required_params[:arrangement_type] == "The same organisation that owns the housing stock" || (required_params[:arrangement_type].blank? && @scheme.arrangement_type_same?)
       required_params[:managing_organisation_id] = required_params[:owning_organisation_id] || @scheme.owning_organisation_id
     end
 
