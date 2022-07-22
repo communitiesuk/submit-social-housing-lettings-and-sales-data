@@ -196,4 +196,8 @@ class Scheme < ApplicationRecord
     }
     Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
   end
+
+  def arrangement_type_same?
+    arrangement_type == "The same organisation that owns the housing stock"
+  end
 end

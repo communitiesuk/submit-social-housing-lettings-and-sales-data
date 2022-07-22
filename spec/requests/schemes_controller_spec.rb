@@ -612,7 +612,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support services provider" do
-        let(:params) { { scheme: { managing_organisation_id: organisation.id, page: "support-services-provider" } } }
+        let(:params) { { scheme: { arrangement_type: "Another organisation", managing_organisation_id: organisation.id, page: "support-services-provider" } } }
 
         it "renders primary client group after successful update" do
           follow_redirect!
@@ -1043,7 +1043,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      arrangement_type: "D",
+                      arrangement_type: "The same organisation that owns the housing stock",
                       owning_organisation_id: another_organisation.id } }
         end
 

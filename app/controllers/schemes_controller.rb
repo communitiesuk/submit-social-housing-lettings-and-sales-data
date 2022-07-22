@@ -103,6 +103,10 @@ private
         @scheme.errors.add(key.to_sym)
       end
     end
+
+    if @scheme.arrangement_type_same? && scheme_params[:arrangement_type] != "The same organisation that owns the housing stock"
+      @scheme.errors.delete(:managing_organisation_id)
+    end
   end
 
   def confirm_secondary_page?(page)
@@ -170,14 +174,20 @@ private
                                                      :intended_stay,
                                                      :confirmed)
 
-    full_params = required_params[:arrangement_type] == "D" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    if @scheme.present? && @scheme.arrangement_type_same? && required_params[:arrangement_type] != "The same organisation that owns the housing stock" && required_params[:managing_organisation_id].blank?
+      required_params[:managing_organisation_id] = nil
+    end
 
-    full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
+    if required_params[:arrangement_type] == "The same organisation that owns the housing stock"
+      required_params[:managing_organisation_id] = required_params[:owning_organisation_id] || @scheme.owning_organisation_id
+    end
+
+    required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
 
     if current_user.data_coordinator?
-      full_params[:owning_organisation_id] = current_user.organisation_id
+      required_params[:owning_organisation_id] = current_user.organisation_id
     end
-    full_params
+    required_params
   end
 
   def search_term

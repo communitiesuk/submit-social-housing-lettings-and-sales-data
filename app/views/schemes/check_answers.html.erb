@@ -19,16 +19,18 @@
                 <% end %>
             <% end %>
           <% end %>
+          <% if !@scheme.arrangement_type_same? %>
           <% @scheme.check_support_services_provider_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% unless @scheme.confirmed? %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_support_services_provider_path(@scheme, check_answers: true),
-                   ) %>
-                <% end %>
+              <%= summary_list.row do |row| %>
+                <% row.key { attr[:name].to_s } %>
+                <% row.value { details_html(attr) } %>
+                <% unless @scheme.confirmed? %>
+                  <% row.action(
+                      text: "Change",
+                      href: scheme_support_services_provider_path(@scheme, check_answers: true),
+                    ) %>
+                  <% end %>
+              <% end %>
             <% end %>
           <% end %>
           <% @scheme.check_primary_client_attributes.each do |attr| %>
