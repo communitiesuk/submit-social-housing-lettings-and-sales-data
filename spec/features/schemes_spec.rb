@@ -843,7 +843,7 @@ RSpec.describe "Schemes scheme Features" do
 
   context "when selecting a scheme" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
     let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
     let!(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
 
@@ -885,6 +885,12 @@ RSpec.describe "Schemes scheme Features" do
       location.update!(startdate: Time.utc(2022, 6, 3))
       visit("/logs/#{case_log.id}/scheme")
       expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
+    end
+
+    it "does display the schemes that are not completed" do
+      schemes[2].update!(managing_organisation_id: nil)
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
     end
   end
 end
