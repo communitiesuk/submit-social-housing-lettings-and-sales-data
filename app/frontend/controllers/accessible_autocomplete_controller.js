@@ -13,7 +13,7 @@ export default class extends Controller {
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
 
     accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: '',
+      defaultValue: options[0].name,
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
