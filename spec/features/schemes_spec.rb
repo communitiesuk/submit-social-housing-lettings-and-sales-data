@@ -175,7 +175,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "AA11AA") }
 
             before do
               visit("schemes")
@@ -199,6 +199,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(location.units)
                   expect(page).to have_content(location.type_of_unit)
                   expect(page).to have_content(location.mobility_type)
+                  expect(page).to have_content(location.location_admin_district)
                 end
               end
             end
@@ -468,10 +469,12 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays information about the first created location" do
-            expect(page).to have_content "SW1P4DF"
+            expect(page).to have_content "AA11AA"
             expect(page).to have_content "Some name"
             expect(page).to have_content "Self-contained house"
             expect(page).to have_content "None"
+            expect(page).to have_content "Local authority"
+            expect(page).to have_content "Westminster"
           end
 
           it "displays information about another location" do

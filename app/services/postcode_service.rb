@@ -3,7 +3,7 @@ class PostcodeService
     @pio = Postcodes::IO.new
   end
 
-  def infer_la(postcode)
+  def lookup(postcode)
     # Avoid network calls when postcode is invalid
     return unless postcode.match(POSTCODE_REGEXP)
 
@@ -16,7 +16,10 @@ class PostcodeService
       Rails.logger.warn("Postcodes.io lookup timed out")
     end
     if postcode_lookup && postcode_lookup.info.present?
-      postcode_lookup.codes["admin_district"]
+      {
+        location_code: postcode_lookup.codes["admin_district"],
+        location_admin_district: postcode_lookup&.admin_district,
+      }
     end
   end
 
