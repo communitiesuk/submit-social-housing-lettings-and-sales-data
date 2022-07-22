@@ -60,7 +60,7 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   context "when searching schemes" do
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, arrangement_type: "The same organisation that owns the housing stock", primary_client_group: "Q", secondary_client_group: "P") }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, managing_organisation_id: case_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
 
     before do
       FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
