@@ -39,15 +39,4 @@ RSpec.describe PrimaryNavigationComponent, type: :component do
       expect(result.text).to include("Schemes")
     end
   end
-
-  context "when production environment" do
-    before do
-      allow(Rails.env).to receive(:production?).and_return(true)
-    end
-
-    it "doesn't render schemes" do
-      result = render_inline(described_class.new(items:))
-      expect(result.text).not_to include("Schemes")
-    end
-  end
 end
