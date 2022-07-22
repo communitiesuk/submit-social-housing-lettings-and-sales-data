@@ -247,9 +247,12 @@ RSpec.describe Exports::CaseLogExportService do
 
   context "when exporting a supporting housing case logs in XML" do
     let(:export_file) { File.open("spec/fixtures/exports/supported_housing_logs.xml", "r:UTF-8") }
-    let(:location) { FactoryBot.create(:location, :export) }
+    let(:organisation) { FactoryBot.create(:organisation, provider_type: "LA") }
+    let(:user) { FactoryBot.create(:user, organisation:) }
+    let(:scheme) { FactoryBot.create(:scheme, :export, owning_organisation: organisation) }
+    let(:location) { FactoryBot.create(:location, :export, scheme:) }
 
-    let(:case_log) { FactoryBot.create(:case_log, :completed, :export, :sh, scheme: location.scheme, location:) }
+    let(:case_log) { FactoryBot.create(:case_log, :completed, :export, :sh, scheme:, location:, created_by: user, owning_organisation: organisation) }
 
     it "generates an XML export file with the expected content" do
       expected_content = replace_entity_ids(case_log, export_file.read)

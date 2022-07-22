@@ -1875,6 +1875,28 @@ RSpec.describe CaseLog do
         expect { case_log.update!(owning_organisation: organisation_2) }
           .to change { case_log.reload.created_by }.from(created_by_user).to(nil)
       end
+
+      context "when the organisation selected doesn't match the scheme set" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
+        let(:case_log) { FactoryBot.create(:case_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+
+        it "clears the scheme value" do
+          case_log.update!(owning_organisation: organisation_2)
+          expect(case_log.reload.scheme).to be nil
+        end
+      end
+
+      context "when the organisation selected still matches the scheme set" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation_2) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
+        let(:case_log) { FactoryBot.create(:case_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+
+        it "does not clear the scheme value" do
+          case_log.update!(owning_organisation: organisation_2)
+          expect(case_log.reload.scheme_id).to eq(scheme.id)
+        end
+      end
     end
   end
 
@@ -2240,13 +2262,14 @@ RSpec.describe CaseLog do
     let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
     let(:scheme) { FactoryBot.create(:scheme) }
     let(:location) { FactoryBot.create(:location, scheme:, type_of_unit: 6, postcode: "SE11TE") }
+    let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
     end
 
     it "generates a correct csv from a case log" do
-      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:)
+      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
       expected_content = csv_export_file.read
       expected_content.sub!(/\{id\}/, case_log["id"].to_s)
       expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
