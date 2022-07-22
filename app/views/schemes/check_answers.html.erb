@@ -93,6 +93,9 @@
               <% row.cell(header: true, text: "Mobility type", html_attributes: {
                 scope: "col",
               }) %>
+              <% row.cell(header: true, text: "Local authority", html_attributes: {
+                scope: "col",
+              }) %>
             <% end %>
           <% end %>
           <% @scheme.locations.each do |location| %>
@@ -103,6 +106,7 @@
                 <% row.cell(text: location.units) %>
                 <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
                 <% row.cell(text: location.mobility_type) %>
+                <% row.cell(text: location.location_code) %>
                 <% end %>
             <% end %>
           <% end %>
