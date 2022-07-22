@@ -174,11 +174,11 @@ private
                                                      :intended_stay,
                                                      :confirmed)
 
-    if @scheme.present? && @scheme.arrangement_type_same? && required_params[:arrangement_type] != "The same organisation that owns the housing stock" && required_params[:managing_organisation_id].blank?
+    if arrangement_type_changed_to_different_org?(required_params)
       required_params[:managing_organisation_id] = nil
     end
 
-    if required_params[:arrangement_type] == "The same organisation that owns the housing stock" || (required_params[:arrangement_type].blank? && @scheme.arrangement_type_same?)
+    if arrangement_type_set_to_same_org?(required_params)
       required_params[:managing_organisation_id] = required_params[:owning_organisation_id] || @scheme.owning_organisation_id
     end
 
@@ -188,6 +188,14 @@ private
       required_params[:owning_organisation_id] = current_user.organisation_id
     end
     required_params
+  end
+
+  def arrangement_type_set_to_same_org?(required_params)
+    required_params[:arrangement_type] == "The same organisation that owns the housing stock" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
+  end
+
+  def arrangement_type_changed_to_different_org?(required_params)
+    @scheme.present? && @scheme.arrangement_type_same? && required_params[:arrangement_type] != "The same organisation that owns the housing stock" && required_params[:managing_organisation_id].blank?
   end
 
   def search_term
