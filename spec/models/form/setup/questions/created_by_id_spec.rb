@@ -10,11 +10,13 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
   let(:form) { instance_double(Form) }
   let!(:user_1) { FactoryBot.create(:user, name: "first user") }
   let!(:user_2) { FactoryBot.create(:user, name: "second user") }
+  let!(:user_3) { FactoryBot.create(:user, name: nil, email: "madeupmail@example.com") }
   let(:expected_answer_options) do
     {
       "" => "Select an option",
       user_1.id => user_1.name,
       user_2.id => user_2.name,
+      user_3.id => user_3.email,
     }
   end
 

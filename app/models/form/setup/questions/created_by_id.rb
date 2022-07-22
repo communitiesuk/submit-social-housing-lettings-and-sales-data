@@ -13,8 +13,9 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    User.select(:id, :name).each_with_object(answer_opts) do |user, hsh|
-      hsh[user.id] = user.name
+    User.select(:id, :name, :email).each_with_object(answer_opts) do |user, hsh|
+      hsh[user.id] = user.name if user.name.present?
+      hsh[user.id] = user.email if user.name.blank?
       hsh
     end
   end
