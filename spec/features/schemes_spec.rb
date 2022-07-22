@@ -387,6 +387,8 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content "Some name"
             expect(page).to have_content "Self-contained house"
             expect(page).to have_content "None"
+            expect(page).to have_content "Local authority"
+            expect(page).to have_content "E09000033"
           end
 
           it "displays information about another location" do
