@@ -50,5 +50,6 @@ private
 
   def infer_la!
     self.location_code = PIO.infer_la(postcode)
+    self.location_admin_district = PIO.infer_admin_district(postcode)
   end
 end

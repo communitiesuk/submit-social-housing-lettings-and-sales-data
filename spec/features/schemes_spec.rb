@@ -199,7 +199,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(location.units)
                   expect(page).to have_content(location.type_of_unit)
                   expect(page).to have_content(location.mobility_type)
-                  expect(page).to have_content(location.location_code)
+                  expect(page).to have_content(location.location_admin_district)
                 end
               end
             end
@@ -389,7 +389,7 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content "Self-contained house"
             expect(page).to have_content "None"
             expect(page).to have_content "Local authority"
-            expect(page).to have_content "E09000033"
+            expect(page).to have_content "Westminster"
           end
 
           it "displays information about another location" do
