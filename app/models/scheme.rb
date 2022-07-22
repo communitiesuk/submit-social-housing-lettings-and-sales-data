@@ -142,7 +142,7 @@ class Scheme < ApplicationRecord
   end
 
   def display_attributes
-    [
+    base_attributes = [
       { name: "Scheme code", value: id_to_display },
       { name: "Name", value: service_name, edit: true },
       { name: "Confidential information", value: sensitive, edit: true },
@@ -157,6 +157,11 @@ class Scheme < ApplicationRecord
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
     ]
+
+    if arrangement_type_same?
+      base_attributes.delete({ name: "Organisation providing support", value: managing_organisation&.name })
+    end
+    base_attributes
   end
 
   def synonyms
