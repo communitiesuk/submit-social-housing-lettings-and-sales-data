@@ -539,10 +539,17 @@ private
     self.created_by = nil if created_by.organisation != owning_organisation
   end
 
+  def reset_scheme
+    return unless scheme && owning_organisation
+
+    self.scheme = nil if scheme.owning_organisation != owning_organisation
+  end
+
   def reset_invalidated_dependent_fields!
     return unless form
 
     reset_created_by
+    reset_scheme
     reset_not_routed_questions
     reset_derived_questions
   end
