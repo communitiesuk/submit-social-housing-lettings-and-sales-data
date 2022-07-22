@@ -630,7 +630,7 @@ RSpec.describe "User Features" do
         it "clears the previously selected organisation value" do
           visit("/logs")
           choose("organisation-select-specific-org-field", allow_label_click: true)
-          expect(page).to have_field("organisation-field", with: "Select an option")
+          expect(page).to have_field("organisation-field", with: "")
           find("#organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
           click_button("Apply filters")
           expect(page).to have_current_path("/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=specific_org&organisation=#{organisation.id}")

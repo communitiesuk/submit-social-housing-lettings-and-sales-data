@@ -6,14 +6,14 @@ import { enhanceOption, suggestion, sort } from '../modules/search'
 export default class extends Controller {
   connect () {
     const selectEl = this.element
-    const selectOptions = Array.from(selectEl.options)
+    const selectOptions = Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' })
     const options = selectOptions.map((o) => enhanceOption(o))
 
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
     const rawFieldName = matches ? `${matches[1]}[${matches[2]}_raw]` : ''
 
     accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: options[0].name,
+      defaultValue: '',
       selectElement: selectEl,
       minLength: 1,
       source: (query, populateResults) => {
