@@ -414,7 +414,7 @@ class CaseLog < ApplicationRecord
       csv << attribute_names + %w[unittype_sh]
 
       all.find_each do |record|
-        csv << record.attributes.merge({ "unittype_sh" => record.unittype_sh }).map do |att, val|
+        csv << record.attributes.merge({ "unittype_sh" => record.unittype_sh, "la" => record.la }).map do |att, val|
           record.form.get_question(att, record)&.label_from_value(val) || val
         end
       end
