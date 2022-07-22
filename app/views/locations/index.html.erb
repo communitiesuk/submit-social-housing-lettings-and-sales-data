@@ -1,5 +1,5 @@
 <% item_label = format_label(@pagy.count, "location") %>
-<% title = @scheme.service_name %>
+<% title = format_title(@searched, @scheme.service_name, current_user, item_label, @pagy.count, nil) %>
 <% content_for :title, title %>
 
 <% content_for :before_content do %>

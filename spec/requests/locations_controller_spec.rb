@@ -864,6 +864,30 @@ RSpec.describe LocationsController, type: :request do
           end
         end
       end
+
+      context "when searching" do
+        let(:searched_location) { locations.first }
+        let(:search_param) { searched_location.name }
+
+        before do
+          get "/schemes/#{scheme.id}/locations?search=#{search_param}"
+        end
+
+        it "returns matching results" do
+          expect(page).to have_content(searched_location.name)
+          locations[1..].each do |location|
+            expect(page).not_to have_content(location.name)
+          end
+        end
+
+        it "updates the table caption" do
+          expect(page).to have_content("1 location found matching ‘#{search_param}’")
+        end
+
+        it "has search in the title" do
+          expect(page).to have_title("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -940,6 +964,30 @@ RSpec.describe LocationsController, type: :request do
             expect(page).not_to have_content("Next")
             expect(page).not_to have_link("Next")
           end
+        end
+      end
+
+      context "when searching" do
+        let(:searched_location) { locations.first }
+        let(:search_param) { searched_location.name }
+
+        before do
+          get "/schemes/#{scheme.id}/locations?search=#{search_param}"
+        end
+
+        it "returns matching results" do
+          expect(page).to have_content(searched_location.name)
+          locations[1..].each do |location|
+            expect(page).not_to have_content(location.name)
+          end
+        end
+
+        it "updates the table caption" do
+          expect(page).to have_content("1 location found matching ‘#{search_param}’")
+        end
+
+        it "has search in the title" do
+          expect(page).to have_title("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
         end
       end
     end
