@@ -603,7 +603,8 @@ private
   end
 
   def get_inferred_la(postcode)
-    PIO.infer_la(postcode)
+    result = PIO.lookup(postcode)
+    result[:location_code] if result
   end
 
   def get_has_benefits
