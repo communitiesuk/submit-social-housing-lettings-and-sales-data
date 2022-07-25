@@ -23,8 +23,7 @@
                                            :id,
                                            :name,
                                            :description,
-                                           legend: { text: "Level of support given", size: "m" },
-                                           bold_labels: false %>
+                                           legend: { text: "Level of support given", size: "m" } %>
 
       <% intended_length_of_stay_options_hints = { "Very short stay": "Up to one month.", "Short stay": "Up to one year.", "Medium stay": "More than one year but with an expectation to move on.", "Permanent": "Provides a home for life with no requirement for the tenant to move." } %>
 
@@ -35,8 +34,7 @@
                                            :id,
                                            :name,
                                            :description,
-                                           legend: { text: "Intended length of stay", size: "m" },
-                                           bold_labels: false %>
+                                           legend: { text: "Intended length of stay", size: "m" } %>
 
       <%= f.hidden_field :page, value: "support" %>
 
