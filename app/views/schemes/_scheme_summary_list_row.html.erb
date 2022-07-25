@@ -1,0 +1,22 @@
+<div class="<%= "govuk-summary-list__row #{scheme.confirmed? && attribute[:name] != 'Name' ? 'govuk-summary-list__row--no-actions' : ''}" %>">
+    <dt class="govuk-summary-list__key">
+        <%= attribute[:name].to_s %>
+    </dt>
+    <% if scheme.errors[attribute[:id].to_sym].count > 0 %>
+        <dd class="govuk-summary-list__value app-summary-list__value--error">
+            <p class="govuk-error-message">
+                <span class="govuk-error-message govuk-visually-hidden">Error:</span> <%= scheme.errors[attribute[:id].to_sym][0] %>
+            </p>
+            <%= details_html(attribute) %>
+        </dd>
+    <% else %>
+        <dd class="govuk-summary-list__value">
+            <%= details_html(attribute) %>
+        </dd>
+    <% end %>
+    <% if !scheme.confirmed? || attribute[:name] == "Name" %>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="<%= change_link %>">Change</a>
+        </dd>
+    <% end %>
+</div>

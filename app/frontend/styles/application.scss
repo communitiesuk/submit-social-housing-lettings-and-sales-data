@@ -40,6 +40,7 @@ $govuk-breakpoints: (
 @import "primary-navigation";
 @import "search";
 @import "sub-navigation";
+@import "errors";
 
 // App utilities
 .app-\!-colour-muted {

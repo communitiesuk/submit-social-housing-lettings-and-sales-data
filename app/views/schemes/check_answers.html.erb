@@ -7,85 +7,31 @@
     <%= f.govuk_error_summary %>
       <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
         <% component.tab(label: "Scheme") do %>
-          <%= govuk_summary_list do |summary_list| %>
+          <dl class="govuk-summary-list">
             <% @scheme.check_details_attributes.each do |attr| %>
               <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
-              <%= summary_list.row do |row| %>
-                <% row.key { attr[:name].to_s } %>
-                <% row.value { details_html(attr) } %>
-                <% unless @scheme.confirmed? && attr[:name] != "Name" %>
-                  <% row.action(
-                      text: "Change",
-                      href: scheme_details_path(@scheme, check_answers: true),
-                    ) %>
-                  <% end %>
-              <% end %>
+              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_details_path(@scheme, check_answers: true) } %>
             <% end %>
             <% if !@scheme.arrangement_type_same? %>
             <% @scheme.check_support_services_provider_attributes.each do |attr| %>
-                <%= summary_list.row do |row| %>
-                  <% row.key { attr[:name].to_s } %>
-                  <% row.value { details_html(attr) } %>
-                  <% unless @scheme.confirmed? %>
-                    <% row.action(
-                        text: "Change",
-                        href: scheme_support_services_provider_path(@scheme, check_answers: true),
-                      ) %>
-                    <% end %>
-                <% end %>
+              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_services_provider_path(@scheme, check_answers: true) } %>
               <% end %>
             <% end %>
             <% @scheme.check_primary_client_attributes.each do |attr| %>
-              <%= summary_list.row do |row| %>
-                <% row.key { attr[:name].to_s } %>
-                <% row.value { details_html(attr) } %>
-                <% unless @scheme.confirmed? %>
-                  <% row.action(
-                      text: "Change",
-                      href: scheme_primary_client_group_path(@scheme, check_answers: true),
-                    ) %>
-                  <% end %>
-              <% end %>
+              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_primary_client_group_path(@scheme, check_answers: true) } %>
             <% end %>
             <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
-              <%= summary_list.row do |row| %>
-                <% row.key { attr[:name].to_s } %>
-                <% row.value { details_html(attr) } %>
-                <% unless @scheme.confirmed? %>
-                  <% row.action(
-                      text: "Change",
-                      href: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true),
-                    ) %>
-                <% end %>
-              <% end %>
+              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true) } %>
             <% end %>
             <% if @scheme.has_other_client_group == "Yes" %>
               <% @scheme.check_secondary_client_attributes.each do |attr| %>
-                <%= summary_list.row do |row| %>
-                  <% row.key { attr[:name].to_s } %>
-                  <% row.value { details_html(attr) } %>
-                  <% unless @scheme.confirmed? %>
-                    <% row.action(
-                        text: "Change",
-                        href: scheme_secondary_client_group_path(@scheme, check_answers: true),
-                      ) %>
-                    <% end %>
-                <% end %>
+                <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_secondary_client_group_path(@scheme, check_answers: true) } %>
               <% end %>
             <% end %>
             <% @scheme.check_support_attributes.each do |attr| %>
-              <%= summary_list.row do |row| %>
-                <% row.key { attr[:name].to_s } %>
-                <% row.value { details_html(attr) } %>
-                <% unless @scheme.confirmed? %>
-                  <% row.action(
-                      text: "Change",
-                      href: scheme_support_path(@scheme, check_answers: true),
-                    ) %>
-                <% end %>
-              <% end %>
+              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_path(@scheme, check_answers: true) } %>
             <% end %>
-          <% end %>
+          </dl>
         <% end %>
         <% component.tab(label: "Locations") do %>
           <%= govuk_table do |table| %>
