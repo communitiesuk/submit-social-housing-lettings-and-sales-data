@@ -104,7 +104,7 @@ private
       end
     end
 
-    if @scheme.arrangement_type_same? && scheme_params[:arrangement_type] != "The same organisation that owns the housing stock"
+    if @scheme.arrangement_type_same? && arrangement_type_value(scheme_params[:arrangement_type]) != "D"
       @scheme.errors.delete(:managing_organisation_id)
     end
   end
@@ -191,11 +191,15 @@ private
   end
 
   def arrangement_type_set_to_same_org?(required_params)
-    required_params[:arrangement_type] == "The same organisation that owns the housing stock" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
+    arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
   end
 
   def arrangement_type_changed_to_different_org?(required_params)
-    @scheme.present? && @scheme.arrangement_type_same? && required_params[:arrangement_type] != "The same organisation that owns the housing stock" && required_params[:managing_organisation_id].blank?
+    @scheme.present? && @scheme.arrangement_type_same? && arrangement_type_value(required_params[:arrangement_type]) != "D" && required_params[:managing_organisation_id].blank?
+  end
+
+  def arrangement_type_value(key)
+    key.present? ? Scheme::ARRANGEMENT_TYPE[key.to_sym] : nil
   end
 
   def search_term

@@ -203,6 +203,6 @@ class Scheme < ApplicationRecord
   end
 
   def arrangement_type_same?
-    arrangement_type == "The same organisation that owns the housing stock"
+    arrangement_type.present? && ARRANGEMENT_TYPE[arrangement_type.to_sym] == "D"
   end
 end
