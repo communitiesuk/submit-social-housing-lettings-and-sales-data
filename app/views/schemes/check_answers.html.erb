@@ -1,137 +1,137 @@
 <% content_for :title, "Check your answers before creating this scheme" %>
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-three-quarters-from-desktop">
-    <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
-      <% component.tab(label: "Scheme") do %>
-        <%= govuk_summary_list do |summary_list| %>
-          <% @scheme.check_details_attributes.each do |attr| %>
-            <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% unless @scheme.confirmed? && attr[:name] != "Name" %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_details_path(@scheme, check_answers: true),
-                   ) %>
-                <% end %>
+<%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
+  <%= f.govuk_error_summary %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters-from-desktop">
+      <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
+        <% component.tab(label: "Scheme") do %>
+          <%= govuk_summary_list do |summary_list| %>
+            <% @scheme.check_details_attributes.each do |attr| %>
+              <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
+              <%= summary_list.row do |row| %>
+                <% row.key { attr[:name].to_s } %>
+                <% row.value { details_html(attr) } %>
+                <% unless @scheme.confirmed? && attr[:name] != "Name" %>
+                  <% row.action(
+                      text: "Change",
+                      href: scheme_details_path(@scheme, check_answers: true),
+                    ) %>
+                  <% end %>
+              <% end %>
             <% end %>
-          <% end %>
-          <% if !@scheme.arrangement_type_same? %>
-          <% @scheme.check_support_services_provider_attributes.each do |attr| %>
+            <% if !@scheme.arrangement_type_same? %>
+            <% @scheme.check_support_services_provider_attributes.each do |attr| %>
+                <%= summary_list.row do |row| %>
+                  <% row.key { attr[:name].to_s } %>
+                  <% row.value { details_html(attr) } %>
+                  <% unless @scheme.confirmed? %>
+                    <% row.action(
+                        text: "Change",
+                        href: scheme_support_services_provider_path(@scheme, check_answers: true),
+                      ) %>
+                    <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% @scheme.check_primary_client_attributes.each do |attr| %>
               <%= summary_list.row do |row| %>
                 <% row.key { attr[:name].to_s } %>
                 <% row.value { details_html(attr) } %>
                 <% unless @scheme.confirmed? %>
                   <% row.action(
                       text: "Change",
-                      href: scheme_support_services_provider_path(@scheme, check_answers: true),
+                      href: scheme_primary_client_group_path(@scheme, check_answers: true),
                     ) %>
                   <% end %>
               <% end %>
             <% end %>
-          <% end %>
-          <% @scheme.check_primary_client_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% unless @scheme.confirmed? %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_primary_client_group_path(@scheme, check_answers: true),
-                   ) %>
-                <% end %>
-            <% end %>
-          <% end %>
-          <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% unless @scheme.confirmed? %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true),
-                   ) %>
-              <% end %>
-            <% end %>
-          <% end %>
-          <% if @scheme.has_other_client_group == "Yes" %>
-            <% @scheme.check_secondary_client_attributes.each do |attr| %>
+            <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
               <%= summary_list.row do |row| %>
                 <% row.key { attr[:name].to_s } %>
                 <% row.value { details_html(attr) } %>
                 <% unless @scheme.confirmed? %>
                   <% row.action(
-                       text: "Change",
-                       href: scheme_secondary_client_group_path(@scheme, check_answers: true),
-                     ) %>
+                      text: "Change",
+                      href: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true),
+                    ) %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% if @scheme.has_other_client_group == "Yes" %>
+              <% @scheme.check_secondary_client_attributes.each do |attr| %>
+                <%= summary_list.row do |row| %>
+                  <% row.key { attr[:name].to_s } %>
+                  <% row.value { details_html(attr) } %>
+                  <% unless @scheme.confirmed? %>
+                    <% row.action(
+                        text: "Change",
+                        href: scheme_secondary_client_group_path(@scheme, check_answers: true),
+                      ) %>
+                    <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% @scheme.check_support_attributes.each do |attr| %>
+              <%= summary_list.row do |row| %>
+                <% row.key { attr[:name].to_s } %>
+                <% row.value { details_html(attr) } %>
+                <% unless @scheme.confirmed? %>
+                  <% row.action(
+                      text: "Change",
+                      href: scheme_support_path(@scheme, check_answers: true),
+                    ) %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% component.tab(label: "Locations") do %>
+          <%= govuk_table do |table| %>
+            <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+              <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
+            <% end %>
+            <%= table.head do |head| %>
+              <%= head.row do |row| %>
+                <% row.cell(header: true, text: "Code", html_attributes: {
+                  scope: "col",
+                }) %>
+                <% row.cell(header: true, text: "Postcode", html_attributes: {
+                  scope: "col",
+                }) %>
+                <% row.cell(header: true, text: "Units", html_attributes: {
+                  scope: "col",
+                }) %>
+                <% row.cell(header: true, text: "Common unit type", html_attributes: {
+                  scope: "col",
+                }) %>
+                <% row.cell(header: true, text: "Mobility type", html_attributes: {
+                  scope: "col",
+                }) %>
+                <% row.cell(header: true, text: "Local authority", html_attributes: {
+                  scope: "col",
+                }) %>
+              <% end %>
+            <% end %>
+            <% @scheme.locations.each do |location| %>
+              <%= table.body do |body| %>
+                <%= body.row do |row| %>
+                  <% row.cell(text: location.id) %>
+                  <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+                  <% row.cell(text: location.units) %>
+                  <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
+                  <% row.cell(text: location.mobility_type) %>
+                  <% row.cell(text: location.location_admin_district) %>
                   <% end %>
               <% end %>
             <% end %>
           <% end %>
-          <% @scheme.check_support_attributes.each do |attr| %>
-            <%= summary_list.row do |row| %>
-              <% row.key { attr[:name].to_s } %>
-              <% row.value { details_html(attr) } %>
-              <% unless @scheme.confirmed? %>
-                <% row.action(
-                     text: "Change",
-                     href: scheme_support_path(@scheme, check_answers: true),
-                   ) %>
-              <% end %>
-            <% end %>
-          <% end %>
+          <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
         <% end %>
       <% end %>
-      <% component.tab(label: "Locations") do %>
-        <%= govuk_table do |table| %>
-          <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-            <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
-          <% end %>
-          <%= table.head do |head| %>
-            <%= head.row do |row| %>
-              <% row.cell(header: true, text: "Code", html_attributes: {
-                scope: "col",
-              }) %>
-              <% row.cell(header: true, text: "Postcode", html_attributes: {
-                scope: "col",
-              }) %>
-              <% row.cell(header: true, text: "Units", html_attributes: {
-                scope: "col",
-              }) %>
-              <% row.cell(header: true, text: "Common unit type", html_attributes: {
-                scope: "col",
-              }) %>
-              <% row.cell(header: true, text: "Mobility type", html_attributes: {
-                scope: "col",
-              }) %>
-              <% row.cell(header: true, text: "Local authority", html_attributes: {
-                scope: "col",
-              }) %>
-            <% end %>
-          <% end %>
-          <% @scheme.locations.each do |location| %>
-            <%= table.body do |body| %>
-              <%= body.row do |row| %>
-                <% row.cell(text: location.id) %>
-                <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
-                <% row.cell(text: location.units) %>
-                <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
-                <% row.cell(text: location.mobility_type) %>
-                <% row.cell(text: location.location_admin_district) %>
-                <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-        <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
-      <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
-
-<%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
   <%= f.hidden_field :page, value: "check-answers" %>
   <%= f.hidden_field :confirmed, value: "true" %>
   <% button_label = @scheme.confirmed? ? "Save" : "Create scheme" %>

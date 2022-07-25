@@ -128,6 +128,8 @@ private
       "schemes/details"
     elsif page.include?("edit")
       "schemes/edit_name"
+    elsif page.include?("check-answers")
+      "schemes/check_answers"
     end
   end
 
