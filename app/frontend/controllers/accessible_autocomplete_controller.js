@@ -6,7 +6,7 @@ import { enhanceOption, suggestion, sort } from '../modules/search'
 export default class extends Controller {
   connect () {
     const selectEl = this.element
-    const selectOptions = Array.from(selectEl.options)
+    const selectOptions = Array.from(selectEl.options).filter(function (option, index, arr) { return option.value !== '' })
     const options = selectOptions.map((o) => enhanceOption(o))
 
     const matches = /^(\w+)\[(\w+)\]$/.exec(selectEl.name)
