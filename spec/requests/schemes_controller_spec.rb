@@ -1078,6 +1078,7 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.managing_organisation_id).to eq(scheme_to_update.owning_organisation_id)
           end
         end
       end

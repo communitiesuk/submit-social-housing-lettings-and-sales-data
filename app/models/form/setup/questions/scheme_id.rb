@@ -21,7 +21,7 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
 
   def displayed_answer_options(case_log)
     organisation = case_log.owning_organisation || case_log.created_by&.organisation
-    schemes = organisation ? Scheme.select(:id).where(owning_organisation_id: organisation.id).where.not(managing_organisation_id: nil) : Scheme.select(:id).where.not(managing_organisation_id: nil)
+    schemes = organisation ? Scheme.select(:id).where(owning_organisation_id: organisation.id).where(confirmed: true) : Scheme.select(:id).where(confirmed: true)
     filtered_scheme_ids = schemes.joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL", Time.zone.today)).map(&:id)
     answer_options.select do |k, _v|
       filtered_scheme_ids.include?(k.to_i) || k.blank?

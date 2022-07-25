@@ -888,7 +888,7 @@ RSpec.describe "Schemes scheme Features" do
     end
 
     it "does display the schemes that are not completed" do
-      schemes[2].update!(managing_organisation_id: nil)
+      schemes[2].update!(confirmed: false)
       visit("/logs/#{case_log.id}/scheme")
       expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
     end
