@@ -203,6 +203,6 @@ class Scheme < ApplicationRecord
   end
 
   def arrangement_type_same?
-    arrangement_type == "The same organisation that owns the housing stock"
+    arrangement_type_before_type_cast == "D"
   end
 end
