@@ -786,6 +786,7 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
+                      managing_organisation_id: organisation.id,
                       arrangement_type: "D" } }
         end
 
