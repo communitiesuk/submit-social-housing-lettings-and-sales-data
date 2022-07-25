@@ -1043,7 +1043,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      arrangement_type: "D",
+                      arrangement_type: "The same organisation that owns the housing stock",
                       owning_organisation_id: another_organisation.id } }
         end
 
