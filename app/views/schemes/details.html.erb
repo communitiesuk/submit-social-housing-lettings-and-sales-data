@@ -49,8 +49,7 @@
                                            :id,
                                            :name,
                                            :description,
-                                           legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" },
-                                           bold_labels: false %>
+                                           legend: { text: "Is this scheme registered under the Care Standards Act 2000?", size: "m" } %>
 
       <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
 
