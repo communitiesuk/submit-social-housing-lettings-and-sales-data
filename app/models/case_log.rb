@@ -110,6 +110,14 @@ class CaseLog < ApplicationRecord
     end
   end
 
+  def location_admin_district
+    if location
+      location.location_admin_district
+    else
+      super
+    end
+  end
+
   def postcode_full
     if location
       location.postcode

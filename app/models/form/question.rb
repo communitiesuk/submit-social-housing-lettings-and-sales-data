@@ -3,7 +3,8 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
+                :extra_check_answer_value
 
   def initialize(id, hsh, page)
     @id = id
@@ -24,6 +25,7 @@ class Form::Question
       @answer_options = hsh["answer_options"]
       @conditional_for = hsh["conditional_for"]
       @inferred_answers = hsh["inferred_answers"]
+      @extra_check_answer_value = hsh["extra_check_answer_value"]
       @inferred_check_answers_value = hsh["inferred_check_answers_value"]
       @hidden_in_check_answers = hsh["hidden_in_check_answers"]
       @derived = hsh["derived"]
@@ -51,14 +53,20 @@ class Form::Question
   def get_inferred_answers(case_log)
     return [] unless inferred_answers
 
-    enabled_inferred_answers(inferred_answers, case_log).keys.map do |x|
-      question = form.get_question(x, case_log)
+    enabled_inferred_answers(inferred_answers, case_log).keys.map do |answer|
+      question = form.get_question(answer, case_log)
       if question.present?
-        question.label_from_value(case_log[x])
+        question.label_from_value(case_log[answer])
       else
-        Array(x.to_s.split(".")).inject(case_log) { |o, a| o.present? ? o.public_send(*a) : "" }
+        Array(answer.to_s.split(".")).inject(case_log) { |log, method| log.present? ? log.public_send(*method) : "" }
       end
     end
+  end
+
+  def get_extra_check_answer_value(case_log)
+    return nil unless extra_check_answer_value
+
+    case_log.public_send(extra_check_answer_value)
   end
 
   def read_only?
