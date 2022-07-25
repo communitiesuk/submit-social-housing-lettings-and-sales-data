@@ -211,19 +211,6 @@ RSpec.describe CaseLog do
       })
     end
 
-    context "when a case log is created in production" do
-      before do
-        allow(Rails.env).to receive(:production?).and_return(true)
-      end
-
-      it "derives that all forms are general needs" do
-        case_log = FactoryBot.create(:case_log)
-        record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["needstype"]).to eq(1)
-        expect(case_log["needstype"]).to eq(1)
-      end
-    end
-
     it "correctly derives and saves partial and full major repairs date" do
       record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
@@ -2244,17 +2231,6 @@ RSpec.describe CaseLog do
     it "returns true for the case log if the environment is not production" do
       case_log = FactoryBot.create(:case_log)
       expect(case_log.supported_housing_schemes_enabled?).to eq(true)
-    end
-
-    context "when in the production environment" do
-      before do
-        allow(Rails.env).to receive(:production?).and_return(true)
-      end
-
-      it "returns false for a case log" do
-        case_log = FactoryBot.create(:case_log)
-        expect(case_log.supported_housing_schemes_enabled?).to eq(false)
-      end
     end
   end
 
