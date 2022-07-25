@@ -2,9 +2,9 @@
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
-  <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters-from-desktop">
+    <%= f.govuk_error_summary %>
       <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
         <% component.tab(label: "Scheme") do %>
           <%= govuk_summary_list do |summary_list| %>
