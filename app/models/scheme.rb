@@ -212,7 +212,7 @@ class Scheme < ApplicationRecord
     required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group]
 
     if confirmed == true && required_attributes.any? { |attribute| self[attribute].blank? }
-      errors.add :base, "Please answer all the required questions"
+      errors.add :base
     end
   end
 end

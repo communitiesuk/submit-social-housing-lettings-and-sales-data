@@ -557,11 +557,20 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
       before do
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when confirming the scheme" do
+        let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: "V", confirmed: true, page: "check-answers" } } }
+
+        it "does not allow the scheme to be confirmed" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.base.invalid"))
+        end
       end
 
       context "when params are missing" do
