@@ -9,6 +9,8 @@ class Scheme < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { joins(:locations).where("locations.postcode ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(filter_by_id(param)).distinct }
 
+  validate :validate_confirmed
+
   SENSITIVE = {
     No: 0,
     Yes: 1,
@@ -100,49 +102,49 @@ class Scheme < ApplicationRecord
 
   def check_details_attributes
     [
-      { name: "Service code", value: id_to_display },
-      { name: "Name", value: service_name },
-      { name: "Confidential information", value: sensitive },
-      { name: "Type of scheme", value: scheme_type },
-      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act },
-      { name: "Housing stock owned by", value: owning_organisation.name },
-      { name: "Support services provided by", value: arrangement_type },
+      { name: "Service code", value: id_to_display, id: "id" },
+      { name: "Name", value: service_name, id: "service_name" },
+      { name: "Confidential information", value: sensitive, id: "sensitive" },
+      { name: "Type of scheme", value: scheme_type, id: "scheme_type" },
+      { name: "Registered under Care Standards Act 2000", value: registered_under_care_act, id: "registered_under_care_act" },
+      { name: "Housing stock owned by", value: owning_organisation.name, id: "owning_organisation_id" },
+      { name: "Support services provided by", value: arrangement_type, id: "arrangement_type" },
     ]
   end
 
   def check_support_services_provider_attributes
     [
-      { name: "Organisation providing support", value: managing_organisation&.name },
+      { name: "Organisation providing support", value: managing_organisation&.name, id: "managing_organisation_id" },
     ]
   end
 
   def check_primary_client_attributes
     [
-      { name: "Primary client group", value: primary_client_group },
+      { name: "Primary client group", value: primary_client_group, id: "primary_client_group" },
     ]
   end
 
   def check_secondary_client_confirmation_attributes
     [
-      { name: "Has another client group", value: has_other_client_group },
+      { name: "Has another client group", value: has_other_client_group, id: "has_other_client_group" },
     ]
   end
 
   def check_secondary_client_attributes
     [
-      { name: "Secondary client group", value: secondary_client_group },
+      { name: "Secondary client group", value: secondary_client_group, id: "secondary_client_group" },
     ]
   end
 
   def check_support_attributes
     [
-      { name: "Level of support given", value: support_type },
-      { name: "Intended length of stay", value: intended_stay },
+      { name: "Level of support given", value: support_type, id: "support_type" },
+      { name: "Intended length of stay", value: intended_stay, id: "intended_stay" },
     ]
   end
 
   def display_attributes
-    [
+    base_attributes = [
       { name: "Scheme code", value: id_to_display },
       { name: "Name", value: service_name, edit: true },
       { name: "Confidential information", value: sensitive, edit: true },
@@ -157,6 +159,11 @@ class Scheme < ApplicationRecord
       { name: "Level of support given", value: support_type },
       { name: "Intended length of stay", value: intended_stay },
     ]
+
+    if arrangement_type_same?
+      base_attributes.delete({ name: "Organisation providing support", value: managing_organisation&.name })
+    end
+    base_attributes
   end
 
   def synonyms
@@ -195,5 +202,23 @@ class Scheme < ApplicationRecord
 
     }
     Scheme.intended_stays.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints[key.to_sym]) }
+  end
+
+  def arrangement_type_same?
+    arrangement_type.present? && ARRANGEMENT_TYPE[arrangement_type.to_sym] == "D"
+  end
+
+  def validate_confirmed
+    required_attributes = attribute_names - %w[id created_at updated_at old_id old_visible_id confirmed end_date sensitive secondary_client_group total_units has_other_client_group]
+
+    if confirmed == true
+      required_attributes.any? do |attribute|
+        if self[attribute].blank?
+          errors.add :base
+          errors.add attribute.to_sym
+          self.confirmed = false
+        end
+      end
+    end
   end
 end

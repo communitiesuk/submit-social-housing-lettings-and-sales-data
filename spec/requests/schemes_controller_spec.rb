@@ -557,11 +557,20 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
       before do
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
+      end
+
+      context "when confirming unfinished scheme" do
+        let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: "V", confirmed: true, page: "check-answers" } } }
+
+        it "does not allow the scheme to be confirmed" do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.base.invalid"))
+        end
       end
 
       context "when params are missing" do
@@ -612,7 +621,7 @@ RSpec.describe SchemesController, type: :request do
       end
 
       context "when updating support services provider" do
-        let(:params) { { scheme: { managing_organisation_id: organisation.id, page: "support-services-provider" } } }
+        let(:params) { { scheme: { arrangement_type: "Another organisation", managing_organisation_id: organisation.id, page: "support-services-provider" } } }
 
         it "renders primary client group after successful update" do
           follow_redirect!
@@ -786,6 +795,7 @@ RSpec.describe SchemesController, type: :request do
                       registered_under_care_act: "No",
                       page: "details",
                       owning_organisation_id: organisation.id,
+                      managing_organisation_id: organisation.id,
                       arrangement_type: "D" } }
         end
 
@@ -1043,7 +1053,7 @@ RSpec.describe SchemesController, type: :request do
                       scheme_type: "Foyer",
                       registered_under_care_act: "No",
                       page: "details",
-                      arrangement_type: "D",
+                      arrangement_type: "The same organisation that owns the housing stock",
                       owning_organisation_id: another_organisation.id } }
         end
 
@@ -1078,6 +1088,7 @@ RSpec.describe SchemesController, type: :request do
             expect(scheme_to_update.reload.scheme_type).to eq("Foyer")
             expect(scheme_to_update.reload.sensitive).to eq("Yes")
             expect(scheme_to_update.reload.registered_under_care_act).to eq("No")
+            expect(scheme_to_update.reload.managing_organisation_id).to eq(scheme_to_update.owning_organisation_id)
           end
         end
       end

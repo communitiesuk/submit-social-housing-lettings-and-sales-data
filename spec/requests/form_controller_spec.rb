@@ -110,7 +110,8 @@ RSpec.describe FormController, type: :request do
               end
 
               before do
-                FactoryBot.create_list(:location, 5)
+                locations = FactoryBot.create_list(:location, 5)
+                locations.each { |location| location.scheme.update!(arrangement_type: "The same organisation that owns the housing stock", managing_organisation_id: location.scheme.owning_organisation_id) }
               end
 
               it "returns an unfiltered list of schemes" do

@@ -103,6 +103,10 @@ private
         @scheme.errors.add(key.to_sym)
       end
     end
+
+    if @scheme.arrangement_type_same? && arrangement_type_value(scheme_params[:arrangement_type]) != "D"
+      @scheme.errors.delete(:managing_organisation_id)
+    end
   end
 
   def confirm_secondary_page?(page)
@@ -124,6 +128,8 @@ private
       "schemes/details"
     elsif page.include?("edit")
       "schemes/edit_name"
+    elsif page.include?("check-answers")
+      "schemes/check_answers"
     end
   end
 
@@ -170,14 +176,32 @@ private
                                                      :intended_stay,
                                                      :confirmed)
 
-    full_params = required_params[:arrangement_type] == "D" && required_params[:owning_organisation_id].present? ? required_params.merge(managing_organisation_id: required_params[:owning_organisation_id]) : required_params
+    if arrangement_type_changed_to_different_org?(required_params)
+      required_params[:managing_organisation_id] = nil
+    end
 
-    full_params[:sensitive] = full_params[:sensitive].to_i if full_params[:sensitive]
+    if arrangement_type_set_to_same_org?(required_params)
+      required_params[:managing_organisation_id] = required_params[:owning_organisation_id] || @scheme.owning_organisation_id
+    end
+
+    required_params[:sensitive] = required_params[:sensitive].to_i if required_params[:sensitive]
 
     if current_user.data_coordinator?
-      full_params[:owning_organisation_id] = current_user.organisation_id
+      required_params[:owning_organisation_id] = current_user.organisation_id
     end
-    full_params
+    required_params
+  end
+
+  def arrangement_type_set_to_same_org?(required_params)
+    arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
+  end
+
+  def arrangement_type_changed_to_different_org?(required_params)
+    @scheme.present? && @scheme.arrangement_type_same? && arrangement_type_value(required_params[:arrangement_type]) != "D" && required_params[:managing_organisation_id].blank?
+  end
+
+  def arrangement_type_value(key)
+    key.present? ? Scheme::ARRANGEMENT_TYPE[key.to_sym] : nil
   end
 
   def search_term
