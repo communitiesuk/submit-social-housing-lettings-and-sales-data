@@ -568,7 +568,7 @@ private
 
   def format_postcode(value)
     value = value.upcase.gsub(/\s+/, "")
-    value.length == 5 ? value= value.insert(2, ' ') : value= value.insert(3, ' ')
+    value = value.length == 5 ? value.insert(2, " ") : value.insert(3, " ")
     value.strip
   end
 
