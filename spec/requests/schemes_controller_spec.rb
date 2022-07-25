@@ -564,7 +564,7 @@ RSpec.describe SchemesController, type: :request do
         patch "/schemes/#{scheme_to_update.id}", params:
       end
 
-      context "when confirming the scheme" do
+      context "when confirming unfinished scheme" do
         let(:params) { { scheme: { owning_organisation_id: user.organisation.id, arrangement_type: "V", confirmed: true, page: "check-answers" } } }
 
         it "does not allow the scheme to be confirmed" do
