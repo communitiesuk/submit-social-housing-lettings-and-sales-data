@@ -68,6 +68,12 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      it "shows incomplete tag if the scheme is not confirmed" do
+        schemes[0].update!(confirmed: nil)
+        get "/schemes"
+        assert_select ".govuk-tag", text: /Incomplete/, count: 1
+      end
+
       it "shows a search bar" do
         expect(page).to have_field("search", type: "search")
       end
