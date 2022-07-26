@@ -619,9 +619,9 @@ private
   end
 
   def get_lettype
-    return unless renttype.present? && needstype.present? && owning_organisation.present? && owning_organisation[:provider_type].present?
+    return unless rent_type.present? && needstype.present? && owning_organisation.present? && owning_organisation[:provider_type].present?
 
-    case RENT_TYPE_MAPPING_LABELS[renttype]
+    case RENT_TYPE_MAPPING_LABELS[RENT_TYPE_MAPPING[rent_type]]
     when "Social Rent"
       if is_supported_housing?
         owning_organisation[:provider_type] == "PRP" ? 2 : 4
