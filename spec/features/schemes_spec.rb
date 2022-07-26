@@ -119,6 +119,13 @@ RSpec.describe "Schemes scheme Features" do
         expect(page).to have_content(scheme_to_search.id_to_display)
       end
 
+      it "returns results with no location" do
+        scheme_to_search.locations.each { |location| location.destroy }
+        scheme_to_search.reload
+        click_button("Search")
+        expect(page).to have_content(scheme_to_search.id_to_display)
+      end
+
       it "allows clearing the search results" do
         fill_in("search", with: scheme_to_search.id_to_display)
         click_button("Search")

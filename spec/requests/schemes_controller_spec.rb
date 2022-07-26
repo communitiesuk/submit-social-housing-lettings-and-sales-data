@@ -179,6 +179,16 @@ RSpec.describe SchemesController, type: :request do
           end
         end
 
+        it "returns results with no location" do
+          searched_scheme.locations.each { |location| location.destroy }
+          searched_scheme.reload
+          get "/schemes?search=#{search_param}"
+          expect(page).to have_content(searched_scheme.id_to_display)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.id_to_display)
+          end
+        end
+
         it "updates the table caption" do
           expect(page).to have_content("1 scheme found matching ‘#{search_param}’")
         end
