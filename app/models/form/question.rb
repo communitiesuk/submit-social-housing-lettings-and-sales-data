@@ -25,7 +25,6 @@ class Form::Question
       @answer_options = hsh["answer_options"]
       @conditional_for = hsh["conditional_for"]
       @inferred_answers = hsh["inferred_answers"]
-      @extra_check_answer_value = hsh["extra_check_answer_value"]
       @inferred_check_answers_value = hsh["inferred_check_answers_value"]
       @hidden_in_check_answers = hsh["hidden_in_check_answers"]
       @derived = hsh["derived"]
