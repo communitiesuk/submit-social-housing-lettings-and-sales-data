@@ -53,12 +53,12 @@ class Form::Question
   def get_inferred_answers(case_log)
     return [] unless inferred_answers
 
-    enabled_inferred_answers(inferred_answers, case_log).keys.map do |answer|
-      question = form.get_question(answer, case_log)
+    enabled_inferred_answers(inferred_answers, case_log).keys.map do |question_id|
+      question = form.get_question(question_id, case_log)
       if question.present?
-        question.label_from_value(case_log[answer])
+        question.label_from_value(case_log[question_id])
       else
-        Array(answer.to_s.split(".")).inject(case_log) { |log, method| log.present? ? log.public_send(*method) : "" }
+        Array(question_id.to_s.split(".")).inject(case_log) { |log, method| log.present? ? log.public_send(*method) : "" }
       end
     end
   end
