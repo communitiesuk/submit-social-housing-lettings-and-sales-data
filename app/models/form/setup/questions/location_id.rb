@@ -34,6 +34,10 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     !supported_housing_selected?(case_log)
   end
 
+  def get_extra_check_answer_value(case_log)
+    case_log.form.get_question("la", nil).label_from_value(case_log.la)
+  end
+
 private
 
   def supported_housing_selected?(case_log)

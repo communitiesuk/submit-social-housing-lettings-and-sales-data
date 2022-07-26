@@ -28,6 +28,7 @@ unless Rails.env.test?
 
   if Rails.env.development? && User.count.zero?
     User.create!(
+      name: "Provider",
       email: "provider@example.com",
       password: "password",
       organisation: org,
@@ -36,6 +37,7 @@ unless Rails.env.test?
     )
 
     User.create!(
+      name: "Coordinator",
       email: "coordinator@example.com",
       password: "password",
       organisation: org,
@@ -44,6 +46,7 @@ unless Rails.env.test?
     )
 
     User.create!(
+      name: "Support",
       email: "support@example.com",
       password: "password",
       organisation: org,

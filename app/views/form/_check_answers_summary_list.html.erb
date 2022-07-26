@@ -3,7 +3,12 @@
     <% summary_list.row do |row| %>
       <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
       <% row.value do %>
-        <%= get_answer_label(question, @case_log) %><br>
+        <span class="govuk-!-margin-right-4"><%= get_answer_label(question, @case_log) %></span>
+        <% extra_value = question.get_extra_check_answer_value(@case_log) %>
+        <% if extra_value %>
+          <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
+        <% end %>
+        <br>
         <% question.get_inferred_answers(@case_log).each do |inferred_answer| %>
           <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
         <% end %>

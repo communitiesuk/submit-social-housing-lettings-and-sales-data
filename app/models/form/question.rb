@@ -51,14 +51,18 @@ class Form::Question
   def get_inferred_answers(case_log)
     return [] unless inferred_answers
 
-    enabled_inferred_answers(inferred_answers, case_log).keys.map do |x|
-      question = form.get_question(x, case_log)
+    enabled_inferred_answers(inferred_answers, case_log).keys.map do |question_id|
+      question = form.get_question(question_id, case_log)
       if question.present?
-        question.label_from_value(case_log[x])
+        question.label_from_value(case_log[question_id])
       else
-        Array(x.to_s.split(".")).inject(case_log) { |o, a| o.present? ? o.public_send(*a) : "" }
+        Array(question_id.to_s.split(".")).inject(case_log) { |log, method| log.present? ? log.public_send(*method) : "" }
       end
     end
+  end
+
+  def get_extra_check_answer_value(_case_log)
+    nil
   end
 
   def read_only?
