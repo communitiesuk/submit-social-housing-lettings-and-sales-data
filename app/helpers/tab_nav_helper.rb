@@ -1,5 +1,6 @@
 module TabNavHelper
   include GovukLinkHelper
+  include Helpers
 
   def user_cell(user)
     link_text = user.name.presence || user.email
@@ -7,7 +8,7 @@ module TabNavHelper
   end
 
   def location_cell(location, link)
-    link_text = location.postcode
+    link_text = location.postcode.formatted_postcode
     [govuk_link_to(link_text, link, method: :patch), "<span class=\"govuk-visually-hidden\">Location </span><span class=\"govuk-!-font-weight-regular app-!-colour-muted\">#{location.name}</span>"].join("\n")
   end
 

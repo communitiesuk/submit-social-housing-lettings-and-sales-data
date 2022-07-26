@@ -18,7 +18,7 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     return answer_opts unless ActiveRecord::Base.connected?
 
     Location.select(:id, :postcode, :name).where("startdate <= ? or startdate IS NULL", Time.zone.today).each_with_object(answer_opts) do |location, hsh|
-      hsh[location.id.to_s] = { "value" => location.postcode, "hint" => location.name }
+      hsh[location.id.to_s] = { "value" => location.postcode.formatted_postcode, "hint" => location.name }
       hsh
     end
   end

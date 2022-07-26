@@ -19,17 +19,17 @@ RSpec.describe "Postcode formatting" do
   end
 
   context "when a postcode is input" do
-    # it "for a 6 character postcode a space will be after the third character" do
-    #   visit("/logs/#{id}/property-postcode")
-    #   fill_in("case-log-postcode-full-field", with: "aa11aa")
-    #   click_button("Save and continue")
-    #   visit("/logs/#{id}/property-information/check-answers")
-    #   expect(page).to have_text("AA1 1AA")
-    # end
+    it "for a 6 character postcode a space will be after the third character" do
+      visit("/logs/#{id}/property-postcode")
+      fill_in("case-log-postcode-full-field", with: "aa11aa")
+      click_button("Save and continue")
+      visit("/logs/#{id}/property-information/check-answers")
+      expect(page).to have_text("AA1 1AA")
+    end
 
     it "for a 5 character postcode a space will be after the second character" do
       visit("/logs/#{id}/property-postcode")
-      fill_in("case-log-postcode-full-field", with: "a9 9aa")
+      fill_in("case-log-postcode-full-field", with: "a99aa")
       click_button("Save and continue")
       visit("/logs/#{id}/property-information/check-answers")
       expect(page).to have_text("A9 9AA")

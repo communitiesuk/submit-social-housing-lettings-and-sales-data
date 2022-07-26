@@ -566,12 +566,6 @@ private
     public_send("age#{person_num}") && public_send("age#{person_num}") < 16
   end
 
-  def format_postcode(value)
-    value = value.upcase.gsub(/\s+/, "")
-    value = value.length == 5 ? value.insert(2, " ") : value.insert(3, " ")
-    value.strip
-  end
-
   def process_postcode_changes!
     self.postcode_full = format_postcode(postcode_full)
     process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
