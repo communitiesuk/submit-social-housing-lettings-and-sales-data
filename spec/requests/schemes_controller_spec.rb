@@ -68,6 +68,19 @@ RSpec.describe SchemesController, type: :request do
         end
       end
 
+      it "shows incomplete tag if the scheme is not confirmed" do
+        schemes[0].update!(confirmed: nil)
+        get "/schemes"
+        assert_select ".govuk-tag", text: /Incomplete/, count: 1
+      end
+
+      it "displays a link to check answers page if the scheme is incomplete" do
+        scheme = schemes[0]
+        scheme.update!(confirmed: nil)
+        get "/schemes"
+        expect(page).to have_link(nil, href: /schemes\/#{scheme.id}\/check-answers/)
+      end
+
       it "shows a search bar" do
         expect(page).to have_field("search", type: "search")
       end
@@ -161,6 +174,15 @@ RSpec.describe SchemesController, type: :request do
 
         it "returns matching results" do
           expect(page).to have_content(searched_scheme.id_to_display)
+          schemes.each do |scheme|
+            expect(page).not_to have_content(scheme.id_to_display)
+          end
+        end
+
+        it "returns results with no location" do
+          scheme_without_location = FactoryBot.create(:scheme)
+          get "/schemes?search=#{scheme_without_location.id}"
+          expect(page).to have_content(scheme_without_location.id_to_display)
           schemes.each do |scheme|
             expect(page).not_to have_content(scheme.id_to_display)
           end
