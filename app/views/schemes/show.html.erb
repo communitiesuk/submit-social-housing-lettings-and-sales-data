@@ -13,16 +13,14 @@
 <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <%= govuk_summary_list do |summary_list| %>
-      <% @scheme.display_attributes.each do |attr| %>
-        <% next if current_user.data_coordinator? && attr[:name] == ("Housing stock owned by") %>
-        <%= summary_list.row do |row| %>
-          <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
-          <% row.value { details_html(attr) } %>
-          <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
-        <% end %>
+  <%= govuk_summary_list do |summary_list| %>
+    <% @scheme.display_attributes.each do |attr| %>
+      <% next if current_user.data_coordinator? && attr[:name] == ("Housing stock owned by") %>
+      <%= summary_list.row do |row| %>
+        <% row.key { attr[:name].eql?("Registered under Care Standards Act 2000") ? "Registered under Care Standards Act 2000" : attr[:name].to_s.humanize } %>
+        <% row.value { details_html(attr) } %>
+        <% row.action(text: "Change", href: scheme_edit_name_path(scheme_id: @scheme.id)) if attr[:edit] %>
       <% end %>
     <% end %>
-  </div>
+  <% end %>
 </div>

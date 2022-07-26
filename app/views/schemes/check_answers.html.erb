@@ -3,7 +3,6 @@
 
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
     <%= f.govuk_error_summary %>
       <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
         <% component.tab(label: "Scheme") do %>
@@ -72,7 +71,6 @@
           <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
         <% end %>
       <% end %>
-    </div>
   </div>
   <%= f.hidden_field :page, value: "check-answers" %>
   <%= f.hidden_field :confirmed, value: "true" %>
