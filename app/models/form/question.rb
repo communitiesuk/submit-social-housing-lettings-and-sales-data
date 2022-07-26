@@ -3,7 +3,7 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
 
   def initialize(id, hsh, page)
     @id = id
