@@ -63,10 +63,8 @@ class Form::Question
     end
   end
 
-  def get_extra_check_answer_value(case_log)
-    return nil unless extra_check_answer_value
-
-    case_log.form.get_question("la", nil).label_from_value(case_log.la)
+  def get_extra_check_answer_value(_case_log)
+    nil
   end
 
   def read_only?
