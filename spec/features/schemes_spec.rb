@@ -175,7 +175,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "AA11AA") }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "AA11AA", startdate: Time.utc(2022,1,1)) }
 
             before do
               visit("schemes")
@@ -198,8 +198,7 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(location.postcode)
                   expect(page).to have_content(location.units)
                   expect(page).to have_content(location.type_of_unit)
-                  expect(page).to have_content(location.mobility_type)
-                  expect(page).to have_content(location.location_admin_district)
+                  expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
                 end
               end
             end
@@ -471,10 +470,9 @@ RSpec.describe "Schemes scheme Features" do
           it "displays information about the first created location" do
             expect(page).to have_content "AA11AA"
             expect(page).to have_content "Some name"
+            expect(page).to have_content "5"
             expect(page).to have_content "Self-contained house"
-            expect(page).to have_content "None"
-            expect(page).to have_content "Local authority"
-            expect(page).to have_content "Westminster"
+            expect(page).to have_content "2 February 2022"
           end
 
           it "displays information about another location" do
@@ -508,7 +506,6 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content "Locations"
             expect(page).to have_content "#{scheme.locations.count} location"
             expect(page).to have_content "ZZ11ZZ"
-            expect(page).to have_content("Wheelchair-user standard")
           end
         end
 
