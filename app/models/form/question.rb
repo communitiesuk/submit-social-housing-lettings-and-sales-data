@@ -4,7 +4,6 @@ class Form::Question
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived,
-                :extra_check_answer_value
 
   def initialize(id, hsh, page)
     @id = id

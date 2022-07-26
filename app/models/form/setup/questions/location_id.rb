@@ -5,7 +5,6 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     @header = "Which location is this log for?"
     @hint_text = ""
     @type = "radio"
-    @extra_check_answer_value = "location_admin_district"
     @answer_options = answer_options
     @inferred_answers = {
       "location.name": {
