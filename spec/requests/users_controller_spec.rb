@@ -935,6 +935,24 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_content(I18n.t("validations.role.invalid"))
         end
       end
+
+      context "when validating the required fields" do
+        let(:params) do
+          {
+            "user": {
+              name: "",
+              email: "",
+              role: "support",
+            },
+          }
+        end
+
+        it "shows an error" do
+          request
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("validations.role.invalid"))
+        end
+      end
     end
 
     describe "#new" do

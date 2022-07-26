@@ -71,13 +71,25 @@ en:
           attributes:
             startdate:
               invalid: "Enter a date in the correct format, for example 1 9 2022"
-
             units:
               blank: "Enter total number of units at this location"
             type_of_unit:
               blank: "Select the most common type of unit at this location"
             mobility_type:
               blank: "Select the mobility standards for the majority of units in this location"
+        user:
+          attributes:
+            organisation_id:
+              blank: "Enter the existing organisation’s name"
+              invalid: "Enter the existing organisation’s name"
+            name:
+              blank: "Enter a name"
+            email:
+              invalid: "Enter an email address in the correct format, like name@example.com"
+              blank: "Enter an email address"
+            role:
+              invalid: "Role must be data accessor, data provider or data coordinator"
+              blank: "Select role"
 
   validations:
     organisation:

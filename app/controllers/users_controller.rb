@@ -63,29 +63,21 @@ class UsersController < ApplicationController
   end
 
   def new
+    debugger
     @organisation_id = params["organisation_id"]
-    @resource = User.new
+    @user = User.new
   end
 
   def create
-    @resource = User.new
-    if user_params["email"].empty?
-      @resource.errors.add :email, I18n.t("validations.email.blank")
-    elsif !email_valid?(user_params["email"])
-      @resource.errors.add :email, I18n.t("validations.email.invalid")
-    elsif user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
-      @resource.errors.add :role, I18n.t("validations.role.invalid")
-    end
-    if @resource.errors.present?
-      render :new, status: :unprocessable_entity
+    @user = User.new(user_params.merge(org_params).merge(password_params))
+    if @user.save
+      redirect_to created_user_redirect_path
     else
-      user = User.create(user_params.merge(org_params).merge(password_params))
-      if user.persisted?
-        redirect_to created_user_redirect_path
-      else
-        @resource.errors.add :email, I18n.t("validations.email.taken")
-        render :new, status: :unprocessable_entity
+      unless @user.errors[:organisation].empty?
+        @user.errors.add(:organisation_id, message: @user.errors[:organisation])
+        @user.errors.delete(:organisation)
       end
+      render :new, status: :unprocessable_entity
     end
   end
 

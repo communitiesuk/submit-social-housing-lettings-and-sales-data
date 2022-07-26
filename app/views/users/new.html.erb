@@ -4,7 +4,7 @@
   <%= govuk_back_link(href: :back) %>
 <% end %>
 
-<%= form_for(@resource, as: :user, html: { method: :post }) do |f| %>
+<%= form_for(@user, as: :user, html: { method: :post }) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
@@ -15,22 +15,22 @@
 
       <%= f.govuk_text_field :name,
         autocomplete: "name",
-        label: { text: "Name (optional)", size: "m" } %>
+        label: { text: "Name", size: "m" } %>
 
       <%= f.govuk_email_field :email,
         label: { text: "Email address", size: "m" },
         autocomplete: "email",
         spellcheck: "false",
-        value: @resource.email %>
+        value: @user.email %>
 
       <% if current_user.support? %>
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
-        <% if @organisation_id %>
-          <% organisation = Organisation.find(@organisation_id) %>
-          <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
-        <% end %>
+
+        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
+        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
+        <% answer_options = null_option + organisations %>
 
           <%= f.govuk_collection_select :organisation_id,
             answer_options,
