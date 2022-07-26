@@ -1685,10 +1685,6 @@ RSpec.describe CaseLog do
           expect(record_from_db["location_id"]).to eq(location.id)
           expect(case_log["location_id"]).to eq(location.id)
         end
-
-        it "derives location_admin_district" do
-          expect(case_log.location_admin_district).to eq(location.location_admin_district)
-        end
       end
 
       context "and not renewal" do
