@@ -120,10 +120,11 @@ RSpec.describe "Schemes scheme Features" do
       end
 
       it "returns results with no location" do
-        scheme_to_search.locations.each { |location| location.destroy }
-        scheme_to_search.reload
+        scheme_without_location = FactoryBot.create(:scheme)
+        visit "/schemes"
+        fill_in("search", with: scheme_without_location.id_to_display)
         click_button("Search")
-        expect(page).to have_content(scheme_to_search.id_to_display)
+        expect(page).to have_content(scheme_without_location.id_to_display)
       end
 
       it "allows clearing the search results" do

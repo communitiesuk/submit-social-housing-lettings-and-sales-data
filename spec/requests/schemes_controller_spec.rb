@@ -180,10 +180,9 @@ RSpec.describe SchemesController, type: :request do
         end
 
         it "returns results with no location" do
-          searched_scheme.locations.each { |location| location.destroy }
-          searched_scheme.reload
-          get "/schemes?search=#{search_param}"
-          expect(page).to have_content(searched_scheme.id_to_display)
+          scheme_without_location = FactoryBot.create(:scheme)
+          get "/schemes?search=#{scheme_without_location.id}"
+          expect(page).to have_content(scheme_without_location.id_to_display)
           schemes.each do |scheme|
             expect(page).not_to have_content(scheme.id_to_display)
           end
