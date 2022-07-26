@@ -3,7 +3,6 @@
 
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters-from-desktop">
     <%= f.govuk_error_summary %>
       <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
         <% component.tab(label: "Scheme") do %>
@@ -52,10 +51,7 @@
                 <% row.cell(header: true, text: "Common unit type", html_attributes: {
                   scope: "col",
                 }) %>
-                <% row.cell(header: true, text: "Mobility type", html_attributes: {
-                  scope: "col",
-                }) %>
-                <% row.cell(header: true, text: "Local authority", html_attributes: {
+                <% row.cell(header: true, text: "Available from", html_attributes: {
                   scope: "col",
                 }) %>
               <% end %>
@@ -67,8 +63,7 @@
                   <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
                   <% row.cell(text: location.units) %>
                   <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
-                  <% row.cell(text: location.mobility_type) %>
-                  <% row.cell(text: location.location_admin_district) %>
+                  <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
                   <% end %>
               <% end %>
             <% end %>
@@ -76,7 +71,6 @@
           <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
         <% end %>
       <% end %>
-    </div>
   </div>
   <%= f.hidden_field :page, value: "check-answers" %>
   <%= f.hidden_field :confirmed, value: "true" %>
