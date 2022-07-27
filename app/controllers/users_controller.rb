@@ -63,7 +63,6 @@ class UsersController < ApplicationController
   end
 
   def new
-    debugger
     @organisation_id = params["organisation_id"]
     @user = User.new
   end

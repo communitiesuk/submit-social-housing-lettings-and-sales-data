@@ -159,7 +159,7 @@ private
   def validate_email
     unless email_valid?(email)
       if User.exists?(["email LIKE ?", "%#{email}%"])
-        errors.add :email, I18n.t("validations.email.taken")
+        errors.add :email
       else
         errors.add :email, I18n.t("validations.email.invalid")
       end

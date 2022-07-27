@@ -1613,7 +1613,7 @@ RSpec.describe UsersController, type: :request do
         it "shows an error" do
           request
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.email.taken"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.taken"))
         end
       end
 

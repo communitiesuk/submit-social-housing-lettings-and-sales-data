@@ -87,6 +87,7 @@ en:
             email:
               invalid: "Enter an email address in the correct format, like name@example.com"
               blank: "Enter an email address"
+              taken: "Enter an email address that hasn’t already been used to sign up"
             role:
               invalid: "Role must be data accessor, data provider or data coordinator"
               blank: "Select role"
