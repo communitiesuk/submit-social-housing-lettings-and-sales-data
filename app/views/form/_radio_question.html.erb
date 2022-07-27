@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
+<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <%= f.govuk_radio_buttons_fieldset question.id.to_sym,
   caption: caption(caption_text, page_header, conditional),
@@ -34,3 +34,6 @@
     <% end %>
   <% end %>
 <% end %>
+
+<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>
+
