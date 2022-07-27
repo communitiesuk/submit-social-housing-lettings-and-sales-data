@@ -7,6 +7,8 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     @type = "select"
     @answer_options = answer_options
     @derived = true unless FeatureToggle.supported_housing_schemes_enabled?
+    @guidance_position = GuidancePosition::BOTTOM
+    @guidance_partial = "scheme_selection"
   end
 
   def answer_options
