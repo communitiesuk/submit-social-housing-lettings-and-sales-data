@@ -69,7 +69,8 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params.merge(org_params).merge(password_params))
-    if @user.save
+
+    if valid_attributes? && @user.save
       redirect_to created_user_redirect_path
     else
       unless @user.errors[:organisation].empty?
@@ -102,6 +103,14 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def valid_attributes?
+    @user.valid?
+    if user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
+      @user.errors.add :role, I18n.t("validations.role.invalid")
+    end
+    @user.errors.empty?
+  end
 
   def format_error_messages
     errors = @user.errors.to_hash

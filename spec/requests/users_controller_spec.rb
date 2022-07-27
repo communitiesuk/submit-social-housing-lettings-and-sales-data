@@ -423,7 +423,7 @@ RSpec.describe UsersController, type: :request do
       context "when a search parameter is passed" do
         let!(:other_user_2) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
         let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
-        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
 
         before do
           get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
@@ -791,19 +791,6 @@ RSpec.describe UsersController, type: :request do
               it "marks user as deactivated" do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.active }.from(true).to(false)
-              end
-
-              context "when the user name is missing" do
-                let(:other_user) { FactoryBot.create(:user, name: nil, organisation: user.organisation) }
-
-                before do
-                  patch "/users/#{other_user.id}", headers:, params:
-                end
-
-                it "uses the user's email" do
-                  follow_redirect!
-                  expect(page).to have_content(other_user.email)
-                end
               end
             end
 
