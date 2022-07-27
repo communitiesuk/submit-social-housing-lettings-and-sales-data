@@ -6,6 +6,7 @@
     <%= f.govuk_error_summary %>
       <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
         <% component.tab(label: "Scheme") do %>
+          <h2 class="govuk-visually-hidden">Scheme</h2>
           <dl class="govuk-summary-list">
             <% @scheme.check_details_attributes.each do |attr| %>
               <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
@@ -33,6 +34,7 @@
           </dl>
         <% end %>
         <% component.tab(label: "Locations") do %>
+          <h2 class="govuk-visually-hidden">Locations</h2>
           <%= govuk_table do |table| %>
             <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
               <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
