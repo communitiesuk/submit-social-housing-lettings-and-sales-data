@@ -247,7 +247,6 @@ RSpec.describe Imports::CaseLogsImportService do
       end
 
       it "completes the log" do
-        allow(logger).to receive(:warn)
         case_log_service.send(:create_log, case_log_xml)
         case_log = CaseLog.find_by(old_id: case_log_id)
         expect(case_log.status).to eq("completed")
