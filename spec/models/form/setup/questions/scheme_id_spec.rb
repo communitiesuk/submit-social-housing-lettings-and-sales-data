@@ -43,7 +43,7 @@ RSpec.describe Form::Setup::Questions::SchemeId, type: :model do
     let(:organisation) { FactoryBot.create(:organisation) }
     let(:organisation_2) { FactoryBot.create(:organisation) }
     let(:user) { FactoryBot.create(:user, organisation:) }
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation) }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation, managing_organisation: organisation) }
     let(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
 
     before do

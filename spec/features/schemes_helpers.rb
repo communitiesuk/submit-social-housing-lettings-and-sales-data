@@ -55,9 +55,12 @@ module SchemesHelpers
   end
 
   def fill_in_and_save_location
-    fill_in "Postcode", with: "SW1P 4DF"
+    fill_in "Postcode", with: "AA1 1AA"
     fill_in "Location name (optional)", with: "Some name"
-    fill_in "Total number of units at this location", with: 1
+    fill_in "Total number of units at this location", with: 5
+    fill_in "Day", with: 2
+    fill_in "Month", with: 2
+    fill_in "Year", with: 2022
     choose "Self-contained house"
     choose "location-add-another-location-no-field"
     choose "location-mobility-type-none-field"

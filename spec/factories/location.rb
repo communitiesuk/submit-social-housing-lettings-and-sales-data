@@ -6,6 +6,9 @@ FactoryBot.define do
     units { [1, 2, 3, 4, 6, 7].sample }
     type_of_building { "Purpose built" }
     mobility_type { %w[A M N W X].sample }
+    location_code { "E09000033" }
+    location_admin_district { "Westminster" }
+    startdate { Faker::Date.between(from: 6.months.ago, to: Time.zone.today) }
     scheme
     trait :export do
       postcode { "SW1A 2AA" }

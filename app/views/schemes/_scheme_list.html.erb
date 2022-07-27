@@ -11,7 +11,10 @@
         <% row.cell(header: true, text: "Scheme", html_attributes: {
           scope: "col",
         }) %>
-        <% row.cell(header: true, text: "Managed by", html_attributes: {
+        <% row.cell(header: true, text: "Locations", html_attributes: {
+          scope: "col",
+        }) %>
+        <% row.cell(header: true, text: "Support provided by", html_attributes: {
           scope: "col",
         }) %>
         <% row.cell(header: true, text: "Created", html_attributes: {
@@ -24,8 +27,9 @@
         <%= body.row do |row| %>
           <% row.cell(text: scheme.id_to_display) %>
           <% row.cell(text: simple_format(scheme_cell(scheme), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+          <% row.cell(text: scheme.locations&.count) %>
           <% row.cell(text: scheme.managing_organisation&.name) %>
-          <% row.cell(text: scheme.created_at.to_formatted_s(:govuk_date)) %>
+          <% row.cell(text: scheme.confirmed? ? scheme.created_at.to_formatted_s(:govuk_date) : govuk_tag(colour: "grey", text: "Incomplete")) %>
         <% end %>
       <% end %>
     <% end %>

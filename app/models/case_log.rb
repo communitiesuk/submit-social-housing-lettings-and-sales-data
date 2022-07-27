@@ -413,7 +413,7 @@ class CaseLog < ApplicationRecord
       csv << attribute_names + %w[unittype_sh]
 
       all.find_each do |record|
-        csv << record.attributes.merge({ "unittype_sh" => record.unittype_sh }).map do |att, val|
+        csv << record.attributes.merge({ "unittype_sh" => record.unittype_sh, "la" => record.la }).map do |att, val|
           record.form.get_question(att, record)&.label_from_value(val) || val
         end
       end
@@ -538,10 +538,17 @@ private
     self.created_by = nil if created_by.organisation != owning_organisation
   end
 
+  def reset_scheme
+    return unless scheme && owning_organisation
+
+    self.scheme = nil if scheme.owning_organisation != owning_organisation
+  end
+
   def reset_invalidated_dependent_fields!
     return unless form
 
     reset_created_by
+    reset_scheme
     reset_not_routed_questions
     reset_derived_questions
   end
@@ -602,7 +609,8 @@ private
   end
 
   def get_inferred_la(postcode)
-    PIO.infer_la(postcode)
+    result = PIO.lookup(postcode)
+    result[:location_code] if result
   end
 
   def get_has_benefits
@@ -610,9 +618,9 @@ private
   end
 
   def get_lettype
-    return unless renttype.present? && needstype.present? && owning_organisation.present? && owning_organisation[:provider_type].present?
+    return unless rent_type.present? && needstype.present? && owning_organisation.present? && owning_organisation[:provider_type].present?
 
-    case RENT_TYPE_MAPPING_LABELS[renttype]
+    case RENT_TYPE_MAPPING_LABELS[RENT_TYPE_MAPPING[rent_type]]
     when "Social Rent"
       if is_supported_housing?
         owning_organisation[:provider_type] == "PRP" ? 2 : 4

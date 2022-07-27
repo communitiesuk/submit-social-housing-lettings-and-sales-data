@@ -211,19 +211,6 @@ RSpec.describe CaseLog do
       })
     end
 
-    context "when a case log is created in production" do
-      before do
-        allow(Rails.env).to receive(:production?).and_return(true)
-      end
-
-      it "derives that all forms are general needs" do
-        case_log = FactoryBot.create(:case_log)
-        record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["needstype"]).to eq(1)
-        expect(case_log["needstype"]).to eq(1)
-      end
-    end
-
     it "correctly derives and saves partial and full major repairs date" do
       record_from_db = ActiveRecord::Base.connection.execute("select mrcdate from case_logs where id=#{case_log.id}").to_a[0]
       expect(record_from_db["mrcdate"].day).to eq(4)
@@ -1875,6 +1862,28 @@ RSpec.describe CaseLog do
         expect { case_log.update!(owning_organisation: organisation_2) }
           .to change { case_log.reload.created_by }.from(created_by_user).to(nil)
       end
+
+      context "when the organisation selected doesn't match the scheme set" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: created_by_user.organisation) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
+        let(:case_log) { FactoryBot.create(:case_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+
+        it "clears the scheme value" do
+          case_log.update!(owning_organisation: organisation_2)
+          expect(case_log.reload.scheme).to be nil
+        end
+      end
+
+      context "when the organisation selected still matches the scheme set" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: organisation_2) }
+        let(:location) { FactoryBot.create(:location, scheme:) }
+        let(:case_log) { FactoryBot.create(:case_log, owning_organisation: nil, needstype: 2, scheme_id: scheme.id) }
+
+        it "does not clear the scheme value" do
+          case_log.update!(owning_organisation: organisation_2)
+          expect(case_log.reload.scheme_id).to eq(scheme.id)
+        end
+      end
     end
   end
 
@@ -2223,30 +2232,20 @@ RSpec.describe CaseLog do
       case_log = FactoryBot.create(:case_log)
       expect(case_log.supported_housing_schemes_enabled?).to eq(true)
     end
-
-    context "when in the production environment" do
-      before do
-        allow(Rails.env).to receive(:production?).and_return(true)
-      end
-
-      it "returns false for a case log" do
-        case_log = FactoryBot.create(:case_log)
-        expect(case_log.supported_housing_schemes_enabled?).to eq(false)
-      end
-    end
   end
 
   describe "csv download" do
     let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
     let(:scheme) { FactoryBot.create(:scheme) }
-    let(:location) { FactoryBot.create(:location, scheme:, type_of_unit: 6, postcode: "SE11TE") }
+    let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE") }
+    let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
     end
 
     it "generates a correct csv from a case log" do
-      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:)
+      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
       expected_content = csv_export_file.read
       expected_content.sub!(/\{id\}/, case_log["id"].to_s)
       expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)

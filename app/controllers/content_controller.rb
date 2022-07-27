@@ -1,6 +1,6 @@
 class ContentController < ApplicationController
   def accessibility_statement
-    render_content_page :accessibility_statement
+    render_content_page :accessibility_statement, page_title: "Accessibility statement for Submit social housing lettings and sales data (CORE)"
   end
 
   def privacy_notice

@@ -3,9 +3,13 @@ class Location < ApplicationRecord
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
 
-  before_save :infer_la!, if: :postcode_changed?
+  before_save :lookup_postcode!, if: :postcode_changed?
 
   attr_accessor :add_another_location
+
+  scope :search_by_postcode, ->(postcode) { where("postcode ILIKE ?", "%#{postcode.gsub(/\s+/, '')}%") }
+  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
 
   MOBILITY_TYPE = {
     "Wheelchair-user standard": "W",
@@ -48,7 +52,11 @@ private
     end
   end
 
-  def infer_la!
-    self.location_code = PIO.infer_la(postcode)
+  def lookup_postcode!
+    result = PIO.lookup(postcode)
+    if result
+      self.location_code = result[:location_code]
+      self.location_admin_district = result[:location_admin_district]
+    end
   end
 end

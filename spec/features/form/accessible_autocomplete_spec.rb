@@ -60,7 +60,7 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   context "when searching schemes" do
-    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
+    let(:scheme) { FactoryBot.create(:scheme, owning_organisation_id: case_log.created_by.organisation_id, managing_organisation_id: case_log.created_by.organisation_id, primary_client_group: "Q", secondary_client_group: "P") }
 
     before do
       FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
@@ -76,7 +76,7 @@ RSpec.describe "Accessible Automcomplete" do
 
     it "displays appended text next to the options", js: true do
       find("#case-log-scheme-id-field").click.native.send_keys("w", "6", :down, :enter)
-      expect(find(".autocomplete__option__append", visible: :hidden, text: scheme.service_name)).to be_present
+      expect(find(".autocomplete__option", visible: :hidden, text: scheme.service_name)).to be_present
       expect(find("span", visible: :hidden, text: "2 locations")).to be_present
     end
 

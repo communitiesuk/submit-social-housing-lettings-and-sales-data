@@ -10,6 +10,8 @@ FactoryBot.define do
     primary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
     secondary_client_group { %w[O H M L A G F B D E I S N R Q P X].sample }
     owning_organisation { FactoryBot.create(:organisation) }
+    managing_organisation { FactoryBot.create(:organisation) }
+    confirmed { true }
     created_at { Time.zone.now }
     trait :export do
       sensitive { 1 }

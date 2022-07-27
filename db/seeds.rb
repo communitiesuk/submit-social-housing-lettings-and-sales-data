@@ -28,6 +28,7 @@ unless Rails.env.test?
 
   if Rails.env.development? && User.count.zero?
     User.create!(
+      name: "Provider",
       email: "provider@example.com",
       password: "password",
       organisation: org,
@@ -36,6 +37,7 @@ unless Rails.env.test?
     )
 
     User.create!(
+      name: "Coordinator",
       email: "coordinator@example.com",
       password: "password",
       organisation: org,
@@ -44,6 +46,7 @@ unless Rails.env.test?
     )
 
     User.create!(
+      name: "Support",
       email: "support@example.com",
       password: "password",
       organisation: org,
@@ -80,6 +83,7 @@ unless Rails.env.test?
       primary_client_group: "O",
       secondary_client_group: "H",
       owning_organisation: org,
+      confirmed: true,
       created_at: Time.zone.now,
     )
 
@@ -93,6 +97,7 @@ unless Rails.env.test?
       primary_client_group: "D",
       secondary_client_group: "E",
       owning_organisation: org,
+      confirmed: true,
       created_at: Time.zone.now,
     )
 
@@ -106,6 +111,7 @@ unless Rails.env.test?
       primary_client_group: "G",
       secondary_client_group: "R",
       owning_organisation: dummy_org,
+      confirmed: true,
       created_at: Time.zone.now,
     )
 

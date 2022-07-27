@@ -144,6 +144,13 @@ RSpec.describe "Form Check Answers Page" do
         expect(page).to have_content("Location")
         expect(page).to have_content(location.name)
       end
+
+      it "displays inferred postcode with the location_admin_district" do
+        case_log.update!(location:)
+        visit("/logs/#{id}/setup/check-answers")
+        expect(page).to have_content("Location")
+        expect(page).to have_content(location.location_admin_district)
+      end
     end
 
     context "when the user changes their answer from check answer page" do

@@ -119,6 +119,14 @@ RSpec.describe "Schemes scheme Features" do
         expect(page).to have_content(scheme_to_search.id_to_display)
       end
 
+      it "returns results with no location" do
+        scheme_without_location = FactoryBot.create(:scheme)
+        visit "/schemes"
+        fill_in("search", with: scheme_without_location.id_to_display)
+        click_button("Search")
+        expect(page).to have_content(scheme_without_location.id_to_display)
+      end
+
       it "allows clearing the search results" do
         fill_in("search", with: scheme_to_search.id_to_display)
         click_button("Search")
@@ -175,7 +183,7 @@ RSpec.describe "Schemes scheme Features" do
           context "when there are locations that belong to the selected scheme" do
             let!(:schemes) { FactoryBot.create_list(:scheme, 5) }
             let(:scheme)     { schemes.first }
-            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:) }
+            let!(:locations) { FactoryBot.create_list(:location, 3, scheme:, postcode: "AA11AA", startdate: Time.utc(2022, 1, 1)) }
 
             before do
               visit("schemes")
@@ -198,7 +206,92 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).to have_content(location.postcode)
                   expect(page).to have_content(location.units)
                   expect(page).to have_content(location.type_of_unit)
-                  expect(page).to have_content(location.mobility_type)
+                  expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
+                end
+              end
+            end
+
+            context "when I search for a specific location" do
+              before do
+                click_link("Locations")
+              end
+
+              it "there is a search bar with a message and search button for locations" do
+                expect(page).to have_field("search")
+                expect(page).to have_content("Search by location name or postcode")
+                expect(page).to have_button("Search")
+              end
+
+              context "when I fill in search information and press the search button" do
+                let(:postcode_to_search) { "NW38RR" }
+                let(:location_name_to_search) { "search name location" }
+                let(:location_to_search) { FactoryBot.create(:location, postcode: postcode_to_search, name: location_name_to_search, scheme:) }
+
+                before do
+                  fill_in("search", with: location_to_search.name)
+                  click_button("Search")
+                end
+
+                it "displays scheme matching the location name" do
+                  expect(page).to have_content(location_name_to_search)
+                end
+
+                context "when I want to clear results" do
+                  it "there is link to clear the search results" do
+                    expect(page).to have_link("Clear search")
+                  end
+
+                  it "displays all schemes after I clear the search results" do
+                    click_link("Clear search")
+                    Location.all.each do |location|
+                      expect(page).to have_content(location.name)
+                    end
+                  end
+                end
+              end
+            end
+
+            context "when the user clicks add location" do
+              before do
+                click_link("Locations")
+                click_link("Add a location")
+              end
+
+              it "shows the new location form" do
+                expect(page).to have_content("Add a location to this scheme")
+              end
+
+              context "when the user completes the new location form" do
+                let(:location_name) { "Area 42" }
+
+                before do
+                  fill_in "Postcode", with: "NW1L 5DP"
+                  fill_in "Location name (optional)", with: location_name
+                  fill_in "Total number of units at this location", with: 1
+                  choose "Bungalow"
+                  choose "location-mobility-type-none-field"
+                  choose "location-add-another-location-no-field"
+                  click_button "Save and continue"
+                end
+
+                it "shows the check answers page location tab" do
+                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page).to have_content(location_name)
+                end
+
+                it "has the correct action button text" do
+                  expect(page).to have_button("Save")
+                  expect(page).not_to have_button("Create scheme")
+                end
+
+                context "when you click to view the scheme details" do
+                  before do
+                    click_link("Scheme")
+                  end
+
+                  it "does not let you change details other than the name" do
+                    assert_selector "a", text: "Change", count: 1
+                  end
                 end
               end
             end
@@ -383,10 +476,11 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays information about the first created location" do
-            expect(page).to have_content "SW1P4DF"
+            expect(page).to have_content "AA11AA"
             expect(page).to have_content "Some name"
+            expect(page).to have_content "5"
             expect(page).to have_content "Self-contained house"
-            expect(page).to have_content "None"
+            expect(page).to have_content "2 February 2022"
           end
 
           it "displays information about another location" do
@@ -420,7 +514,6 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content "Locations"
             expect(page).to have_content "#{scheme.locations.count} location"
             expect(page).to have_content "ZZ11ZZ"
-            expect(page).to have_content("Wheelchair-user standard")
           end
         end
 
@@ -431,7 +524,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays change links" do
-            assert_selector "a", text: "Change", count: 13
+            assert_selector "a", text: "Change", count: 12
           end
 
           it "allows changing details questions" do
@@ -451,13 +544,20 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content "Check your changes before creating this scheme"
           end
+
+          it "indicates if the scheme is not complete" do
+            click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+            choose "Another registered housing provider"
+            click_button "Save and continue"
+            expect(page).to have_content("You didn’t answer this question")
+          end
         end
 
         context "when selecting 'create a scheme'" do
           before do
             create_and_save_a_scheme
             fill_in_and_save_location
-            click_link "Create scheme"
+            click_button "Create scheme"
           end
 
           it "adds scheme to the list of schemes" do
@@ -465,7 +565,7 @@ RSpec.describe "Schemes scheme Features" do
             expect(page).to have_content scheme.id_to_display
             expect(page).to have_content scheme.service_name
             expect(page).to have_content scheme.owning_organisation.name
-            expect(page).to have_content "#{scheme.owning_organisation.name} has been created."
+            expect(page).to have_content "#{scheme.service_name} has been created."
           end
         end
 
@@ -534,6 +634,20 @@ RSpec.describe "Schemes scheme Features" do
               click_link "Back"
               expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
               expect(page).to have_content "Check your changes before creating this scheme"
+            end
+
+            it "keeps the provider answer when swithing between other provider options" do
+              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+              choose "Another organisation"
+              click_button "Save and continue"
+              expect(page).to have_content(another_organisation.name)
+            end
+
+            it "does not display the answer if it's changed to the same support provider" do
+              click_link("Change", href: "/schemes/#{scheme.id}/details?check_answers=true", match: :first)
+              choose "The same organisation that owns the housing stock"
+              click_button "Save and continue"
+              expect(page).not_to have_content("Organisation providing support")
             end
           end
         end
@@ -641,6 +755,91 @@ RSpec.describe "Schemes scheme Features" do
                 end
               end
             end
+
+            context "when I search for a specific location" do
+              before do
+                click_link("Locations")
+              end
+
+              it "there is a search bar with a message and search button for locations" do
+                expect(page).to have_field("search")
+                expect(page).to have_content("Search by location name or postcode")
+                expect(page).to have_button("Search")
+              end
+
+              context "when I fill in search information and press the search button" do
+                let(:postcode_to_search) { "NW38RR" }
+                let(:location_name_to_search) { "search name location" }
+                let(:location_to_search) { FactoryBot.create(:location, postcode: postcode_to_search, name: location_name_to_search, scheme:) }
+
+                before do
+                  fill_in("search", with: location_to_search.name)
+                  click_button("Search")
+                end
+
+                it "displays scheme matching the location name" do
+                  expect(page).to have_content(location_name_to_search)
+                end
+
+                context "when I want to clear results" do
+                  it "there is link to clear the search results" do
+                    expect(page).to have_link("Clear search")
+                  end
+
+                  it "displays all schemes after I clear the search results" do
+                    click_link("Clear search")
+                    Location.all.each do |location|
+                      expect(page).to have_content(location.name)
+                    end
+                  end
+                end
+              end
+            end
+
+            context "when the user clicks add location" do
+              before do
+                click_link("Locations")
+                click_link("Add a location")
+              end
+
+              it "shows the new location form" do
+                expect(page).to have_content("Add a location to this scheme")
+              end
+
+              context "when the user completes the new location form" do
+                let(:location_name) { "Area 42" }
+
+                before do
+                  fill_in "Postcode", with: "NW1L 5DP"
+                  fill_in "Location name (optional)", with: location_name
+                  fill_in "Total number of units at this location", with: 1
+                  choose "Bungalow"
+                  choose "location-mobility-type-none-field"
+                  choose "location-add-another-location-no-field"
+                  click_button "Save and continue"
+                end
+
+                it "shows the check answers page location tab" do
+                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                  expect(page).to have_content(location_name)
+                end
+
+                it "has the correct action button text" do
+                  expect(page).to have_button("Save")
+                  expect(page).not_to have_button("Create scheme")
+                end
+
+                context "when you click to view the scheme details" do
+                  before do
+                    click_link("Scheme")
+                  end
+
+                  it "does not let you change details other than the name" do
+                    assert_selector "a", text: "Change", count: 1
+                  end
+                end
+              end
+            end
           end
         end
       end
@@ -649,7 +848,7 @@ RSpec.describe "Schemes scheme Features" do
 
   context "when selecting a scheme" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation) }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
     let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
     let!(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
 
@@ -691,6 +890,12 @@ RSpec.describe "Schemes scheme Features" do
       location.update!(startdate: Time.utc(2022, 6, 3))
       visit("/logs/#{case_log.id}/scheme")
       expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
+    end
+
+    it "does display the schemes that are not completed" do
+      schemes[2].update!(confirmed: false)
+      visit("/logs/#{case_log.id}/scheme")
+      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
     end
   end
 end

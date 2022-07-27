@@ -93,6 +93,34 @@ RSpec.describe FormController, type: :request do
             expect(response.body).to match("What counts as income?")
           end
         end
+
+        context "when viewing the setup section schemes page" do
+          context "when the user is support" do
+            let(:user) { FactoryBot.create(:user, :support) }
+
+            context "when organisation and user have not been selected yet" do
+              let(:case_log) do
+                FactoryBot.create(
+                  :case_log,
+                  owning_organisation: nil,
+                  managing_organisation: nil,
+                  created_by: nil,
+                  needstype: 2,
+                )
+              end
+
+              before do
+                locations = FactoryBot.create_list(:location, 5)
+                locations.each { |location| location.scheme.update!(arrangement_type: "The same organisation that owns the housing stock", managing_organisation_id: location.scheme.owning_organisation_id) }
+              end
+
+              it "returns an unfiltered list of schemes" do
+                get "/logs/#{case_log.id}/scheme", headers: headers, params: {}
+                expect(response.body.scan("<option value=").count).to eq(6)
+              end
+            end
+          end
+        end
       end
 
       context "when displaying check answers pages" do
