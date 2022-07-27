@@ -41,13 +41,23 @@
             options: { disabled: [""], selected: @organisation_id ? answer_options.first : "" } %>
       <% end %>
 
-      <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+
+      <% hints_for_roles = { data_provider: ["Can view and submit logs for this this organisation"],  data_coordinator: ["Can view and submit logs for this this organisation"],   support: [] } %>
+
+      <% roles_with_hints = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints_for_roles[key.to_sym]) } %>
 
       <%= f.govuk_collection_radio_buttons :role,
-        roles,
-        :id,
-        :name,
-        legend: { text: "Role", size: "m" } %>
+                                           roles_with_hints,
+                                           :id,
+                                           :name,
+                                           ->(option) do
+                                             content_tag(:ul, class: "govuk-list govuk-list--bullet govuk-hint") do
+                                               content_tag(:li, "1")
+                                               content_tag(:li, "2")
+                                               content_tag(:li, "3")
+                                             end
+                                           end,
+                                           legend: { text: "Role", size: "m" } %>
 
       <%= f.govuk_collection_radio_buttons :is_dpo,
         [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],

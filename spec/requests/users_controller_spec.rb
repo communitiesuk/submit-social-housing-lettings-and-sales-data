@@ -1603,6 +1603,7 @@ RSpec.describe UsersController, type: :request do
             },
           }
         end
+
         before do
           FactoryBot.create(:user, email: "new_user@example.com")
         end
