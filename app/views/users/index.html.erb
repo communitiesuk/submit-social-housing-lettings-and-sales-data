@@ -5,8 +5,6 @@
 
 <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Users", sub: nil } : { main: "User", sub: current_user.organisation.name } %>
 
-<h2 class="govuk-visually-hidden">Users</h2>
-
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path, html: { method: :get } %>
 <% end %>

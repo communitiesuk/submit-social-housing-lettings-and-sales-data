@@ -9,11 +9,10 @@
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
+  <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 <% end %>
 
 <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
-
-<h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 
 <%= govuk_details(
   classes: "govuk-!-width-two-thirds",

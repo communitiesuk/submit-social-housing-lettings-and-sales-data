@@ -12,6 +12,8 @@
 
 <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
+<h2 class="govuk-visually-hidden">Scheme</h2>
+
 <div class="govuk-grid-row">
   <%= govuk_summary_list do |summary_list| %>
     <% @scheme.display_attributes.each do |attr| %>

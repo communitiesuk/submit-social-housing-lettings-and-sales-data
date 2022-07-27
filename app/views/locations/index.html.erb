@@ -13,6 +13,8 @@
 
 <%= render SubNavigationComponent.new(items: scheme_items(request.path, @scheme.id, "Locations")) %>
 
+<h2 class="govuk-visually-hidden">Locations</h2>
+
 <%= render SearchComponent.new(current_user:, search_label: "Search by location name or postcode", value: @searched) %>
 
 <%= govuk_section_break(visible: true, size: "m") %>
