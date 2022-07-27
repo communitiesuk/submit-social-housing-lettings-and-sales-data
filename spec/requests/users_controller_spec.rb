@@ -1605,6 +1605,31 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/users")
       end
 
+      context "when validations fail" do
+        let(:params) do
+          {
+            "user": {
+              name: "",
+              email: "",
+              role: "",
+              organisation_id: nil,
+            },
+          }
+        end
+        before do
+          FactoryBot.create(:user, email: "new_user@example.com")
+        end
+
+        it "shows an error" do
+          request
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.role.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
+        end
+      end
+
       context "when the email is already taken" do
         before do
           FactoryBot.create(:user, email: "new_user@example.com")

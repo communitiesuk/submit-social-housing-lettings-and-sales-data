@@ -161,7 +161,7 @@ private
       if User.exists?(["email LIKE ?", "%#{email}%"])
         errors.add :email
       else
-        errors.add :email, I18n.t("validations.email.invalid")
+        errors.add :email, I18n.tI18n.t("activerecord.errors.models.user.attributes.email.invalid")
       end
     end
   end
