@@ -885,7 +885,7 @@ RSpec.describe LocationsController, type: :request do
         end
 
         it "has search in the title" do
-          expect(page).to have_title("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
+          expect(page).to have_title(CGI.escapeHTML("#{scheme.service_name} (1 location matching ‘#{search_param}’) - Submit social housing lettings and sales data (CORE) - GOV.UK"))
         end
       end
     end
