@@ -1,4 +1,5 @@
 class Form::Setup::Questions::LocationId < ::Form::Question
+  using FormatPostcode
   def initialize(_id, hsh, page)
     super("location_id", hsh, page)
     @check_answer_label = "Location"
