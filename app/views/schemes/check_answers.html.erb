@@ -2,78 +2,76 @@
 <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
-  <div class="govuk-grid-row">
-    <%= f.govuk_error_summary %>
-      <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
-        <% component.tab(label: "Scheme") do %>
-          <h2 class="govuk-visually-hidden">Scheme</h2>
-          <dl class="govuk-summary-list">
-            <% @scheme.check_details_attributes.each do |attr| %>
-              <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
-              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_details_path(@scheme, check_answers: true) } %>
-            <% end %>
-            <% if !@scheme.arrangement_type_same? %>
-            <% @scheme.check_support_services_provider_attributes.each do |attr| %>
-              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_services_provider_path(@scheme, check_answers: true) } %>
-              <% end %>
-            <% end %>
-            <% @scheme.check_primary_client_attributes.each do |attr| %>
-              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_primary_client_group_path(@scheme, check_answers: true) } %>
-            <% end %>
-            <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
-              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true) } %>
-            <% end %>
-            <% if @scheme.has_other_client_group == "Yes" %>
-              <% @scheme.check_secondary_client_attributes.each do |attr| %>
-                <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_secondary_client_group_path(@scheme, check_answers: true) } %>
-              <% end %>
-            <% end %>
-            <% @scheme.check_support_attributes.each do |attr| %>
-              <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_path(@scheme, check_answers: true) } %>
-            <% end %>
-          </dl>
+  <%= f.govuk_error_summary %>
+  <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
+    <% component.tab(label: "Scheme") do %>
+      <h2 class="govuk-visually-hidden">Scheme</h2>
+      <dl class="govuk-summary-list">
+        <% @scheme.check_details_attributes.each do |attr| %>
+          <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_details_path(@scheme, check_answers: true) } %>
         <% end %>
-        <% component.tab(label: "Locations") do %>
-          <h2 class="govuk-visually-hidden">Locations</h2>
-          <%= govuk_table do |table| %>
-            <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
-              <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
-            <% end %>
-            <%= table.head do |head| %>
-              <%= head.row do |row| %>
-                <% row.cell(header: true, text: "Code", html_attributes: {
-                  scope: "col",
-                }) %>
-                <% row.cell(header: true, text: "Postcode", html_attributes: {
-                  scope: "col",
-                }) %>
-                <% row.cell(header: true, text: "Units", html_attributes: {
-                  scope: "col",
-                }) %>
-                <% row.cell(header: true, text: "Common unit type", html_attributes: {
-                  scope: "col",
-                }) %>
-                <% row.cell(header: true, text: "Available from", html_attributes: {
-                  scope: "col",
-                }) %>
-              <% end %>
-            <% end %>
-            <% @scheme.locations.each do |location| %>
-              <%= table.body do |body| %>
-                <%= body.row do |row| %>
-                  <% row.cell(text: location.id) %>
-                  <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
-                  <% row.cell(text: location.units) %>
-                  <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
-                  <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
-                  <% end %>
-              <% end %>
-            <% end %>
+        <% if !@scheme.arrangement_type_same? %>
+        <% @scheme.check_support_services_provider_attributes.each do |attr| %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_services_provider_path(@scheme, check_answers: true) } %>
           <% end %>
-          <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
+        <% end %>
+        <% @scheme.check_primary_client_attributes.each do |attr| %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_primary_client_group_path(@scheme, check_answers: true) } %>
+        <% end %>
+        <% @scheme.check_secondary_client_confirmation_attributes.each do |attr| %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_confirm_secondary_client_group_path(@scheme, check_answers: true) } %>
+        <% end %>
+        <% if @scheme.has_other_client_group == "Yes" %>
+          <% @scheme.check_secondary_client_attributes.each do |attr| %>
+            <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_secondary_client_group_path(@scheme, check_answers: true) } %>
+          <% end %>
+        <% end %>
+        <% @scheme.check_support_attributes.each do |attr| %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_support_path(@scheme, check_answers: true) } %>
+        <% end %>
+      </dl>
+    <% end %>
+    <% component.tab(label: "Locations") do %>
+      <h2 class="govuk-visually-hidden">Locations</h2>
+      <%= govuk_table do |table| %>
+        <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular]) do |caption| %>
+          <strong><%= @scheme.locations.count %></strong> <%= @scheme.locations.count.eql?(1) ? "location" : "locations" %>
+        <% end %>
+        <%= table.head do |head| %>
+          <%= head.row do |row| %>
+            <% row.cell(header: true, text: "Code", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Postcode", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Units", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Common unit type", html_attributes: {
+              scope: "col",
+            }) %>
+            <% row.cell(header: true, text: "Available from", html_attributes: {
+              scope: "col",
+            }) %>
+          <% end %>
+        <% end %>
+        <% @scheme.locations.each do |location| %>
+          <%= table.body do |body| %>
+            <%= body.row do |row| %>
+              <% row.cell(text: location.id) %>
+              <% row.cell(text: simple_format(location_cell(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+              <% row.cell(text: location.units) %>
+              <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
+              <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
+              <% end %>
+          <% end %>
         <% end %>
       <% end %>
-  </div>
+      <%= govuk_button_link_to "Add a location", new_location_path(id: @scheme.id), secondary: true %>
+    <% end %>
+  <% end %>
   <%= f.hidden_field :page, value: "check-answers" %>
   <%= f.hidden_field :confirmed, value: "true" %>
   <% button_label = @scheme.confirmed? ? "Save" : "Create scheme" %>
