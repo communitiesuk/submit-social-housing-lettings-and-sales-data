@@ -149,7 +149,7 @@ RSpec.describe Form, type: :model do
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("household-needs/check-answers")
       end
 
-      it "returns the first page of the next incomplete subsection (skipping completed subsections)" do
+      it "returns the first page of the next incomplete subsection (skipping completed subsections, and pages that are not routed to)" do
         answer_household_needs(case_log)
         expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("property-postcode")
       end
