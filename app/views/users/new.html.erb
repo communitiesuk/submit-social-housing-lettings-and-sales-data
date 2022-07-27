@@ -28,9 +28,10 @@
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
 
-        <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
-        <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
-        <% answer_options = null_option + organisations %>
+        <% if @organisation_id %>
+          <% organisation = Organisation.find(@organisation_id) %>
+          <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
+        <% end %>
 
           <%= f.govuk_collection_select :organisation_id,
             answer_options,

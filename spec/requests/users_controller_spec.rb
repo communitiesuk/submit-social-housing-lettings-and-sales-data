@@ -1029,7 +1029,7 @@ RSpec.describe UsersController, type: :request do
     describe "#index" do
       let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
       let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "other_org@other_example.com") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "otherorg@otherexample.com") }
 
       before do
         sign_in user
@@ -1096,7 +1096,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           context "when our search term matches an email" do
-            let(:search_param) { "other_org@other_example.com" }
+            let(:search_param) { "otherorg@otherexample.com" }
 
             it "returns only matching result" do
               expect(page).not_to have_content(user.name)
@@ -1108,7 +1108,7 @@ RSpec.describe UsersController, type: :request do
 
           context "when our search term matches an email and a name" do
             let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
-            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
             let(:search_param) { "joe" }
 
             it "returns any results including joe" do
@@ -1620,7 +1620,7 @@ RSpec.describe UsersController, type: :request do
           FactoryBot.create(:user, email: "new_user@example.com")
         end
 
-        it "shows an error" do
+        it "shows an error messages for all failed validations" do
           request
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
