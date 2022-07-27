@@ -3,7 +3,7 @@
 
 <% content_for :title, title %>
 
-<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Schemes", sub: current_user.organisation.name } %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Supported housing schemes", sub: current_user.organisation.name } %>
 
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
