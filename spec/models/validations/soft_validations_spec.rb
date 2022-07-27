@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Validations::SoftValidations do
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
+  let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
 
   describe "rent min max validations" do
     before do
@@ -18,7 +19,8 @@ RSpec.describe Validations::SoftValidations do
       )
 
       record.la = "E07000223"
-      record.lettype = 1
+      record.needstype = 1
+      record.rent_type = 0
       record.beds = 1
       record.period = 1
       record.startdate = Time.zone.local(2021, 10, 10)

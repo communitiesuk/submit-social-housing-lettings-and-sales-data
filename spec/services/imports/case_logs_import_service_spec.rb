@@ -229,6 +229,30 @@ RSpec.describe Imports::CaseLogsImportService do
       end
     end
 
+    context "and the rent soft validation is triggered (rent_value_check)" do
+      before do
+        case_log_xml.at_xpath("//xmlns:Q18ai").content = 200.00
+        case_log_xml.at_xpath("//xmlns:Q18av").content = 232.02
+        case_log_xml.at_xpath("//xmlns:Q17").content = "1 Weekly for 52 weeks"
+        LaRentRange.create!(
+          start_year: 2021,
+          la: "E08000035",
+          beds: 2,
+          lettype: 1,
+          soft_max: 900,
+          hard_max: 1500,
+          soft_min: 500,
+          hard_min: 100,
+        )
+      end
+
+      it "completes the log" do
+        case_log_service.send(:create_log, case_log_xml)
+        case_log = CaseLog.find_by(old_id: case_log_id)
+        expect(case_log.status).to eq("completed")
+      end
+    end
+
     context "and this is a supported housing log with multiple locations under a scheme" do
       let(:case_log_id) { "0b4a68df-30cc-474a-93c0-a56ce8fdad3b" }
 
