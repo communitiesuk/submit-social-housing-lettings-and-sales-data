@@ -1,0 +1,23 @@
+.app-metadata {
+  @include govuk-font($size: 16, $tabular: true);
+  color: $govuk-secondary-text-colour;
+  margin-top: 0;
+
+  &--inline {
+    display: flex;
+    gap: govuk-spacing(3);
+    margin: 0;
+  }
+
+  &__item {
+    display: flex;
+  }
+
+  &__term {
+    margin-right: govuk-spacing(1);
+  }
+
+  &__definition {
+    margin-left: 0;
+  }
+}

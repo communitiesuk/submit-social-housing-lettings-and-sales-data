@@ -1,68 +1,8 @@
-<section class="app-table-group" tabindex="0" aria-labelledby="<%= title.dasherize %>">
-  <%= govuk_table do |table| %>
-    <%= table.caption(classes: %w[govuk-!-font-size-19 govuk-!-font-weight-regular], id: title.dasherize) do |caption| %>
-     <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", path: request.path)) %>
-      <%= govuk_link_to "Download (CSV)", "#{request.path}.csv", type: "text/csv" %>
-    <% end %>
-    <%= table.head do |head| %>
-      <%= head.row do |row| %>
-        <% row.cell(header: true, text: "Log", html_attributes: {
-          scope: "col",
-        }) %>
-        <% row.cell(header: true, text: "Tenant", html_attributes: {
-          scope: "col",
-        }) %>
-        <% row.cell(header: true, text: "Property", html_attributes: {
-          scope: "col",
-        }) %>
-        <% row.cell(header: true, text: "Tenancy starts", html_attributes: {
-          scope: "col",
-        }) %>
-        <% row.cell(header: true, text: "Log created", html_attributes: {
-          scope: "col",
-        }) %>
-        <% row.cell(header: true, text: "Log status", html_attributes: {
-          scope: "col",
-        }) %>
-        <% if current_user.support? %>
-          <% row.cell(header: true, text: "Owning organisation", html_attributes: {
-            scope: "col",
-          }) %>
-          <% row.cell(header: true, text: "Managing organisation", html_attributes: {
-            scope: "col",
-          }) %>
-        <% end %>
-      <% end %>
-    <% end %>
-    <%= table.body do |body| %>
-      <% case_logs.map do |log| %>
-        <%= body.row do |row| %>
-          <% row.cell(header: true, html_attributes: {
-            scope: "row",
-          }) do %>
-            <%= govuk_link_to case_log_path(log) do %>
-              <span class="govuk-visually-hidden">Log </span><%= log.id %>
-            <% end %>
-          <% end %>
-          <% row.cell(
-            text: log.tenancycode? ? log.tenancycode : "–",
-            classes: "app-!-font-tabular",
-          ) %>
-          <% row.cell(
-            text: log.propcode? ? log.propcode : "–",
-            classes: "app-!-font-tabular",
-          ) %>
-          <% row.cell(text: log.startdate.present? ? log.startdate.to_formatted_s(:govuk_date) : "–") %>
-          <% row.cell(text: log.created_at.to_formatted_s(:govuk_date)) %>
-          <% row.cell do %>
-            <%= status_tag(log.status) %>
-          <% end %>
-          <% if current_user.support? %>
-            <% row.cell(text: log.owning_organisation&.name) %>
-            <% row.cell(text: log.managing_organisation&.name) %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-</section>
+<h2 class="govuk-body">
+  <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", path: request.path)) %>
+  <%= govuk_link_to "Download (CSV)", "#{request.path}.csv", type: "text/csv" %>
+</h2>
+
+<% case_logs.map do |log| %>
+  <%= render(LogSummaryComponent.new(current_user:, log:)) %>
+<% end %>
