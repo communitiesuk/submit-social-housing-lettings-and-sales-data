@@ -25,7 +25,7 @@ class LocationsController < ApplicationController
         if location_params[:add_another_location] == "Yes"
           redirect_to new_location_path(@scheme)
         else
-          check_answers_path = @scheme.confirmed? ? scheme_check_answers_path(@scheme, anchor: "locations") : scheme_check_answers_path(@scheme)
+          check_answers_path = @scheme.confirmed? ? locations_path(@scheme) : scheme_check_answers_path(@scheme)
           redirect_to check_answers_path
         end
       else
