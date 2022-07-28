@@ -74,7 +74,7 @@ class UsersController < ApplicationController
       redirect_to created_user_redirect_path
     else
       unless @resource.errors[:organisation].empty?
-        @resource.errors.add(:organisation_id, message: @user.errors[:organisation])
+        @resource.errors.add(:organisation_id, message: @resource.errors[:organisation])
         @resource.errors.delete(:organisation)
       end
       render :new, status: :unprocessable_entity

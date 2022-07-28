@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_28_092850) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_22_083835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -341,7 +341,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_092850) do
     t.datetime "last_sign_in_at", precision: nil
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.integer "role", default: 1
+    t.integer "role"
     t.string "old_user_id"
     t.string "phone"
     t.integer "failed_attempts", default: 0
