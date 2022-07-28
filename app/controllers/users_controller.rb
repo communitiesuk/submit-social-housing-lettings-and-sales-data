@@ -109,6 +109,9 @@ private
     if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
       @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
+    if user_params[:role].empty?
+      @resource.errors.add :role, I18n.t("activerecord.errors.models.user.attributes.role.blank")
+    end
     @resource.errors.empty?
   end
 
