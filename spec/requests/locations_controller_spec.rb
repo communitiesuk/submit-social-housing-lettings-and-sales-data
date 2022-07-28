@@ -1,5 +1,7 @@
 require "rails_helper"
 
+using RefinementTest
+
 RSpec.describe LocationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :support) }
@@ -802,7 +804,7 @@ RSpec.describe LocationsController, type: :request do
       it "shows scheme" do
         locations.each do |location|
           expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.postcode.formatted_postcode)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end
@@ -904,7 +906,7 @@ RSpec.describe LocationsController, type: :request do
       it "shows scheme" do
         locations.each do |location|
           expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode)
+          expect(page).to have_content(location.postcode.formatted_postcode)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end

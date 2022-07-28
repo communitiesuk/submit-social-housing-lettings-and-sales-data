@@ -574,12 +574,12 @@ private
   end
 
   def process_postcode_changes!
-    self.postcode_full = format_postcode(postcode_full)
+    self.postcode_full = upcase_and_remove_whitespace(postcode_full)
     process_postcode(postcode_full, "postcode_known", "is_la_inferred", "la")
   end
 
   def process_previous_postcode_changes!
-    self.ppostcode_full = format_postcode(ppostcode_full)
+    self.ppostcode_full = upcase_and_remove_whitespace(ppostcode_full)
     process_postcode(ppostcode_full, "ppcodenk", "is_previous_la_inferred", "prevloc")
   end
 
@@ -698,5 +698,9 @@ private
     return "" unless value && num_of_weeks
 
     (value * 52 / num_of_weeks).round(2)
+  end
+
+  def upcase_and_remove_whitespace(string)
+    string.present? ? string.upcase.gsub(/\s+/, "") : string
   end
 end
