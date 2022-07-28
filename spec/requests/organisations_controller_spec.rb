@@ -1020,4 +1020,39 @@ RSpec.describe OrganisationsController, type: :request do
       end
     end
   end
+
+  context "when the user is a support user" do
+    let(:user) { FactoryBot.create(:user, :support) }
+
+    before do
+      allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+      sign_in user
+    end
+
+    context "when they view the logs tab" do
+      before do
+        get "/organisations/#{organisation.id}/logs"
+      end
+
+      it "has a CSV download button with the correct path" do
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs.csv")
+      end
+
+      context "when you download the CSV" do
+        let(:headers) { { "Accept" => "text/csv" } }
+        let(:other_organisation) { FactoryBot.create(:organisation) }
+
+        before do
+          FactoryBot.create_list(:case_log, 3, owning_organisation: organisation)
+          FactoryBot.create_list(:case_log, 2, owning_organisation: other_organisation)
+        end
+
+        it "only includes logs from that organisation" do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(4)
+        end
+      end
+    end
+  end
 end

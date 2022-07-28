@@ -83,11 +83,18 @@ class OrganisationsController < ApplicationController
       organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
       unpaginated_filtered_logs = filtered_case_logs(filtered_collection(organisation_logs, search_term))
 
-      @pagy, @case_logs = pagy(unpaginated_filtered_logs)
-      @searched = search_term.presence
-      @total_count = organisation_logs.size
+      respond_to do |format|
+        format.html do
+          @pagy, @case_logs = pagy(unpaginated_filtered_logs)
+          @searched = search_term.presence
+          @total_count = organisation_logs.size
+          render "logs", layout: "application"
+        end
 
-      render "logs", layout: "application"
+        format.csv do
+          send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
+        end
+      end
     else
       redirect_to(case_logs_path)
     end
