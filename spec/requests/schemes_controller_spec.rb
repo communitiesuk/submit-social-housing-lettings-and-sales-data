@@ -873,7 +873,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1433,12 +1433,34 @@ RSpec.describe SchemesController, type: :request do
 
       before do
         sign_in user
-        get "/schemes/#{scheme.id}/check-answers"
       end
 
-      it "returns a template for a support" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before creating this scheme")
+      context "when the scheme is not confirmed" do
+        before do
+          scheme.update!(confirmed: nil)
+          get "/schemes/#{scheme.id}/check-answers"
+        end
+
+        it "returns a template for a support" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your changes before creating this scheme")
+          assert_select "a", text: /Change/, count: 11
+        end
+      end
+
+      context "when the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/check-answers"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_content("Check your changes before creating this scheme")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 2
+        end
       end
 
       context "when attempting to access check-answers scheme page for another organisation" do
@@ -1460,12 +1482,34 @@ RSpec.describe SchemesController, type: :request do
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
-        get "/schemes/#{scheme.id}/check-answers"
       end
 
-      it "returns a template for a support" do
-        expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Check your changes before creating this scheme")
+      context "when the scheme is not confirmed" do
+        before do
+          scheme.update!(confirmed: nil)
+          get "/schemes/#{scheme.id}/check-answers"
+        end
+
+        it "returns a template for a support" do
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("Check your changes before creating this scheme")
+          assert_select "a", text: /Change/, count: 11
+        end
+      end
+
+      context "when the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/check-answers"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).not_to have_content("Check your changes before creating this scheme")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 3
+        end
       end
     end
   end

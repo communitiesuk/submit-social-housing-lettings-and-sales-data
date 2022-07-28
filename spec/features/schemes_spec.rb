@@ -274,13 +274,13 @@ RSpec.describe "Schemes scheme Features" do
                   click_button "Save and continue"
                 end
 
-                it "shows the check answers page location tab" do
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                it "shows scheme location tab" do
+                  expect(page.current_url.split("/").last).to eq("locations")
                   expect(page).to have_content(location_name)
                 end
 
-                it "has the correct action button text" do
-                  expect(page).to have_button("Save")
+                it "does not have an action button" do
+                  expect(page).not_to have_button("Save")
                   expect(page).not_to have_button("Create scheme")
                 end
 
@@ -289,8 +289,8 @@ RSpec.describe "Schemes scheme Features" do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, confidential information and Housing stock owned by" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
               end
@@ -459,6 +459,14 @@ RSpec.describe "Schemes scheme Features" do
             click_link "Add a location"
             fill_in_and_save_second_location
             expect(page).to have_content "Check your changes before creating this scheme"
+          end
+
+          context "when saving a scheme" do
+            it "shows a confirmation banner" do
+              fill_in_and_save_location
+              click_button "Create scheme"
+              expect(page).to have_content("has been created.")
+            end
           end
         end
 
@@ -819,13 +827,13 @@ RSpec.describe "Schemes scheme Features" do
                   click_button "Save and continue"
                 end
 
-                it "shows the check answers page location tab" do
-                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
+                it "shows the scheme location tab" do
+                  expect(page.current_url.split("/").last).to eq("locations")
                   expect(page).to have_content(location_name)
                 end
 
-                it "has the correct action button text" do
-                  expect(page).to have_button("Save")
+                it "does not have an action button" do
+                  expect(page).not_to have_button("Save")
                   expect(page).not_to have_button("Create scheme")
                 end
 
@@ -834,8 +842,8 @@ RSpec.describe "Schemes scheme Features" do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, Confidential information and Housing stock owned by" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
               end

@@ -84,7 +84,11 @@ class SchemesController < ApplicationController
   end
 
   def check_answers
-    render "schemes/check_answers"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/check_answers"
+    end
   end
 
   def edit_name

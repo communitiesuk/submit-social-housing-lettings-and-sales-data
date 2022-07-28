@@ -89,7 +89,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let(:startdate) { Time.utc(2022, 2, 2) }
       let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, mobility_type: "A" } } }
 
@@ -268,7 +268,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
       let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
       before do
@@ -507,7 +507,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:location) { FactoryBot.create(:location, scheme:) }
       let(:startdate) { Time.utc(2021, 1, 2) }
       let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", startdate:, page: "edit" } } }
@@ -639,7 +639,7 @@ RSpec.describe LocationsController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:location)  { FactoryBot.create(:location, scheme:) }
       let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", page: "edit" } } }
 
