@@ -45,6 +45,17 @@ RSpec.describe Scheme, type: :model do
         end
       end
 
+      context "when searching by location name" do
+        it "returns case insensitive matching records" do
+          expect(described_class.search_by_location_name(location.name.upcase).count).to eq(1)
+          expect(described_class.search_by_location_name(location.name.downcase).count).to eq(1)
+          expect(described_class.search_by_location_name(location.name.downcase).first.locations.first.name).to eq(location.name)
+          expect(described_class.search_by_location_name(location_2.name.upcase).count).to eq(1)
+          expect(described_class.search_by_location_name(location_2.name.downcase).count).to eq(1)
+          expect(described_class.search_by_location_name(location_2.name.downcase).first.locations.first.name).to eq(location_2.name)
+        end
+      end
+
       context "when searching by all searchable fields" do
         before do
           location_2.update!(postcode: location_2.postcode.gsub(scheme_1.id.to_s, "0"))
@@ -59,6 +70,9 @@ RSpec.describe Scheme, type: :model do
           expect(described_class.search_by(location.postcode.upcase).count).to eq(1)
           expect(described_class.search_by(location.postcode.downcase).count).to eq(1)
           expect(described_class.search_by(location.postcode.downcase).first.locations.first.postcode).to eq(location.postcode)
+          expect(described_class.search_by(location.name.upcase).count).to eq(1)
+          expect(described_class.search_by(location.name.downcase).count).to eq(1)
+          expect(described_class.search_by(location.name.downcase).first.locations.first.name).to eq(location.name)
         end
       end
     end
