@@ -586,7 +586,7 @@ RSpec.describe SchemesController, type: :request do
 
         it "does not allow the scheme to be confirmed" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.base.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.scheme.attributes.managing_organisation_id.invalid"))
         end
       end
 

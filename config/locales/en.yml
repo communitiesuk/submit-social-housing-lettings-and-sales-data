@@ -65,8 +65,6 @@ en:
               invalid: "Select if this scheme provides for another client group"
             arrangement_type:
               invalid: "Select who provides the support services used by this scheme"
-            base:
-              invalid: "You must answer all the required questions for this scheme"
         location:
           attributes:
             startdate:
