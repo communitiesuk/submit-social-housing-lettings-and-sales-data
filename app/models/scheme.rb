@@ -214,7 +214,6 @@ class Scheme < ApplicationRecord
     if confirmed == true
       required_attributes.any? do |attribute|
         if self[attribute].blank?
-          errors.add :base
           errors.add attribute.to_sym
           self.confirmed = false
         end
