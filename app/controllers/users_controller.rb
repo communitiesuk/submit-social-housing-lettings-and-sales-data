@@ -65,7 +65,6 @@ class UsersController < ApplicationController
   def new
     @organisation_id = params["organisation_id"]
     @resource = User.new
-    debugger
   end
 
   def create
