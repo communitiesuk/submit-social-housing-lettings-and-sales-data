@@ -1054,5 +1054,31 @@ RSpec.describe OrganisationsController, type: :request do
         end
       end
     end
+
+    context "when they view the users tab" do
+      before do
+        get "/organisations/#{organisation.id}/users"
+      end
+
+      it "has a CSV download button with the correct path" do
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/users.csv")
+      end
+
+      context "when you download the CSV" do
+        let(:headers) { { "Accept" => "text/csv" } }
+        let(:other_organisation) { FactoryBot.create(:organisation) }
+
+        before do
+          FactoryBot.create_list(:user, 3, organisation:)
+          FactoryBot.create_list(:user, 2, organisation: other_organisation)
+        end
+
+        it "only includes users from that organisation" do
+          get "/organisations/#{other_organisation.id}/users", headers:, params: {}
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(3)
+        end
+      end
+    end
   end
 end

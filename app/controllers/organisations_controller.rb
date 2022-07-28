@@ -29,13 +29,24 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users(@organisation.users.sorted_by_organisation_and_role, search_term))
-    @searched = search_term.presence
-    @total_count = @organisation.users.size
-    if current_user.support?
-      render "users", layout: "application"
-    else
-      render "users/index"
+    organisation_users = @organisation.users.sorted_by_organisation_and_role
+    unpaginated_filtered_users = filtered_collection(organisation_users, search_term)
+
+    respond_to do |format|
+      format.html do
+        @pagy, @users = pagy(unpaginated_filtered_users)
+        @searched = search_term.presence
+        @total_count = @organisation.users.size
+
+        if current_user.support?
+          render "users", layout: "application"
+        else
+          render "users/index"
+        end
+      end
+      format.csv do
+        send_data unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
+      end
     end
   end
 
