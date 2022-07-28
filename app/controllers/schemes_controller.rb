@@ -64,23 +64,43 @@ class SchemesController < ApplicationController
   end
 
   def primary_client_group
-    render "schemes/primary_client_group"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/primary_client_group"
+    end
   end
 
   def confirm_secondary_client_group
-    render "schemes/confirm_secondary"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/confirm_secondary"
+    end
   end
 
   def secondary_client_group
-    render "schemes/secondary_client_group"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/secondary_client_group"
+    end
   end
 
   def support
-    render "schemes/support"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/support"
+    end
   end
 
   def details
-    render "schemes/details"
+    if @scheme.confirmed?
+      redirect_to @scheme
+    else
+      render "schemes/details"
+    end
   end
 
   def check_answers
