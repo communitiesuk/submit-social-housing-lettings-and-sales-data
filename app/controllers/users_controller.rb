@@ -64,18 +64,19 @@ class UsersController < ApplicationController
 
   def new
     @organisation_id = params["organisation_id"]
-    @user = User.new
+    @resource = User.new
+    debugger
   end
 
   def create
-    @user = User.new(user_params.merge(org_params).merge(password_params))
+    @resource = User.new(user_params.merge(org_params).merge(password_params))
 
-    if valid_attributes? && @user.save
+    if valid_attributes? && @resource.save
       redirect_to created_user_redirect_path
     else
-      unless @user.errors[:organisation].empty?
-        @user.errors.add(:organisation_id, message: @user.errors[:organisation])
-        @user.errors.delete(:organisation)
+      unless @resource.errors[:organisation].empty?
+        @resource.errors.add(:organisation_id, message: @user.errors[:organisation])
+        @resource.errors.delete(:organisation)
       end
       render :new, status: :unprocessable_entity
     end
@@ -105,11 +106,11 @@ class UsersController < ApplicationController
 private
 
   def valid_attributes?
-    @user.valid?
-    if user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
-      @user.errors.add :role, I18n.t("validations.role.invalid")
+    @resource.valid?
+    if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
+      @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
-    @user.errors.empty?
+    @resource.errors.empty?
   end
 
   def format_error_messages

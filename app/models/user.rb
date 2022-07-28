@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :managed_case_logs, through: :organisation
 
   validate :validate_email
-  validates :name, :role, :email, presence: true
+  validates :name, :email, presence: true
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
@@ -120,6 +120,19 @@ class User < ApplicationRecord
     return ROLES if support?
 
     ROLES.except(:support)
+  end
+
+  def assignable_roles_with_hints
+    roles_with_hints = {
+      data_provider: "Can view and submit logs for this this organisation",
+      data_coordinator: "data_coordinator",
+      support: "support",
+    }
+
+    return {} unless data_coordinator? || support?
+    return roles_with_hints if support?
+
+    roles_with_hints.except(:support)
   end
 
   def case_logs_filters(specific_org: false)

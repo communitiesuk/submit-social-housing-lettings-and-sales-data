@@ -1613,7 +1613,6 @@ RSpec.describe UsersController, type: :request do
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
-          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.role.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
         end
       end
