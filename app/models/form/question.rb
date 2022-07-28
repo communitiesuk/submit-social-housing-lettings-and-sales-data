@@ -5,6 +5,11 @@ class Form::Question
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
                 :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
 
+  module GuidancePosition
+    TOP = 1
+    BOTTOM = 2
+  end
+
   def initialize(id, hsh, page)
     @id = id
     @page = page
@@ -12,6 +17,7 @@ class Form::Question
       @check_answer_label = hsh["check_answer_label"]
       @header = hsh["header"]
       @guidance_partial = hsh["guidance_partial"]
+      @guidance_position = GuidancePosition::TOP
       @hint_text = hsh["hint_text"]
       @type = hsh["type"]
       @min = hsh["min"]
@@ -236,6 +242,14 @@ class Form::Question
     return false unless type == "select"
 
     case_log[id].to_s == answer.id.to_s
+  end
+
+  def top_guidance?
+    @guidance_partial && @guidance_position == GuidancePosition::TOP
+  end
+
+  def bottom_guidance?
+    @guidance_partial && @guidance_position == GuidancePosition::BOTTOM
   end
 
 private

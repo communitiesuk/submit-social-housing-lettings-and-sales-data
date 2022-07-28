@@ -1,0 +1,5 @@
+<% if current_user.data_provider? %>
+  <p class="govuk-body">If you can’t find the supported housing service you’re looking for or not sure which to choose, contact a data coordinator at <%= current_user.organisation.name %>.</p>
+<% elsif current_user.data_coordinator? %>
+  <p class="govuk-body">or <%= govuk_link_to "create a new supported housing service", new_scheme_path %></p>
+<% end %>
