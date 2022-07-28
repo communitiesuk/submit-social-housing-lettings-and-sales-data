@@ -116,11 +116,6 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_field("search", type: "search")
         end
 
-        it "has hidden accessibility field with description" do
-          expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
-          expect(CGI.unescape_html(response.body)).to include(expected_field)
-        end
-
         it "shows only schemes belonging to the same organisation" do
           expect(page).to have_content(same_org_scheme.id_to_display)
           schemes.each do |scheme|

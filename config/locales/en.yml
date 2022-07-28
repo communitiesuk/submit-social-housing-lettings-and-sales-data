@@ -65,8 +65,6 @@ en:
               invalid: "Select if this scheme provides for another client group"
             arrangement_type:
               invalid: "Select who provides the support services used by this scheme"
-            base:
-              invalid: "You must answer all the required questions for this scheme"
         location:
           attributes:
             startdate:
@@ -325,7 +323,7 @@ en:
       name: "Location name (optional)"
       units: "Total number of units at this location"
       type_of_unit: "What is the most common type of unit at this location?"
-      startdate: "When did the first property in this location become available under this scheme?"
+      startdate: "When did the first property in this location become available under this scheme? (optional)"
       add_another_location: "Do you want to add another location?"
       mobility_type: "What are the mobility standards for the majority of units in this location?"
     descriptions:

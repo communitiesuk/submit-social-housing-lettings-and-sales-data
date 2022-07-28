@@ -5,8 +5,6 @@
 
 <%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Supported housing schemes", sub: nil } : { main: "Supported housing schemes", sub: current_user.organisation.name } %>
 
-<h2 class="govuk-visually-hidden">Supported housing schemes</h2>
-
 <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by scheme name, code or postcode", value: @searched) %>
