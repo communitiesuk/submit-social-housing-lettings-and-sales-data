@@ -3,17 +3,22 @@
 
 <% content_for :title, title %>
 
-<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Schemes", sub: current_user.organisation.name } %>
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: @organisation.name, sub: nil } : { main: "Supported housing schemes", sub: current_user.organisation.name } %>
 
 <% if current_user.support? %>
   <%= render SubNavigationComponent.new(
     items: secondary_items(request.path, @organisation.id),
   ) %>
+  <h2 class="govuk-visually-hidden">Supported housing schemes</h2>
 <% end %>
 
 <%= govuk_button_link_to "Create a new supported housing scheme", new_scheme_path, html: { method: :post } %>
 
-<h2 class="govuk-visually-hidden">Supported housing schemes</h2>
+<%= govuk_details(
+  classes: "govuk-!-width-two-thirds",
+  summary_text: "What is a supported housing scheme?",
+  text: "A supported housing scheme (also known as a ‘supported housing service’) provides shared or self-contained housing for a particular client group, for example younger or vulnerable people. A single scheme can contain multiple units, for example bedrooms in shared houses or a bungalow with 3 bedrooms.",
+) %>
 
 <%= render SearchComponent.new(current_user:, search_label: "Search by scheme name, code or postcode", value: @searched) %>
 

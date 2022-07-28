@@ -93,11 +93,6 @@ RSpec.describe SchemesController, type: :request do
         expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes.")
       end
 
-      it "has hidden accebility field with description" do
-        expected_field = "<h2 class=\"govuk-visually-hidden\">Supported housing schemes</h2>"
-        expect(CGI.unescape_html(response.body)).to include(expected_field)
-      end
-
       context "when params scheme_id is present" do
         it "shows a success banner" do
           get "/schemes", params: { scheme_id: schemes.first.id }
