@@ -327,21 +327,14 @@ RSpec.describe "User Features" do
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "newuser@example.com")
         choose("user-role-data-provider-field")
-        choose("user-is-dpo-true-field")
-        choose("user-is-key-contact-true-field")
         click_button("Continue")
         expect(User.find_by(
                  name: "New User",
                  email: "newuser@example.com",
                  role: "data_provider",
-                 is_dpo: true,
-                 is_key_contact: true,
+                 is_dpo: false,
+                 is_key_contact: false,
                )).to be_a(User)
-      end
-
-      it "defaults to is_dpo false" do
-        visit("users/new")
-        expect(page).to have_field("user[is_dpo]", with: false)
       end
     end
 

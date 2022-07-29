@@ -805,19 +805,6 @@ RSpec.describe UsersController, type: :request do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.active }.from(false).to(true)
               end
-
-              context "when the user name is missing" do
-                let(:other_user) { FactoryBot.create(:user, name: nil, organisation: user.organisation) }
-
-                before do
-                  patch "/users/#{other_user.id}", headers:, params:
-                end
-
-                it "uses the user's email" do
-                  follow_redirect!
-                  expect(page).to have_content(other_user.email)
-                end
-              end
             end
           end
         end
