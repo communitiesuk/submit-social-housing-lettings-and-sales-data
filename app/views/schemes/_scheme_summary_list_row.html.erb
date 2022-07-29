@@ -1,4 +1,4 @@
-<div class="<%= "govuk-summary-list__row #{scheme.confirmed? && attribute[:name] != 'Name' ? 'govuk-summary-list__row--no-actions' : ''}" %>">
+<div class="<%= "govuk-summary-list__row #{scheme.confirmed? && !["Name", "Confidential information", "Housing stock owned by"].include?(attribute[:name]) ? 'govuk-summary-list__row--no-actions' : ''}" %>">
     <dt class="govuk-summary-list__key">
         <%= attribute[:name].to_s %>
     </dt>
@@ -14,7 +14,7 @@
             <%= details_html(attribute) %>
         </dd>
     <% end %>
-    <% if !scheme.confirmed? || attribute[:name] == "Name" %>
+    <% if can_change_scheme_answer?(attribute[:name], scheme) %>
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="<%= change_link %>">Change</a>
         </dd>

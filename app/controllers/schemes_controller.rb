@@ -57,8 +57,8 @@ class SchemesController < ApplicationController
     if @scheme.errors.empty? && @scheme.update(scheme_params)
       if scheme_params[:confirmed] == "true"
         @scheme.locations.each {|location| location.update!(confirmed:true)}
-      end
-      if check_answers
+        redirect_to scheme_path(@scheme)
+      elsif check_answers
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
         else
@@ -180,7 +180,7 @@ private
         scheme_details_path(@scheme)
       end
     when "edit-name"
-      scheme_path(@scheme)
+      scheme_check_answers_path(@scheme)
     when "check-answers"
       schemes_path(scheme_id: @scheme.id)
     end

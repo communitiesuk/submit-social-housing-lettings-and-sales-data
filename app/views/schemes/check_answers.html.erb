@@ -10,7 +10,7 @@
       <dl class="govuk-summary-list">
         <% @scheme.check_details_attributes.each do |attr| %>
           <% next if current_user.data_coordinator? && attr[:name] == ("owned by") %>
-          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: scheme_details_path(@scheme, check_answers: true) } %>
+          <%= render partial: "scheme_summary_list_row", locals: { scheme: @scheme, attribute: attr, change_link: @scheme.confirmed? ? scheme_edit_name_path(@scheme) : scheme_details_path(@scheme, check_answers: true) } %>
         <% end %>
         <% if !@scheme.arrangement_type_same? %>
         <% @scheme.check_support_services_provider_attributes.each do |attr| %>

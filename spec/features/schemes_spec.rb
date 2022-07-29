@@ -284,6 +284,27 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).not_to have_button("Create scheme")
                 end
 
+                it "allows you to edit the newly added location" do
+                  click_link 'Locations'
+                  expect(page).to have_link(nil , href: /edit/)
+                end
+
+                context "when you click save" do
+                  it "takes you to view location tab and displays a banner" do
+                    click_button "Save"
+                    expect(page.current_url.split("/").last).to eq("locations")
+                    expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+                    expect(page).to have_content("udpated")
+                  end
+
+                  it "does not let you edit the saved location" do
+                    click_button "Save"
+                    click_link "Back"
+                    click_link 'Change'
+                    expect(page.current_url.split("/").last).to eq("edit-name")
+                  end
+                end
+
                 context "when you click to view the scheme details" do
                   before do
                     click_link("Scheme")
@@ -451,6 +472,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me check my answers after adding a location" do
             fill_in_and_save_location
+            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content "Check your changes before creating this scheme"
           end
 
@@ -704,9 +726,10 @@ RSpec.describe "Schemes scheme Features" do
                 click_button "Save changes"
               end
 
-              it "lets me see amended details on the show page" do
+              it "lets me see amended details on the check answers page" do
                 expect(page).to have_content "FooBar"
-                expect(page).to have_current_path("/schemes/#{scheme.id}")
+                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                assert_selector "a", text: "Change", count: 3
               end
             end
           end
@@ -846,6 +869,55 @@ RSpec.describe "Schemes scheme Features" do
     end
   end
 
+  context "when I am signed in as a data coordinator" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation_id: user.organisation_id) }
+    let!(:scheme_to_search) { FactoryBot.create(:scheme) }
+
+    before do
+      visit("/logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+    end
+
+    context "when editing a scheme" do
+      context "when I visit schemes page" do
+        before do
+          visit("schemes")
+        end
+
+        context "when I click to see individual scheme" do
+          let(:scheme) { schemes.first }
+          let!(:location) { FactoryBot.create(:location, scheme:) }
+
+          before do
+            click_link(scheme.service_name)
+          end
+
+          context "when I click to change scheme name" do
+            before do
+              click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
+            end
+
+            context "when I edit details" do
+              before do
+                fill_in "Scheme name", with: "FooBar"
+                check "This scheme contains confidential information"
+                click_button "Save changes"
+              end
+
+              it "lets me see amended details on the check answers page" do
+                expect(page).to have_content "FooBar"
+                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                expect(page).to have_link("Change", href:  /schemes\/#{scheme.id}\/edit-name/, count: 2)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
   context "when selecting a scheme" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }

@@ -11,6 +11,10 @@ module CheckAnswersHelper
     end
   end
 
+  def can_change_scheme_answer?(attribute_name, scheme)
+    editable_attributes = current_user.support? ? ["Name", "Confidential information", "Housing stock owned by"] : ["Name", "Confidential information"]
+    !scheme.confirmed? || editable_attributes.include?(attribute_name) 
+  end
 private
 
   def answered_questions_count(subsection, case_log, current_user)
