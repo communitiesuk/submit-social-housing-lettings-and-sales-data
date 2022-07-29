@@ -912,7 +912,7 @@ RSpec.describe UsersController, type: :request do
             "user": {
               name: "",
               email: "",
-              role: "support",
+              role: "",
             },
           }
         end
@@ -920,7 +920,9 @@ RSpec.describe UsersController, type: :request do
         it "shows an error" do
           request
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.role.invalid"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.role.blank"))
         end
       end
     end
