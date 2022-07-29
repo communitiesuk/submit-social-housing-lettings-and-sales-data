@@ -4,7 +4,7 @@
      <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "users", path: request.path)) %>
        <% if current_user.support? %>
         <% query = searched.present? ? "?search=#{searched}" : nil %>
-        <%= govuk_link_to "Download (CSV)", "/users.csv#{query}", type: "text/csv" %>
+        <%= govuk_link_to "Download (CSV)", "#{request.path}.csv#{query}", type: "text/csv" %>
       <% end %>
     <% end %>
     <%= table.head do |head| %>
