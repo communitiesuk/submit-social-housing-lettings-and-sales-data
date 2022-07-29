@@ -355,17 +355,12 @@ RSpec.describe "User Features" do
         click_link(other_user.name)
         expect(page).to have_title("Other name’s account")
         first(:link, "Change").click
-        expect(page).to have_field("user[is_dpo]", with: true)
-        choose("user-is-dpo-field")
-        choose("user-is-key-contact-true-field")
         fill_in("user[name]", with: "Updated new name")
         click_button("Save changes")
         expect(page).to have_title("Updated new name’s account")
         expect(User.find_by(
                  name: "Updated new name",
                  role: "data_provider",
-                 is_dpo: false,
-                 is_key_contact: true,
                )).to be_a(User)
       end
     end
