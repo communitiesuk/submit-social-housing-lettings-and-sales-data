@@ -5,11 +5,12 @@
 
 <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
 
-<%= render SubNavigationComponent.new(
-  items: secondary_items(request.path, @organisation.id),
-) %>
-
-<h2 class="govuk-visually-hidden">Logs</h2>
+<% if current_user.support? %>
+  <%= render SubNavigationComponent.new(
+    items: secondary_items(request.path, @organisation.id),
+  ) %>
+  <h2 class="govuk-visually-hidden">Logs</h2>
+<% end %>
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">

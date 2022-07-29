@@ -44,35 +44,33 @@ en:
         scheme:
           attributes:
             owning_organisation_id:
-              invalid: "Enter the existing organisation’s name"
+              invalid: "Enter the name of the organisation that owns the housing stock"
             managing_organisation_id:
-              invalid: "Enter the existing organisation’s name"
+              invalid: "Enter the name of the organisation that manages the housing stock"
             service_name:
-              invalid: "Enter the scheme’s name"
+              invalid: "Enter the name of the scheme"
             scheme_type:
-              invalid: "Select the scheme’s type"
+              invalid: "Select the type of scheme"
             registered_under_care_act:
               invalid: "Select if this scheme is registered under the Care Standards Act 2000"
             primary_client_group:
-              invalid: "Select what client group is this scheme intended for"
+              invalid: "Select what client group this scheme is intended for"
             secondary_client_group:
-              invalid: "Select what is the other client group"
+              invalid: "Select the other client group for this scheme"
             support_type:
-              invalid: "Select level of support given"
+              invalid: "Select the level of support provided by this scheme"
             intended_stay:
-              invalid: "Select intended length of stay"
+              invalid: "Select the intended length of stay"
             has_other_client_group:
               invalid: "Select if this scheme provides for another client group"
             arrangement_type:
               invalid: "Select who provides the support services used by this scheme"
-            base:
-              invalid: "You must answer all the required questions for this scheme"
         location:
           attributes:
             startdate:
-              invalid: "Enter a date in the correct format, for example 1 9 2022"
+              invalid: "Enter a date in the correct format, for example 31 1 2022"
             units:
-              blank: "Enter total number of units at this location"
+              blank: "Enter the total number of units at this location"
             type_of_unit:
               blank: "Select the most common type of unit at this location"
             mobility_type:
@@ -94,8 +92,8 @@ en:
 
   validations:
     organisation:
-      name_missing: "Enter the organisation’s name"
-      provider_type_missing: "Select the organisation’s type"
+      name_missing: "Enter the name of the organisation"
+      provider_type_missing: "Select the organisation type"
     not_answered: "You must answer %{question}"
 
     other_field_missing: "If %{main_field_label} is other then %{other_field_label} must be provided"
@@ -103,8 +101,8 @@ en:
     numeric:
       valid: "%{field} must be between %{min} and %{max}"
     date:
-      invalid_date: "Enter a date in the correct format, for example 1 9 2022"
-      outside_collection_window: "Date must be within the current collection windows"
+      invalid_date: "Enter a date in the correct format, for example 31 1 2022"
+      outside_collection_window: "Enter a date within the current collection windows"
     postcode: "Enter a postcode in the correct format, for example AA1 1AA"
     email:
       taken: "Enter an email address that hasn’t already been used to sign up"
@@ -122,20 +120,20 @@ en:
 
     property:
       mrcdate:
-        before_tenancy_start: "Major repairs date must be before the tenancy start date"
+        before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
-        730_days_before_tenancy_start: "The major repairs completion date should be no more than 730 days before the tenancy start date"
+        730_days_before_tenancy_start: "Enter a major repairs completion date that is no more than 730 days before the tenancy start date"
       void_date:
-        ten_years_before_tenancy_start: "The void date must be no more than 10 years before the tenancy start date"
-        before_tenancy_start: "Void date must be before the tenancy start date"
+        ten_years_before_tenancy_start: "Enter a void date must no more than 10 years before the tenancy start date"
+        before_tenancy_start: "Enter a void date must that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
       offered:
-        relet_number: "Number of times the property has been re-let must be between 0 and 20"
+        relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"
       la:
         la_invalid_for_org: "%{org_name} does not operate in %{la_name}"
-        postcode_invalid_for_org: "Postcode must be in an area covered by %{org_name}"
+        postcode_invalid_for_org: "Enter a postcode in an area covered by %{org_name}"
       rsnvac:
-        first_let_not_social: "Reason for vacancy cannot be first let if unit has been previously let as social housing"
+        first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing"
         first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
         previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
         non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us this accommodation is not temporary"
@@ -150,9 +148,9 @@ en:
 
     financial:
       tshortfall:
-        outstanding_amount_not_required: "You must not answer the outstanding amount question if you don’t have outstanding rent or charges"
-        more_than_rent: "Answer must be less than the basic rent amount"
-        must_be_positive: "Answer must be more than £0.01 as you told us there is an outstanding amount"
+        outstanding_amount_not_required: "You cannot answer the outstanding amount question if you don’t have outstanding rent or charges"
+        more_than_rent: "Enter a value less less than the basic rent amount"
+        must_be_positive: "Enter a value over £0.01 as you told us there is an outstanding amount"
       hbrentshortfall:
         outstanding_no_benefits: "Answer cannot be ‘yes’ to outstanding amount for basic rent or charges if tenant does not receive housing benefit or Universal Credit or you‘re not sure"
       benefits:
@@ -164,28 +162,28 @@ en:
         earnings_missing: "Enter how much income the household has in total"
       negative_currency: "Enter an amount above 0"
       rent:
-        less_than_shortfall: "Answer must be more than the shortfall in basic rent"
+        less_than_shortfall: "Enter an amount that is more than the shortfall in basic rent"
         scharge:
           private_registered_provider:
-            general_needs: "Service charge must be between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £280 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £55 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £280 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Service charge must be between £0 and £45 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Service charge must be between £0 and £165 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the service charge between £0 and £45 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the service charge between £0 and £165 per week if the landlord is a local authority and it is a supported housing letting"
         pscharge:
           private_registered_provider:
-            general_needs: "Personal service charge must be between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £200 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the personal service charge between £0 and £30 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the personal service charge between £0 and £200 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Personal service charge must be between £0 and £35 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Personal service charge must be between £0 and £75 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the personal service charge between £0 and £35 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the personal service charge between £0 and £75 per week if the landlord is a local authority and it is a supported housing letting"
         supcharg:
           private_registered_provider:
-            general_needs: "Support charge must be between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £465 per week if the landlord is a private registered provider and it is a supported housing letting"
+            general_needs: "Enter a value for the support charge between £0 and £40 per week if the landlord is a private registered provider and it is a general needs letting"
+            supported_housing: "Enter a value for the support charge between £0 and £465 per week if the landlord is a private registered provider and it is a supported housing letting"
           local_authority:
-            general_needs: "Support charge must be between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
-            supported_housing: "Support charge must be between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
+            general_needs: "Enter a value for the support charge between £0 and £60 per week if the landlord is a local authority and it is a general needs letting"
+            supported_housing: "Enter a value for the support charge between £0 and £120 per week if the landlord is a local authority and it is a supported housing letting"
       brent:
         not_in_range: "Basic rent is outside of the expected range based on the lettings type, local authority and number of bedrooms"
         la:
@@ -201,7 +199,7 @@ en:
       charges:
         complete_1_of_3: "Answer either the ‘household rent and charges’ question or ‘is this accommodation a care home‘, or select ‘no’ for ‘does the household pay rent or charges for the accommodation?’"
       tcharge:
-        under_10: "Total charge must be at least £10 per week"
+        under_10: "Enter a total charge that is at least £10 per week"
       rent_period:
         invalid_for_org: "%{org_name} does not charge rent %{rent_period}"
       carehome:
@@ -211,18 +209,18 @@ en:
       reasonpref:
         not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
-        reason_required: "If reasonable preference is ‘yes’, a reason must be given"
-        reason_not_required: "If reasonable preference is ‘no’, no reason should be given"
+        reason_required: "Enter a reason if you've answered 'yes' to reasonable preference"
+        reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference"
       underoccupation_benefitcap:
         dont_know_required: "Answer must be ‘don’t know’ as you told us you don’t know the tenant’s main reason for leaving"
       reservist:
-        injury_required: "You must answer whether the person was seriously injured or ill as a result of serving in the UK armed forces"
+        injury_required: "Tell us whether the person was seriously injured or ill as a result of serving in the UK armed forces"
         injury_not_required: "You cannot answer this question as you told us the person has not served in the UK armed forces or prefers not to say"
       leftreg:
-        question_required: "You must answer whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
+        question_required: "Tell us whether the person is still serving in the UK armed forces as you told us they’re a current or former regular"
         question_not_required: "You cannot answer whether the person is still serving in the UK armed forces as you told us they’re not a current or former regular"
       preg_occ:
-        no_female: "You must answer ‘no’ as there are no female tenants aged 11-65 in the household"
+        no_female: "Enter ‘no’ as there are no female tenants aged 11-65 in the household"
       age:
         retired_male: "Male tenant who is retired must be 65 or over"
         retired_female: "Female tenant who is retired must be 60 or over"
@@ -338,7 +336,7 @@ en:
       name: "Location name (optional)"
       units: "Total number of units at this location"
       type_of_unit: "What is the most common type of unit at this location?"
-      startdate: "When did the first property in this location become available under this scheme?"
+      startdate: "When did the first property in this location become available under this scheme? (optional)"
       add_another_location: "Do you want to add another location?"
       mobility_type: "What are the mobility standards for the majority of units in this location?"
     descriptions:

@@ -172,10 +172,10 @@ RSpec.describe CaseLogsController, type: :request do
           sign_in user
         end
 
-        it "does have organisation columns" do
+        it "does have organisation values" do
           get "/logs", headers: headers, params: {}
-          expect(page).to have_content("Owning organisation")
-          expect(page).to have_content("Managing organisation")
+          expect(page).to have_content("Owned by")
+          expect(page).to have_content("Managed by")
         end
 
         it "shows case logs for all organisations" do
@@ -449,7 +449,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           it "shows a table of logs" do
-            expect(CGI.unescape_html(response.body)).to match(/<table class="govuk-table">/)
+            expect(CGI.unescape_html(response.body)).to match(/<article class="app-log-summary">/)
             expect(CGI.unescape_html(response.body)).to match(/logs/)
           end
 

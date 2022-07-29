@@ -1,0 +1,67 @@
+<article class="app-log-summary">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <header class="app-log-summary__header">
+        <h2 class="app-log-summary__title">
+          <%= govuk_link_to case_log_path(log) do %>
+            <span class="govuk-visually-hidden">Log </span><%= log.id %>
+          <% end %>
+        </h2>
+        <% if log.tenancycode? or log.propcode? %>
+          <dl class="app-metadata app-metadata--inline">
+            <% if log.tenancycode? %>
+              <div class="app-metadata__item">
+                <dt class="app-metadata__term">Tenant</dt>
+                <dd class="app-metadata__definition"><%= log.tenancycode %></dd>
+              </div>
+            <% end %>
+            <% if log.propcode? %>
+              <div class="app-metadata__item">
+                <dt class="app-metadata__term">Property</dt>
+                <dd class="app-metadata__definition"><%= log.propcode %></dd>
+              </div>
+            <% end %>
+          </dl>
+        <% end %>
+      </header>
+
+      <% if log.needstype? or log.startdate? %>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <% if log.needstype? %>
+            <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
+          <% end %>
+          <% if log.startdate? %>
+            Tenancy starts <time datetime="<%= log.startdate.iso8601 %>"><%= log.startdate.to_formatted_s(:govuk_date) %></time>
+          <% end %>
+        </p>
+      <% end %>
+
+      <% if current_user.support? %>
+        <% if log.owning_organisation or log.managing_organisation %>
+          <dl class="app-metadata">
+            <div class="app-metadata__item">
+              <dt class="app-metadata__term">Owned by</dt>
+              <dd class="app-metadata__definition"><%= log.owning_organisation&.name %></dd>
+            </div>
+            <div class="app-metadata__item">
+              <dt class="app-metadata__term">Managed by</dt>
+              <dd class="app-metadata__definition"><%= log.managing_organisation&.name %></dd>
+            </div>
+          </dl>
+        <% end %>
+      <% end %>
+    </div>
+
+    <footer class="govuk-grid-column-one-half app-log-summary__footer">
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        <%= log_status %>
+      </p>
+      <p class="govuk-body">
+        Created <time datetime="<%= log.created_at.iso8601 %>"><%= log.created_at.to_formatted_s(:govuk_date) %></time>
+        <% if log.created_by %>
+          <span class="app-log-summary__footer--actor">by <%= log.created_by.name || log.created_by.email %></span>
+        <% end %>
+      </p>
+    </footer>
+  </div>
+</article>

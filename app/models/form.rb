@@ -79,7 +79,7 @@ class Form
     when :in_progress
       "#{next_subsection.id}/check_answers".dasherize
     when :not_started
-      first_question_in_subsection = next_subsection.pages.first.id
+      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(case_log, nil) }.id
       first_question_in_subsection.to_s.dasherize
     else
       "error"

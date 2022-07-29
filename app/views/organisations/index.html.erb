@@ -5,8 +5,6 @@
 
 <%= render partial: "organisations/headings", locals: request.path == "/organisations" ? { main: "Organisations", sub: nil } : { main: @organisation.name, sub: "Organisations" } %>
 
-<h2 class="govuk-visually-hidden">Organisations</h2>
-
 <% if current_user.support? %>
   <%= govuk_button_link_to "Create a new organisation", new_organisation_path, html: { method: :get } %>
 <% end %>

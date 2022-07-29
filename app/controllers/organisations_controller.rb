@@ -29,13 +29,24 @@ class OrganisationsController < ApplicationController
   end
 
   def users
-    @pagy, @users = pagy(filtered_users(@organisation.users.sorted_by_organisation_and_role, search_term))
-    @searched = search_term.presence
-    @total_count = @organisation.users.size
-    if current_user.support?
-      render "users", layout: "application"
-    else
-      render "users/index"
+    organisation_users = @organisation.users.sorted_by_organisation_and_role
+    unpaginated_filtered_users = filtered_collection(organisation_users, search_term)
+
+    respond_to do |format|
+      format.html do
+        @pagy, @users = pagy(unpaginated_filtered_users)
+        @searched = search_term.presence
+        @total_count = @organisation.users.size
+
+        if current_user.support?
+          render "users", layout: "application"
+        else
+          render "users/index"
+        end
+      end
+      format.csv do
+        send_data unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
+      end
     end
   end
 
@@ -83,11 +94,18 @@ class OrganisationsController < ApplicationController
       organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
       unpaginated_filtered_logs = filtered_case_logs(filtered_collection(organisation_logs, search_term))
 
-      @pagy, @case_logs = pagy(unpaginated_filtered_logs)
-      @searched = search_term.presence
-      @total_count = organisation_logs.size
+      respond_to do |format|
+        format.html do
+          @pagy, @case_logs = pagy(unpaginated_filtered_logs)
+          @searched = search_term.presence
+          @total_count = organisation_logs.size
+          render "logs", layout: "application"
+        end
 
-      render "logs", layout: "application"
+        format.csv do
+          send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
+        end
+      end
     else
       redirect_to(case_logs_path)
     end

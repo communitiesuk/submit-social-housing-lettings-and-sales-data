@@ -5,11 +5,12 @@
 
 <%= render partial: "organisations/headings", locals: { main: @organisation.name, sub: nil } %>
 
-<%= render SubNavigationComponent.new(
-  items: secondary_items(request.path, @organisation.id),
-) %>
-
-<h2 class="govuk-visually-hidden">Users</h2>
+<% if current_user.support? %>
+  <%= render SubNavigationComponent.new(
+    items: secondary_items(request.path, @organisation.id),
+  ) %>
+  <h2 class="govuk-visually-hidden">Users</h2>
+<% end %>
 
 <% if current_user.data_coordinator? || current_user.support? %>
   <%= govuk_button_link_to "Invite user", new_user_path(organisation_id: @organisation.id), html: { method: :get } %>
