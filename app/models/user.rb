@@ -122,19 +122,6 @@ class User < ApplicationRecord
     ROLES.except(:support)
   end
 
-  def assignable_roles_with_hints
-    roles_with_hints = {
-      data_provider: "Can view and submit logs for this this organisation",
-      data_coordinator: "data_coordinator",
-      support: "support",
-    }
-
-    return {} unless data_coordinator? || support?
-    return roles_with_hints if support?
-
-    roles_with_hints.except(:support)
-  end
-
   def case_logs_filters(specific_org: false)
     if support? && !specific_org
       %w[status years user organisation]

@@ -8,9 +8,10 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
   let(:page) { instance_double(Form::Page) }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form) }
-  let!(:user_1) { FactoryBot.build(:user, name: "first user") }
-  let!(:user_2) { FactoryBot.build(:user, name: "second user") }
-  let!(:user_3) { FactoryBot.build(:user, name: nil, email: "madeupmail@example.com") }
+  let!(:user_1) { FactoryBot.create(:user, name: "first user") }
+  let!(:user_2) { FactoryBot.create(:user, name: "second user") }
+  let(:user_3) { FactoryBot.build(:user, name: nil, email: "madeupmail@example.com") }
+  let(:users)  { [user_1, user_2, user_3] }
   let(:expected_answer_options) do
     {
       "" => "Select an option",
@@ -21,7 +22,7 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
   end
 
   before do
-    allow(User).to receive(:select).and_return [user_1, user_2, user_3]
+    allow(User).to receive(:select).and_return users
   end
 
   it "has correct page" do

@@ -195,8 +195,8 @@ RSpec.describe User, type: :model do
     let!(:user_1) { FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
     let!(:user_3) { FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
     let!(:user_2) { FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
-    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org_2.com", organisation: organisation_2, role: "data_coordinator") }
-    let!(:user_5) { FactoryBot.create(:user, name: "Adam Thomas", email: "adam@org_2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_5) { FactoryBot.create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
