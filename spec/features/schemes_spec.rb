@@ -290,18 +290,19 @@ RSpec.describe "Schemes scheme Features" do
                 end
 
                 context "when you click save" do
-                  it "takes you to view location tab and displays a banner" do
+                  xit "takes you to view location tab and displays a banner" do
                     click_button "Save"
                     expect(page.current_url.split("/").last).to eq("locations")
                     expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-                    expect(page).to have_content("udpated")
+                    expect(page).to have_content("updated")
                   end
 
                   it "does not let you edit the saved location" do
+                    click_link "Locations"
+                    expect(page).to have_link(nil, href: /edit(?!-name)/)
                     click_button "Save"
-                    click_link "Back"
-                    click_link 'Change'
-                    expect(page.current_url.split("/").last).to eq("edit-name")
+                    click_link "Locations"
+                    expect(page).not_to have_link(nil, href: /edit(?!-name)/)
                   end
                 end
 
@@ -310,8 +311,8 @@ RSpec.describe "Schemes scheme Features" do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, confidential information and housing stock owner" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
               end
