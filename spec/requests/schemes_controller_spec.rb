@@ -884,7 +884,8 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
+      let!(:location) { FactoryBot.create(:location, scheme: scheme_to_update )}
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -937,6 +938,21 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+
+        context "when saving a scheme" do
+          let(:params) { { scheme: { page: "check-answers", confirmed: "true" } } }
+
+          it "marks the scheme as confirmed" do
+           expect(scheme_to_update.reload.confirmed?).to eq(true)
+          end
+
+          it "marks all the scheme locations as confirmed" do
+            expect(scheme_to_update.locations.count > 0).to eq(true)
+            scheme_to_update.locations.each do |location|
+              expect(location.confirmed?).to eq(true)
+            end
           end
         end
       end
