@@ -1,0 +1,27 @@
+<% content_for :title, "Is this user your organisation’s data protection officer?" %>
+
+
+<% content_for :before_content do %>
+  <%= govuk_back_link(href: :back) %>
+<% end %>
+
+<%= render partial: "organisations/headings", locals: { main: "Is this user your organisation’s data protection officer?", sub: @user.name } %>
+
+<%= form_for(@user, as: :user, html: { method: :patch }) do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= f.govuk_error_summary %>
+
+      <% if current_user.data_coordinator? || current_user.support? %>
+
+        <%= f.govuk_collection_radio_buttons :is_dpo,
+                                             [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
+                                             :id,
+                                             :name,
+                                             legend: nil %>
+      <% end %>
+
+      <%= f.govuk_submit "Save changes" %>
+    </div>
+  </div>
+<% end %>
