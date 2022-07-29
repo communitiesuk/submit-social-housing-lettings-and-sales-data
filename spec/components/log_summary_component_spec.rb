@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe LogSummaryComponent, type: :component do
   let(:support_user) { FactoryBot.create(:user, :support) }
   let(:coordinator_user) { FactoryBot.create(:user) }
-  let!(:log) { FactoryBot.create(:case_log, needstype: 1, startdate: Time.utc(2022, 1, 1)) }
+  let(:propcode) { "P3647" }
+  let(:tenancycode) { "T62863" }
+  let(:log) { FactoryBot.create(:case_log, needstype: 1, startdate: Time.utc(2022, 1, 1), tenancycode:, propcode:) }
 
   context "when rendering log for a support user" do
     it "show the log summary with organisational relationships" do
@@ -11,7 +13,6 @@ RSpec.describe LogSummaryComponent, type: :component do
 
       expect(result).to have_link(log.id.to_s)
       expect(result).to have_text(log.tenancycode)
-      expect(result).to have_text(log.propcode)
       expect(result).to have_text(log.propcode)
       expect(result).to have_text("General needs")
       expect(result).to have_text("Tenancy starts 1 January 2022")
