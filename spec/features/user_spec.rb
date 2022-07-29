@@ -363,6 +363,28 @@ RSpec.describe "User Features" do
                  role: "data_provider",
                )).to be_a(User)
       end
+
+      context "when updating other user DPO and key contact information" do
+        it "allows updating users dpo details" do
+          visit("/organisations/#{user.organisation.id}")
+          click_link("Users")
+          click_link(other_user.name)
+          find("a[href='#{user_edit_dpo_path(other_user)}']").click
+          choose("Yes")
+          click_button("Save changes")
+          expect(User.find_by(name: "Other name", role: "data_provider", is_dpo: true)).to be_a(User)
+        end
+
+        it "allows updating users key contact details" do
+          visit("/organisations/#{user.organisation.id}")
+          click_link("Users")
+          click_link(other_user.name)
+          find("a[href='#{user_edit_key_contact_path(other_user)}']").click
+          choose("Yes")
+          click_button("Save changes")
+          expect(User.find_by(name: "Other name", role: "data_provider", is_key_contact: true)).to be_a(User)
+        end
+      end
     end
 
     context "when deactivating a user" do

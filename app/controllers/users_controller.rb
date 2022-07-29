@@ -30,6 +30,10 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def dpo; end
+
+  def key_contact; end
+
   def edit
     redirect_to user_path(@user) unless @user.active?
   end

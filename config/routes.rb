@@ -53,6 +53,9 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    get "edit_dpo", to: "users#dpo"
+    get "edit_key_contact", to: "users#key_contact"
+
     member do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"
