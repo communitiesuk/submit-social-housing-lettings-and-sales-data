@@ -168,7 +168,7 @@ private
   end
 
   def find_resource
-    @user = params[:id] ? User.find_by(id: params[:id]) : current_user
+    @user = User.find_by(id: params[:id]) || User.find_by(id: params[:user_id]) || current_user
   end
 
   def authenticate_scope!
