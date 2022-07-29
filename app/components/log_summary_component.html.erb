@@ -26,14 +26,14 @@
       </header>
 
       <% if log.needstype? or log.startdate? %>
-      <p class="govuk-body govuk-!-margin-bottom-2">
-        <% if log.needstype? %>
-          <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
-        <% end %>
-        <% if log.startdate? %>
-          Tenancy starts <time datetime="<%= log.startdate.iso8601 %>"><%= log.startdate.to_formatted_s(:govuk_date) %></time>
-        <% end %>
-      </p>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <% if log.needstype? %>
+            <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
+          <% end %>
+          <% if log.startdate? %>
+            Tenancy starts <time datetime="<%= log.startdate.iso8601 %>"><%= log.startdate.to_formatted_s(:govuk_date) %></time>
+          <% end %>
+        </p>
       <% end %>
 
       <% if current_user.support? %>
