@@ -290,11 +290,6 @@ RSpec.describe "Schemes scheme Features" do
                 end
 
                 context "when you click save" do
-                  xit "takes you to view location tab" do
-                    click_button "Save"
-                    expect(page.current_url.split("/").last).to eq("locations")
-                  end
-
                   it "displays a updated banner" do
                     click_button "Save"
                     expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
