@@ -60,12 +60,16 @@ An empty link on the ‘Users’ page within ‘Your Organisation’ will cause 
 
 We plan to fix this by December 2022.
 
+An optional field is not clearly labelled on the ‘Invite user to submit CORE data’ page. This fails WCAG 2.1 success criteria 3.3.2 Labels or Instructions (Level A).
+
+We plan to fix this by December 2022.
+
 A skip link for an error message on the ‘Household’s combined income after tax’ page doesn’t work. This fails WCAG 2.1 success criteria 4.1.2 Name, Role, Value (Level A).
 
 We plan to fix this by December 2022.
 
 ## Preparation of this accessibility statement
 
-This statement was prepared on 27 July 2022. It was last reviewed on 29 July 2022.
+This statement was prepared on 27 July 2022. It was last reviewed on 1 August 2022.
 
 This website was last tested on 14 March 2022. The test was carried out by the Digital Accessibility Centre (DAC).
