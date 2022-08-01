@@ -18,9 +18,9 @@ module CheckAnswersHelper
 
   def get_location_change_link_href(scheme, location)
     if location.confirmed?
-      "/schemes/#{scheme.id}/locations/#{location.id}/edit-name"
+      location_edit_name_path(id: scheme.id, location_id: location.id)
     else
-      "/schemes/#{scheme.id}/locations/#{location.id}/edit"
+      location_edit_path(id: scheme.id, location_id: location.id)
     end
   end
 
