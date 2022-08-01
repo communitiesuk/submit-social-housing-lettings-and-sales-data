@@ -1,7 +1,7 @@
 module RefinementTest
   refine String do
     def formatted_postcode
-      postcode = self.upcase.gsub(/\s+/, "")
+      postcode = upcase.gsub(/\s+/, "")
       case postcode.length
       when 5
         postcode.insert(2, " ")
