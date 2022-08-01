@@ -1,7 +1,5 @@
 require "rails_helper"
 
-using RefinementTest
-
 RSpec.describe LocationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :support) }
@@ -110,7 +108,7 @@ RSpec.describe LocationsController, type: :request do
       it "creates a new location for scheme with valid params" do
         expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
         expect(Location.last.name).to eq("Test")
-        expect(Location.last.postcode).to eq("ZZ11ZZ")
+        expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.startdate).to eq(startdate)
@@ -121,7 +119,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", mobility_type: "N" } } }
 
         it "creates a new location for scheme with postcode " do
-          expect(Location.last.postcode).to eq("ZZ11ZZ")
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         end
       end
 
@@ -288,7 +286,7 @@ RSpec.describe LocationsController, type: :request do
 
       it "creates a new location for scheme with valid params" do
         expect(Location.last.name).to eq("Test")
-        expect(Location.last.postcode).to eq("ZZ11ZZ")
+        expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
       end
@@ -297,7 +295,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", mobility_type: "N" } } }
 
         it "creates a new location for scheme with postcode " do
-          expect(Location.last.postcode).to eq("ZZ11ZZ")
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         end
       end
 
@@ -528,7 +526,7 @@ RSpec.describe LocationsController, type: :request do
       it "updates existing location for scheme with valid params" do
         expect(Location.last.scheme.owning_organisation_id).to eq(user.organisation_id)
         expect(Location.last.name).to eq("Test")
-        expect(Location.last.postcode).to eq("ZZ11ZZ")
+        expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
         expect(Location.last.startdate).to eq(startdate)
@@ -552,7 +550,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
 
         it "updates existing location for scheme with postcode " do
-          expect(Location.last.postcode).to eq("ZZ11ZZ")
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         end
       end
 
@@ -659,7 +657,7 @@ RSpec.describe LocationsController, type: :request do
 
       it "updates existing location for scheme with valid params" do
         expect(Location.last.name).to eq("Test")
-        expect(Location.last.postcode).to eq("ZZ11ZZ")
+        expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         expect(Location.last.units).to eq(5)
         expect(Location.last.type_of_unit).to eq("Bungalow")
       end
@@ -682,7 +680,7 @@ RSpec.describe LocationsController, type: :request do
         let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "zz1 1zz", page: "edit" } } }
 
         it "updates a location for scheme with postcode " do
-          expect(Location.last.postcode).to eq("ZZ11ZZ")
+          expect(Location.last.postcode).to eq("ZZ1 1ZZ")
         end
       end
 
@@ -804,7 +802,7 @@ RSpec.describe LocationsController, type: :request do
       it "shows scheme" do
         locations.each do |location|
           expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode.formatted_postcode)
+          expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end
@@ -906,7 +904,7 @@ RSpec.describe LocationsController, type: :request do
       it "shows scheme" do
         locations.each do |location|
           expect(page).to have_content(location.id)
-          expect(page).to have_content(location.postcode.formatted_postcode)
+          expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end

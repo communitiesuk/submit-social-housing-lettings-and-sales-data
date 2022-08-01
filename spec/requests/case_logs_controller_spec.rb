@@ -30,7 +30,7 @@ RSpec.describe CaseLogsController, type: :request do
     let(:age1) { 35 }
     let(:offered) { 12 }
     let(:period) { 2 }
-    let(:postcode_full) { "SE116TY" }
+    let(:postcode_full) { "SE11 6TY" }
     let(:in_progress) { "in_progress" }
     let(:completed) { "completed" }
 
@@ -792,7 +792,7 @@ RSpec.describe CaseLogsController, type: :request do
         it "downloads logs matching both csv and filter logs" do
           get "/logs?status[]=completed&search=#{postcode}", headers:, params: {}
           csv = CSV.parse(response.body)
-          expect(csv.count).to eq(2)
+          expect(csv.count).to eq(1)
         end
       end
     end
@@ -831,7 +831,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenancycode).to eq("New Value")
-      expect(case_log.postcode_full).to eq("M11AE")
+      expect(case_log.postcode_full).to eq("M1 1AE")
     end
 
     context "with an invalid case log id" do
@@ -889,7 +889,7 @@ RSpec.describe CaseLogsController, type: :request do
     it "updates the case log with the given fields and keeps original values where none are passed" do
       case_log.reload
       expect(case_log.tenancycode).to eq("New Value")
-      expect(case_log.postcode_full).to eq("SW1A2AA")
+      expect(case_log.postcode_full).to eq("SW1A 2AA")
     end
 
     context "with an invalid case log id" do

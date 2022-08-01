@@ -68,7 +68,7 @@ module SchemesHelpers
   end
 
   def fill_in_and_save_second_location
-    fill_in "Postcode", with: "XX1 1XX"
+    fill_in "Postcode", with: "AA1 2AA"
     fill_in "Location name (optional)", with: "Other name"
     fill_in "Total number of units at this location", with: 2
     choose "Self-contained house"

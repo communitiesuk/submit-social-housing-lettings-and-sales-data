@@ -442,10 +442,10 @@ module Imports
     def compose_postcode(xml_doc, outcode, incode)
       outcode_value = string_or_nil(xml_doc, outcode)
       incode_value = string_or_nil(xml_doc, incode)
-      if outcode_value.nil? || incode_value.nil? || !"#{outcode_value}#{incode_value}".match(POSTCODE_REGEXP)
+      if outcode_value.nil? || incode_value.nil? || !"#{outcode_value} #{incode_value}".match(POSTCODE_REGEXP)
         nil
       else
-        "#{outcode_value}#{incode_value}"
+        "#{outcode_value} #{incode_value}"
       end
     end
 

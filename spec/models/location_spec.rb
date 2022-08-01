@@ -58,8 +58,8 @@ RSpec.describe Location, type: :model do
 
   describe "scopes" do
     before do
-      FactoryBot.create(:location, name: "ABC", postcode: "NW18RR")
-      FactoryBot.create(:location, name: "XYZ", postcode: "SE16HJ")
+      FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR")
+      FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ")
     end
 
     context "when searching by name" do

@@ -7,7 +7,7 @@ class Location < ApplicationRecord
 
   attr_accessor :add_another_location
 
-  scope :search_by_postcode, ->(postcode) { where("postcode ILIKE ?", "%#{postcode.gsub(/\s+/, '')}%") }
+  scope :search_by_postcode, ->(postcode) { where("postcode ILIKE ?", "%#{UKPostcode.parse(postcode)}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
 
@@ -39,6 +39,14 @@ class Location < ApplicationRecord
       { name: "Type of unit", value: type_of_unit, suffix: false },
       { name: "Type of building", value: type_of_building, suffix: false },
     ]
+  end
+
+  def postcode=(postcode)
+    if postcode
+      super UKPostcode.parse(postcode).to_s
+    else
+      super nil
+    end
   end
 
 private

@@ -1113,14 +1113,14 @@ RSpec.describe CaseLog do
 
     def check_postcode_fields(postcode_field)
       record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
-      expect(address_case_log[postcode_field]).to eq("M11AE")
-      expect(record_from_db[postcode_field]).to eq("M11AE")
+      expect(address_case_log[postcode_field]).to eq("M1 1AE")
+      expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
 
     def check_previous_postcode_fields(postcode_field)
       record_from_db = ActiveRecord::Base.connection.execute("select #{postcode_field} from case_logs where id=#{address_case_log.id}").to_a[0]
-      expect(address_case_log[postcode_field]).to eq("M11AE")
-      expect(record_from_db[postcode_field]).to eq("M11AE")
+      expect(address_case_log[postcode_field]).to eq("M1 1AE")
+      expect(record_from_db[postcode_field]).to eq("M1 1AE")
     end
 
     context "when saving addresses" do
@@ -1205,7 +1205,7 @@ RSpec.describe CaseLog do
         address_case_log.update!({ postcode_known: 1, postcode_full: "M1 1AD" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select la, postcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["postcode_full"]).to eq("M11AD")
+        expect(record_from_db["postcode_full"]).to eq("M1 1AD")
         expect(address_case_log.la).to eq("E08000003")
         expect(record_from_db["la"]).to eq("E08000003")
       end
@@ -1295,7 +1295,7 @@ RSpec.describe CaseLog do
         address_case_log.update!({ ppcodenk: 0, ppostcode_full: "M1 1AD" })
 
         record_from_db = ActiveRecord::Base.connection.execute("select prevloc, ppostcode_full from case_logs where id=#{address_case_log.id}").to_a[0]
-        expect(record_from_db["ppostcode_full"]).to eq("M11AD")
+        expect(record_from_db["ppostcode_full"]).to eq("M1 1AD")
         expect(address_case_log.prevloc).to eq("E08000003")
         expect(record_from_db["prevloc"]).to eq("E08000003")
       end
@@ -1717,7 +1717,7 @@ RSpec.describe CaseLog do
         it "correctly infers and saves postcode" do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT postcode_full from case_logs WHERE id=#{supported_housing_case_log.id}").to_a[0]
           expect(record_from_db["postcode_full"]).to be_nil
-          expect(supported_housing_case_log.postcode_full).to eq("M11AE")
+          expect(supported_housing_case_log.postcode_full).to eq("M1 1AE")
         end
 
         it "unittype_sh method returns the type_of_unit of the location" do

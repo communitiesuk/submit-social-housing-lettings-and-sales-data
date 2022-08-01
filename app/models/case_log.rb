@@ -56,7 +56,7 @@ class CaseLog < ApplicationRecord
   scope :filter_by_id, ->(id) { where(id:) }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
-  scope :filter_by_postcode, ->(postcode_full) { where("postcode_full ILIKE ?", "%#{postcode_full.gsub(/\s+/, '')}%") }
+  scope :filter_by_postcode, ->(postcode_full) { where("postcode_full ILIKE ?", "%#{UKPostcode.parse(postcode_full)}%") }
   scope :search_by, lambda { |param|
                       filter_by_id(param)
                                 .or(filter_by_tenant_code(param))
@@ -114,6 +114,22 @@ class CaseLog < ApplicationRecord
       location.postcode
     else
       super
+    end
+  end
+
+  def postcode_full=(postcode)
+    if postcode
+      super UKPostcode.parse(postcode).to_s
+    else
+      super nil
+    end
+  end
+
+  def ppostcode_full=(postcode)
+    if postcode
+      super UKPostcode.parse(postcode).to_s
+    else
+      super nil
     end
   end
 
