@@ -1,0 +1,23 @@
+.app-log-summary {
+  border-top: 1px solid $govuk-border-colour;
+  padding-top: govuk-spacing(3);
+}
+
+.app-log-summary__header {
+  align-items: baseline;
+  display: flex;
+}
+
+.app-log-summary__title {
+  margin: 0 govuk-spacing(3) govuk-spacing(2) 0;
+}
+
+@include govuk-media-query(tablet) {
+  .app-log-summary__footer {
+    text-align: right;
+  }
+
+  .app-log-summary__footer--actor {
+    display: block;
+  }
+}

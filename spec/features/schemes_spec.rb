@@ -34,7 +34,7 @@ RSpec.describe "Schemes scheme Features" do
         context "when I search for a specific scheme" do
           it "there is a search bar with a message and search button for schemes" do
             expect(page).to have_field("search")
-            expect(page).to have_content("Search by scheme name, code or postcode")
+            expect(page).to have_content("Search by scheme name, code, postcode or location name")
             expect(page).to have_button("Search")
           end
 
@@ -109,7 +109,7 @@ RSpec.describe "Schemes scheme Features" do
 
       it "displays a search bar" do
         expect(page).to have_field("search")
-        expect(page).to have_content("Search by scheme name, code or postcode")
+        expect(page).to have_content("Search by scheme name, code, postcode or location name")
         expect(page).to have_button("Search")
       end
 

@@ -32,7 +32,7 @@ RSpec.describe Location, type: :model do
     it "does add an error when the postcode is invalid" do
       location.postcode = "invalid"
       expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode Enter a postcode in the correct format, for example AA1 1AA")
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Postcode #{I18n.t('validations.postcode')}")
     end
   end
 
@@ -42,7 +42,7 @@ RSpec.describe Location, type: :model do
     it "does add an error when the postcode is invalid" do
       location.units = nil
       expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units Enter total number of units at this location")
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Units #{I18n.t('activerecord.errors.models.location.attributes.units.blank')}")
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe Location, type: :model do
     it "does add an error when the postcode is invalid" do
       location.type_of_unit = nil
       expect { location.save! }
-        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit Select the most common type of unit at this location")
+        .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Type of unit #{I18n.t('activerecord.errors.models.location.attributes.type_of_unit.blank')}")
     end
   end
 

@@ -1,4 +1,4 @@
-<%= render partial: "form/guidance/#{question.guidance_partial}" if question.guidance_partial %>
+<%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <div class="govuk-form-group">
   <label class="govuk-label govuk-label--<%= label_size(page_header, conditional) %>" for="case-log-<%= question.id %>-field">
@@ -20,3 +20,5 @@
     <span class="govuk-input__suffix"><%= question.suffix_label(case_log) %></span>
   </div>
 </div>
+
+<%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>

@@ -7,7 +7,13 @@ class Scheme < ApplicationRecord
   scope :filter_by_id, ->(id) { where(id: (id.start_with?("S") ? id[1..] : id)) }
   scope :search_by_service_name, ->(name) { where("service_name ILIKE ?", "%#{name}%") }
   scope :search_by_postcode, ->(postcode) { joins("LEFT JOIN locations ON locations.scheme_id = schemes.id").where("locations.postcode ILIKE ?", "%#{UKPostcode.parse(postcode)}%") }
-  scope :search_by, ->(param) { search_by_postcode(param).or(search_by_service_name(param)).or(filter_by_id(param)).distinct }
+  scope :search_by_location_name, ->(name) { joins("LEFT JOIN locations ON locations.scheme_id = schemes.id").where("locations.name ILIKE ?", "%#{name}%") }
+  scope :search_by, lambda { |param|
+                      search_by_postcode(param)
+                        .or(search_by_service_name(param))
+                        .or(search_by_location_name(param))
+                        .or(filter_by_id(param)).distinct
+                    }
 
   validate :validate_confirmed
 
@@ -214,7 +220,6 @@ class Scheme < ApplicationRecord
     if confirmed == true
       required_attributes.any? do |attribute|
         if self[attribute].blank?
-          errors.add :base
           errors.add attribute.to_sym
           self.confirmed = false
         end

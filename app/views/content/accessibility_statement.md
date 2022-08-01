@@ -10,7 +10,7 @@ This website is run by the Department for Levelling Up, Housing and Communities 
 
 We’ve also made the website text as simple as possible to understand.
 
-AbilityNet has advice on making your device easier to use if you have a disability.
+[AbilityNet has advice on making your device easier to use](https://mcmw.abilitynet.org.uk/) if you have a disability.
 
 ### How accessible this website is
 
@@ -32,15 +32,15 @@ If you need information on this website in a different format like accessible PD
 
 We’ll consider your request and get back to you in 2 working days.
 
-You can also contact us through the helpdesk.
+You can also [contact us through the helpdesk](https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/).
 
 ### Reporting accessibility problems with this website
 
-We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact the helpdesk.
+We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, [contact the helpdesk](https://digital.dclg.gov.uk/jira/servicedesk/customer/portal/4/).
 
 ### Enforcement procedure
 
-The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, contact the Equality Advisory and Support Service (EASS).
+The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, [contact the Equality Advisory and Support Service (EASS)](https://www.equalityadvisoryservice.com/).
 
 ## Technical information about this website’s accessibility
 
@@ -48,7 +48,7 @@ DLUHC is committed to making its website accessible, in accordance with the Publ
 
 ### Compliance status
 
-This website is partially compliant with the Web Content Accessibility Guidelines version 2.1 AA standard due to the non-compliances listed below.
+This website is partially compliant with the [Web Content Accessibility Guidelines version 2.1](https://www.w3.org/TR/WCAG21/) AA standard due to the non-compliances listed below.
 
 ## Non-accessible content
 
@@ -59,3 +59,17 @@ The content listed below is non-accessible for the following reasons.
 An empty link on the ‘Users’ page within ‘Your Organisation’ will cause problems for some users of assistive technology. This fails WCAG 2.1 success criteria 2.4.4 Link Purpose – in context (Level A) and 3.3.2 Labels or Instructions (Level A).
 
 We plan to fix this by December 2022.
+
+An optional field is not clearly labelled on the ‘Invite user to submit CORE data’ page. This fails WCAG 2.1 success criteria 3.3.2 Labels or Instructions (Level A).
+
+We plan to fix this by December 2022.
+
+A skip link for an error message on the ‘Household’s combined income after tax’ page doesn’t work. This fails WCAG 2.1 success criteria 4.1.2 Name, Role, Value (Level A).
+
+We plan to fix this by December 2022.
+
+## Preparation of this accessibility statement
+
+This statement was prepared on 27 July 2022. It was last reviewed on 1 August 2022.
+
+This website was last tested on 14 March 2022. The test was carried out by the Digital Accessibility Centre (DAC).
