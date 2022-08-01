@@ -37,14 +37,6 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes"
       end
 
-      context "when params scheme_id is present" do
-        it "shows a success banner" do
-          get "/schemes", params: { scheme_id: schemes.first.id }
-          follow_redirect!
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        end
-      end
-
       it "redirects to the organisation schemes path" do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/schemes")
@@ -91,13 +83,6 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows the total organisations count" do
         expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes")
-      end
-
-      context "when params scheme_id is present" do
-        it "shows a success banner" do
-          get "/schemes", params: { scheme_id: schemes.first.id }
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        end
       end
 
       context "when paginating over 20 results" do
@@ -885,9 +870,10 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
       let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
-      let!(:location) { FactoryBot.create(:location, scheme: scheme_to_update )}
+      # let!(:location) { FactoryBot.create(:location, scheme: scheme_to_update) }
 
       before do
+        FactoryBot.create(:location, scheme: scheme_to_update)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
@@ -945,7 +931,7 @@ RSpec.describe SchemesController, type: :request do
           let(:params) { { scheme: { page: "check-answers", confirmed: "true" } } }
 
           it "marks the scheme as confirmed" do
-           expect(scheme_to_update.reload.confirmed?).to eq(true)
+            expect(scheme_to_update.reload.confirmed?).to eq(true)
           end
 
           it "marks all the scheme locations as confirmed" do

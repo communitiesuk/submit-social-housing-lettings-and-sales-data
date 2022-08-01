@@ -285,16 +285,20 @@ RSpec.describe "Schemes scheme Features" do
                 end
 
                 it "allows you to edit the newly added location" do
-                  click_link 'Locations'
-                  expect(page).to have_link(nil , href: /edit/)
+                  click_link "Locations"
+                  expect(page).to have_link(nil, href: /edit/)
                 end
 
                 context "when you click save" do
-                  xit "takes you to view location tab and displays a banner" do
+                  xit "takes you to view location tab" do
                     click_button "Save"
                     expect(page.current_url.split("/").last).to eq("locations")
+                  end
+
+                  it "displays a updated banner" do
+                    click_button "Save"
                     expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-                    expect(page).to have_content("updated")
+                    expect(page).to have_content("has been updated")
                   end
 
                   it "does not let you edit the saved location" do
@@ -584,11 +588,12 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "adds scheme to the list of schemes" do
+            expect(page).to have_content "#{scheme.service_name} has been created."
+            click_link "Schemes"
             expect(page).to have_content "Supported housing schemes"
             expect(page).to have_content scheme.id_to_display
             expect(page).to have_content scheme.service_name
             expect(page).to have_content scheme.owning_organisation.name
-            expect(page).to have_content "#{scheme.service_name} has been created."
           end
         end
 
@@ -732,6 +737,13 @@ RSpec.describe "Schemes scheme Features" do
                 expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
                 assert_selector "a", text: "Change", count: 3
               end
+
+              it "lets me save the scheme" do
+                click_button "Save"
+                expect(page).to have_current_path("/schemes/#{scheme.id}")
+                expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+                expect(page).to have_content("has been updated")
+              end
             end
           end
 
@@ -772,10 +784,10 @@ RSpec.describe "Schemes scheme Features" do
                   click_button "Save and continue"
                 end
 
-                it "returns to locations page and shows the new name" do
+                it "returns to locations check your answers page and shows the new name" do
                   expect(page).to have_content location.id
                   expect(page).to have_content "NewName"
-                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
+                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
                 end
               end
             end
@@ -858,8 +870,8 @@ RSpec.describe "Schemes scheme Features" do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, Confidential information	and Housing stock owned by" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
               end
@@ -873,7 +885,6 @@ RSpec.describe "Schemes scheme Features" do
   context "when I am signed in as a data coordinator" do
     let(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation_id: user.organisation_id) }
-    let!(:scheme_to_search) { FactoryBot.create(:scheme) }
 
     before do
       visit("/logs")
@@ -890,9 +901,9 @@ RSpec.describe "Schemes scheme Features" do
 
         context "when I click to see individual scheme" do
           let(:scheme) { schemes.first }
-          let!(:location) { FactoryBot.create(:location, scheme:) }
 
           before do
+            FactoryBot.create(:location, scheme:)
             click_link(scheme.service_name)
           end
 
@@ -919,6 +930,7 @@ RSpec.describe "Schemes scheme Features" do
       end
     end
   end
+
   context "when selecting a scheme" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }

@@ -13,7 +13,7 @@ module CheckAnswersHelper
 
   def can_change_scheme_answer?(attribute_name, scheme)
     editable_attributes = current_user.support? ? ["Name", "Confidential information", "Housing stock owned by"] : ["Name", "Confidential information"]
-    !scheme.confirmed? || editable_attributes.include?(attribute_name) 
+    !scheme.confirmed? || editable_attributes.include?(attribute_name)
   end
 
   def get_location_change_link_href(scheme, location)
@@ -23,6 +23,7 @@ module CheckAnswersHelper
       "/schemes/#{scheme.id}/locations/#{location.id}/edit"
     end
   end
+
 private
 
   def answered_questions_count(subsection, case_log, current_user)

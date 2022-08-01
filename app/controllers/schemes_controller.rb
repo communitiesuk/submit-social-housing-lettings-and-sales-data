@@ -7,7 +7,6 @@ class SchemesController < ApplicationController
   before_action :authenticate_scope!
 
   def index
-    flash[:notice] = "#{Scheme.find(params[:scheme_id].to_i).service_name} has been created." if params[:scheme_id]
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_schemes = Scheme.all.order("service_name ASC")
 
@@ -52,11 +51,17 @@ class SchemesController < ApplicationController
 
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
+    scheme_previously_confirmed = @scheme.confirmed?
 
     validation_errors scheme_params
     if @scheme.errors.empty? && @scheme.update(scheme_params)
       if scheme_params[:confirmed] == "true"
-        @scheme.locations.each {|location| location.update!(confirmed:true)}
+        @scheme.locations.each { |location| location.update!(confirmed: true) }
+        flash[:notice] = if scheme_previously_confirmed
+                           "#{@scheme.service_name} has been updated."
+                         else
+                           "#{@scheme.service_name} has been created."
+                         end
         redirect_to scheme_path(@scheme)
       elsif check_answers
         if confirm_secondary_page? page
