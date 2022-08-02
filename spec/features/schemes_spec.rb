@@ -476,7 +476,7 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays information about the first created location" do
-            expect(page).to have_content "AA11AA"
+            expect(page).to have_content "AA1 1AA"
             expect(page).to have_content "Some name"
             expect(page).to have_content "5"
             expect(page).to have_content "Self-contained house"
@@ -493,7 +493,7 @@ RSpec.describe "Schemes scheme Features" do
           it "displays information about newly created location" do
             click_link "Add a location"
             fill_in_and_save_second_location
-            expect(page).to have_content "XX11XX"
+            expect(page).to have_content "AA1 2AA"
             expect(page).to have_content "Other name"
             expect(page).to have_content "Self-contained house"
           end
@@ -507,13 +507,13 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "displays changed location" do
-            click_link "XX11XX"
-            fill_in "Postcode", with: "ZZ1 1ZZ"
+            click_link "AA1 2AA"
+            fill_in "Postcode", with: "AA1 3AA"
             choose "location-mobility-type-wheelchair-user-standard-field"
             click_button "Save and continue"
             expect(page).to have_content "Locations"
             expect(page).to have_content "#{scheme.locations.count} location"
-            expect(page).to have_content "ZZ11ZZ"
+            expect(page).to have_content "AA1 3AA"
           end
         end
 
