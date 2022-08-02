@@ -39,7 +39,6 @@ class Location < ApplicationRecord
       { name: "Location code ", value: location_code, suffix: false },
       { name: "Postcode", value: postcode, suffix: county },
       { name: "Type of unit", value: type_of_unit, suffix: false },
-      { name: "Type of building", value: type_of_building, suffix: false },
     ]
   end
 

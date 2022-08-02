@@ -122,7 +122,6 @@ unless Rails.env.test?
       name: "Rectory Road",
       type_of_unit: 4,
       units: 1,
-      type_of_building: "Purpose built",
       mobility_type: "N",
     )
 
@@ -133,7 +132,6 @@ unless Rails.env.test?
       name: "Smithy Lane",
       type_of_unit: 1,
       units: 1,
-      type_of_building: "Converted from previous residential or non-residential property",
       mobility_type: "W",
     )
 
@@ -144,7 +142,6 @@ unless Rails.env.test?
       name: "Smithy Lane",
       type_of_unit: 2,
       units: 1,
-      type_of_building: "Converted from previous residential or non-residential property",
       mobility_type: "W",
     )
   end
