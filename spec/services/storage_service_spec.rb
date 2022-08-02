@@ -99,7 +99,7 @@ RSpec.describe StorageService do
     end
   end
 
-  context "when we create a storage service and list files" do
+  context "when we create a storage service" do
     subject(:storage_service) { described_class.new(PaasConfigurationService.new, instance_name) }
 
     let(:s3_client_stub) { Aws::S3::Client.new(stub_responses: true) }
@@ -110,22 +110,59 @@ RSpec.describe StorageService do
       allow(Aws::S3::Client).to receive(:new).and_return(s3_client_stub)
     end
 
-    it "returns a list with all present file names in a given folder" do
-      expected_filenames = %w[my_folder/my_file1.xml my_folder/my_file2.xml]
-      s3_client_stub.stub_responses(:list_objects_v2, {
-        contents: [
-          {
-            key: expected_filenames[0],
-          },
-          {
-            key: expected_filenames[1],
-          },
-        ],
-      })
+    context "and we list files based on a prefix" do
+      let(:expected_filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
 
-      filenames = storage_service.list_files("my_folder")
+      before do
+        s3_client_stub.stub_responses(:list_objects_v2, {
+          contents: [
+            {
+              key: expected_filenames[0],
+            },
+            {
+              key: expected_filenames[1],
+            },
+          ],
+        })
+      end
 
-      expect(filenames).to eq(expected_filenames)
+      it "returns a list with all present file names in a given folder" do
+        filenames = storage_service.list_files("my_folder")
+        expect(filenames).to eq(expected_filenames)
+      end
+    end
+
+    context "and we check for an existing folder" do
+      before do
+        expected_filenames = %w[my_folder/my_file1.xml]
+        s3_client_stub.stub_responses(:list_objects_v2, {
+          key_count: 1,
+          contents: [
+            {
+              key: expected_filenames[0],
+            },
+          ],
+        })
+      end
+
+      it "returns true" do
+        response = storage_service.folder_present?("my_folder")
+        expect(response).to be_truthy
+      end
+    end
+
+    context "and we check for a folder that does not exists" do
+      before do
+        s3_client_stub.stub_responses(:list_objects_v2, {
+          key_count: 0,
+          contents: [],
+        })
+      end
+
+      it "returns false" do
+        response = storage_service.folder_present?("my_folder")
+        expect(response).to be_falsey
+      end
     end
   end
 end
