@@ -18,6 +18,7 @@ class SchemesController < ApplicationController
 
   def show
     @scheme = Scheme.find_by(id: params[:id])
+    render_not_found_json("Scheme", params[:id]) unless @scheme
   end
 
   def new
@@ -193,11 +194,15 @@ private
   end
 
   def arrangement_type_set_to_same_org?(required_params)
+    return unless @scheme
+
     arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
   end
 
   def arrangement_type_changed_to_different_org?(required_params)
-    @scheme.present? && @scheme.arrangement_type_same? && arrangement_type_value(required_params[:arrangement_type]) != "D" && required_params[:managing_organisation_id].blank?
+    return unless @scheme
+
+    @scheme.arrangement_type_same? && arrangement_type_value(required_params[:arrangement_type]) != "D" && required_params[:managing_organisation_id].blank?
   end
 
   def arrangement_type_value(key)
@@ -215,7 +220,7 @@ private
   def authenticate_scope!
     head :unauthorized and return unless current_user.data_coordinator? || current_user.support?
 
-    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
+    if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end

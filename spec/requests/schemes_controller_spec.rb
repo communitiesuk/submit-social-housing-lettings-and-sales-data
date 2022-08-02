@@ -250,6 +250,13 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context "when the requested scheme does not exist" do
+        it "returns not found" do
+          get "/schemes/#{Scheme.maximum(:id) + 1}"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     context "when signed in as a support user" do
