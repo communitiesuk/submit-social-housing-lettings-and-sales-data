@@ -792,7 +792,7 @@ RSpec.describe CaseLogsController, type: :request do
         it "downloads logs matching both csv and filter logs" do
           get "/logs?status[]=completed&search=#{postcode}", headers:, params: {}
           csv = CSV.parse(response.body)
-          expect(csv.count).to eq(1)
+          expect(csv.count).to eq(2)
         end
       end
     end
