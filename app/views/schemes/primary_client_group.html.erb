@@ -15,12 +15,12 @@
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "What client group is this scheme intended for?", sub: @scheme.service_name } %>
-
 <%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
+
+<%= render partial: "organisations/headings", locals: { main: "What client group is this scheme intended for?", sub: @scheme.service_name } %>
 
       <% primary_client_group_selection = Scheme.primary_client_groups.keys.excluding("Missing").map { |key, _| OpenStruct.new(id: key, name: key) } %>
       <%= f.govuk_collection_radio_buttons :primary_client_group,
