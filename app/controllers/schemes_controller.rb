@@ -18,7 +18,7 @@ class SchemesController < ApplicationController
 
   def show
     @scheme = Scheme.find_by(id: params[:id])
-    render_not_found_json("Scheme", params[:id]) unless @scheme
+    render_not_found and return unless @scheme
   end
 
   def new
@@ -43,7 +43,13 @@ class SchemesController < ApplicationController
     end
   end
 
+  def edit
+    render_not_found and return unless @scheme
+  end
+
   def update
+    render_not_found and return unless @scheme
+
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
 
@@ -65,34 +71,50 @@ class SchemesController < ApplicationController
   end
 
   def primary_client_group
+    render_not_found and return unless @scheme
+
     render "schemes/primary_client_group"
   end
 
   def confirm_secondary_client_group
+    render_not_found and return unless @scheme
+
     render "schemes/confirm_secondary"
   end
 
   def secondary_client_group
+    render_not_found and return unless @scheme
+
     render "schemes/secondary_client_group"
   end
 
   def support
+    render_not_found and return unless @scheme
+
     render "schemes/support"
   end
 
   def details
+    render_not_found and return unless @scheme
+
     render "schemes/details"
   end
 
   def check_answers
+    render_not_found and return unless @scheme
+
     render "schemes/check_answers"
   end
 
   def edit_name
+    render_not_found and return unless @scheme
+
     render "schemes/edit_name"
   end
 
   def support_services_provider
+    render_not_found and return unless @scheme
+
     render "schemes/support_services_provider"
   end
 
