@@ -8,6 +8,20 @@ RSpec.describe Scheme, type: :model do
       expect(scheme.owning_organisation).to be_a(Organisation)
     end
 
+    describe "paper trail" do
+      let(:scheme) { FactoryBot.create(:scheme) }
+      let!(:name) { scheme.service_name }
+
+      it "creates a record of changes to a log" do
+        expect { scheme.update!(service_name: "new test name") }.to change(scheme.versions, :count).by(1)
+      end
+
+      it "allows case logs to be restored to a previous version" do
+        scheme.update!(service_name: "new test name")
+        expect(scheme.paper_trail.previous_version.service_name).to eq(name)
+      end
+    end
+
     describe "scopes" do
       let!(:scheme_1) { FactoryBot.create(:scheme) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }

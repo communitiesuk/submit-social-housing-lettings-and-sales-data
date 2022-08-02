@@ -3,6 +3,8 @@ class Location < ApplicationRecord
   validates :units, :type_of_unit, :mobility_type, presence: true
   belongs_to :scheme
 
+  has_paper_trail
+
   before_save :lookup_postcode!, if: :postcode_changed?
 
   attr_accessor :add_another_location
