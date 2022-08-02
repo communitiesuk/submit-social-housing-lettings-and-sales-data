@@ -10,7 +10,7 @@ RSpec.describe Imports::SchemeLocationImportService do
   let(:first_location_id) { "0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e" }
   let(:second_location_id) { "0bb3836b70b4dd9903263d5a764a5c45b964a89d" }
 
-  let!(:scheme) { FactoryBot.create(:scheme, service_name: "Management Group", old_id: "6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d") }
+  let!(:scheme) { FactoryBot.create(:scheme, service_name: "Management Group", old_id: "6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d", confirmed: nil) }
 
   def open_file(directory, filename)
     File.open("#{directory}/#{filename}.xml")
@@ -38,6 +38,11 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect { location_service.create_scheme_locations(remote_folder) }
         .to change(Location, :count).by(2)
         .and(change(Scheme, :count).by(0))
+    end
+
+    it "successfully sets the scheme to confirmed" do
+      expect { location_service.create_scheme_locations(remote_folder) }
+        .to change { scheme.reload.confirmed }.from(nil).to(true)
     end
   end
 

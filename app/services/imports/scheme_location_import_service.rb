@@ -36,6 +36,7 @@ module Imports
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
         end_date: attributes["end_date"],
+        confirmed: true,
         # These values were set by the scheme import (management groups)
         owning_organisation_id: source_scheme.owning_organisation_id,
         managing_organisation_id: source_scheme.managing_organisation_id,
@@ -56,6 +57,7 @@ module Imports
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
         end_date: attributes["end_date"],
+        confirmed: true,
       )
       scheme
     end
