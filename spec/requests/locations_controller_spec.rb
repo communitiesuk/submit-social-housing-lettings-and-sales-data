@@ -804,6 +804,8 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(location.id)
           expect(page).to have_content(location.postcode)
           expect(page).to have_content(location.type_of_unit)
+          expect(page).to have_content(location.mobility_type)
+          expect(page).to have_content(location.location_admin_district)
           expect(page).to have_content(location.startdate&.to_formatted_s(:govuk_date))
         end
       end
