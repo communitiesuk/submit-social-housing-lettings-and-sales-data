@@ -196,7 +196,7 @@ private
   def arrangement_type_set_to_same_org?(required_params)
     return unless @scheme
 
-    arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.present? && @scheme.arrangement_type_same?)
+    arrangement_type_value(required_params[:arrangement_type]) == "D" || (required_params[:arrangement_type].blank? && @scheme.arrangement_type_same?)
   end
 
   def arrangement_type_changed_to_different_org?(required_params)
