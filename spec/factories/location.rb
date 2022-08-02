@@ -4,7 +4,6 @@ FactoryBot.define do
     name { Faker::Address.street_name }
     type_of_unit { [1, 2, 3, 4, 6, 7].sample }
     units { [1, 2, 3, 4, 6, 7].sample }
-    type_of_building { "Purpose built" }
     mobility_type { %w[A M N W X].sample }
     location_code { "E09000033" }
     location_admin_district { "Westminster" }
