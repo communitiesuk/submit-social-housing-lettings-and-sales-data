@@ -48,13 +48,6 @@
 
       <%= govuk_section_break(visible: true, size: "m") %>
 
-      <%= f.govuk_collection_radio_buttons :add_another_location,
-                                           another_location_selection,
-                                           :id,
-                                           :name,
-                                           inline: true,
-                                           legend: { text: I18n.t("questions.location.add_another_location"), size: "m" } %>
-
       <%= f.hidden_field :page, value: "edit" %>
 
       <%= f.govuk_submit "Save and continue" %>
