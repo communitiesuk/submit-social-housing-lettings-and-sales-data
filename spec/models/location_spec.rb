@@ -56,6 +56,20 @@ RSpec.describe Location, type: :model do
     end
   end
 
+  describe "paper trail" do
+    let(:location) { FactoryBot.create(:location) }
+    let!(:name) { location.name }
+
+    it "creates a record of changes to a log" do
+      expect { location.update!(name: "new test name") }.to change(location.versions, :count).by(1)
+    end
+
+    it "allows case logs to be restored to a previous version" do
+      location.update!(name: "new test name")
+      expect(location.paper_trail.previous_version.name).to eq(name)
+    end
+  end
+
   describe "scopes" do
     before do
       FactoryBot.create(:location, name: "ABC", postcode: "NW18RR")
