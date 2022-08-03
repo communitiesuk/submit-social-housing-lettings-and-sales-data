@@ -74,7 +74,8 @@ class UsersController < ApplicationController
   def create
     @resource = User.new(user_params.merge(org_params).merge(password_params))
 
-    if valid_attributes? && @resource.save
+    validate_attributes
+    if @resource.errors.empty? && @resource.save
       redirect_to created_user_redirect_path
     else
       unless @resource.errors[:organisation].empty?
@@ -108,15 +109,14 @@ class UsersController < ApplicationController
 
 private
 
-  def valid_attributes?
-    @resource.valid?
+  def validate_attributes
+    @resource.validate
     if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
       @resource.errors.add :role, I18n.t("validations.role.invalid")
     end
     if user_params[:role].empty?
       @resource.errors.add :role, I18n.t("activerecord.errors.models.user.attributes.role.blank")
     end
-    @resource.errors.empty?
   end
 
   def format_error_messages
