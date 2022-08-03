@@ -1393,7 +1393,7 @@ RSpec.describe SchemesController, type: :request do
           assert_select "a", text: /Change/, count: 3
         end
       end
-      
+
       it "does not show the primary client group as an option" do
         expect(scheme.primary_client_group).not_to be_nil
         expect(page).not_to have_content("Homeless families with support needs")
