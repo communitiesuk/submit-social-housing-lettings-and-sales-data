@@ -7,12 +7,12 @@
   ) %>
 <% end %>
 
-<%= render partial: "organisations/headings", locals: { main: "What support does this scheme provide?", sub: @scheme.service_name } %>
-
 <%= form_for(@scheme, method: :patch) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
+
+      <%= render partial: "organisations/headings", locals: { main: "What support does this scheme provide?", sub: @scheme.service_name } %>
 
       <% support_level_options_hints = { "Low level": "Staff visiting once a week, fortnightly or less.", "Medium level": "Staff on site daily or making frequent visits with some out-of-hours cover.", "High level": "Intensive level of staffing provided on a 24-hour basis." } %>
 
