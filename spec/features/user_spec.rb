@@ -340,7 +340,7 @@ RSpec.describe "User Features" do
 
     context "when editing someone elses account details" do
       let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: true, organisation: user.organisation) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: false, organisation: user.organisation) }
 
       before do
         visit("/logs")

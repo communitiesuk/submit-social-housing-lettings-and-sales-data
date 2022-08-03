@@ -30,9 +30,13 @@ class UsersController < ApplicationController
 
   def show; end
 
-  def dpo; end
+  def dpo
+    pp params
+  end
 
-  def key_contact; end
+  def key_contact
+    pp params
+  end
 
   def edit
     redirect_to user_path(@user) unless @user.active?
@@ -168,7 +172,7 @@ private
   end
 
   def find_resource
-    @user = User.find_by(id: params[:id]) || User.find_by(id: params[:user_id]) || current_user
+    @user = User.find_by(id: params[:user_id]) || User.find_by(id: params[:id]) || current_user
   end
 
   def authenticate_scope!
