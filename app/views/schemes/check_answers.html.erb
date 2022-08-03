@@ -1,8 +1,8 @@
 <%= form_for(@scheme, as: :scheme, method: :patch) do |f| %>
   <%= f.govuk_error_summary %>
 
-<% content_for :title, "Check your answers before creating this scheme" %>
-<%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
+  <% content_for :title, "Check your answers before creating this scheme" %>
+  <%= render partial: "organisations/headings", locals: { main: "Check your changes before creating this scheme", sub: @scheme.service_name } %>
 
   <%= govuk_tabs(title: "Check your answers before creating this scheme") do |component| %>
     <% component.tab(label: "Scheme") do %>
