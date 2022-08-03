@@ -48,12 +48,7 @@ class FormController < ApplicationController
     form.pages.map do |page|
       define_method(page.id) do |_errors = {}|
         if @case_log
-          if session["errors"]
-            JSON(session["errors"]).each do |field, messages|
-              messages.each { |message| @case_log.errors.add field.to_sym, message }
-            end
-          end
-          session["fields"].each { |field, value| @case_log[field] = value } if session["fields"]
+          restore_error_field_values
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
           if @page.routed_to?(@case_log, current_user)
@@ -69,6 +64,21 @@ class FormController < ApplicationController
   end
 
 private
+
+  def restore_error_field_values
+    if session["errors"]
+      JSON(session["errors"]).each do |field, messages|
+        messages.each { |message| @case_log.errors.add field.to_sym, message }
+      end
+    end
+    if session["fields"]
+      session["fields"].each do |field, value|
+        unless @case_log.form.get_question(field, @case_log).type == "date"
+          @case_log[field] = value
+        end
+      end
+    end
+  end
 
   def responses_for_page(page)
     page.questions.each_with_object({}) do |question, result|

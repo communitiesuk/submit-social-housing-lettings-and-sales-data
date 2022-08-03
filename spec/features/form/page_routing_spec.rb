@@ -72,4 +72,43 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
     end
   end
+
+  context "when answer is invalid" do
+    it "shows error with invalid value in the field" do
+      visit("/logs/#{id}/property-postcode")
+      fill_in("case-log-postcode-full-field", with: "fake_postcode")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/property-postcode")
+      expect(find("#case-log-postcode-full-field-error").value).to eq("fake_postcode")
+    end
+
+    it "does not reset the displayed date" do
+      case_log.update!(startdate: "2021/10/13")
+      visit("/logs/#{id}/tenancy-start-date")
+      fill_in("case_log[startdate(1i)]", with: "202")
+      fill_in("case_log[startdate(2i)]", with: "32")
+      fill_in("case_log[startdate(3i)]", with: "0")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/tenancy-start-date")
+      expect(find_field("case_log[startdate(3i)]").value).to eq("13")
+      expect(find_field("case_log[startdate(2i)]").value).to eq("10")
+      expect(find_field("case_log[startdate(1i)]").value).to eq("2021")
+    end
+
+    it "does not reset the displayed date if it's empty" do
+      case_log.update!(startdate: nil)
+      visit("/logs/#{id}/tenancy-start-date")
+      fill_in("case_log[startdate(1i)]", with: "202")
+      fill_in("case_log[startdate(2i)]", with: "32")
+      fill_in("case_log[startdate(3i)]", with: "0")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/tenancy-start-date")
+      expect(find_field("case_log[startdate(3i)]").value).to eq(nil)
+      expect(find_field("case_log[startdate(2i)]").value).to eq(nil)
+      expect(find_field("case_log[startdate(1i)]").value).to eq(nil)
+    end
+  end
 end
