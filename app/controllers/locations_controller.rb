@@ -39,13 +39,18 @@ class LocationsController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    render_not_found and return unless @location && @scheme
+  end
 
-  def edit_name; end
+  def edit_name
+    render_not_found and return unless @location && @scheme
+  end
 
   def update
-    page = params[:location][:page]
+    render_not_found and return unless @location && @scheme
 
+    page = params[:location][:page]
     if @location.update(location_params)
       case page
       when "edit"
@@ -77,12 +82,12 @@ private
     @scheme = if %w[new create index edit_name].include?(action_name)
                 Scheme.find(params[:id])
               else
-                @location.scheme
+                @location&.scheme
               end
   end
 
   def find_location
-    @location = params[:location_id].present? ? Location.find(params[:location_id]) : Location.find(params[:id])
+    @location = params[:location_id].present? ? Location.find_by(id: params[:location_id]) : Location.find_by(id: params[:id])
   end
 
   def authenticate_scope!
@@ -90,7 +95,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name].include?(action_name) && !((current_user.organisation == @scheme.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
