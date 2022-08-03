@@ -250,6 +250,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
     t.string "mobility_type"
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
+    t.boolean "confirmed"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end

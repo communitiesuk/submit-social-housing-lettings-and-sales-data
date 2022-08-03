@@ -5,9 +5,9 @@ class SchemesController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index]
   before_action :authenticate_scope!
+  before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
 
   def index
-    flash[:notice] = "#{Scheme.find(params[:scheme_id].to_i).service_name} has been created." if params[:scheme_id]
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
     all_schemes = Scheme.all.order("service_name ASC")
 
@@ -52,10 +52,19 @@ class SchemesController < ApplicationController
 
     check_answers = params[:scheme][:check_answers]
     page = params[:scheme][:page]
+    scheme_previously_confirmed = @scheme.confirmed?
 
     validation_errors scheme_params
     if @scheme.errors.empty? && @scheme.update(scheme_params)
-      if check_answers
+      if scheme_params[:confirmed] == "true"
+        @scheme.locations.update!(confirmed: true)
+        flash[:notice] = if scheme_previously_confirmed
+                           "#{@scheme.service_name} has been updated."
+                         else
+                           "#{@scheme.service_name} has been created."
+                         end
+        redirect_to scheme_path(@scheme)
+      elsif check_answers
         if confirm_secondary_page? page
           redirect_to scheme_secondary_client_group_path(@scheme, check_answers: "true")
         else
@@ -177,7 +186,7 @@ private
         scheme_details_path(@scheme)
       end
     when "edit-name"
-      scheme_path(@scheme)
+      scheme_check_answers_path(@scheme)
     when "check-answers"
       schemes_path(scheme_id: @scheme.id)
     end
@@ -245,5 +254,9 @@ private
     if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
+  end
+
+  def redirect_if_scheme_confirmed
+    redirect_to @scheme if @scheme.confirmed?
   end
 end

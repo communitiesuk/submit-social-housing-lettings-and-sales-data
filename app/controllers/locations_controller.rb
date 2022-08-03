@@ -56,7 +56,7 @@ class LocationsController < ApplicationController
       when "edit"
         location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-name"
-        redirect_to(locations_path(@scheme))
+        redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       end
     else
       render :edit, status: :unprocessable_entity
