@@ -1334,7 +1334,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, primary_client_group: Scheme::PRIMARY_CLIENT_GROUP[:"Homeless families with support needs"]) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1345,6 +1345,11 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What is the other client group?")
+      end
+
+      it "does not show the primary client group as an option" do
+        expect(scheme.primary_client_group).not_to be_nil
+        expect(page).not_to have_content("Homeless families with support needs")
       end
     end
   end
