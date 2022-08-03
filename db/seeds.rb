@@ -83,6 +83,8 @@ unless Rails.env.test?
       primary_client_group: "O",
       secondary_client_group: "H",
       owning_organisation: org,
+      managing_organisation: org,
+      arrangement_type: "D",
       confirmed: true,
       created_at: Time.zone.now,
     )
@@ -97,6 +99,8 @@ unless Rails.env.test?
       primary_client_group: "D",
       secondary_client_group: "E",
       owning_organisation: org,
+      managing_organisation: org,
+      arrangement_type: "D",
       confirmed: true,
       created_at: Time.zone.now,
     )
@@ -111,6 +115,8 @@ unless Rails.env.test?
       primary_client_group: "G",
       secondary_client_group: "R",
       owning_organisation: dummy_org,
+      managing_organisation: dummy_org,
+      arrangement_type: "D",
       confirmed: true,
       created_at: Time.zone.now,
     )

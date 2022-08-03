@@ -15,7 +15,7 @@
 
       <%= f.govuk_text_field :name,
         autocomplete: "name",
-        label: { text: "Name (optional)", size: "m" } %>
+        label: { text: "Name", size: "m" } %>
 
       <%= f.govuk_email_field :email,
         label: { text: "Email address", size: "m" },
@@ -27,6 +27,7 @@
         <% null_option = [OpenStruct.new(id: "", name: "Select an option")] %>
         <% organisations = Organisation.all.map { |org| OpenStruct.new(id: org.id, name: org.name) } %>
         <% answer_options = null_option + organisations %>
+
         <% if @organisation_id %>
           <% organisation = Organisation.find(@organisation_id) %>
           <% answer_options = [OpenStruct.new(id: organisation.id, name: organisation.name)] %>
@@ -40,26 +41,18 @@
             options: { disabled: [""], selected: @organisation_id ? answer_options.first : "" } %>
       <% end %>
 
-      <% roles = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize) } %>
+      <% hints_for_roles = { data_provider: ["Default role for this organisation", "Can view and submit logs for this organisation"], data_coordinator: ["Can view and submit logs for this organisation and any of its managing agents", "Can manage details for this organisation", "Can manage users for this organisation"], support: nil } %>
+
+      <% roles_with_hints = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints_for_roles[key.to_sym]) } %>
 
       <%= f.govuk_collection_radio_buttons :role,
-        roles,
-        :id,
-        :name,
-        legend: { text: "Role", size: "m" } %>
-
-      <%= f.govuk_collection_radio_buttons :is_dpo,
-        [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
-        :id,
-        :name,
-        legend: { text: "#{perspective(@user, current_user)} the organisation’s data protection officer?", size: "m" } %>
-
-      <%= f.govuk_collection_radio_buttons :is_key_contact,
-        [OpenStruct.new(id: true, name: "Yes"), OpenStruct.new(id: false, name: "No")],
-        :id,
-        :name,
-        legend: { text: "#{perspective(@user, current_user)} a key contact for this service?", size: "m" },
-        hint: { text: "This is a person responsible for sharing information about social housing lettings and sales data within the organisation." } %>
+                                           roles_with_hints,
+                                           :id,
+                                           :name,
+                                           lambda { |option|
+                                             option.description&.map { |hint| content_tag(:li, hint) }&.reduce(:+)
+                                           },
+                                           legend: { text: "Role", size: "m" } %>
 
       <%= f.govuk_submit "Continue" %>
     </div>

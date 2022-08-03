@@ -327,27 +327,20 @@ RSpec.describe "User Features" do
         fill_in("user[name]", with: "New User")
         fill_in("user[email]", with: "newuser@example.com")
         choose("user-role-data-provider-field")
-        choose("user-is-dpo-true-field")
-        choose("user-is-key-contact-true-field")
         click_button("Continue")
         expect(User.find_by(
                  name: "New User",
                  email: "newuser@example.com",
                  role: "data_provider",
-                 is_dpo: true,
-                 is_key_contact: true,
+                 is_dpo: false,
+                 is_key_contact: false,
                )).to be_a(User)
-      end
-
-      it "defaults to is_dpo false" do
-        visit("users/new")
-        expect(page).to have_field("user[is_dpo]", with: false)
       end
     end
 
     context "when editing someone elses account details" do
       let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
-      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: true, organisation: user.organisation) }
+      let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: false, organisation: user.organisation) }
 
       before do
         visit("/logs")
@@ -362,18 +355,35 @@ RSpec.describe "User Features" do
         click_link(other_user.name)
         expect(page).to have_title("Other name’s account")
         first(:link, "Change").click
-        expect(page).to have_field("user[is_dpo]", with: true)
-        choose("user-is-dpo-field")
-        choose("user-is-key-contact-true-field")
         fill_in("user[name]", with: "Updated new name")
         click_button("Save changes")
         expect(page).to have_title("Updated new name’s account")
         expect(User.find_by(
                  name: "Updated new name",
                  role: "data_provider",
-                 is_dpo: false,
-                 is_key_contact: true,
                )).to be_a(User)
+      end
+
+      context "when updating other user DPO and key contact information" do
+        it "allows updating users dpo details" do
+          visit("/organisations/#{user.organisation.id}")
+          click_link("Users")
+          click_link(other_user.name)
+          find("a[href='#{user_edit_dpo_path(other_user)}']").click
+          choose("Yes")
+          click_button("Save changes")
+          expect(User.find_by(name: "Other name", role: "data_provider", is_dpo: true)).to be_a(User)
+        end
+
+        it "allows updating users key contact details" do
+          visit("/organisations/#{user.organisation.id}")
+          click_link("Users")
+          click_link(other_user.name)
+          find("a[href='#{user_edit_key_contact_path(other_user)}']").click
+          choose("Yes")
+          click_button("Save changes")
+          expect(User.find_by(name: "Other name", role: "data_provider", is_key_contact: true)).to be_a(User)
+        end
       end
     end
 
