@@ -3,12 +3,11 @@ class Form::Subsections::Setup < ::Form::Subsection
     super
     @id = "setup"
     @label = "Set up this lettings log"
-    @pages = [pages]
     @section = section
   end
 
   def pages
-    [
+    @pages ||= [
       Form::Setup::Pages::Organisation.new(nil, nil, self),
       Form::Setup::Pages::CreatedBy.new(nil, nil, self),
       Form::Setup::Pages::NeedsType.new(nil, nil, self),
