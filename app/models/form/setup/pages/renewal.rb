@@ -4,12 +4,11 @@ class Form::Setup::Pages::Renewal < ::Form::Page
     @id = "renewal"
     @header = ""
     @description = ""
-    @questions = questions
     @subsection = subsection
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::Renewal.new(nil, nil, self),
     ]
   end

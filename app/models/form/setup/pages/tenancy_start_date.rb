@@ -3,12 +3,11 @@ class Form::Setup::Pages::TenancyStartDate < ::Form::Page
     super
     @id = "tenancy_start_date"
     @description = ""
-    @questions = questions
     @subsection = subsection
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::TenancyStartDate.new(nil, nil, self),
     ]
   end
