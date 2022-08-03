@@ -50,7 +50,7 @@
                                            :id,
                                            :name,
                                            lambda { |option|
-                                             option.description&.sum("") { |hint| content_tag(:li, hint) }
+                                             option.description&.map{ |hint| content_tag(:li, hint) }&.reduce(:+)
                                            },
                                            legend: { text: "Role", size: "m" } %>
 
