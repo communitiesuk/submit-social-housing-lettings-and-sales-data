@@ -26,6 +26,10 @@ class Form::Subsections::Setup < ::Form::Subsection
     questions.select { |q| support_only_questions.include?(q.id) } + super
   end
 
+  def enabled?(_case_log)
+    true
+  end
+
 private
 
   def support_only_questions
