@@ -5,6 +5,7 @@ class SchemesController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index]
   before_action :authenticate_scope!
+  before_action :redirect_if_scheme_confirmed, only: %i[primary_client_group confirm_secondary_client_group secondary_client_group support details]
 
   def index
     redirect_to schemes_organisation_path(current_user.organisation) unless current_user.support?
@@ -253,5 +254,9 @@ private
     if %w[show locations primary_client_group confirm_secondary_client_group secondary_client_group support details check_answers edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
+  end
+
+  def redirect_if_scheme_confirmed
+    redirect_to @scheme if @scheme.confirmed?
   end
 end
