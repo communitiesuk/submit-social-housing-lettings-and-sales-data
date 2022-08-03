@@ -1366,7 +1366,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil, primary_client_group: Scheme::PRIMARY_CLIENT_GROUP[:"Homeless families with support needs"]) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1392,6 +1392,11 @@ RSpec.describe SchemesController, type: :request do
           expect(page).to have_content(scheme.service_name)
           assert_select "a", text: /Change/, count: 3
         end
+      end
+      
+      it "does not show the primary client group as an option" do
+        expect(scheme.primary_client_group).not_to be_nil
+        expect(page).not_to have_content("Homeless families with support needs")
       end
     end
   end
