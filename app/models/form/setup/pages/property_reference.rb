@@ -4,12 +4,11 @@ class Form::Setup::Pages::PropertyReference < ::Form::Page
     @id = "property_reference"
     @header = ""
     @description = ""
-    @questions = questions
     @subsection = subsection
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::PropertyReference.new(nil, nil, self),
     ]
   end

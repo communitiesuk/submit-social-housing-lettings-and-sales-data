@@ -3,13 +3,12 @@ class Form::Setup::Pages::RentType < ::Form::Page
     super("rent_type", hsh, subsection)
     @header = ""
     @description = ""
-    @questions = questions
     @depends_on = [{ "supported_housing_schemes_enabled?" => true }]
     @derived = true
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::RentType.new(nil, nil, self),
       Form::Setup::Questions::IrproductOther.new(nil, nil, self),
     ]
