@@ -1843,7 +1843,7 @@ RSpec.describe CaseLog do
     end
 
     context "when it changes from a supported housing to not a supported housing" do
-      let(:location) { FactoryBot.create(:location, mobility_type: "A") }
+      let(:location) { FactoryBot.create(:location, mobility_type: "A", postcode: "SW1P 4DG") }
       let(:case_log) { FactoryBot.create(:case_log, location:) }
 
       it "resets inferred wchair value" do
@@ -1857,6 +1857,18 @@ RSpec.describe CaseLog do
         record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
         expect(record_from_db["wchair"]).to eq(nil)
         expect(case_log["wchair"]).to eq(nil)
+      end
+
+      it "resets location" do
+        case_log.update!({ needstype: 2 })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["location_id"]).to eq(location.id)
+        expect(case_log["location_id"]).to eq(location.id)
+        case_log.update!({ needstype: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["location_id"]).to eq(nil)
+        expect(case_log["location_id"]).to eq(nil)
       end
     end
 

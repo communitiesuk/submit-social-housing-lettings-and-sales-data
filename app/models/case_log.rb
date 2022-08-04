@@ -537,7 +537,8 @@ private
                             homeless: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
                             underoccupation_benefitcap: [{ key: :renewal, value: 0 }],
-                            wchair: [{ key: :needstype, value: 1 }] }
+                            wchair: [{ key: :needstype, value: 1 }],
+                            location_id: [{ key: :needstype, value: 1 }] }
 
     dependent_questions.each do |dependent, conditions|
       condition_key = conditions.first[:key]
