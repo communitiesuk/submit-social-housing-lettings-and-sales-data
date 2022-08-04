@@ -3,7 +3,7 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: scheme_check_answers_path(@scheme.id, anchor: "locations"),
+    href: scheme_check_answers_path(@scheme, anchor: "locations"),
   ) %>
 <% end %>
 
