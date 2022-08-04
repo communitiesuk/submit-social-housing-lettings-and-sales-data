@@ -6,7 +6,7 @@ class User < ApplicationRecord
          :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
   belongs_to :organisation
-  has_many :owned_case_logs, through: :organisation
+  has_many :owned_case_logs, through: :organisation, dependent: :delete_all
   has_many :managed_case_logs, through: :organisation
 
   validate :validate_email
