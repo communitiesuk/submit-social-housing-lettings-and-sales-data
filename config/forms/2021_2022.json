@@ -34,7 +34,14 @@
                   "conditional_for": {
                     "postcode_full": [1]
                   },
-                  "hidden_in_check_answers": true
+                  "hidden_in_check_answers": {
+                    "depends_on": [{
+                      "postcode_known": 0
+                    },
+                    {
+                      "postcode_known": 1
+                    }]
+                  }
                 },
                 "postcode_full": {
                   "check_answer_label": "Postcode",
@@ -1122,7 +1129,11 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_hhmemb_value_check": {
-              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1248,7 +1259,11 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_age_value_check": {
-              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
@@ -1356,7 +1371,11 @@
               }
             },
             "females_in_soft_age_range_in_pregnant_household_lead_value_check": {
-              "depends_on": [{ "female_in_pregnant_household_in_soft_validation_range?": true }],
+              "depends_on": [
+                {
+                  "female_in_pregnant_household_in_soft_validation_range?": true
+                }
+              ],
               "title_text": {
                 "translation": "soft_validations.pregnancy.title",
                 "arguments": [
