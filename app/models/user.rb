@@ -29,6 +29,10 @@ class User < ApplicationRecord
 
   before_validation :strip_whitespaces
 
+  def fields_to_strip
+    %w[name]
+  end
+
   ROLES = {
     data_provider: 1,
     data_coordinator: 2,

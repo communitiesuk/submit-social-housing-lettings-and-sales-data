@@ -8,6 +8,10 @@ class Location < ApplicationRecord
   before_save :lookup_postcode!, if: :postcode_changed?
   before_validation :strip_whitespaces
 
+  def fields_to_strip
+    %w[name]
+  end
+
   attr_accessor :add_another_location
 
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }

@@ -21,6 +21,10 @@ class Scheme < ApplicationRecord
 
   before_validation :strip_whitespaces
 
+  def fields_to_strip
+    %w[service_name]
+  end
+
   SENSITIVE = {
     No: 0,
     Yes: 1,
