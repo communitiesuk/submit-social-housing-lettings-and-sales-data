@@ -78,8 +78,8 @@ en:
         user:
           attributes:
             organisation_id:
-              blank: "Enter the existing organisation’s name"
-              invalid: "Enter the existing organisation’s name"
+              blank: "Select the user’s organisation"
+              invalid: "Select the user’s organisation"
             name:
               blank: "Enter a name"
             email:
