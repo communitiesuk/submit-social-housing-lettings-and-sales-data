@@ -111,4 +111,37 @@ RSpec.describe "Form Page Routing" do
       expect(find_field("case_log[startdate(1i)]").value).to eq(nil)
     end
   end
+
+  context "when completing the setup section" do
+    context "with a supported housing log" do
+      let(:case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          needstype: 2,
+        )
+      end
+
+      context "with a scheme with only 1 active location" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+        let!(:active_location) { FactoryBot.create(:location, scheme:) }
+
+        before do
+          FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 20.days)
+          visit("/logs/#{case_log.id}/scheme")
+          select(scheme.service_name, from: "case_log[scheme_id]")
+          click_button("Save and continue")
+        end
+
+        it "does not route to the scheme location question" do
+          expect(page).to have_current_path("/logs/#{case_log.id}/renewal")
+        end
+
+        it "infers the scheme location" do
+          expect(case_log.reload.location_id).to eq(active_location.id)
+        end
+      end
+    end
+  end
 end
