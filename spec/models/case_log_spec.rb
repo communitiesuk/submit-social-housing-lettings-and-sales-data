@@ -2073,6 +2073,20 @@ RSpec.describe CaseLog do
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
+
+        context "when case log is supported housing" do
+          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+
+          before do
+            case_log_to_search.update!(needstype: 2, location:)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.filter_by_location_postcode("W6 0ST")
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
       end
 
       describe "#search_by" do
@@ -2098,6 +2112,20 @@ RSpec.describe CaseLog do
           result = described_class.search_by(case_log_to_search.postcode_full)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when case log is supported housing" do
+          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+
+          before do
+            case_log_to_search.update!(needstype: 2, location:)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.search_by("W6 0ST")
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
         end
 
         context "when postcode has spaces and lower case letters" do
