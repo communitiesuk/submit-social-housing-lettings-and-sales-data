@@ -1,16 +1,17 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :omniauthable
-  include Helpers::Email
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable,
+  devise :database_authenticatable, :recoverable, :rememberable,
          :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
   belongs_to :organisation
   has_many :owned_case_logs, through: :organisation, dependent: :delete_all
   has_many :managed_case_logs, through: :organisation
 
-  validate :validate_email
-  validates :name, :email, presence: true
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
+  validates_format_of :email, with: Devise.email_regexp
+  validates_length_of :password, within: Devise.password_length, allow_blank: true
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
