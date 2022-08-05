@@ -346,7 +346,7 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let(:params) do
-        { scheme: { service_name: "testy",
+        { scheme: { service_name: "  testy ",
                     sensitive: "1",
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",

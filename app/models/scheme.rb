@@ -19,6 +19,8 @@ class Scheme < ApplicationRecord
 
   validate :validate_confirmed
 
+  auto_strip_attributes :service_name
+
   SENSITIVE = {
     No: 0,
     Yes: 1,

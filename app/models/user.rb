@@ -27,6 +27,8 @@ class User < ApplicationRecord
 
   has_one_time_password(encrypted: true)
 
+  auto_strip_attributes :name
+
   ROLES = {
     data_provider: 1,
     data_coordinator: 2,

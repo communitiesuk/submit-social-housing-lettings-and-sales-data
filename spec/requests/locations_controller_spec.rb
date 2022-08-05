@@ -269,7 +269,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
+      let(:params) { { location: { name: " Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)

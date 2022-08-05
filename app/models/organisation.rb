@@ -12,6 +12,8 @@ class Organisation < ApplicationRecord
 
   has_paper_trail
 
+  auto_strip_attributes :name
+
   PROVIDER_TYPE = {
     LA: 1,
     PRP: 2,
