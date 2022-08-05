@@ -12,11 +12,7 @@ class Organisation < ApplicationRecord
 
   has_paper_trail
 
-  before_validation :strip_whitespaces
-
-  def fields_to_strip
-    %w[name]
-  end
+  auto_strip_attributes :name
 
   PROVIDER_TYPE = {
     LA: 1,

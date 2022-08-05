@@ -55,6 +55,7 @@ gem "redis"
 gem "sentry-rails"
 gem "sentry-ruby"
 # Possessives in strings
+gem "auto_strip_attributes"
 gem "possessive"
 
 group :development, :test do

@@ -19,11 +19,7 @@ class Scheme < ApplicationRecord
 
   validate :validate_confirmed
 
-  before_validation :strip_whitespaces
-
-  def fields_to_strip
-    %w[service_name]
-  end
+  auto_strip_attributes :service_name
 
   SENSITIVE = {
     No: 0,

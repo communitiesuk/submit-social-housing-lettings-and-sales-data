@@ -81,6 +81,8 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
+    auto_strip_attributes (2.6.0)
+      activerecord (>= 4.0)
     aws-eventstream (1.2.0)
     aws-partitions (1.609.0)
     aws-sdk-core (3.131.3)
@@ -428,6 +430,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  auto_strip_attributes
   aws-sdk-s3
   bootsnap (>= 1.4.4)
   bundler-audit

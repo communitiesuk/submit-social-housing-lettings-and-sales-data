@@ -27,11 +27,7 @@ class User < ApplicationRecord
 
   has_one_time_password(encrypted: true)
 
-  before_validation :strip_whitespaces
-
-  def fields_to_strip
-    %w[name]
-  end
+  auto_strip_attributes :name
 
   ROLES = {
     data_provider: 1,
