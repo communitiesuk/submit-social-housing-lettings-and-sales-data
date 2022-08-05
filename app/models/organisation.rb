@@ -63,15 +63,16 @@ class Organisation < ApplicationRecord
 
   def display_attributes
     [
-      { name: "name", value: name, editable: true },
-      { name: "address", value: address_string, editable: true },
-      { name: "telephone_number", value: phone, editable: true },
-      { name: "type", value: display_provider_type, editable: false },
-      { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
+      { name: "Name", value: name, editable: true },
+      { name: "Address", value: address_string, editable: true },
+      { name: "Telephone_number", value: phone, editable: true },
+      { name: "Type of provider", value: display_provider_type, editable: false },
+      { name: "Registration number", value: housing_registration_no || "", editable: false },
+      { name: "Rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-      { name: "other_stock_owners", value: other_stock_owners, editable: false },
-      { name: "managing_agents", value: managing_agents, editable: false },
-      { name: "data_protection_agreement", value: data_protection_agreement_string, editable: false },
+      { name: "Other stock owners", value: other_stock_owners, editable: false },
+      { name: "Managing agents", value: managing_agents, editable: false },
+      { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
     ]
   end
 end
