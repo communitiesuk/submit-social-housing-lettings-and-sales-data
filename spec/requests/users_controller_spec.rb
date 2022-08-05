@@ -841,7 +841,7 @@ RSpec.describe UsersController, type: :request do
       let(:params) do
         {
           "user": {
-            name: "new user",
+            name: "new user ",
             email: "new_user@example.com",
             role: "data_coordinator",
           },
@@ -850,7 +850,7 @@ RSpec.describe UsersController, type: :request do
 
       let(:personalisation) do
         {
-          name: params[:user][:name],
+          name: "new user",
           email: params[:user][:email],
           organisation: user.organisation.name,
           link: include("/account/confirmation?confirmation_token="),
@@ -869,6 +869,14 @@ RSpec.describe UsersController, type: :request do
       it "sends an invitation email" do
         expect(notify_client).to receive(:send_email).with(email_address: params[:user][:email], template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         request
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        request
+
+        expect(User.last.name).to eq("new user")
+        expect(User.last.email).to eq("new_user@example.com")
+        expect(User.last.role).to eq("data_coordinator")
       end
 
       it "redirects back to organisation users page" do

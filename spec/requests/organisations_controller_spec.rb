@@ -962,7 +962,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       describe "#create" do
-        let(:name) { "Unique new org name" }
+        let(:name) { " Unique new org name" }
         let(:address_line1) { "12 Random Street" }
         let(:address_line2) { "Manchester" }
         let(:postcode) { "MD1 5TR" }
@@ -993,7 +993,7 @@ RSpec.describe OrganisationsController, type: :request do
         it "sets the organisation attributes correctly" do
           request
           organisation = Organisation.find_by(housing_registration_no:)
-          expect(organisation.name).to eq(name)
+          expect(organisation.name).to eq("Unique new org name")
           expect(organisation.address_line1).to eq(address_line1)
           expect(organisation.address_line2).to eq(address_line2)
           expect(organisation.postcode).to eq(postcode)

@@ -12,6 +12,8 @@ class Organisation < ApplicationRecord
 
   has_paper_trail
 
+  before_validation :strip_whitespace
+
   PROVIDER_TYPE = {
     LA: 1,
     PRP: 2,
@@ -73,5 +75,9 @@ class Organisation < ApplicationRecord
       { name: "managing_agents", value: managing_agents, editable: false },
       { name: "data_protection_agreement", value: data_protection_agreement_string, editable: false },
     ]
+  end
+
+  def strip_whitespace
+    self.name = name.strip unless name.nil?
   end
 end
