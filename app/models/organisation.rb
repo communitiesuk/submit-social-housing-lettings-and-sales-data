@@ -17,7 +17,7 @@ class Organisation < ApplicationRecord
   def fields_to_strip
     %w[name]
   end
-  
+
   PROVIDER_TYPE = {
     LA: 1,
     PRP: 2,
