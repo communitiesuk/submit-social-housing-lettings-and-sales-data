@@ -12,6 +12,8 @@ class Location < ApplicationRecord
   scope :search_by_postcode, ->(postcode) { where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{postcode.delete(' ')}%") }
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param).or(search_by_postcode(param)) }
+  scope :started, -> { where("startdate <= ?", Time.zone.today).or(where(startdate: nil)) }
+  scope :active, -> { where(confirmed: true).and(started) }
 
   MOBILITY_TYPE = {
     "Wheelchair-user standard": "W",

@@ -72,8 +72,9 @@ RSpec.describe Location, type: :model do
 
   describe "scopes" do
     before do
-      FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR")
-      FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ")
+      FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR", startdate: Time.zone.today)
+      FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ", startdate: Time.zone.today + 1.day)
+      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, confirmed: false)
     end
 
     context "when searching by name" do
@@ -94,6 +95,18 @@ RSpec.describe Location, type: :model do
       it "returns case insensitive matching records" do
         expect(described_class.search_by("aBc").count).to eq(1)
         expect(described_class.search_by("nw18rr").count).to eq(1)
+      end
+    end
+
+    context "when filtering by started locations" do
+      it "returns only locations that started today or earlier" do
+        expect(described_class.started.count).to eq(2)
+      end
+    end
+
+    context "when filtering by active locations" do
+      it "returns only locations that started today or earlier and have been confirmed" do
+        expect(described_class.active.count).to eq(1)
       end
     end
   end
