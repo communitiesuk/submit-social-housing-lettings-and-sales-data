@@ -19,7 +19,7 @@ class Scheme < ApplicationRecord
 
   validate :validate_confirmed
 
-  before_validation :strip_whitespace
+  before_validation :strip_whitespaces
 
   SENSITIVE = {
     No: 0,
@@ -229,9 +229,5 @@ class Scheme < ApplicationRecord
         end
       end
     end
-  end
-
-  def strip_whitespace
-    self.service_name = service_name.strip unless service_name.nil?
   end
 end

@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   has_one_time_password(encrypted: true)
 
-  before_validation :strip_whitespace
+  before_validation :strip_whitespaces
 
   ROLES = {
     data_provider: 1,
@@ -166,9 +166,5 @@ private
         errors.add :email, I18n.t("activerecord.errors.models.user.attributes.email.invalid")
       end
     end
-  end
-
-  def strip_whitespace
-    self.name = name.strip unless name.nil?
   end
 end

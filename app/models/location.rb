@@ -6,6 +6,7 @@ class Location < ApplicationRecord
   has_paper_trail
 
   before_save :lookup_postcode!, if: :postcode_changed?
+  before_validation :strip_whitespaces
 
   attr_accessor :add_another_location
 
