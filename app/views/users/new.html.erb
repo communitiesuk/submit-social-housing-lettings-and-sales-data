@@ -41,7 +41,7 @@
             options: { disabled: [""], selected: @organisation_id ? answer_options.first : "" } %>
       <% end %>
 
-      <% hints_for_roles = { data_provider: ["Default role for this organisation", "Can view and submit logs for this organisation"], data_coordinator: ["Can view and submit logs for this organisation and any of its managing agents", "Can manage details for this organisation", "Can manage users for this organisation"], support: nil } %>
+      <% hints_for_roles = { data_provider: ["Can view and submit logs for this organisation"], data_coordinator: ["Can view and submit logs for this organisation and any of its managing agents", "Can manage details for this organisation", "Can manage users for this organisation"], support: nil } %>
 
       <% roles_with_hints = current_user.assignable_roles.map { |key, _| OpenStruct.new(id: key, name: key.to_s.humanize, description: hints_for_roles[key.to_sym]) } %>
 
@@ -52,7 +52,8 @@
                                            lambda { |option|
                                              option.description&.map { |hint| content_tag(:li, hint) }&.reduce(:+)
                                            },
-                                           legend: { text: "Role", size: "m" } %>
+                                           legend: { text: "Role (optional)", size: "m" },
+                                           hint: { text: "This does not need to be selected if the user is a data protection officer only" } %>
 
       <%= f.govuk_submit "Continue" %>
     </div>

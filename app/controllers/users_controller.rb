@@ -58,7 +58,7 @@ class UsersController < ApplicationController
       end
     elsif user_params.key?("password")
       format_error_messages
-      @minimum_password_length = User.password_length.min
+      @minimum_password_length = Devise.password_length.min
       render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }, status: :unprocessable_entity
     else
       format_error_messages
@@ -79,7 +79,6 @@ class UsersController < ApplicationController
       redirect_to created_user_redirect_path
     else
       unless @resource.errors[:organisation].empty?
-        @resource.errors.add(:organisation_id, message: @resource.errors[:organisation])
         @resource.errors.delete(:organisation)
       end
       render :new, status: :unprocessable_entity
@@ -87,7 +86,7 @@ class UsersController < ApplicationController
   end
 
   def edit_password
-    @minimum_password_length = User.password_length.min
+    @minimum_password_length = Devise.password_length.min
     render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }
   end
 
@@ -113,9 +112,6 @@ private
     @resource.validate
     if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
       @resource.errors.add :role, I18n.t("validations.role.invalid")
-    end
-    if user_params[:role].empty?
-      @resource.errors.add :role, I18n.t("activerecord.errors.models.user.attributes.role.blank")
     end
   end
 

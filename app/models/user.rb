@@ -4,14 +4,20 @@ class User < ApplicationRecord
   devise :database_authenticatable, :recoverable, :rememberable,
          :trackable, :lockable, :two_factor_authenticatable, :confirmable, :timeoutable
 
-  belongs_to :organisation
+  # Marked as optional because we validate organisation_id below instead so that
+  # the error message is linked to the right field on the form
+  belongs_to :organisation, optional: true
   has_many :owned_case_logs, through: :organisation, dependent: :delete_all
   has_many :managed_case_logs, through: :organisation
 
   validates :name, presence: true
-  validates :email, presence: true, uniqueness: true
-  validates :email, format: { with: Devise.email_regexp }
+  validates :email, presence: true
+  validates :email, uniqueness: { allow_blank: true, case_sensitive: true, if: :will_save_change_to_email? }
+  validates :email, format: { with: Devise.email_regexp, allow_blank: true, if: :will_save_change_to_email? }
+  validates :password, presence: { if: :password_required? }
+  validates :password, confirmation: { if: :password_required? }
   validates :password, length: { within: Devise.password_length, allow_blank: true }
+  validates :organisation_id, presence: true
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
@@ -153,5 +159,14 @@ class User < ApplicationRecord
 
   def valid_for_authentication?
     super && active?
+  end
+
+protected
+
+  # Checks whether a password is needed or not. For validations only.
+  # Passwords are always required if it's a new record, or if the password
+  # or confirmation are being set somewhere.
+  def password_required?
+    !persisted? || !password.nil? || !password_confirmation.nil?
   end
 end

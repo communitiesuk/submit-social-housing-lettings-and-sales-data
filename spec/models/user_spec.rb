@@ -227,17 +227,15 @@ RSpec.describe User, type: :model do
   end
 
   describe "validate" do
-    let(:organisation) { FactoryBot.create(:organisation) }
-
     context "when a user does not have values for required fields" do
-      let(:user) { described_class.new(organisation:) }
+      let(:user) { described_class.new }
 
       before do
         user.validate
       end
 
-      it "validates name presence before email presence" do
-        expect(user.errors.map(&:attribute).uniq).to eq(%i[name email])
+      it "validates name, email and organisation presence in the correct order" do
+        expect(user.errors.map(&:attribute).uniq).to eq(%i[name email password organisation_id])
       end
     end
 

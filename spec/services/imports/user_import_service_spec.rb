@@ -44,7 +44,7 @@ RSpec.describe Imports::UserImportService do
     end
 
     it "refuses to create a user belonging to a non existing organisation" do
-      expect(logger).to receive(:error).with(/Organisation must exist/)
+      expect(logger).to receive(:error).with(/ActiveRecord::RecordInvalid/)
       import_service.create_users("user_directory")
     end
 
