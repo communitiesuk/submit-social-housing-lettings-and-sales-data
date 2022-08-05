@@ -75,6 +75,7 @@ RSpec.describe Location, type: :model do
       FactoryBot.create(:location, name: "ABC", postcode: "NW1 8RR", startdate: Time.zone.today)
       FactoryBot.create(:location, name: "XYZ", postcode: "SE1 6HJ", startdate: Time.zone.today + 1.day)
       FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: Time.zone.today - 1.day, confirmed: false)
+      FactoryBot.create(:location, name: "GHQ", postcode: "EW1 7JK", startdate: nil)
     end
 
     context "when searching by name" do
@@ -100,13 +101,13 @@ RSpec.describe Location, type: :model do
 
     context "when filtering by started locations" do
       it "returns only locations that started today or earlier" do
-        expect(described_class.started.count).to eq(2)
+        expect(described_class.started.count).to eq(3)
       end
     end
 
     context "when filtering by active locations" do
       it "returns only locations that started today or earlier and have been confirmed" do
-        expect(described_class.active.count).to eq(1)
+        expect(described_class.active.count).to eq(2)
       end
     end
   end
