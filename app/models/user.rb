@@ -154,16 +154,4 @@ class User < ApplicationRecord
   def valid_for_authentication?
     super && active?
   end
-
-private
-
-  def validate_email
-    unless email_valid?(email)
-      if User.exists?(["email LIKE ?", "%#{email}%"])
-        errors.add :email, I18n.t("activerecord.errors.models.user.attributes.email.taken")
-      else
-        errors.add :email, I18n.t("activerecord.errors.models.user.attributes.email.invalid")
-      end
-    end
-  end
 end
