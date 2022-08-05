@@ -5,7 +5,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.2"
 
-gem "auto_strip_attributes"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 7.0.2"
 # Use postgresql as the database for Active Record
@@ -57,6 +56,8 @@ gem "sentry-rails"
 gem "sentry-ruby"
 # Possessives in strings
 gem "possessive"
+# Strip whitespace from active record attributes
+gem "auto_strip_attributes"
 
 group :development, :test do
   # Check gems for known vulnerabilities
