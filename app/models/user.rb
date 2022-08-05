@@ -10,8 +10,8 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
-  validates_format_of :email, with: Devise.email_regexp
-  validates_length_of :password, within: Devise.password_length, allow_blank: true
+  validates :email, format: { with: Devise.email_regexp }
+  validates :password, length: { within: Devise.password_length, allow_blank: true }
 
   has_paper_trail ignore: %w[last_sign_in_at
                              current_sign_in_at
