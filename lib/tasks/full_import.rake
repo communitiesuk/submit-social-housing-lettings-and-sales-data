@@ -20,7 +20,11 @@ namespace :core do
 
     import_list.each do |import|
       folder_path = File.join(path, import.folder, "")
-      import.import_class.new(storage_service).send(import.import_method, folder_path)
+      if storage_service.folder_present?(folder_path)
+        import.import_class.new(storage_service).send(import.import_method, folder_path)
+      else
+        Rails.logger.info("#{folder_path} does not exist, skipping #{import.import_class}")
+      end
     end
   end
 end
