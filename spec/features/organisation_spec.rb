@@ -42,16 +42,19 @@ RSpec.describe "User Features" do
 
       context "when the user is a coordinator and the organisation holds housing stock" do
         let(:organisation) { FactoryBot.create(:organisation, holds_own_stock: true) }
+
         it "shows schemes in the navigation bar" do
           visit("/logs")
           expect(page).to have_link("Schemes", href: "/schemes")
         end
       end
+
       context "when the user is a coordinator and the organisation does not hold housing stock" do
         let(:organisation) { FactoryBot.create(:organisation, holds_own_stock: false) }
+
         it "does not show schemes in the navigation bar" do
           visit("/logs")
-          expect(page).to_not have_link("Schemes", href: "/schemes")
+          expect(page).not_to have_link("Schemes", href: "/schemes")
         end
       end
     end
