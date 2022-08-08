@@ -209,6 +209,7 @@ module Imports
 
       # Soft validations can become required answers, set them to yes by default
       attributes["pregnancy_value_check"] = 0
+      attributes["major_repairs_date_value_check"] = 0
       attributes["retirement_value_check"] = 0
       attributes["rent_value_check"] = 0
       attributes["net_income_value_check"] = 0

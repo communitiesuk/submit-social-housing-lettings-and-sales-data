@@ -867,6 +867,29 @@
                   "rsnvac": 19
                 }
               ]
+            },
+            "property_major_repairs_value_check": {
+              "depends_on": [{ "major_repairs_date_in_soft_range?": true }],
+              "title_text": {
+                "translation": "soft_validations.major_repairs_date.title_text"
+              },
+              "informative_text": {},
+              "questions": {
+                "major_repairs_date_value_check": {
+                  "check_answer_label": "Major repairs soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure the time between these dates is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
             }
           }
         },
