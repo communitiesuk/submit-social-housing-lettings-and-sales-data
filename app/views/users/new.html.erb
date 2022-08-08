@@ -53,7 +53,7 @@
                                              option.description&.map { |hint| content_tag(:li, hint) }&.reduce(:+)
                                            },
                                            legend: { text: "Role (optional)", size: "m" },
-                                           hint: { text: "This does not need to be selected if the user is a data protection officer only" } %>
+                                           hint: { text: "You do not need to select a role if the user is a data protection officer only. You can tell us that this user is a data protection officer after you have invited them." } %>
 
       <%= f.govuk_submit "Continue" %>
     </div>
