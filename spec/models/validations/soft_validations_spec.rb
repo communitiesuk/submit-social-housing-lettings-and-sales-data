@@ -226,14 +226,14 @@ RSpec.describe Validations::SoftValidations do
     context "when the void date is within 10 years of the tenancy start date" do
       it "shows the interruption screen" do
         record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2013, 2, 1))
-        expect(record.voiddate_date_in_soft_range?).to be true
+        expect(record.voiddate_in_soft_range?).to be true
       end
     end
 
     context "when the void date is less than 2 years before the tenancy start date" do
       it "does not show the interruption screen" do
         record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2021, 2, 1))
-        expect(record.voiddate_date_in_soft_range?).to be false
+        expect(record.voiddate_in_soft_range?).to be false
       end
     end
   end

@@ -771,6 +771,29 @@
                 }
               ]
             },
+            "void_date_value_check": {
+              "depends_on": [{ "voiddate_in_soft_range?": true }],
+              "title_text": {
+                "translation": "soft_validations.void_date.title_text"
+              },
+              "informative_text": {},
+              "questions": {
+                "void_date_value_check": {
+                  "check_answer_label": "Void date soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure the time between these dates is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
+                    },
+                    "1": {
+                      "value": "No"
+                    }
+                  }
+                }
+              }
+            },
             "new_build_handover_date": {
               "header": "",
               "description": "",

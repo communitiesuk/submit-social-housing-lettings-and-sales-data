@@ -66,7 +66,7 @@ module Validations::SoftValidations
     mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - 3650, startdate.to_date - 730)
   end
 
-  def voiddate_date_in_soft_range?
+  def voiddate_in_soft_range?
     voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - 3650, startdate.to_date - 730)
   end
 

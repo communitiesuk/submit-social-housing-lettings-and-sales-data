@@ -321,7 +321,8 @@ en:
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
     major_repairs_date:
       title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 730 days"
-      hint_text: "Are you sure the time between these dates is correct?"
+    void_date:
+      title_text: "You told us the time between the start of the tenancy and the void date is more than 730 days"
 
   devise:
     two_factor_authentication:
