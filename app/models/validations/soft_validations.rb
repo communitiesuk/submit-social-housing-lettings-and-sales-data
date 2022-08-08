@@ -62,12 +62,15 @@ module Validations::SoftValidations
     end
   end
 
+  TWO_YEARS_IN_DAYS = 730
+  TEN_YEARS_IN_DAYS = 3650
+
   def major_repairs_date_in_soft_range?
-    mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - 3650, startdate.to_date - 730)
+    mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
   def voiddate_in_soft_range?
-    voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - 3650, startdate.to_date - 730)
+    voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - TEN_YEARS_IN_DAYS, startdate.to_date - TWO_YEARS_IN_DAYS)
   end
 
 private
