@@ -9,7 +9,7 @@ module NavigationItemsHelper
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
       ]
-    elsif current_user.data_coordinator?
+    elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?
       [
         NavigationItem.new("Logs", case_logs_path, logs_current?(path)),
         NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),

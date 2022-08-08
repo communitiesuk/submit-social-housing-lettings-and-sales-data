@@ -8,6 +8,7 @@ FactoryBot.define do
     postcode { "SW1P 4DF" }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
+    holds_own_stock { true }
   end
 
   factory :organisation_la do

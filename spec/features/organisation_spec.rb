@@ -39,6 +39,28 @@ RSpec.describe "User Features" do
         click_link("About your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
       end
+
+      context "when the user is a coordinator and the organisation does not hold housing stock" do
+        before do
+          organisation.update(holds_own_stock: false)
+        end
+
+        it "does not show schemes in the navigation bar" do
+          visit("/logs")
+          expect(page).not_to have_link("Schemes", href: "/schemes")
+        end
+      end
+
+      context "when the user is a coordinator and the organisation holds housing stock" do
+        before do
+          organisation.update(holds_own_stock: true)
+        end
+
+        it "shows schemes in the navigation bar" do
+          visit("/logs")
+          expect(page).to have_link("Schemes", href: "/schemes")
+        end
+      end
     end
 
     context "when users are part of organisation" do
