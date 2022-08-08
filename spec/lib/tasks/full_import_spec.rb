@@ -20,38 +20,39 @@ describe "rake core:full_import", type: :task do
   end
 
   context "when starting a full import" do
+    let(:fixture_path) { "spec/fixtures/imports" }
+    let(:case_logs_service) { instance_double(Imports::CaseLogsImportService) }
+    let(:rent_period_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
+    let(:data_protection_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
+    let(:user_service) { instance_double(Imports::UserImportService) }
+    let(:location_service) { instance_double(Imports::SchemeLocationImportService) }
+    let(:scheme_service) { instance_double(Imports::SchemeImportService) }
+    let(:organisation_service) { instance_double(Imports::OrganisationImportService) }
+
+    before do
+      allow(Imports::OrganisationImportService).to receive(:new).and_return(organisation_service)
+      allow(Imports::SchemeImportService).to receive(:new).and_return(scheme_service)
+      allow(Imports::SchemeLocationImportService).to receive(:new).and_return(location_service)
+      allow(Imports::UserImportService).to receive(:new).and_return(user_service)
+      allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(data_protection_service)
+      allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(rent_period_service)
+      allow(Imports::CaseLogsImportService).to receive(:new).and_return(case_logs_service)
+    end
+
     it "raises an exception if no parameters are provided" do
       expect { task.invoke }.to raise_error(/Usage/)
     end
 
     context "with all folders being present"
-      let(:organisation_service) { instance_double(Imports::OrganisationImportService) }
-      let(:scheme_service) { instance_double(Imports::SchemeImportService) }
-      let(:location_service) { instance_double(Imports::SchemeLocationImportService) }
-      let(:user_service) { instance_double(Imports::UserImportService) }
-      let(:data_protection_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
-      let(:rent_period_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
-      let(:case_logs_service) { instance_double(Imports::CaseLogsImportService) }
-      let(:fixture_path) { "spec/fixtures/imports" }
-
-    before do
-        allow(Imports::OrganisationImportService).to receive(:new).and_return(organisation_service)
-        allow(Imports::SchemeImportService).to receive(:new).and_return(scheme_service)
-        allow(Imports::SchemeLocationImportService).to receive(:new).and_return(location_service)
-        allow(Imports::UserImportService).to receive(:new).and_return(user_service)
-        allow(Imports::DataProtectionConfirmationImportService).to receive(:new).and_return(data_protection_service)
-        allow(Imports::OrganisationRentPeriodImportService).to receive(:new).and_return(rent_period_service)
-        allow(Imports::CaseLogsImportService).to receive(:new).and_return(case_logs_service)
-    end
 
     it "calls every import method" do
-      expect(organisation_service).to receive(:create_organisations).with(fixture_path)
-      expect(scheme_service).to receive(:create_schemes).with(fixture_path)
-      expect(location_service).to receive(:create_scheme_locations).with(fixture_path)
-      expect(user_service).to receive(:create_users).with(fixture_path)
-      expect(data_protection_service).to receive(:create_data_protection_confirmations).with(fixture_path)
-      expect(rent_period_service).to receive(:create_organisation_rent_periods).with(fixture_path)
-      expect(case_logs_service).to receive(:create_logs).with(fixture_path)
+      expect(organisation_service).to receive(:create_organisations).with("#{fixture_path}/institution/")
+      expect(scheme_service).to receive(:create_schemes).with("#{fixture_path}/mgmtgroups/")
+      expect(location_service).to receive(:create_scheme_locations).with("#{fixture_path}/schemes/")
+      expect(user_service).to receive(:create_users).with("#{fixture_path}/user/")
+      expect(data_protection_service).to receive(:create_data_protection_confirmations).with("#{fixture_path}/dataprotect/")
+      expect(rent_period_service).to receive(:create_organisation_rent_periods).with("#{fixture_path}/rent-period/")
+      expect(case_logs_service).to receive(:create_logs).with("#{fixture_path}/logs/")
 
       task.invoke(fixture_path)
     end
