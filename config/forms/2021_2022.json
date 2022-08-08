@@ -779,8 +779,17 @@
               "informative_text": {},
               "questions": {
                 "void_date_value_check": {
-                  "check_answer_label": "Void date soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Void date confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "void_date_value_check": 0
+                      },
+                      {
+                        "void_date_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure the time between these dates is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -899,8 +908,17 @@
               "informative_text": {},
               "questions": {
                 "major_repairs_date_value_check": {
-                  "check_answer_label": "Major repairs soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Major repairs date confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "major_repairs_date_value_check": 0
+                      },
+                      {
+                        "major_repairs_date_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure the time between these dates is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -1768,8 +1786,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -1814,8 +1841,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2262,8 +2298,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2308,8 +2353,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2753,8 +2807,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2799,8 +2862,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3241,8 +3313,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3287,8 +3368,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3726,8 +3816,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3772,8 +3871,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4208,8 +4316,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4254,8 +4371,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4687,8 +4813,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4733,8 +4868,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -5163,8 +5307,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -5209,8 +5362,17 @@
               },
               "questions": {
                 "retirement_value_check": {
-                  "check_answer_label": "Retirement age soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Retirement confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "retirement_value_check": 0
+                      },
+                      {
+                        "retirement_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -5427,8 +5589,16 @@
               },
               "questions": {
                 "pregnancy_value_check": {
-                  "check_answer_label": "Pregnancy soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Pregnancy confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [{
+                        "pregnancy_value_check": 0
+                      },
+                      {
+                        "pregnancy_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -6921,8 +7091,17 @@
               },
               "questions": {
                 "net_income_value_check": {
-                  "check_answer_label": "Net income soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Net income confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "net_income_value_check": 0
+                      },
+                      {
+                        "net_income_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -7825,8 +8004,17 @@
               },
               "questions": {
                 "rent_value_check": {
-                  "check_answer_label": "Rent soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Total rent confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "rent_value_check": 0
+                      },
+                      {
+                        "rent_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -7869,8 +8057,17 @@
               },
               "questions": {
                 "rent_value_check": {
-                  "check_answer_label": "Rent soft validation",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Total rent confirmation",
+                  "hidden_in_check_answers": {
+                    "depends_on": [
+                      {
+                        "rent_value_check": 0
+                      },
+                      {
+                        "rent_value_check": 1
+                      }
+                    ]
+                  },
                   "header": "Are you sure this is correct?",
                   "type": "interruption_screen",
                   "answer_options": {
