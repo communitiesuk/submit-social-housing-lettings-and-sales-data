@@ -73,8 +73,8 @@ describe "rake core:full_import", type: :task do
         expect(rent_period_service).to receive(:create_organisation_rent_periods)
         expect(case_logs_service).to receive(:create_logs)
 
-        expect(scheme_service).to_not receive(:create_schemes)
-        expect(location_service).to_not receive(:create_scheme_locations)
+        expect(scheme_service).not_to receive(:create_schemes)
+        expect(location_service).not_to receive(:create_scheme_locations)
         expect(Rails.logger).to receive(:info).with("spec/fixtures/imports/mgmtgroups/ does not exist, skipping Imports::SchemeImportService")
         expect(Rails.logger).to receive(:info).with("spec/fixtures/imports/schemes/ does not exist, skipping Imports::SchemeLocationImportService")
 
