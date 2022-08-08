@@ -62,6 +62,14 @@ module Validations::SoftValidations
     end
   end
 
+  def major_repairs_date_in_soft_range?
+    mrcdate.present? && startdate.present? && mrcdate.between?(startdate.to_date - 3650, startdate.to_date - 730)
+  end
+
+  def voiddate_date_in_soft_range?
+    voiddate.present? && startdate.present? && voiddate.between?(startdate.to_date - 3650, startdate.to_date - 730)
+  end
+
 private
 
   def details_known_or_lead_tenant?(tenant_number)
