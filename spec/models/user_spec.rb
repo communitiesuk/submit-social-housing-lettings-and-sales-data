@@ -225,4 +225,48 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "validate" do
+    context "when a user does not have values for required fields" do
+      let(:user) { described_class.new }
+
+      before do
+        user.validate
+      end
+
+      it "validates name, email and organisation presence in the correct order" do
+        expect(user.errors.map(&:attribute).uniq).to eq(%i[name email password organisation_id])
+      end
+    end
+
+    context "when a too short password is entered" do
+      let(:password) { "123" }
+      let(:error_message) { "Validation failed: Password #{I18n.t('errors.messages.too_short', count: 8)}" }
+
+      it "validates password length" do
+        expect { FactoryBot.create(:user, password:) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+
+    context "when an invalid email is entered" do
+      let(:invalid_email) { "not_an_email" }
+      let(:error_message) { "Validation failed: Email #{I18n.t('activerecord.errors.models.user.attributes.email.invalid')}" }
+
+      it "validates email format" do
+        expect { FactoryBot.create(:user, email: invalid_email) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+
+    context "when the email entered has already been used" do
+      let(:user) { FactoryBot.create(:user) }
+      let(:error_message) { "Validation failed: Email #{I18n.t('activerecord.errors.models.user.attributes.email.taken')}" }
+
+      it "validates email uniqueness" do
+        expect { FactoryBot.create(:user, email: user.email) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+  end
 end
