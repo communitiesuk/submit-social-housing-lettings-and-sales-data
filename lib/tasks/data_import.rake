@@ -1,5 +1,5 @@
 namespace :core do
-  desc "Import data XMLs from Softwire system"
+  desc "Import data XMLs from legacy CORE"
   task :data_import, %i[type path] => :environment do |_task, args|
     type = args[:type]
     path = args[:path]
