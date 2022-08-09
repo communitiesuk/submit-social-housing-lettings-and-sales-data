@@ -50,9 +50,11 @@ RSpec.describe ArchiveStorageService do
     end
 
     it "raises an error if the file exists but is too large" do
-      allow(archive_service.archive)
-      content = archive_service.get_file_io(compressed_filepath)
-      expect(content.read).to eq(compressed_file.read)
+      archive = archive_service.instance_variable_get(:@archive)
+      allow(archive).to receive(:get_entry).and_return(Zip::Entry.new(nil, "", nil, nil, nil, nil, nil, 100_000_000, nil))
+
+      expect { archive_service.get_file_io(compressed_filepath) }
+        .to raise_error(RuntimeError, "File too large to be extracted")
     end
 
     it "raises an error of a file does not exist" do
