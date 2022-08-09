@@ -7876,6 +7876,14 @@
                 {
                   "hb": 6,
                   "household_charge": null
+                },
+                {
+                  "hb": 8,
+                  "household_charge": 0
+                },
+                {
+                  "hb": 8,
+                  "household_charge": null
                 }
               ]
             },
@@ -7955,6 +7963,14 @@
                 },
                 {
                   "hb": 6,
+                  "hbrentshortfall": 1
+                },
+                {
+                  "hb": 7,
+                  "hbrentshortfall": 1
+                },
+                {
+                  "hb": 8,
                   "hbrentshortfall": 1
                 }
               ]
