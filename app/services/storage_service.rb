@@ -13,6 +13,11 @@ class StorageService
            .flat_map { |response| response.contents.map(&:key) }
   end
 
+  def folder_present?(folder)
+    response = @client.list_objects_v2(bucket: @configuration.bucket_name, prefix: folder, max_keys: 1)
+    response.key_count == 1
+  end
+
   def get_file_io(file_name)
     @client.get_object(bucket: @configuration.bucket_name, key: file_name)
            .body
