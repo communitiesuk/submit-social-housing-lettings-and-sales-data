@@ -8,7 +8,7 @@ RSpec.describe Imports::CaseLogsImportService do
 
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
   let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
-  let(:fixture_directory) { "spec/fixtures/imports/case_logs" }
+  let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
   let(:scheme1) { FactoryBot.create(:scheme, old_visible_id: 123, owning_organisation: organisation) }

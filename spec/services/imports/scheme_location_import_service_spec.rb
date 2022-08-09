@@ -6,7 +6,7 @@ RSpec.describe Imports::SchemeLocationImportService do
   let(:storage_service) { instance_double(StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:fixture_directory) { "spec/fixtures/imports/scheme_locations" }
+  let(:fixture_directory) { "spec/fixtures/imports/schemes" }
   let(:first_location_id) { "0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e" }
   let(:second_location_id) { "0bb3836b70b4dd9903263d5a764a5c45b964a89d" }
 
