@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Imports::OrganisationImportService do
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(Rails::Rack::Logger) }
   let(:folder_name) { "organisations" }
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }

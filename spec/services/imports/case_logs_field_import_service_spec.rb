@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Imports::CaseLogsFieldImportService do
   subject(:import_service) { described_class.new(storage_service, logger) }
 
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }

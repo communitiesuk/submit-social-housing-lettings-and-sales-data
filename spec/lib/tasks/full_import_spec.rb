@@ -5,7 +5,7 @@ describe "rake core:full_import", type: :task do
   subject(:task) { Rake::Task["core:full_import"] }
 
   let(:instance_name) { "paas_import_instance" }
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:paas_config_service) { instance_double(PaasConfigurationService) }
 
   before do
@@ -13,13 +13,13 @@ describe "rake core:full_import", type: :task do
     Rake::Task.define_task(:environment)
     task.reenable
 
-    allow(StorageService).to receive(:new).and_return(storage_service)
+    allow(S3StorageService).to receive(:new).and_return(storage_service)
     allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
 
-  context "when starting a full import" do
+  context "when starting a full import with mocked services" do
     let(:fixture_path) { "spec/fixtures/imports" }
     let(:case_logs_service) { instance_double(Imports::CaseLogsImportService) }
     let(:rent_period_service) { instance_double(Imports::OrganisationRentPeriodImportService) }

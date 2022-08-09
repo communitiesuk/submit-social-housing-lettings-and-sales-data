@@ -4,7 +4,7 @@ namespace :core do
     format = args[:format]
     full_update = args[:full_update].present? && args[:full_update] == "true"
 
-    storage_service = StorageService.new(PaasConfigurationService.new, ENV["EXPORT_PAAS_INSTANCE"])
+    storage_service = S3StorageService.new(PaasConfigurationService.new, ENV["EXPORT_PAAS_INSTANCE"])
     export_service = Exports::CaseLogExportService.new(storage_service)
 
     if format.present? && format == "CSV"

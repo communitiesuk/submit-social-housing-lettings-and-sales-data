@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Imports::SchemeLocationImportService do
   subject(:location_service) { described_class.new(storage_service, logger) }
 
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
   let(:fixture_directory) { "spec/fixtures/imports/schemes" }
