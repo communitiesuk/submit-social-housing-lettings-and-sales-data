@@ -38,4 +38,19 @@ RSpec.describe "Checkboxes" do
       expect(case_log["housingneeds_h"]).to eq(1)
     end
   end
+
+  context "when a checkbox question is submitted with invalid answers" do
+
+    before do
+      allow(case_log).to receive(:update).and_return(false)
+    end
+
+    it "shows an error summary", js:true do
+      visit("/logs/#{id}/accessibility-requirements")
+      page.check("case-log-accessibility-requirements-housingneeds-a-field", allow_label_click: true)
+      page.check("case-log-accessibility-requirements-housingneeds-c-field", allow_label_click: true)
+      click_button("Save and continue")
+      expect(page).to have_title("Error")
+    end
+  end
 end

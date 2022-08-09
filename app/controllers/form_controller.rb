@@ -73,7 +73,7 @@ private
     end
     if session["fields"]
       session["fields"].each do |field, value|
-        unless @case_log.form.get_question(field, @case_log).type == "date"
+        unless @case_log.form.get_question(field, @case_log)&.type == "date"
           @case_log[field] = value
         end
       end
