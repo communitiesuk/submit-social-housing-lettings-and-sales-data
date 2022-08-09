@@ -7876,28 +7876,18 @@
                 {
                   "hb": 6,
                   "household_charge": null
-                },
-                {
-                  "hb": 8,
-                  "household_charge": 0
-                },
-                {
-                  "hb": 8,
-                  "household_charge": null
                 }
               ]
             },
-            "outstanding_amount_known": {
+            "outstanding_amount": {
               "header": "",
               "description": "",
               "questions": {
                 "tshortfall_known": {
-                  "check_answer_label": "",
-                  "header": "",
-                  "hint_text": "",
-                  "hidden_in_check_answers": true,
+                  "check_answer_label": "Do you know the outstanding amount?",
+                  "header": "Can you estimate the outstanding amount?",
+                  "hint_text": "You only need to give an approximate figure.",
                   "type": "radio",
-                  "derived": true,
                   "answer_options": {
                     "0": {
                       "value": "Yes"
@@ -7905,19 +7895,14 @@
                     "1": {
                       "value": "No"
                     }
+                  },
+                  "conditional_for": {
+                    "tshortfall": [0]
                   }
-                }
-              },
-              "depends_on": [false]
-            },
-            "outstanding_amount": {
-              "header": "",
-              "description": "",
-              "questions": {
+                },
                 "tshortfall": {
                   "check_answer_label": "Estimated outstanding amount",
-                  "header": "What do you expect the outstanding amount to be?",
-                  "hint_text": "Give an estimated amount if you don’t know the exact figure.",
+                  "header": "Estimated outstanding amount",
                   "type": "numeric",
                   "min": 0,
                   "step": 0.01,
@@ -7970,14 +7955,6 @@
                 },
                 {
                   "hb": 6,
-                  "hbrentshortfall": 1
-                },
-                {
-                  "hb": 7,
-                  "hbrentshortfall": 1
-                },
-                {
-                  "hb": 8,
                   "hbrentshortfall": 1
                 }
               ]
