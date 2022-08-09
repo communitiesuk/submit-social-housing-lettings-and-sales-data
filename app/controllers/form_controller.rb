@@ -161,10 +161,11 @@ private
 
   def question_missing_response?(responses_for_page, question)
     if %w[checkbox validation_override].include?(question.type)
-      question.answer_options.keys.reject { |x| x.match(/divider/) }.all? do |option|
+      answered = question.answer_options.keys.reject { |x| x.match(/divider/) }.map do |option|
         session["fields"][option] = @case_log[option] = params["case_log"][question.id].include?(option) ? 1 : 0
         params["case_log"][question.id].exclude?(option)
       end
+      answered.all?
     else
       session["fields"][question.id] = @case_log[question.id] = responses_for_page[question.id]
       responses_for_page[question.id].nil? || responses_for_page[question.id].blank?

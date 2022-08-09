@@ -45,12 +45,21 @@ RSpec.describe "Checkboxes" do
       allow(case_log).to receive(:update).and_return(false)
     end
 
-    it "shows an error summary", js:true do
+    it "shows an error summary" do
       visit("/logs/#{id}/accessibility-requirements")
-      page.check("case-log-accessibility-requirements-housingneeds-a-field", allow_label_click: true)
-      page.check("case-log-accessibility-requirements-housingneeds-c-field", allow_label_click: true)
+      page.check("case-log-accessibility-requirements-housingneeds-a-field")
+      page.check("case-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
       expect(page).to have_title("Error")
+    end
+
+    it "persists the original selections" do
+      visit("/logs/#{id}/accessibility-requirements")
+      page.check("case-log-accessibility-requirements-housingneeds-a-field")
+      page.check("case-log-accessibility-requirements-housingneeds-c-field")
+      click_button("Save and continue")
+      expect(page).to have_checked_field("case-log-accessibility-requirements-housingneeds-a-field")
+      expect(page).to have_checked_field("case-log-accessibility-requirements-housingneeds-c-field")
     end
   end
 end
