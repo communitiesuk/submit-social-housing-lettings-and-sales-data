@@ -694,30 +694,6 @@ private
     end
   end
 
-  # def get_housingneeds
-  #   return 1 if has_housingneeds?
-  #   return 2 if no_housingneeds?
-  #   return 3 if unknown_housingneeds?
-  # end
-
-  # def has_housingneeds?
-  #   if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
-  #     1
-  #   end
-  # end
-
-  # def no_housingneeds?
-  #   if housingneeds_g == 1
-  #     1
-  #   end
-  # end
-
-  # def unknown_housingneeds?
-  #   if housingneeds_h == 1
-  #     1
-  #   end
-  # end
-
   def all_fields_completed?
     subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
     subsection_statuses == [:completed]
