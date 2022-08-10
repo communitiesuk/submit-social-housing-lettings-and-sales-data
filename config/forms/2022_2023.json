@@ -7783,7 +7783,7 @@
               "description": "",
               "questions": {
                 "hbrentshortfall": {
-                  "check_answer_label": "Outstanding amount for basic rent and charges",
+                  "check_answer_label": "Any outstanding amount for basic rent and charges",
                   "header": "After the household has received any housing-related benefits, will they still need to pay for rent and charges?",
                   "hint_text": "Also known as the ‘outstanding amount’.",
                   "type": "radio",
