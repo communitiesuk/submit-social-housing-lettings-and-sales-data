@@ -43,7 +43,6 @@ module DerivedVariables::CaseLogVariables
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge&.zero? ? 1 : 0
-    # self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
       self.homeless = 1
