@@ -139,10 +139,6 @@ RSpec.describe CaseLog do
       expect(validator).to receive(:validate_rsnvac)
     end
 
-    it "validates accessibility requirements" do
-      expect(validator).to receive(:validate_accessibility_requirements)
-    end
-
     it "validates referral" do
       expect(validator).to receive(:validate_referral)
     end
@@ -1440,34 +1436,6 @@ RSpec.describe CaseLog do
       end
     end
 
-    context "when the data provider is filling in household needs" do
-      let!(:case_log) do
-        described_class.create({
-          managing_organisation: owning_organisation,
-          owning_organisation:,
-          created_by: created_by_user,
-        })
-      end
-
-      it "correctly derives and saves housing neeeds as 1" do
-        case_log.update!(housingneeds_a: 1)
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["housingneeds"]).to eq(1)
-      end
-
-      it "correctly derives and saves housing neeeds as 2" do
-        case_log.update!(housingneeds_g: 1)
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["housingneeds"]).to eq(2)
-      end
-
-      it "correctly derives and saves housing neeeds as 3" do
-        case_log.update!(housingneeds_h: 1)
-        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds from case_logs where id=#{case_log.id}").to_a[0]
-        expect(record_from_db["housingneeds"]).to eq(3)
-      end
-    end
-
     context "when it is supported housing and a care home charge has been supplied" do
       let!(:case_log) do
         described_class.create({
@@ -1751,6 +1719,99 @@ RSpec.describe CaseLog do
           record_from_db = ActiveRecord::Base.connection.execute("SELECT voiddate from case_logs where id=#{supported_housing_case_log.id}").to_a[0]
           expect(record_from_db["voiddate"].to_i).to eq(supported_housing_case_log.startdate.to_i)
         end
+      end
+    end
+
+    context "when saving accessibility needs" do
+      it "derives housingneeds_h as true if 'Don't know' is selected for housingneeds" do
+        case_log.update!({ housingneeds: 3 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_g]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_h"]).to eq(1)
+        expect(case_log["housingneeds_h"]).to eq(1)
+      end
+
+      it "derives housingneeds_g as true if 'No' is selected for housingneeds" do
+        case_log.update!({ housingneeds: 2 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_g"]).to eq(1)
+        expect(case_log["housingneeds_g"]).to eq(1)
+      end
+
+      it "derives housingneeds_a as true if 'Fully wheelchair accessible' is selected for housingneeds_type" do
+        case_log.update!({ housingneeds: 1, housingneeds_type: 0 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_b housingneeds_c housingneeds_f housingneeds_g housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_a"]).to eq(1)
+        expect(case_log["housingneeds_a"]).to eq(1)
+      end
+
+      it "derives housingneeds_b as true if 'Wheelchair access to essential rooms' is selected for housingneeds_type" do
+        case_log.update!({ housingneeds: 1, housingneeds_type: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_c housingneeds_f housingneeds_g housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_b"]).to eq(1)
+        expect(case_log["housingneeds_b"]).to eq(1)
+      end
+
+      it "derives housingneeds_c if 'Level access housing' is selected for housingneeds_type" do
+        case_log.update!({ housingneeds: 1, housingneeds_type: 2 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_f housingneeds_g housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_c"]).to eq(1)
+        expect(case_log["housingneeds_c"]).to eq(1)
+      end
+
+      it "derives housingneeds_f if 'Yes' is selected for housingneeds_other" do
+        case_log.update!({ housingneeds: 1, housingneeds_other: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_g housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_f"]).to eq(1)
+        expect(case_log["housingneeds_f"]).to eq(1)
+      end
+
+      it "clears previously set housingneeds if 'No' is selected for housingneeds" do
+        case_log.update!({ housingneeds: 1, housingneeds_type: 2, housingneeds_other: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["housingneeds_c"]).to eq(1)
+        expect(case_log["housingneeds_c"]).to eq(1)
+        expect(record_from_db["housingneeds_f"]).to eq(1)
+        expect(case_log["housingneeds_f"]).to eq(1)
+
+        case_log.update!({ housingneeds: 2 })
+        record_from_db = ActiveRecord::Base.connection.execute("select housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f, housingneeds_g, housingneeds_h from case_logs where id=#{case_log.id}").to_a[0]
+        not_selected_housingneeds = %w[housingneeds_a housingneeds_b housingneeds_c housingneeds_f housingneeds_h]
+        not_selected_housingneeds.each do |housingneed|
+          expect(record_from_db[housingneed]).to eq(0)
+          expect(case_log[housingneed]).to eq(0)
+        end
+        expect(record_from_db["housingneeds_g"]).to eq(1)
+        expect(case_log["housingneeds_g"]).to eq(1)
       end
     end
   end

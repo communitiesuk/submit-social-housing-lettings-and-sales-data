@@ -25,6 +25,7 @@ class CaseLog < ApplicationRecord
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
   before_validation :process_previous_postcode_changes!, if: :ppostcode_full_changed?
+  before_validation :set_housingneeds_fields, if: :housingneeds_present?
   before_validation :reset_invalidated_dependent_fields!
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
@@ -693,29 +694,29 @@ private
     end
   end
 
-  def get_housingneeds
-    return 1 if has_housingneeds?
-    return 2 if no_housingneeds?
-    return 3 if unknown_housingneeds?
-  end
+  # def get_housingneeds
+  #   return 1 if has_housingneeds?
+  #   return 2 if no_housingneeds?
+  #   return 3 if unknown_housingneeds?
+  # end
 
-  def has_housingneeds?
-    if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
-      1
-    end
-  end
+  # def has_housingneeds?
+  #   if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
+  #     1
+  #   end
+  # end
 
-  def no_housingneeds?
-    if housingneeds_g == 1
-      1
-    end
-  end
+  # def no_housingneeds?
+  #   if housingneeds_g == 1
+  #     1
+  #   end
+  # end
 
-  def unknown_housingneeds?
-    if housingneeds_h == 1
-      1
-    end
-  end
+  # def unknown_housingneeds?
+  #   if housingneeds_h == 1
+  #     1
+  #   end
+  # end
 
   def all_fields_completed?
     subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
@@ -753,5 +754,58 @@ private
 
   def upcase_and_remove_whitespace(string)
     string.present? ? string.upcase.gsub(/\s+/, "") : string
+  end
+
+  def housingneeds_present?
+    housingneeds.present?
+  end
+
+  def fully_wheelchair_accessible?
+    housingneeds_type.present? && housingneeds_type.zero?
+  end
+
+  def essential_wheelchair_access?
+    housingneeds_type == 1
+  end
+
+  def level_access_housing?
+    housingneeds_type == 2
+  end
+
+  def other_housingneeds?
+    housingneeds_other == 1
+  end
+
+  def has_housingneeds?
+    housingneeds == 1
+  end
+
+  def no_housingneeds?
+    housingneeds == 2
+  end
+
+  def unknown_housingneeds?
+    housingneeds == 3
+  end
+
+  def set_housingneeds_fields
+    set_housingneeds_values_to_nil
+
+    self.housingneeds_a = 1 if fully_wheelchair_accessible?
+    self.housingneeds_b = 1 if essential_wheelchair_access?
+    self.housingneeds_c = 1 if level_access_housing?
+    self.housingneeds_f = 1 if other_housingneeds?
+    set_housingneeds_values_to_nil unless has_housingneeds?
+    self.housingneeds_g = 1 if no_housingneeds?
+    self.housingneeds_h = 1 if unknown_housingneeds?
+  end
+
+  def set_housingneeds_values_to_nil
+    self.housingneeds_a = 0
+    self.housingneeds_b = 0
+    self.housingneeds_c = 0
+    self.housingneeds_f = 0
+    self.housingneeds_g = 0
+    self.housingneeds_h = 0
   end
 end

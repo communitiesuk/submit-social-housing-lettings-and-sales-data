@@ -41,24 +41,24 @@ RSpec.describe "Checkboxes" do
 
   context "when a checkbox question is submitted with invalid answers" do
     before do
+      case_log.update(illness: 100)
       allow(case_log).to receive(:update).and_return(false)
     end
 
     it "shows an error summary" do
-      visit("/logs/#{id}/accessibility-requirements")
-      page.check("case-log-accessibility-requirements-housingneeds-a-field")
-      page.check("case-log-accessibility-requirements-housingneeds-c-field")
+      visit("/logs/#{id}/condition-effects")
+      page.check("case-log-condition-effects-illness-type-1-field")
+      page.check("case-log-condition-effects-illness-type-2-field")
       click_button("Save and continue")
       expect(page).to have_title("Error")
     end
 
     it "persists the original selections" do
-      visit("/logs/#{id}/accessibility-requirements")
-      page.check("case-log-accessibility-requirements-housingneeds-a-field")
-      page.check("case-log-accessibility-requirements-housingneeds-c-field")
+      visit("/logs/#{id}/condition-effects")
+      page.check("case-log-condition-effects-illness-type-1-field")
+      page.check("case-log-condition-effects-illness-type-2-field")
       click_button("Save and continue")
-      expect(page).to have_checked_field("case-log-accessibility-requirements-housingneeds-a-field")
-      expect(page).to have_checked_field("case-log-accessibility-requirements-housingneeds-c-field")
+      expect(page).to have_checked_field("case-log-condition-effects-illness-type-2-field")
     end
   end
 end

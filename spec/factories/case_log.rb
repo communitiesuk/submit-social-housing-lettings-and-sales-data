@@ -87,12 +87,9 @@ FactoryBot.define do
       chr { 1 }
       cap { 0 }
       reasonother { nil }
-      housingneeds_a { 1 }
-      housingneeds_b { 0 }
-      housingneeds_c { 0 }
-      housingneeds_f { 0 }
-      housingneeds_g { 0 }
-      housingneeds_h { 0 }
+      housingneeds { 1 }
+      housingneeds_type { 0 }
+      housingneeds_other { 0 }
       illness_type_1 { 0 }
       illness_type_2 { 1 }
       illness_type_3 { 0 }

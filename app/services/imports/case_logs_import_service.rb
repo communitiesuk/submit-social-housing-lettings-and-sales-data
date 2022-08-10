@@ -107,6 +107,13 @@ module Imports
       %w[a b c f g h].each do |letter|
         attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
       end
+      attributes["housingneeds"] = 1 if [attributes["housingneeds_a"], attributes["housingneeds_b"], attributes["housingneeds_c"], attributes["housingneeds_f"]].any? { |housingneed| housingneed == 1 }
+      attributes["housingneeds"] = 2 if attributes["housingneeds_g"] == 1
+      attributes["housingneeds"] = 3 if attributes["housingneeds_h"] == 1
+      attributes["housingneeds_type"] = 0 if attributes["housingneeds_a"] == 1
+      attributes["housingneeds_type"] = 1 if attributes["housingneeds_b"] == 1
+      attributes["housingneeds_type"] = 2 if attributes["housingneeds_c"] == 1
+      attributes["housingneeds_other"] = attributes["housingneeds_f"] == 1 ? 1 : 0
 
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
       (1..10).each do |index|
@@ -275,7 +282,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check  major_repairs_date_value_check void_date_value_check housingneeds_type housingneeds_other]
     end
 
     def check_status_completed(case_log, previous_status)
