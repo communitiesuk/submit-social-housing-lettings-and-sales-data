@@ -5720,7 +5720,7 @@
                     }
                   }
                 },
-                "housingneeds_type_other": {
+                "housingneeds_other": {
                   "header": "Do they have any other access needs?",
                   "hint_text": "",
                   "type": "radio",
