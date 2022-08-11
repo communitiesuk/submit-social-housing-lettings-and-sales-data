@@ -27,6 +27,22 @@ RSpec.describe Organisation, type: :model do
         .to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Provider type #{I18n.t('validations.organisation.provider_type_missing')}")
     end
 
+    context "with parent/child association" do
+      let(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC_Child") }
+
+      before do
+        FactoryBot.create(:organisation_relationship, child_organisation:, parent_organisation: organisation)
+      end
+
+      it "has correct child" do
+        expect(organisation.child_organisations.first).to eq(child_organisation)
+      end
+
+      it "has correct parent" do
+        expect(child_organisation.parent_organisations.first).to eq(organisation)
+      end
+    end
+
     context "with data protection confirmations" do
       before do
         FactoryBot.create(:data_protection_confirmation, organisation:, confirmed: false, created_at: Time.utc(2018, 0o6, 0o5, 10, 36, 49))
