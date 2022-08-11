@@ -2,11 +2,13 @@ Import = Struct.new("Import", :import_class, :import_method, :folder)
 
 namespace :core do
   desc "Import all data XMLs from legacy CORE"
-  task :full_import, %i[path] => :environment do |_task, args|
-    path = args[:path]
-    raise "Usage: rake core:full_import['path/to/main_folder']" if path.blank?
+  task :full_import, %i[archive_path] => :environment do |_task, args|
+    archive_path = args[:archive_path]
+    raise "Usage: rake core:full_import['path/to/archive']" if archive_path.blank?
 
-    storage_service = StorageService.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = S3StorageService.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    archive_io = s3_service.get_file_io(archive_path)
+    archive_service = ArchiveStorageService.new(archive_io)
 
     import_list = [
       Import.new(Imports::OrganisationImportService, :create_organisations, "institution"),
@@ -18,12 +20,11 @@ namespace :core do
       Import.new(Imports::CaseLogsImportService, :create_logs, "logs"),
     ]
 
-    import_list.each do |import|
-      folder_path = File.join(path, import.folder, "")
-      if storage_service.folder_present?(folder_path)
-        import.import_class.new(storage_service).send(import.import_method, folder_path)
+    import_list.each do |step|
+      if archive_service.folder_present?(step.folder)
+        step.import_class.new(archive_service).send(step.import_method, step.folder)
       else
-        Rails.logger.info("#{folder_path} does not exist, skipping #{import.import_class}")
+        Rails.logger.info("#{step.folder} does not exist, skipping #{step.import_class}")
       end
     end
   end

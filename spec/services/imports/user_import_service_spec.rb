@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Imports::UserImportService do
-  let(:fixture_directory) { "spec/fixtures/imports/users" }
+  let(:fixture_directory) { "spec/fixtures/imports/user" }
   let(:old_user_id) { "fc7625a02b24ae16162aa63ae7cb33feeec0c373" }
   let(:old_org_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
   let(:user_file) { File.open("#{fixture_directory}/#{old_user_id}.xml") }
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
   let(:notify_client) { instance_double(Notifications::Client) }
   let(:devise_notify_mailer) { DeviseNotifyMailer.new }

@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Imports::OrganisationImportService do
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(Rails::Rack::Logger) }
   let(:folder_name) { "organisations" }
   let(:filenames) { %w[my_folder/my_file1.xml my_folder/my_file2.xml] }
-  let(:fixture_directory) { "spec/fixtures/imports/organisations" }
+  let(:fixture_directory) { "spec/fixtures/imports/institution" }
 
   def create_organisation_file(fixture_directory, visible_id, name = nil)
     file = File.open("#{fixture_directory}/7c5bd5fb549c09a2c55d7cb90d7ba84927e64618.xml")

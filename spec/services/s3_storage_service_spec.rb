@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe StorageService do
+RSpec.describe S3StorageService do
   let(:instance_name) { "instance_1" }
   let(:bucket_name) { "bucket_1" }
   let(:vcap_services) do
