@@ -1,26 +1,36 @@
 require "rails_helper"
 require "rake"
+require "zip"
 
 describe "rake core:full_import", type: :task do
   subject(:task) { Rake::Task["core:full_import"] }
 
-  let(:instance_name) { "paas_import_instance" }
-  let(:storage_service) { instance_double(S3StorageService) }
+  let(:s3_service) { instance_double(S3StorageService) }
+  let(:archive_service) { instance_double(ArchiveStorageService) }
   let(:paas_config_service) { instance_double(PaasConfigurationService) }
+
+  # let(:archive) {
+  #   zip_file = Zip::File.open_buffer(StringIO.new)
+  #   Dir["#{fixture_path}/**/*.xml"].each do |path|
+  #     fixture_pathname = Pathname.new(fixture_path)
+  #     relative_pathname = Pathname(path).relative_path_from(fixture_pathname).to_s
+  #     zip_file.add(relative_pathname, File.open(path))
+  #   end
+  #   zip_file.write_buffer
+  # }
 
   before do
     Rake.application.rake_require("tasks/full_import")
     Rake::Task.define_task(:environment)
     task.reenable
 
-    allow(S3StorageService).to receive(:new).and_return(storage_service)
     allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
-    allow(ENV).to receive(:[])
-    allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
+    allow(S3StorageService).to receive(:new).and_return(s3_service)
+    allow(s3_service).to receive(:get_file_io)
+    allow(ArchiveStorageService).to receive(:new).and_return(archive_service)
   end
 
-  context "when starting a full import with mocked services" do
-    let(:fixture_path) { "spec/fixtures/imports" }
+  context "when starting a full import" do
     let(:case_logs_service) { instance_double(Imports::CaseLogsImportService) }
     let(:rent_period_service) { instance_double(Imports::OrganisationRentPeriodImportService) }
     let(:data_protection_service) { instance_double(Imports::DataProtectionConfirmationImportService) }
@@ -44,16 +54,16 @@ describe "rake core:full_import", type: :task do
     end
 
     context "with all folders being present" do
-      before { allow(storage_service).to receive(:folder_present?).and_return(true) }
+      before { allow(archive_service).to receive(:folder_present?).and_return(true) }
 
       it "calls every import method with the correct folder" do
-        expect(organisation_service).to receive(:create_organisations).with("#{fixture_path}/institution/")
-        expect(scheme_service).to receive(:create_schemes).with("#{fixture_path}/mgmtgroups/")
-        expect(location_service).to receive(:create_scheme_locations).with("#{fixture_path}/schemes/")
-        expect(user_service).to receive(:create_users).with("#{fixture_path}/user/")
-        expect(data_protection_service).to receive(:create_data_protection_confirmations).with("#{fixture_path}/dataprotect/")
-        expect(rent_period_service).to receive(:create_organisation_rent_periods).with("#{fixture_path}/rent-period/")
-        expect(case_logs_service).to receive(:create_logs).with("#{fixture_path}/logs/")
+        expect(organisation_service).to receive(:create_organisations).with("institution")
+        expect(scheme_service).to receive(:create_schemes).with("mgmtgroups")
+        expect(location_service).to receive(:create_scheme_locations).with("schemes")
+        expect(user_service).to receive(:create_users).with("user")
+        expect(data_protection_service).to receive(:create_data_protection_confirmations).with("dataprotect")
+        expect(rent_period_service).to receive(:create_organisation_rent_periods).with("rent-period")
+        expect(case_logs_service).to receive(:create_logs).with("logs")
 
         task.invoke(fixture_path)
       end
@@ -61,9 +71,9 @@ describe "rake core:full_import", type: :task do
 
     context "when a specific folders are missing" do
       before do
-        allow(storage_service).to receive(:folder_present?).and_return(true)
-        allow(storage_service).to receive(:folder_present?).with("#{fixture_path}/mgmtgroups/").and_return(false)
-        allow(storage_service).to receive(:folder_present?).with("#{fixture_path}/schemes/").and_return(false)
+        allow(archive_service).to receive(:folder_present?).and_return(true)
+        allow(archive_service).to receive(:folder_present?).with("mgmtgroups").and_return(false)
+        allow(archive_service).to receive(:folder_present?).with("schemes").and_return(false)
       end
 
       it "only calls import methods for existing folders" do
@@ -75,11 +85,13 @@ describe "rake core:full_import", type: :task do
 
         expect(scheme_service).not_to receive(:create_schemes)
         expect(location_service).not_to receive(:create_scheme_locations)
-        expect(Rails.logger).to receive(:info).with("spec/fixtures/imports/mgmtgroups/ does not exist, skipping Imports::SchemeImportService")
-        expect(Rails.logger).to receive(:info).with("spec/fixtures/imports/schemes/ does not exist, skipping Imports::SchemeLocationImportService")
+        expect(Rails.logger).to receive(:info).with("mgmtgroups does not exist, skipping Imports::SchemeImportService")
+        expect(Rails.logger).to receive(:info).with("schemes does not exist, skipping Imports::SchemeLocationImportService")
 
         task.invoke(fixture_path)
       end
     end
   end
+
+
 end
