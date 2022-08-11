@@ -57,7 +57,7 @@ RSpec.describe ArchiveStorageService do
         .to raise_error(RuntimeError, "File too large to be extracted")
     end
 
-    it "raises an error of a file does not exist" do
+    it "raises an error if a file does not exist" do
       expect { archive_service.get_file_io("random.zzz") }
         .to raise_error(Errno::ENOENT)
     end
