@@ -9,16 +9,6 @@ describe "rake core:full_import", type: :task do
   let(:archive_service) { instance_double(ArchiveStorageService) }
   let(:paas_config_service) { instance_double(PaasConfigurationService) }
 
-  # let(:archive) {
-  #   zip_file = Zip::File.open_buffer(StringIO.new)
-  #   Dir["#{fixture_path}/**/*.xml"].each do |path|
-  #     fixture_pathname = Pathname.new(fixture_path)
-  #     relative_pathname = Pathname(path).relative_path_from(fixture_pathname).to_s
-  #     zip_file.add(relative_pathname, File.open(path))
-  #   end
-  #   zip_file.write_buffer
-  # }
-
   before do
     Rake.application.rake_require("tasks/full_import")
     Rake::Task.define_task(:environment)
@@ -92,6 +82,4 @@ describe "rake core:full_import", type: :task do
       end
     end
   end
-
-
 end
