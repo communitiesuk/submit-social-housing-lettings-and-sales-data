@@ -28,7 +28,7 @@ RSpec.describe Organisation, type: :model do
     end
 
     context "with parent/child association" do
-      let(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC_Child") }
+      let(:child_organisation) { FactoryBot.create(:organisation, name: "DLUHC Child") }
 
       before do
         FactoryBot.create(:organisation_relationship, child_organisation:, parent_organisation: organisation)
