@@ -12,7 +12,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-<%= render partial: "organisations/headings", locals: { main: "Location name for #{@location.postcode}", sub: @scheme.service_name } %>
+      <%= render partial: "organisations/headings", locals: { main: "Location name for #{@location.postcode}", sub: @scheme.service_name } %>
 
       <%= f.govuk_text_field :name,
                              label: { hidden: true },
