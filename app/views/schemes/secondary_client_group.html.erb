@@ -12,7 +12,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-<%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
+      <%= render partial: "organisations/headings", locals: { main: "What is the other client group?", sub: @scheme.service_name } %>
 
       <% secondary_client_group_selection = Scheme.secondary_client_groups.keys.excluding("Missing", @scheme.primary_client_group).map { |key, _| OpenStruct.new(id: key, name: key) } %>
 
