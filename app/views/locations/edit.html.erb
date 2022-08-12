@@ -3,16 +3,20 @@
 <% content_for :before_content do %>
   <%= govuk_back_link(
     text: "Back",
-    href: "/schemes/#{@scheme.id}/support",
+    href: scheme_check_answers_path(@scheme, anchor: "locations"),
   ) %>
 <% end %>
 
+
 <%= form_for(@location, method: :patch, url: location_path) do |f| %>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-<%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
+
+      <%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
+
 
       <%= f.govuk_text_field :postcode,
                              label: { size: "m" },
@@ -47,13 +51,6 @@
                               width: 20 %>
 
       <%= govuk_section_break(visible: true, size: "m") %>
-
-      <%= f.govuk_collection_radio_buttons :add_another_location,
-                                           another_location_selection,
-                                           :id,
-                                           :name,
-                                           inline: true,
-                                           legend: { text: I18n.t("questions.location.add_another_location"), size: "m" } %>
 
       <%= f.hidden_field :page, value: "edit" %>
 

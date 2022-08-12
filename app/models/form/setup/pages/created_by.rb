@@ -4,12 +4,11 @@ class Form::Setup::Pages::CreatedBy < ::Form::Page
     @id = "created_by"
     @header = ""
     @description = ""
-    @questions = questions
     @subsection = subsection
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::CreatedById.new(nil, nil, self),
     ]
   end

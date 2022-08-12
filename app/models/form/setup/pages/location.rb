@@ -3,7 +3,6 @@ class Form::Setup::Pages::Location < ::Form::Page
     super("location", hsh, subsection)
     @header = ""
     @description = ""
-    @questions = questions
     @depends_on = [{
       "supported_housing_schemes_enabled?" => true,
       "needstype" => 2,
@@ -12,7 +11,7 @@ class Form::Setup::Pages::Location < ::Form::Page
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::LocationId.new(nil, nil, self),
     ]
   end

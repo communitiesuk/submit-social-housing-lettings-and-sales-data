@@ -8,6 +8,7 @@ FactoryBot.define do
     location_code { "E09000033" }
     location_admin_district { "Westminster" }
     startdate { Faker::Date.between(from: 6.months.ago, to: Time.zone.today) }
+    confirmed { true }
     scheme
     trait :export do
       postcode { "SW1A 2AA" }

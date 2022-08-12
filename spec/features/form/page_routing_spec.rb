@@ -72,4 +72,76 @@ RSpec.describe "Form Page Routing" do
       expect(page).to have_current_path("/logs/#{id}/property-wheelchair-accessible")
     end
   end
+
+  context "when answer is invalid" do
+    it "shows error with invalid value in the field" do
+      visit("/logs/#{id}/property-postcode")
+      fill_in("case-log-postcode-full-field", with: "fake_postcode")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/property-postcode")
+      expect(find("#case-log-postcode-full-field-error").value).to eq("fake_postcode")
+    end
+
+    it "does not reset the displayed date" do
+      case_log.update!(startdate: "2021/10/13")
+      visit("/logs/#{id}/tenancy-start-date")
+      fill_in("case_log[startdate(1i)]", with: "202")
+      fill_in("case_log[startdate(2i)]", with: "32")
+      fill_in("case_log[startdate(3i)]", with: "0")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/tenancy-start-date")
+      expect(find_field("case_log[startdate(3i)]").value).to eq("13")
+      expect(find_field("case_log[startdate(2i)]").value).to eq("10")
+      expect(find_field("case_log[startdate(1i)]").value).to eq("2021")
+    end
+
+    it "does not reset the displayed date if it's empty" do
+      case_log.update!(startdate: nil)
+      visit("/logs/#{id}/tenancy-start-date")
+      fill_in("case_log[startdate(1i)]", with: "202")
+      fill_in("case_log[startdate(2i)]", with: "32")
+      fill_in("case_log[startdate(3i)]", with: "0")
+      click_button("Save and continue")
+
+      expect(page).to have_current_path("/logs/#{id}/tenancy-start-date")
+      expect(find_field("case_log[startdate(3i)]").value).to eq(nil)
+      expect(find_field("case_log[startdate(2i)]").value).to eq(nil)
+      expect(find_field("case_log[startdate(1i)]").value).to eq(nil)
+    end
+  end
+
+  context "when completing the setup section" do
+    context "with a supported housing log" do
+      let(:case_log) do
+        FactoryBot.create(
+          :case_log,
+          owning_organisation: user.organisation,
+          managing_organisation: user.organisation,
+          needstype: 2,
+        )
+      end
+
+      context "with a scheme with only 1 active location" do
+        let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+        let!(:active_location) { FactoryBot.create(:location, scheme:) }
+
+        before do
+          FactoryBot.create(:location, scheme:, startdate: Time.zone.today + 20.days)
+          visit("/logs/#{case_log.id}/scheme")
+          select(scheme.service_name, from: "case_log[scheme_id]")
+          click_button("Save and continue")
+        end
+
+        it "does not route to the scheme location question" do
+          expect(page).to have_current_path("/logs/#{case_log.id}/renewal")
+        end
+
+        it "infers the scheme location" do
+          expect(case_log.reload.location_id).to eq(active_location.id)
+        end
+      end
+    end
+  end
 end

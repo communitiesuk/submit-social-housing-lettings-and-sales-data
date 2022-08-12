@@ -37,14 +37,6 @@ RSpec.describe SchemesController, type: :request do
         get "/schemes"
       end
 
-      context "when params scheme_id is present" do
-        it "shows a success banner" do
-          get "/schemes", params: { scheme_id: schemes.first.id }
-          follow_redirect!
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        end
-      end
-
       it "redirects to the organisation schemes path" do
         follow_redirect!
         expect(path).to match("/organisations/#{user.organisation.id}/schemes")
@@ -91,13 +83,6 @@ RSpec.describe SchemesController, type: :request do
 
       it "shows the total organisations count" do
         expect(CGI.unescape_html(response.body)).to match("<strong>#{schemes.count}</strong> total schemes")
-      end
-
-      context "when params scheme_id is present" do
-        it "shows a success banner" do
-          get "/schemes", params: { scheme_id: schemes.first.id }
-          expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
-        end
       end
 
       context "when paginating over 20 results" do
@@ -250,6 +235,13 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context "when the requested scheme does not exist" do
+        it "returns not found" do
+          get "/schemes/#{Scheme.maximum(:id) + 1}"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -354,7 +346,7 @@ RSpec.describe SchemesController, type: :request do
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
       let(:params) do
-        { scheme: { service_name: "testy",
+        { scheme: { service_name: "  testy ",
                     sensitive: "1",
                     scheme_type: "Foyer",
                     registered_under_care_act: "No",
@@ -864,13 +856,24 @@ RSpec.describe SchemesController, type: :request do
           expect(scheme_to_update.reload.sensitive).to eq("Yes")
         end
       end
+
+      context "when the requested scheme does not exist" do
+        let(:scheme_to_update) { OpenStruct.new(id: Scheme.maximum(:id) + 1) }
+        let(:params) { {} }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     context "when signed in as a support" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let(:scheme_to_update) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
+      # let!(:location) { FactoryBot.create(:location, scheme: scheme_to_update) }
 
       before do
+        FactoryBot.create(:location, scheme: scheme_to_update)
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
         sign_in user
         patch "/schemes/#{scheme_to_update.id}", params:
@@ -921,6 +924,21 @@ RSpec.describe SchemesController, type: :request do
           it "updates a scheme with valid params" do
             follow_redirect!
             expect(scheme_to_update.reload.primary_client_group).to eq("Homeless families with support needs")
+          end
+        end
+
+        context "when saving a scheme" do
+          let(:params) { { scheme: { page: "check-answers", confirmed: "true" } } }
+
+          it "marks the scheme as confirmed" do
+            expect(scheme_to_update.reload.confirmed?).to eq(true)
+          end
+
+          it "marks all the scheme locations as confirmed" do
+            expect(scheme_to_update.locations.count > 0).to eq(true)
+            scheme_to_update.locations.each do |location|
+              expect(location.confirmed?).to eq(true)
+            end
           end
         end
       end
@@ -1159,7 +1177,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1186,7 +1204,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1197,6 +1215,21 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a primary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What client group is this scheme intended for?")
+      end
+
+      context "and the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/primary-client-group"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 3
+        end
       end
     end
   end
@@ -1225,7 +1258,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1252,7 +1285,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1263,6 +1296,21 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a confirm-secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Does this scheme provide for another client group?")
+      end
+
+      context "and the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/confirm-secondary-client-group"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 3
+        end
       end
     end
   end
@@ -1291,7 +1339,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1318,7 +1366,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil, primary_client_group: Scheme::PRIMARY_CLIENT_GROUP[:"Homeless families with support needs"]) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1329,6 +1377,26 @@ RSpec.describe SchemesController, type: :request do
       it "returns a template for a secondary-client-group" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("What is the other client group?")
+      end
+
+      context "and the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/secondary-client-group"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 3
+        end
+      end
+
+      it "does not show the primary client group as an option" do
+        expect(scheme.primary_client_group).not_to be_nil
+        expect(page).not_to have_content("Homeless families with support needs")
       end
     end
   end
@@ -1357,7 +1425,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1380,11 +1448,26 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context "and the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/support"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 2
+        end
+      end
     end
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -1489,7 +1572,7 @@ RSpec.describe SchemesController, type: :request do
 
     context "when signed in as a data coordinator" do
       let(:user) { FactoryBot.create(:user, :data_coordinator) }
-      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation, confirmed: nil) }
       let!(:another_scheme) { FactoryBot.create(:scheme) }
 
       before do
@@ -1512,11 +1595,26 @@ RSpec.describe SchemesController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+
+      context "and the scheme is confirmed" do
+        before do
+          scheme.update!(confirmed: true)
+          get "/schemes/#{scheme.id}/details"
+        end
+
+        it "redirects to a view scheme page" do
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(path).to match("/schemes/#{scheme.id}")
+          expect(page).to have_content(scheme.service_name)
+          assert_select "a", text: /Change/, count: 2
+        end
+      end
     end
 
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:scheme) { FactoryBot.create(:scheme) }
+      let!(:scheme) { FactoryBot.create(:scheme, confirmed: nil) }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)

@@ -39,6 +39,28 @@ RSpec.describe "User Features" do
         click_link("About your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
       end
+
+      context "when the user is a coordinator and the organisation does not hold housing stock" do
+        before do
+          organisation.update(holds_own_stock: false)
+        end
+
+        it "does not show schemes in the navigation bar" do
+          visit("/logs")
+          expect(page).not_to have_link("Schemes", href: "/schemes")
+        end
+      end
+
+      context "when the user is a coordinator and the organisation holds housing stock" do
+        before do
+          organisation.update(holds_own_stock: true)
+        end
+
+        it "shows schemes in the navigation bar" do
+          visit("/logs")
+          expect(page).to have_link("Schemes", href: "/schemes")
+        end
+      end
     end
 
     context "when users are part of organisation" do
@@ -215,6 +237,39 @@ RSpec.describe "User Features" do
 
               it "has only specific organisation name in the dropdown" do
                 expect(page).to have_select("user-organisation-id-field", options: [org_name])
+              end
+            end
+          end
+
+          describe "delete cascade" do
+            context "when the organisation is deleted" do
+              let!(:organisation) { FactoryBot.create(:organisation) }
+              let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+              let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+              let!(:log_to_delete) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+
+              context "when organisation is deleted" do
+                it "child relationships ie logs, schemes and users are deleted too - application" do
+                  organisation.destroy!
+                  expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+                  expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                  expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                  expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                end
+
+                context "when the organisation is deleted" do
+                  let!(:organisation) { FactoryBot.create(:organisation) }
+                  let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+                  let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+                  let!(:log_to_delete) { FactoryBot.create(:case_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
+
+                  it "child relationships ie logs, schemes and users are deleted too - database" do
+                    ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
+                    expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                    expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                    expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                  end
+                end
               end
             end
           end

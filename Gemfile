@@ -56,6 +56,8 @@ gem "sentry-rails"
 gem "sentry-ruby"
 # Possessives in strings
 gem "possessive"
+# Strip whitespace from active record attributes
+gem "auto_strip_attributes"
 
 group :development, :test do
   # Check gems for known vulnerabilities

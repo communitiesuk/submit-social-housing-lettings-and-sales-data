@@ -48,12 +48,7 @@ class FormController < ApplicationController
     form.pages.map do |page|
       define_method(page.id) do |_errors = {}|
         if @case_log
-          if session["errors"]
-            JSON(session["errors"]).each do |field, messages|
-              messages.each { |message| @case_log.errors.add field.to_sym, message }
-            end
-          end
-          session["fields"].each { |field, value| @case_log[field] = value } if session["fields"]
+          restore_error_field_values
           @subsection = @case_log.form.subsection_for_page(page)
           @page = @case_log.form.get_page(page.id)
           if @page.routed_to?(@case_log, current_user)
@@ -70,6 +65,21 @@ class FormController < ApplicationController
 
 private
 
+  def restore_error_field_values
+    if session["errors"]
+      JSON(session["errors"]).each do |field, messages|
+        messages.each { |message| @case_log.errors.add field.to_sym, message }
+      end
+    end
+    if session["fields"]
+      session["fields"].each do |field, value|
+        unless @case_log.form.get_question(field, @case_log)&.type == "date"
+          @case_log[field] = value
+        end
+      end
+    end
+  end
+
   def responses_for_page(page)
     page.questions.each_with_object({}) do |question, result|
       question_params = params["case_log"][question.id]
@@ -79,7 +89,7 @@ private
         year = params["case_log"]["#{question.id}(1i)"]
         next unless [day, month, year].any?(&:present?)
 
-        result[question.id] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
+        result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.between?(2000, 2200)
                                 Date.new(year.to_i, month.to_i, day.to_i)
                               else
                                 Date.new(0, 1, 1)
@@ -151,10 +161,11 @@ private
 
   def question_missing_response?(responses_for_page, question)
     if %w[checkbox validation_override].include?(question.type)
-      question.answer_options.keys.reject { |x| x.match(/divider/) }.all? do |option|
+      answered = question.answer_options.keys.reject { |x| x.match(/divider/) }.map do |option|
         session["fields"][option] = @case_log[option] = params["case_log"][question.id].include?(option) ? 1 : 0
         params["case_log"][question.id].exclude?(option)
       end
+      answered.all?
     else
       session["fields"][question.id] = @case_log[question.id] = responses_for_page[question.id]
       responses_for_page[question.id].nil? || responses_for_page[question.id].blank?

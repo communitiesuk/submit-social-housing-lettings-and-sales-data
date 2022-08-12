@@ -269,7 +269,7 @@ RSpec.describe LocationsController, type: :request do
     context "when signed in as a support user" do
       let(:user) { FactoryBot.create(:user, :support) }
       let!(:scheme) { FactoryBot.create(:scheme) }
-      let(:params) { { location: { name: "Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
+      let(:params) { { location: { name: " Test", units: "5", type_of_unit: "Bungalow", add_another_location: "No", postcode: "ZZ1 1ZZ", mobility_type: "N" } } }
 
       before do
         allow(user).to receive(:need_two_factor_authentication?).and_return(false)
@@ -454,12 +454,20 @@ RSpec.describe LocationsController, type: :request do
         expect(page).to have_content("Add a location to this scheme")
       end
 
-      context "when trying to new location to a scheme that belongs to another organisation" do
+      context "when trying to edit a location that belongs to another organisation" do
         let(:another_scheme)  { FactoryBot.create(:scheme) }
         let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
 
         it "displays the new page with an error message" do
           get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
+
+        it "returns not found" do
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -633,6 +641,15 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content(I18n.t("validations.postcode"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.units.blank"))
           expect(page).to have_content(I18n.t("activerecord.errors.models.location.attributes.type_of_unit.blank"))
+        end
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
+        let(:params) { {} }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
@@ -1059,6 +1076,14 @@ RSpec.describe LocationsController, type: :request do
       it "returns a template for a new location" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Location name for #{location.postcode}")
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
   end

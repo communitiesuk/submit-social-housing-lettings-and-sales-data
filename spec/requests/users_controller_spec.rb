@@ -423,7 +423,7 @@ RSpec.describe UsersController, type: :request do
       context "when a search parameter is passed" do
         let!(:other_user_2) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
         let!(:other_user_3) { FactoryBot.create(:user, name: "User 5", organisation: user.organisation, email: "joe@example.com") }
-        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+        let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
 
         before do
           get "/organisations/#{user.organisation.id}/users?search=#{search_param}"
@@ -604,8 +604,6 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
-          expect(page).to have_field("user[is_dpo]")
-          expect(page).to have_field("user[is_key_contact]")
         end
 
         it "does not allow setting the role to `support`" do
@@ -632,8 +630,6 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
-            expect(page).to have_field("user[is_dpo]")
-            expect(page).to have_field("user[is_key_contact]")
           end
         end
 
@@ -792,19 +788,6 @@ RSpec.describe UsersController, type: :request do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.active }.from(true).to(false)
               end
-
-              context "when the user name is missing" do
-                let(:other_user) { FactoryBot.create(:user, name: nil, organisation: user.organisation) }
-
-                before do
-                  patch "/users/#{other_user.id}", headers:, params:
-                end
-
-                it "uses the user's email" do
-                  follow_redirect!
-                  expect(page).to have_content(other_user.email)
-                end
-              end
             end
 
             context "and tries to activate deactivated user" do
@@ -817,19 +800,6 @@ RSpec.describe UsersController, type: :request do
               it "marks user as active" do
                 expect { patch "/users/#{other_user.id}", headers:, params: }
                   .to change { other_user.reload.active }.from(false).to(true)
-              end
-
-              context "when the user name is missing" do
-                let(:other_user) { FactoryBot.create(:user, name: nil, organisation: user.organisation) }
-
-                before do
-                  patch "/users/#{other_user.id}", headers:, params:
-                end
-
-                it "uses the user's email" do
-                  follow_redirect!
-                  expect(page).to have_content(other_user.email)
-                end
               end
             end
           end
@@ -871,7 +841,7 @@ RSpec.describe UsersController, type: :request do
       let(:params) do
         {
           "user": {
-            name: "new user",
+            name: "new user ",
             email: "new_user@example.com",
             role: "data_coordinator",
           },
@@ -880,7 +850,7 @@ RSpec.describe UsersController, type: :request do
 
       let(:personalisation) do
         {
-          name: params[:user][:name],
+          name: "new user",
           email: params[:user][:email],
           organisation: user.organisation.name,
           link: include("/account/confirmation?confirmation_token="),
@@ -899,6 +869,14 @@ RSpec.describe UsersController, type: :request do
       it "sends an invitation email" do
         expect(notify_client).to receive(:send_email).with(email_address: params[:user][:email], template_id: User::CONFIRMABLE_TEMPLATE_ID, personalisation:).once
         request
+      end
+
+      it "creates a new scheme for user organisation with valid params" do
+        request
+
+        expect(User.last.name).to eq("new user")
+        expect(User.last.email).to eq("new_user@example.com")
+        expect(User.last.role).to eq("data_coordinator")
       end
 
       it "redirects back to organisation users page" do
@@ -933,6 +911,25 @@ RSpec.describe UsersController, type: :request do
           request
           expect(response).to have_http_status(:unprocessable_entity)
           expect(page).to have_content(I18n.t("validations.role.invalid"))
+        end
+      end
+
+      context "when validating the required fields" do
+        let(:params) do
+          {
+            "user": {
+              name: "",
+              email: "",
+              role: "",
+            },
+          }
+        end
+
+        it "shows an error" do
+          request
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
         end
       end
     end
@@ -1011,7 +1008,7 @@ RSpec.describe UsersController, type: :request do
     describe "#index" do
       let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "User 2", email: "other@example.com") }
       let!(:inactive_user) { FactoryBot.create(:user, organisation: user.organisation, active: false, name: "User 3", email: "inactive@example.com") }
-      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "other_org@other_example.com") }
+      let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "otherorg@otherexample.com") }
 
       before do
         sign_in user
@@ -1078,7 +1075,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           context "when our search term matches an email" do
-            let(:search_param) { "other_org@other_example.com" }
+            let(:search_param) { "otherorg@otherexample.com" }
 
             it "returns only matching result" do
               expect(page).not_to have_content(user.name)
@@ -1090,7 +1087,7 @@ RSpec.describe UsersController, type: :request do
 
           context "when our search term matches an email and a name" do
             let!(:other_user) { FactoryBot.create(:user, organisation: user.organisation, name: "joe", email: "other@example.com") }
-            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@other_example.com") }
+            let!(:other_org_user) { FactoryBot.create(:user, name: "User 4", email: "joe@otherexample.com") }
             let(:search_param) { "joe" }
 
             it "returns any results including joe" do
@@ -1259,8 +1256,6 @@ RSpec.describe UsersController, type: :request do
           expect(page).to have_field("user[name]")
           expect(page).to have_field("user[email]")
           expect(page).to have_field("user[role]")
-          expect(page).to have_field("user[is_dpo]")
-          expect(page).to have_field("user[is_key_contact]")
         end
 
         it "allows setting the role to `support`" do
@@ -1287,8 +1282,6 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
-            expect(page).to have_field("user[is_dpo]")
-            expect(page).to have_field("user[is_key_contact]")
           end
         end
 
@@ -1307,8 +1300,6 @@ RSpec.describe UsersController, type: :request do
             expect(page).to have_field("user[name]")
             expect(page).to have_field("user[email]")
             expect(page).to have_field("user[role]")
-            expect(page).to have_field("user[is_dpo]")
-            expect(page).to have_field("user[is_key_contact]")
           end
         end
 
@@ -1587,6 +1578,31 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to("/users")
       end
 
+      context "when validations fail" do
+        let(:params) do
+          {
+            "user": {
+              name: "",
+              email: "",
+              role: "",
+              organisation_id: nil,
+            },
+          }
+        end
+
+        before do
+          FactoryBot.create(:user, email: "new_user@example.com")
+        end
+
+        it "shows an error messages for all failed validations" do
+          request
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.blank"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.organisation_id.blank"))
+        end
+      end
+
       context "when the email is already taken" do
         before do
           FactoryBot.create(:user, email: "new_user@example.com")
@@ -1595,7 +1611,7 @@ RSpec.describe UsersController, type: :request do
         it "shows an error" do
           request
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(page).to have_content(I18n.t("validations.email.taken"))
+          expect(page).to have_content(I18n.t("activerecord.errors.models.user.attributes.email.taken"))
         end
       end
 

@@ -195,8 +195,8 @@ RSpec.describe User, type: :model do
     let!(:user_1) { FactoryBot.create(:user, name: "Joe Bloggs", email: "joe@example.com", organisation: organisation_1, role: "support") }
     let!(:user_3) { FactoryBot.create(:user, name: "Tom Smith", email: "tom@example.com", organisation: organisation_1, role: "data_provider") }
     let!(:user_2) { FactoryBot.create(:user, name: "Jenny Ford", email: "jenny@smith.com", organisation: organisation_1, role: "data_coordinator") }
-    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org_2.com", organisation: organisation_2, role: "data_coordinator") }
-    let!(:user_5) { FactoryBot.create(:user, name: "Adam Thomas", email: "adam@org_2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_4) { FactoryBot.create(:user, name: "Greg Thomas", email: "greg@org2.com", organisation: organisation_2, role: "data_coordinator") }
+    let!(:user_5) { FactoryBot.create(:user, name: "Adam Thomas", email: "adam@org2.com", organisation: organisation_2, role: "data_coordinator") }
 
     context "when searching by name" do
       it "returns case insensitive matching records" do
@@ -222,6 +222,50 @@ RSpec.describe User, type: :model do
     context "when using sorted by organisation and role scope" do
       it "returns all users sorted by organisation name, then by role, then alphabetically by name" do
         expect(described_class.sorted_by_organisation_and_role.to_a).to eq([user_1, user_2, user_3, user_5, user_4])
+      end
+    end
+  end
+
+  describe "validate" do
+    context "when a user does not have values for required fields" do
+      let(:user) { described_class.new }
+
+      before do
+        user.validate
+      end
+
+      it "validates name, email and organisation presence in the correct order" do
+        expect(user.errors.map(&:attribute).uniq).to eq(%i[name email password organisation_id])
+      end
+    end
+
+    context "when a too short password is entered" do
+      let(:password) { "123" }
+      let(:error_message) { "Validation failed: Password #{I18n.t('errors.messages.too_short', count: 8)}" }
+
+      it "validates password length" do
+        expect { FactoryBot.create(:user, password:) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+
+    context "when an invalid email is entered" do
+      let(:invalid_email) { "not_an_email" }
+      let(:error_message) { "Validation failed: Email #{I18n.t('activerecord.errors.models.user.attributes.email.invalid')}" }
+
+      it "validates email format" do
+        expect { FactoryBot.create(:user, email: invalid_email) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+
+    context "when the email entered has already been used" do
+      let(:user) { FactoryBot.create(:user) }
+      let(:error_message) { "Validation failed: Email #{I18n.t('activerecord.errors.models.user.attributes.email.taken')}" }
+
+      it "validates email uniqueness" do
+        expect { FactoryBot.create(:user, email: user.email) }
+          .to raise_error(ActiveRecord::RecordInvalid, error_message)
       end
     end
   end

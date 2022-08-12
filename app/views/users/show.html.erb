@@ -81,7 +81,7 @@
             if can_edit_dpo?(@user, current_user)
               row.action(
                 visually_hidden_text: "if data protection officer",
-                href: aliased_user_edit(@user, current_user),
+                href: user_edit_dpo_path(@user),
                 html_attributes: { "data-qa": "change-data-protection-officer" },
               )
             else
@@ -95,7 +95,7 @@
             if can_edit_key_contact?(@user, current_user)
               row.action(
                 visually_hidden_text: "if a key contact",
-                href: aliased_user_edit(@user, current_user),
+                href: user_edit_key_contact_path(@user),
                 html_attributes: { "data-qa": "change-key-contact" },
               )
             else

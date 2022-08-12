@@ -48,11 +48,15 @@ Rails.application.routes.draw do
     member do
       resources :locations do
         get "edit-name", to: "locations#edit_name"
+        get "edit", to: "locations#edit"
       end
     end
   end
 
   resources :users do
+    get "edit-dpo", to: "users#dpo"
+    get "edit-key-contact", to: "users#key_contact"
+
     member do
       get "deactivate", to: "users#deactivate"
       get "reactivate", to: "users#reactivate"

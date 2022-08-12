@@ -4,12 +4,11 @@ class Form::Setup::Pages::Organisation < ::Form::Page
     @id = "organisation"
     @header = ""
     @description = ""
-    @questions = questions
     @subsection = subsection
   end
 
   def questions
-    [
+    @questions ||= [
       Form::Setup::Questions::OwningOrganisationId.new(nil, nil, self),
     ]
   end

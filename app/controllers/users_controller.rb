@@ -30,6 +30,10 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def dpo; end
+
+  def key_contact; end
+
   def edit
     redirect_to user_path(@user) unless @user.active?
   end
@@ -54,7 +58,7 @@ class UsersController < ApplicationController
       end
     elsif user_params.key?("password")
       format_error_messages
-      @minimum_password_length = User.password_length.min
+      @minimum_password_length = Devise.password_length.min
       render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }, status: :unprocessable_entity
     else
       format_error_messages
@@ -68,29 +72,21 @@ class UsersController < ApplicationController
   end
 
   def create
-    @resource = User.new
-    if user_params["email"].empty?
-      @resource.errors.add :email, I18n.t("validations.email.blank")
-    elsif !email_valid?(user_params["email"])
-      @resource.errors.add :email, I18n.t("validations.email.invalid")
-    elsif user_params[:role] && !current_user.assignable_roles.key?(user_params[:role].to_sym)
-      @resource.errors.add :role, I18n.t("validations.role.invalid")
-    end
-    if @resource.errors.present?
-      render :new, status: :unprocessable_entity
+    @resource = User.new(user_params.merge(org_params).merge(password_params))
+
+    validate_attributes
+    if @resource.errors.empty? && @resource.save
+      redirect_to created_user_redirect_path
     else
-      user = User.create(user_params.merge(org_params).merge(password_params))
-      if user.persisted?
-        redirect_to created_user_redirect_path
-      else
-        @resource.errors.add :email, I18n.t("validations.email.taken")
-        render :new, status: :unprocessable_entity
+      unless @resource.errors[:organisation].empty?
+        @resource.errors.delete(:organisation)
       end
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit_password
-    @minimum_password_length = User.password_length.min
+    @minimum_password_length = Devise.password_length.min
     render "devise/passwords/edit", locals: { resource: @user, resource_name: "user" }
   end
 
@@ -111,6 +107,13 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def validate_attributes
+    @resource.validate
+    if user_params[:role].present? && !current_user.assignable_roles.key?(user_params[:role].to_sym)
+      @resource.errors.add :role, I18n.t("validations.role.invalid")
+    end
+  end
 
   def format_error_messages
     errors = @user.errors.to_hash
@@ -161,7 +164,7 @@ private
   end
 
   def find_resource
-    @user = params[:id] ? User.find_by(id: params[:id]) : current_user
+    @user = User.find_by(id: params[:user_id]) || User.find_by(id: params[:id]) || current_user
   end
 
   def authenticate_scope!

@@ -1,16 +1,22 @@
 class Organisation < ApplicationRecord
-  has_many :users
-  has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id"
+  has_many :users, dependent: :delete_all
+  has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
   has_many :organisation_rent_periods
-  has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id"
+  has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :delete_all
   has_many :managed_schemes, class_name: "Scheme", foreign_key: "managing_organisation_id"
+  has_many :parent_organisation_relationships, foreign_key: :child_organisation_id, class_name: "OrganisationRelationship"
+  has_many :parent_organisations, through: :parent_organisation_relationships
+  has_many :child_organisation_relationships, foreign_key: :parent_organisation_id, class_name: "OrganisationRelationship"
+  has_many :child_organisations, through: :child_organisation_relationships
 
   scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
   scope :search_by, ->(param) { search_by_name(param) }
 
   has_paper_trail
+
+  auto_strip_attributes :name
 
   PROVIDER_TYPE = {
     LA: 1,
@@ -63,15 +69,16 @@ class Organisation < ApplicationRecord
 
   def display_attributes
     [
-      { name: "name", value: name, editable: true },
-      { name: "address", value: address_string, editable: true },
-      { name: "telephone_number", value: phone, editable: true },
-      { name: "type", value: display_provider_type, editable: false },
-      { name: "rent_periods", value: rent_period_labels, editable: false, format: :bullet },
+      { name: "Name", value: name, editable: true },
+      { name: "Address", value: address_string, editable: true },
+      { name: "Telephone_number", value: phone, editable: true },
+      { name: "Type of provider", value: display_provider_type, editable: false },
+      { name: "Registration number", value: housing_registration_no || "", editable: false },
+      { name: "Rent_periods", value: rent_period_labels, editable: false, format: :bullet },
       { name: "Owns housing stock", value: holds_own_stock ? "Yes" : "No", editable: false },
-      { name: "other_stock_owners", value: other_stock_owners, editable: false },
-      { name: "managing_agents", value: managing_agents, editable: false },
-      { name: "data_protection_agreement", value: data_protection_agreement_string, editable: false },
+      { name: "Other stock owners", value: other_stock_owners, editable: false },
+      { name: "Managing agents", value: managing_agents, editable: false },
+      { name: "Data protection agreement", value: data_protection_agreement_string, editable: false },
     ]
   end
 end

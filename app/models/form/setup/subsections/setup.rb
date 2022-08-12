@@ -3,12 +3,11 @@ class Form::Subsections::Setup < ::Form::Subsection
     super
     @id = "setup"
     @label = "Set up this lettings log"
-    @pages = [pages]
     @section = section
   end
 
   def pages
-    [
+    @pages ||= [
       Form::Setup::Pages::Organisation.new(nil, nil, self),
       Form::Setup::Pages::CreatedBy.new(nil, nil, self),
       Form::Setup::Pages::NeedsType.new(nil, nil, self),
@@ -24,6 +23,10 @@ class Form::Subsections::Setup < ::Form::Subsection
 
   def applicable_questions(case_log)
     questions.select { |q| support_only_questions.include?(q.id) } + super
+  end
+
+  def enabled?(_case_log)
+    true
   end
 
 private
