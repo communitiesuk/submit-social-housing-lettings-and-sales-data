@@ -7,16 +7,13 @@
   ) %>
 <% end %>
 
-
-<%= form_for(@location, method: :patch, url: location_path) do |f| %>
+<%= form_for(@location, method: :patch, url: location_path(location_id: @location.id)) do |f| %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-
       <%= render partial: "organisations/headings", locals: { main: "Add a location to this scheme", sub: @scheme.service_name } %>
-
 
       <%= f.govuk_text_field :postcode,
                              label: { size: "m" },
