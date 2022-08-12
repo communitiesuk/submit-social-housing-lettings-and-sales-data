@@ -27,6 +27,10 @@ class CaseLogsController < ApplicationController
     end
   end
 
+  def emailCsv
+    EmailCsvJob.perform_later()
+  end
+
   def create
     case_log = CaseLog.new(case_log_params)
     respond_to do |format|
