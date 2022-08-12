@@ -89,7 +89,7 @@ private
         year = params["case_log"]["#{question.id}(1i)"]
         next unless [day, month, year].any?(&:present?)
 
-        result[question.id] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200)
+        result[question.id] = if day.to_i.between?(1, 31) && month.to_i.between?(1, 12) && year.to_i.between?(2000, 2200) && Time.days_in_month(month.to_i, year.to_i) >= day.to_i
                                 Date.new(year.to_i, month.to_i, day.to_i)
                               else
                                 Date.new(0, 1, 1)
