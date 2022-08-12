@@ -22,13 +22,6 @@
       case_log: @case_log,
     } %>
 
-    <% subsection.applicable_questions(@case_log).group_by(&:check_answers_card_number).values.each do |question_group| %>
-      <%= render CheckAnswersSummaryListCardComponent.new(questions: question_group, case_log: @case_log, user: current_user) %>
-      <br>
-      <br>
-      <br>
-    <% end %>
-
     <%= form_with model: @case_log, method: "get" do |f| %>
       <%= f.govuk_submit "Save and return to log" do %>
         <% next_incomplete_section_redirect_path = @case_log.form.next_incomplete_section_redirect_path(subsection, @case_log) %>
