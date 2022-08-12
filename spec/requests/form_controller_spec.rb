@@ -255,6 +255,27 @@ RSpec.describe FormController, type: :request do
             expect(Rails.logger).to receive(:info).with("User triggered validation(s) on: age1").once
             post "/logs/#{case_log.id}/form", params: params
           end
+
+          context "when the number of days is too high for the month" do
+            let(:page_id) { "tenancy_start_date" }
+            let(:params) do
+              {
+                id: case_log.id,
+                case_log: {
+                  page: page_id,
+                  "startdate(3i)" => 31,
+                  "startdate(2i)" => 6,
+                  "startdate(1i)" => 2022,
+                },
+              }
+            end
+
+            it "validates the date correctly" do
+              post "/logs/#{case_log.id}/form", params: params
+              follow_redirect!
+              expect(page).to have_content("There is a problem")
+            end
+          end
         end
 
         context "with valid answers" do
