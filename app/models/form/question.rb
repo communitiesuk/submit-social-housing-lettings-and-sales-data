@@ -3,7 +3,7 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived, :check_answers_card_number
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
 
   module GuidancePosition
     TOP = 1
@@ -37,7 +37,6 @@ class Form::Question
       @suffix = hsh["suffix"]
       @requires_js = hsh["requires_js"]
       @fields_added = hsh["fields_added"]
-      @check_answers_card_number = hsh["check_answers_card_number"]
     end
   end
 
