@@ -3,14 +3,14 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-<% content_for :title, "Create a new supported housing scheme" %>
+      <% content_for :title, "Create a new supported housing scheme" %>
 
-<% content_for :before_content do %>
-  <%= govuk_back_link(
-        text: "Back",
-        href: "javascript:history.go(-1);",
-      ) %>
-<% end %>
+      <% content_for :before_content do %>
+        <%= govuk_back_link(
+              text: "Back",
+              href: "javascript:history.go(-1);",
+            ) %>
+      <% end %>
 
       <h1 class="govuk-heading-l">
         <%= content_for(:title) %>
