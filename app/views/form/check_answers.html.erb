@@ -17,6 +17,11 @@
     <% end %>
     <%= display_answered_questions_summary(subsection, @case_log, current_user) %>
 
+ <%= render partial: "form/check_answers_summary_list", locals: {
+      subsection:,
+      case_log: @case_log,
+    } %>
+
     <% subsection.applicable_questions(@case_log).group_by(&:check_answers_card_number).values.each do |question_group| %>
       <%= render CheckAnswersSummaryListCardComponent.new(questions: question_group, case_log: @case_log, user: current_user) %>
       <br>
