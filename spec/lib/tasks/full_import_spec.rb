@@ -64,6 +64,7 @@ describe "rake core:full_import", type: :task do
         allow(archive_service).to receive(:folder_present?).and_return(true)
         allow(archive_service).to receive(:folder_present?).with("mgmtgroups").and_return(false)
         allow(archive_service).to receive(:folder_present?).with("schemes").and_return(false)
+        allow(Rails.logger).to receive(:info)
       end
 
       it "only calls import methods for existing folders" do
