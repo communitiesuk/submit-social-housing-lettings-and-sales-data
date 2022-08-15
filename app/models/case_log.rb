@@ -765,18 +765,18 @@ private
   end
 
   def set_housingneeds_fields
-    set_housingneeds_values_to_nil
+    set_housingneeds_values_to_zero
 
     self.housingneeds_a = 1 if fully_wheelchair_accessible?
     self.housingneeds_b = 1 if essential_wheelchair_access?
     self.housingneeds_c = 1 if level_access_housing?
     self.housingneeds_f = 1 if other_housingneeds?
-    set_housingneeds_values_to_nil unless has_housingneeds?
+    set_housingneeds_values_to_zero unless has_housingneeds?
     self.housingneeds_g = 1 if no_housingneeds?
     self.housingneeds_h = 1 if unknown_housingneeds?
   end
 
-  def set_housingneeds_values_to_nil
+  def set_housingneeds_values_to_zero
     self.housingneeds_a = 0
     self.housingneeds_b = 0
     self.housingneeds_c = 0
