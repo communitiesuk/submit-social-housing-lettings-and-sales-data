@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe S3StorageService do
+RSpec.describe Storage::S3Service do
   let(:instance_name) { "instance_1" }
   let(:bucket_name) { "bucket_1" }
   let(:vcap_services) do
@@ -48,11 +48,11 @@ RSpec.describe S3StorageService do
     end
 
     it "creates a Storage Configuration" do
-      expect(storage_service.configuration).to be_an(StorageConfiguration)
+      expect(storage_service.configuration).to be_an(Storage::StorageConfiguration)
     end
 
     it "sets the expected parameters in the configuration" do
-      expected_configuration = StorageConfiguration.new(
+      expected_configuration = Storage::StorageConfiguration.new(
         {
           aws_access_key_id: "key_id",
           aws_region: "eu-west-2",

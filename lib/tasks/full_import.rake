@@ -6,9 +6,9 @@ namespace :core do
     archive_path = args[:archive_path]
     raise "Usage: rake core:full_import['path/to/archive']" if archive_path.blank?
 
-    s3_service = S3StorageService.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     archive_io = s3_service.get_file_io(archive_path)
-    archive_service = ArchiveStorageService.new(archive_io)
+    archive_service = Storage::ArchiveService.new(archive_io)
 
     import_list = [
       Import.new(Imports::OrganisationImportService, :create_organisations, "institution"),
