@@ -36,8 +36,8 @@ module Storage
   private
 
     def create_configuration
-      unless @config_service.config_present?
-        raise "No PaaS configuration present"
+      unless @config_service.s3_config_present?
+        raise "No S3 bucket is present in the PaaS configuration"
       end
       unless @config_service.s3_buckets.key?(@instance_name)
         raise "#{@instance_name} instance name could not be found"

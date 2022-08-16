@@ -6,7 +6,7 @@ describe "rake core:data_export", type: task do
 
   let(:paas_instance) { "paas_export_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:paas_config_service) { instance_double(PaasConfigurationService) }
+  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
   let(:export_service) { instance_double(Exports::CaseLogExportService) }
 
   before do
@@ -15,7 +15,7 @@ describe "rake core:data_export", type: task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(Exports::CaseLogExportService).to receive(:new).and_return(export_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("EXPORT_PAAS_INSTANCE").and_return(paas_instance)

@@ -6,7 +6,7 @@ describe "rake core:data_import", type: :task do
 
   let(:instance_name) { "paas_import_instance" }
   let(:storage_service) { instance_double(Storage::S3Service) }
-  let(:paas_config_service) { instance_double(PaasConfigurationService) }
+  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
   before do
     Rake.application.rake_require("tasks/data_import")
@@ -14,7 +14,7 @@ describe "rake core:data_import", type: :task do
     task.reenable
 
     allow(Storage::S3Service).to receive(:new).and_return(storage_service)
-    allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
