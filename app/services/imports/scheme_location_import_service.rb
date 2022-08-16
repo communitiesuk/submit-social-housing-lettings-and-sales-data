@@ -27,7 +27,7 @@ module Imports
     }.freeze
 
     def create_scheme(source_scheme, attributes)
-      Scheme.create!(
+      scheme = Scheme.new(
         scheme_type: attributes["scheme_type"],
         registered_under_care_act: attributes["registered_under_care_act"],
         support_type: attributes["support_type"],
@@ -36,7 +36,6 @@ module Imports
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
         end_date: attributes["end_date"],
-        confirmed: true,
         # These values were set by the scheme import (management groups)
         owning_organisation_id: source_scheme.owning_organisation_id,
         managing_organisation_id: source_scheme.managing_organisation_id,
@@ -45,10 +44,12 @@ module Imports
         old_id: source_scheme.old_id,
         old_visible_id: source_scheme.old_visible_id,
       )
+      confirm_scheme(scheme)
+      scheme.save! && scheme
     end
 
     def update_scheme(scheme, attributes)
-      scheme.update!(
+      scheme.attributes = {
         scheme_type: attributes["scheme_type"],
         registered_under_care_act: attributes["registered_under_care_act"],
         support_type: attributes["support_type"],
@@ -57,9 +58,18 @@ module Imports
         secondary_client_group: attributes["secondary_client_group"],
         sensitive: attributes["sensitive"],
         end_date: attributes["end_date"],
-        confirmed: true,
-      )
-      scheme
+      }
+      confirm_scheme(scheme)
+      scheme.save! && scheme
+    end
+
+    def confirm_scheme(scheme)
+      scheme.confirmed = true
+      scheme.validate_confirmed
+      unless scheme.errors.empty?
+        scheme.confirmed = false
+        scheme.errors.clear
+      end
     end
 
     def scheme_attributes(xml_doc)

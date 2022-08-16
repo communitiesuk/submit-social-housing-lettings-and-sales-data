@@ -157,6 +157,7 @@ RSpec.describe Imports::SchemeLocationImportService do
       expect(location.scheme.secondary_client_group).to be_nil
       expect(location.scheme.sensitive).to eq("No")
       expect(location.scheme.end_date).to eq("2050-12-31")
+      expect(location.scheme.confirmed).to be_truthy
     end
 
     context "and the end date is before the current date" do
@@ -181,6 +182,20 @@ RSpec.describe Imports::SchemeLocationImportService do
         expect(logger).to receive(:warn).with("Location is already present with legacy ID 0ae7ad6dc0f1cf7ef33c18cc8c108bebc1b4923e, skipping")
         expect { location_service.create_scheme_location(location_xml) }
           .not_to change(Location, :count)
+      end
+    end
+
+    context "and the registered under care act value is missing" do
+      before { location_xml.at_xpath("//scheme:reg-home-type").content = "0" }
+
+      it "sets the registered under care act to nil" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.registered_under_care_act).to be_nil
+      end
+
+      it "sets the confirmed status to false" do
+        location = location_service.create_scheme_location(location_xml)
+        expect(location.scheme.confirmed).to be_falsey
       end
     end
   end

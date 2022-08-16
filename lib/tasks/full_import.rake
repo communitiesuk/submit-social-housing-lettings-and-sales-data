@@ -22,6 +22,7 @@ namespace :core do
 
     import_list.each do |step|
       if archive_service.folder_present?(step.folder)
+        Rails.logger.info("Start importing folder #{step.folder}")
         step.import_class.new(archive_service).send(step.import_method, step.folder)
       else
         Rails.logger.info("#{step.folder} does not exist, skipping #{step.import_class}")
