@@ -59,6 +59,7 @@
     "housingneeds": 1,
     "housingneeds_type": 2,
     "housingneeds_other": 0,
+    "housingneeds_c": 1,
     "illness_type_1":null,
     "illness_type_2":null,
     "illness_type_3":null,
