@@ -320,9 +320,9 @@ en:
       no_females: "You also told us there are no female tenants living at the property."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
     major_repairs_date:
-      title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 730 days"
+      title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
     void_date:
-      title_text: "You told us the time between the start of the tenancy and the void date is more than 730 days"
+      title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
 
   devise:
     two_factor_authentication:
