@@ -433,10 +433,17 @@ class CaseLog < ApplicationRecord
 
       all.find_each do |record|
         csv << attributes.map do |att|
-          record.form.get_question(att, record)&.label_from_value(record.send(att)) || record.send(att)
+          record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
         end
       end
     end
+  end
+
+  def self.label_from_value(value)
+    return "Yes" if value == true
+    return "No" if value == false
+
+    value
   end
 
   def self.csv_attributes(user)
