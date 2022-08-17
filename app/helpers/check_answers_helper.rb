@@ -41,4 +41,8 @@ private
   def total_applicable_questions(subsection, case_log, current_user)
     subsection.applicable_questions(case_log).reject { |q| q.hidden_in_check_answers?(case_log, current_user) }
   end
+
+  def get_answer_label(question, case_log)
+    question.answer_label(case_log).presence || "<span class=\"app-!-colour-muted\">You didn’t answer this question</span>".html_safe
+  end
 end

@@ -1205,6 +1205,7 @@
                   }
                 },
                 "age1": {
+                  "check_answers_card_number": 1,
                   "header": "Age",
                   "check_answer_label": "Lead tenant’s age",
                   "type": "numeric",
@@ -1423,7 +1424,7 @@
               "questions": {
                 "ethnic_group": {
                   "check_answer_label": "Lead tenant’s ethnic group",
-                  "check_answers_card_number": 0,
+                  "check_answers_card_number": 1,
                   "header": "What is the lead tenant’s ethnic group?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1459,6 +1460,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Arab background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1480,6 +1482,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Asian or Asian British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1510,6 +1513,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Black, African, Caribbean or Black British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1534,6 +1538,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Mixed or Multiple ethnic groups background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1561,6 +1566,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s White background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1588,6 +1594,7 @@
               "description": "",
               "questions": {
                 "national": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s nationality",
                   "header": "What is the lead tenant’s nationality?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1657,7 +1664,7 @@
                 "ecstat1": {
                   "check_answer_label": "Lead tenant’s working situation",
                   "header": "Which of these best describes the lead tenant’s working situation?",
-                  "check_answers_card_number": 0,
+                  "check_answers_card_number": 1,
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
@@ -1795,7 +1802,7 @@
               "questions": {
                 "details_known_2": {
                   "check_answer_label": "Details known for person 2",
-                  "check_answers_card_number": 1,
+                  "check_answers_card_number": 2,
                   "header": "Do you know details for person 2?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -1839,7 +1846,7 @@
               "questions": {
                 "relat2": {
                   "check_answer_label": "Person 2’s relationship to the lead tenant",
-                  "check_answers_card_number": 1,
+                  "check_answers_card_number": 2,
                   "header": "What is person 2’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -2013,7 +2020,7 @@
                 "sex2": {
                   "check_answer_label": "Person 2’s gender identity",
                   "header": "Which of these best describes person 2’s gender identity?",
-                  "check_answers_card_number": 1,
+                  "check_answers_card_number": 2,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2135,7 +2142,7 @@
               "questions": {
                 "ecstat2": {
                   "check_answer_label": "Person 2’s working situation",
-                  "check_answers_card_number": 1,
+                  "check_answers_card_number": 2,
                   "header": "Which of these best describes person 2’s working situation?",
                   "hint_text": "",
                   "type": "radio",

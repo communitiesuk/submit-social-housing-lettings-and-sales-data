@@ -21,7 +21,10 @@
             <h3 class="x-govuk-summary-card__title"><%= subsection.label %></h3>
           </div>
           <div class="x-govuk-summary-card__body">
-           <%= render CheckAnswersSummaryListCardComponent.new(questions: subsection.applicable_questions(@case_log), case_log: @case_log, user: current_user) %>
+            <%= render partial: "form/check_answers_summary_list", locals: {
+              subsection:,
+              case_log: @case_log,
+            } %>
           </div>
         </div>
       <% end %>
