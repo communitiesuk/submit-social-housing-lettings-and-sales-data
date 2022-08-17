@@ -13,6 +13,7 @@
               "tenant_code_test": {
                 "questions": {
                   "tenancycode": {
+                    "check_answers_card_number": 0,
                     "check_answer_label": "Tenant code",
                     "header": "What is the tenant code?",
                     "hint_text": "This is how you usually refer to this tenancy on your own systems.",
@@ -31,6 +32,7 @@
               "person_1_age": {
                 "questions": {
                   "age1": {
+                    "check_answers_card_number": 1,
                     "check_answer_label": "Lead tenant’s age",
                     "header": "What is the tenant’s age?",
                     "type": "numeric",
@@ -52,6 +54,7 @@
               "person_1_gender": {
                 "questions": {
                   "sex1": {
+                    "check_answers_card_number": 1,
                     "check_answer_label": "Lead tenant’s gender identity",
                     "header": "Which of these best describes the tenant’s gender identity?",
                     "type": "radio",
@@ -77,6 +80,7 @@
                 "description": "",
                 "questions": {
                   "ecstat1": {
+                    "check_answers_card_number": 1,
                     "check_answer_label": "Lead tenant’s working situation",
                     "header": "Which of these best describes the lead tenant’s socks?",
                     "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -125,6 +129,7 @@
               "household_number_of_members": {
                 "questions": {
                   "hhmemb": {
+                    "check_answers_card_number": 0,
                     "check_answer_label": "Number of Household Members",
                     "header": "How many people are there in the household?",
                     "hint_text": "The maximum number of members is 8",
@@ -140,6 +145,7 @@
                     }
                   },
                   "relat2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s relationship to lead tenant",
                     "header": "What is person 2’s relationship to lead tenant",
                     "type": "radio",
@@ -153,6 +159,7 @@
                     }
                   },
                   "age2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s age",
                     "header": "Do you know person 2’s age?",
                     "type": "numeric",
@@ -162,6 +169,7 @@
                     "width": 2
                   },
                   "sex2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s gender identity",
                     "header": "Which of these best describes person 2’s gender identity?",
                     "type": "radio",
@@ -187,6 +195,7 @@
                 "description": "",
                 "questions": {
                   "ecstat2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s Work",
                     "header": "Which of these best describes person 2’s working situation?",
                     "type": "radio",
@@ -216,6 +225,7 @@
               "propcode": {
                 "questions": {
                   "propcode": {
+                    "check_answers_card_number": 0,
                     "check_answer_label": "",
                     "header": "property reference?",
                     "type": "text"
