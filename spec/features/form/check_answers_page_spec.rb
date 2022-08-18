@@ -144,7 +144,7 @@ RSpec.describe "Form Check Answers Page" do
         assert_selector ".x-govuk-summary-card__title", text: "Lead tenant", count: 1
         assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
       end
-    end 
+    end
 
     context "when viewing setup section answers" do
       before do
