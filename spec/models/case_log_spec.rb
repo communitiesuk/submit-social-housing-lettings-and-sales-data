@@ -2293,32 +2293,32 @@ RSpec.describe CaseLog do
   end
 
   describe "csv download" do
-    let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
-    let(:csv_export_file_non_support) { File.open("spec/fixtures/files/case_logs_download_non_support.csv", "r:UTF-8") }
     let(:scheme) { FactoryBot.create(:scheme) }
     let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE") }
     let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
+    let(:expected_content) { csv_export_file.read }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
+      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
+      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
+      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
     end
 
-    it "generates a correct csv from a case log" do
-      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
-      expected_content = csv_export_file.read
-      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
-      expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
-      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
-      expect(described_class.to_csv).to eq(expected_content)
+    context "with a support user" do
+      let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
+
+      it "generates a correct csv from a case log" do
+        expect(described_class.to_csv).to eq(expected_content)
+      end
     end
 
-    it "generates a correct csv from a case log for non support users" do
-      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
-      expected_content = csv_export_file_non_support.read
-      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
-      expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
-      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
-      expect(described_class.to_csv(user)).to eq(expected_content)
+    context "with a non support user" do
+      let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download_non_support.csv", "r:UTF-8") }
+
+      it "generates a correct csv from a case log" do
+        expect(described_class.to_csv(user)).to eq(expected_content)
+      end
     end
   end
 end
