@@ -7,8 +7,8 @@ class User < ApplicationRecord
   # Marked as optional because we validate organisation_id below instead so that
   # the error message is linked to the right field on the form
   belongs_to :organisation, optional: true
-  has_many :owned_case_logs, through: :organisation, dependent: :delete_all
-  has_many :managed_case_logs, through: :organisation
+  has_many :owned_lettings_logs, through: :organisation, dependent: :delete_all
+  has_many :managed_lettings_logs, through: :organisation
 
   validates :name, presence: true
   validates :email, presence: true
@@ -50,20 +50,20 @@ class User < ApplicationRecord
   scope :search_by, ->(param) { search_by_name(param).or(search_by_email(param)) }
   scope :sorted_by_organisation_and_role, -> { joins(:organisation).order("organisations.name", role: :desc, name: :asc) }
 
-  def case_logs
+  def lettings_logs
     if support?
-      CaseLog.all
+      LettingsLog.all
     else
-      CaseLog.filter_by_organisation(organisation)
+      LettingsLog.filter_by_organisation(organisation)
     end
   end
 
-  def completed_case_logs
-    case_logs.completed
+  def completed_lettings_logs
+    lettings_logs.completed
   end
 
-  def not_completed_case_logs
-    case_logs.not_completed
+  def not_completed_lettings_logs
+    lettings_logs.not_completed
   end
 
   def is_key_contact?
@@ -131,7 +131,7 @@ class User < ApplicationRecord
     ROLES.except(:support)
   end
 
-  def case_logs_filters(specific_org: false)
+  def lettings_logs_filters(specific_org: false)
     if support? && !specific_org
       %w[status years user organisation]
     else

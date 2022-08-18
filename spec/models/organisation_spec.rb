@@ -80,40 +80,40 @@ RSpec.describe Organisation, type: :model do
       end
     end
 
-    context "with case logs" do
+    context "with lettings logs" do
       let(:other_organisation) { FactoryBot.create(:organisation) }
-      let!(:owned_case_log) do
+      let!(:owned_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :completed,
           owning_organisation: organisation,
           managing_organisation: other_organisation,
           created_by: user,
         )
       end
-      let!(:managed_case_log) do
+      let!(:managed_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           owning_organisation: other_organisation,
           managing_organisation: organisation,
         )
       end
 
-      it "has owned case logs" do
-        expect(organisation.owned_case_logs.first).to eq(owned_case_log)
+      it "has owned lettings logs" do
+        expect(organisation.owned_lettings_logs.first).to eq(owned_lettings_log)
       end
 
-      it "has managed case logs" do
-        expect(organisation.managed_case_logs.first).to eq(managed_case_log)
+      it "has managed lettings logs" do
+        expect(organisation.managed_lettings_logs.first).to eq(managed_lettings_log)
       end
 
-      it "has case logs" do
-        expect(organisation.case_logs.to_a).to match_array([owned_case_log, managed_case_log])
+      it "has lettings logs" do
+        expect(organisation.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
       end
 
-      it "has case log status helper methods" do
-        expect(organisation.completed_case_logs.to_a).to eq([owned_case_log])
-        expect(organisation.not_completed_case_logs.to_a).to eq([managed_case_log])
+      it "has lettings log status helper methods" do
+        expect(organisation.completed_lettings_logs.to_a).to eq([owned_lettings_log])
+        expect(organisation.not_completed_lettings_logs.to_a).to eq([managed_lettings_log])
       end
     end
   end
@@ -125,7 +125,7 @@ RSpec.describe Organisation, type: :model do
       expect { organisation.update!(name: "new test name") }.to change(organisation.versions, :count).by(1)
     end
 
-    it "allows case logs to be restored to a previous version" do
+    it "allows lettings logs to be restored to a previous version" do
       organisation.update!(name: "new test name")
       expect(organisation.paper_trail.previous_version.name).to eq("DLUHC")
     end

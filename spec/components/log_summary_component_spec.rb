@@ -5,7 +5,7 @@ RSpec.describe LogSummaryComponent, type: :component do
   let(:coordinator_user) { FactoryBot.create(:user) }
   let(:propcode) { "P3647" }
   let(:tenancycode) { "T62863" }
-  let(:log) { FactoryBot.create(:case_log, needstype: 1, startdate: Time.utc(2022, 1, 1), tenancycode:, propcode:) }
+  let(:log) { FactoryBot.create(:lettings_log, needstype: 1, startdate: Time.utc(2022, 1, 1), tenancycode:, propcode:) }
 
   context "when rendering log for a support user" do
     it "show the log summary with organisational relationships" do

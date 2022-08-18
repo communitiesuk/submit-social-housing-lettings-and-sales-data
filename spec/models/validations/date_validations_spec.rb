@@ -4,7 +4,7 @@ RSpec.describe Validations::DateValidations do
   subject(:date_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::DateValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
   let(:scheme) { FactoryBot.create(:scheme, end_date: Time.zone.today - 5.days) }
   let(:scheme_no_end_date) { FactoryBot.create(:scheme, end_date: nil) }
 

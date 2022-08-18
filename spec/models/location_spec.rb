@@ -64,7 +64,7 @@ RSpec.describe Location, type: :model do
       expect { location.update!(name: "new test name") }.to change(location.versions, :count).by(1)
     end
 
-    it "allows case logs to be restored to a previous version" do
+    it "allows lettings logs to be restored to a previous version" do
       location.update!(name: "new test name")
       expect(location.paper_trail.previous_version.name).to eq(name)
     end

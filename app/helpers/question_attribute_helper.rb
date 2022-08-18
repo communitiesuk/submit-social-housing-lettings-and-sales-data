@@ -16,7 +16,7 @@ private
     {
       "data-controller": "numeric-question",
       "data-action": "input->numeric-question#calculateFields",
-      "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
+      "data-target": "lettings-log-#{question.result_field.to_s.dasherize}-field",
       "data-calculated": question.fields_to_add.to_json,
     }
   end

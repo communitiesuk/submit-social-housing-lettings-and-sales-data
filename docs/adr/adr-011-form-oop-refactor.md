@@ -11,6 +11,6 @@ Refactoring this into smaller form domain object classes has several benefits:
 - It’s easier to compare the form definition JSON to the code classes and reason about what fields can be passed and what effect they’ll have
 - It moves business logic out of the helpers and keeps them to just dealing with display logic
 - It makes it easier to unit test form functionality, and group that into smaller chunks
-- It allows for less passing of arguments. e.g. `page.routed_to?(case_log)` vs `form.was_page_routed_to?(page, case_log)`
+- It allows for less passing of arguments. e.g. `page.routed_to?(lettings_log)` vs `form.was_page_routed_to?(page, lettings_log)`
 
-This abstraction is likely still not the best (the form vs case log split) but this seems like an improvement that can be iterated on.
+This abstraction is likely still not the best (the form vs lettings log split) but this seems like an improvement that can be iterated on.

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :case_log do
+  factory :lettings_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }

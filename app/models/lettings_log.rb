@@ -1,4 +1,4 @@
-class CaseLogValidator < ActiveModel::Validator
+class LettingsLogValidator < ActiveModel::Validator
   # Validations methods need to be called 'validate_' to run on model save
   # or form page submission
   include Validations::SetupValidations
@@ -14,13 +14,13 @@ class CaseLogValidator < ActiveModel::Validator
   end
 end
 
-class CaseLog < ApplicationRecord
+class LettingsLog < ApplicationRecord
   include Validations::SoftValidations
-  include DerivedVariables::CaseLogVariables
+  include DerivedVariables::LettingsLogVariables
 
   has_paper_trail
 
-  validates_with CaseLogValidator
+  validates_with LettingsLogValidator
   before_validation :recalculate_start_year!, if: :startdate_changed?
   before_validation :reset_scheme_location!, if: :scheme_changed?, unless: :location_changed?
   before_validation :process_postcode_changes!, if: :postcode_full_changed?
@@ -466,7 +466,7 @@ class CaseLog < ApplicationRecord
   end
 
   def self.to_csv(user = nil)
-    Csv::CaseLogCsvService.new(user).to_csv
+    Csv::LettingsLogCsvService.new(user).to_csv
   end
 
   def soft_min_for_period

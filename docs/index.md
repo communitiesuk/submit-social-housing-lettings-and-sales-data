@@ -46,13 +46,13 @@ This is a useful analogy as a parent can have multiple children, and a child can
 
 ### User permissions within organisations
 
-The case logs that a user can see depends on their role:
+The lettings logs that a user can see depends on their role:
 
-- Customer support users can access any case log
+- Customer support users can access any lettings log
 
-- Data coordinators can access any case log for which the organisation they work for is ultimately responsible for, meaning they can see logs managed by a child organisation
+- Data coordinators can access any lettings log for which the organisation they work for is ultimately responsible for, meaning they can see logs managed by a child organisation
 
-- Data providers can only access case logs for which their organisation manages (or directly owns)
+- Data providers can only access lettings logs for which their organisation manages (or directly owns)
 
 Taking the relationships from the above diagram, and looking at which logs each user can access:
 

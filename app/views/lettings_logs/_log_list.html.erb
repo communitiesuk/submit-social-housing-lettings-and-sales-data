@@ -3,6 +3,6 @@
   <%= govuk_link_to "Download (CSV)", "#{request.path}.csv", type: "text/csv" %>
 </h2>
 
-<% case_logs.map do |log| %>
+<% lettings_logs.map do |log| %>
   <%= render(LogSummaryComponent.new(current_user:, log:)) %>
 <% end %>

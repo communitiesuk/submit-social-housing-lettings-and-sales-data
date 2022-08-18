@@ -67,7 +67,7 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
   end
 
   context "when the owning organisation is already set" do
-    let(:case_log) { FactoryBot.create(:case_log, owning_organisation: user_2.organisation) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: user_2.organisation) }
     let(:expected_answer_options) do
       {
         "" => "Select an option",
@@ -76,7 +76,7 @@ RSpec.describe Form::Setup::Questions::CreatedById, type: :model do
     end
 
     it "only displays users that belong to that organisation" do
-      expect(question.displayed_answer_options(case_log)).to eq(expected_answer_options)
+      expect(question.displayed_answer_options(lettings_log)).to eq(expected_answer_options)
     end
   end
 end

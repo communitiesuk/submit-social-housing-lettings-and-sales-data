@@ -20,8 +20,8 @@ namespace :core do
       Imports::DataProtectionConfirmationImportService.new(storage_service).create_data_protection_confirmations(path)
     when "organisation-rent-periods"
       Imports::OrganisationRentPeriodImportService.new(storage_service).create_organisation_rent_periods(path)
-    when "case-logs"
-      Imports::CaseLogsImportService.new(storage_service).create_logs(path)
+    when "lettings-logs"
+      Imports::LettingsLogsImportService.new(storage_service).create_logs(path)
     else
       raise "Type #{type} is not supported by data_import"
     end

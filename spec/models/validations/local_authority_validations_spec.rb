@@ -4,7 +4,7 @@ RSpec.describe Validations::LocalAuthorityValidations do
   subject(:local_auth_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::LocalAuthorityValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "#validate_previous_accommodation_postcode" do
     it "does not add an error if the record ppostcode_full is missing" do

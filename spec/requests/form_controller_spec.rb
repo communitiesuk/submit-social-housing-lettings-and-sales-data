@@ -5,23 +5,23 @@ RSpec.describe FormController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   let(:other_organisation) { FactoryBot.create(:organisation) }
-  let!(:case_log) do
+  let!(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       owning_organisation: organisation,
       managing_organisation: organisation,
     )
   end
-  let!(:unauthorized_case_log) do
+  let!(:unauthorized_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       owning_organisation: other_organisation,
       managing_organisation: other_organisation,
     )
   end
-  let(:setup_complete_case_log) do
+  let(:setup_complete_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :about_completed,
       status: 1,
       startdate: Time.zone.local(2021, 10, 10),
@@ -29,9 +29,9 @@ RSpec.describe FormController, type: :request do
       managing_organisation: organisation,
     )
   end
-  let(:completed_case_log) do
+  let(:completed_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :completed,
       owning_organisation: organisation,
       managing_organisation: organisation,
@@ -41,20 +41,20 @@ RSpec.describe FormController, type: :request do
 
   context "when a user is not signed in" do
     describe "GET" do
-      it "does not let you get case logs pages you don't have access to" do
-        get "/logs/#{case_log.id}/person-1-age", headers: headers, params: {}
+      it "does not let you get lettings logs pages you don't have access to" do
+        get "/logs/#{lettings_log.id}/person-1-age", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
 
-      it "does not let you get case log check answer pages you don't have access to" do
-        get "/logs/#{case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+      it "does not let you get lettings log check answer pages you don't have access to" do
+        get "/logs/#{lettings_log.id}/household-characteristics/check-answers", headers: headers, params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
 
     describe "POST" do
-      it "does not let you post form answers to case logs you don't have access to" do
-        post "/logs/#{case_log.id}/form", params: {}
+      it "does not let you post form answers to lettings logs you don't have access to" do
+        post "/logs/#{lettings_log.id}/form", params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -69,27 +69,27 @@ RSpec.describe FormController, type: :request do
     describe "GET" do
       context "with form pages" do
         context "when forms exist for multiple years" do
-          let(:case_log_year_1) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
-          let(:case_log_year_2) { FactoryBot.create(:case_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_1) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1), owning_organisation: organisation, created_by: user) }
+          let(:lettings_log_year_2) { FactoryBot.create(:lettings_log, :about_completed, startdate: Time.zone.local(2022, 5, 1), owning_organisation: organisation, created_by: user) }
 
-          it "displays the correct question details for each case log based on form year" do
-            get "/logs/#{case_log_year_1.id}/tenant-code-test", headers: headers, params: {}
+          it "displays the correct question details for each lettings log based on form year" do
+            get "/logs/#{lettings_log_year_1.id}/tenant-code-test", headers: headers, params: {}
             expect(response.body).to include("What is the tenant code?")
-            get "/logs/#{case_log_year_2.id}/tenant-code-test", headers: headers, params: {}
+            get "/logs/#{lettings_log_year_2.id}/tenant-code-test", headers: headers, params: {}
             expect(response.body).to match("Different question header text for this year - 2023")
           end
         end
 
-        context "when case logs are not owned or managed by your organisation" do
-          it "does not show form pages for case logs you don't have access to" do
-            get "/logs/#{unauthorized_case_log.id}/person-1-age", headers: headers, params: {}
+        context "when lettings logs are not owned or managed by your organisation" do
+          it "does not show form pages for lettings logs you don't have access to" do
+            get "/logs/#{unauthorized_lettings_log.id}/person-1-age", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
           end
         end
 
         context "with a form page that has custom guidance" do
           it "displays the correct partial" do
-            get "/logs/#{case_log.id}/net-income", headers: headers, params: {}
+            get "/logs/#{lettings_log.id}/net-income", headers: headers, params: {}
             expect(response.body).to match("What counts as income?")
           end
         end
@@ -99,9 +99,9 @@ RSpec.describe FormController, type: :request do
             let(:user) { FactoryBot.create(:user, :support) }
 
             context "when organisation and user have not been selected yet" do
-              let(:case_log) do
+              let(:lettings_log) do
                 FactoryBot.create(
-                  :case_log,
+                  :lettings_log,
                   owning_organisation: nil,
                   managing_organisation: nil,
                   created_by: nil,
@@ -115,7 +115,7 @@ RSpec.describe FormController, type: :request do
               end
 
               it "returns an unfiltered list of schemes" do
-                get "/logs/#{case_log.id}/scheme", headers: headers, params: {}
+                get "/logs/#{lettings_log.id}/scheme", headers: headers, params: {}
                 expect(response.body.scan("<option value=").count).to eq(6)
               end
             end
@@ -124,17 +124,17 @@ RSpec.describe FormController, type: :request do
       end
 
       context "when displaying check answers pages" do
-        context "when case logs are not owned or managed by your organisation" do
-          it "does not show a check answers for case logs you don't have access to" do
-            get "/logs/#{unauthorized_case_log.id}/household-characteristics/check-answers", headers: headers, params: {}
+        context "when lettings logs are not owned or managed by your organisation" do
+          it "does not show a check answers for lettings logs you don't have access to" do
+            get "/logs/#{unauthorized_lettings_log.id}/household-characteristics/check-answers", headers: headers, params: {}
             expect(response).to have_http_status(:not_found)
           end
         end
 
         context "when no other sections are enabled" do
-          let(:case_log_2022) do
+          let(:lettings_log_2022) do
             FactoryBot.create(
-              :case_log,
+              :lettings_log,
               startdate: Time.zone.local(2022, 12, 1),
               owning_organisation: organisation,
               managing_organisation: organisation,
@@ -144,7 +144,7 @@ RSpec.describe FormController, type: :request do
 
           before do
             Timecop.freeze(Time.zone.local(2022, 12, 1))
-            get "/logs/#{case_log_2022.id}/setup/check-answers", headers: headers, params: {}
+            get "/logs/#{lettings_log_2022.id}/setup/check-answers", headers: headers, params: {}
           end
 
           after do
@@ -159,21 +159,21 @@ RSpec.describe FormController, type: :request do
 
       context "with a question in a section that isn't enabled yet" do
         it "routes back to the tasklist page" do
-          get "/logs/#{case_log.id}/declaration", headers: headers, params: {}
-          expect(response).to redirect_to("/logs/#{case_log.id}")
+          get "/logs/#{lettings_log.id}/declaration", headers: headers, params: {}
+          expect(response).to redirect_to("/logs/#{lettings_log.id}")
         end
       end
 
       context "with a question that isn't enabled yet" do
         it "routes back to the tasklist page" do
-          get "/logs/#{case_log.id}/conditional-question-no-second-page", headers: headers, params: {}
-          expect(response).to redirect_to("/logs/#{case_log.id}")
+          get "/logs/#{lettings_log.id}/conditional-question-no-second-page", headers: headers, params: {}
+          expect(response).to redirect_to("/logs/#{lettings_log.id}")
         end
       end
 
       context "when visiting the review page" do
-        it "renders the review page for the case log" do
-          get "/logs/#{setup_complete_case_log.id}/review", headers: headers, params: {}
+        it "renders the review page for the lettings log" do
+          get "/logs/#{setup_complete_lettings_log.id}/review", headers: headers, params: {}
           expect(response.body).to match("Review lettings log")
         end
       end
@@ -183,15 +183,15 @@ RSpec.describe FormController, type: :request do
           let(:user) { FactoryBot.create(:user, :support) }
 
           it "routes to the page" do
-            get "/logs/#{case_log.id}/organisation"
+            get "/logs/#{lettings_log.id}/organisation"
             expect(response).to have_http_status(:ok)
           end
         end
 
         context "when the dependency is not met" do
           it "redirects to the tasklist page" do
-            get "/logs/#{case_log.id}/organisation"
-            expect(response).to redirect_to("/logs/#{case_log.id}")
+            get "/logs/#{lettings_log.id}/organisation"
+            expect(response).to redirect_to("/logs/#{lettings_log.id}")
           end
         end
       end
@@ -201,9 +201,9 @@ RSpec.describe FormController, type: :request do
       context "with a form page" do
         let(:user) { FactoryBot.create(:user) }
         let(:organisation) { user.organisation }
-        let(:case_log) do
+        let(:lettings_log) do
           FactoryBot.create(
-            :case_log,
+            :lettings_log,
             owning_organisation: organisation,
             managing_organisation: organisation,
           )
@@ -211,8 +211,8 @@ RSpec.describe FormController, type: :request do
         let(:page_id) { "person_1_age" }
         let(:params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: page_id,
               age1: answer,
             },
@@ -220,8 +220,8 @@ RSpec.describe FormController, type: :request do
         end
         let(:valid_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: page_id,
               age1: valid_answer,
             },
@@ -238,30 +238,30 @@ RSpec.describe FormController, type: :request do
           end
 
           it "re-renders the same page with errors if validation fails" do
-            post "/logs/#{case_log.id}/form", params: params
-            expect(response).to redirect_to("/logs/#{case_log.id}/#{page_id.dasherize}")
+            post "/logs/#{lettings_log.id}/form", params: params
+            expect(response).to redirect_to("/logs/#{lettings_log.id}/#{page_id.dasherize}")
             follow_redirect!
             expect(page).to have_content("There is a problem")
           end
 
           it "resets errors when fixed" do
-            post "/logs/#{case_log.id}/form", params: params
-            post "/logs/#{case_log.id}/form", params: valid_params
-            get "/logs/#{case_log.id}/#{page_id.dasherize}"
+            post "/logs/#{lettings_log.id}/form", params: params
+            post "/logs/#{lettings_log.id}/form", params: valid_params
+            get "/logs/#{lettings_log.id}/#{page_id.dasherize}"
             expect(page).not_to have_content("There is a problem")
           end
 
           it "logs that validation was triggered" do
             expect(Rails.logger).to receive(:info).with("User triggered validation(s) on: age1").once
-            post "/logs/#{case_log.id}/form", params: params
+            post "/logs/#{lettings_log.id}/form", params: params
           end
 
           context "when the number of days is too high for the month" do
             let(:page_id) { "tenancy_start_date" }
             let(:params) do
               {
-                id: case_log.id,
-                case_log: {
+                id: lettings_log.id,
+                lettings_log: {
                   page: page_id,
                   "startdate(3i)" => 31,
                   "startdate(2i)" => 6,
@@ -271,7 +271,7 @@ RSpec.describe FormController, type: :request do
             end
 
             it "validates the date correctly" do
-              post "/logs/#{case_log.id}/form", params: params
+              post "/logs/#{lettings_log.id}/form", params: params
               follow_redirect!
               expect(page).to have_content("There is a problem")
             end
@@ -282,8 +282,8 @@ RSpec.describe FormController, type: :request do
           let(:answer) { 20 }
           let(:params) do
             {
-              id: case_log.id,
-              case_log: {
+              id: lettings_log.id,
+              lettings_log: {
                 page: page_id,
                 age1: answer,
                 age2: 2000,
@@ -292,7 +292,7 @@ RSpec.describe FormController, type: :request do
           end
 
           before do
-            post "/logs/#{case_log.id}/form", params:
+            post "/logs/#{lettings_log.id}/form", params:
           end
 
           it "re-renders the same page with errors if validation fails" do
@@ -300,14 +300,14 @@ RSpec.describe FormController, type: :request do
           end
 
           it "only updates answers that apply to the page being submitted" do
-            case_log.reload
-            expect(case_log.age1).to eq(answer)
-            expect(case_log.age2).to be nil
+            lettings_log.reload
+            expect(lettings_log.age1).to eq(answer)
+            expect(lettings_log.age2).to be nil
           end
 
           it "tracks who updated the record" do
-            case_log.reload
-            whodunnit_actor = case_log.versions.last.actor
+            lettings_log.reload
+            whodunnit_actor = lettings_log.versions.last.actor
             expect(whodunnit_actor).to be_a(User)
             expect(whodunnit_actor.id).to eq(user.id)
           end
@@ -319,8 +319,8 @@ RSpec.describe FormController, type: :request do
               let(:page_id) { "property_postcode" }
               let(:valid_params) do
                 {
-                  id: case_log.id,
-                  case_log: {
+                  id: lettings_log.id,
+                  lettings_log: {
                     page: page_id,
                     postcode_known: "0",
                     postcode_full: "",
@@ -329,12 +329,12 @@ RSpec.describe FormController, type: :request do
               end
 
               before do
-                case_log.update!(postcode_known: 1, postcode_full: "NW1 8RR")
-                post "/logs/#{case_log.id}/form", params: valid_params
+                lettings_log.update!(postcode_known: 1, postcode_full: "NW1 8RR")
+                post "/logs/#{lettings_log.id}/form", params: valid_params
               end
 
               it "does not require you to answer that question" do
-                expect(response).to redirect_to("/logs/#{case_log.id}/do-you-know-the-local-authority")
+                expect(response).to redirect_to("/logs/#{lettings_log.id}/do-you-know-the-local-authority")
               end
             end
           end
@@ -342,10 +342,10 @@ RSpec.describe FormController, type: :request do
       end
 
       context "with checkbox questions" do
-        let(:case_log_form_params) do
+        let(:lettings_log_form_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: "accessibility_requirements",
               accessibility_requirements:
                                      %w[housingneeds_b],
@@ -353,10 +353,10 @@ RSpec.describe FormController, type: :request do
           }
         end
 
-        let(:new_case_log_form_params) do
+        let(:new_lettings_log_form_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: "accessibility_requirements",
               accessibility_requirements: %w[housingneeds_c],
             },
@@ -364,26 +364,26 @@ RSpec.describe FormController, type: :request do
         end
 
         it "sets checked items to true" do
-          post "/logs/#{case_log.id}/form", params: case_log_form_params
-          case_log.reload
+          post "/logs/#{lettings_log.id}/form", params: lettings_log_form_params
+          lettings_log.reload
 
-          expect(case_log.housingneeds_b).to eq(1)
+          expect(lettings_log.housingneeds_b).to eq(1)
         end
 
         it "sets previously submitted items to false when resubmitted with new values" do
-          post "/logs/#{case_log.id}/form", params: new_case_log_form_params
-          case_log.reload
+          post "/logs/#{lettings_log.id}/form", params: new_lettings_log_form_params
+          lettings_log.reload
 
-          expect(case_log.housingneeds_b).to eq(0)
-          expect(case_log.housingneeds_c).to eq(1)
+          expect(lettings_log.housingneeds_b).to eq(0)
+          expect(lettings_log.housingneeds_c).to eq(1)
         end
 
         context "with a page having checkbox and non-checkbox questions" do
           let(:tenant_code) { "BZ355" }
-          let(:case_log_form_params) do
+          let(:lettings_log_form_params) do
             {
-              id: case_log.id,
-              case_log: {
+              id: lettings_log.id,
+              lettings_log: {
                 page: "accessibility_requirements",
                 accessibility_requirements:
                                        %w[ housingneeds_a
@@ -411,44 +411,44 @@ RSpec.describe FormController, type: :request do
               Form::Question.new("tenancycode", { "type" => "text" }, nil),
             ]
           end
-          let(:page) { case_log.form.get_page("accessibility_requirements") }
+          let(:page) { lettings_log.form.get_page("accessibility_requirements") }
 
           it "updates both question fields" do
             allow(page).to receive(:questions).and_return(questions_for_page)
-            post "/logs/#{case_log.id}/form", params: case_log_form_params
-            case_log.reload
+            post "/logs/#{lettings_log.id}/form", params: lettings_log_form_params
+            lettings_log.reload
 
-            expect(case_log.housingneeds_a).to eq(1)
-            expect(case_log.housingneeds_f).to eq(1)
-            expect(case_log.tenancycode).to eq(tenant_code)
+            expect(lettings_log.housingneeds_a).to eq(1)
+            expect(lettings_log.housingneeds_f).to eq(1)
+            expect(lettings_log.tenancycode).to eq(tenant_code)
           end
         end
       end
 
       context "with conditional routing" do
-        let(:validator) { case_log._validators[nil].first }
-        let(:case_log_form_conditional_question_yes_params) do
+        let(:validator) { lettings_log._validators[nil].first }
+        let(:lettings_log_form_conditional_question_yes_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: "conditional_question",
               preg_occ: 1,
             },
           }
         end
-        let(:case_log_form_conditional_question_no_params) do
+        let(:lettings_log_form_conditional_question_no_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: "conditional_question",
               preg_occ: 2,
             },
           }
         end
-        let(:case_log_form_conditional_question_wchair_yes_params) do
+        let(:lettings_log_form_conditional_question_wchair_yes_params) do
           {
-            id: case_log.id,
-            case_log: {
+            id: lettings_log.id,
+            lettings_log: {
               page: "property_wheelchair_accessible",
               wchair: 1,
             },
@@ -460,17 +460,17 @@ RSpec.describe FormController, type: :request do
         end
 
         it "routes to the appropriate conditional page based on the question answer of the current page" do
-          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_yes_params
-          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-yes-page")
+          post "/logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_yes_params
+          expect(response).to redirect_to("/logs/#{lettings_log.id}/conditional-question-yes-page")
 
-          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
-          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-no-page")
+          post "/logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_no_params
+          expect(response).to redirect_to("/logs/#{lettings_log.id}/conditional-question-no-page")
         end
 
         it "routes to the page if at least one of the condition sets is met" do
-          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_wchair_yes_params
-          post "/logs/#{case_log.id}/form", params: case_log_form_conditional_question_no_params
-          expect(response).to redirect_to("/logs/#{case_log.id}/conditional-question-yes-page")
+          post "/logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_wchair_yes_params
+          post "/logs/#{lettings_log.id}/form", params: lettings_log_form_conditional_question_no_params
+          expect(response).to redirect_to("/logs/#{lettings_log.id}/conditional-question-yes-page")
         end
       end
 
@@ -478,26 +478,26 @@ RSpec.describe FormController, type: :request do
         context "and navigating to an interruption screen" do
           let(:interrupt_params) do
             {
-              id: completed_case_log.id,
-              case_log: {
+              id: completed_lettings_log.id,
+              lettings_log: {
                 page: "net_income_value_check",
                 net_income_value_check: value,
               },
             }
           end
-          let(:referrer) { "/logs/#{completed_case_log.id}/net-income-value-check?referrer=check_answers" }
+          let(:referrer) { "/logs/#{completed_lettings_log.id}/net-income-value-check?referrer=check_answers" }
 
           before do
-            completed_case_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?§
-            allow(completed_case_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
-            post "/logs/#{completed_case_log.id}/form", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
+            completed_lettings_log.update!(ecstat1: 1, earnings: 130, hhmemb: 1) # we're not routing to that page, so it gets cleared?§
+            allow(completed_lettings_log).to receive(:net_income_soft_validation_triggered?).and_return(true)
+            post "/logs/#{completed_lettings_log.id}/form", params: interrupt_params, headers: headers.merge({ "HTTP_REFERER" => referrer })
           end
 
           context "when yes is answered" do
             let(:value) { 0 }
 
             it "redirects back to check answers if 'yes' is selected" do
-              expect(response).to redirect_to("/logs/#{completed_case_log.id}/income-and-benefits/check-answers")
+              expect(response).to redirect_to("/logs/#{completed_lettings_log.id}/income-and-benefits/check-answers")
             end
           end
 
@@ -505,28 +505,28 @@ RSpec.describe FormController, type: :request do
             let(:value) { 1 }
 
             it "redirects to the previous question if 'no' is selected" do
-              expect(response).to redirect_to("/logs/#{completed_case_log.id}/net-income?referrer=check_answers")
+              expect(response).to redirect_to("/logs/#{completed_lettings_log.id}/net-income?referrer=check_answers")
             end
           end
         end
       end
 
-      context "with case logs that are not owned or managed by your organisation" do
+      context "with lettings logs that are not owned or managed by your organisation" do
         let(:answer) { 25 }
         let(:other_organisation) { FactoryBot.create(:organisation) }
-        let(:unauthorized_case_log) do
+        let(:unauthorized_lettings_log) do
           FactoryBot.create(
-            :case_log,
+            :lettings_log,
             owning_organisation: other_organisation,
             managing_organisation: other_organisation,
           )
         end
 
         before do
-          post "/logs/#{unauthorized_case_log.id}/form", params: {}
+          post "/logs/#{unauthorized_lettings_log.id}/form", params: {}
         end
 
-        it "does not let you post form answers to case logs you don't have access to" do
+        it "does not let you post form answers to lettings logs you don't have access to" do
           expect(response).to have_http_status(:not_found)
         end
       end

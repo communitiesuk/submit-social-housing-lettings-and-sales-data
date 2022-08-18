@@ -4,7 +4,7 @@ RSpec.describe Validations::SharedValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::SharedValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "numeric min max validations" do
     context "when validating age" do

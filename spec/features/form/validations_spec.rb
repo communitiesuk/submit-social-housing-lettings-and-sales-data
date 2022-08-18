@@ -8,24 +8,24 @@ RSpec.describe "validations" do
 
   include Helpers
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) do
+  let(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )
   end
-  let(:empty_case_log) do
+  let(:empty_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )
   end
   let(:completed_without_declaration) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -33,36 +33,36 @@ RSpec.describe "validations" do
       declaration: nil,
     )
   end
-  let(:id) { case_log.id }
+  let(:id) { lettings_log.id }
 
   describe "Question validation" do
     context "when the tenant age is invalid" do
       it "shows validation for under 0" do
         visit("/logs/#{id}/person-1-age")
-        fill_in_number_question(empty_case_log.id, "age1", -5, "person-1-age")
+        fill_in_number_question(empty_lettings_log.id, "age1", -5, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-age1-error")
-        expect(page).to have_selector("#case-log-age1-field-error")
+        expect(page).to have_selector("#lettings-log-age1-error")
+        expect(page).to have_selector("#lettings-log-age1-field-error")
         expect(page).to have_title("Error")
       end
 
       it "shows validation for over 120" do
         visit("/logs/#{id}/person-1-age")
-        fill_in_number_question(empty_case_log.id, "age1", 121, "person-1-age")
+        fill_in_number_question(empty_lettings_log.id, "age1", 121, "person-1-age")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-age1-error")
-        expect(page).to have_selector("#case-log-age1-field-error")
+        expect(page).to have_selector("#lettings-log-age1-error")
+        expect(page).to have_selector("#lettings-log-age1-field-error")
         expect(page).to have_title("Error")
       end
     end
   end
 
   describe "date validation", js: true do
-    def fill_in_date(case_log_id, question, day, month, year, path)
-      visit("/logs/#{case_log_id}/#{path}")
-      fill_in("case_log[#{question}(1i)]", with: year)
-      fill_in("case_log[#{question}(2i)]", with: month)
-      fill_in("case_log[#{question}(3i)]", with: day)
+    def fill_in_date(lettings_log_id, question, day, month, year, path)
+      visit("/logs/#{lettings_log_id}/#{path}")
+      fill_in("lettings_log[#{question}(1i)]", with: year)
+      fill_in("lettings_log[#{question}(2i)]", with: month)
+      fill_in("lettings_log[#{question}(3i)]", with: day)
     end
 
     it "does not allow out of range dates to be submitted" do
@@ -112,9 +112,9 @@ RSpec.describe "validations" do
 
   describe "Soft Validation" do
     context "when a weekly net income is above the expected amount for the given economic status but below the hard max" do
-      let(:case_log) do
+      let(:lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :in_progress,
           ecstat1: 1,
           owning_organisation: user.organisation,
@@ -125,27 +125,27 @@ RSpec.describe "validations" do
       let(:income_under_soft_limit) { 700 }
 
       it "prompts the user to confirm the value is correct with an interruption screen" do
-        visit("/logs/#{case_log.id}/net-income")
-        fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-1-field", allow_label_click: true)
+        visit("/logs/#{lettings_log.id}/net-income")
+        fill_in("lettings-log-earnings-field", with: income_over_soft_limit)
+        choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{case_log.id}/net-income-value-check")
+        expect(page).to have_current_path("/logs/#{lettings_log.id}/net-income-value-check")
         expect(page).to have_content("Net income is outside the expected range based on the lead tenant’s working situation")
         expect(page).to have_content("You told us the lead tenant’s working situation is: full-time – 30 hours or more")
         expect(page).to have_content("The household income you have entered is £750.00 every week")
-        choose("case-log-net-income-value-check-0-field", allow_label_click: true)
+        choose("lettings-log-net-income-value-check-0-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{case_log.id}/net-income-uc-proportion")
+        expect(page).to have_current_path("/logs/#{lettings_log.id}/net-income-uc-proportion")
       end
 
       it "returns the user to the previous question if they do not confirm the value as correct on the interruption screen" do
-        visit("/logs/#{case_log.id}/net-income")
-        fill_in("case-log-earnings-field", with: income_over_soft_limit)
-        choose("case-log-incfreq-1-field", allow_label_click: true)
+        visit("/logs/#{lettings_log.id}/net-income")
+        fill_in("lettings-log-earnings-field", with: income_over_soft_limit)
+        choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
-        choose("case-log-net-income-value-check-1-field", allow_label_click: true)
+        choose("lettings-log-net-income-value-check-1-field", allow_label_click: true)
         click_button("Save and continue")
-        expect(page).to have_current_path("/logs/#{case_log.id}/net-income")
+        expect(page).to have_current_path("/logs/#{lettings_log.id}/net-income")
       end
     end
   end

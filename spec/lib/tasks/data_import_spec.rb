@@ -91,18 +91,18 @@ describe "rake core:data_import", type: :task do
     end
   end
 
-  context "when importing case logs" do
-    let(:type) { "case-logs" }
-    let(:import_service) { instance_double(Imports::CaseLogsImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
+  context "when importing lettings logs" do
+    let(:type) { "lettings-logs" }
+    let(:import_service) { instance_double(Imports::LettingsLogsImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
 
     before do
-      allow(Imports::CaseLogsImportService).to receive(:new).and_return(import_service)
+      allow(Imports::LettingsLogsImportService).to receive(:new).and_return(import_service)
     end
 
-    it "creates case logs from the given XML file" do
+    it "creates lettings logs from the given XML file" do
       expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::CaseLogsImportService).to receive(:new).with(storage_service)
+      expect(Imports::LettingsLogsImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_logs).with(fixture_path)
 
       task.invoke(type, fixture_path)

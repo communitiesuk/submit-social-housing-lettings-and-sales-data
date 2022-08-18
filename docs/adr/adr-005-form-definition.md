@@ -65,5 +65,5 @@ Assumptions made by the format:
 - All sections have at least 1 subsection
 - All subsections have at least 1 page
 - All pages have at least 1 question
-- The ActiveRecord case log model has a field for each question name (must match)
+- The ActiveRecord lettings log model has a field for each question name (must match)
 - Text not required by a page/question such as a header or hint text should be passed as an empty string

@@ -2,34 +2,34 @@ require "rails_helper"
 
 RSpec.describe Form, type: :model do
   let(:user) { FactoryBot.build(:user) }
-  let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
-  let(:form) { case_log.form }
-  let(:completed_case_log) { FactoryBot.build(:case_log, :completed) }
-  let(:conditional_section_complete_case_log) { FactoryBot.build(:case_log, :conditional_section_complete) }
+  let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
+  let(:form) { lettings_log.form }
+  let(:completed_lettings_log) { FactoryBot.build(:lettings_log, :completed) }
+  let(:conditional_section_complete_lettings_log) { FactoryBot.build(:lettings_log, :conditional_section_complete) }
 
   describe ".next_page" do
     let(:previous_page) { form.get_page("person_1_age") }
     let(:value_check_previous_page) { form.get_page("net_income_value_check") }
 
     it "returns the next page given the previous" do
-      expect(form.next_page(previous_page, case_log, user)).to eq("person_1_gender")
+      expect(form.next_page(previous_page, lettings_log, user)).to eq("person_1_gender")
     end
 
     context "when the current page is a value check page" do
       before do
-        case_log.incfreq = 1
-        case_log.earnings = 140
-        case_log.ecstat1 = 1
+        lettings_log.incfreq = 1
+        lettings_log.earnings = 140
+        lettings_log.ecstat1 = 1
       end
 
       it "returns the previous page if answer is `No` and the page is routed to" do
-        case_log.net_income_value_check = 1
-        expect(form.next_page(value_check_previous_page, case_log, user)).to eq("net_income")
+        lettings_log.net_income_value_check = 1
+        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income")
       end
 
       it "returns the next page if answer is `Yes` answer and the page is routed to" do
-        case_log.net_income_value_check = 0
-        expect(form.next_page(value_check_previous_page, case_log, user)).to eq("net_income_uc_proportion")
+        lettings_log.net_income_value_check = 0
+        expect(form.next_page(value_check_previous_page, lettings_log, user)).to eq("net_income_uc_proportion")
       end
     end
   end
@@ -40,17 +40,17 @@ RSpec.describe Form, type: :model do
       let!(:page_ids) { subsection.pages.map(&:id) }
 
       before do
-        case_log.preg_occ = 2
+        lettings_log.preg_occ = 2
       end
 
       it "returns the previous page if the page is routed to" do
         page_index = page_ids.index("conditional_question_no_second_page")
-        expect(form.previous_page(page_ids, page_index, case_log, user)).to eq("conditional_question_no_page")
+        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question_no_page")
       end
 
       it "returns the page before the previous one if the previous page is not routed to" do
         page_index = page_ids.index("conditional_question_no_page")
-        expect(form.previous_page(page_ids, page_index, case_log, user)).to eq("conditional_question")
+        expect(form.previous_page(page_ids, page_index, lettings_log, user)).to eq("conditional_question")
       end
     end
   end
@@ -61,147 +61,147 @@ RSpec.describe Form, type: :model do
     let(:previous_conditional_page) { form.get_page("conditional_question") }
 
     it "returns a correct page path if there is no conditional routing" do
-      expect(form.next_page_redirect_path(previous_page, case_log, user)).to eq("case_log_net_income_uc_proportion_path")
+      expect(form.next_page_redirect_path(previous_page, lettings_log, user)).to eq("lettings_log_net_income_uc_proportion_path")
     end
 
     it "returns a check answers page if previous page is the last page" do
-      expect(form.next_page_redirect_path(last_previous_page, case_log, user)).to eq("case_log_income_and_benefits_check_answers_path")
+      expect(form.next_page_redirect_path(last_previous_page, lettings_log, user)).to eq("lettings_log_income_and_benefits_check_answers_path")
     end
 
     it "returns a correct page path if there is conditional routing" do
-      case_log["preg_occ"] = 2
-      expect(form.next_page_redirect_path(previous_conditional_page, case_log, user)).to eq("case_log_conditional_question_no_page_path")
+      lettings_log["preg_occ"] = 2
+      expect(form.next_page_redirect_path(previous_conditional_page, lettings_log, user)).to eq("lettings_log_conditional_question_no_page_path")
     end
   end
 
   describe "next_incomplete_section_redirect_path" do
-    let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
     let(:subsection) { form.get_subsection("household_characteristics") }
     let(:later_subsection) { form.get_subsection("declaration") }
 
     context "when a user is on the check answers page for a subsection" do
-      def answer_household_needs(case_log)
-        case_log.armedforces = 3
-        case_log.illness = 0
-        case_log.housingneeds_a = 1
-        case_log.la = "E06000014"
-        case_log.illness_type_1 = 1
+      def answer_household_needs(lettings_log)
+        lettings_log.armedforces = 3
+        lettings_log.illness = 0
+        lettings_log.housingneeds_a = 1
+        lettings_log.la = "E06000014"
+        lettings_log.illness_type_1 = 1
       end
 
-      def answer_tenancy_information(case_log)
-        case_log.tenancycode = "1234"
+      def answer_tenancy_information(lettings_log)
+        lettings_log.tenancycode = "1234"
       end
 
-      def answer_property_information(case_log)
-        case_log.postcode_known = 1
-        case_log.wchair = "No"
+      def answer_property_information(lettings_log)
+        lettings_log.postcode_known = 1
+        lettings_log.wchair = "No"
       end
 
-      def answer_conditional_question(case_log)
-        case_log.preg_occ = "No"
-        case_log.cbl = "No"
+      def answer_conditional_question(lettings_log)
+        lettings_log.preg_occ = "No"
+        lettings_log.cbl = "No"
       end
 
-      def answer_income_and_benefits(case_log)
-        case_log.earnings = 30_000
-        case_log.incfreq = 3
-        case_log.benefits = "Some"
-        case_log.hb = "Tenant prefers not to say"
+      def answer_income_and_benefits(lettings_log)
+        lettings_log.earnings = 30_000
+        lettings_log.incfreq = 3
+        lettings_log.benefits = "Some"
+        lettings_log.hb = "Tenant prefers not to say"
       end
 
-      def answer_rent_and_charges(case_log)
-        case_log.period = "Every 2 weeks"
-        case_log.brent = 650
-        case_log.scharge = 0
-        case_log.pscharge = 0
-        case_log.supcharg = 0
-        case_log.tcharge = 650
+      def answer_rent_and_charges(lettings_log)
+        lettings_log.period = "Every 2 weeks"
+        lettings_log.brent = 650
+        lettings_log.scharge = 0
+        lettings_log.pscharge = 0
+        lettings_log.supcharg = 0
+        lettings_log.tcharge = 650
       end
 
-      def answer_local_authority(case_log)
-        case_log.layear = "1 year but under 2 years"
-        case_log.waityear = "Less than 1 year"
-        case_log.postcode_full = "NW1 5TY"
-        case_log.reason = "Permanently decanted from another property owned by this landlord"
-        case_log.ppostcode_full = "SE2 6RT"
-        case_log.mrcdate = Time.zone.parse("03/11/2019")
+      def answer_local_authority(lettings_log)
+        lettings_log.layear = "1 year but under 2 years"
+        lettings_log.waityear = "Less than 1 year"
+        lettings_log.postcode_full = "NW1 5TY"
+        lettings_log.reason = "Permanently decanted from another property owned by this landlord"
+        lettings_log.ppostcode_full = "SE2 6RT"
+        lettings_log.mrcdate = Time.zone.parse("03/11/2019")
       end
 
       before do
-        case_log.tenancycode = "123"
-        case_log.age1 = 35
-        case_log.sex1 = "M"
-        case_log.ecstat1 = 0
-        case_log.hhmemb = 2
-        case_log.relat2 = "P"
-        case_log.sex2 = "F"
-        case_log.ecstat2 = 1
-        case_log.needstype = 1
+        lettings_log.tenancycode = "123"
+        lettings_log.age1 = 35
+        lettings_log.sex1 = "M"
+        lettings_log.ecstat1 = 0
+        lettings_log.hhmemb = 2
+        lettings_log.relat2 = "P"
+        lettings_log.sex2 = "F"
+        lettings_log.ecstat2 = 1
+        lettings_log.needstype = 1
       end
 
       it "returns the first page of the next incomplete subsection if the subsection is not in progress" do
-        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("armed-forces")
+        expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("armed-forces")
       end
 
       it "returns the check answers page of the next incomplete subsection if the subsection is already in progress" do
-        case_log.armedforces = "No"
-        case_log.illness = "No"
-        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("household-needs/check-answers")
+        lettings_log.armedforces = "No"
+        lettings_log.illness = "No"
+        expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("household-needs/check-answers")
       end
 
       it "returns the first page of the next incomplete subsection (skipping completed subsections, and pages that are not routed to)" do
-        answer_household_needs(case_log)
-        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("property-postcode")
+        answer_household_needs(lettings_log)
+        expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("property-postcode")
       end
 
-      it "returns the declaration section for a completed case log" do
-        expect(form.next_incomplete_section_redirect_path(subsection, completed_case_log)).to eq("declaration")
+      it "returns the declaration section for a completed lettings log" do
+        expect(form.next_incomplete_section_redirect_path(subsection, completed_lettings_log)).to eq("declaration")
       end
 
       it "returns the next incomplete section by cycling back around if next subsections are completed" do
-        expect(form.next_incomplete_section_redirect_path(later_subsection, case_log)).to eq("armed-forces")
+        expect(form.next_incomplete_section_redirect_path(later_subsection, lettings_log)).to eq("armed-forces")
       end
 
-      it "returns the declaration section if all sections are complete but the case log is in progress" do
-        answer_household_needs(case_log)
-        answer_tenancy_information(case_log)
-        answer_property_information(case_log)
-        answer_conditional_question(case_log)
-        answer_income_and_benefits(case_log)
-        answer_rent_and_charges(case_log)
-        answer_local_authority(case_log)
+      it "returns the declaration section if all sections are complete but the lettings log is in progress" do
+        answer_household_needs(lettings_log)
+        answer_tenancy_information(lettings_log)
+        answer_property_information(lettings_log)
+        answer_conditional_question(lettings_log)
+        answer_income_and_benefits(lettings_log)
+        answer_rent_and_charges(lettings_log)
+        answer_local_authority(lettings_log)
 
-        expect(form.next_incomplete_section_redirect_path(subsection, case_log)).to eq("declaration")
+        expect(form.next_incomplete_section_redirect_path(subsection, lettings_log)).to eq("declaration")
       end
     end
   end
 
   describe "invalidated_page_questions" do
-    let(:case_log) { FactoryBot.create(:case_log, :in_progress, needstype: 1) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1) }
     let(:expected_invalid) { %w[scheme_id retirement_value_check condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
 
     context "when dependencies are not met" do
       it "returns an array of question keys whose pages conditions are not met" do
-        expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
+        expect(form.invalidated_page_questions(lettings_log).map(&:id).uniq).to eq(expected_invalid)
       end
     end
 
     context "with two pages having the same question and only one has dependencies met" do
       it "returns an array of question keys whose pages conditions are not met" do
-        case_log["preg_occ"] = "No"
-        expect(form.invalidated_page_questions(case_log).map(&:id).uniq).to eq(expected_invalid)
+        lettings_log["preg_occ"] = "No"
+        expect(form.invalidated_page_questions(lettings_log).map(&:id).uniq).to eq(expected_invalid)
       end
     end
 
     context "when a question is marked as `derived` and `depends_on: false`" do
-      let(:case_log) { FactoryBot.build(:case_log, :in_progress, startdate: Time.utc(2022, 4, 2, 10, 36, 49)) }
+      let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, startdate: Time.utc(2022, 4, 2, 10, 36, 49)) }
 
       it "does not count it's questions as invalidated" do
-        expect(form.enabled_page_questions(case_log).map(&:id).uniq).to include("tshortfall_known")
+        expect(form.enabled_page_questions(lettings_log).map(&:id).uniq).to include("tshortfall_known")
       end
 
       it "does not route to the page" do
-        expect(form.invalidated_pages(case_log).map(&:id)).to include("outstanding_amount_known")
+        expect(form.invalidated_pages(lettings_log).map(&:id)).to include("outstanding_amount_known")
       end
     end
   end

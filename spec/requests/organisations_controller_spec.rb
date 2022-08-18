@@ -567,24 +567,24 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         context "when viewing a specific organisation's logs" do
-          let(:number_of_org1_case_logs) { 2 }
-          let(:number_of_org2_case_logs) { 4 }
+          let(:number_of_org1_lettings_logs) { 2 }
+          let(:number_of_org2_lettings_logs) { 4 }
 
           before do
-            FactoryBot.create_list(:case_log, number_of_org1_case_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
-            FactoryBot.create_list(:case_log, number_of_org2_case_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
+            FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
+            FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
             get "/organisations/#{organisation.id}/logs", headers:, params: {}
           end
 
           it "only shows logs for that organisation" do
-            expect(page).to have_content("#{number_of_org1_case_logs} total logs")
-            organisation.case_logs.map(&:id).each do |case_log_id|
-              expect(page).to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+            expect(page).to have_content("#{number_of_org1_lettings_logs} total logs")
+            organisation.lettings_logs.map(&:id).each do |lettings_log_id|
+              expect(page).to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
             end
 
-            unauthorised_organisation.case_logs.map(&:id).each do |case_log_id|
-              expect(page).not_to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+            unauthorised_organisation.lettings_logs.map(&:id).each do |lettings_log_id|
+              expect(page).not_to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
             end
           end
 
@@ -603,16 +603,16 @@ RSpec.describe OrganisationsController, type: :request do
           end
 
           context "when using a search query" do
-            let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+            let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+            let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
-            it "shows case logs matching the id" do
+            it "shows lettings logs matching the id" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
@@ -620,7 +620,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
             end
 
-            it "shows case logs matching the tenant code" do
+            it "shows lettings logs matching the tenant code" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
@@ -628,7 +628,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
             end
 
-            it "shows case logs matching the property reference" do
+            it "shows lettings logs matching the property reference" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
@@ -636,7 +636,7 @@ RSpec.describe OrganisationsController, type: :request do
               end
             end
 
-            it "shows case logs matching the property postcode" do
+            it "shows lettings logs matching the property postcode" do
               get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
@@ -645,7 +645,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             context "when more than one results with matching postcode" do
-              let!(:matching_postcode_log) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
+              let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
               it "displays all matching logs" do
                 get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
@@ -659,8 +659,8 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when there are more than 1 page of search results" do
               let(:postcode) { "XX11YY" }
-              let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
-              let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+              let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode) }
+              let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
               it "has title with pagination details for page 1" do
                 get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
@@ -696,7 +696,7 @@ RSpec.describe OrganisationsController, type: :request do
             context "when search and filter is present" do
               let(:matching_postcode) { log_to_search.postcode_full }
               let(:matching_status) { "in_progress" }
-              let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
+              let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
               it "shows only logs matching both search and filters" do
                 get "/organisations/#{organisation.id}/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
@@ -1043,8 +1043,8 @@ RSpec.describe OrganisationsController, type: :request do
         let(:other_organisation) { FactoryBot.create(:organisation) }
 
         before do
-          FactoryBot.create_list(:case_log, 3, owning_organisation: organisation)
-          FactoryBot.create_list(:case_log, 2, owning_organisation: other_organisation)
+          FactoryBot.create_list(:lettings_log, 3, owning_organisation: organisation)
+          FactoryBot.create_list(:lettings_log, 2, owning_organisation: other_organisation)
         end
 
         it "only includes logs from that organisation" do

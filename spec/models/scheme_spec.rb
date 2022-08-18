@@ -16,7 +16,7 @@ RSpec.describe Scheme, type: :model do
         expect { scheme.update!(service_name: "new test name") }.to change(scheme.versions, :count).by(1)
       end
 
-      it "allows case logs to be restored to a previous version" do
+      it "allows lettings logs to be restored to a previous version" do
         scheme.update!(service_name: "new test name")
         expect(scheme.paper_trail.previous_version.service_name).to eq(name)
       end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseLogsController, type: :request do
+RSpec.describe LettingsLogsController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:owning_organisation) { user.organisation }
   let(:managing_organisation) { owning_organisation }
@@ -56,12 +56,12 @@ RSpec.describe CaseLogsController, type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "returns a serialized Case Log" do
+      it "returns a serialized lettings log" do
         json_response = JSON.parse(response.body)
-        expect(json_response.keys).to match_array(CaseLog.new.attributes.keys)
+        expect(json_response.keys).to match_array(LettingsLog.new.attributes.keys)
       end
 
-      it "creates a case log with the values passed" do
+      it "creates a lettings log with the values passed" do
         json_response = JSON.parse(response.body)
         expect(json_response["tenancycode"]).to eq(tenant_code)
         expect(json_response["age1"]).to eq(age1)
@@ -72,33 +72,33 @@ RSpec.describe CaseLogsController, type: :request do
         let(:age1) { 2000 }
         let(:offered) { 21 }
 
-        it "validates case log parameters" do
+        it "validates lettings log parameters" do
           json_response = JSON.parse(response.body)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(json_response["errors"]).to match_array([["offered", [I18n.t("validations.property.offered.relet_number")]], ["age1", [I18n.t("validations.numeric.valid", field: "Lead tenant’s age", min: 16, max: 120)]]])
         end
       end
 
-      context "with a partial case log submission" do
+      context "with a partial lettings log submission" do
         it "marks the record as in_progress" do
           json_response = JSON.parse(response.body)
           expect(json_response["status"]).to eq(in_progress)
         end
       end
 
-      context "with a complete case log submission" do
+      context "with a complete lettings log submission" do
         let(:org_params) do
           {
-            "case_log" => {
+            "lettings_log" => {
               "owning_organisation_id" => owning_organisation.id,
               "managing_organisation_id" => managing_organisation.id,
               "created_by_id" => user.id,
             },
           }
         end
-        let(:case_log_params) { JSON.parse(File.open("spec/fixtures/complete_case_log.json").read) }
+        let(:lettings_log_params) { JSON.parse(File.open("spec/fixtures/complete_lettings_log.json").read) }
         let(:params) do
-          case_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
+          lettings_log_params.merge(org_params) { |_k, a_val, b_val| a_val.merge(b_val) }
         end
 
         it "marks the record as completed" do
@@ -132,7 +132,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "tracks who created the record" do
         created_id = response.location.match(/[0-9]+/)[0]
-        whodunnit_actor = CaseLog.find_by(id: created_id).versions.last.actor
+        whodunnit_actor = LettingsLog.find_by(id: created_id).versions.last.actor
         expect(whodunnit_actor).to be_a(User)
         expect(whodunnit_actor.id).to eq(user.id)
       end
@@ -144,17 +144,17 @@ RSpec.describe CaseLogsController, type: :request do
     let(:user) { FactoryBot.create(:user) }
     let(:organisation) { user.organisation }
     let(:other_organisation) { FactoryBot.create(:organisation) }
-    let!(:case_log) do
+    let!(:lettings_log) do
       FactoryBot.create(
-        :case_log,
+        :lettings_log,
         owning_organisation: organisation,
         managing_organisation: organisation,
         tenancycode: "LC783",
       )
     end
-    let!(:unauthorized_case_log) do
+    let!(:unauthorized_lettings_log) do
       FactoryBot.create(
-        :case_log,
+        :lettings_log,
         owning_organisation: other_organisation,
         managing_organisation: other_organisation,
         tenancycode: "UA984",
@@ -178,7 +178,7 @@ RSpec.describe CaseLogsController, type: :request do
           expect(page).to have_content("Managed by")
         end
 
-        it "shows case logs for all organisations" do
+        it "shows lettings logs for all organisations" do
           get "/logs", headers: headers, params: {}
           expect(page).to have_content("LC783")
           expect(page).to have_content("UA984")
@@ -186,7 +186,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when there are no logs in the database" do
           before do
-            CaseLog.destroy_all
+            LettingsLog.destroy_all
           end
 
           it "page has correct title" do
@@ -199,76 +199,76 @@ RSpec.describe CaseLogsController, type: :request do
           context "with status filter" do
             let(:organisation_2) { FactoryBot.create(:organisation) }
             let(:user_2) { FactoryBot.create(:user, organisation: organisation_2) }
-            let!(:in_progress_case_log) do
-              FactoryBot.create(:case_log, :in_progress,
+            let!(:in_progress_lettings_log) do
+              FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
                                 managing_organisation: organisation,
                                 created_by: user)
             end
-            let!(:completed_case_log) do
-              FactoryBot.create(:case_log, :completed,
+            let!(:completed_lettings_log) do
+              FactoryBot.create(:lettings_log, :completed,
                                 owning_organisation: organisation_2,
                                 managing_organisation: organisation,
                                 created_by: user_2)
             end
 
-            it "shows case logs for multiple selected statuses" do
+            it "shows lettings logs for multiple selected statuses" do
               get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
-              expect(page).to have_link(in_progress_case_log.id.to_s)
-              expect(page).to have_link(completed_case_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
+              expect(page).to have_link(completed_lettings_log.id.to_s)
             end
 
-            it "shows case logs for one selected status" do
+            it "shows lettings logs for one selected status" do
               get "/logs?status[]=in_progress", headers: headers, params: {}
-              expect(page).to have_link(in_progress_case_log.id.to_s)
-              expect(page).not_to have_link(completed_case_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
+              expect(page).not_to have_link(completed_lettings_log.id.to_s)
             end
 
             it "filters on organisation" do
               get "/logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
-              expect(page).to have_link(completed_case_log.id.to_s)
-              expect(page).not_to have_link(in_progress_case_log.id.to_s)
+              expect(page).to have_link(completed_lettings_log.id.to_s)
+              expect(page).not_to have_link(in_progress_lettings_log.id.to_s)
             end
 
             it "does not reset the filters" do
               get "/logs?status[]=in_progress", headers: headers, params: {}
-              expect(page).to have_link(in_progress_case_log.id.to_s)
-              expect(page).not_to have_link(completed_case_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
+              expect(page).not_to have_link(completed_lettings_log.id.to_s)
 
               get "/logs", headers: headers, params: {}
-              expect(page).to have_link(in_progress_case_log.id.to_s)
-              expect(page).not_to have_link(completed_case_log.id.to_s)
+              expect(page).to have_link(in_progress_lettings_log.id.to_s)
+              expect(page).not_to have_link(completed_lettings_log.id.to_s)
             end
           end
 
           context "with year filter" do
-            let!(:case_log_2021) do
-              FactoryBot.create(:case_log, :in_progress,
+            let!(:lettings_log_2021) do
+              FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
                                 startdate: Time.zone.local(2022, 3, 1),
                                 managing_organisation: organisation)
             end
-            let!(:case_log_2022) do
-              case_log = FactoryBot.build(:case_log, :completed,
-                                          owning_organisation: organisation,
-                                          mrcdate: Time.zone.local(2022, 2, 1),
-                                          startdate: Time.zone.local(2022, 12, 1),
-                                          tenancy: 6,
-                                          managing_organisation: organisation)
-              case_log.save!(validate: false)
-              case_log
+            let!(:lettings_log_2022) do
+              lettings_log = FactoryBot.build(:lettings_log, :completed,
+                                              owning_organisation: organisation,
+                                              mrcdate: Time.zone.local(2022, 2, 1),
+                                              startdate: Time.zone.local(2022, 12, 1),
+                                              tenancy: 6,
+                                              managing_organisation: organisation)
+              lettings_log.save!(validate: false)
+              lettings_log
             end
 
-            it "shows case logs for multiple selected years" do
+            it "shows lettings logs for multiple selected years" do
               get "/logs?years[]=2021&years[]=2022", headers: headers, params: {}
-              expect(page).to have_link(case_log_2021.id.to_s)
-              expect(page).to have_link(case_log_2022.id.to_s)
+              expect(page).to have_link(lettings_log_2021.id.to_s)
+              expect(page).to have_link(lettings_log_2022.id.to_s)
             end
 
-            it "shows case logs for one selected year" do
+            it "shows lettings logs for one selected year" do
               get "/logs?years[]=2021", headers: headers, params: {}
-              expect(page).to have_link(case_log_2021.id.to_s)
-              expect(page).not_to have_link(case_log_2022.id.to_s)
+              expect(page).to have_link(lettings_log_2021.id.to_s)
+              expect(page).not_to have_link(lettings_log_2022.id.to_s)
             end
           end
 
@@ -281,15 +281,15 @@ RSpec.describe CaseLogsController, type: :request do
               Timecop.unfreeze
             end
 
-            let!(:case_log_2021) do
-              FactoryBot.create(:case_log, :in_progress,
+            let!(:lettings_log_2021) do
+              FactoryBot.create(:lettings_log, :in_progress,
                                 owning_organisation: organisation,
                                 startdate: Time.zone.local(2022, 3, 1),
                                 managing_organisation: organisation,
                                 created_by: user)
             end
-            let!(:case_log_2022) do
-              FactoryBot.create(:case_log, :completed,
+            let!(:lettings_log_2022) do
+              FactoryBot.create(:lettings_log, :completed,
                                 owning_organisation: organisation,
                                 mrcdate: Time.zone.local(2022, 2, 1),
                                 startdate: Time.zone.local(2022, 12, 1),
@@ -297,8 +297,8 @@ RSpec.describe CaseLogsController, type: :request do
                                 managing_organisation: organisation,
                                 created_by: user)
             end
-            let!(:case_log_2022_in_progress) do
-              FactoryBot.build(:case_log, :in_progress,
+            let!(:lettings_log_2022_in_progress) do
+              FactoryBot.build(:lettings_log, :in_progress,
                                owning_organisation: organisation,
                                mrcdate: Time.zone.local(2022, 2, 1),
                                startdate: Time.zone.local(2022, 12, 1),
@@ -308,18 +308,18 @@ RSpec.describe CaseLogsController, type: :request do
                                created_by: user)
             end
 
-            it "shows case logs for multiple selected statuses and years" do
+            it "shows lettings logs for multiple selected statuses and years" do
               get "/logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
-              expect(page).to have_link(case_log_2021.id.to_s)
-              expect(page).to have_link(case_log_2022.id.to_s)
-              expect(page).to have_link(case_log_2022_in_progress.id.to_s)
+              expect(page).to have_link(lettings_log_2021.id.to_s)
+              expect(page).to have_link(lettings_log_2022.id.to_s)
+              expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
             end
 
-            it "shows case logs for one selected status" do
+            it "shows lettings logs for one selected status" do
               get "/logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
-              expect(page).to have_link(case_log_2022_in_progress.id.to_s)
-              expect(page).not_to have_link(case_log_2021.id.to_s)
-              expect(page).not_to have_link(case_log_2022.id.to_s)
+              expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
+              expect(page).not_to have_link(lettings_log_2021.id.to_s)
+              expect(page).not_to have_link(lettings_log_2022.id.to_s)
             end
           end
         end
@@ -337,16 +337,16 @@ RSpec.describe CaseLogsController, type: :request do
         end
 
         context "when using a search query" do
-          let(:logs) { FactoryBot.create_list(:case_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-          let(:log_to_search) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, created_by: user) }
-          let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+          let(:logs) { FactoryBot.create_list(:lettings_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
+          let(:log_to_search) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, created_by: user) }
+          let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
           it "has search results in the title" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_title("Logs (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
-          it "shows case logs matching the id" do
+          it "shows lettings logs matching the id" do
             get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
@@ -354,7 +354,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          it "shows case logs matching the tenant code" do
+          it "shows lettings logs matching the tenant code" do
             get "/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
@@ -362,7 +362,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          it "shows case logs matching the property reference" do
+          it "shows lettings logs matching the property reference" do
             get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
@@ -370,7 +370,7 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          it "shows case logs matching the property postcode" do
+          it "shows lettings logs matching the property postcode" do
             get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
@@ -379,7 +379,7 @@ RSpec.describe CaseLogsController, type: :request do
           end
 
           context "when more than one results with matching postcode" do
-            let!(:matching_postcode_log) { FactoryBot.create(:case_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
+            let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
             it "displays all matching logs" do
               get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
@@ -393,8 +393,8 @@ RSpec.describe CaseLogsController, type: :request do
 
           context "when there are more than 1 page of search results" do
             let(:postcode) { "XX11YY" }
-            let(:logs) { FactoryBot.create_list(:case_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, created_by: user) }
-            let(:log_total_count) { CaseLog.where(owning_organisation: user.organisation).count }
+            let(:logs) { FactoryBot.create_list(:lettings_log, 30, :completed, owning_organisation: user.organisation, postcode_full: postcode, created_by: user) }
+            let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
               get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
@@ -430,7 +430,7 @@ RSpec.describe CaseLogsController, type: :request do
           context "when search and filter is present" do
             let(:matching_postcode) { log_to_search.postcode_full }
             let(:matching_status) { "in_progress" }
-            let!(:log_matching_filter_and_search) { FactoryBot.create(:case_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
+            let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
             it "shows only logs matching both search and filters" do
               get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
@@ -453,20 +453,20 @@ RSpec.describe CaseLogsController, type: :request do
             expect(CGI.unescape_html(response.body)).to match(/logs/)
           end
 
-          it "only shows case logs for your organisation" do
-            expected_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{case_log.id}"
-            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{unauthorized_case_log.id}"
+          it "only shows lettings logs for your organisation" do
+            expected_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{lettings_log.id}"
+            unauthorized_case_row_log = "<span class=\"govuk-visually-hidden\">Log </span>#{unauthorized_lettings_log.id}"
             expect(CGI.unescape_html(response.body)).to include(expected_case_row_log)
             expect(CGI.unescape_html(response.body)).not_to include(unauthorized_case_row_log)
           end
 
           it "shows the formatted created at date for each log" do
-            formatted_date = case_log.created_at.to_formatted_s(:govuk_date)
+            formatted_date = lettings_log.created_at.to_formatted_s(:govuk_date)
             expect(CGI.unescape_html(response.body)).to include(formatted_date)
           end
 
           it "shows the log's status" do
-            expect(CGI.unescape_html(response.body)).to include(case_log.status.humanize)
+            expect(CGI.unescape_html(response.body)).to include(lettings_log.status.humanize)
           end
 
           it "shows the total log count" do
@@ -503,8 +503,8 @@ RSpec.describe CaseLogsController, type: :request do
           let(:tenant_code_2) { "TC8745" }
 
           before do
-            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1)
-            FactoryBot.create(:case_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
+            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_1, tenancycode: tenant_code_1)
+            FactoryBot.create(:lettings_log, :in_progress, owning_organisation: org_2, tenancycode: tenant_code_2)
             allow(user).to receive(:need_two_factor_authentication?).and_return(false)
             sign_in user
           end
@@ -539,7 +539,7 @@ RSpec.describe CaseLogsController, type: :request do
 
         context "when there are more than 20 logs" do
           before do
-            FactoryBot.create_list(:case_log, 25, owning_organisation: organisation, managing_organisation: organisation)
+            FactoryBot.create_list(:lettings_log, 25, owning_organisation: organisation, managing_organisation: organisation)
           end
 
           context "when on the first page" do
@@ -591,9 +591,9 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "when requesting a specific case log" do
-      let(:completed_case_log) { FactoryBot.create(:case_log, :completed) }
-      let(:id) { completed_case_log.id }
+    context "when requesting a specific lettings log" do
+      let(:completed_lettings_log) { FactoryBot.create(:lettings_log, :completed) }
+      let(:id) { completed_lettings_log.id }
 
       before do
         get "/logs/#{id}", headers:
@@ -603,42 +603,42 @@ RSpec.describe CaseLogsController, type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "returns a serialized Case Log" do
+      it "returns a serialized lettings log" do
         json_response = JSON.parse(response.body)
-        expect(json_response["status"]).to eq(completed_case_log.status)
+        expect(json_response["status"]).to eq(completed_lettings_log.status)
       end
 
-      context "when requesting an invalid case log id" do
-        let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+      context "when requesting an invalid lettings log id" do
+        let(:id) { (LettingsLog.order(:id).last&.id || 0) + 1 }
 
         it "returns 404" do
           expect(response).to have_http_status(:not_found)
         end
       end
 
-      context "when editing a case log" do
+      context "when editing a lettings log" do
         let(:headers) { { "Accept" => "text/html" } }
 
         context "with a user that is not signed in" do
-          it "does not let the user get case log tasklist pages they don't have access to" do
-            get "/logs/#{case_log.id}", headers: headers, params: {}
+          it "does not let the user get lettings log tasklist pages they don't have access to" do
+            get "/logs/#{lettings_log.id}", headers: headers, params: {}
             expect(response).to redirect_to("/account/sign-in")
           end
         end
 
         context "with a signed in user" do
-          context "with case logs that are owned or managed by your organisation" do
+          context "with lettings logs that are owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{case_log.id}", headers:, params: {}
+              get "/logs/#{lettings_log.id}", headers:, params: {}
             end
 
-            it "shows the tasklist for case logs you have access to" do
+            it "shows the tasklist for lettings logs you have access to" do
               expect(response.body).to match("Log")
-              expect(response.body).to match(case_log.id.to_s)
+              expect(response.body).to match(lettings_log.id.to_s)
             end
 
-            it "displays a section status for a case log" do
+            it "displays a section status for a lettings log" do
               assert_select ".govuk-tag", text: /Not started/, count: 6
               assert_select ".govuk-tag", text: /In progress/, count: 2
               assert_select ".govuk-tag", text: /Completed/, count: 0
@@ -646,10 +646,10 @@ RSpec.describe CaseLogsController, type: :request do
             end
           end
 
-          context "with a case log with a single section complete" do
-            let(:section_completed_case_log) do
+          context "with a lettings log with a single section complete" do
+            let(:section_completed_lettings_log) do
               FactoryBot.create(
-                :case_log,
+                :lettings_log,
                 :conditional_section_complete,
                 owning_organisation: organisation,
                 managing_organisation: organisation,
@@ -658,23 +658,23 @@ RSpec.describe CaseLogsController, type: :request do
 
             before do
               sign_in user
-              get "/logs/#{section_completed_case_log.id}", headers:, params: {}
+              get "/logs/#{section_completed_lettings_log.id}", headers:, params: {}
             end
 
-            it "displays a section status for a case log" do
+            it "displays a section status for a lettings log" do
               assert_select ".govuk-tag", text: /Not started/, count: 6
               assert_select ".govuk-tag", text: /Completed/, count: 1
               assert_select ".govuk-tag", text: /Cannot start yet/, count: 1
             end
           end
 
-          context "with case logs that are not owned or managed by your organisation" do
+          context "with lettings logs that are not owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{unauthorized_case_log.id}", headers:, params: {}
+              get "/logs/#{unauthorized_lettings_log.id}", headers:, params: {}
             end
 
-            it "does not show the tasklist for case logs you don't have access to" do
+            it "does not show the tasklist for lettings logs you don't have access to" do
               expect(response).to have_http_status(:not_found)
             end
           end
@@ -683,13 +683,13 @@ RSpec.describe CaseLogsController, type: :request do
     end
 
     context "when accessing the check answers page" do
-      let(:postcode_case_log) do
-        FactoryBot.create(:case_log,
+      let(:postcode_lettings_log) do
+        FactoryBot.create(:lettings_log,
                           owning_organisation: organisation,
                           managing_organisation: organisation,
                           postcode_known: "No")
       end
-      let(:id) { postcode_case_log.id }
+      let(:id) { postcode_lettings_log.id }
 
       before do
         stub_request(:get, /api.postcodes.io/)
@@ -698,12 +698,12 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       it "shows the inferred la" do
-        case_log = FactoryBot.create(:case_log,
-                                     owning_organisation: organisation,
-                                     managing_organisation: organisation,
-                                     postcode_known: 1,
-                                     postcode_full: "PO5 3TE")
-        id = case_log.id
+        lettings_log = FactoryBot.create(:lettings_log,
+                                         owning_organisation: organisation,
+                                         managing_organisation: organisation,
+                                         postcode_known: 1,
+                                         postcode_full: "PO5 3TE")
+        id = lettings_log.id
         get "/logs/#{id}/property-information/check-answers"
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
         expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
@@ -733,9 +733,9 @@ RSpec.describe CaseLogsController, type: :request do
     let(:other_organisation) { FactoryBot.create(:organisation) }
 
     context "when a log exists" do
-      let!(:case_log) do
+      let!(:lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           owning_organisation: organisation,
           managing_organisation: organisation,
           ecstat1: 1,
@@ -744,8 +744,8 @@ RSpec.describe CaseLogsController, type: :request do
 
       before do
         sign_in user
-        FactoryBot.create(:case_log)
-        FactoryBot.create(:case_log,
+        FactoryBot.create(:lettings_log)
+        FactoryBot.create(:lettings_log,
                           :completed,
                           owning_organisation: organisation,
                           managing_organisation: organisation,
@@ -756,7 +756,7 @@ RSpec.describe CaseLogsController, type: :request do
       it "downloads a CSV file with headers" do
         csv = CSV.parse(response.body)
         expect(csv.first.first).to eq("\uFEFFid")
-        expect(csv.second.first).to eq(case_log.id.to_s)
+        expect(csv.second.first).to eq(lettings_log.id.to_s)
       end
 
       it "does not download other orgs logs" do
@@ -776,17 +776,17 @@ RSpec.describe CaseLogsController, type: :request do
       end
 
       it "dowloads searched logs" do
-        get "/logs?search=#{case_log.id}", headers:, params: {}
+        get "/logs?search=#{lettings_log.id}", headers:, params: {}
         csv = CSV.parse(response.body)
-        expect(csv.count).to eq(CaseLog.search_by(case_log.id.to_s).count + 1)
+        expect(csv.count).to eq(LettingsLog.search_by(lettings_log.id.to_s).count + 1)
       end
 
       context "when both filter and search applied" do
         let(:postcode) { "XX1 1TG" }
 
         before do
-          FactoryBot.create(:case_log, :in_progress, postcode_full: postcode, owning_organisation: organisation, created_by: user)
-          FactoryBot.create(:case_log, :completed, postcode_full: postcode, owning_organisation: organisation, created_by: user)
+          FactoryBot.create(:lettings_log, :in_progress, postcode_full: postcode, owning_organisation: organisation, created_by: user)
+          FactoryBot.create(:lettings_log, :completed, postcode_full: postcode, owning_organisation: organisation, created_by: user)
         end
 
         it "downloads logs matching both csv and filter logs" do
@@ -800,7 +800,7 @@ RSpec.describe CaseLogsController, type: :request do
     context "when there are more than 20 logs" do
       before do
         sign_in user
-        FactoryBot.create_list(:case_log, 26, owning_organisation: organisation)
+        FactoryBot.create_list(:lettings_log, 26, owning_organisation: organisation)
         get "/logs", headers:, params: {}
       end
 
@@ -812,13 +812,13 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "PATCH" do
-    let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "M1 1AE")
+    let(:lettings_log) do
+      FactoryBot.create(:lettings_log, :in_progress, tenancycode: "Old Value", postcode_full: "M1 1AE")
     end
     let(:params) do
       { tenancycode: "New Value" }
     end
-    let(:id) { case_log.id }
+    let(:id) { lettings_log.id }
 
     before do
       patch "/logs/#{id}", headers:, params: params.to_json
@@ -828,21 +828,21 @@ RSpec.describe CaseLogsController, type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "updates the case log with the given fields and keeps original values where none are passed" do
-      case_log.reload
-      expect(case_log.tenancycode).to eq("New Value")
-      expect(case_log.postcode_full).to eq("M1 1AE")
+    it "updates the lettings log with the given fields and keeps original values where none are passed" do
+      lettings_log.reload
+      expect(lettings_log.tenancycode).to eq("New Value")
+      expect(lettings_log.postcode_full).to eq("M1 1AE")
     end
 
-    context "with an invalid case log id" do
-      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+    context "with an invalid lettings log id" do
+      let(:id) { (LettingsLog.order(:id).last&.id || 0) + 1 }
 
       it "returns 404" do
         expect(response).to have_http_status(:not_found)
       end
     end
 
-    context "with an invalid case log params" do
+    context "with an invalid lettings log params" do
       let(:params) { { age1: 200 } }
 
       it "returns 422" do
@@ -870,13 +870,13 @@ RSpec.describe CaseLogsController, type: :request do
   # fields in both cases, and both route to #Update. Rails generally recommends PATCH as it more closely matches
   # what actually happens to an ActiveRecord object and what we're doing here, but either is allowed.
   describe "PUT" do
-    let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress, tenancycode: "Old Value", postcode_full: "SW1A 2AA")
+    let(:lettings_log) do
+      FactoryBot.create(:lettings_log, :in_progress, tenancycode: "Old Value", postcode_full: "SW1A 2AA")
     end
     let(:params) do
       { tenancycode: "New Value" }
     end
-    let(:id) { case_log.id }
+    let(:id) { lettings_log.id }
 
     before do
       put "/logs/#{id}", headers:, params: params.to_json
@@ -886,14 +886,14 @@ RSpec.describe CaseLogsController, type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "updates the case log with the given fields and keeps original values where none are passed" do
-      case_log.reload
-      expect(case_log.tenancycode).to eq("New Value")
-      expect(case_log.postcode_full).to eq("SW1A 2AA")
+    it "updates the lettings log with the given fields and keeps original values where none are passed" do
+      lettings_log.reload
+      expect(lettings_log.tenancycode).to eq("New Value")
+      expect(lettings_log.postcode_full).to eq("SW1A 2AA")
     end
 
-    context "with an invalid case log id" do
-      let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+    context "with an invalid lettings log id" do
+      let(:id) { (LettingsLog.order(:id).last&.id || 0) + 1 }
 
       it "returns 404" do
         expect(response).to have_http_status(:not_found)
@@ -912,12 +912,12 @@ RSpec.describe CaseLogsController, type: :request do
   end
 
   describe "DELETE" do
-    let!(:case_log) do
-      FactoryBot.create(:case_log, :in_progress)
+    let!(:lettings_log) do
+      FactoryBot.create(:lettings_log, :in_progress)
     end
-    let(:id) { case_log.id }
+    let(:id) { lettings_log.id }
 
-    context "when deleting a case log" do
+    context "when deleting a lettings log" do
       before do
         delete "/logs/#{id}", headers:
       end
@@ -926,12 +926,12 @@ RSpec.describe CaseLogsController, type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "deletes the case log" do
-        expect { CaseLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      it "deletes the lettings log" do
+        expect { LettingsLog.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
-      context "with an invalid case log id" do
-        let(:id) { (CaseLog.order(:id).last&.id || 0) + 1 }
+      context "with an invalid lettings log id" do
+        let(:id) { (LettingsLog.order(:id).last&.id || 0) + 1 }
 
         it "returns 404" do
           expect(response).to have_http_status(:not_found)
@@ -949,10 +949,10 @@ RSpec.describe CaseLogsController, type: :request do
       end
     end
 
-    context "when a case log deletion fails" do
+    context "when a lettings log deletion fails" do
       before do
-        allow(CaseLog).to receive(:find_by).and_return(case_log)
-        allow(case_log).to receive(:delete).and_return(false)
+        allow(LettingsLog).to receive(:find_by).and_return(lettings_log)
+        allow(lettings_log).to receive(:delete).and_return(false)
         delete "/logs/#{id}", headers:
       end
 

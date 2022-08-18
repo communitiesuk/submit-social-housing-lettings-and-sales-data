@@ -4,7 +4,7 @@ RSpec.describe Validations::FinancialValidations do
   subject(:financial_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::FinancialValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "earnings and income frequency" do
     it "when earnings are provided it validates that income frequency must be provided" do
@@ -77,7 +77,7 @@ RSpec.describe Validations::FinancialValidations do
     end
 
     context "when outstanding rent or charges is yes" do
-      let(:record) { FactoryBot.create(:case_log, :about_completed) }
+      let(:record) { FactoryBot.create(:lettings_log, :about_completed) }
 
       it "expects that a shortfall is provided" do
         record.hbrentshortfall = 1
@@ -117,7 +117,7 @@ RSpec.describe Validations::FinancialValidations do
 
   describe "rent period validations" do
     let(:organisation) { FactoryBot.create(:organisation) }
-    let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
+    let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
     before do
       FactoryBot.create(:organisation_rent_period, organisation:, rent_period: 2)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Validations::SoftValidations do
   let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
-  let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
+  let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
   describe "rent min max validations" do
     before do
