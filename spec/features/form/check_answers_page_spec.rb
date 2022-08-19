@@ -133,7 +133,7 @@ RSpec.describe "Form Check Answers Page" do
       end
     end
 
-    it "has no summary cards if the subsection is not household characteristics" do
+    it "does not group questions into summary cards if the questions in the subsection don't have a check_answers_card_number attribute" do
       visit("/logs/#{completed_case_log.id}/household-needs/check-answers")
       assert_selector ".x-govuk-summary-card__title", count: 0
     end
