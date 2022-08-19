@@ -12,5 +12,16 @@ RSpec.describe CheckAnswersSummaryListCardComponent, type: :component do
       result = render_inline(described_class.new(questions:, case_log:, user:))
       expect(result).to have_content(questions.first.answer_label(case_log))
     end
+
+    it "applicable questions doesn't return questions that are hidden in check answers" do
+      summary_list = described_class.new(questions:, case_log:, user:)
+      expect(summary_list.applicable_questions.map(&:id).include?("retirement_value_check")).to eq(false)
+    end 
+
+    it "has the correct answer label for a question" do 
+      summary_list = described_class.new(questions:, case_log:, user:)
+      sex1_question = questions[2]
+      expect(summary_list.get_answer_label(sex1_question)).to eq("Female")
+    end 
   end
 end
