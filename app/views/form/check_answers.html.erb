@@ -17,7 +17,7 @@
     <% end %>
     <%= display_answered_questions_summary(subsection, @case_log, current_user) %>
 
-    <% if subsection.id == "household_characteristics" %>
+    <% if subsection.applicable_questions(@case_log).map(&:check_answers_card_number).compact.length > 0 %>
       <% subsection.applicable_questions(@case_log).group_by(&:check_answers_card_number).values.each do |question_group| %>
         <%= render CheckAnswersSummaryListCardComponent.new(questions: question_group, case_log: @case_log, user: current_user) %>
       <% end %>
