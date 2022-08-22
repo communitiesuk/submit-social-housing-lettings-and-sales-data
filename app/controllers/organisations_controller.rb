@@ -31,6 +31,7 @@ class OrganisationsController < ApplicationController
   def users
     organisation_users = @organisation.users.sorted_by_organisation_and_role
     unpaginated_filtered_users = filtered_collection(organisation_users, search_term)
+    byte_order_mark = "\uFEFF"
 
     respond_to do |format|
       format.html do
@@ -45,7 +46,7 @@ class OrganisationsController < ApplicationController
         end
       end
       format.csv do
-        send_data unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
+        send_data byte_order_mark + unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
   end
@@ -93,6 +94,7 @@ class OrganisationsController < ApplicationController
 
       organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
       unpaginated_filtered_logs = filtered_case_logs(filtered_collection(organisation_logs, search_term))
+      byte_order_mark = "\uFEFF"
 
       respond_to do |format|
         format.html do
@@ -103,7 +105,7 @@ class OrganisationsController < ApplicationController
         end
 
         format.csv do
-          send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
+          send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
         end
       end
     else

@@ -12,6 +12,8 @@ class UsersController < ApplicationController
 
     all_users = User.sorted_by_organisation_and_role
     filtered_users = filtered_users(all_users, search_term)
+    byte_order_mark = "\uFEFF"
+
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
     @total_count = all_users.size
@@ -20,7 +22,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
-          send_data filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
+          send_data byte_order_mark + filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
         end
