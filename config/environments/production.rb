@@ -128,4 +128,7 @@ Rails.application.configure do
   # in a proc. See guides for an example.
   # config.active_record.shard_selector = { lock: true }
   # config.active_record.shard_resolver = ->(request) { Tenant.find_by!(host: request.host).shard }
+
+  # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
+  config.active_record.yaml_column_permitted_classes = [Time]
 end
