@@ -25,8 +25,8 @@ RSpec.describe Scheme, type: :model do
     describe "scopes" do
       let!(:scheme_1) { FactoryBot.create(:scheme) }
       let!(:scheme_2) { FactoryBot.create(:scheme) }
-      let!(:location) { FactoryBot.create(:location, scheme: scheme_1) }
-      let!(:location_2) { FactoryBot.create(:location, scheme: scheme_2) }
+      let!(:location) { FactoryBot.create(:location, :export, scheme: scheme_1) }
+      let!(:location_2) { FactoryBot.create(:location, scheme: scheme_2, postcode: "NE4 6TR", name: "second location") }
 
       context "when filtering by id" do
         it "returns case insensitive matching records" do
