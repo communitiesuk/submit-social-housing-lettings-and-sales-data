@@ -460,8 +460,35 @@ class CaseLog < ApplicationRecord
   end
 
   def self.csv_attributes(user)
-    attributes = attribute_names - %w[owning_organisation_id managing_organisation_id created_by_id] + %w[unittype_sh owning_organisation_name managing_organisation_name created_by_name]
+    attributes = attribute_names + %w[unittype_sh]
+    attributes = replace_csv_id_fields_with_names(attributes)
+
+    attributes = order_csv_attributes(attributes)
+
     user.present? && !user.support? ? attributes - CSV_FIELDS_TO_OMIT : attributes
+  end
+
+  def self.replace_csv_id_fields_with_names(initial_attributes)
+    attributes = initial_attributes.clone
+    { "managing_organisation_id": "managing_organisation_name", "owning_organisation_id": "owning_organisation_name", "created_by_id": "created_by_name" }.each { |current, new_attribute| attributes[attributes.index(current.to_s)] = new_attribute }
+    attributes
+  end
+
+  def self.order_csv_attributes(initial_attributes)
+    attributes = initial_attributes.clone
+    ordered_default_form_questions = FormHandler.instance.forms.first.second.questions.map(&:id).uniq
+
+    attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
+    move_metadata_fields_to_front(attributes)
+  end
+
+  def self.move_metadata_fields_to_front(initial_attributes)
+    attributes = initial_attributes.clone
+    %w[managing_organisation_name owning_organisation_name created_by_name updated_at created_at status id].each do |attribute|
+      attributes.delete(attribute)
+      attributes.insert(0, attribute)
+    end
+    attributes
   end
 
   def soft_min_for_period
