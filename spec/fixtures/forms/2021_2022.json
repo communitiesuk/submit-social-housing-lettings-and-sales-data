@@ -159,6 +159,7 @@
                     }
                   },
                   "age2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s age",
                     "header": "Do you know person 2’s age?",
                     "type": "numeric",
@@ -168,6 +169,7 @@
                     "width": 2
                   },
                   "sex2": {
+                    "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s gender identity",
                     "header": "Which of these best describes person 2’s gender identity?",
                     "type": "radio",
@@ -388,6 +390,9 @@
                 "depends_on": [
                   {
                     "illness": 1
+                  },
+                  {
+                    "illness": 100
                   }
                 ]
               }
