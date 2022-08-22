@@ -11,13 +11,6 @@ FactoryBot.define do
     holds_own_stock { true }
   end
 
-  factory :organisation_la do
-    organisation
-    ons_code { "E07000041" }
-    created_at { Time.zone.now }
-    updated_at { Time.zone.now }
-  end
-
   factory :organisation_rent_period do
     organisation
     rent_period { 2 }
