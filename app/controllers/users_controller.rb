@@ -12,7 +12,6 @@ class UsersController < ApplicationController
 
     all_users = User.sorted_by_organisation_and_role
     filtered_users = filtered_users(all_users, search_term)
-
     @pagy, @users = pagy(filtered_users)
     @searched = search_term.presence
     @total_count = all_users.size
