@@ -178,7 +178,7 @@ RSpec.describe Form, type: :model do
 
   describe "invalidated_page_questions" do
     let(:case_log) { FactoryBot.create(:case_log, :in_progress, needstype: 1) }
-    let(:expected_invalid) { %w[scheme_id condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
+    let(:expected_invalid) { %w[scheme_id retirement_value_check condition_effects cbl conditional_question_no_second_question net_income_value_check dependent_question offered layear declaration] }
 
     context "when dependencies are not met" do
       it "returns an array of question keys whose pages conditions are not met" do

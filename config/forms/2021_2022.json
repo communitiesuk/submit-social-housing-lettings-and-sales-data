@@ -1127,6 +1127,7 @@
                   "header": "",
                   "guidance_partial": "privacy_notice",
                   "check_answer_label": "Tenant has seen the privacy notice",
+                  "check_answers_card_number": 0,
                   "type": "checkbox",
                   "answer_options": {
                     "declaration": {
@@ -1141,6 +1142,7 @@
               "description": "",
               "questions": {
                 "hhmemb": {
+                  "check_answers_card_number": 0,
                   "check_answer_label": "Number of household members",
                   "header": "How many people live in the household for this letting?",
                   "hint_text": "You can provide details for a maximum of 8 people.",
@@ -1240,6 +1242,7 @@
               "description": "",
               "questions": {
                 "age1_known": {
+                  "check_answers_card_number": 1, 
                   "header": "Do you know the lead tenant’s age?",
                   "hint_text": "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1266,6 +1269,7 @@
                   }
                 },
                 "age1": {
+                  "check_answers_card_number": 1,
                   "header": "Age",
                   "check_answer_label": "Lead tenant’s age",
                   "type": "numeric",
@@ -1371,6 +1375,7 @@
               "questions": {
                 "sex1": {
                   "check_answer_label": "Lead tenant’s gender identity",
+                  "check_answers_card_number": 1,
                   "header": "Which of these best describes the lead tenant’s gender identity?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1483,6 +1488,7 @@
               "questions": {
                 "ethnic_group": {
                   "check_answer_label": "Lead tenant’s ethnic group",
+                  "check_answers_card_number": 1,
                   "header": "What is the lead tenant’s ethnic group?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -1518,6 +1524,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Arab background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1539,6 +1546,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Asian or Asian British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1569,6 +1577,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Black, African, Caribbean or Black British background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1593,6 +1602,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s Mixed or Multiple ethnic groups background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1620,6 +1630,7 @@
               "description": "",
               "questions": {
                 "ethnic": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s ethnic background",
                   "header": "Which of the following best describes the lead tenant’s White background?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1647,6 +1658,7 @@
               "description": "",
               "questions": {
                 "national": {
+                  "check_answers_card_number": 1,
                   "check_answer_label": "Lead tenant’s nationality",
                   "header": "What is the lead tenant’s nationality?",
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
@@ -1716,6 +1728,7 @@
                 "ecstat1": {
                   "check_answer_label": "Lead tenant’s working situation",
                   "header": "Which of these best describes the lead tenant’s working situation?",
+                  "check_answers_card_number": 1,
                   "hint_text": "The lead tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
                   "answer_options": {
@@ -1871,6 +1884,7 @@
               "questions": {
                 "details_known_2": {
                   "check_answer_label": "Details known for person 2",
+                  "check_answers_card_number": 2,
                   "header": "Do you know details for person 2?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -1914,6 +1928,7 @@
               "questions": {
                 "relat2": {
                   "check_answer_label": "Person 2’s relationship to the lead tenant",
+                  "check_answers_card_number": 2,
                   "header": "What is person 2’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -1949,6 +1964,7 @@
               "questions": {
                 "age2_known": {
                   "header": "Do you know person 2’s age?",
+                  "check_answers_card_number": 2,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -1976,6 +1992,7 @@
                 "age2": {
                   "header": "Age",
                   "check_answer_label": "Person 2’s age",
+                  "check_answers_card_number": 2,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2087,6 +2104,7 @@
                 "sex2": {
                   "check_answer_label": "Person 2’s gender identity",
                   "header": "Which of these best describes person 2’s gender identity?",
+                  "check_answers_card_number": 2,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2208,6 +2226,7 @@
               "questions": {
                 "ecstat2": {
                   "check_answer_label": "Person 2’s working situation",
+                  "check_answers_card_number": 2,
                   "header": "Which of these best describes person 2’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2383,6 +2402,7 @@
               "questions": {
                 "details_known_3": {
                   "check_answer_label": "Details known for person 3",
+                  "check_answers_card_number": 3,
                   "header": "Do you know details for person 3?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -2423,6 +2443,7 @@
               "questions": {
                 "relat3": {
                   "check_answer_label": "Person 3’s relationship to the lead tenant",
+                  "check_answers_card_number": 3,
                   "header": "What is person 3’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -2458,6 +2479,7 @@
               "questions": {
                 "age3_known": {
                   "header": "Do you know person 3’s age?",
+                  "check_answers_card_number": 3,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2485,6 +2507,7 @@
                 "age3": {
                   "header": "Age",
                   "check_answer_label": "Person 3’s age",
+                  "check_answers_card_number": 3,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -2595,6 +2618,7 @@
               "questions": {
                 "sex3": {
                   "check_answer_label": "Person 3’s gender identity",
+                  "check_answers_card_number": 3,
                   "header": "Which of these best describes person 3’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -2717,6 +2741,7 @@
               "questions": {
                 "ecstat3": {
                   "check_answer_label": "Person 3’s working situation",
+                  "check_answers_card_number": 3,
                   "header": "Which of these best describes person 3’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -2892,6 +2917,7 @@
               "questions": {
                 "details_known_4": {
                   "check_answer_label": "Details known for person 4",
+                  "check_answers_card_number": 4,
                   "header": "Do you know details for person 4?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -2929,6 +2955,7 @@
               "questions": {
                 "relat4": {
                   "check_answer_label": "Person 4’s relationship to the lead tenant",
+                  "check_answers_card_number": 4,
                   "header": "What is person 4’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -2964,6 +2991,7 @@
               "questions": {
                 "age4_known": {
                   "header": "Do you know person 4’s age?",
+                  "check_answers_card_number": 4,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -2991,6 +3019,7 @@
                 "age4": {
                   "header": "Age",
                   "check_answer_label": "Person 4’s age",
+                  "check_answers_card_number": 4,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -3101,6 +3130,7 @@
               "questions": {
                 "sex4": {
                   "check_answer_label": "Person 4’s gender identity",
+                  "check_answers_card_number": 4,
                   "header": "Which of these best describes person 4’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -3223,6 +3253,7 @@
               "questions": {
                 "ecstat4": {
                   "check_answer_label": "Person 4’s working situation",
+                  "check_answers_card_number": 4,
                   "header": "Which of these best describes person 4’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -3398,6 +3429,7 @@
               "questions": {
                 "details_known_5": {
                   "check_answer_label": "Details known for person 5",
+                  "check_answers_card_number": 5,
                   "header": "Do you know details for person 5?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -3432,6 +3464,7 @@
               "questions": {
                 "relat5": {
                   "check_answer_label": "Person 5’s relationship to the lead tenant",
+                  "check_answers_card_number": 5,
                   "header": "What is person 5’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -3467,6 +3500,7 @@
               "questions": {
                 "age5_known": {
                   "header": "Do you know person 5’s age?",
+                  "check_answers_card_number": 5,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -3494,6 +3528,7 @@
                 "age5": {
                   "header": "Age",
                   "check_answer_label": "Person 5’s age",
+                  "check_answers_card_number": 5,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -3604,6 +3639,7 @@
               "questions": {
                 "sex5": {
                   "check_answer_label": "Person 5’s gender identity",
+                  "check_answers_card_number": 5,
                   "header": "Which of these best describes person 5’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -3726,6 +3762,7 @@
               "questions": {
                 "ecstat5": {
                   "check_answer_label": "Person 5’s working situation",
+                  "check_answers_card_number": 5,
                   "header": "Which of these best describes person 5’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -3901,6 +3938,7 @@
               "questions": {
                 "details_known_6": {
                   "check_answer_label": "Details known for person 6",
+                  "check_answers_card_number": 6,
                   "header": "Do you know details for person 6?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -3932,6 +3970,7 @@
               "questions": {
                 "relat6": {
                   "check_answer_label": "Person 6’s relationship to the lead tenant",
+                  "check_answers_card_number": 6,
                   "header": "What is person 6’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -3967,6 +4006,7 @@
               "questions": {
                 "age6_known": {
                   "header": "Do you know person 6’s age?",
+                  "check_answers_card_number": 6,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -3994,6 +4034,7 @@
                 "age6": {
                   "header": "Age",
                   "check_answer_label": "Person 6’s age",
+                  "check_answers_card_number": 6,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -4104,6 +4145,7 @@
               "questions": {
                 "sex6": {
                   "check_answer_label": "Person 6’s gender identity",
+                  "check_answers_card_number": 6,
                   "header": "Which of these best describes person 6’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -4226,6 +4268,7 @@
               "questions": {
                 "ecstat6": {
                   "check_answer_label": "Person 6’s working situation",
+                  "check_answers_card_number": 6,
                   "header": "Which of these best describes person 6’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -4401,6 +4444,7 @@
               "questions": {
                 "details_known_7": {
                   "check_answer_label": "Details known for person 7",
+                  "check_answers_card_number": 7,
                   "header": "Do you know details for person 7?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -4429,6 +4473,7 @@
               "questions": {
                 "relat7": {
                   "check_answer_label": "Person 7’s relationship to the lead tenant",
+                  "check_answers_card_number": 7,
                   "header": "What is person 7’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -4464,6 +4509,7 @@
               "questions": {
                 "age7_known": {
                   "header": "Do you know person 7’s age?",
+                  "check_answers_card_number": 7,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -4491,6 +4537,7 @@
                 "age7": {
                   "header": "Age",
                   "check_answer_label": "Person 7’s age",
+                  "check_answers_card_number": 7,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -4601,6 +4648,7 @@
               "questions": {
                 "sex7": {
                   "check_answer_label": "Person 7’s gender identity",
+                  "check_answers_card_number": 7,
                   "header": "Which of these best describes person 7’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -4723,6 +4771,7 @@
               "questions": {
                 "ecstat7": {
                   "check_answer_label": "Person 7’s working situation",
+                  "check_answers_card_number": 7,
                   "header": "Which of these best describes person 7’s working situation?",
                   "hint_text": "",
                   "type": "radio",
@@ -4898,6 +4947,7 @@
               "questions": {
                 "details_known_8": {
                   "check_answer_label": "Details known for person 8",
+                  "check_answers_card_number": 8,
                   "header": "Do you know details for person 8?",
                   "hint_text": "You must provide details for everyone in the household if you know them.",
                   "type": "radio",
@@ -4923,6 +4973,7 @@
               "questions": {
                 "relat8": {
                   "check_answer_label": "Person 8’s relationship to the lead tenant",
+                  "check_answers_card_number": 8,
                   "header": "What is person 8’s relationship to the lead tenant?",
                   "hint_text": "",
                   "type": "radio",
@@ -4958,6 +5009,7 @@
               "questions": {
                 "age8_known": {
                   "header": "Do you know person 8’s age?",
+                  "check_answers_card_number": 8,
                   "hint_text": "",
                   "type": "radio",
                   "answer_options": {
@@ -4985,6 +5037,7 @@
                 "age8": {
                   "header": "Age",
                   "check_answer_label": "Person 8’s age",
+                  "check_answers_card_number": 8,
                   "type": "numeric",
                   "min": 0,
                   "max": 120,
@@ -5095,6 +5148,7 @@
               "questions": {
                 "sex8": {
                   "check_answer_label": "Person 8’s gender identity",
+                  "check_answers_card_number": 8,
                   "header": "Which of these best describes person 8’s gender identity?",
                   "hint_text": "",
                   "type": "radio",
@@ -5217,6 +5271,7 @@
               "questions": {
                 "ecstat8": {
                   "check_answer_label": "Person 8’s working situation",
+                  "check_answers_card_number": 8,
                   "header": "Which of these best describes person 8’s working situation?",
                   "hint_text": "",
                   "type": "radio",

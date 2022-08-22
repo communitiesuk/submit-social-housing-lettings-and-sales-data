@@ -133,6 +133,19 @@ RSpec.describe "Form Check Answers Page" do
       end
     end
 
+    it "does not group questions into summary cards if the questions in the subsection don't have a check_answers_card_number attribute" do
+      visit("/logs/#{completed_case_log.id}/household-needs/check-answers")
+      assert_selector ".x-govuk-summary-card__title", count: 0
+    end
+
+    context "when the user is checking their answers for the household characteristics subsection" do
+      it "they see a seperate summary card for each member of the household" do
+        visit("/logs/#{completed_case_log.id}/#{subsection}/check-answers")
+        assert_selector ".x-govuk-summary-card__title", text: "Lead tenant", count: 1
+        assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
+      end
+    end
+
     context "when viewing setup section answers" do
       before do
         FactoryBot.create(:location, scheme:)
