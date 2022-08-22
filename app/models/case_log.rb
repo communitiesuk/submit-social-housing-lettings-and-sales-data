@@ -439,6 +439,88 @@ class CaseLog < ApplicationRecord
     created_by&.name
   end
 
+  def scheme_code
+    scheme&.id ? "S#{scheme.id}" : nil
+  end
+
+  def scheme_name
+    scheme&.service_name
+  end
+
+  def scheme_confidential_information
+    scheme&.sensitive
+  end
+
+  def scheme_type
+    scheme&.scheme_type
+  end
+
+  def scheme_registered_under_care_act
+    scheme&.registered_under_care_act
+  end
+
+  def scheme_housing_stock_owned_by
+    scheme&.owning_organisation&.name
+  end
+
+  def scheme_support_provided_by
+    scheme&.managing_organisation&.name
+  end
+
+  def scheme_primary_client_group
+    scheme&.primary_client_group
+  end
+  def scheme_has_another_client_group
+    scheme&.has_other_client_group
+  end
+  def scheme_secondary_client_group
+    scheme&.secondary_client_group
+  end
+  def  scheme_level_of_support
+    scheme&.support_type
+  end
+
+  def scheme_intended_length_of_stay
+    scheme&.intended_stay
+  end
+
+  def scheme_created
+    scheme&.created_at
+  end
+
+  # This is not the location_code in the db, location.id is just called code in the UI
+  def location_code
+    location&.id
+  end
+
+  def location_postcode
+    location&.postcode
+  end
+
+  def location_name
+    location&.name
+  end
+
+  def location_units
+    location&.units
+  end
+
+  def location_common_unit_type
+    location&.type_of_unit
+  end
+
+  def location_mobility_type
+    location&.mobility_type
+  end
+
+  def location_local_authority
+    location&.location_admin_district
+  end
+
+  def location_available_from
+    location&.startdate
+  end
+
   def self.to_csv(user = nil)
     CSV.generate(headers: true) do |csv|
       attributes = csv_attributes(user)
@@ -460,7 +542,7 @@ class CaseLog < ApplicationRecord
   end
 
   def self.csv_attributes(user)
-    attributes = attribute_names - %w[owning_organisation_id managing_organisation_id created_by_id] + %w[unittype_sh owning_organisation_name managing_organisation_name created_by_name]
+    attributes = attribute_names - %w[owning_organisation_id managing_organisation_id created_by_id scheme_id location_id] + %w[unittype_sh owning_organisation_name managing_organisation_name created_by_name scheme_code scheme_name scheme_confidential_information scheme_type scheme_registered_under_care_act scheme_housing_stock_owned_by scheme_support_provided_by scheme_primary_client_group scheme_has_another_client_group scheme_secondary_client_group scheme_level_of_support scheme_intended_length_of_stay scheme_created location_code location_postcode location_name location_units location_common_unit_type location_mobility_type location_local_authority location_available_from]
     user.present? && !user.support? ? attributes - CSV_FIELDS_TO_OMIT : attributes
   end
 
