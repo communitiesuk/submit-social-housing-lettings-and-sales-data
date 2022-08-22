@@ -439,6 +439,10 @@ class CaseLog < ApplicationRecord
     created_by&.name
   end
 
+  def is_dpo
+    created_by&.is_dpo
+  end
+
   def self.to_csv(user = nil)
     CSV.generate(headers: true) do |csv|
       attributes = csv_attributes(user)
@@ -480,12 +484,13 @@ class CaseLog < ApplicationRecord
 
     attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
     attributes = move_metadata_fields_to_front(attributes)
-    move_is_inferred_fields(attributes)
+    attributes = move_is_inferred_fields(attributes)
+    move_scheme_fields_to_back(attributes)
   end
 
   def self.move_metadata_fields_to_front(initial_attributes)
     attributes = initial_attributes.clone
-    %w[managing_organisation_name owning_organisation_name created_by_name updated_at created_at status id].each do |attribute|
+    %w[managing_organisation_name owning_organisation_name is_dpo created_by_name updated_at created_at status id].each do |attribute|
       attributes.delete(attribute)
       attributes.insert(0, attribute)
     end
@@ -497,6 +502,15 @@ class CaseLog < ApplicationRecord
     { is_la_inferred: "la", is_previous_la_inferred: "prevloc" }.each do |field, inferred_field|
       attributes.delete(field.to_s)
       attributes.insert(attributes.find_index(inferred_field), field.to_s)
+    end
+    attributes
+  end
+
+  def self.move_scheme_fields_to_back(initial_attributes)
+    attributes = initial_attributes.clone
+    %w[scheme_id location_id].each do |attribute|
+      attributes.delete(attribute)
+      attributes.insert(-1, attribute)
     end
     attributes
   end
