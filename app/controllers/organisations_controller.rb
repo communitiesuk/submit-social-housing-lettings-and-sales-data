@@ -45,7 +45,7 @@ class OrganisationsController < ApplicationController
         end
       end
       format.csv do
-        send_data unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
+        send_data byte_order_mark + unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
   end
@@ -103,7 +103,7 @@ class OrganisationsController < ApplicationController
         end
 
         format.csv do
-          send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
+          send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
         end
       end
     else
