@@ -3,11 +3,11 @@ require "rails_helper"
 RSpec.describe Imports::CaseLogsFieldImportService do
   subject(:import_service) { described_class.new(storage_service, logger) }
 
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
   let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
-  let(:fixture_directory) { "spec/fixtures/imports/case_logs" }
+  let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:case_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
   let(:case_log_file) { open_file(fixture_directory, case_log_id) }

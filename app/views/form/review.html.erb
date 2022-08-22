@@ -11,7 +11,7 @@
       <%= content_for(:title) %>
     </h1>
     <p class="govuk-body">
-      You can review and make changes to this log up to 3 months after the end of the current collection year, which closes on 31 March <%= @case_log.collection_start_year.present? ? @case_log.collection_start_year + 1 : "" %>.
+      You can review and make changes to this log until 2nd June <%= @case_log.collection_start_year.present? ? @case_log.collection_start_year + 1 : "" %>.
     </p>
     <% @case_log.form.sections.map do |section| %>
       <h2 class="govuk-heading-m"><%= section.label %></h2>

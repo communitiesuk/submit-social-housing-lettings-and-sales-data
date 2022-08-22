@@ -22,7 +22,7 @@ class CaseLogsController < ApplicationController
       end
 
       format.csv do
-        send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{Time.zone.now}.csv"
+        send_data unpaginated_filtered_logs.to_csv(current_user), filename: "logs-#{Time.zone.now}.csv"
       end
     end
   end

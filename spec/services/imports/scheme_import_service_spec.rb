@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Imports::SchemeImportService do
   subject(:scheme_service) { described_class.new(storage_service, logger) }
 
-  let(:storage_service) { instance_double(StorageService) }
+  let(:storage_service) { instance_double(S3StorageService) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:fixture_directory) { "spec/fixtures/imports/schemes" }
+  let(:fixture_directory) { "spec/fixtures/imports/mgmtgroups" }
   let(:scheme_id) { "6d6d7618b58affe2a150a5ef2e9f4765fa6cd05d" }
 
   let!(:owning_org) { FactoryBot.create(:organisation, old_org_id: "7c5bd5fb549c09z2c55d9cb90d7ba84927e64618") }

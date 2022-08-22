@@ -11,6 +11,23 @@ module CheckAnswersHelper
     end
   end
 
+  def can_change_scheme_answer?(attribute_name, scheme)
+    editable_attributes = current_user.support? ? ["Name", "Confidential information", "Housing stock owned by"] : ["Name", "Confidential information"]
+    !scheme.confirmed? || editable_attributes.include?(attribute_name)
+  end
+
+  def get_location_change_link_href(scheme, location)
+    if location.confirmed?
+      location_edit_name_path(id: scheme.id, location_id: location.id)
+    else
+      location_edit_path(id: scheme.id, location_id: location.id)
+    end
+  end
+
+  def any_questions_have_summary_card_number?(subsection, case_log)
+    subsection.applicable_questions(case_log).map(&:check_answers_card_number).compact.length.positive?
+  end
+
 private
 
   def answered_questions_count(subsection, case_log, current_user)

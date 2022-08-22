@@ -85,17 +85,17 @@ RSpec.describe Validations::DateValidations do
       expect(record.errors["mrcdate"]).to be_empty
     end
 
-    it "cannot be more than 2 years before the tenancy start date" do
+    it "cannot be more than 10 years before the tenancy start date" do
       record.startdate = Time.zone.local(2022, 2, 1)
-      record.mrcdate = Time.zone.local(2020, 1, 1)
+      record.mrcdate = Time.zone.local(2012, 1, 1)
       date_validator.validate_property_major_repairs(record)
       expect(record.errors["mrcdate"])
-        .to include(match I18n.t("validations.property.mrcdate.730_days_before_tenancy_start"))
+        .to include(match I18n.t("validations.property.mrcdate.ten_years_before_tenancy_start"))
     end
 
-    it "must be within 2 years of the tenancy start date" do
+    it "must be within 10 years of the tenancy start date" do
       record.startdate = Time.zone.local(2022, 2, 1)
-      record.mrcdate = Time.zone.local(2020, 3, 1)
+      record.mrcdate = Time.zone.local(2012, 3, 1)
       date_validator.validate_property_major_repairs(record)
       expect(record.errors["mrcdate"]).to be_empty
     end

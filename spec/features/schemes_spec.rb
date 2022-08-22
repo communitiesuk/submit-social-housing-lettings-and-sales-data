@@ -284,13 +284,34 @@ RSpec.describe "Schemes scheme Features" do
                   expect(page).not_to have_button("Create scheme")
                 end
 
+                it "allows you to edit the newly added location" do
+                  click_link "Locations"
+                  expect(page).to have_link(nil, href: /edit/)
+                end
+
+                context "when you click save" do
+                  it "displays a updated banner" do
+                    click_button "Save"
+                    expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+                    expect(page).to have_content("has been updated")
+                  end
+
+                  it "does not let you edit the saved location" do
+                    click_link "Locations"
+                    expect(page).to have_link(nil, href: /edit(?!-name)/)
+                    click_button "Save"
+                    click_link "Locations"
+                    expect(page).not_to have_link(nil, href: /edit(?!-name)/)
+                  end
+                end
+
                 context "when you click to view the scheme details" do
                   before do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, confidential information and housing stock owner" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
               end
@@ -451,6 +472,7 @@ RSpec.describe "Schemes scheme Features" do
 
           it "lets me check my answers after adding a location" do
             fill_in_and_save_location
+            expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
             expect(page).to have_content "Check your changes before creating this scheme"
           end
 
@@ -561,11 +583,12 @@ RSpec.describe "Schemes scheme Features" do
           end
 
           it "adds scheme to the list of schemes" do
+            expect(page).to have_content "#{scheme.service_name} has been created."
+            click_link "Schemes"
             expect(page).to have_content "Supported housing schemes"
             expect(page).to have_content scheme.id_to_display
             expect(page).to have_content scheme.service_name
             expect(page).to have_content scheme.owning_organisation.name
-            expect(page).to have_content "#{scheme.service_name} has been created."
           end
         end
 
@@ -704,9 +727,17 @@ RSpec.describe "Schemes scheme Features" do
                 click_button "Save changes"
               end
 
-              it "lets me see amended details on the show page" do
+              it "lets me see amended details on the check answers page" do
                 expect(page).to have_content "FooBar"
+                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                assert_selector "a", text: "Change", count: 3
+              end
+
+              it "lets me save the scheme" do
+                click_button "Save"
                 expect(page).to have_current_path("/schemes/#{scheme.id}")
+                expect(page).to have_css(".govuk-notification-banner.govuk-notification-banner--success")
+                expect(page).to have_content("has been updated")
               end
             end
           end
@@ -748,10 +779,10 @@ RSpec.describe "Schemes scheme Features" do
                   click_button "Save and continue"
                 end
 
-                it "returns to locations page and shows the new name" do
+                it "returns to locations check your answers page and shows the new name" do
                   expect(page).to have_content location.id
                   expect(page).to have_content "NewName"
-                  expect(page).to have_current_path("/schemes/#{scheme.id}/locations")
+                  expect(page.current_url.split("/").last).to eq("check-answers#locations")
                 end
               end
             end
@@ -834,10 +865,59 @@ RSpec.describe "Schemes scheme Features" do
                     click_link("Scheme")
                   end
 
-                  it "does not let you change details other than the name" do
-                    assert_selector "a", text: "Change", count: 1
+                  it "does not let you change details other than the name, Confidential information	and Housing stock owned by" do
+                    assert_selector "a", text: "Change", count: 3
                   end
                 end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+  context "when I am signed in as a data coordinator" do
+    let(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
+    let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation_id: user.organisation_id) }
+
+    before do
+      visit("/logs")
+      fill_in("user[email]", with: user.email)
+      fill_in("user[password]", with: user.password)
+      click_button("Sign in")
+    end
+
+    context "when editing a scheme" do
+      context "when I visit schemes page" do
+        before do
+          visit("schemes")
+        end
+
+        context "when I click to see individual scheme" do
+          let(:scheme) { schemes.first }
+
+          before do
+            FactoryBot.create(:location, scheme:)
+            click_link(scheme.service_name)
+          end
+
+          context "when I click to change scheme name" do
+            before do
+              click_link("Change", href: "/schemes/#{scheme.id}/edit-name", match: :first)
+            end
+
+            context "when I edit details" do
+              before do
+                fill_in "Scheme name", with: "FooBar"
+                check "This scheme contains confidential information"
+                click_button "Save changes"
+              end
+
+              it "lets me see amended details on the check answers page" do
+                expect(page).to have_content "FooBar"
+                expect(page).to have_current_path("/schemes/#{scheme.id}/check-answers")
+                expect(page).to have_link("Change", href:  /schemes\/#{scheme.id}\/edit-name/, count: 2)
               end
             end
           end

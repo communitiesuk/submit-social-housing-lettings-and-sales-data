@@ -1,8 +1,8 @@
 class Scheme < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, optional: true, class_name: "Organisation"
-  has_many :locations
-  has_many :case_logs
+  has_many :locations, dependent: :delete_all
+  has_many :case_logs, dependent: :delete_all
 
   has_paper_trail
 
@@ -18,6 +18,8 @@ class Scheme < ApplicationRecord
                     }
 
   validate :validate_confirmed
+
+  auto_strip_attributes :service_name
 
   SENSITIVE = {
     No: 0,

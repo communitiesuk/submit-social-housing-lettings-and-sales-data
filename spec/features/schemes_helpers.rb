@@ -44,7 +44,7 @@ module SchemesHelpers
   end
 
   def fill_in_and_save_secondary_client_group
-    choose "Homeless families with support needs"
+    choose "Offenders and people at risk of offending"
     click_button "Save and continue"
   end
 

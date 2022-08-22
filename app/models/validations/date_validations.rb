@@ -9,8 +9,8 @@ module Validations::DateValidations
       record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.not_first_let")
     end
 
-    if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 730
-      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.730_days_before_tenancy_start")
+    if record["mrcdate"].present? && record["startdate"].present? && record["startdate"].to_date - record["mrcdate"].to_date > 3650
+      record.errors.add :mrcdate, I18n.t("validations.property.mrcdate.ten_years_before_tenancy_start")
     end
   end
 

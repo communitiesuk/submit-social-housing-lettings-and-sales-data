@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_10_152340) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -200,6 +200,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
     t.integer "vacdays"
     t.bigint "scheme_id"
     t.bigint "location_id"
+    t.integer "major_repairs_date_value_check"
+    t.integer "void_date_value_check"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["location_id"], name: "index_case_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
@@ -250,6 +252,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
     t.string "mobility_type"
     t.datetime "startdate", precision: nil
     t.string "location_admin_district"
+    t.boolean "confirmed"
     t.index ["old_id"], name: "index_locations_on_old_id", unique: true
     t.index ["scheme_id"], name: "index_locations_on_scheme_id"
   end
@@ -260,6 +263,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
     t.integer "base_number", default: 1, null: false
     t.integer "increment_number", default: 1, null: false
     t.boolean "empty_export", default: false, null: false
+  end
+
+  create_table "organisation_relationships", force: :cascade do |t|
+    t.integer "child_organisation_id"
+    t.integer "parent_organisation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "organisation_rent_periods", force: :cascade do |t|
@@ -379,8 +389,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_02_125711) do
   end
 
   add_foreign_key "case_logs", "locations"
+  add_foreign_key "case_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "case_logs", "schemes"
   add_foreign_key "locations", "schemes"
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
-  add_foreign_key "schemes", "organisations", column: "owning_organisation_id"
+  add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
+  add_foreign_key "users", "organisations", on_delete: :cascade
 end

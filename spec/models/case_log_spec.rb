@@ -1842,6 +1842,36 @@ RSpec.describe CaseLog do
       end
     end
 
+    context "when it changes from a supported housing to not a supported housing" do
+      let(:location) { FactoryBot.create(:location, mobility_type: "A", postcode: "SW1P 4DG") }
+      let(:case_log) { FactoryBot.create(:case_log, location:) }
+
+      it "resets inferred wchair value" do
+        case_log.update!({ needstype: 2 })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select wchair from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["wchair"]).to eq(2)
+        expect(case_log["wchair"]).to eq(2)
+
+        case_log.update!({ needstype: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select needstype from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["wchair"]).to eq(nil)
+        expect(case_log["wchair"]).to eq(nil)
+      end
+
+      it "resets location" do
+        case_log.update!({ needstype: 2 })
+
+        record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["location_id"]).to eq(location.id)
+        expect(case_log["location_id"]).to eq(location.id)
+        case_log.update!({ needstype: 1 })
+        record_from_db = ActiveRecord::Base.connection.execute("select location_id from case_logs where id=#{case_log.id}").to_a[0]
+        expect(record_from_db["location_id"]).to eq(nil)
+        expect(case_log["location_id"]).to eq(nil)
+      end
+    end
+
     context "when it is not a renewal" do
       let(:case_log) { FactoryBot.create(:case_log) }
 
@@ -2043,6 +2073,20 @@ RSpec.describe CaseLog do
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
         end
+
+        context "when case log is supported housing" do
+          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+
+          before do
+            case_log_to_search.update!(needstype: 2, location:)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.filter_by_location_postcode("W6 0ST")
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
+        end
       end
 
       describe "#search_by" do
@@ -2068,6 +2112,20 @@ RSpec.describe CaseLog do
           result = described_class.search_by(case_log_to_search.postcode_full)
           expect(result.count).to eq(1)
           expect(result.first.id).to eq case_log_to_search.id
+        end
+
+        context "when case log is supported housing" do
+          let(:location) { FactoryBot.create(:location, postcode: "W6 0ST") }
+
+          before do
+            case_log_to_search.update!(needstype: 2, location:)
+          end
+
+          it "allows searching by a Property Postcode" do
+            result = described_class.search_by("W6 0ST")
+            expect(result.count).to eq(1)
+            expect(result.first.id).to eq case_log_to_search.id
+          end
         end
 
         context "when postcode has spaces and lower case letters" do
@@ -2235,22 +2293,32 @@ RSpec.describe CaseLog do
   end
 
   describe "csv download" do
-    let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
     let(:scheme) { FactoryBot.create(:scheme) }
     let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE") }
     let(:user) { FactoryBot.create(:user, organisation: location.scheme.owning_organisation) }
+    let(:expected_content) { csv_export_file.read }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
+      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
+      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
+      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
     end
 
-    it "generates a correct csv from a case log" do
-      case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
-      expected_content = csv_export_file.read
-      expected_content.sub!(/\{id\}/, case_log["id"].to_s)
-      expected_content.sub!(/\{owning_org_id\}/, case_log["owning_organisation_id"].to_s)
-      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
-      expect(described_class.to_csv).to eq(expected_content)
+    context "with a support user" do
+      let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download.csv", "r:UTF-8") }
+
+      it "generates a correct csv from a case log" do
+        expect(described_class.to_csv).to eq(expected_content)
+      end
+    end
+
+    context "with a non support user" do
+      let(:csv_export_file) { File.open("spec/fixtures/files/case_logs_download_non_support.csv", "r:UTF-8") }
+
+      it "generates a correct csv from a case log" do
+        expect(described_class.to_csv(user)).to eq(expected_content)
+      end
     end
   end
 end
