@@ -13,7 +13,6 @@ class CaseLogsController < ApplicationController
 
     all_logs = current_user.case_logs
     unpaginated_filtered_logs = filtered_case_logs(filtered_collection(all_logs, search_term))
-    byte_order_mark = "\uFEFF"
 
     respond_to do |format|
       format.html do

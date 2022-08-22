@@ -14,4 +14,8 @@ protected
   def user_for_paper_trail
     current_user
   end
+
+  def byte_order_mark
+    "\uFEFF"
+  end
 end
