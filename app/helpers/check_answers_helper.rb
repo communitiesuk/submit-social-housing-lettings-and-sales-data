@@ -25,7 +25,7 @@ module CheckAnswersHelper
   end
 
   def any_questions_have_summary_card_number?(subsection, case_log)
-    subsection.applicable_questions(case_log).map(&:check_answers_card_number).compact.length > 0
+    subsection.applicable_questions(case_log).map(&:check_answers_card_number).compact.length.positive?
   end
 
 private
