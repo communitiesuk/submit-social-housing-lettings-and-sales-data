@@ -209,6 +209,8 @@ module Imports
 
       # Soft validations can become required answers, set them to yes by default
       attributes["pregnancy_value_check"] = 0
+      attributes["major_repairs_date_value_check"] = 0
+      attributes["void_date_value_check"] = 0
       attributes["retirement_value_check"] = 0
       attributes["rent_value_check"] = 0
       attributes["net_income_value_check"] = 0
@@ -273,7 +275,7 @@ module Imports
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check]
     end
 
     def check_status_completed(case_log, previous_status)
