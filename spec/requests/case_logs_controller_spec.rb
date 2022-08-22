@@ -755,7 +755,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "downloads a CSV file with headers" do
         csv = CSV.parse(response.body)
-        expect(csv.first.first).to eq("id")
+        expect(csv.first.first).to eq("\uFEFFid")
         expect(csv.second.first).to eq(case_log.id.to_s)
       end
 
