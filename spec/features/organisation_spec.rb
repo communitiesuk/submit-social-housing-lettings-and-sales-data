@@ -59,8 +59,10 @@ RSpec.describe "User Features" do
         it "shows schemes in the navigation bar" do
           visit("/logs")
           expect(page).to have_link("Schemes", href: "/schemes")
-        end
+        end    
       end
+
+      # test
       
       context "when the user is support and the organisation does not hold housing stock" do
         before do
