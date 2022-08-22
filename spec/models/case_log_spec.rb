@@ -2285,13 +2285,6 @@ RSpec.describe CaseLog do
     end
   end
 
-  describe "supported_housing_schemes_enabled?" do
-    it "returns true for the case log if the environment is not production" do
-      case_log = FactoryBot.create(:case_log)
-      expect(case_log.supported_housing_schemes_enabled?).to eq(true)
-    end
-  end
-
   describe "csv download" do
     let(:scheme) { FactoryBot.create(:scheme) }
     let(:location) { FactoryBot.create(:location, :export, scheme:, type_of_unit: 6, postcode: "SE11TE") }
