@@ -168,20 +168,6 @@
                     "step": 1,
                     "width": 2
                   },
-                  "retirement_value_check": {
-                    "check_answer_label": "Retirement age soft validation",
-                    "hidden_in_check_answers": true,
-                    "header": "Are you sure this person is retired?",
-                    "type": "interruption_screen",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
-                  },
                   "sex2": {
                     "check_answers_card_number": 2,
                     "check_answer_label": "Person 2’s gender identity",
@@ -203,6 +189,29 @@
                     }
                   }
                 }
+              },
+              "retirement_value_check": {
+                "questions": {
+                  "retirement_value_check": {
+                    "check_answer_label": "Retirement age soft validation",
+                    "hidden_in_check_answers": true,
+                    "header": "Are you sure this person is retired?",
+                    "type": "radio",
+                    "answer_options": {
+                      "0": {
+                        "value": "Yes"
+                      },
+                      "1": {
+                        "value": "No"
+                      }
+                    }
+                  }
+                },
+                "depends_on": [
+                  {
+                    "age2": { "operator": ">", "operand": 50 }
+                  }
+                ]
               },
               "person_2_working_situation": {
                 "header": "",
