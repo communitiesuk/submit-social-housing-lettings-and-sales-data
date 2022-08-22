@@ -479,7 +479,8 @@ class CaseLog < ApplicationRecord
     ordered_default_form_questions = FormHandler.instance.forms.first.second.questions.map(&:id).uniq
 
     attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
-    move_metadata_fields_to_front(attributes)
+    attributes = move_metadata_fields_to_front(attributes)
+    move_is_inferred_fields(attributes)
   end
 
   def self.move_metadata_fields_to_front(initial_attributes)
@@ -487,6 +488,15 @@ class CaseLog < ApplicationRecord
     %w[managing_organisation_name owning_organisation_name created_by_name updated_at created_at status id].each do |attribute|
       attributes.delete(attribute)
       attributes.insert(0, attribute)
+    end
+    attributes
+  end
+
+  def self.move_is_inferred_fields(initial_attributes)
+    attributes = initial_attributes.clone
+    { is_la_inferred: "la", is_previous_la_inferred: "prevloc" }.each do |field, inferred_field|
+      attributes.delete(field.to_s)
+      attributes.insert(attributes.find_index(inferred_field), field.to_s)
     end
     attributes
   end
