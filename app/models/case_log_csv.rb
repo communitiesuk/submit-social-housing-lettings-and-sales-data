@@ -1,0 +1,96 @@
+class CaseLogCsv
+  CSV_FIELDS_TO_OMIT = %w[hhmemb net_income_value_check sale_or_letting first_time_property_let_as_social_housing renttype needstype postcode_known is_la_inferred totchild totelder totadult net_income_known is_carehome previous_la_known is_previous_la_inferred age1_known age2_known age3_known age4_known age5_known age6_known age7_known age8_known letting_allocation_unknown details_known_2 details_known_3 details_known_4 details_known_5 details_known_6 details_known_7 details_known_8 rent_type wrent wscharge wpschrge wsupchrg wtcharge wtshortfall rent_value_check old_form_id old_id retirement_value_check tshortfall_known pregnancy_value_check hhtype new_old vacdays].freeze
+
+  def initialize(all, user, attribute_names)
+    @all = all
+    @user = user
+    @attribute_names = attribute_names
+  end
+
+  def to_csv
+    CSV.generate(headers: true) do |csv|
+      attributes = csv_attributes(@user)
+      csv << attributes
+
+      @all.find_each do |record|
+        csv << attributes.map do |att|
+          record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
+        end
+      end
+    end
+  end
+
+  def label_from_value(value)
+    return "Yes" if value == true
+    return "No" if value == false
+
+    value
+  end
+
+  def csv_attributes(user)
+    attributes = @attribute_names + %w[unittype_sh]
+    attributes = replace_csv_id_fields_with_names(attributes)
+
+    attributes = order_csv_attributes(attributes)
+
+    user.present? && !user.support? ? attributes - CSV_FIELDS_TO_OMIT : attributes
+  end
+
+  def replace_csv_id_fields_with_names(initial_attributes)
+    attributes = initial_attributes.clone
+    { "managing_organisation_id": "managing_organisation_name", "owning_organisation_id": "owning_organisation_name", "created_by_id": "created_by_name" }.each { |current, new_attribute| attributes[attributes.index(current.to_s)] = new_attribute }
+    attributes
+  end
+
+  def order_csv_attributes(initial_attributes)
+    attributes = initial_attributes.clone
+    downloaded_form_years = @all.map(&:collection_start_year).uniq.compact
+
+    downloaded_form_fields = downloaded_form_years.count == 1 && downloaded_form_years[0].present? ? FormHandler.instance.get_form("#{downloaded_form_years[0]}_#{downloaded_form_years[0] + 1}").questions : FormHandler.instance.forms.first.second.questions
+    ordered_default_form_questions = move_checkbox_answer_options(downloaded_form_fields)
+
+    attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
+    attributes = move_metadata_fields_to_front(attributes)
+    attributes = move_is_inferred_fields(attributes)
+    move_scheme_fields_to_back(attributes)
+  end
+
+  def move_checkbox_answer_options(form_questions)
+    checkboxes = form_questions.filter { |question| question.type == "checkbox" }.map { |question| { "#{question.id}": question.answer_options.keys } }
+    attributes = form_questions.map(&:id).uniq
+
+    checkboxes.each do |checkbox_question|
+      checkbox_question.values[0].each do |answer_option|
+        attributes.insert(attributes.find_index(checkbox_question.keys[0].to_s), answer_option)
+      end
+    end
+    attributes
+  end
+
+  def move_metadata_fields_to_front(attributes)
+    metadata_fields = %w[managing_organisation_name owning_organisation_name is_dpo created_by_name updated_at created_at status id]
+    move_csv_attributes(attributes, metadata_fields, 0)
+  end
+
+  def move_is_inferred_fields(initial_attributes)
+    attributes = initial_attributes.clone
+    { is_la_inferred: "la", is_previous_la_inferred: "prevloc" }.each do |field, inferred_field|
+      attributes.delete(field.to_s)
+      attributes.insert(attributes.find_index(inferred_field), field.to_s)
+    end
+    attributes
+  end
+
+  def move_scheme_fields_to_back(attributes)
+    move_csv_attributes(attributes, %w[scheme_id location_id], -1)
+  end
+
+  def move_csv_attributes(initial_attributes, fields_to_move, index)
+    attributes = initial_attributes.clone
+    fields_to_move.each do |field|
+      attributes.delete(field)
+      attributes.insert(index, field)
+    end
+    attributes
+  end
+end
