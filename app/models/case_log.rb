@@ -443,7 +443,7 @@ class CaseLog < ApplicationRecord
   end
 
   def self.to_csv(user = nil)
-    CaseLogCsv.new(all, user, attribute_names).to_csv
+    Csv::CaseLogCsvService.new(user).to_csv
   end
 
   def soft_min_for_period
