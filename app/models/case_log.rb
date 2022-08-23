@@ -482,7 +482,7 @@ class CaseLog < ApplicationRecord
     attributes = initial_attributes.clone
     downloaded_form_years = all.map(&:collection_start_year).uniq.compact
 
-    downloaded_form_fields = if downloaded_form_years.count == 1 && downloaded_form_years[0].present? ? FormHandler.instance.get_form("#{downloaded_form_years[0]}_#{downloaded_form_years[0] + 1}").questions : FormHandler.instance.forms.first.second.questions
+    downloaded_form_fields = downloaded_form_years.count == 1 && downloaded_form_years[0].present? ? FormHandler.instance.get_form("#{downloaded_form_years[0]}_#{downloaded_form_years[0] + 1}").questions : FormHandler.instance.forms.first.second.questions
     ordered_default_form_questions = move_checkbox_answer_options(downloaded_form_fields)
 
     attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
