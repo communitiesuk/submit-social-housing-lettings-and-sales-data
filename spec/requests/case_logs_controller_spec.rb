@@ -766,7 +766,7 @@ RSpec.describe CaseLogsController, type: :request do
 
       it "downloads answer labels rather than values" do
         csv = CSV.parse(response.body)
-        expect(csv.second[10]).to eq("Full-time – 30 hours or more")
+        expect(csv.second[15]).to eq("Full-time – 30 hours or more")
       end
 
       it "downloads filtered logs" do
