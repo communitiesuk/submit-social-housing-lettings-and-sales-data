@@ -500,13 +500,9 @@ class CaseLog < ApplicationRecord
     attributes
   end
 
-  def self.move_metadata_fields_to_front(initial_attributes)
-    attributes = initial_attributes.clone
-    %w[managing_organisation_name owning_organisation_name is_dpo created_by_name updated_at created_at status id].each do |attribute|
-      attributes.delete(attribute)
-      attributes.insert(0, attribute)
-    end
-    attributes
+  def self.move_metadata_fields_to_front(attributes)
+    metadata_fields = %w[managing_organisation_name owning_organisation_name is_dpo created_by_name updated_at created_at status id]
+    move_csv_attributes(attributes, metadata_fields, 0)
   end
 
   def self.move_is_inferred_fields(initial_attributes)
@@ -518,11 +514,15 @@ class CaseLog < ApplicationRecord
     attributes
   end
 
-  def self.move_scheme_fields_to_back(initial_attributes)
+  def self.move_scheme_fields_to_back(attributes)
+    move_csv_attributes(attributes, %w[scheme_id location_id], -1)
+  end
+
+  def self.move_csv_attributes(initial_attributes, fields_to_move, index)
     attributes = initial_attributes.clone
-    %w[scheme_id location_id].each do |attribute|
-      attributes.delete(attribute)
-      attributes.insert(-1, attribute)
+    fields_to_move.each do |field|
+      attributes.delete(field)
+      attributes.insert(index, field)
     end
     attributes
   end
