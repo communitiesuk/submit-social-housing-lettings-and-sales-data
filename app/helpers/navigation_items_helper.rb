@@ -26,12 +26,20 @@ module NavigationItemsHelper
   end
 
   def secondary_items(path, current_organisation_id)
-    [
-      NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
-      NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
-      NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
-      NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-    ]
+    if current_user.organisation.holds_own_stock?
+      [
+        NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+        NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
+        NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
+        NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
+      ]
+    else
+      [
+        NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+        NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
+        NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
+      ]
+    end
   end
 
   def scheme_items(path, current_scheme_id, title)
