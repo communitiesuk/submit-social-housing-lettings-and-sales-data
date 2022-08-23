@@ -480,12 +480,24 @@ class CaseLog < ApplicationRecord
 
   def self.order_csv_attributes(initial_attributes)
     attributes = initial_attributes.clone
-    ordered_default_form_questions = FormHandler.instance.forms.first.second.questions.map(&:id).uniq
+    ordered_default_form_questions = move_checkbox_answer_options(FormHandler.instance.forms.first.second.questions)
 
     attributes = (ordered_default_form_questions & attributes) + (attributes - ordered_default_form_questions)
     attributes = move_metadata_fields_to_front(attributes)
     attributes = move_is_inferred_fields(attributes)
     move_scheme_fields_to_back(attributes)
+  end
+
+  def self.move_checkbox_answer_options(form_questions)
+    checkboxes = form_questions.filter { |question| question.type == "checkbox" }.map { |question| { "#{question.id}": question.answer_options.keys } }
+    attributes = form_questions.map(&:id).uniq
+
+    checkboxes.each do |checkbox_question|
+      checkbox_question.values[0].each do |answer_option|
+        attributes.insert(attributes.find_index(checkbox_question.keys[0].to_s), answer_option)
+      end
+    end
+    attributes
   end
 
   def self.move_metadata_fields_to_front(initial_attributes)
