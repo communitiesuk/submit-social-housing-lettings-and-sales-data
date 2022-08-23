@@ -470,13 +470,16 @@ class CaseLog < ApplicationRecord
   def scheme_primary_client_group
     scheme&.primary_client_group
   end
+
   def scheme_has_another_client_group
     scheme&.has_other_client_group
   end
+
   def scheme_secondary_client_group
     scheme&.secondary_client_group
   end
-  def  scheme_level_of_support
+
+  def scheme_level_of_support
     scheme&.support_type
   end
 
