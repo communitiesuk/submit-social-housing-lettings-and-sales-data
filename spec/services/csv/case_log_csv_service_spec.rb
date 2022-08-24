@@ -202,7 +202,28 @@ RSpec.describe Csv::CaseLogCsvService do
                                    housingneeds_other
                                    unittype_sh
                                    scheme_id
-                                   location_id]
+                                   location_id
+                                   scheme_code
+                                   scheme_service_name
+                                   scheme_sensitive
+                                   scheme_type
+                                   scheme_registered_under_care_act
+                                   scheme_owning_organisation_name
+                                   scheme_managing_organisation_name
+                                   scheme_primary_client_group
+                                   scheme_has_other_client_group
+                                   scheme_secondary_client_group
+                                   scheme_support_type
+                                   scheme_intended_stay
+                                   scheme_created_at
+                                   location_code
+                                   location_postcode
+                                   location_name
+                                   location_units
+                                   location_type_of_unit
+                                   location_mobility_type
+                                   location_admin_district
+                                   location_startdate]
       csv = CSV.parse(described_class.new(user).to_csv)
       expect(csv.first).to eq(expected_csv_attributes)
     end
