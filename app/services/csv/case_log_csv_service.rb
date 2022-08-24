@@ -31,12 +31,12 @@ module Csv
     def set_csv_attributes
       metadata_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name managing_organisation_name]
       metadata_id_fields = %w[managing_organisation_id owning_organisation_id created_by_id]
-      intersecting_attributes = ordered_form_questions & CaseLog.attribute_names
-      remaining_attributes = CaseLog.attribute_names - intersecting_attributes
+      scheme_attributes = %w[scheme_id location_id]
+      intersecting_attributes = ordered_form_questions & CaseLog.attribute_names - scheme_attributes
+      remaining_attributes = CaseLog.attribute_names - intersecting_attributes - scheme_attributes
 
-      @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh]).uniq
+      @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh] + scheme_attributes).uniq
       move_is_inferred_fields
-      move_scheme_fields_to_back
 
       @attributes -= CSV_FIELDS_TO_OMIT if @user.present? && !@user.support?
     end
@@ -60,16 +60,9 @@ module Csv
     end
 
     def move_is_inferred_fields
-      { is_la_inferred: "la", is_previous_la_inferred: "prevloc" }.each do |field, inferred_field|
-        @attributes.delete(field.to_s)
-        @attributes.insert(@attributes.find_index(inferred_field), field.to_s)
-      end
-    end
-
-    def move_scheme_fields_to_back
-      %w[scheme_id location_id].each do |field|
+      { la: "is_la_inferred", prevloc: "is_previous_la_inferred" }.each do |inferred_field, field|
         @attributes.delete(field)
-        @attributes.insert(-1, field)
+        @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
       end
     end
   end
