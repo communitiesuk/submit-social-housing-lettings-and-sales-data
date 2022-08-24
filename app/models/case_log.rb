@@ -442,7 +442,7 @@ class CaseLog < ApplicationRecord
     created_by&.is_dpo
   end
 
-  delegate :service_name, :sensitive, :registered_under_care_act, :primary_client_group, :has_other_client_group, :secondary_client_group, :support_type, :intended_stay, :created_at, prefix: "scheme", to: :scheme, allow_nil: true
+  delegate :service_name, :sensitive, :registered_under_care_act, :primary_client_group, :has_other_client_group, :secondary_client_group, :owning_organisation, :managing_organisation, :support_type, :intended_stay, :created_at, prefix: "scheme", to: :scheme, allow_nil: true
   delegate :scheme_type, to: :scheme, allow_nil: true
 
   def scheme_code
@@ -450,11 +450,11 @@ class CaseLog < ApplicationRecord
   end
 
   def scheme_owning_organisation_name
-    scheme&.owning_organisation&.name
+    scheme_owning_organisation&.name
   end
 
   def scheme_managing_organisation_name
-    scheme&.managing_organisation&.name
+    scheme_managing_organisation&.name
   end
 
   delegate :postcode, :name, :units, :type_of_unit, :mobility_type, :startdate, prefix: "location", to: :location, allow_nil: true
