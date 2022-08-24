@@ -4,7 +4,6 @@ class Form::Setup::Pages::NeedsType < ::Form::Page
     @id = "needs_type"
     @header = ""
     @description = ""
-    @depends_on = [{ "supported_housing_schemes_enabled?" => true }]
     @subsection = subsection
   end
 
