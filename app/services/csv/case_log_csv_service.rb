@@ -29,27 +29,22 @@ module Csv
     end
 
     def set_csv_attributes
-      @attributes = CaseLog.attribute_names + %w[unittype_sh]
-      replace_csv_id_fields_with_names
-      order_csv_attributes
+      metadata_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name managing_organisation_name]
+      metadata_id_fields = %w[managing_organisation_id owning_organisation_id created_by_id]
+      scheme_attributes = %w[scheme_id location_id]
+      intersecting_attributes = ordered_form_questions & CaseLog.attribute_names - scheme_attributes
+      remaining_attributes = CaseLog.attribute_names - intersecting_attributes - scheme_attributes
+
+      @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh] + scheme_attributes).uniq
+      move_is_inferred_fields
 
       @attributes -= CSV_FIELDS_TO_OMIT if @user.present? && !@user.support?
     end
 
-    def replace_csv_id_fields_with_names
-      { "managing_organisation_id": "managing_organisation_name", "owning_organisation_id": "owning_organisation_name", "created_by_id": "created_by_name" }.each { |current, new_attribute| @attributes[@attributes.index(current.to_s)] = new_attribute }
-    end
-
-    def order_csv_attributes
+    def ordered_form_questions
       downloaded_form_years = CaseLog.all.map(&:collection_start_year).uniq.compact
-
       downloaded_form_fields = downloaded_form_years.count == 1 && downloaded_form_years[0].present? ? FormHandler.instance.get_form("#{downloaded_form_years[0]}_#{downloaded_form_years[0] + 1}").questions : FormHandler.instance.forms.first.second.questions
-      ordered_default_form_questions = move_checkbox_answer_options(downloaded_form_fields)
-
-      @attributes = (ordered_default_form_questions & @attributes) + (@attributes - ordered_default_form_questions)
-      move_metadata_fields_to_front
-      move_is_inferred_fields
-      move_scheme_fields_to_back
+      move_checkbox_answer_options(downloaded_form_fields)
     end
 
     def move_checkbox_answer_options(form_questions)
@@ -64,26 +59,10 @@ module Csv
       attributes
     end
 
-    def move_metadata_fields_to_front
-      metadata_fields = %w[managing_organisation_name owning_organisation_name is_dpo created_by_name updated_at created_at status id]
-      move_csv_attributes(metadata_fields, 0)
-    end
-
     def move_is_inferred_fields
-      { is_la_inferred: "la", is_previous_la_inferred: "prevloc" }.each do |field, inferred_field|
-        @attributes.delete(field.to_s)
-        @attributes.insert(@attributes.find_index(inferred_field), field.to_s)
-      end
-    end
-
-    def move_scheme_fields_to_back
-      move_csv_attributes(%w[scheme_id location_id], -1)
-    end
-
-    def move_csv_attributes(fields_to_move, index)
-      fields_to_move.each do |field|
+      { la: "is_la_inferred", prevloc: "is_previous_la_inferred" }.each do |inferred_field, field|
         @attributes.delete(field)
-        @attributes.insert(index, field)
+        @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
       end
     end
   end
