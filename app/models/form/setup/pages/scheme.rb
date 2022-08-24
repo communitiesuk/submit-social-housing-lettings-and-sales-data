@@ -4,7 +4,6 @@ class Form::Setup::Pages::Scheme < ::Form::Page
     @header = ""
     @description = ""
     @depends_on = [{
-      "supported_housing_schemes_enabled?" => true,
       "needstype" => 2,
     }]
   end

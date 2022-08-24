@@ -1,10 +1,6 @@
 module DerivedVariables::CaseLogVariables
   RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
 
-  def supported_housing_schemes_enabled?
-    FeatureToggle.supported_housing_schemes_enabled?
-  end
-
   def scheme_has_multiple_locations?
     return false unless scheme
 
@@ -15,8 +11,6 @@ module DerivedVariables::CaseLogVariables
   def set_derived_fields!
     # TODO: Remove once we support parent/child relationships
     self.managing_organisation_id ||= owning_organisation_id
-    # TODO: Remove once we support supported housing logs
-    self.needstype = 1 unless supported_housing_schemes_enabled?
     if rsnvac.present?
       self.newprop = has_first_let_vacancy_reason? ? 1 : 2
     end

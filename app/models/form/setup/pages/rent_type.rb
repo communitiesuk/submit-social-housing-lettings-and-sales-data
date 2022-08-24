@@ -3,7 +3,6 @@ class Form::Setup::Pages::RentType < ::Form::Page
     super("rent_type", hsh, subsection)
     @header = ""
     @description = ""
-    @depends_on = [{ "supported_housing_schemes_enabled?" => true }]
     @derived = true
   end
 

@@ -26,8 +26,4 @@ RSpec.describe Form::Setup::Pages::Scheme, type: :model do
   it "has the correct description" do
     expect(page.description).to eq("")
   end
-
-  it "has the correct depends_on" do
-    expect(page.depends_on).to eq([{ "needstype" => 2, "supported_housing_schemes_enabled?" => true }])
-  end
 end
