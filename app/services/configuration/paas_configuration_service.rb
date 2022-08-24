@@ -8,7 +8,7 @@ module Configuration
 
     def read_config
       unless config_present?
-        @logger.warn("Could not find VCAP_SERVICES in the environment!")
+        @logger.warn("Could not find VCAP_SERVICES in the environment variables!")
         return {}
       end
 
