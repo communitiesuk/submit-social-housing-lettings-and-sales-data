@@ -2304,6 +2304,8 @@ RSpec.describe CaseLog do
       expected_content.sub!(/\{scheme_intended_length_of_stay\}/, scheme["intended_stay"].to_s)
       expected_content.sub!(/\{location_code\}/, location["id"].to_s)
       expected_content.sub!(/\{location_available_from\}/, location["startdate"].to_s)
+      expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
+      expected_content.sub!(/\{location_id\}/, location["id"].to_s)
     end
 
     context "with a support user" do
