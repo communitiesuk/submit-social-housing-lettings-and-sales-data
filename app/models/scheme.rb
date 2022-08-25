@@ -112,7 +112,7 @@ class Scheme < ApplicationRecord
 
   def check_details_attributes
     [
-      { name: "Service code", value: id_to_display, id: "id" },
+      { name: "Scheme code", value: id_to_display, id: "id" },
       { name: "Name", value: service_name, id: "service_name" },
       { name: "Confidential information", value: sensitive, id: "sensitive" },
       { name: "Type of scheme", value: scheme_type, id: "scheme_type" },
