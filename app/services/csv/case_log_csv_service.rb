@@ -67,9 +67,11 @@ module Csv
     end
 
     def move_la_fields
-      { la: "is_la_inferred", la: "la_label", prevloc: "is_previous_la_inferred", prevloc: "prevloc_label" }.each do |inferred_field, field|
-        @attributes.delete(field)
-        @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
+      { la: %w[is_la_inferred la_label], prevloc: %w[is_previous_la_inferred prevloc_label] }.each do |inferred_field, fields|
+        fields.each do |field|
+          @attributes.delete(field)
+          @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
+        end
       end
     end
   end
