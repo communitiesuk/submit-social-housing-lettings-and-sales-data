@@ -5,20 +5,38 @@ class Form
 
   include Form::Setup
 
-  def initialize(form_path, name)
-    raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
+  def initialize(form_path, name, sections_in_form = [], type = "lettings")
+    if type == "sales"
+      # @form_definition = sections.map do |s|
+      #   s.new(nil, nil, self)
+      # end
+      @name = name
+      # @setup_sections = [Form::Setup::Sections::Setup.new(nil, nil, self)]
+      # @form_definition = JSON.parse(File.open(form_path).read)
+      @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
+      @type = "sales"
+      @sections = form_sections
+      @subsections = sections.flat_map(&:subsections)
+      @pages = subsections.flat_map(&:pages)
+      @questions = pages.flat_map(&:questions)
+      @start_date = Time.zone.local(name[0..3], 4, 1)
+      @end_date = Time.zone.local(start_date.year + 1, 4, 1)
 
-    @name = name
-    @setup_sections = [Form::Setup::Sections::Setup.new(nil, nil, self)]
-    @form_definition = JSON.parse(File.open(form_path).read)
-    @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
-    @type = form_definition["form_type"]
-    @sections =  setup_sections + form_sections
-    @subsections = sections.flat_map(&:subsections)
-    @pages = subsections.flat_map(&:pages)
-    @questions = pages.flat_map(&:questions)
-    @start_date = Time.iso8601(form_definition["start_date"])
-    @end_date = Time.iso8601(form_definition["end_date"])
+    else
+      raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
+
+      @name = name
+      @setup_sections = [Form::Setup::Sections::Setup.new(nil, nil, self)]
+      @form_definition = JSON.parse(File.open(form_path).read)
+      @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
+      @type = form_definition["form_type"]
+      @sections =  setup_sections + form_sections
+      @subsections = sections.flat_map(&:subsections)
+      @pages = subsections.flat_map(&:pages)
+      @questions = pages.flat_map(&:questions)
+      @start_date = Time.iso8601(form_definition["start_date"])
+      @end_date = Time.iso8601(form_definition["end_date"])
+    end
   end
 
   def get_subsection(id)
@@ -58,28 +76,28 @@ class Form
   def next_page_redirect_path(page, lettings_log, current_user)
     nxt_page = next_page(page, lettings_log, current_user)
     if nxt_page == :check_answers
-      "lettings_log_#{subsection_for_page(page).id}_check_answers_path"
+      "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      "lettings_log_#{nxt_page}_path"
+      "#{type}_log_#{nxt_page}_path"
     end
   end
 
-  def next_incomplete_section_redirect_path(subsection, lettings_log)
+  def next_incomplete_section_redirect_path(subsection, log)
     subsection_ids = subsections.map(&:id)
 
-    if lettings_log.status == "completed"
+    if log.status == "completed"
       return first_question_in_last_subsection(subsection_ids)
     end
 
-    next_subsection = next_subsection(subsection, lettings_log, subsection_ids)
+    next_subsection = next_subsection(subsection, log, subsection_ids)
 
-    case next_subsection.status(lettings_log)
+    case next_subsection.status(log)
     when :completed
-      next_incomplete_section_redirect_path(next_subsection, lettings_log)
+      next_incomplete_section_redirect_path(next_subsection, log)
     when :in_progress
       "#{next_subsection.id}/check_answers".dasherize
     when :not_started
-      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(lettings_log, nil) }.id
+      first_question_in_subsection = next_subsection.pages.find { |page| page.routed_to?(log, nil) }.id
       first_question_in_subsection.to_s.dasherize
     else
       "error"
@@ -92,11 +110,11 @@ class Form
     first_question_in_subsection.to_s.dasherize
   end
 
-  def next_subsection(subsection, lettings_log, subsection_ids)
+  def next_subsection(subsection, log, subsection_ids)
     next_subsection_id_index = subsection_ids.index(subsection.id) + 1
     next_subsection = get_subsection(subsection_ids[next_subsection_id_index])
 
-    if subsection_ids[subsection_ids.length - 1] == subsection.id && lettings_log.status != "completed"
+    if subsection_ids[subsection_ids.length - 1] == subsection.id && log.status != "completed"
       next_subsection = get_subsection(subsection_ids[0])
     end
 

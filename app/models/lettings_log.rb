@@ -14,7 +14,7 @@ class LettingsLogValidator < ActiveModel::Validator
   end
 end
 
-class LettingsLog < ApplicationRecord
+class LettingsLog < Log
   include Validations::SoftValidations
   include DerivedVariables::LettingsLogVariables
 
@@ -31,9 +31,6 @@ class LettingsLog < ApplicationRecord
   before_validation :set_derived_fields!
   before_save :update_status!
 
-  belongs_to :owning_organisation, class_name: "Organisation", optional: true
-  belongs_to :managing_organisation, class_name: "Organisation", optional: true
-  belongs_to :created_by, class_name: "User", optional: true
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
 

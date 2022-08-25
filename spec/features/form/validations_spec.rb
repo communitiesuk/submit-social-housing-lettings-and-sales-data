@@ -37,7 +37,7 @@ RSpec.describe "validations" do
 
   describe "Question validation" do
     context "when the tenant age is invalid" do
-      it "shows validation for under 0" do
+      it "shows validation for under 0", js: true do
         visit("/logs/#{id}/person-1-age")
         fill_in_number_question(empty_lettings_log.id, "age1", -5, "person-1-age")
         expect(page).to have_selector("#error-summary-title")

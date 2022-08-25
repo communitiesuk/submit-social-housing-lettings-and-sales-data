@@ -9,6 +9,8 @@ class User < ApplicationRecord
   belongs_to :organisation, optional: true
   has_many :owned_lettings_logs, through: :organisation, dependent: :delete_all
   has_many :managed_lettings_logs, through: :organisation
+  has_many :owned_sales_logs, through: :organisation, dependent: :delete_all
+  has_many :managed_sales_logs, through: :organisation
 
   validates :name, presence: true
   validates :email, presence: true
@@ -55,6 +57,14 @@ class User < ApplicationRecord
       LettingsLog.all
     else
       LettingsLog.filter_by_organisation(organisation)
+    end
+  end
+
+  def sales_logs
+    if support?
+      SalesLog.all
+    else
+      SalesLog.filter_by_organisation(organisation)
     end
   end
 

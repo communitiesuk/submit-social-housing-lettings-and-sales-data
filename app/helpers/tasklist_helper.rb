@@ -11,13 +11,13 @@ module TasklistHelper
     lettings_log.form.subsections.count { |subsection| subsection.status(lettings_log) == status && subsection.applicable_questions(lettings_log).count.positive? }
   end
 
-  def next_page_or_check_answers(subsection, lettings_log, current_user)
-    path = if subsection.is_started?(lettings_log)
-             "lettings_log_#{subsection.id}_check_answers_path"
+  def next_page_or_check_answers(subsection, log, current_user)
+    path = if subsection.is_started?(log)
+             "#{log.class.name.underscore}_#{subsection.id}_check_answers_path"
            else
-             "lettings_log_#{next_question_page(subsection, lettings_log, current_user)}_path"
+             "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
            end
-    send(path, lettings_log)
+    send(path, log)
   end
 
   def next_question_page(subsection, lettings_log, current_user)

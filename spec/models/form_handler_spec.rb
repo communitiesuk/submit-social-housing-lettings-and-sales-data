@@ -35,4 +35,9 @@ RSpec.describe FormHandler do
     expect(Form).not_to receive(:new).with(:any, test_form_name)
     expect(form_handler.get_form(test_form_name)).to be_a(Form)
   end
+
+  it "can get a saleslog form" do
+    form_handler = described_class.instance
+    expect(form_handler.get_form("2022_2023_sales")).to be_a(Form)
+  end
 end

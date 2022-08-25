@@ -1,10 +1,8 @@
-class LettingsLogsController < ApplicationController
+class LettingsLogsController < LogsController
   include Pagy::Backend
   include Modules::LettingsLogsFilter
   include Modules::SearchFilter
 
-  skip_before_action :verify_authenticity_token, if: :json_api_request?
-  before_action :authenticate, if: :json_api_request?
   before_action :authenticate_user!, unless: :json_api_request?
   before_action :find_resource, except: %i[create index edit]
 
@@ -28,25 +26,12 @@ class LettingsLogsController < ApplicationController
   end
 
   def create
-    lettings_log = LettingsLog.new(lettings_log_params)
-    respond_to do |format|
-      format.html do
-        lettings_log.save!
-        redirect_to lettings_log_url(lettings_log)
-      end
-      format.json do
-        if lettings_log.save
-          render json: lettings_log, status: :created
-        else
-          render json: { errors: lettings_log.errors.messages }, status: :unprocessable_entity
-        end
-      end
-    end
+    super { LettingsLog.new(log_params) }
   end
 
   def update
     if @lettings_log
-      if @lettings_log.update(api_lettings_log_params)
+      if @lettings_log.update(api_log_params)
         render json: @lettings_log, status: :ok
       else
         render json: { errors: @lettings_log.errors.messages }, status: :unprocessable_entity
@@ -99,40 +84,15 @@ private
     params["search"]
   end
 
-  def json_api_request?
-    API_ACTIONS.include?(request["action"]) && request.format.json?
-  end
-
-  def authenticate
-    http_basic_authenticate_or_request_with name: ENV["API_USER"], password: ENV["API_KEY"]
-  end
-
-  def lettings_log_params
-    if current_user && !current_user.support?
-      org_params.merge(api_lettings_log_params)
-    else
-      api_lettings_log_params
-    end
-  end
-
-  def org_params
-    {
-      "owning_organisation_id" => current_user.organisation.id,
-      "managing_organisation_id" => current_user.organisation.id,
-      "created_by_id" => current_user.id,
-    }
-  end
-
-  def api_lettings_log_params
-    return {} unless params[:lettings_log]
-
-    permitted = params.require(:lettings_log).permit(LettingsLog.editable_fields)
-    owning_id = permitted["owning_organisation_id"]
-    permitted["owning_organisation"] = Organisation.find(owning_id) if owning_id
-    permitted
-  end
+  def permitted_log_params
+    params.require(:lettings_log).permit(LettingsLog.editable_fields)
+  end 
 
   def find_resource
     @lettings_log = LettingsLog.find_by(id: params[:id])
+  end
+
+  def post_create_redirect_url(log)
+    lettings_log_url(log)
   end
 end
