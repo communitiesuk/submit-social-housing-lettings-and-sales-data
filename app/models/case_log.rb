@@ -442,6 +442,14 @@ class CaseLog < ApplicationRecord
     created_by&.is_dpo
   end
 
+  def la_label
+    la
+  end
+
+  def prevloc_label
+    prevloc
+  end
+
   def self.to_csv(user = nil)
     Csv::CaseLogCsvService.new(user).to_csv
   end
