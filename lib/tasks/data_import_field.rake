@@ -5,7 +5,7 @@ namespace :core do
     path = args[:path]
     raise "Usage: rake core:data_import_field['field','path/to/xml_files']" if path.blank? || field.blank?
 
-    storage_service = S3StorageService.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    storage_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
 
     # We only allow a reduced list of known fields to be updatable
     case field

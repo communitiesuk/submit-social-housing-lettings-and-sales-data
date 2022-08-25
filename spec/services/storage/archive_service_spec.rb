@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ArchiveStorageService do
+RSpec.describe Storage::ArchiveService do
   subject(:archive_service) { described_class.new(archive_content) }
 
   let(:compressed_folder) { "my_directory" }
