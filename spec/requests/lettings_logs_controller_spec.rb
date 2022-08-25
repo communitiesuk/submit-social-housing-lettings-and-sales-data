@@ -50,7 +50,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       before do
         Timecop.freeze(Time.utc(2022, 2, 8))
-        post "/logs", headers:, params: params.to_json
+        post "/lettings-logs", headers:, params: params.to_json
       end
 
       after do
@@ -132,7 +132,7 @@ RSpec.describe LettingsLogsController, type: :request do
       before do
         RequestHelper.stub_http_requests
         sign_in user
-        post "/logs", headers:
+        post "/lettings-logs", headers:
       end
 
       it "tracks who created the record" do
@@ -169,6 +169,21 @@ RSpec.describe LettingsLogsController, type: :request do
     context "when displaying a collection of logs" do
       let(:headers) { { "Accept" => "text/html" } }
 
+      context "when you visit the index page" do
+        let(:user) { FactoryBot.create(:user, :support) }
+
+        before do
+          allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+          sign_in user
+        end
+
+        it "does not have a button for creating sales logs" do
+          get "/lettings-logs", headers:, params: {}
+          page.assert_selector(".govuk-button", text: "Create a new sales log", count: 0)
+          page.assert_selector(".govuk-button", text: "Create a new lettings log", count: 1)
+        end
+      end
+
       context "when the user is a customer support user" do
         let(:user) { FactoryBot.create(:user, :support) }
 
@@ -178,13 +193,13 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         it "does have organisation values" do
-          get "/logs", headers: headers, params: {}
+          get "/lettings-logs", headers: headers, params: {}
           expect(page).to have_content("Owned by")
           expect(page).to have_content("Managed by")
         end
 
         it "shows lettings logs for all organisations" do
-          get "/logs", headers: headers, params: {}
+          get "/lettings-logs", headers: headers, params: {}
           expect(page).to have_content("LC783")
           expect(page).to have_content("UA984")
         end
@@ -195,7 +210,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "page has correct title" do
-            get "/logs", headers: headers, params: {}
+            get "/lettings-logs", headers: headers, params: {}
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
         end
@@ -218,29 +233,29 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "shows lettings logs for multiple selected statuses" do
-              get "/logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
+              get "/lettings-logs?status[]=in_progress&status[]=completed", headers: headers, params: {}
               expect(page).to have_link(in_progress_lettings_log.id.to_s)
               expect(page).to have_link(completed_lettings_log.id.to_s)
             end
 
             it "shows lettings logs for one selected status" do
-              get "/logs?status[]=in_progress", headers: headers, params: {}
+              get "/lettings-logs?status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(in_progress_lettings_log.id.to_s)
               expect(page).not_to have_link(completed_lettings_log.id.to_s)
             end
 
             it "filters on organisation" do
-              get "/logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
+              get "/lettings-logs?organisation[]=#{organisation_2.id}", headers: headers, params: {}
               expect(page).to have_link(completed_lettings_log.id.to_s)
               expect(page).not_to have_link(in_progress_lettings_log.id.to_s)
             end
 
             it "does not reset the filters" do
-              get "/logs?status[]=in_progress", headers: headers, params: {}
+              get "/lettings-logs?status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(in_progress_lettings_log.id.to_s)
               expect(page).not_to have_link(completed_lettings_log.id.to_s)
 
-              get "/logs", headers: headers, params: {}
+              get "/lettings-logs", headers: headers, params: {}
               expect(page).to have_link(in_progress_lettings_log.id.to_s)
               expect(page).not_to have_link(completed_lettings_log.id.to_s)
             end
@@ -265,13 +280,13 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "shows lettings logs for multiple selected years" do
-              get "/logs?years[]=2021&years[]=2022", headers: headers, params: {}
+              get "/lettings-logs?years[]=2021&years[]=2022", headers: headers, params: {}
               expect(page).to have_link(lettings_log_2021.id.to_s)
               expect(page).to have_link(lettings_log_2022.id.to_s)
             end
 
             it "shows lettings logs for one selected year" do
-              get "/logs?years[]=2021", headers: headers, params: {}
+              get "/lettings-logs?years[]=2021", headers: headers, params: {}
               expect(page).to have_link(lettings_log_2021.id.to_s)
               expect(page).not_to have_link(lettings_log_2022.id.to_s)
             end
@@ -314,14 +329,14 @@ RSpec.describe LettingsLogsController, type: :request do
             end
 
             it "shows lettings logs for multiple selected statuses and years" do
-              get "/logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
+              get "/lettings-logs?years[]=2021&years[]=2022&status[]=in_progress&status[]=completed", headers: headers, params: {}
               expect(page).to have_link(lettings_log_2021.id.to_s)
               expect(page).to have_link(lettings_log_2022.id.to_s)
               expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
             end
 
             it "shows lettings logs for one selected status" do
-              get "/logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
+              get "/lettings-logs?years[]=2022&status[]=in_progress", headers: headers, params: {}
               expect(page).to have_link(lettings_log_2022_in_progress.id.to_s)
               expect(page).not_to have_link(lettings_log_2021.id.to_s)
               expect(page).not_to have_link(lettings_log_2022.id.to_s)
@@ -336,7 +351,7 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         it "does not have organisation columns" do
-          get "/logs", headers: headers, params: {}
+          get "/lettings-logs", headers: headers, params: {}
           expect(page).not_to have_content("Owning organisation")
           expect(page).not_to have_content("Managing organisation")
         end
@@ -347,12 +362,12 @@ RSpec.describe LettingsLogsController, type: :request do
           let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
           it "has search results in the title" do
-            get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            get "/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_title("Logs (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
           it "shows lettings logs matching the id" do
-            get "/logs?search=#{log_to_search.id}", headers: headers, params: {}
+            get "/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
@@ -360,7 +375,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows lettings logs matching the tenant code" do
-            get "/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
+            get "/lettings-logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
@@ -368,7 +383,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows lettings logs matching the property reference" do
-            get "/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
+            get "/lettings-logs?search=#{log_to_search.propcode}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
@@ -376,7 +391,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows lettings logs matching the property postcode" do
-            get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+            get "/lettings-logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
             expect(page).to have_link(log_to_search.id.to_s)
             logs.each do |log|
               expect(page).not_to have_link(log.id.to_s)
@@ -393,7 +408,7 @@ RSpec.describe LettingsLogsController, type: :request do
             let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
             it "displays all matching logs" do
-              get "/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+              get "/lettings-logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               expect(page).to have_link(matching_postcode_log.id.to_s)
               logs.each do |log|
@@ -408,19 +423,19 @@ RSpec.describe LettingsLogsController, type: :request do
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has title with pagination details for page 1" do
-              get "/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
+              get "/lettings-logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
               expect(page).to have_title("Logs (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "has title with pagination details for page 2" do
-              get "/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
+              get "/lettings-logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
               expect(page).to have_title("Logs (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
           end
 
           context "when search query doesn't match any logs" do
             it "doesn't display any logs" do
-              get "/logs?search=foobar", headers:, params: {}
+              get "/lettings-logs?search=foobar", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
               end
@@ -430,7 +445,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when search query is empty" do
             it "doesn't display any logs" do
-              get "/logs?search=", headers:, params: {}
+              get "/lettings-logs?search=", headers:, params: {}
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
               end
@@ -444,7 +459,7 @@ RSpec.describe LettingsLogsController, type: :request do
             let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
             it "shows only logs matching both search and filters" do
-              get "/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
+              get "/lettings-logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
               expect(page).to have_link(log_matching_filter_and_search.id.to_s)
               expect(page).not_to have_link(log_to_search.id.to_s)
               logs.each do |log|
@@ -456,7 +471,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "when there are less than 20 logs" do
           before do
-            get "/logs", headers:, params: {}
+            get "/lettings-logs", headers:, params: {}
           end
 
           it "shows a table of logs" do
@@ -521,19 +536,19 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "does show the organisation filter" do
-            get "/logs", headers:, params: {}
+            get "/lettings-logs", headers:, params: {}
             expect(page).to have_field("organisation-field")
           end
 
           it "shows all logs by default" do
-            get "/logs", headers:, params: {}
+            get "/lettings-logs", headers:, params: {}
             expect(page).to have_content(tenant_code_1)
             expect(page).to have_content(tenant_code_2)
           end
 
           context "when filtering by organisation" do
             it "only show the selected organisations logs" do
-              get "/logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
+              get "/lettings-logs?organisation_select=specific_org&organisation=#{org_1.id}", headers:, params: {}
               expect(page).to have_content(tenant_code_1)
               expect(page).not_to have_content(tenant_code_2)
             end
@@ -541,7 +556,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when the support user has filtered by organisation, then switches back to all organisations" do
             it "shows all organisations" do
-              get "http://localhost:3000/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all&organisation=#{org_1.id}", headers:, params: {}
+              get "http://localhost:3000/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all&organisation=#{org_1.id}", headers:, params: {}
               expect(page).to have_content(tenant_code_1)
               expect(page).to have_content(tenant_code_2)
             end
@@ -555,7 +570,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when on the first page" do
             before do
-              get "/logs", headers:, params: {}
+              get "/lettings-logs", headers:, params: {}
             end
 
             it "has pagination links" do
@@ -576,7 +591,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           context "when on the second page" do
             before do
-              get "/logs?page=2", headers:, params: {}
+              get "/lettings-logs?page=2", headers:, params: {}
             end
 
             it "shows the total log count" do
@@ -607,7 +622,7 @@ RSpec.describe LettingsLogsController, type: :request do
       let(:id) { completed_lettings_log.id }
 
       before do
-        get "/logs/#{id}", headers:
+        get "/lettings-logs/#{id}", headers:
       end
 
       it "returns http success" do
@@ -632,7 +647,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         context "with a user that is not signed in" do
           it "does not let the user get lettings log tasklist pages they don't have access to" do
-            get "/logs/#{lettings_log.id}", headers: headers, params: {}
+            get "/lettings-logs/#{lettings_log.id}", headers: headers, params: {}
             expect(response).to redirect_to("/account/sign-in")
           end
         end
@@ -641,7 +656,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "with lettings logs that are owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{lettings_log.id}", headers:, params: {}
+              get "/lettings-logs/#{lettings_log.id}", headers:, params: {}
             end
 
             it "shows the tasklist for lettings logs you have access to" do
@@ -669,7 +684,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
             before do
               sign_in user
-              get "/logs/#{section_completed_lettings_log.id}", headers:, params: {}
+              get "/lettings-logs/#{section_completed_lettings_log.id}", headers:, params: {}
             end
 
             it "displays a section status for a lettings log" do
@@ -682,7 +697,7 @@ RSpec.describe LettingsLogsController, type: :request do
           context "with lettings logs that are not owned or managed by your organisation" do
             before do
               sign_in user
-              get "/logs/#{unauthorized_lettings_log.id}", headers:, params: {}
+              get "/lettings-logs/#{unauthorized_lettings_log.id}", headers:, params: {}
             end
 
             it "does not show the tasklist for lettings logs you don't have access to" do
@@ -715,23 +730,23 @@ RSpec.describe LettingsLogsController, type: :request do
                                          postcode_known: 1,
                                          postcode_full: "PO5 3TE")
         id = lettings_log.id
-        get "/logs/#{id}/property-information/check-answers"
+        get "/lettings-logs/#{id}/property-information/check-answers"
         expected_inferred_answer = "<span class=\"govuk-!-font-weight-regular app-!-colour-muted\">Manchester</span>"
         expect(CGI.unescape_html(response.body)).to include(expected_inferred_answer)
       end
 
       it "does not show do you know the property postcode question" do
-        get "/logs/#{id}/property-information/check-answers"
+        get "/lettings-logs/#{id}/property-information/check-answers"
         expect(CGI.unescape_html(response.body)).not_to include("Do you know the property postcode?")
       end
 
       it "shows if the postcode is not known" do
-        get "/logs/#{id}/property-information/check-answers"
+        get "/lettings-logs/#{id}/property-information/check-answers"
         expect(CGI.unescape_html(response.body)).to include("Not known")
       end
 
       it "shows `you haven't answered this question` if the question wasn't answered" do
-        get "/logs/#{id}/income-and-benefits/check-answers"
+        get "/lettings-logs/#{id}/income-and-benefits/check-answers"
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
       end
     end
@@ -784,7 +799,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:id) { lettings_log.id }
 
     before do
-      patch "/logs/#{id}", headers:, params: params.to_json
+      patch "/lettings-logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -842,7 +857,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:id) { lettings_log.id }
 
     before do
-      put "/logs/#{id}", headers:, params: params.to_json
+      put "/lettings-logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -882,7 +897,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when deleting a lettings log" do
       before do
-        delete "/logs/#{id}", headers:
+        delete "/lettings-logs/#{id}", headers:
       end
 
       it "returns http success" do
@@ -916,7 +931,7 @@ RSpec.describe LettingsLogsController, type: :request do
       before do
         allow(LettingsLog).to receive(:find_by).and_return(lettings_log)
         allow(lettings_log).to receive(:delete).and_return(false)
-        delete "/logs/#{id}", headers:
+        delete "/lettings-logs/#{id}", headers:
       end
 
       it "returns an unprocessable entity 422" do

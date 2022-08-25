@@ -121,8 +121,8 @@ class Form::Question
     end
   end
 
-  def action_href(lettings_log, page_id)
-    "/logs/#{lettings_log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
+  def action_href(log, page_id)
+    "/#{log.model_name.param_key.dasherize}s/#{log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
   end
 
   def completed?(lettings_log)

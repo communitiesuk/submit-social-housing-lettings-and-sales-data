@@ -14,9 +14,12 @@ class FormHandler
     forms[forms.keys.max_by(&:to_i)]
   end
 
-private
+  def sales_forms
+    sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
+    { "2022_2023_sales" => Form.new(nil, "2022_2023_sales", sales_sections, "sales") }
+  end
 
-  def get_all_forms
+  def lettings_forms
     forms = {}
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
@@ -25,6 +28,12 @@ private
       end
     end
     forms
+  end
+
+private
+
+  def get_all_forms
+    lettings_forms.merge(sales_forms)
   end
 
   def directories

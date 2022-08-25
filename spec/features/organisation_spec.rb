@@ -27,7 +27,7 @@ RSpec.describe "User Features" do
 
     context "when viewing organisation page" do
       it "defaults to organisation details" do
-        visit("/logs")
+        visit("/lettings-logs")
         click_link("About your organisation")
         expect(page).to have_content(user.organisation.name)
       end
@@ -46,7 +46,7 @@ RSpec.describe "User Features" do
         end
 
         it "does not show schemes in the navigation bar" do
-          visit("/logs")
+          visit("/lettings-logs")
           expect(page).not_to have_link("Schemes", href: "/schemes")
         end
       end
@@ -57,7 +57,7 @@ RSpec.describe "User Features" do
         end
 
         it "shows schemes in the navigation bar" do
-          visit("/logs")
+          visit("/lettings-logs")
           expect(page).to have_link("Schemes", href: "/schemes")
         end
       end
@@ -109,7 +109,7 @@ RSpec.describe "User Features" do
 
     context "when viewing organisation page" do
       it "can see the details tab and users tab" do
-        visit("/logs")
+        visit("/lettings-logs")
         click_link("About your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
         expect(page).to have_link("Logs")
@@ -141,7 +141,7 @@ RSpec.describe "User Features" do
       let(:number_of_lettings_logs) { LettingsLog.count }
 
       before do
-        visit("/organisations/#{org_id}/logs")
+        visit("/organisations/#{org_id}/lettings-logs")
       end
 
       it "shows a create button for that organisation" do
@@ -201,12 +201,12 @@ RSpec.describe "User Features" do
       it "can filter lettings logs" do
         expect(page).to have_content("#{number_of_lettings_logs} total logs")
         organisation.lettings_logs.map(&:id).each do |lettings_log_id|
-          expect(page).to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
+          expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
         end
         check("years-2021-field")
         click_button("Apply filters")
-        expect(page).to have_current_path("/organisations/#{org_id}/logs?years[]=&years[]=2021&status[]=&user=all")
-        expect(page).not_to have_link first_log.id.to_s, href: "/logs/#{first_log.id}"
+        expect(page).to have_current_path("/organisations/#{org_id}/lettings-logs?years[]=&years[]=2021&status[]=&user=all")
+        expect(page).not_to have_link first_log.id.to_s, href: "/lettings-logs/#{first_log.id}"
       end
     end
 
@@ -249,39 +249,6 @@ RSpec.describe "User Features" do
 
               it "has only specific organisation name in the dropdown" do
                 expect(page).to have_select("user-organisation-id-field", options: [org_name])
-              end
-            end
-          end
-
-          describe "delete cascade" do
-            context "when the organisation is deleted" do
-              let!(:organisation) { FactoryBot.create(:organisation) }
-              let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
-              let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-              let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
-
-              context "when organisation is deleted" do
-                it "child relationships ie logs, schemes and users are deleted too - application" do
-                  organisation.destroy!
-                  expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
-                  expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                  expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                  expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                end
-
-                context "when the organisation is deleted" do
-                  let!(:organisation) { FactoryBot.create(:organisation) }
-                  let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
-                  let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-                  let!(:log_to_delete) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
-
-                  it "child relationships ie logs, schemes and users are deleted too - database" do
-                    ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
-                    expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                    expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                    expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
-                  end
-                end
               end
             end
           end

@@ -7,7 +7,12 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
-    <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+    <% if current_page?(:controller => 'lettings_logs', :action => 'index') %>
+      <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+    <% end %>
+    <% if FeatureToggle.sales_log_enabled? && current_page?(:controller => 'sales_logs', :action => 'index') %>
+      <%= govuk_button_to "Create a new sales log", sales_logs_path %>
+    <% end %>
     <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
   </div>
 
@@ -15,7 +20,7 @@
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>
-    <%= render partial: "log_list", locals: { lettings_logs: @lettings_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, csv_download_url: csv_download_lettings_logs_path(search: @search_term) } %>
+    <%= render partial: "log_list", locals: { logs: @logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count, csv_download_url: csv_download_lettings_logs_path(search: @search_term) } %>
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>
 </div>

@@ -7,7 +7,7 @@ class FilterService
     end
   end
 
-  def self.filter_lettings_logs(logs, search_term, filters, all_orgs, user)
+  def self.filter_logs(logs, search_term, filters, all_orgs, user)
     logs = filter_by_search(logs, search_term)
 
     filters.each do |category, values|

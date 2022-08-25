@@ -8,7 +8,7 @@
   width: question.width,
   readonly: question.read_only?,
   prefix_text: question.prefix.to_s,
-  suffix_text: question.suffix_label(@lettings_log),
+  suffix_text: question.suffix_label(@log),
   **stimulus_html_attributes(question) %>
 
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.bottom_guidance? %>

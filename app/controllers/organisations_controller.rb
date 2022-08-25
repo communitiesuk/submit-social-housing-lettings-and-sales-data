@@ -1,6 +1,6 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
-  include Modules::LettingsLogsFilter
+  include Modules::LogsFilter
   include Modules::SearchFilter
 
   before_action :authenticate_user!
@@ -89,17 +89,21 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  def logs
-    organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
+  def lettings_logs
+    organisation_logs = LettingsLog.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
 
     respond_to do |format|
       format.html do
         @search_term = search_term
-        @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = organisation_logs.size
         render "logs", layout: "application"
+      end
+
+      format.csv do
+        send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "lettings-logs-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
   end
@@ -116,7 +120,26 @@ class OrganisationsController < ApplicationController
     redirect_to logs_csv_confirmation_organisation_path
   end
 
-private
+  def sales_logs
+    organisation_logs = SalesLog.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
+
+    respond_to do |format|
+      format.html do
+        @search_term = search_term
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = organisation_logs.size
+        render "logs", layout: "application"
+      end
+
+      format.csv do
+        send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "sales-logs-#{@organisation.name}-#{Time.zone.now}.csv"
+      end
+    end
+  end
+
+  private
 
   def org_params
     params.require(:organisation).permit(:name, :address_line1, :address_line2, :postcode, :phone, :holds_own_stock, :provider_type, :housing_registration_no)

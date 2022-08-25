@@ -3,11 +3,11 @@
     <div class="govuk-grid-column-one-half">
       <header class="app-log-summary__header">
         <h2 class="app-log-summary__title">
-          <%= govuk_link_to lettings_log_path(log) do %>
+          <%= govuk_link_to log.is_a?(LettingsLog) ? lettings_log_path(log) : sales_log_path(log) do %>
             <span class="govuk-visually-hidden">Log </span><%= log.id %>
           <% end %>
         </h2>
-        <% if log.tenancycode? or log.propcode? %>
+        <% if log.is_a?(LettingsLog) && (log.tenancycode? or log.propcode?) %>
           <dl class="app-metadata app-metadata--inline">
             <% if log.tenancycode? %>
               <div class="app-metadata__item">
@@ -25,7 +25,7 @@
         <% end %>
       </header>
 
-      <% if log.needstype? or log.startdate? %>
+      <% if log.is_a?(LettingsLog) && (log.needstype? or log.startdate?) %>
         <p class="govuk-body govuk-!-margin-bottom-2">
           <% if log.needstype? %>
             <%= log.is_general_needs? ? "General needs" : "Supported housing" %><br>
