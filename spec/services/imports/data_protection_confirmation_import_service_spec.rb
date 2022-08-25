@@ -5,7 +5,7 @@ RSpec.describe Imports::DataProtectionConfirmationImportService do
   let(:old_org_id) { "7c5bd5fb549c09a2c55d7cb90d7ba84927e64618" }
   let(:old_id) { old_org_id }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }
-  let(:storage_service) { instance_double(S3StorageService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing data protection confirmations" do

@@ -5,7 +5,7 @@ RSpec.describe Imports::OrganisationRentPeriodImportService do
   let(:old_org_id) { "44026acc7ed5c29516b26f2a5deb639e5e37966d" }
   let(:old_id) { "ebd22326d33e389e9f1bfd546979d2c05f9e68d6" }
   let(:import_file) { File.open("#{fixture_directory}/#{old_id}.xml") }
-  let(:storage_service) { instance_double(S3StorageService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
   context "when importing organisation rent periods" do

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Exports::CaseLogExportService do
   subject(:export_service) { described_class.new(storage_service) }
 
-  let(:storage_service) { instance_double(S3StorageService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
 
   let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
