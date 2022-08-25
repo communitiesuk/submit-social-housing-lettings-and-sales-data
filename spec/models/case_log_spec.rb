@@ -2295,7 +2295,17 @@ RSpec.describe CaseLog do
       Timecop.freeze(Time.utc(2022, 6, 5))
       case_log = FactoryBot.create(:case_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
       expected_content.sub!(/\{id\}/, case_log["id"].to_s)
+      expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
+      expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)
+      expected_content.sub!(/\{scheme_sensitive\}/, scheme["sensitive"].to_s)
+      expected_content.sub!(/\{scheme_primary_client_group\}/, scheme["primary_client_group"].to_s)
+      expected_content.sub!(/\{scheme_secondary_client_group\}/, scheme["secondary_client_group"].to_s)
+      expected_content.sub!(/\{scheme_support_type\}/, scheme["support_type"].to_s)
+      expected_content.sub!(/\{scheme_intended_stay\}/, scheme["intended_stay"].to_s)
+      expected_content.sub!(/\{location_code\}/, location["id"].to_s)
+      expected_content.sub!(/\{location_startdate\}/, location["startdate"].to_s)
       expected_content.sub!(/\{scheme_id\}/, scheme["service_name"].to_s)
+      expected_content.sub!(/\{location_id\}/, location["id"].to_s)
     end
 
     context "with a support user" do
