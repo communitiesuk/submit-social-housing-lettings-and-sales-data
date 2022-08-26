@@ -790,7 +790,7 @@
                       }
                     ]
                   },
-                  "header": "Are you sure the time between these dates is correct?",
+                  "header": "Are you sure the property has been vacant for this long?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
@@ -919,7 +919,7 @@
                       }
                     ]
                   },
-                  "header": "Are you sure the time between these dates is correct?",
+                  "header": "Are you sure the property has been vacant for this long?",
                   "type": "interruption_screen",
                   "answer_options": {
                     "0": {
