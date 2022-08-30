@@ -202,8 +202,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_152340) do
     t.bigint "location_id"
     t.integer "major_repairs_date_value_check"
     t.integer "void_date_value_check"
-    t.integer "housingneeds_type"
-    t.integer "housingneeds_other"
     t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
     t.index ["location_id"], name: "index_case_logs_on_location_id"
     t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"

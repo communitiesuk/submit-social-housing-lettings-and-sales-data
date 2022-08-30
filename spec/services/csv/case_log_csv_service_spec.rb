@@ -198,8 +198,6 @@ RSpec.describe Csv::CaseLogCsvService do
                                    hhtype
                                    new_old
                                    vacdays
-                                   housingneeds_type
-                                   housingneeds_other
                                    unittype_sh
                                    scheme_id
                                    location_id
