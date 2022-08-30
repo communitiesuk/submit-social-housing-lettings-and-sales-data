@@ -46,7 +46,6 @@ module DerivedVariables::CaseLogVariables
     self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.homeless = 1
       self.referral = 0
       self.waityear = 2
       if is_general_needs?
