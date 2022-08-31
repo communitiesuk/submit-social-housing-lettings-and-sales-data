@@ -1242,7 +1242,7 @@
               "description": "",
               "questions": {
                 "age1_known": {
-                  "check_answers_card_number": 1, 
+                  "check_answers_card_number": 1,
                   "header": "Do you know the lead tenant’s age?",
                   "hint_text": "The ’lead’ or ’main’ tenant is the person in the household who does the most paid work. If several people do the same paid work, the lead tenant is whoever is the oldest.",
                   "type": "radio",
@@ -6209,12 +6209,7 @@
                     }
                   }
                 }
-              },
-              "depends_on": [
-                {
-                  "renewal": 0
-                }
-              ]
+              }
             },
             "previous_postcode": {
               "header": "",
