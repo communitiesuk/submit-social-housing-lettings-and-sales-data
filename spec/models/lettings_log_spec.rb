@@ -204,6 +204,7 @@ RSpec.describe LettingsLog do
         rent_type: 4,
         hb: 1,
         hbrentshortfall: 1,
+        created_at: Time.utc(2022, 2, 8, 16, 52, 15),
       })
     end
 
@@ -1378,6 +1379,7 @@ RSpec.describe LettingsLog do
           created_by: created_by_user,
           renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
+          created_at: Time.utc(2022, 2, 8, 16, 52, 15),
         })
       end
 
@@ -1712,6 +1714,7 @@ RSpec.describe LettingsLog do
             location_id: location.id,
             renewal: 1,
             startdate: Time.zone.now,
+            created_at: Time.utc(2022, 2, 8, 16, 52, 15),
           })
         end
 
