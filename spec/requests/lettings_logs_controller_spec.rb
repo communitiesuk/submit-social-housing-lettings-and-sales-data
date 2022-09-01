@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe LettingsLogsController, type: :request do
+  include ActiveSupport::Testing::TimeHelpers
+
   let(:user) { FactoryBot.create(:user) }
   let(:owning_organisation) { user.organisation }
   let(:managing_organisation) { owning_organisation }
@@ -49,6 +51,7 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       before do
+        travel_to Time.utc(2022, 2, 8, 16, 52, 15)
         post "/logs", headers:, params: params.to_json
       end
 
