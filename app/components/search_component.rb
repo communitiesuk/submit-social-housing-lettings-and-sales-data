@@ -20,7 +20,7 @@ class SearchComponent < ViewComponent::Base
     elsif request.path.include?("organisations")
       organisations_path
     elsif request.path.include?("logs")
-      case_logs_path
+      lettings_logs_path
     end
   end
 

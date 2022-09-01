@@ -31,7 +31,7 @@ An example subsection might look something like this:
 
 In the above example the the subsection has the id `property_information`. The `depends_on` contains the set of conditions that must be met for the section to be accessible to a data provider, in this example subsection depends on the completion of the setup section/subsection (note that this is a common condition as the answers provided to questions in the setup subsection often have an impact on what questions are asked of the data provider in later subsections of the form).
 
-The label contains the text that users will see for that subsection in the task list page of a case log.
+The label contains the text that users will see for that subsection in the task list page of a lettings log.
 
 The pages of the subsection in the example would be `property_postcode` and `property_local_authority`.
 

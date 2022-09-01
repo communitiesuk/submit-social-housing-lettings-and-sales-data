@@ -19,12 +19,12 @@ describe "rake core:data_import_field", type: :task do
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
 
-  context "when importing a case log field" do
-    let(:import_service) { instance_double(Imports::CaseLogsFieldImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
+  context "when importing a lettings log field" do
+    let(:import_service) { instance_double(Imports::LettingsLogsFieldImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
 
     before do
-      allow(Imports::CaseLogsFieldImportService).to receive(:new).and_return(import_service)
+      allow(Imports::LettingsLogsFieldImportService).to receive(:new).and_return(import_service)
       allow(import_service).to receive(:update_field)
     end
 

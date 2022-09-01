@@ -1,7 +1,7 @@
 class Organisation < ApplicationRecord
   has_many :users, dependent: :delete_all
-  has_many :owned_case_logs, class_name: "CaseLog", foreign_key: "owning_organisation_id", dependent: :delete_all
-  has_many :managed_case_logs, class_name: "CaseLog", foreign_key: "managing_organisation_id"
+  has_many :owned_lettings_logs, class_name: "LettingsLog", foreign_key: "owning_organisation_id", dependent: :delete_all
+  has_many :managed_lettings_logs, class_name: "LettingsLog", foreign_key: "managing_organisation_id"
   has_many :data_protection_confirmations
   has_many :organisation_rent_periods
   has_many :owned_schemes, class_name: "Scheme", foreign_key: "owning_organisation_id", dependent: :delete_all
@@ -28,16 +28,16 @@ class Organisation < ApplicationRecord
   validates :name, presence: { message: I18n.t("validations.organisation.name_missing") }
   validates :provider_type, presence: { message: I18n.t("validations.organisation.provider_type_missing") }
 
-  def case_logs
-    CaseLog.filter_by_organisation(self)
+  def lettings_logs
+    LettingsLog.filter_by_organisation(self)
   end
 
-  def completed_case_logs
-    case_logs.completed
+  def completed_lettings_logs
+    lettings_logs.completed
   end
 
-  def not_completed_case_logs
-    case_logs.not_completed
+  def not_completed_lettings_logs
+    lettings_logs.not_completed
   end
 
   def address_string

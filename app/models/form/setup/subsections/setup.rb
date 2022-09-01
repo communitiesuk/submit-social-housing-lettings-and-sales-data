@@ -21,11 +21,11 @@ class Form::Subsections::Setup < ::Form::Subsection
     ]
   end
 
-  def applicable_questions(case_log)
+  def applicable_questions(lettings_log)
     questions.select { |q| support_only_questions.include?(q.id) } + super
   end
 
-  def enabled?(_case_log)
+  def enabled?(_lettings_log)
     true
   end
 

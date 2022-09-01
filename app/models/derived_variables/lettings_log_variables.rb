@@ -1,4 +1,4 @@
-module DerivedVariables::CaseLogVariables
+module DerivedVariables::LettingsLogVariables
   RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
 
   def scheme_has_multiple_locations?

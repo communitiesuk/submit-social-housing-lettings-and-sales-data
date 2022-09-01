@@ -4,27 +4,27 @@ require_relative "helpers"
 RSpec.describe "Task List" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) do
+  let(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
     )
   end
-  let(:completed_case_log) do
+  let(:completed_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
     )
   end
-  let(:empty_case_log) do
+  let(:empty_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
@@ -32,7 +32,7 @@ RSpec.describe "Task List" do
   end
   let(:setup_completed_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :about_completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -40,15 +40,15 @@ RSpec.describe "Task List" do
       created_by: user,
     )
   end
-  let(:id) { case_log.id }
-  let(:status) { case_log.status }
+  let(:id) { lettings_log.id }
+  let(:status) { lettings_log.status }
 
   before do
     sign_in user
   end
 
   it "shows if the section has not been started" do
-    visit("/logs/#{empty_case_log.id}")
+    visit("/logs/#{empty_lettings_log.id}")
     expect(page).to have_content("This log has not been started.")
   end
 
@@ -63,10 +63,10 @@ RSpec.describe "Task List" do
     expect(page).to have_link("Skip to next incomplete section", href: /#household-characteristics/)
   end
 
-  it "has a review section which has a button that allows the data inputter to review the case log" do
-    visit("/logs/#{completed_case_log.id}")
+  it "has a review section which has a button that allows the data inputter to review the lettings log" do
+    visit("/logs/#{completed_lettings_log.id}")
     expect(page).to have_content("review and make changes to this log")
     click_link(text: "review and make changes to this log")
-    expect(page).to have_current_path("/logs/#{completed_case_log.id}/review")
+    expect(page).to have_current_path("/logs/#{completed_lettings_log.id}/review")
   end
 end

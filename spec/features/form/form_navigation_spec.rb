@@ -4,25 +4,25 @@ require_relative "helpers"
 RSpec.describe "Form Navigation" do
   include Helpers
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) do
+  let(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
     )
   end
-  let(:empty_case_log) do
+  let(:empty_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
       created_by: user,
     )
   end
 
-  let(:id) { case_log.id }
+  let(:id) { lettings_log.id }
   let(:question_answers) do
     {
       tenancycode: { type: "text", answer: "BZ737", path: "tenant-code-test" },
@@ -41,7 +41,7 @@ RSpec.describe "Form Navigation" do
     it "redirects to the task list for the new log" do
       visit("/logs")
       click_button("Create a new lettings log")
-      id = CaseLog.order(created_at: :desc).first.id
+      id = LettingsLog.order(created_at: :desc).first.id
       expect(page).to have_content("Log #{id}")
     end
   end
@@ -49,7 +49,7 @@ RSpec.describe "Form Navigation" do
   describe "Viewing a log" do
     it "questions can be accessed by url" do
       visit("/logs/#{id}/person-1-age")
-      expect(page).to have_field("case-log-age1-field")
+      expect(page).to have_field("lettings-log-age1-field")
     end
 
     it "a question page leads to the next question defined in the form definition" do
@@ -62,15 +62,15 @@ RSpec.describe "Form Navigation" do
     end
 
     it "a question page has a Skip for now link that lets you move on to the next question without inputting anything" do
-      visit("logs/#{empty_case_log.id}/tenant-code-test")
+      visit("logs/#{empty_lettings_log.id}/tenant-code-test")
       click_link(text: "Skip for now")
-      expect(page).to have_current_path("/logs/#{empty_case_log.id}/person-1-age")
+      expect(page).to have_current_path("/logs/#{empty_lettings_log.id}/person-1-age")
     end
 
     it "routes to check answers when skipping on the last page in the form" do
-      visit("logs/#{empty_case_log.id}/propcode")
+      visit("logs/#{empty_lettings_log.id}/propcode")
       click_link(text: "Skip for now")
-      expect(page).to have_current_path("/logs/#{empty_case_log.id}/household-characteristics/check-answers")
+      expect(page).to have_current_path("/logs/#{empty_lettings_log.id}/household-characteristics/check-answers")
     end
 
     describe "Back link directs correctly", js: true do
@@ -86,14 +86,14 @@ RSpec.describe "Form Navigation" do
         click_button("Save and continue")
         visit("/logs/#{id}/person-1-age")
         click_link(text: "Back")
-        expect(page).to have_field("case-log-tenancycode-field")
+        expect(page).to have_field("lettings-log-tenancycode-field")
       end
 
       it "doesn't get stuck in infinite loops", js: true do
         visit("/logs")
         visit("/logs/#{id}/net-income")
-        fill_in("case-log-earnings-field", with: 740)
-        choose("case-log-incfreq-1-field", allow_label_click: true)
+        fill_in("lettings-log-earnings-field", with: 740)
+        choose("lettings-log-incfreq-1-field", allow_label_click: true)
         click_button("Save and continue")
         click_link(text: "Back")
         click_link(text: "Back")
@@ -119,13 +119,13 @@ RSpec.describe "Form Navigation" do
     end
 
     context "when clicking save and continue on a mandatory question with no input" do
-      let(:id) { empty_case_log.id }
+      let(:id) { empty_lettings_log.id }
 
       it "shows a validation error on radio questions" do
         visit("/logs/#{id}/renewal")
         click_button("Save and continue")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-renewal-error")
+        expect(page).to have_selector("#lettings-log-renewal-error")
         expect(page).to have_title("Error")
       end
 
@@ -133,7 +133,7 @@ RSpec.describe "Form Navigation" do
         visit("/logs/#{id}/tenancy-start-date")
         click_button("Save and continue")
         expect(page).to have_selector("#error-summary-title")
-        expect(page).to have_selector("#case-log-startdate-error")
+        expect(page).to have_selector("#lettings-log-startdate-error")
         expect(page).to have_title("Error")
       end
 
@@ -141,10 +141,10 @@ RSpec.describe "Form Navigation" do
         context "when the conditional question is required but not answered" do
           it "shows a validation error for the conditional question" do
             visit("/logs/#{id}/armed-forces")
-            choose("case-log-armedforces-1-field", allow_label_click: true)
+            choose("lettings-log-armedforces-1-field", allow_label_click: true)
             click_button("Save and continue")
             expect(page).to have_selector("#error-summary-title")
-            expect(page).to have_selector("#case-log-leftreg-error")
+            expect(page).to have_selector("#lettings-log-leftreg-error")
             expect(page).to have_title("Error")
           end
         end
@@ -152,7 +152,7 @@ RSpec.describe "Form Navigation" do
     end
 
     context "when clicking save and continue on an optional question with no input" do
-      let(:id) { empty_case_log.id }
+      let(:id) { empty_lettings_log.id }
 
       it "does not show a validation error" do
         visit("/logs/#{id}/tenant-code")

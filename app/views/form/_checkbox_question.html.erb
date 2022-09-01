@@ -6,7 +6,7 @@
     hint: { text: question.hint_text&.html_safe } do %>
     <% after_divider = false %>
 
-    <% question.displayed_answer_options(@case_log).map do |key, options| %>
+    <% question.displayed_answer_options(@lettings_log).map do |key, options| %>
       <% if key.starts_with?("divider") %>
       <% after_divider = true %>
       <%= f.govuk_check_box_divider %>
@@ -14,7 +14,7 @@
         <%= f.govuk_check_box question.id, key,
           label: { text: options["value"] },
           hint: { text: options["hint"] },
-          checked: @case_log[key] == 1,
+          checked: @lettings_log[key] == 1,
           exclusive: after_divider,
           **stimulus_html_attributes(question) %>
       <% end %>

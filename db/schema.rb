@@ -10,11 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_10_152340) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_23_083657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "case_logs", force: :cascade do |t|
+  create_table "data_protection_confirmations", force: :cascade do |t|
+    t.bigint "organisation_id"
+    t.bigint "data_protection_officer_id"
+    t.boolean "confirmed"
+    t.string "old_id"
+    t.string "old_org_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["data_protection_officer_id"], name: "dpo_user_id"
+    t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
+    t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
+  end
+
+  create_table "la_rent_ranges", force: :cascade do |t|
+    t.integer "ranges_rent_id"
+    t.integer "lettype"
+    t.string "la"
+    t.integer "beds"
+    t.decimal "soft_min", precision: 10, scale: 2
+    t.decimal "soft_max", precision: 10, scale: 2
+    t.decimal "hard_min", precision: 10, scale: 2
+    t.decimal "hard_max", precision: 10, scale: 2
+    t.integer "start_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "lettings_logs", force: :cascade do |t|
     t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -390,9 +418,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_10_152340) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "case_logs", "locations"
-  add_foreign_key "case_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
-  add_foreign_key "case_logs", "schemes"
+  add_foreign_key "lettings_logs", "locations"
+  add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
+  add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade

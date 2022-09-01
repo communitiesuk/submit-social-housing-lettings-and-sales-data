@@ -1,18 +1,18 @@
 module Helpers
-  def fill_in_number_question(case_log_id, question, value, path)
-    visit("/logs/#{case_log_id}/#{path}")
-    fill_in("case-log-#{question.to_s.dasherize}-field", with: value)
+  def fill_in_number_question(lettings_log_id, question, value, path)
+    visit("/logs/#{lettings_log_id}/#{path}")
+    fill_in("lettings-log-#{question.to_s.dasherize}-field", with: value)
     click_button("Save and continue")
   end
 
-  def answer_all_questions_in_income_subsection(case_log)
-    visit("/logs/#{case_log.id}/net-income")
-    fill_in("case-log-earnings-field", with: 18_000)
-    choose("case-log-incfreq-2-field")
+  def answer_all_questions_in_income_subsection(lettings_log)
+    visit("/logs/#{lettings_log.id}/net-income")
+    fill_in("lettings-log-earnings-field", with: 18_000)
+    choose("lettings-log-incfreq-2-field")
     click_button("Save and continue")
-    choose("case-log-benefits-0-field")
+    choose("lettings-log-benefits-0-field")
     click_button("Save and continue")
-    choose("case-log-hb-1-field")
+    choose("lettings-log-hb-1-field")
     click_button("Save and continue")
   end
 

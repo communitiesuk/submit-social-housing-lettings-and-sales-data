@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe Csv::CaseLogCsvService do
+RSpec.describe Csv::LettingsLogCsvService do
   context "when the user is support" do
     let(:user) { FactoryBot.create(:user, :support) }
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
 
     before do
-      CaseLog.create!(startdate: "2021-10-10")
+      LettingsLog.create!(startdate: "2021-10-10")
       allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
     end
 

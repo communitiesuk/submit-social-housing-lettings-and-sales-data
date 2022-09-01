@@ -1,4 +1,4 @@
-module Exports::CaseLogExportConstants
+module Exports::LettingsLogExportConstants
   MAX_XML_RECORDS = 10_000
   LOG_ID_OFFSET = 300_000_000_000
 

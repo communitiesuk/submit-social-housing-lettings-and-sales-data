@@ -1,5 +1,5 @@
 <ol class="app-task-list govuk-!-margin-top-8">
-  <% @case_log.form.sections.map do |section| %>
+  <% @lettings_log.form.sections.map do |section| %>
     <li>
       <h2 class="app-task-list__section-heading">
         <%= section.label %>
@@ -9,11 +9,11 @@
       <% end %>
       <ul class="app-task-list__items">
         <% section.subsections.map do |subsection| %>
-          <% if subsection.applicable_questions(@case_log).count > 0 || !subsection.enabled?(@case_log) %>
-            <% subsection_status = subsection.status(@case_log) %>
+          <% if subsection.applicable_questions(@lettings_log).count > 0 || !subsection.enabled?(@lettings_log) %>
+            <% subsection_status = subsection.status(@lettings_log) %>
             <li class="app-task-list__item">
               <span class="app-task-list__task-name" id="<%= subsection.id.dasherize %>">
-                <%= subsection_link(subsection, @case_log, current_user) %>
+                <%= subsection_link(subsection, @lettings_log, current_user) %>
               </span>
               <%= status_tag(subsection_status, "app-task-list__tag") %>
             </li>

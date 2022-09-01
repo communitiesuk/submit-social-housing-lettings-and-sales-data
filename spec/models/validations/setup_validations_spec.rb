@@ -4,7 +4,7 @@ RSpec.describe Validations::SetupValidations do
   subject(:setup_validator) { setup_validator_class.new }
 
   let(:setup_validator_class) { Class.new { include Validations::SetupValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "#validate_irproduct" do
     it "adds an error when the intermediate rent product name is not provided but the rent type was given as other intermediate rent product" do
