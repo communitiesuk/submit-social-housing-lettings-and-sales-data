@@ -124,8 +124,8 @@ en:
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
         ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
       void_date:
-        ten_years_before_tenancy_start: "Enter a void date must no more than 10 years before the tenancy start date"
-        before_tenancy_start: "Enter a void date must that is before the tenancy start date"
+        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
+        before_tenancy_start: "Enter a void date that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
       offered:
         relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"

@@ -567,7 +567,6 @@ private
 
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
-                            homeless: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
                             underoccupation_benefitcap: [{ key: :renewal, value: 0 }],
                             wchair: [{ key: :needstype, value: 1 }],
@@ -693,30 +692,6 @@ private
     end
   end
 
-  def get_housingneeds
-    return 1 if has_housingneeds?
-    return 2 if no_housingneeds?
-    return 3 if unknown_housingneeds?
-  end
-
-  def has_housingneeds?
-    if [housingneeds_a, housingneeds_b, housingneeds_c, housingneeds_f].any?(1)
-      1
-    end
-  end
-
-  def no_housingneeds?
-    if housingneeds_g == 1
-      1
-    end
-  end
-
-  def unknown_housingneeds?
-    if housingneeds_h == 1
-      1
-    end
-  end
-
   def all_fields_completed?
     subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
     subsection_statuses == [:completed]
@@ -753,5 +728,33 @@ private
 
   def upcase_and_remove_whitespace(string)
     string.present? ? string.upcase.gsub(/\s+/, "") : string
+  end
+
+  def fully_wheelchair_accessible?
+    housingneeds_type.present? && housingneeds_type.zero?
+  end
+
+  def essential_wheelchair_access?
+    housingneeds_type == 1
+  end
+
+  def level_access_housing?
+    housingneeds_type == 2
+  end
+
+  def other_housingneeds?
+    housingneeds_other == 1
+  end
+
+  def has_housingneeds?
+    housingneeds == 1
+  end
+
+  def no_housingneeds?
+    housingneeds == 2
+  end
+
+  def unknown_housingneeds?
+    housingneeds == 3
   end
 end
