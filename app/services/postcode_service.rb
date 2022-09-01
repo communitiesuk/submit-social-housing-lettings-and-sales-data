@@ -11,7 +11,7 @@ class PostcodeService
     begin
       # URI encoding only supports ASCII characters
       ascii_postcode = self.class.clean(postcode)
-      Timeout.timeout(5) { postcode_lookup = @pio.lookup(ascii_postcode) }
+      Timeout.timeout(0) { postcode_lookup = @pio.lookup(ascii_postcode) }
     rescue Timeout::Error
       Rails.logger.warn("Postcodes.io lookup timed out")
     end

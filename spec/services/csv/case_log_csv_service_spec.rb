@@ -201,8 +201,6 @@ RSpec.describe Csv::CaseLogCsvService do
                                    housingneeds_type
                                    housingneeds_other
                                    unittype_sh
-                                   scheme_id
-                                   location_id
                                    scheme_code
                                    scheme_service_name
                                    scheme_sensitive
