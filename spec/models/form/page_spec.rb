@@ -4,8 +4,8 @@ RSpec.describe Form::Page, type: :model do
   subject(:page) { described_class.new(page_id, page_definition, subsection) }
 
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) { FactoryBot.build(:case_log) }
-  let(:form) { case_log.form }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
+  let(:form) { lettings_log.form }
   let(:section_id) { "rent_and_charges" }
   let(:section_definition) { form.form_definition["sections"][section_id] }
   let(:section) { Form::Section.new(section_id, section_definition, form) }
@@ -42,23 +42,23 @@ RSpec.describe Form::Page, type: :model do
     end
   end
 
-  context "with a case log" do
-    let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  context "with a lettings log" do
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
 
     it "knows if it's been routed to" do
-      expect(page.routed_to?(case_log, user)).to be true
+      expect(page.routed_to?(lettings_log, user)).to be true
     end
 
     context "with routing conditions" do
       let(:page_id) { "dependent_page" }
 
       it "evaluates not met conditions correctly" do
-        expect(page.routed_to?(case_log, user)).to be false
+        expect(page.routed_to?(lettings_log, user)).to be false
       end
 
       it "evaluates met conditions correctly" do
-        case_log.incfreq = 1
-        expect(page.routed_to?(case_log, user)).to be true
+        lettings_log.incfreq = 1
+        expect(page.routed_to?(lettings_log, user)).to be true
       end
     end
 
@@ -68,13 +68,13 @@ RSpec.describe Form::Page, type: :model do
       let(:page_id) { "person_2_working_situation" }
 
       it "evaluates not met conditions correctly" do
-        case_log.age2 = 12
-        expect(page.routed_to?(case_log, user)).to be false
+        lettings_log.age2 = 12
+        expect(page.routed_to?(lettings_log, user)).to be false
       end
 
       it "evaluates met conditions correctly" do
-        case_log.age2 = 17
-        expect(page.routed_to?(case_log, user)).to be true
+        lettings_log.age2 = 17
+        expect(page.routed_to?(lettings_log, user)).to be true
       end
     end
 
@@ -82,11 +82,11 @@ RSpec.describe Form::Page, type: :model do
       let(:section_id) { "submission" }
       let(:subsection_id) { "declaration" }
       let(:page_id) { "declaration" }
-      let(:completed_case_log) { FactoryBot.build(:case_log, :completed, incfreq: "Weekly") }
+      let(:completed_lettings_log) { FactoryBot.build(:lettings_log, :completed, incfreq: "Weekly") }
 
       it "evaluates the sections dependencies" do
-        expect(page.routed_to?(case_log, user)).to be false
-        expect(page.routed_to?(completed_case_log, user)).to be true
+        expect(page.routed_to?(lettings_log, user)).to be false
+        expect(page.routed_to?(completed_lettings_log, user)).to be true
       end
     end
   end

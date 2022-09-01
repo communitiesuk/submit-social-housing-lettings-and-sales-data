@@ -1,77 +1,77 @@
 require "rails_helper"
 
 RSpec.describe TasklistHelper do
-  let(:empty_case_log) { FactoryBot.create(:case_log) }
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress, needstype: 1) }
+  let(:empty_lettings_log) { FactoryBot.create(:lettings_log) }
+  let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1) }
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      expect(get_next_incomplete_section(lettings_log).id).to eq("household_characteristics")
     end
 
     it "returns the first subsection name if it is partially completed" do
-      case_log["tenancycode"] = 123
-      expect(get_next_incomplete_section(case_log).id).to eq("household_characteristics")
+      lettings_log["tenancycode"] = 123
+      expect(get_next_incomplete_section(lettings_log).id).to eq("household_characteristics")
     end
   end
 
   describe "get sections count" do
     it "returns the total of sections if no status is given" do
-      expect(get_subsections_count(empty_case_log)).to eq(8)
+      expect(get_subsections_count(empty_lettings_log)).to eq(8)
     end
 
     it "returns 0 sections for completed sections if no sections are completed" do
-      expect(get_subsections_count(empty_case_log, :completed)).to eq(0)
+      expect(get_subsections_count(empty_lettings_log, :completed)).to eq(0)
     end
 
     it "returns the number of not started sections" do
-      expect(get_subsections_count(empty_case_log, :not_started)).to eq(8)
+      expect(get_subsections_count(empty_lettings_log, :not_started)).to eq(8)
     end
 
     it "returns the number of sections in progress" do
-      expect(get_subsections_count(case_log, :in_progress)).to eq(3)
+      expect(get_subsections_count(lettings_log, :in_progress)).to eq(3)
     end
 
     it "returns 0 for invalid state" do
-      expect(get_subsections_count(case_log, :fake)).to eq(0)
+      expect(get_subsections_count(lettings_log, :fake)).to eq(0)
     end
   end
 
   describe "get_next_page_or_check_answers" do
-    let(:subsection) { case_log.form.get_subsection("household_characteristics") }
+    let(:subsection) { lettings_log.form.get_subsection("household_characteristics") }
     let(:user) { FactoryBot.build(:user) }
 
     it "returns the check answers page path if the section has been started already" do
-      expect(next_page_or_check_answers(subsection, case_log, user)).to match(/check-answers/)
+      expect(next_page_or_check_answers(subsection, lettings_log, user)).to match(/check-answers/)
     end
 
     it "returns the first question page path for the section if it has not been started yet" do
-      expect(next_page_or_check_answers(subsection, empty_case_log, user)).to match(/tenant-code-test/)
+      expect(next_page_or_check_answers(subsection, empty_lettings_log, user)).to match(/tenant-code-test/)
     end
 
     it "when first question being not routed to returns the next routed question link" do
-      empty_case_log.housingneeds_a = "No"
-      expect(next_page_or_check_answers(subsection, empty_case_log, user)).to match(/person-1-gender/)
+      empty_lettings_log.housingneeds_a = "No"
+      expect(next_page_or_check_answers(subsection, empty_lettings_log, user)).to match(/person-1-gender/)
     end
   end
 
   describe "subsection link" do
-    let(:subsection) { case_log.form.get_subsection("household_characteristics") }
+    let(:subsection) { lettings_log.form.get_subsection("household_characteristics") }
     let(:user) { FactoryBot.build(:user) }
 
     context "with a subsection that's enabled" do
       it "returns the subsection link url" do
-        expect(subsection_link(subsection, case_log, user)).to match(/household-characteristics/)
+        expect(subsection_link(subsection, lettings_log, user)).to match(/household-characteristics/)
       end
     end
 
     context "with a subsection that cannot be started yet" do
       before do
-        allow(subsection).to receive(:status).with(case_log).and_return(:cannot_start_yet)
+        allow(subsection).to receive(:status).with(lettings_log).and_return(:cannot_start_yet)
       end
 
       it "returns the label instead of a link" do
-        expect(subsection_link(subsection, case_log, user)).to match(subsection.label)
+        expect(subsection_link(subsection, lettings_log, user)).to match(subsection.label)
       end
     end
   end

@@ -15,7 +15,7 @@
     "/logs/:id": {
       "parameters": [],
       "get": {
-        "summary": "Get Case Log Info by Case Log ID",
+        "summary": "Get lettings log Info by lettings log ID",
         "tags": [],
         "responses": {
           "200": {
@@ -23,7 +23,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Case-Log"
+                  "$ref": "#/components/schemas/lettings-log"
                 },
                 "examples": {}
               }
@@ -40,7 +40,7 @@
                 "examples": {
                   "Not found": {
                     "value": {
-                      "error": "Case Log 67 not found"
+                      "error": "lettings log 67 not found"
                     }
                   }
                 }
@@ -48,8 +48,8 @@
             }
           }
         },
-        "operationId": "get-case_logs-case_logs-:id",
-        "description": "Retrieve data for a specific case log",
+        "operationId": "get-lettings_logs-lettings_logs-:id",
+        "description": "Retrieve data for a specific lettings log",
         "parameters": [
           {
             "schema": {
@@ -65,15 +65,15 @@
         ]
       },
       "patch": {
-        "summary": "Update Case Log Information",
-        "operationId": "patch-case_logs-case_logs-:id",
+        "summary": "Update lettings log Information",
+        "operationId": "patch-lettings_logs-lettings_logs-:id",
         "responses": {
           "200": {
-            "description": "Case Log Updated",
+            "description": "lettings log Updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Case-Log"
+                  "$ref": "#/components/schemas/lettings-log"
                 },
                 "examples": {}
               }
@@ -90,7 +90,7 @@
                 "examples": {
                   "Not found": {
                     "value": {
-                      "error": "Case Log 67 not found"
+                      "error": "lettings log 67 not found"
                     }
                   }
                 }
@@ -120,17 +120,17 @@
             }
           }
         },
-        "description": "Update the information of an existing case log",
+        "description": "Update the information of an existing lettings log",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Case-Log"
+                "$ref": "#/components/schemas/lettings-log"
               },
               "examples": {}
             }
           },
-          "description": "Patch case log properties to update."
+          "description": "Patch lettings log properties to update."
         },
         "parameters": [
           {
@@ -147,8 +147,8 @@
         ]
       },
       "delete": {
-        "summary": "Delete a Case Log by Case Log ID",
-        "operationId": "delete-case_logs-:id",
+        "summary": "Delete a lettings log by lettings log ID",
+        "operationId": "delete-lettings_logs-:id",
         "responses": {
           "204": {
             "description": "No Content"
@@ -164,7 +164,7 @@
                 "examples": {
                   "Not found": {
                     "value": {
-                      "error": "Case Log 67 not found"
+                      "error": "lettings log 67 not found"
                     }
                   }
                 }
@@ -172,7 +172,7 @@
             }
           }
         },
-        "description": "Delete a case log",
+        "description": "Delete a lettings log",
         "parameters": [
           {
             "schema": {
@@ -190,15 +190,15 @@
     },
     "/logs": {
       "post": {
-        "summary": "Create New Case Log",
-        "operationId": "post-caselog",
+        "summary": "Create New lettings log",
+        "operationId": "post-LettingsLog",
         "responses": {
           "201": {
-            "description": "Case Log Created",
+            "description": "lettings log Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Case-Log"
+                  "$ref": "#/components/schemas/lettings-log"
                 },
                 "examples": {}
               }
@@ -234,14 +234,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Case-Log"
+                "$ref": "#/components/schemas/lettings-log"
               },
               "examples": {}
             }
           },
-          "description": "Post the necessary fields for the API to create a new case log."
+          "description": "Post the necessary fields for the API to create a new lettings log."
         },
-        "description": "Create a new case log.",
+        "description": "Create a new lettings log.",
         "parameters": [
           {
             "schema": {
@@ -262,12 +262,12 @@
   },
   "components": {
     "schemas": {
-      "Case-Log": {
+      "lettings-log": {
         "description": "",
         "type": "object",
         "x-examples": {
           "example-1": {
-            "case_log": {
+            "lettings_log": {
               "tenant_code": "T657",
               "age1": 35,
               "sex1": "F",
@@ -415,7 +415,7 @@
             }
           }
         },
-        "title": "Case Log",
+        "title": "lettings log",
         "x-internal": false,
         "properties": {
           "tenant_code": {

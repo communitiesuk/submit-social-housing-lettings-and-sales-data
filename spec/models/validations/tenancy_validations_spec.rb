@@ -4,7 +4,7 @@ RSpec.describe Validations::TenancyValidations do
   subject(:tenancy_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::TenancyValidations } }
-  let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2021, 5, 1)) }
+  let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2021, 5, 1)) }
 
   describe "fixed term tenancy validations" do
     context "when fixed term tenancy" do
@@ -107,7 +107,7 @@ RSpec.describe Validations::TenancyValidations do
       end
 
       context "when the collection start year is 2022 or later" do
-        let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 5, 1)) }
+        let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1)) }
 
         context "when type of tenancy is Secure - fixed term" do
           let(:expected_error) { I18n.t("validations.tenancy.length.secure") }
@@ -240,7 +240,7 @@ RSpec.describe Validations::TenancyValidations do
 
   describe "joint tenancy validation" do
     context "when the data inputter has said that there is only one member in the household" do
-      let(:record) { FactoryBot.create(:case_log, startdate: Time.zone.local(2022, 5, 1)) }
+      let(:record) { FactoryBot.create(:lettings_log, startdate: Time.zone.local(2022, 5, 1)) }
       let(:expected_error) { I18n.t("validations.tenancy.not_joint") }
       let(:hhmemb_expected_error) { I18n.t("validations.tenancy.joint_more_than_one_member") }
 

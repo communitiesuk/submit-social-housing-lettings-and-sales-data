@@ -7,15 +7,15 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
-    <%= govuk_button_to "Create a new lettings log", case_logs_path %>
-    <%#= govuk_link_to "Upload logs", bulk_upload_case_logs_path %>
+    <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+    <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
   </div>
 
   <%= render partial: "log_filters" %>
   <div class="app-filter-layout__content">
     <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
     <%= govuk_section_break(visible: true, size: "m") %>
-    <%= render partial: "log_list", locals: { case_logs: @case_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+    <%= render partial: "log_list", locals: { lettings_logs: @lettings_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
     <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
   </div>
 </div>

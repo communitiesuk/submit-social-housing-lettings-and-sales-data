@@ -15,7 +15,7 @@ These are handled slightly differently:
 
 These run for all submitted data. Every time a form page (in the UI) is submitted, the fields related to that form page will be checked to ensure that any responses given are valid. If they are not, an error message will be shown on screen, and it will not be possible to ‘Save and continue’ until the response is fixed or removed.
 
-Similarly if an API request is made to create a case log with data that contains _invalid_ fields, that data will be rejected, and an error message will be returned.
+Similarly if an API request is made to create a lettings log with data that contains _invalid_ fields, that data will be rejected, and an error message will be returned.
 
 ## Presence checks
 
@@ -23,8 +23,8 @@ These are not strictly error checks since it’s possible to submit partial data
 
 Similarly the API client (3rd party software system) may not have all the required data and may only be submitting a partial log. This is still a valid use case so we should not be enforcing presence checks and returning errors based on them for either submission type.
 
-Instead we determine the _status_ of the case log based the presence checks. Every time data is submitted (via a form page, bulk upload or API), before saving the data, the system will check whether all fields have been completed _and_ pass validity checks. If so, the case log will be marked as _completed_, if not it will be marked as _in progress_.
+Instead we determine the _status_ of the lettings log based the presence checks. Every time data is submitted (via a form page, bulk upload or API), before saving the data, the system will check whether all fields have been completed _and_ pass validity checks. If so, the lettings log will be marked as _completed_, if not it will be marked as _in progress_.
 
-By default all fields that a Case Log has will be assumed to be required unless explicitly marked as not required (for example as a result of other answers rendering a question inapplicable).
+By default all fields that a lettings log has will be assumed to be required unless explicitly marked as not required (for example as a result of other answers rendering a question inapplicable).
 
-On the form UI this will work by not allowing you to submit the form, until all presence checks have been satisfied, but all other navigation is allowed. On the API this will work by returning a Case Log that is ‘in progress’ if you’ve submitted a partial log, or ‘completed’ if you’ve submitted a full log, or ‘errors’ if you’ve submitted an invalid log.
+On the form UI this will work by not allowing you to submit the form, until all presence checks have been satisfied, but all other navigation is allowed. On the API this will work by returning a lettings log that is ‘in progress’ if you’ve submitted a partial log, or ‘completed’ if you’ve submitted a full log, or ‘errors’ if you’ve submitted an invalid log.

@@ -1,7 +1,7 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
 <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--<%= label_size(page_header, conditional) %>" for="case-log-<%= question.id %>-field">
+  <label class="govuk-label govuk-label--<%= label_size(page_header, conditional) %>" for="lettings-log-<%= question.id %>-field">
     <%= question.header.html_safe %>
   </label>
   <div class="govuk-hint">
@@ -9,15 +9,15 @@
   </div>
   <div class="govuk-input__wrapper">
     <span class="govuk-input__prefix"><%= question.prefix %></span>
-    <output id="case-log-<%= question.id %>-field"
+    <output id="lettings-log-<%= question.id %>-field"
             class="govuk-input govuk-input--width-<%= question.width %> app-input--output"
             min="<%= question.min %>"
             step="<%= question.step %>"
             type="number"
-            name="case_log[tcharge]"
-            for="<%= question.fields_added.present? ? question.fields_added.map { |x| "case-log-#{x}-field" }.join(" ") : "" %>">
-      <%= case_log[question.id] %></output>
-    <span class="govuk-input__suffix"><%= question.suffix_label(case_log) %></span>
+            name="lettings_log[tcharge]"
+            for="<%= question.fields_added.present? ? question.fields_added.map { |x| "lettings-log-#{x}-field" }.join(" ") : "" %>">
+      <%= lettings_log[question.id] %></output>
+    <span class="govuk-input__suffix"><%= question.suffix_label(lettings_log) %></span>
   </div>
 </div>
 

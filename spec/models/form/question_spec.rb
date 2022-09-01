@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe Form::Question, type: :model do
   subject(:question) { described_class.new(question_id, question_definition, page) }
 
-  let(:case_log) { FactoryBot.build(:case_log) }
-  let(:form) { case_log.form }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
+  let(:form) { lettings_log.form }
   let(:section_id) { "rent_and_charges" }
   let(:section_definition) { form.form_definition["sections"][section_id] }
   let(:section) { Form::Section.new(section_id, section_definition, form) }
@@ -118,7 +118,7 @@ RSpec.describe Form::Question, type: :model do
 
     context "when answer options do not include derived options" do
       it "displays all answer options" do
-        expect(question.displayed_answer_options(case_log)).to match(question.answer_options)
+        expect(question.displayed_answer_options(lettings_log)).to match(question.answer_options)
       end
     end
 
@@ -132,7 +132,7 @@ RSpec.describe Form::Question, type: :model do
       end
 
       it "does not include those options in the displayed options" do
-        expect(question.displayed_answer_options(case_log)).to match(expected_answer_options)
+        expect(question.displayed_answer_options(lettings_log)).to match(expected_answer_options)
       end
 
       it "can still map the value label" do
@@ -216,35 +216,35 @@ RSpec.describe Form::Question, type: :model do
     end
   end
 
-  context "with a case log" do
-    let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  context "with a lettings log" do
+    let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
     let(:question_id) { "incfreq" }
 
     it "has an answer label" do
-      case_log.incfreq = 1
-      expect(question.answer_label(case_log)).to eq("Weekly")
+      lettings_log.incfreq = 1
+      expect(question.answer_label(lettings_log)).to eq("Weekly")
     end
 
     it "has an update answer link text helper" do
-      expect(question.action_text(case_log)).to match(/Answer/)
-      case_log["incfreq"] = 0
-      expect(question.action_text(case_log)).to match(/Change/)
+      expect(question.action_text(lettings_log)).to match(/Answer/)
+      lettings_log["incfreq"] = 0
+      expect(question.action_text(lettings_log)).to match(/Change/)
     end
 
     it "has an update answer link href helper" do
-      case_log.id = 1
-      expect(question.action_href(case_log, page.id)).to eq("/logs/1/net-income?referrer=check_answers")
+      lettings_log.id = 1
+      expect(question.action_href(lettings_log, page.id)).to eq("/logs/1/net-income?referrer=check_answers")
     end
 
     context "when the question has an inferred answer" do
       let(:section_id) { "tenancy_and_property" }
       let(:subsection_id) { "property_information" }
       let(:page_id) { "property_postcode" }
-      let(:case_log) { FactoryBot.build(:case_log, :in_progress, postcode_known: 0, postcode_full: nil) }
+      let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress, postcode_known: 0, postcode_full: nil) }
       let(:question_id) { "postcode_full" }
 
       it "displays 'change' in the check answers link text" do
-        expect(question.action_text(case_log)).to match(/Change/)
+        expect(question.action_text(lettings_log)).to match(/Change/)
       end
     end
 
@@ -253,12 +253,12 @@ RSpec.describe Form::Question, type: :model do
       let(:subsection_id) { "household_characteristics" }
       let(:page_id) { "person_2_working_situation" }
       let(:question_id) { "ecstat2" }
-      let(:case_log) do
-        FactoryBot.create(:case_log, :in_progress, hhmemb: 2, details_known_2: 0, age2_known: 0, age2: 12)
+      let(:lettings_log) do
+        FactoryBot.create(:lettings_log, :in_progress, hhmemb: 2, details_known_2: 0, age2_known: 0, age2: 12)
       end
 
       it "knows it has an inferred value for check answers" do
-        expect(question.has_inferred_check_answers_value?(case_log)).to be true
+        expect(question.has_inferred_check_answers_value?(lettings_log)).to be true
       end
     end
 
@@ -269,13 +269,13 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "mrcdate" }
 
       it "displays a formatted answer label" do
-        case_log.mrcdate = Time.zone.local(2021, 10, 11)
-        expect(question.answer_label(case_log)).to eq("11 October 2021")
+        lettings_log.mrcdate = Time.zone.local(2021, 10, 11)
+        expect(question.answer_label(lettings_log)).to eq("11 October 2021")
       end
 
       it "can handle nils" do
-        case_log.mrcdate = nil
-        expect(question.answer_label(case_log)).to eq("")
+        lettings_log.mrcdate = nil
+        expect(question.answer_label(lettings_log)).to eq("")
       end
     end
 
@@ -286,10 +286,10 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "accessibility_requirements" }
 
       it "has a joined answers label" do
-        case_log.housingneeds_a = 1
-        case_log.housingneeds_c = 1
+        lettings_log.housingneeds_a = 1
+        lettings_log.housingneeds_c = 1
         expected_answer_label = "Fully wheelchair accessible housing, Level access housing"
-        expect(question.answer_label(case_log)).to eq(expected_answer_label)
+        expect(question.answer_label(lettings_log)).to eq(expected_answer_label)
       end
     end
 
@@ -298,12 +298,12 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "conditional_question" }
 
       it "knows whether it is enabled or not for unmet conditions" do
-        expect(question.enabled?(case_log)).to be false
+        expect(question.enabled?(lettings_log)).to be false
       end
 
       it "knows whether it is enabled or not for met conditions" do
-        case_log.hb = "Housing benefit"
-        expect(question.enabled?(case_log)).to be true
+        lettings_log.hb = "Housing benefit"
+        expect(question.enabled?(lettings_log)).to be true
       end
 
       context "when the condition type hasn't been implemented yet" do
@@ -314,7 +314,7 @@ RSpec.describe Form::Question, type: :model do
         end
 
         it "raises an exception" do
-          expect { question.enabled?(case_log) }.to raise_error("Not implemented yet")
+          expect { question.enabled?(lettings_log) }.to raise_error("Not implemented yet")
         end
       end
     end
@@ -326,13 +326,13 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "earnings" }
 
       it "displays the correct label for given suffix and answer the suffix depends on" do
-        case_log.incfreq = 1
-        case_log.earnings = 500
-        expect(question.answer_label(case_log)).to eq("£500.00 every week")
-        case_log.incfreq = 2
-        expect(question.answer_label(case_log)).to eq("£500.00 every month")
-        case_log.incfreq = 3
-        expect(question.answer_label(case_log)).to eq("£500.00 every year")
+        lettings_log.incfreq = 1
+        lettings_log.earnings = 500
+        expect(question.answer_label(lettings_log)).to eq("£500.00 every week")
+        lettings_log.incfreq = 2
+        expect(question.answer_label(lettings_log)).to eq("£500.00 every month")
+        lettings_log.incfreq = 3
+        expect(question.answer_label(lettings_log)).to eq("£500.00 every year")
       end
     end
   end
@@ -345,8 +345,8 @@ RSpec.describe Form::Question, type: :model do
       let(:question_id) { "postcode_full" }
 
       it "returns true" do
-        case_log["postcode_known"] = 0
-        expect(question.completed?(case_log)).to be(true)
+        lettings_log["postcode_known"] = 0
+        expect(question.completed?(lettings_log)).to be(true)
       end
     end
   end
@@ -356,14 +356,14 @@ RSpec.describe Form::Question, type: :model do
     let(:subsection_id) { "local_authority" }
     let(:page_id) { "time_lived_in_la" }
     let(:question_id) { "layear" }
-    let(:case_log) do
-      FactoryBot.create(:case_log, :in_progress)
+    let(:lettings_log) do
+      FactoryBot.create(:lettings_log, :in_progress)
     end
 
     it "can work out if the question will be shown in check answers" do
-      expect(question.hidden_in_check_answers?(case_log, nil)).to be(false)
-      case_log.layear = 0
-      expect(question.hidden_in_check_answers?(case_log, nil)).to be(true)
+      expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(false)
+      lettings_log.layear = 0
+      expect(question.hidden_in_check_answers?(lettings_log, nil)).to be(true)
     end
   end
 end

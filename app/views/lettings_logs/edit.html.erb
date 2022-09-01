@@ -1,4 +1,4 @@
-<% content_for :title, "Log #{@case_log.id}" %>
+<% content_for :title, "Log #{@lettings_log.id}" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Logs" => "/logs",
   content_for(:title) => "",
@@ -10,10 +10,10 @@
       <%= content_for(:title) %>
     </h1>
 
-    <% if @case_log.status == "in_progress" %>
-      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@case_log, :completed) %> of <%= get_subsections_count(@case_log, :all) %> sections completed.</p>
+    <% if @lettings_log.status == "in_progress" %>
+      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@lettings_log, :completed) %> of <%= get_subsections_count(@lettings_log, :all) %> sections completed.</p>
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <% next_incomplete_section = get_next_incomplete_section(@case_log) %>
+        <% next_incomplete_section = get_next_incomplete_section(@lettings_log) %>
       </p>
       <p>
         <% if next_incomplete_section.present? %>
@@ -22,14 +22,14 @@
           </a>
         <% end %>
       </p>
-    <% elsif @case_log.status == "not_started" %>
+    <% elsif @lettings_log.status == "not_started" %>
       <p class="govuk-body">This log has not been started.</p>
-    <% elsif @case_log.status == "completed" %>
+    <% elsif @lettings_log.status == "completed" %>
       <p class="govuk-body">
-        <%= status_tag(@case_log.status) %>
+        <%= status_tag(@lettings_log.status) %>
       </p>
       <p class="govuk-body">
-        You can <%= govuk_link_to "review and make changes to this log", "/logs/#{@case_log.id}/review" %> until 2nd June <%= @case_log.collection_start_year.present? ? @case_log.collection_start_year + 1 : "" %>.
+        You can <%= govuk_link_to "review and make changes to this log", "/logs/#{@lettings_log.id}/review" %> until 2nd June <%= @lettings_log.collection_start_year.present? ? @lettings_log.collection_start_year + 1 : "" %>.
       </p>
     <% end %>
     <%= render "tasklist" %>

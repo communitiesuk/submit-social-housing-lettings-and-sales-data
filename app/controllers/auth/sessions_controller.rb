@@ -24,7 +24,7 @@ private
     if resource.need_two_factor_authentication?(request)
       user_two_factor_authentication_path
     else
-      params.dig("user", "start").present? ? case_logs_path : super
+      params.dig("user", "start").present? ? lettings_logs_path : super
     end
   end
 end
