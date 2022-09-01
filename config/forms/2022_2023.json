@@ -5669,40 +5669,79 @@
                 }
               }
             },
-            "access_needs": {
+            "access_needs_exist": {
               "header": "",
               "description": "",
               "questions": {
-                "accessibility_requirements": {
+                "housingneeds": {
                   "header": "Does anybody in the household have any disabled access needs?",
                   "hint_text": "",
-                  "type": "checkbox",
-                  "check_answer_label": "Anybody in household with disabled access needs",
+                  "type": "radio",
+                  "check_answer_label": "Anybody with disabled access needs",
                   "answer_options": {
-                    "housingneeds_a": {
-                      "value": "Fully wheelchair accessible housing"
+                    "1": {
+                      "value": "Yes"
                     },
-                    "housingneeds_b": {
-                      "value": "Wheelchair access to essential rooms"
-                    },
-                    "housingneeds_c": {
-                      "value": "Level access housing"
-                    },
-                    "housingneeds_f": {
-                      "value": "Other disabled access needs"
+                    "2": {
+                      "value": "No"
                     },
                     "divider": {
                       "value": true
                     },
-                    "housingneeds_g": {
-                      "value": "No disabled access needs"
-                    },
-                    "housingneeds_h": {
+                    "3": {
                       "value": "Don’t know"
                     }
                   }
                 }
               }
+            },
+            "type_of_access_needs": {
+              "header": "Disabled access needs",
+              "description": "",
+              "questions": {
+                "housingneeds_type": {
+                  "header": "What type of access need do they have?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Disabled access needs",
+                  "answer_options": {
+                    "0": {
+                      "value": "Fully wheelchair accessible housing"
+                    },
+                    "1": {
+                      "value": "Wheelchair access to essential rooms"
+                    },
+                    "2": {
+                      "value": "Level access housing"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "3": {
+                      "value": "None of the above"
+                    }
+                  }
+                },
+                "housingneeds_other": {
+                  "header": "Do they have any other access needs?",
+                  "hint_text": "",
+                  "type": "radio",
+                  "check_answer_label": "Other disabled access needs",
+                  "answer_options": {
+                    "1": {
+                      "value": "Yes"
+                    },
+                    "0": {
+                      "value": "No"
+                    }
+                  }
+                }
+              },
+              "depends_on": [
+                {
+                  "housingneeds": 1
+                }
+              ]
             },
             "health_conditions": {
               "header": "",

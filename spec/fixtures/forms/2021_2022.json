@@ -390,6 +390,9 @@
                 "depends_on": [
                   {
                     "illness": 1
+                  },
+                  {
+                    "illness": 100
                   }
                 ]
               }
@@ -634,386 +637,366 @@
                     "label": true,
                     "i18n_template": "ecstat1"
                   },
-                  {"key": "earnings",
+                  {
+                    "key": "earnings",
                     "label": true,
                     "i18n_template": "earnings"
-                  }]
-                },
-                "questions": {
-                  "net_income_value_check": {
-                    "check_answer_label": "Net income soft validation",
-                    "hidden_in_check_answers": true,
-                    "header": "Are you sure this is correct?",
-                    "type": "interruption_screen",
-                    "answer_options": {
-                      "0": {
-                        "value": "Yes"
-                      },
-                      "1": {
-                        "value": "No"
-                      }
-                    }
                   }
-                }
+                ]
               },
-              "net_income_uc_proportion": {
-                "questions": {
-                  "benefits": {
-                    "check_answer_label": "Benefits as a proportion of income",
-                    "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value":"All"
-                      },
-                      "1": {
-                        "value":"Some"
-                      }
-                    }
-                  }
-                }
-              },
-              "housing_benefit": {
-                "questions": {
-                  "hb": {
-                    "check_answer_label": "Housing-related benefits received",
-                    "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Housing benefit"
-                      },
-                      "1": {
-                        "value": "Tenant prefers not to say"
-                      }
+              "questions": {
+                "net_income_value_check": {
+                  "check_answer_label": "Net income soft validation",
+                  "hidden_in_check_answers": true,
+                  "header": "Are you sure this is correct?",
+                  "type": "interruption_screen",
+                  "answer_options": {
+                    "0": {
+                      "value": "Yes"
                     },
-                    "conditional_for": {
-                      "conditional_question": [0]
-                    }
-                  },
-                  "conditional_question": {
-                    "check_answer_label": "Conditional Question",
-                    "header": "Question to test page conditions",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Option A"
-                      },
-                      "1": {
-                        "value": "Option B"
-                      }
-                    }
-                  }
-                }
-              },
-              "dependent_page": {
-                "depends_on": [{ "incfreq": 1 }],
-                "questions": {
-                  "dependent_question": {
-                    "check_answer_label": "Dependent Question",
-                    "header": "Question to test page routing",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Option A"
-                      },
-                      "1": {
-                        "value": "Option B"
-                      }
+                    "1": {
+                      "value": "No"
                     }
                   }
                 }
               }
-            }
-          },
-          "rent_and_charges": {
-            "label": "Rent",
-            "pages": {
-              "rent": {
-                "questions": {
-                  "period": {
-                    "check_answer_label": "Rent Period",
-                    "header": "Which period are rent and other charges due?",
-                    "type": "radio",
-                    "answer_options": {
-                      "1": {
-                        "value": "Weekly for 52 weeks"
-                      },
-                      "3": {
-                        "value": "Every 4 weeks"
-                      }
-                    }
-                  },
-                  "brent": {
-                    "check_answer_label": "Basic Rent",
-                    "header": "What is the basic rent?",
-                    "hint_text": "Eligible for housing benefit or Universal Credit",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4,
-                    "fields-to-add": [
-                      "brent",
-                      "scharge",
-                      "pscharge",
-                      "supcharg"
-                    ],
-                    "result-field": "tcharge"
-                  },
-                  "scharge": {
-                    "check_answer_label": "Service Charge",
-                    "header": "What is the service charge?",
-                    "hint_text": "Eligible for housing benefit or Universal Credit",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4,
-                    "fields-to-add": [
-                      "brent",
-                      "scharge",
-                      "pscharge",
-                      "supcharg"
-                    ],
-                    "result-field": "tcharge"
-                  },
-                  "pscharge": {
-                    "check_answer_label": "Personal Service Charge",
-                    "header": "What is the personal service charge?",
-                    "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4,
-                    "fields-to-add": [
-                      "brent",
-                      "scharge",
-                      "pscharge",
-                      "supcharg"
-                    ],
-                    "result-field": "tcharge"
-                  },
-                  "supcharg": {
-                    "check_answer_label": "Support Charge",
-                    "header": "What is the support charge?",
-                    "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
-                    "type": "numeric",
-                    "min": 0,
-                    "max": 300,
-                    "step": 1,
-                    "width": 4,
-                    "fields-to-add": [
-                      "brent",
-                      "scharge",
-                      "pscharge",
-                      "supcharg"
-                    ],
-                    "result-field": "tcharge"
-                  },
-                  "tcharge": {
-                    "check_answer_label": "Total Charge",
-                    "header": "Total charge?",
-                    "hint_text": "This is the total of rent and all charges",
-                    "type": "numeric_output",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4,
-                    "readonly": true,
-                    "requires_js": true
-                  }
-                }
-              },
-              "weekly_net_income": {
-                "header": "",
-                "description": "",
-                "questions": {
-                  "earnings": {
-                    "check_answer_label": "Total household income",
-                    "header": "How much income does the household have in total every week?",
-                    "hint_text": "",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": "1",
-                    "width": 5,
-                    "prefix": "£",
-                    "suffix": " every week"
-                  }
-                }
-              },
-              "care_home_charge": {
-                "questions": {
-                  "offered": {
-                    "check_answer_label": "Basic Rent",
-                    "header": "What is the basic rent?",
-                    "hint_text": "Eligible for housing benefit or Universal Credit",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4
-                  }
-                },
-                "depends_on": [{"period": 3}]
-              },
-              "care_home_charge_bi_weekly": {
-                "questions": {
-                  "offered": {
-                    "check_answer_label": "Basic Rent",
-                    "header": "What is the basic rent?",
-                    "hint_text": "Eligible for housing benefit or Universal Credit",
-                    "type": "numeric",
-                    "min": 0,
-                    "step": 1,
-                    "width": 4
-                  }
-                },
-                "depends_on": [{"period": 2}]
-              }
-            }
-          }
-        }
-      },
-      "local_authority": {
-        "label": "Local authority",
-        "subsections": {
-          "local_authority": {
-            "label": "Local authority",
-            "pages": {
-              "time_lived_in_la": {
-                "questions": {
-                  "layear": {
-                    "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
-                    "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Just moved to local authority area"
-                      },
-                      "1": {
-                        "value": "Less than 1 year"
-                      },
-                      "2": {
-                        "value": "1 year but under 2 years"
-                      },
-                      "3": {
-                        "value": "2 years but under 3 years"
-                      },
-                      "4": {
-                        "value": "3 years but under 4 years"
-                      },
-                      "5": {
-                        "value": "4 years but under 5 years"
-                      },
-                      "6": {
-                        "value": "5 years or more"
-                      },
-                      "divider": {
-                        "value": true
-                      },
-                      "7": {
-                        "value": "Don’t know"
-                      }
+            },
+            "net_income_uc_proportion": {
+              "questions": {
+                "benefits": {
+                  "check_answer_label": "Benefits as a proportion of income",
+                  "header": "How much of the tenant’s income is from Universal Credit, state pensions or benefits?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "All"
                     },
-                    "hidden_in_check_answers": {
-                      "depends_on": [
-                        { "layear": 0 },
-                        { "layear": 1 }
-                      ]
+                    "1": {
+                      "value": "Some"
                     }
+                  }
+                }
+              }
+            },
+            "housing_benefit": {
+              "questions": {
+                "hb": {
+                  "check_answer_label": "Housing-related benefits received",
+                  "header": "Is the tenant likely to be in receipt of any of these housing-related benefits?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Housing benefit"
+                    },
+                    "1": {
+                      "value": "Tenant prefers not to say"
+                    }
+                  },
+                  "conditional_for": {
+                    "conditional_question": [0]
                   }
                 },
-                "depends_on":  [{ "renewal": 0 }]
-              },
-              "time_on_la_waiting_list": {
-                "questions": {
-                  "lawaitlist": {
-                    "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
-                    "header": "How long has the household been on the local authority waiting list where the new letting is located?",
-                    "type": "radio",
-                    "answer_options": {
-                      "0": {
-                        "value": "Just moved to local authority area"
-                      },
-                      "1": {
-                        "value": "Less than 1 year"
-                      },
-                      "2": {
-                        "value": "1 year but under 2 years"
-                      },
-                      "3": {
-                        "value": "2 years but under 3 years"
-                      },
-                      "4": {
-                        "value": "3 years but under 4 years"
-                      },
-                      "5": {
-                        "value": "4 years but under 5 years"
-                      },
-                      "6": {
-                        "value": "5 years or more"
-                      },
-                      "divider": {
-                        "value": true
-                      },
-                      "7": {
-                        "value": "Don’t know"
-                      }
+                "conditional_question": {
+                  "check_answer_label": "Conditional Question",
+                  "header": "Question to test page conditions",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Option A"
+                    },
+                    "1": {
+                      "value": "Option B"
                     }
                   }
                 }
-              },
-              "other_postcode": {
-                "questions": {
-                  "other_postcode": {
-                    "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
-                    "header": "Postcode for the previous accommodation",
-                    "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
-                    "type": "text",
-                    "width": 5,
-                    "conditional_for": { "fake_key": "fake_condition" }
-                  },
-                  "ppostcode_full": {
-                    "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
-                    "header": "Postcode for the previous accommodation",
-                    "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
-                    "type": "text",
-                    "width": 5
-                  }
-                }
-              },
-              "property_major_repairs": {
-                "questions": {
-                  "mrcdate": {
-                    "check_answer_label": "What was the major repairs completion date?",
-                    "header": "What was the major repairs completion date?",
-                    "hint_text": "For example, 27 3 2021",
-                    "type": "date"
+              }
+            },
+            "dependent_page": {
+              "depends_on": [{ "incfreq": 1 }],
+              "questions": {
+                "dependent_question": {
+                  "check_answer_label": "Dependent Question",
+                  "header": "Question to test page routing",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Option A"
+                    },
+                    "1": {
+                      "value": "Option B"
+                    }
                   }
                 }
               }
             }
           }
+        },
+        "rent_and_charges": {
+          "label": "Rent",
+          "pages": {
+            "rent": {
+              "questions": {
+                "period": {
+                  "check_answer_label": "Rent Period",
+                  "header": "Which period are rent and other charges due?",
+                  "type": "radio",
+                  "answer_options": {
+                    "1": {
+                      "value": "Weekly for 52 weeks"
+                    },
+                    "3": {
+                      "value": "Every 4 weeks"
+                    }
+                  }
+                },
+                "brent": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4,
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "scharge": {
+                  "check_answer_label": "Service Charge",
+                  "header": "What is the service charge?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4,
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "pscharge": {
+                  "check_answer_label": "Personal Service Charge",
+                  "header": "What is the personal service charge?",
+                  "hint_text": "Not eligible for housing benefit or Universal Credit. For example, hot water excluding water rates.",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4,
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "supcharg": {
+                  "check_answer_label": "Support Charge",
+                  "header": "What is the support charge?",
+                  "hint_text": "This is to fund housing-related support services included in the tenancy agreement",
+                  "type": "numeric",
+                  "min": 0,
+                  "max": 300,
+                  "step": 1,
+                  "width": 4,
+                  "fields-to-add": ["brent", "scharge", "pscharge", "supcharg"],
+                  "result-field": "tcharge"
+                },
+                "tcharge": {
+                  "check_answer_label": "Total Charge",
+                  "header": "Total charge?",
+                  "hint_text": "This is the total of rent and all charges",
+                  "type": "numeric_output",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4,
+                  "readonly": true,
+                  "requires_js": true
+                }
+              }
+            },
+            "weekly_net_income": {
+              "header": "",
+              "description": "",
+              "questions": {
+                "earnings": {
+                  "check_answer_label": "Total household income",
+                  "header": "How much income does the household have in total every week?",
+                  "hint_text": "",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": "1",
+                  "width": 5,
+                  "prefix": "£",
+                  "suffix": " every week"
+                }
+              }
+            },
+            "care_home_charge": {
+              "questions": {
+                "offered": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4
+                }
+              },
+              "depends_on": [{ "period": 3 }]
+            },
+            "care_home_charge_bi_weekly": {
+              "questions": {
+                "offered": {
+                  "check_answer_label": "Basic Rent",
+                  "header": "What is the basic rent?",
+                  "hint_text": "Eligible for housing benefit or Universal Credit",
+                  "type": "numeric",
+                  "min": 0,
+                  "step": 1,
+                  "width": 4
+                }
+              },
+              "depends_on": [{ "period": 2 }]
+            }
+          }
         }
-      },
-      "submission": {
-        "label": "Submission",
-        "subsections": {
-          "declaration": {
-            "label": "Declaration",
-            "depends_on": [{
+      }
+    },
+    "local_authority": {
+      "label": "Local authority",
+      "subsections": {
+        "local_authority": {
+          "label": "Local authority",
+          "pages": {
+            "time_lived_in_la": {
+              "questions": {
+                "layear": {
+                  "check_answer_label": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "header": "How long has the household continuously lived in the local authority area where the new letting is located?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Just moved to local authority area"
+                    },
+                    "1": {
+                      "value": "Less than 1 year"
+                    },
+                    "2": {
+                      "value": "1 year but under 2 years"
+                    },
+                    "3": {
+                      "value": "2 years but under 3 years"
+                    },
+                    "4": {
+                      "value": "3 years but under 4 years"
+                    },
+                    "5": {
+                      "value": "4 years but under 5 years"
+                    },
+                    "6": {
+                      "value": "5 years or more"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
+                    }
+                  },
+                  "hidden_in_check_answers": {
+                    "depends_on": [{ "layear": 0 }, { "layear": 1 }]
+                  }
+                }
+              },
+              "depends_on": [{ "renewal": 0 }]
+            },
+            "time_on_la_waiting_list": {
+              "questions": {
+                "lawaitlist": {
+                  "check_answer_label": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "header": "How long has the household been on the local authority waiting list where the new letting is located?",
+                  "type": "radio",
+                  "answer_options": {
+                    "0": {
+                      "value": "Just moved to local authority area"
+                    },
+                    "1": {
+                      "value": "Less than 1 year"
+                    },
+                    "2": {
+                      "value": "1 year but under 2 years"
+                    },
+                    "3": {
+                      "value": "2 years but under 3 years"
+                    },
+                    "4": {
+                      "value": "3 years but under 4 years"
+                    },
+                    "5": {
+                      "value": "4 years but under 5 years"
+                    },
+                    "6": {
+                      "value": "5 years or more"
+                    },
+                    "divider": {
+                      "value": true
+                    },
+                    "7": {
+                      "value": "Don’t know"
+                    }
+                  }
+                }
+              }
+            },
+            "other_postcode": {
+              "questions": {
+                "other_postcode": {
+                  "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "type": "text",
+                  "width": 5,
+                  "conditional_for": { "fake_key": "fake_condition" }
+                },
+                "ppostcode_full": {
+                  "check_answer_label": "Postcode of previous accommodation if the household has moved from settled accommodation",
+                  "header": "Postcode for the previous accommodation",
+                  "hint_text": "If the household has moved from settled accommodation immediately prior to being re-housed",
+                  "type": "text",
+                  "width": 5
+                }
+              }
+            },
+            "property_major_repairs": {
+              "questions": {
+                "mrcdate": {
+                  "check_answer_label": "What was the major repairs completion date?",
+                  "header": "What was the major repairs completion date?",
+                  "hint_text": "For example, 27 3 2021",
+                  "type": "date"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "submission": {
+      "label": "Submission",
+      "subsections": {
+        "declaration": {
+          "label": "Declaration",
+          "depends_on": [
+            {
               "household_characteristics": "completed",
               "household_needs": "completed",
               "property_information": "completed"
-            }],
-            "pages": {
-              "declaration": {
-                "questions": {
-                  "declaration": {
-                    "check_answer_label": "",
-                    "header": "Submit this lettings log ",
-                    "type": "checkbox",
-                    "answer_options": {
-                      "declaration": {
-                        "value": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
-                      }
+            }
+          ],
+          "pages": {
+            "declaration": {
+              "questions": {
+                "declaration": {
+                  "check_answer_label": "",
+                  "header": "Submit this lettings log ",
+                  "type": "checkbox",
+                  "answer_options": {
+                    "declaration": {
+                      "value": "The tenant has seen the Department for Levelling Up, Housing & Communities (DLUHC) privacy notice"
                     }
                   }
                 }
@@ -1024,3 +1007,4 @@
       }
     }
   }
+}

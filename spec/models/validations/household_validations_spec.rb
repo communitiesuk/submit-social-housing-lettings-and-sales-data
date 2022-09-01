@@ -575,46 +575,6 @@ RSpec.describe Validations::HouseholdValidations do
     end
   end
 
-  describe "accessibility requirement validations" do
-    it "validates that mutually exclusive options can't be selected together" do
-      record.housingneeds_a = 1
-      record.housingneeds_b = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-      record.housingneeds_a = 0
-      record.housingneeds_b = 0
-      record.housingneeds_g = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-      record.housingneeds_a = 1
-      record.housingneeds_g = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-    end
-
-    it "validates that non-mutually exclusive options can be selected together" do
-      record.housingneeds_a = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
-      record.housingneeds_a = 0
-      record.housingneeds_b = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
-      record.housingneeds_b = 0
-      record.housingneeds_c = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
-    end
-  end
-
   describe "referral validations" do
     context "when homelessness is assessed" do
       it "can be internal transfer" do
