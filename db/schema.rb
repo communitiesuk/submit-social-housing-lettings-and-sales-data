@@ -232,12 +232,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.integer "void_date_value_check"
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
-    t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
-    t.index ["location_id"], name: "index_case_logs_on_location_id"
-    t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
-    t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
-    t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
-    t.index ["scheme_id"], name: "index_case_logs_on_scheme_id"
+    t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
+    t.index ["location_id"], name: "index_lettings_logs_on_location_id"
+    t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
+    t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
+    t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
   end
 
   create_table "locations", force: :cascade do |t|
