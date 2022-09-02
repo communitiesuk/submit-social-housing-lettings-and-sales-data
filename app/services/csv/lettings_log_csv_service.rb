@@ -44,7 +44,7 @@ module Csv
       remaining_attributes = LettingsLog.attribute_names - intersecting_attributes - scheme_and_location_ids
 
       @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh] + scheme_attributes + location_attributes).uniq
-      move_is_inferred_fields
+      move_la_fields
 
       @attributes -= CSV_FIELDS_TO_OMIT if @user.present? && !@user.support?
     end
