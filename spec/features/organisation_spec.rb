@@ -135,10 +135,10 @@ RSpec.describe "User Features" do
     end
 
     context "when viewing logs for specific organisation" do
-      let(:first_log) { organisation.case_logs.first }
-      let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
-      let!(:other_logs) { FactoryBot.create_list(:case_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
-      let(:number_of_case_logs) { CaseLog.count }
+      let(:first_log) { organisation.lettings_logs.first }
+      let!(:log_to_search) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation, managing_organisation_id: organisation.id) }
+      let!(:other_logs) { FactoryBot.create_list(:lettings_log, 4, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id) }
+      let(:number_of_lettings_logs) { LettingsLog.count }
 
       before do
         visit("/organisations/#{org_id}/logs")
@@ -198,10 +198,10 @@ RSpec.describe "User Features" do
         end
       end
 
-      it "can filter case logs" do
-        expect(page).to have_content("#{number_of_case_logs} total logs")
-        organisation.case_logs.map(&:id).each do |case_log_id|
-          expect(page).to have_link case_log_id.to_s, href: "/logs/#{case_log_id}"
+      it "can filter lettings logs" do
+        expect(page).to have_content("#{number_of_lettings_logs} total logs")
+        organisation.lettings_logs.map(&:id).each do |lettings_log_id|
+          expect(page).to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
         end
         check("years-2021-field")
         click_button("Apply filters")
@@ -258,13 +258,13 @@ RSpec.describe "User Features" do
               let!(:organisation) { FactoryBot.create(:organisation) }
               let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
               let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-              let!(:log_to_delete) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
+              let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
 
               context "when organisation is deleted" do
                 it "child relationships ie logs, schemes and users are deleted too - application" do
                   organisation.destroy!
                   expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
-                  expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                  expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
                   expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
                   expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
                 end
@@ -273,11 +273,11 @@ RSpec.describe "User Features" do
                   let!(:organisation) { FactoryBot.create(:organisation) }
                   let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
                   let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
-                  let!(:log_to_delete) { FactoryBot.create(:case_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
+                  let!(:log_to_delete) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
 
                   it "child relationships ie logs, schemes and users are deleted too - database" do
                     ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
-                    expect { CaseLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                    expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
                     expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
                     expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
                   end

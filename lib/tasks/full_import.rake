@@ -17,7 +17,7 @@ namespace :core do
       Import.new(Imports::UserImportService, :create_users, "user"),
       Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect"),
       Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period"),
-      Import.new(Imports::CaseLogsImportService, :create_logs, "logs"),
+      Import.new(Imports::LettingsLogsImportService, :create_logs, "logs"),
     ]
 
     import_list.each do |step|

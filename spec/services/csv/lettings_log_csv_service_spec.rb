@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe Csv::CaseLogCsvService do
+RSpec.describe Csv::LettingsLogCsvService do
   context "when the user is support" do
     let(:user) { FactoryBot.create(:user, :support) }
     let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
 
     before do
-      CaseLog.create!(startdate: "2021-10-10")
+      LettingsLog.create!(startdate: "2021-10-10")
       allow(FormHandler.instance).to receive(:get_form).and_return(real_2021_2022_form)
     end
 
@@ -106,12 +106,9 @@ RSpec.describe Csv::CaseLogCsvService do
                                    leftreg
                                    reservist
                                    preg_occ
-                                   housingneeds_a
-                                   housingneeds_b
-                                   housingneeds_c
-                                   housingneeds_f
-                                   housingneeds_g
-                                   housingneeds_h
+                                   housingneeds
+                                   housingneeds_type
+                                   housingneeds_other
                                    illness
                                    illness_type_4
                                    illness_type_5
@@ -167,6 +164,12 @@ RSpec.describe Csv::CaseLogCsvService do
                                    hbrentshortfall
                                    tshortfall_known
                                    tshortfall
+                                   housingneeds_a
+                                   housingneeds_b
+                                   housingneeds_c
+                                   housingneeds_f
+                                   housingneeds_g
+                                   housingneeds_h
                                    property_owner_organisation
                                    property_manager_organisation
                                    sale_or_letting
@@ -189,7 +192,6 @@ RSpec.describe Csv::CaseLogCsvService do
                                    wtcharge
                                    wtshortfall
                                    refused
-                                   housingneeds
                                    wchchrg
                                    newprop
                                    old_form_id
@@ -200,11 +202,7 @@ RSpec.describe Csv::CaseLogCsvService do
                                    hhtype
                                    new_old
                                    vacdays
-                                   housingneeds_type
-                                   housingneeds_other
                                    unittype_sh
-                                   scheme_id
-                                   location_id
                                    scheme_code
                                    scheme_service_name
                                    scheme_sensitive

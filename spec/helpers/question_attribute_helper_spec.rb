@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe QuestionAttributeHelper do
-  let(:case_log) { FactoryBot.build(:case_log) }
-  let(:form) { case_log.form }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
+  let(:form) { lettings_log.form }
   let(:questions) { form.get_page("rent").questions }
 
   describe "html attributes" do
@@ -16,7 +16,7 @@ RSpec.describe QuestionAttributeHelper do
       expect(stimulus_html_attributes(brent)).to eq({
         "data-controller": "numeric-question",
         "data-action": "input->numeric-question#calculateFields",
-        "data-target": "case-log-#{brent.result_field.to_s.dasherize}-field",
+        "data-target": "lettings-log-#{brent.result_field.to_s.dasherize}-field",
         "data-calculated": brent.fields_to_add.to_json,
       })
     end
@@ -41,7 +41,7 @@ RSpec.describe QuestionAttributeHelper do
         {
           "data-controller": "numeric-question conditional-question",
           "data-action": "input->numeric-question#calculateFields click->conditional-question#displayConditional",
-          "data-target": "case-log-#{question.result_field.to_s.dasherize}-field",
+          "data-target": "lettings-log-#{question.result_field.to_s.dasherize}-field",
           "data-calculated": question.fields_to_add.to_json,
           "data-info": question.conditional_for.to_json,
         }

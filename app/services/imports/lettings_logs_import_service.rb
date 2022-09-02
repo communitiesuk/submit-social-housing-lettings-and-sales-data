@@ -1,5 +1,5 @@
 module Imports
-  class CaseLogsImportService < ImportService
+  class LettingsLogsImportService < ImportService
     def initialize(storage_service, logger = Rails.logger)
       @logs_with_discrepancies = Set.new
       @logs_overridden = Set.new
@@ -9,7 +9,7 @@ module Imports
     def create_logs(folder)
       import_from(folder, :create_log)
       if @logs_with_discrepancies.count.positive?
-        @logger.warn("The following case logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
+        @logger.warn("The following lettings logs had status discrepancies: [#{@logs_with_discrepancies.join(', ')}]")
       end
     end
 
@@ -107,6 +107,13 @@ module Imports
       %w[a b c f g h].each do |letter|
         attributes["housingneeds_#{letter}"] = housing_needs(xml_doc, letter)
       end
+      attributes["housingneeds"] = 1 if [attributes["housingneeds_a"], attributes["housingneeds_b"], attributes["housingneeds_c"], attributes["housingneeds_f"]].any? { |housingneed| housingneed == 1 }
+      attributes["housingneeds"] = 2 if attributes["housingneeds_g"] == 1
+      attributes["housingneeds"] = 3 if attributes["housingneeds_h"] == 1
+      attributes["housingneeds_type"] = 0 if attributes["housingneeds_a"] == 1
+      attributes["housingneeds_type"] = 1 if attributes["housingneeds_b"] == 1
+      attributes["housingneeds_type"] = 2 if attributes["housingneeds_c"] == 1
+      attributes["housingneeds_other"] = attributes["housingneeds_f"] == 1 ? 1 : 0
 
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
       (1..10).each do |index|
@@ -224,65 +231,65 @@ module Imports
       apply_date_consistency!(attributes)
       apply_household_consistency!(attributes)
 
-      case_log = save_case_log(attributes)
-      compute_differences(case_log, attributes)
-      check_status_completed(case_log, previous_status) unless @logs_overridden.include?(case_log.old_id)
+      lettings_log = save_lettings_log(attributes)
+      compute_differences(lettings_log, attributes)
+      check_status_completed(lettings_log, previous_status) unless @logs_overridden.include?(lettings_log.old_id)
     end
 
-    def save_case_log(attributes)
-      case_log = CaseLog.new(attributes)
+    def save_lettings_log(attributes)
+      lettings_log = LettingsLog.new(attributes)
       begin
-        case_log.save!
-        case_log
+        lettings_log.save!
+        lettings_log
       rescue ActiveRecord::RecordNotUnique
         legacy_id = attributes["old_id"]
-        record = CaseLog.find_by(old_id: legacy_id)
-        @logger.info "Updating case log #{record.id} with legacy ID #{legacy_id}"
+        record = LettingsLog.find_by(old_id: legacy_id)
+        @logger.info "Updating lettings log #{record.id} with legacy ID #{legacy_id}"
         record.update!(attributes)
         record
       rescue ActiveRecord::RecordInvalid => e
-        rescue_validation_or_raise(case_log, attributes, e)
+        rescue_validation_or_raise(lettings_log, attributes, e)
       end
     end
 
-    def rescue_validation_or_raise(case_log, attributes, exception)
-      if case_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
-        @logger.warn("Log #{case_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
-        @logs_overridden << case_log.old_id
+    def rescue_validation_or_raise(lettings_log, attributes, exception)
+      if lettings_log.errors.of_kind?(:referral, :internal_transfer_non_social_housing)
+        @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is a non social housing")
+        @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
-        save_case_log(attributes)
-      elsif case_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
-        @logger.warn("Log #{case_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
-        @logs_overridden << case_log.old_id
+        save_lettings_log(attributes)
+      elsif lettings_log.errors.of_kind?(:referral, :internal_transfer_fixed_or_lifetime)
+        @logger.warn("Log #{lettings_log.old_id}: Removing internal transfer referral since previous tenancy is fixed terms or lifetime")
+        @logs_overridden << lettings_log.old_id
         attributes.delete("referral")
-        save_case_log(attributes)
+        save_lettings_log(attributes)
       else
         raise exception
       end
     end
 
-    def compute_differences(case_log, attributes)
+    def compute_differences(lettings_log, attributes)
       differences = []
       attributes.each do |key, value|
-        case_log_value = case_log.send(key.to_sym)
+        lettings_log_value = lettings_log.send(key.to_sym)
         next if fields_not_present_in_softwire_data.include?(key)
 
-        if value != case_log_value
-          differences.push("#{key} #{value.inspect} #{case_log_value.inspect}")
+        if value != lettings_log_value
+          differences.push("#{key} #{value.inspect} #{lettings_log_value.inspect}")
         end
       end
-      @logger.warn "Differences found when saving log #{case_log.old_id}: #{differences}" unless differences.empty?
+      @logger.warn "Differences found when saving log #{lettings_log.old_id}: #{differences}" unless differences.empty?
     end
 
     def fields_not_present_in_softwire_data
-      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check]
+      %w[majorrepairs illness_type_0 tshortfall_known pregnancy_value_check retirement_value_check rent_value_check net_income_value_check major_repairs_date_value_check void_date_value_check housingneeds_type housingneeds_other]
     end
 
-    def check_status_completed(case_log, previous_status)
-      if previous_status.include?("submitted") && case_log.status != "completed"
-        @logger.warn "Case log #{case_log.id} is not completed"
-        @logger.warn "Case log with old id:#{case_log.old_id} is incomplete but status should be complete"
-        @logs_with_discrepancies << case_log.old_id
+    def check_status_completed(lettings_log, previous_status)
+      if previous_status.include?("submitted") && lettings_log.status != "completed"
+        @logger.warn "lettings log #{lettings_log.id} is not completed"
+        @logger.warn "lettings log with old id:#{lettings_log.old_id} is incomplete but status should be complete"
+        @logs_with_discrepancies << lettings_log.old_id
       end
     end
 
@@ -341,7 +348,7 @@ module Imports
       end
     end
 
-    # This does not match renttype (CDS) which is derived by case log logic
+    # This does not match renttype (CDS) which is derived by lettings log logic
     def rent_type(xml_doc, lar, irproduct)
       sr_ar_ir = get_form_name_component(xml_doc, FORM_NAME_INDEX[:rent_type])
 

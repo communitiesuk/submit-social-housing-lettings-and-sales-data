@@ -6,7 +6,7 @@ RSpec.describe Form::Setup::Questions::PropertyReference, type: :model do
   let(:question_id) { nil }
   let(:question_definition) { nil }
   let(:page) { instance_double(Form::Page) }
-  let(:case_log) { FactoryBot.create(:case_log) }
+  let(:lettings_log) { FactoryBot.create(:lettings_log) }
 
   it "has correct page" do
     expect(question.page).to eq(page)
@@ -41,6 +41,6 @@ RSpec.describe Form::Setup::Questions::PropertyReference, type: :model do
   end
 
   it "returns false for answer_selected" do
-    expect(question.answer_selected?(case_log, {})).to be false
+    expect(question.answer_selected?(lettings_log, {})).to be false
   end
 end

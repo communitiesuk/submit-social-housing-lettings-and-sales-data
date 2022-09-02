@@ -23,28 +23,28 @@ class Form::Setup::Questions::LocationId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(case_log)
-    return {} unless case_log.scheme
+  def displayed_answer_options(lettings_log)
+    return {} unless lettings_log.scheme
 
-    scheme_location_ids = case_log.scheme.locations.pluck(:id)
+    scheme_location_ids = lettings_log.scheme.locations.pluck(:id)
     answer_options.select { |k, _v| scheme_location_ids.include?(k.to_i) }
   end
 
-  def hidden_in_check_answers?(case_log, _current_user = nil)
-    !supported_housing_selected?(case_log)
+  def hidden_in_check_answers?(lettings_log, _current_user = nil)
+    !supported_housing_selected?(lettings_log)
   end
 
-  def get_extra_check_answer_value(case_log)
-    case_log.form.get_question("la", nil).label_from_value(case_log.la)
+  def get_extra_check_answer_value(lettings_log)
+    lettings_log.form.get_question("la", nil).label_from_value(lettings_log.la)
   end
 
 private
 
-  def supported_housing_selected?(case_log)
-    case_log.needstype == 2
+  def supported_housing_selected?(lettings_log)
+    lettings_log.needstype == 2
   end
 
-  def selected_answer_option_is_derived?(_case_log)
+  def selected_answer_option_is_derived?(_lettings_log)
     false
   end
 end

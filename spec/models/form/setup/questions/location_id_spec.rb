@@ -39,11 +39,11 @@ RSpec.describe Form::Setup::Questions::LocationId, type: :model do
 
   context "when getting available locations" do
     let(:scheme) { FactoryBot.create(:scheme) }
-    let(:case_log) { FactoryBot.create(:case_log, owning_organisation: scheme.owning_organisation, scheme:, needstype: 2) }
+    let(:lettings_log) { FactoryBot.create(:lettings_log, owning_organisation: scheme.owning_organisation, scheme:, needstype: 2) }
 
     context "when there are no locations" do
       it "the displayed_answer_options is an empty hash" do
-        expect(question.displayed_answer_options(case_log)).to eq({})
+        expect(question.displayed_answer_options(lettings_log)).to eq({})
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Form::Setup::Questions::LocationId, type: :model do
         end
 
         it "the displayed_answer_options is an empty hash" do
-          expect(question.displayed_answer_options(case_log)).to eq({})
+          expect(question.displayed_answer_options(lettings_log)).to eq({})
         end
       end
 
@@ -74,7 +74,7 @@ RSpec.describe Form::Setup::Questions::LocationId, type: :model do
         end
 
         it "the displayed_answer_options shows the locations" do
-          expect(question.displayed_answer_options(case_log).count).to eq(2)
+          expect(question.displayed_answer_options(lettings_log).count).to eq(2)
         end
       end
 
@@ -85,7 +85,7 @@ RSpec.describe Form::Setup::Questions::LocationId, type: :model do
         end
 
         it "the displayed_answer_options shows the locations" do
-          expect(question.displayed_answer_options(case_log).count).to eq(2)
+          expect(question.displayed_answer_options(lettings_log).count).to eq(2)
         end
       end
 
@@ -96,7 +96,7 @@ RSpec.describe Form::Setup::Questions::LocationId, type: :model do
         end
 
         it "the displayed_answer_options shows the active location" do
-          expect(question.displayed_answer_options(case_log).count).to eq(1)
+          expect(question.displayed_answer_options(lettings_log).count).to eq(1)
         end
       end
     end

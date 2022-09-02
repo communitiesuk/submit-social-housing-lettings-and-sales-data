@@ -22,20 +22,20 @@ class BulkUpload
     sheet = xlsx.sheet(0)
     last_row = sheet.last_row
     if last_row < FIRST_DATA_ROW
-      errors.add(:case_log_bulk_upload, "No data found")
+      errors.add(:lettings_log_bulk_upload, "No data found")
     else
       data_range = FIRST_DATA_ROW..last_row
       data_range.map do |row_num|
         row = sheet.row(row_num)
         # owning_organisation = Organisation.find(row[111])
         # managing_organisation = Organisation.find(row[113])
-        case_log = CaseLog.create!(
+        lettings_log = LettingsLog.create!(
           owning_organisation: current_user.organisation,
           managing_organisation: current_user.organisation,
           created_by: current_user,
         )
         map_row(row).each do |attr_key, attr_val|
-          update = case_log.update(attr_key => attr_val)
+          update = lettings_log.update(attr_key => attr_val)
           unless update
             # TODO: determine what to do when a bulk upload contains field values that don't pass validations
           end
@@ -50,7 +50,7 @@ class BulkUpload
     if SPREADSHEET_CONTENT_TYPES.include?(@content_type)
       true
     else
-      errors.add(:case_log_bulk_upload, "Invalid file type")
+      errors.add(:lettings_log_bulk_upload, "Invalid file type")
       false
     end
   end

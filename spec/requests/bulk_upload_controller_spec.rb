@@ -22,7 +22,7 @@ RSpec.describe BulkUploadController, type: :request do
     end
 
     describe "POST #bulk upload" do
-      before { post url, params: { bulk_upload: { case_log_bulk_upload: valid_file } } }
+      before { post url, params: { bulk_upload: { lettings_log_bulk_upload: valid_file } } }
 
       it "does not let you submit bulk uploads" do
         expect(response).to redirect_to("/account/sign-in")
@@ -45,26 +45,26 @@ RSpec.describe BulkUploadController, type: :request do
       end
 
       it "returns a page with a file upload form" do
-        expect(response.body).to match(/<input id="bulk-upload-case-log-bulk-upload-field" class="govuk-file-upload"/)
+        expect(response.body).to match(/<input id="bulk-upload-lettings-log-bulk-upload-field" class="govuk-file-upload"/)
         expect(response.body).to match(/<button type="submit" formnovalidate="formnovalidate" class="govuk-button"/)
       end
     end
 
     describe "POST #bulk upload" do
       context "with a valid file based on the upload template" do
-        let(:request) { post url, params: { bulk_upload: { case_log_bulk_upload: valid_file } } }
+        let(:request) { post url, params: { bulk_upload: { lettings_log_bulk_upload: valid_file } } }
 
-        it "creates case logs for each row in the template" do
-          expect { request }.to change(CaseLog, :count).by(9)
+        it "creates lettings logs for each row in the template" do
+          expect { request }.to change(LettingsLog, :count).by(9)
         end
 
-        it "redirects to the case log index page" do
-          expect(request).to redirect_to(case_logs_path)
+        it "redirects to the lettings log index page" do
+          expect(request).to redirect_to(lettings_logs_path)
         end
       end
 
       context "with an invalid file type" do
-        before { post url, params: { bulk_upload: { case_log_bulk_upload: invalid_file } } }
+        before { post url, params: { bulk_upload: { lettings_log_bulk_upload: invalid_file } } }
 
         it "displays an error message" do
           expect(response.body).to match(/Invalid file type/)
@@ -72,7 +72,7 @@ RSpec.describe BulkUploadController, type: :request do
       end
 
       context "with an empty file" do
-        let(:request) { post url, params: { bulk_upload: { case_log_bulk_upload: empty_file } } }
+        let(:request) { post url, params: { bulk_upload: { lettings_log_bulk_upload: empty_file } } }
 
         it "displays an error message" do
           request

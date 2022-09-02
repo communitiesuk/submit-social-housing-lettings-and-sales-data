@@ -23,9 +23,9 @@ As a result it’s not modelled as part of the config but rather as code. It sti
 
 - Conditional questions (`conditional_for`) – Radio and checkbox questions can support conditional text or numeric questions that show/hide on the same page when the triggering option is selected
 
-- Routing (`depends_on`) – all pages can specify conditions (attributes of the case log) that determine whether or not they’re shown to the user
+- Routing (`depends_on`) – all pages can specify conditions (attributes of the lettings log) that determine whether or not they’re shown to the user
 
-  - Methods can be chained (i.e. you can have conditions in the form `{ owning_organisation.provider_type: "local_authority"`) which will call `case_log.owning_organisation.provider_type` and compare the result to the provided value.
+  - Methods can be chained (i.e. you can have conditions in the form `{ owning_organisation.provider_type: "local_authority"`) which will call `lettings_log.owning_organisation.provider_type` and compare the result to the provided value.
 
   - Numeric questions support math expression depends_on conditions such as `{ age2: ">16" }`
 
@@ -108,7 +108,7 @@ Assumptions made by the format:
 
 - All pages have at least 1 question
 
-- The ActiveRecord case log model has a field for each question name (must match). In the case of checkbox questions it must have one field for every answer option (again names must match).
+- The ActiveRecord lettings log model has a field for each question name (must match). In the case of checkbox questions it must have one field for every answer option (again names must match).
 
 - Text not required by a page/question such as a header or hint text should be passed as an empty string
 

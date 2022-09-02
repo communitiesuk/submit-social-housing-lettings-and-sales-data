@@ -14,7 +14,7 @@ RSpec.describe "User Features" do
     allow(Devise.token_generator).to receive(:generate).and_return(reset_password_token)
   end
 
-  context "when the user navigates to case logs" do
+  context "when the user navigates to lettings logs" do
     it "is required to log in" do
       visit("/logs")
       expect(page).to have_current_path("/account/sign-in")
@@ -26,7 +26,7 @@ RSpec.describe "User Features" do
       expect(page).to have_no_content("You need to sign in or sign up before continuing.")
     end
 
-    it "is redirected to case logs after signing in" do
+    it "is redirected to lettings logs after signing in" do
       visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")

@@ -20,8 +20,8 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(case_log)
-    organisation = case_log.owning_organisation || case_log.created_by&.organisation
+  def displayed_answer_options(lettings_log)
+    organisation = lettings_log.owning_organisation || lettings_log.created_by&.organisation
     schemes = organisation ? Scheme.select(:id).where(owning_organisation_id: organisation.id, confirmed: true) : Scheme.select(:id).where(confirmed: true)
     filtered_scheme_ids = schemes.joins(:locations).merge(Location.where("startdate <= ? or startdate IS NULL", Time.zone.today)).map(&:id)
     answer_options.select do |k, _v|
@@ -29,21 +29,21 @@ class Form::Setup::Questions::SchemeId < ::Form::Question
     end
   end
 
-  def hidden_in_check_answers?(case_log, _current_user = nil)
-    !supported_housing_selected?(case_log)
+  def hidden_in_check_answers?(lettings_log, _current_user = nil)
+    !supported_housing_selected?(lettings_log)
   end
 
-  def answer_selected?(case_log, answer)
-    case_log[id] == answer.name || case_log[id] == answer.resource
+  def answer_selected?(lettings_log, answer)
+    lettings_log[id] == answer.name || lettings_log[id] == answer.resource
   end
 
 private
 
-  def supported_housing_selected?(case_log)
-    case_log.needstype == 2
+  def supported_housing_selected?(lettings_log)
+    lettings_log.needstype == 2
   end
 
-  def selected_answer_option_is_derived?(_case_log)
+  def selected_answer_option_is_derived?(_lettings_log)
     false
   end
 end

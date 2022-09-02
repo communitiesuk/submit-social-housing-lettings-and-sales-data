@@ -1,4 +1,4 @@
-module DerivedVariables::CaseLogVariables
+module DerivedVariables::LettingsLogVariables
   RENT_TYPE_MAPPING = { 0 => 1, 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3 }.freeze
 
   def scheme_has_multiple_locations?
@@ -43,10 +43,8 @@ module DerivedVariables::CaseLogVariables
     self.has_benefits = get_has_benefits
     self.tshortfall_known = 0 if tshortfall
     self.nocharge = household_charge&.zero? ? 1 : 0
-    self.housingneeds = get_housingneeds
     if is_renewal?
       self.underoccupation_benefitcap = 2 if collection_start_year == 2021
-      self.homeless = 1
       self.referral = 0
       self.waityear = 2
       if is_general_needs?
@@ -70,6 +68,8 @@ module DerivedVariables::CaseLogVariables
         self.voiddate = startdate
       end
     end
+
+    set_housingneeds_fields if housingneeds?
   end
 
 private
@@ -185,5 +185,24 @@ private
     if scheme && scheme.locations.active.size == 1
       self.location = scheme.locations.first
     end
+  end
+
+  def set_housingneeds_fields
+    self.housingneeds_a = fully_wheelchair_accessible? ? 1 : 0
+    self.housingneeds_b = essential_wheelchair_access? ? 1 : 0
+    self.housingneeds_c = level_access_housing? ? 1 : 0
+    self.housingneeds_f = other_housingneeds? ? 1 : 0
+    set_housingneeds_values_to_zero unless has_housingneeds?
+    self.housingneeds_g = no_housingneeds? ? 1 : 0
+    self.housingneeds_h = unknown_housingneeds? ? 1 : 0
+  end
+
+  def set_housingneeds_values_to_zero
+    self.housingneeds_a = 0
+    self.housingneeds_b = 0
+    self.housingneeds_c = 0
+    self.housingneeds_f = 0
+    self.housingneeds_g = 0
+    self.housingneeds_h = 0
   end
 end

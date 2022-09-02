@@ -1,25 +1,25 @@
 module Exports
-  class CaseLogExportService
-    include Exports::CaseLogExportConstants
+  class LettingsLogExportService
+    include Exports::LettingsLogExportConstants
 
     def initialize(storage_service, logger = Rails.logger)
       @storage_service = storage_service
       @logger = logger
     end
 
-    def export_csv_case_logs
+    def export_csv_lettings_logs
       time_str = Time.zone.now.strftime("%F").underscore
-      case_logs = retrieve_case_logs(Time.zone.now, true)
-      csv_io = build_export_csv(case_logs)
+      lettings_logs = retrieve_lettings_logs(Time.zone.now, true)
+      csv_io = build_export_csv(lettings_logs)
       @storage_service.write_file("export_#{time_str}.csv", csv_io)
     end
 
-    def export_xml_case_logs(full_update: false)
+    def export_xml_lettings_logs(full_update: false)
       start_time = Time.zone.now
-      case_logs = retrieve_case_logs(start_time, full_update)
+      lettings_logs = retrieve_lettings_logs(start_time, full_update)
       export = build_export_run(start_time, full_update)
       daily_run = get_daily_run_number
-      archive_datetimes = write_export_archive(export, case_logs)
+      archive_datetimes = write_export_archive(export, lettings_logs)
       export.empty_export = archive_datetimes.empty?
       write_master_manifest(daily_run, archive_datetimes)
       export.save!
@@ -62,41 +62,41 @@ module Exports
       @storage_service.write_file(file_path, string_io)
     end
 
-    def get_archive_name(case_log, base_number, increment)
-      return unless case_log.startdate
+    def get_archive_name(lettings_log, base_number, increment)
+      return unless lettings_log.startdate
 
-      collection_start = case_log.collection_start_year
-      month = case_log.startdate.month
+      collection_start = lettings_log.collection_start_year
+      month = lettings_log.startdate.month
       quarter = QUARTERS[(month - 1) / 3]
       base_number_str = "f#{base_number.to_s.rjust(4, '0')}"
       increment_str = "inc#{increment.to_s.rjust(4, '0')}"
       "core_#{collection_start}_#{collection_start + 1}_#{quarter}_#{base_number_str}_#{increment_str}"
     end
 
-    def write_export_archive(export, case_logs)
-      # Order case logs per archive
-      case_logs_per_archive = {}
-      case_logs.each do |case_log|
-        archive = get_archive_name(case_log, export.base_number, export.increment_number)
+    def write_export_archive(export, lettings_logs)
+      # Order lettings logs per archive
+      lettings_logs_per_archive = {}
+      lettings_logs.each do |lettings_log|
+        archive = get_archive_name(lettings_log, export.base_number, export.increment_number)
         next unless archive
 
-        if case_logs_per_archive.key?(archive)
-          case_logs_per_archive[archive] << case_log
+        if lettings_logs_per_archive.key?(archive)
+          lettings_logs_per_archive[archive] << lettings_log
         else
-          case_logs_per_archive[archive] = [case_log]
+          lettings_logs_per_archive[archive] = [lettings_log]
         end
       end
 
       # Write all archives
       archive_datetimes = {}
-      case_logs_per_archive.each do |archive, case_logs_to_export|
-        manifest_xml = build_manifest_xml(case_logs_to_export.count)
+      lettings_logs_per_archive.each do |archive, lettings_logs_to_export|
+        manifest_xml = build_manifest_xml(lettings_logs_to_export.count)
         zip_file = Zip::File.open_buffer(StringIO.new)
         zip_file.add("manifest.xml", manifest_xml)
 
         part_number = 1
-        case_logs_to_export.each_slice(MAX_XML_RECORDS) do |case_logs_slice|
-          data_xml = build_export_xml(case_logs_slice)
+        lettings_logs_to_export.each_slice(MAX_XML_RECORDS) do |lettings_logs_slice|
+          data_xml = build_export_xml(lettings_logs_slice)
           part_number_str = "pt#{part_number.to_s.rjust(3, '0')}"
           zip_file.add("#{archive}_#{part_number_str}.xml", data_xml)
           part_number += 1
@@ -112,14 +112,14 @@ module Exports
       archive_datetimes
     end
 
-    def retrieve_case_logs(start_time, full_update)
+    def retrieve_lettings_logs(start_time, full_update)
       recent_export = LogsExport.order("started_at").last
       if !full_update && recent_export
         params = { from: recent_export.started_at, to: start_time }
-        CaseLog.where("updated_at >= :from and updated_at <= :to", params)
+        LettingsLog.where("updated_at >= :from and updated_at <= :to", params)
       else
         params = { to: start_time }
-        CaseLog.where("updated_at <= :to", params)
+        LettingsLog.where("updated_at <= :to", params)
       end
     end
 
@@ -150,13 +150,13 @@ module Exports
       xml_doc_to_temp_file(doc)
     end
 
-    def apply_cds_transformation(case_log, export_mode)
-      attribute_hash = case_log.attributes_before_type_cast
+    def apply_cds_transformation(lettings_log, export_mode)
+      attribute_hash = lettings_log.attributes_before_type_cast
       attribute_hash["form"] = attribute_hash["old_form_id"] || (attribute_hash["id"] + LOG_ID_OFFSET)
 
       # We can't have a variable number of columns in CSV
       unless export_mode == EXPORT_MODE[:csv]
-        case case_log.collection_start_year
+        case lettings_log.collection_start_year
         when 2021
           attribute_hash.delete("joint")
         when 2022
@@ -165,15 +165,15 @@ module Exports
       end
 
       # Organisation fields
-      if case_log.owning_organisation
-        attribute_hash["owningorgid"] = case_log.owning_organisation.old_visible_id || (case_log.owning_organisation.id + LOG_ID_OFFSET)
-        attribute_hash["owningorgname"] = case_log.owning_organisation.name
-        attribute_hash["hcnum"] = case_log.owning_organisation.housing_registration_no
+      if lettings_log.owning_organisation
+        attribute_hash["owningorgid"] = lettings_log.owning_organisation.old_visible_id || (lettings_log.owning_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["owningorgname"] = lettings_log.owning_organisation.name
+        attribute_hash["hcnum"] = lettings_log.owning_organisation.housing_registration_no
       end
-      if case_log.managing_organisation
-        attribute_hash["maningorgid"] = case_log.managing_organisation.old_visible_id || (case_log.managing_organisation.id + LOG_ID_OFFSET)
-        attribute_hash["maningorgname"] = case_log.managing_organisation.name
-        attribute_hash["manhcnum"] = case_log.managing_organisation.housing_registration_no
+      if lettings_log.managing_organisation
+        attribute_hash["maningorgid"] = lettings_log.managing_organisation.old_visible_id || (lettings_log.managing_organisation.id + LOG_ID_OFFSET)
+        attribute_hash["maningorgname"] = lettings_log.managing_organisation.name
+        attribute_hash["manhcnum"] = lettings_log.managing_organisation.housing_registration_no
       end
 
       # Mapping which would require a change in our data model
@@ -190,13 +190,13 @@ module Exports
       end
 
       # Supported housing fields
-      if case_log.is_supported_housing?
-        attribute_hash["unittype_sh"] = case_log.unittype_sh
-        attribute_hash["sheltered"] = case_log.sheltered
-        attribute_hash["nocharge"] = case_log.household_charge == 1 ? 1 : nil
-        attribute_hash["chcharge"] = case_log.chcharge
-        add_scheme_fields!(case_log.scheme, attribute_hash)
-        add_location_fields!(case_log.location, attribute_hash)
+      if lettings_log.is_supported_housing?
+        attribute_hash["unittype_sh"] = lettings_log.unittype_sh
+        attribute_hash["sheltered"] = lettings_log.sheltered
+        attribute_hash["nocharge"] = lettings_log.household_charge == 1 ? 1 : nil
+        attribute_hash["chcharge"] = lettings_log.chcharge
+        add_scheme_fields!(lettings_log.scheme, attribute_hash)
+        add_location_fields!(lettings_log.location, attribute_hash)
         attribute_hash.delete("unittype_gn")
       end
       attribute_hash
@@ -232,11 +232,11 @@ module Exports
         !EXPORT_FIELDS.include?(field_name)
     end
 
-    def build_export_csv(case_logs)
+    def build_export_csv(lettings_logs)
       csv_io = CSV.generate do |csv|
         attribute_keys = nil
-        case_logs.each do |case_log|
-          attribute_hash = apply_cds_transformation(case_log, EXPORT_MODE[:csv])
+        lettings_logs.each do |lettings_log|
+          attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:csv])
           if attribute_keys.nil?
             attribute_keys = attribute_hash.keys
             filter_keys!(attribute_keys)
@@ -249,11 +249,11 @@ module Exports
       StringIO.new(csv_io)
     end
 
-    def build_export_xml(case_logs)
+    def build_export_xml(lettings_logs)
       doc = Nokogiri::XML("<forms/>")
 
-      case_logs.each do |case_log|
-        attribute_hash = apply_cds_transformation(case_log, EXPORT_MODE[:xml])
+      lettings_logs.each do |lettings_log|
+        attribute_hash = apply_cds_transformation(lettings_log, EXPORT_MODE[:xml])
         form = doc.create_element("form")
         doc.at("forms") << form
         attribute_hash.each do |key, value|
@@ -263,7 +263,7 @@ module Exports
             form << doc.create_element(key, value)
           end
         end
-        form << doc.create_element("providertype", case_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
+        form << doc.create_element("providertype", lettings_log.owning_organisation.read_attribute_before_type_cast(:provider_type))
       end
 
       xml_doc_to_temp_file(doc)

@@ -4,6 +4,49 @@ nav_order: 5
 
 # Infrastructure
 
+## Configuration
+
+On [GOV.UK PaaS](https://www.cloud.service.gov.uk/), service credentials are appended to the environment variable `VCAP_SERVICES` when services [are bound](https://docs.cloud.service.gov.uk/deploying_services/s3/#bind-an-aws-s3-bucket-to-your-app) to an application.
+Such services include datastores and S3 buckets.
+
+Our application uses S3 and Redis clients and supports two different ways of parsing their configuration:
+* Via the environment variable `VCAP_SERVICES` using the `PaasConfigurationService` class
+* Via the environment variables `S3_CONFIG` and `REDIS_CONFIG` using the `EnvConfigurationService` class
+
+`S3_CONFIG` and `REDIS_CONFIG` are populated using a similar structure than `VCAP_SERVICES`:
+
+S3_CONFIG:
+```json
+[
+  {
+    "instance_name": "bucket_1",
+    "credentials": {
+      "aws_access_key_id": "123",
+      "aws_secret_access_key": "456",
+      "aws_region": "eu-west-1",
+      "bucket_name": "my-bucket"
+    }
+  }
+]
+```
+
+REDIS_CONFIG:
+```json
+[
+  {
+    "instance_name": "redis_1",
+    "credentials": {
+      "uri": "redis_uri"
+    }
+  }
+]
+```
+
+In order to switch from using [GOV.UK PaaS](https://www.cloud.service.gov.uk/) provided services to external ones, instances of `PaasConfigurationService` need to be replaced by `EnvConfigurationService`.
+This assumes that `S3_CONFIG` or/and `REDIS_CONFIG` are available.
+
+Please check `full_import.rake` and `rack_attack.rb` for examples of how the configuration is used.
+
 ## Deployment
 
 This application is running on [GOV.UK PaaS](https://www.cloud.service.gov.uk/). To deploy you need to:

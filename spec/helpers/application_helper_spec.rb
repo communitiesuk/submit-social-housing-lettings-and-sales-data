@@ -4,7 +4,7 @@ RSpec.describe ApplicationHelper do
   form_handler = FormHandler.instance
   let(:form) { form_handler.get_form("test_form") }
   let(:subsection) { form.get_subsection("household_characteristics") }
-  let(:case_log) { FactoryBot.build(:case_log, :in_progress) }
+  let(:lettings_log) { FactoryBot.build(:lettings_log, :in_progress) }
   let(:pagy) { nil }
   let(:current_user) { FactoryBot.create(:user) }
 

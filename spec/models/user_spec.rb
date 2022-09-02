@@ -4,18 +4,18 @@ RSpec.describe User, type: :model do
   describe "#new" do
     let(:user) { FactoryBot.create(:user) }
     let(:other_organisation) { FactoryBot.create(:organisation) }
-    let!(:owned_case_log) do
+    let!(:owned_lettings_log) do
       FactoryBot.create(
-        :case_log,
+        :lettings_log,
         :completed,
         owning_organisation: user.organisation,
         managing_organisation: other_organisation,
         created_by: user,
       )
     end
-    let!(:managed_case_log) do
+    let!(:managed_lettings_log) do
       FactoryBot.create(
-        :case_log,
+        :lettings_log,
         owning_organisation: other_organisation,
         managing_organisation: user.organisation,
       )
@@ -25,21 +25,21 @@ RSpec.describe User, type: :model do
       expect(user.organisation).to be_a(Organisation)
     end
 
-    it "has owned case logs through their organisation" do
-      expect(user.owned_case_logs.first).to eq(owned_case_log)
+    it "has owned lettings logs through their organisation" do
+      expect(user.owned_lettings_logs.first).to eq(owned_lettings_log)
     end
 
-    it "has managed case logs through their organisation" do
-      expect(user.managed_case_logs.first).to eq(managed_case_log)
+    it "has managed lettings logs through their organisation" do
+      expect(user.managed_lettings_logs.first).to eq(managed_lettings_log)
     end
 
-    it "has case logs through their organisation" do
-      expect(user.case_logs.to_a).to match_array([owned_case_log, managed_case_log])
+    it "has lettings logs through their organisation" do
+      expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log])
     end
 
-    it "has case log status helper methods" do
-      expect(user.completed_case_logs.to_a).to match_array([owned_case_log])
-      expect(user.not_completed_case_logs.to_a).to match_array([managed_case_log])
+    it "has lettings log status helper methods" do
+      expect(user.completed_lettings_logs.to_a).to match_array([owned_lettings_log])
+      expect(user.not_completed_lettings_logs.to_a).to match_array([managed_lettings_log])
     end
 
     it "has a role" do
@@ -114,17 +114,17 @@ RSpec.describe User, type: :model do
         })
       end
 
-      it "can filter case logs by user, year and status" do
-        expect(user.case_logs_filters).to eq(%w[status years user])
+      it "can filter lettings logs by user, year and status" do
+        expect(user.lettings_logs_filters).to eq(%w[status years user])
       end
     end
 
     context "when the user is a Customer Support person" do
       let(:user) { FactoryBot.create(:user, :support) }
-      let!(:other_orgs_log) { FactoryBot.create(:case_log) }
+      let!(:other_orgs_log) { FactoryBot.create(:lettings_log) }
 
       it "has access to logs from all organisations" do
-        expect(user.case_logs.to_a).to match_array([owned_case_log, managed_case_log, other_orgs_log])
+        expect(user.lettings_logs.to_a).to match_array([owned_lettings_log, managed_lettings_log, other_orgs_log])
       end
 
       it "requires 2FA" do
@@ -139,8 +139,8 @@ RSpec.describe User, type: :model do
         })
       end
 
-      it "can filter case logs by user, year, status and organisation" do
-        expect(user.case_logs_filters).to eq(%w[status years user organisation])
+      it "can filter lettings logs by user, year, status and organisation" do
+        expect(user.lettings_logs_filters).to eq(%w[status years user organisation])
       end
     end
 
@@ -164,7 +164,7 @@ RSpec.describe User, type: :model do
       expect { user.update!(name: "new test name") }.to change(user.versions, :count).by(1)
     end
 
-    it "allows case logs to be restored to a previous version" do
+    it "allows lettings logs to be restored to a previous version" do
       user.update!(name: "new test name")
       expect(user.paper_trail.previous_version.name).to eq("Danny Rojas")
     end

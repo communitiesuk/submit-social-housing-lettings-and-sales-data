@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :case_log do
+  factory :lettings_log do
     created_by { FactoryBot.create(:user) }
     owning_organisation { created_by.organisation }
     managing_organisation { created_by.organisation }
@@ -87,6 +87,9 @@ FactoryBot.define do
       chr { 1 }
       cap { 0 }
       reasonother { nil }
+      housingneeds { 1 }
+      housingneeds_type { 0 }
+      housingneeds_other { 0 }
       housingneeds_a { 1 }
       housingneeds_b { 0 }
       housingneeds_c { 0 }
