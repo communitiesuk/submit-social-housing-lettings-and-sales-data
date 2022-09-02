@@ -113,6 +113,7 @@ module Imports
       attributes["housingneeds_type"] = 0 if attributes["housingneeds_a"] == 1
       attributes["housingneeds_type"] = 1 if attributes["housingneeds_b"] == 1
       attributes["housingneeds_type"] = 2 if attributes["housingneeds_c"] == 1
+      attributes["housingneeds_type"] = 3 if attributes["housingneeds_f"] == 1 && [attributes["housingneeds_a"], attributes["housingneeds_b"], attributes["housingneeds_c"]].all? { |housingneed| housingneed != 1 }
       attributes["housingneeds_other"] = attributes["housingneeds_f"] == 1 ? 1 : 0
 
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
