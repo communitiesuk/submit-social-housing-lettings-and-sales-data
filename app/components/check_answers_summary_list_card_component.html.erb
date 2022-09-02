@@ -1,5 +1,5 @@
 <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
-  <% if applicable_questions.first.check_answers_card_number != 0 %>
+  <% if applicable_questions.first.check_answers_card_number != 0 && applicable_questions.first.check_answers_card_number.present? %>
     <div class="x-govuk-summary-card__header">
       <% if applicable_questions.first.check_answers_card_number == 1 %>
         <h3 class="x-govuk-summary-card__title">Lead tenant</h3>
