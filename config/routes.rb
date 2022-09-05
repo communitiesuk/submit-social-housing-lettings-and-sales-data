@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       resources :locations do
         get "edit-name", to: "locations#edit_name"
         get "edit", to: "locations#edit"
+        get "la-fallback", to: "locations#la_fallback"
       end
     end
   end

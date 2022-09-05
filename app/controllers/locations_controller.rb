@@ -57,6 +57,8 @@ class LocationsController < ApplicationController
         location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+      when "la-fallback"
+        redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       end
     else
       render :edit, status: :unprocessable_entity
@@ -95,7 +97,7 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name la_fallback].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
