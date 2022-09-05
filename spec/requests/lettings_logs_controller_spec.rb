@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe LettingsLogsController, type: :request do
-
   let(:user) { FactoryBot.create(:user) }
   let(:owning_organisation) { user.organisation }
   let(:managing_organisation) { owning_organisation }
