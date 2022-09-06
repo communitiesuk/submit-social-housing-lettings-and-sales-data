@@ -56,7 +56,7 @@
         <% row.cell(text: location.units) %>
         <% row.cell(text: simple_format("<span>#{location.type_of_unit}</span>")) %>
         <% row.cell(text: location.mobility_type) %>
-        <% row.cell(text: simple_format(location_cell_location_admin_district(location, "/schemes/#{@scheme.id}/locations/#{location.id}/la-fallback"), { class: "govuk-!-font-weight-bold" }, wrapper_tag: "div")) %>
+        <% row.cell(text: simple_format(location_cell_location_admin_district(location, "/schemes/#{@scheme.id}/locations/#{location.id}/edit-local-authority"), wrapper_tag: "div")) %>
         <% row.cell(text: location.startdate&.to_formatted_s(:govuk_date)) %>
         <% end %>
     <% end %>

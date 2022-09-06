@@ -12,7 +12,14 @@ module TabNavHelper
   end
 
   def location_cell_location_admin_district(location, link)
-    govuk_link_to(location.location_admin_district, link, method: :patch)
+    la = location.location_admin_district
+    if location.confirmed?
+      la
+    elsif la
+      govuk_link_to(la, link, method: :patch)
+    else
+      govuk_link_to("Select local authority", link, method: :patch)
+    end
   end
 
   def scheme_cell(scheme)

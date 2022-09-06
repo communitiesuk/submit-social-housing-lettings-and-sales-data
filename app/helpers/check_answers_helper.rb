@@ -25,7 +25,7 @@ module CheckAnswersHelper
   end
 
   def get_location_change_link_href_location_admin_district(scheme, location)
-    location_la_fallback_path(id: scheme.id, location_id: location.id)
+    location_edit_local_authority_path(id: scheme.id, location_id: location.id)
   end
 
   def any_questions_have_summary_card_number?(subsection, lettings_log)

@@ -10,7 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
       <%= f.govuk_error_summary %>
 
-      <%= render partial: "organisations/headings", locals: { main: "What is the the local authority of this location?", sub: @scheme.service_name } %>
+      <%= render partial: "organisations/headings", locals: { main: "What is the the local authority of #{@location.postcode}?", sub: @scheme.service_name } %>
 
       <% la_hash = {
         "E07000223": "Adur",
@@ -341,9 +341,14 @@
                                     label: { hidden: true },
                                     "data-controller": %w[conditional-filter accessible-autocomplete] %>
 
-      <%= f.hidden_field :page, value: "la-fallback" %>
+      <%= f.hidden_field :page, value: "edit-local-authority" %>
 
-      <%= f.govuk_submit "Save and continue" %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit "Save and continue" %>
+
+        <%= govuk_link_to "Skip for now", "/schemes/#{@scheme.id}/check-answers#locations" %>
+      </div>
+
     </div>
   </div>
 <% end %>
