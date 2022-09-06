@@ -336,10 +336,10 @@
 
       <%= f.govuk_collection_select :location_admin_district,
                                     las,
-                                    :id,
+                                    :name,
                                     :name,
                                     label: { hidden: true },
-                                    "data-controller": %w[accessible-autocomplete conditional-filter] %>
+                                    "data-controller": %w[conditional-filter accessible-autocomplete] %>
 
       <%= f.hidden_field :page, value: "la-fallback" %>
 
