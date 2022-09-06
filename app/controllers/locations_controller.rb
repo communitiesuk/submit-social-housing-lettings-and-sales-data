@@ -22,7 +22,9 @@ class LocationsController < ApplicationController
     if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)
       if @location.save
-        if location_params[:add_another_location] == "Yes"
+        if @location.location_admin_district.nil?
+          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+        elsif location_params[:add_another_location] == "Yes"
           redirect_to new_location_path(@scheme)
         else
           check_answers_path = @scheme.confirmed? ? scheme_check_answers_path(@scheme, anchor: "locations") : scheme_check_answers_path(@scheme)
@@ -58,11 +60,22 @@ class LocationsController < ApplicationController
     if @location.update(location_params)
       case page
       when "edit"
-        location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        if @location.location_admin_district.nil?
+          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+        elsif location_params[:add_another_location] == "Yes"
+          redirect_to(new_location_path(@location.scheme))
+        else
+          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        end
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-local-authority"
-        redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        @add_another_location = nil&.(CGI.parse(URI.parse(request.referrer).query)['add_another_location'].first)
+        if @add_another_location == "Yes"
+          redirect_to(new_location_path(@location.scheme))
+        else
+          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        end
       end
     else
       render :edit, status: :unprocessable_entity
