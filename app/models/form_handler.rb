@@ -39,6 +39,4 @@ private
   def directories
     Rails.env.test? ? ["spec/fixtures/forms"] : ["config/forms"]
   end
-
-  # SALES_FORM = [Form::Sales::Sections::Setup, Form::Sales::Sections::Property]
 end
