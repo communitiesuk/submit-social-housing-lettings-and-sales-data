@@ -86,7 +86,7 @@ private
 
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)
-  end 
+  end
 
   def find_resource
     @lettings_log = LettingsLog.find_by(id: params[:id])

@@ -44,7 +44,7 @@ private
       api_log_params
     end
   end
-  
+
   def api_log_params
     return {} unless params[:lettings_log] || params[:sales_log]
 

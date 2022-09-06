@@ -9,7 +9,7 @@ class SalesLog < Log
   before_save :update_status!
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
-  
+
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
 
@@ -47,7 +47,7 @@ class SalesLog < Log
     status == "completed"
   end
 
-  private
+private
 
   def update_status!
     self.status = if all_fields_completed? && errors.empty?

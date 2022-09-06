@@ -155,14 +155,15 @@ RSpec.describe "Log Features" do
         expect(page).to have_content("2022")
       end
     end
-    context "When the sales log feature flag is toggled" do
+
+    context "when the sales log feature flag is toggled" do
       before do
         allow(Rails.env).to receive(:production?).and_return(true)
       end
 
       it "hides the create sales log button in production" do
         visit("/logs")
-        expect(page).to_not have_content("Create a new sales log")
+        expect(page).not_to have_content("Create a new sales log")
       end
     end
   end

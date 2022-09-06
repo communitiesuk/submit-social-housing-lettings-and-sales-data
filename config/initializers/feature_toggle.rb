@@ -4,7 +4,7 @@ class FeatureToggle
   end
 
   def self.sales_log_enabled?
-    return true unless Rails.env.production? 
+    return true unless Rails.env.production?
 
     false
   end
