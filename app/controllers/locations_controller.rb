@@ -47,6 +47,10 @@ class LocationsController < ApplicationController
     render_not_found and return unless @location && @scheme
   end
 
+  def edit_local_authority
+    render_not_found and return unless @location && @scheme
+  end
+
   def update
     render_not_found and return unless @location && @scheme
 
