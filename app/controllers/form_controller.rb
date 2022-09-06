@@ -13,7 +13,7 @@ class FormController < ApplicationController
         session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
-        redirect_path = "#{@log.class.name.underscore}_#{@page.id}_path"
+        redirect_path = "#{@log.model_name.param_key}_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message
         end
@@ -79,11 +79,11 @@ private
 
   def responses_for_page(page)
     page.questions.each_with_object({}) do |question, result|
-      question_params = params[@log.class.name.underscore][question.id]
+      question_params = params[@log.model_name.param_key][question.id]
       if question.type == "date"
-        day = params[@log.class.name.underscore]["#{question.id}(3i)"]
-        month = params[@log.class.name.underscore]["#{question.id}(2i)"]
-        year = params[@log.class.name.underscore]["#{question.id}(1i)"]
+        day = params[@log.model_name.param_key]["#{question.id}(3i)"]
+        month = params[@log.model_name.param_key]["#{question.id}(2i)"]
+        year = params[@log.model_name.param_key]["#{question.id}(1i)"]
         next unless [day, month, year].any?(&:present?)
 
         result[question.id] = if Date.valid_date?(year.to_i, month.to_i, day.to_i) && year.to_i.between?(2000, 2200)
@@ -135,7 +135,7 @@ private
       if next_page.to_s.include?("value_check") || next_page == previous_page
         return "/logs/#{@log.id}/#{next_page.dasherize}?referrer=check_answers"
       else
-        return send("#{@log.class.name.underscore}_#{@log.form.subsection_for_page(@page).id}_check_answers_path", @log)
+        return send("#{@log.model_name.param_key}_#{@log.form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
     end
     redirect_path = @log.form.next_page_redirect_path(@page, @log, current_user)
