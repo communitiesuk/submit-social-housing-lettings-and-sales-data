@@ -17,7 +17,11 @@ module TasklistHelper
            else
              "lettings_log_#{next_question_page(subsection, lettings_log, current_user)}_path"
            end
-    send(path, lettings_log)
+    if lettings_log.id
+      send(path, lettings_log)
+    else
+      "/logs/new/#{next_question_page(subsection, lettings_log, current_user)}"
+    end
   end
 
   def next_question_page(subsection, lettings_log, current_user)

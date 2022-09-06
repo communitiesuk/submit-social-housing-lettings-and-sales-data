@@ -28,18 +28,9 @@ class LettingsLogsController < ApplicationController
   end
 
   def create
-    lettings_log = LettingsLog.new(lettings_log_params)
     respond_to do |format|
       format.html do
-        lettings_log.save!
-        redirect_to lettings_log_url(lettings_log)
-      end
-      format.json do
-        if lettings_log.save
-          render json: lettings_log, status: :created
-        else
-          render json: { errors: lettings_log.errors.messages }, status: :unprocessable_entity
-        end
+        redirect_to new_log_lettings_logs_path
       end
     end
   end
@@ -71,7 +62,12 @@ class LettingsLogsController < ApplicationController
   end
 
   def edit
-    @lettings_log = current_user.lettings_logs.find_by(id: params[:id])
+    @lettings_log = if new_log_request?
+                      LettingsLog.new(lettings_log_params)
+                    else
+                      current_user.lettings_logs.find_by(id: params[:id])
+                    end
+
     if @lettings_log
       render :edit, locals: { current_user: }
     else
@@ -94,6 +90,10 @@ class LettingsLogsController < ApplicationController
 private
 
   API_ACTIONS = %w[create show update destroy].freeze
+
+  def new_log_request?
+    request.path.split("/").include?("new")
+  end
 
   def search_term
     params["search"]

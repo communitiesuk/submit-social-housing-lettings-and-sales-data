@@ -75,8 +75,16 @@ Rails.application.routes.draw do
 
   resources :lettings_logs, path: "/logs" do
     collection do
+      get "create-new-log", to: "lettings_logs#create"
+      get "new-log", to: "lettings_logs#show"
+      post "new-form", to: "form#submit_form"
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
+      FormHandler.instance.forms.each do |_key, form|
+        form.pages.map do |page|
+          get "new/#{page.id.to_s.dasherize}", to: "form#new_log_#{page.id}"
+        end
+      end
     end
 
     member do

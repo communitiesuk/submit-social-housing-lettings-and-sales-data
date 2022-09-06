@@ -60,10 +60,33 @@ class FormController < ApplicationController
           render_not_found
         end
       end
+      define_method("new_log_#{page.id}") do |_errors = {}|
+        if @lettings_log
+          save_new_log page
+          restore_error_field_values
+          @subsection = @lettings_log.form.subsection_for_page(page)
+          @page = @lettings_log.form.get_page(page.id)
+          if @page.routed_to?(@lettings_log, current_user)
+            render "form/page"
+          else
+            redirect_to lettings_log_path(@lettings_log)
+          end
+        else
+          render_not_found
+        end
+      end
     end
   end
 
 private
+
+  def save_new_log(page)
+    if current_user.support?
+      @lettings_log.save! unless page.id.eql?("organisation") && @lettings_log.id.nil?
+    else
+      @lettings_log.save! unless page.id.eql?("needs_type") && @lettings_log.id.nil?
+    end
+  end
 
   def restore_error_field_values
     if session["errors"]
@@ -109,11 +132,27 @@ private
   end
 
   def find_resource
-    @lettings_log = current_user.lettings_logs.find_by(id: params[:id])
+    @lettings_log = if is_new_log_request? || new_log_referrer?
+                      LettingsLog.new(owning_organisation: current_user.support? ? nil : current_user.organisation)
+                    else
+                      current_user.lettings_logs.find_by(id: params[:id])
+                    end
   end
 
   def find_resource_by_named_id
-    @lettings_log = current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+    @lettings_log = if is_new_log_request?
+                      LettingsLog.new
+                    else
+                      current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+                    end
+  end
+
+  def new_log_request?
+    request.path.split("/").include?("new")
+  end
+
+  def new_log_request_referrer?
+    request.referer.split("/").include?("new")
   end
 
   def is_referrer_check_answers?

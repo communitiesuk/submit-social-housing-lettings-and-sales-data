@@ -34,7 +34,8 @@ class Form::Subsection
 
     qs = applicable_questions(lettings_log)
     qs_optional_removed = qs.reject { |q| lettings_log.optional_fields.include?(q.id) }
-    return :not_started if qs.count.positive? && qs.all? { |question| lettings_log[question.id].blank? || question.read_only? || question.derived? }
+    return :not_started if lettings_log.id.nil?
+    return :in_progress if qs.count.positive? && qs.all? { |question| lettings_log[question.id].blank? || question.read_only? || question.derived? }
     return :completed if qs_optional_removed.all? { |question| question.completed?(lettings_log) }
 
     :in_progress

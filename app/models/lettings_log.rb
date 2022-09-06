@@ -70,7 +70,7 @@ class LettingsLog < ApplicationRecord
   OPTIONAL_FIELDS = %w[first_time_property_let_as_social_housing tenancycode propcode].freeze
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
-  STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
+  STATUS = { "in_progress" => 1, "completed" => 2 }.freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
@@ -534,8 +534,6 @@ private
   def update_status!
     self.status = if all_fields_completed? && errors.empty?
                     "completed"
-                  elsif all_fields_nil?
-                    "not_started"
                   else
                     "in_progress"
                   end

@@ -60,7 +60,7 @@ class Form
     if nxt_page == :check_answers
       "lettings_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      "lettings_log_#{nxt_page}_path"
+      lettings_log.id ? "lettings_log_#{nxt_page}_path" : "new_#{nxt_page}_lettings_logs_path"
     end
   end
 

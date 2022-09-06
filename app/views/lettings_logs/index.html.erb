@@ -7,7 +7,7 @@
 
 <div class="app-filter-layout" data-controller="filter-layout">
   <div class="govuk-button-group app-filter-toggle">
-    <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+    <%= govuk_button_to "Create a new lettings log", create_new_log_lettings_logs_path, method: :get %>
     <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
   </div>
 
