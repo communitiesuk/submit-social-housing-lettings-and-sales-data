@@ -16,7 +16,7 @@ class Form
       @pages = subsections.flat_map(&:pages)
       @questions = pages.flat_map(&:questions)
       @start_date = Time.zone.local(name[0..3], 4, 1)
-      @end_date = Time.zone.local(start_date.year + 1, 4, 1)
+      @end_date = Time.zone.local(start_date.year + 1, 7, 1)
       @form_definition = {
         "form_type" => type,
         "start_date" => start_date,

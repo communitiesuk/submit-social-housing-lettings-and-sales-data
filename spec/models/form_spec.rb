@@ -212,10 +212,10 @@ RSpec.describe Form, type: :model do
       form = described_class.new(nil, "2022_23_sales", sections, "sales")
       expect(form.type).to eq("sales")
       expect(form.name).to eq("2022_23_sales")
-      expect(form.form_sections.count).to eq(1)
-      expect(form.form_sections[0].class).to eq(sections[0])
+      expect(form.setup_sections.count).to eq(1)
+      expect(form.setup_sections[0].class).to eq(Form::Sales::Setup::Sections::Setup)
       expect(form.sections.count).to eq(1)
-      expect(form.sections[0].class).to eq(sections[0])
+      expect(form.sections[0].class).to eq(Form::Sales::Setup::Sections::Setup)
       expect(form.subsections.count).to eq(1)
       expect(form.subsections.first.id).to eq("setup")
       expect(form.pages.count).to eq(1)
@@ -223,7 +223,7 @@ RSpec.describe Form, type: :model do
       expect(form.questions.count).to eq(1)
       expect(form.questions.first.id).to eq("saledate")
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
-      expect(form.end_date).to eq(Time.zone.parse("2023-04-01"))
+      expect(form.end_date).to eq(Time.zone.parse("2023-07-01"))
     end
   end
 end
