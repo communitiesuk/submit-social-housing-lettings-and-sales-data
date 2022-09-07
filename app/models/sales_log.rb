@@ -13,6 +13,10 @@ class SalesLog < Log
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
 
+  def startdate
+    saledate
+  end
+
   def self.editable_fields
     attribute_names
   end
@@ -21,14 +25,6 @@ class SalesLog < Log
     return unless saledate
 
     "#{collection_start_year}_#{collection_start_year + 1}_sales"
-  end
-
-  def collection_start_year
-    return @sale_year if @sale_year
-    return unless saledate
-
-    window_end_date = Time.zone.local(saledate.year, 4, 1)
-    @sale_year = saledate < window_end_date ? saledate.year - 1 : saledate.year
   end
 
   def form

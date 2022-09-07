@@ -77,14 +77,6 @@ class LettingsLog < Log
     FormHandler.instance.get_form(form_name) || FormHandler.instance.forms.first.second
   end
 
-  def collection_start_year
-    return @start_year if @start_year
-    return unless startdate
-
-    window_end_date = Time.zone.local(startdate.year, 4, 1)
-    @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
-  end
-
   def recalculate_start_year!
     @start_year = nil
     collection_start_year

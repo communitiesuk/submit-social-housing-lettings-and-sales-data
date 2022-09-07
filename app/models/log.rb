@@ -5,6 +5,14 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
 
+  def collection_start_year
+    return @start_year if @start_year
+    return unless startdate
+
+    window_end_date = Time.zone.local(startdate.year, 4, 1)
+    @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+  end
+
 private
 
   def update_status!
