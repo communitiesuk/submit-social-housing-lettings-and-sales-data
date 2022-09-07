@@ -70,13 +70,19 @@ class LocationsController < ApplicationController
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-local-authority"
-        @uri_query = URI.parse(request.referer).query
-        @query_hash = @uri_query ? CGI.parse(@uri_query) : { "add_another_location": [] }
-        @add_another_location = @query_hash["add_another_location"].try(:first)
-        if @add_another_location == "Yes"
-          redirect_to(new_location_path(@location.scheme))
+        if valid_location_admin_district?(location_params)
+          @uri_query = URI.parse(request.referer).query
+          @query_hash = @uri_query ? CGI.parse(@uri_query) : { "add_another_location": [] }
+          @add_another_location = @query_hash["add_another_location"].try(:first)
+          if @add_another_location == "Yes"
+            redirect_to(new_location_path(@location.scheme))
+          else
+            redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+          end
         else
-          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+          error_message = I18n.t("validations.location_admin_district")
+          @location.errors.add :location_admin_district, error_message
+          render :edit_local_authority, status: :unprocessable_entity
         end
       end
     else
@@ -129,5 +135,9 @@ private
 
   def search_term
     params["search"]
+  end
+
+  def valid_location_admin_district?(location_params)
+    location_params["location_admin_district"] != "Select an option"
   end
 end
