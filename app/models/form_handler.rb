@@ -15,7 +15,7 @@ class FormHandler
   end
 
   def sales_forms
-    sales_sections = [Form::Sales::Setup::Sections::Setup]
+    sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
     { "2022_2023_sales" => Form.new(nil, "2022_2023_sales", sales_sections, "sales") }
   end
 
