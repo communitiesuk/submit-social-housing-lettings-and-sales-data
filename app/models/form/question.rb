@@ -37,7 +37,7 @@ class Form::Question
       @suffix = hsh["suffix"]
       @requires_js = hsh["requires_js"]
       @fields_added = hsh["fields_added"]
-      @check_answers_card_number = hsh["check_answers_card_number"]
+      @check_answers_card_number = hsh["check_answers_card_number"] || 0
     end
   end
 
