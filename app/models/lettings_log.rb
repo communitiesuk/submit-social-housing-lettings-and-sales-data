@@ -528,16 +528,6 @@ private
 
   PIO = PostcodeService.new
 
-  def update_status!
-    self.status = if all_fields_completed? && errors.empty?
-                    "completed"
-                  elsif all_fields_nil?
-                    "not_started"
-                  else
-                    "in_progress"
-                  end
-  end
-
   def reset_not_routed_questions
     enabled_questions = form.enabled_page_questions(self)
     enabled_question_ids = enabled_questions.map(&:id)
@@ -687,17 +677,6 @@ private
         owning_organisation[:provider_type] == "PRP" ? 9 : 11
       end
     end
-  end
-
-  def all_fields_completed?
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
-    subsection_statuses == [:completed]
-  end
-
-  def all_fields_nil?
-    not_started_statuses = %i[not_started cannot_start_yet]
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
-    subsection_statuses.all? { |status| not_started_statuses.include?(status) }
   end
 
   def age_refused?
