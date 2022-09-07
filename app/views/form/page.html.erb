@@ -45,7 +45,7 @@
           <%= govuk_link_to "Skip for now", send(@log.form.next_page_redirect_path(@page, @log, current_user), @log) %>
           <% else %>
           <%= f.govuk_submit "Save changes" %>
-            <%= govuk_link_to "Cancel", "/logs/#{@log.id}/setup/check-answers" %>
+            <%= govuk_link_to "Cancel", send("#{@log.class.name.underscore}_#{@page.subsection.id}_check_answers_path", @log) %>
           <% end %>
         <% end %>
       </div>

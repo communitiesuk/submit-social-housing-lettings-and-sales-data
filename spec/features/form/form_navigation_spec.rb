@@ -115,7 +115,7 @@ RSpec.describe "Form Navigation" do
     it "a question page has a link allowing you to cancel your input and return to the check answers page" do
       visit("logs/#{id}/tenant-code-test?referrer=check_answers")
       click_link(text: "Cancel")
-      expect(page).to have_current_path("/logs/#{id}/setup/check-answers")
+      expect(page).to have_current_path("/logs/#{id}/household-characteristics/check-answers")
     end
 
     context "when clicking save and continue on a mandatory question with no input" do

@@ -133,10 +133,7 @@ private
       next_page = @log.form.next_page(@page, @log, current_user)
       previous_page = @log.form.previous_page(page_ids, page_index, @log, current_user)
       if next_page.to_s.include?("value_check") || next_page == previous_page
-        binding.pry
-        "lettings_log_void_or_renewal_date_path"
-        "#{@log.class.name.underscore}_#{next_page}"
-        return "/logs/#{@log.id}/#{next_page.dasherize}?referrer=check_answers"
+        return send("#{@log.class.name.underscore}_#{next_page}_path", @log, { referrer: "check_answers" })
       else
         return send("#{@log.model_name.param_key}_#{@log.form.subsection_for_page(@page).id}_check_answers_path", @log)
       end
