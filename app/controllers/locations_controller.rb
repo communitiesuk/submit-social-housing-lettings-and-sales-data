@@ -70,7 +70,9 @@ class LocationsController < ApplicationController
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-local-authority"
-        @add_another_location = nil&.(CGI.parse(URI.parse(request.referrer).query)['add_another_location'].first)
+        @uri_query = URI.parse(request.referer).query
+        @query_hash = @uri_query ? CGI.parse(@uri_query) : { "add_another_location": [] }
+        @add_another_location = @query_hash["add_another_location"].try(:first)
         if @add_another_location == "Yes"
           redirect_to(new_location_path(@location.scheme))
         else
