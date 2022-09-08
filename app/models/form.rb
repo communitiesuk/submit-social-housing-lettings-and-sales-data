@@ -48,9 +48,9 @@ class Form
     pages.find { |p| p.id == id.to_s.underscore }
   end
 
-  def get_question(id, lettings_log, current_user = nil)
+  def get_question(id, log, current_user = nil)
     all_questions = questions.select { |q| q.id == id.to_s.underscore }
-    routed_question = all_questions.find { |q| q.page.routed_to?(lettings_log, current_user) } if lettings_log
+    routed_question = all_questions.find { |q| q.page.routed_to?(log, current_user) } if log
     routed_question || all_questions[0]
   end
 
@@ -58,24 +58,24 @@ class Form
     subsections.find { |s| s.pages.find { |p| p.id == page.id } }
   end
 
-  def next_page(page, lettings_log, current_user)
+  def next_page(page, log, current_user)
     page_ids = subsection_for_page(page).pages.map(&:id)
     page_index = page_ids.index(page.id)
-    page_id = if page.id.include?("value_check") && lettings_log[page.questions[0].id] == 1 && page.routed_to?(lettings_log, current_user)
-                previous_page(page_ids, page_index, lettings_log, current_user)
+    page_id = if page.id.include?("value_check") && log[page.questions[0].id] == 1 && page.routed_to?(log, current_user)
+                previous_page(page_ids, page_index, log, current_user)
               else
                 page_ids[page_index + 1]
               end
     nxt_page = get_page(page_id)
 
     return :check_answers if nxt_page.nil?
-    return nxt_page.id if nxt_page.routed_to?(lettings_log, current_user)
+    return nxt_page.id if nxt_page.routed_to?(log, current_user)
 
-    next_page(nxt_page, lettings_log, current_user)
+    next_page(nxt_page, log, current_user)
   end
 
-  def next_page_redirect_path(page, lettings_log, current_user)
-    nxt_page = next_page(page, lettings_log, current_user)
+  def next_page_redirect_path(page, log, current_user)
+    nxt_page = next_page(page, log, current_user)
     if nxt_page == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
@@ -122,10 +122,10 @@ class Form
     next_subsection
   end
 
-  def all_subsections_except_declaration_completed?(lettings_log)
+  def all_subsections_except_declaration_completed?(log)
     subsection_ids = subsections.map(&:id)
     subsection_ids.delete_at(subsection_ids.length - 1)
-    return true if subsection_ids.all? { |subsection_id| get_subsection(subsection_id).status(lettings_log) == :completed }
+    return true if subsection_ids.all? { |subsection_id| get_subsection(subsection_id).status(log) == :completed }
 
     false
   end
@@ -137,26 +137,26 @@ class Form
     }.flatten
   end
 
-  def invalidated_pages(lettings_log, current_user = nil)
-    pages.reject { |p| p.routed_to?(lettings_log, current_user) }
+  def invalidated_pages(log, current_user = nil)
+    pages.reject { |p| p.routed_to?(log, current_user) }
   end
 
-  def invalidated_questions(lettings_log)
-    invalidated_page_questions(lettings_log) + invalidated_conditional_questions(lettings_log)
+  def invalidated_questions(log)
+    invalidated_page_questions(log) + invalidated_conditional_questions(log)
   end
 
-  def invalidated_page_questions(lettings_log, current_user = nil)
-    # we're already treating these fields as a special case and reset their values upon saving a lettings_log
+  def invalidated_page_questions(log, current_user = nil)
+    # we're already treating these fields as a special case and reset their values upon saving a log
     callback_questions = %w[postcode_known la ppcodenk previous_la_known prevloc postcode_full ppostcode_full location_id]
-    questions.reject { |q| q.page.routed_to?(lettings_log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
+    questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
   end
 
-  def enabled_page_questions(lettings_log)
-    questions - invalidated_page_questions(lettings_log)
+  def enabled_page_questions(log)
+    questions - invalidated_page_questions(log)
   end
 
-  def invalidated_conditional_questions(lettings_log)
-    questions.reject { |q| q.enabled?(lettings_log) } || []
+  def invalidated_conditional_questions(log)
+    questions.reject { |q| q.enabled?(log) } || []
   end
 
   def readonly_questions
@@ -167,18 +167,18 @@ class Form
     questions.select { |q| q.type == "numeric" }
   end
 
-  def previous_page(page_ids, page_index, lettings_log, current_user)
+  def previous_page(page_ids, page_index, log, current_user)
     prev_page = get_page(page_ids[page_index - 1])
-    return prev_page.id if prev_page.routed_to?(lettings_log, current_user)
+    return prev_page.id if prev_page.routed_to?(log, current_user)
 
-    previous_page(page_ids, page_index - 1, lettings_log, current_user)
+    previous_page(page_ids, page_index - 1, log, current_user)
   end
 
-  def send_chain(arr, lettings_log)
-    Array(arr).inject(lettings_log) { |o, a| o.public_send(*a) }
+  def send_chain(arr, log)
+    Array(arr).inject(log) { |o, a| o.public_send(*a) }
   end
 
-  def depends_on_met(depends_on, lettings_log)
+  def depends_on_met(depends_on, log)
     return true unless depends_on
 
     depends_on.any? do |conditions_set|
@@ -188,12 +188,12 @@ class Form
         if value.is_a?(Hash) && value.key?("operator")
           operator = value["operator"]
           operand = value["operand"]
-          lettings_log[question]&.send(operator, operand)
+          log[question]&.send(operator, operand)
         else
           parts = question.split(".")
-          lettings_log_value = send_chain(parts, lettings_log)
+          log_value = send_chain(parts, log)
 
-          value.nil? ? lettings_log_value == value : !lettings_log_value.nil? && lettings_log_value == value
+          value.nil? ? log_value == value : !log_value.nil? && log_value == value
         end
       end
     end
