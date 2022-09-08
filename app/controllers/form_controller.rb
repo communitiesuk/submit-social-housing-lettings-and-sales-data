@@ -70,7 +70,7 @@ private
     end
     if session["fields"]
       session["fields"].each do |field, value|
-        unless @log.form.get_question(field, @log)&.type == "date"
+        if @log.form.get_question(field, @log)&.type != "date" && @log.respond_to?(field)
           @log[field] = value
         end
       end
@@ -153,7 +153,7 @@ private
   end
 
   def question_is_required?(question)
-    LettingsLog::OPTIONAL_FIELDS.exclude?(question.id) && required_questions.include?(question.id)
+    @log.class::OPTIONAL_FIELDS.exclude?(question.id) && required_questions.include?(question.id)
   end
 
   def required_questions
@@ -167,8 +167,8 @@ private
   def question_missing_response?(responses_for_page, question)
     if %w[checkbox validation_override].include?(question.type)
       answered = question.answer_options.keys.reject { |x| x.match(/divider/) }.map do |option|
-        session["fields"][option] = @log[option] = params["lettings_log"][question.id].include?(option) ? 1 : 0
-        params["lettings_log"][question.id].exclude?(option)
+        session["fields"][option] = @log[option] = params[@log.model_name.param_key][question.id].include?(option) ? 1 : 0
+        params[@log.model_name.param_key][question.id].exclude?(option)
       end
       answered.all?
     else
