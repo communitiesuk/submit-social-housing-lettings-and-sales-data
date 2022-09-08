@@ -1,5 +1,4 @@
 class LettingsLogsController < LogsController
-
   before_action :find_resource, except: %i[create index edit]
 
   def index

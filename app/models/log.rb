@@ -5,6 +5,8 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
 
+  scope :combined, -> { ActiveRecord::Base.connection.execute("SELECT * FROM logs") }
+
   def collection_start_year
     return @start_year if @start_year
     return unless startdate

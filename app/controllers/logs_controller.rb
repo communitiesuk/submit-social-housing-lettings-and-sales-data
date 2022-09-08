@@ -1,5 +1,4 @@
 class LogsController < ApplicationController
-
   include Pagy::Backend
   include Modules::LogsFilter
   include Modules::SearchFilter
@@ -11,7 +10,7 @@ class LogsController < ApplicationController
   def index
     set_session_filters
 
-    all_logs = current_user.lettings_logs + current_user.sales_logs 
+    all_logs = current_user.lettings_logs + current_user.sales_logs
     unpaginated_filtered_logs = filtered_logs(filtered_collection(all_logs, search_term))
 
     respond_to do |format|
