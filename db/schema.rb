@@ -408,9 +408,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
-  add_foreign_key "sales_logs", "organisations", column: "managing_organisation_id"
   add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
-  add_foreign_key "sales_logs", "users", column: "created_by_id"
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "users", "organisations", on_delete: :cascade
