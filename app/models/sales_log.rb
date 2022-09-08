@@ -13,8 +13,8 @@ class SalesLog < Log
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
 
-  OPTIONAL_FIELDS = []
-  
+  OPTIONAL_FIELDS = [].freeze
+
   def startdate
     saledate
   end
