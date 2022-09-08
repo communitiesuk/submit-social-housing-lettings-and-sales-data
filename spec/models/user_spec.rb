@@ -269,4 +269,37 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "delete" do
+    let(:user) { FactoryBot.create(:user) }
+    let!(:owned_lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        :completed,
+        owning_organisation: user.organisation,
+        managing_organisation: user.organisation,
+        created_by: user,
+      )
+    end
+
+    context "when the user is deleted" do
+      it "owned lettings logs are not deleted as a result" do
+        expect(described_class.count).to eq(1)
+        expect(LettingsLog.count).to eq(1)
+        user.destroy!
+        expect(described_class.count).to eq(0)
+        expect(LettingsLog.count).to eq(1)
+      end
+
+      it "owned lettings logs are not deleted as a result" do
+        expect(described_class.count).to eq(1)
+        expect(LettingsLog.count).to eq(1)
+        expect(Organisation.count).to eq(1)
+        user.organisation.destroy!
+        expect(described_class.count).to eq(0)
+        expect(Organisation.count).to eq(0)
+        expect(LettingsLog.count).to eq(0)
+      end
+    end
+  end
 end

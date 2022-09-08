@@ -7,9 +7,9 @@ class User < ApplicationRecord
   # Marked as optional because we validate organisation_id below instead so that
   # the error message is linked to the right field on the form
   belongs_to :organisation, optional: true
-  has_many :owned_lettings_logs, through: :organisation, dependent: :delete_all
+  has_many :owned_lettings_logs, through: :organisation
   has_many :managed_lettings_logs, through: :organisation
-  has_many :owned_sales_logs, through: :organisation, dependent: :delete_all
+  has_many :owned_sales_logs, through: :organisation
   has_many :managed_sales_logs, through: :organisation
 
   validates :name, presence: true
