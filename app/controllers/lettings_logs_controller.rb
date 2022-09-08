@@ -1,16 +1,12 @@
 class LettingsLogsController < LogsController
-  include Pagy::Backend
-  include Modules::LettingsLogsFilter
-  include Modules::SearchFilter
 
-  before_action :authenticate_user!, unless: :json_api_request?
   before_action :find_resource, except: %i[create index edit]
 
   def index
     set_session_filters
 
     all_logs = current_user.lettings_logs
-    unpaginated_filtered_logs = filtered_lettings_logs(filtered_collection(all_logs, search_term))
+    unpaginated_filtered_logs = filtered_logs(filtered_collection(all_logs, search_term))
 
     respond_to do |format|
       format.html do
@@ -77,12 +73,6 @@ class LettingsLogsController < LogsController
   end
 
 private
-
-  API_ACTIONS = %w[create show update destroy].freeze
-
-  def search_term
-    params["search"]
-  end
 
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)

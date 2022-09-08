@@ -141,7 +141,7 @@ class User < ApplicationRecord
     ROLES.except(:support)
   end
 
-  def lettings_logs_filters(specific_org: false)
+  def logs_filters(specific_org: false)
     if support? && !specific_org
       %w[status years user organisation]
     else

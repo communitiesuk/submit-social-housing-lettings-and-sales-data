@@ -1,6 +1,31 @@
 class LogsController < ApplicationController
+
+  include Pagy::Backend
+  include Modules::LogsFilter
+  include Modules::SearchFilter
+
   skip_before_action :verify_authenticity_token, if: :json_api_request?
   before_action :authenticate, if: :json_api_request?
+  before_action :authenticate_user!, unless: :json_api_request?
+
+  def index
+    set_session_filters
+
+    all_logs = current_user.lettings_logs + current_user.sales_logs 
+    unpaginated_filtered_logs = filtered_logs(filtered_collection(all_logs, search_term))
+
+    respond_to do |format|
+      format.html do
+        @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = all_logs.size
+      end
+
+      format.csv do
+        send_data byte_order_mark + unpaginated_filtered_logs.to_csv(current_user), filename: "logs-#{Time.zone.now}.csv"
+      end
+    end
+  end
 
 private
 
@@ -60,5 +85,9 @@ private
       "managing_organisation_id" => current_user.organisation.id,
       "created_by_id" => current_user.id,
     }
+  end
+
+  def search_term
+    params["search"]
   end
 end
