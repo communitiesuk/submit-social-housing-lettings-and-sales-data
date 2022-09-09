@@ -4,7 +4,7 @@ RSpec.describe Validations::PropertyValidations do
   subject(:property_validator) { property_validator_class.new }
 
   let(:property_validator_class) { Class.new { include Validations::PropertyValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "#validate_property_number_of_times_relet" do
     let(:expected_error) { I18n.t("validations.property.offered.relet_number") }

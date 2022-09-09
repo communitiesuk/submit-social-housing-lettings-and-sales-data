@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ConditionalQuestionsHelper do
-  let(:case_log) { FactoryBot.build(:case_log) }
-  let(:page) { case_log.form.get_page("armed_forces") }
+  let(:lettings_log) { FactoryBot.build(:lettings_log) }
+  let(:page) { lettings_log.form.get_page("armed_forces") }
 
   describe "conditional questions for page" do
     let(:conditional_pages) { %w[leftreg] }

@@ -1,6 +1,6 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
-  include Modules::CaseLogsFilter
+  include Modules::LettingsLogsFilter
   include Modules::SearchFilter
 
   before_action :authenticate_user!
@@ -45,7 +45,7 @@ class OrganisationsController < ApplicationController
         end
       end
       format.csv do
-        send_data unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
+        send_data byte_order_mark + unpaginated_filtered_users.to_csv, filename: "users-#{@organisation.name}-#{Time.zone.now}.csv"
       end
     end
   end
@@ -91,23 +91,23 @@ class OrganisationsController < ApplicationController
     if current_user.support?
       set_session_filters(specific_org: true)
 
-      organisation_logs = CaseLog.all.where(owning_organisation_id: @organisation.id)
-      unpaginated_filtered_logs = filtered_case_logs(filtered_collection(organisation_logs, search_term))
+      organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+      unpaginated_filtered_logs = filtered_lettings_logs(filtered_collection(organisation_logs, search_term))
 
       respond_to do |format|
         format.html do
-          @pagy, @case_logs = pagy(unpaginated_filtered_logs)
+          @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
           @searched = search_term.presence
           @total_count = organisation_logs.size
           render "logs", layout: "application"
         end
 
         format.csv do
-          send_data unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
+          send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
         end
       end
     else
-      redirect_to(case_logs_path)
+      redirect_to(lettings_logs_path)
     end
   end
 

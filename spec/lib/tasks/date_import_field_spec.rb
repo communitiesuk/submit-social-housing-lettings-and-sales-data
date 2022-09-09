@@ -5,26 +5,26 @@ describe "rake core:data_import_field", type: :task do
   subject(:task) { Rake::Task["core:data_import_field"] }
 
   let(:instance_name) { "paas_import_instance" }
-  let(:storage_service) { instance_double(S3StorageService) }
-  let(:paas_config_service) { instance_double(PaasConfigurationService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
   before do
     Rake.application.rake_require("tasks/data_import_field")
     Rake::Task.define_task(:environment)
     task.reenable
 
-    allow(S3StorageService).to receive(:new).and_return(storage_service)
-    allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
 
-  context "when importing a case log field" do
-    let(:import_service) { instance_double(Imports::CaseLogsFieldImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
+  context "when importing a lettings log field" do
+    let(:import_service) { instance_double(Imports::LettingsLogsFieldImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
 
     before do
-      allow(Imports::CaseLogsFieldImportService).to receive(:new).and_return(import_service)
+      allow(Imports::LettingsLogsFieldImportService).to receive(:new).and_return(import_service)
       allow(import_service).to receive(:update_field)
     end
 
@@ -32,7 +32,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "tenant_code" }
 
       it "properly configures the storage service" do
-        expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
         task.invoke(field, fixture_path)
       end
 
@@ -46,7 +46,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "lettings_allocation" }
 
       it "properly configures the storage service" do
-        expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
         task.invoke(field, fixture_path)
       end
 
@@ -60,7 +60,7 @@ describe "rake core:data_import_field", type: :task do
       let(:field) { "major_repairs" }
 
       it "properly configures the storage service" do
-        expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+        expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
         task.invoke(field, fixture_path)
       end
 

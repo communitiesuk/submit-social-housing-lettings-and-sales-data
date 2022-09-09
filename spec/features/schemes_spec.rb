@@ -930,7 +930,7 @@ RSpec.describe "Schemes scheme Features" do
     let!(:user) { FactoryBot.create(:user, :data_coordinator, last_sign_in_at: Time.zone.now) }
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation: user.organisation, managing_organisation: user.organisation, arrangement_type: "The same organisation that owns the housing stock") }
     let(:location) { FactoryBot.create(:location, scheme: schemes[2]) }
-    let!(:case_log) { FactoryBot.create(:case_log, created_by: user, needstype: 2) }
+    let!(:lettings_log) { FactoryBot.create(:lettings_log, created_by: user, needstype: 2) }
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 3))
@@ -950,32 +950,32 @@ RSpec.describe "Schemes scheme Features" do
     end
 
     it "does not display the schemes without a location" do
-      visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
+      visit("/logs/#{lettings_log.id}/scheme")
+      expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does not display the schemes with a location with a startdate in the future" do
       location.update!(startdate: Time.utc(2022, 7, 4))
-      visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+      visit("/logs/#{lettings_log.id}/scheme")
+      expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(3)
     end
 
     it "does display the schemes with a location with a startdate in the past" do
       location.update!(startdate: Time.utc(2022, 5, 2))
-      visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
+      visit("/logs/#{lettings_log.id}/scheme")
+      expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does display the schemes with a location with a startdate being today" do
       location.update!(startdate: Time.utc(2022, 6, 3))
-      visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(4)
+      visit("/logs/#{lettings_log.id}/scheme")
+      expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does display the schemes that are not completed" do
       schemes[2].update!(confirmed: false)
-      visit("/logs/#{case_log.id}/scheme")
-      expect(find("#case-log-scheme-id-field").all("option").count).to eq(3)
+      visit("/logs/#{lettings_log.id}/scheme")
+      expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(3)
     end
   end
 end

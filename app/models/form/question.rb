@@ -3,7 +3,7 @@ class Form::Question
                 :type, :min, :max, :step, :width, :fields_to_add, :result_field,
                 :conditional_for, :readonly, :answer_options, :page, :check_answer_label,
                 :inferred_answers, :hidden_in_check_answers, :inferred_check_answers_value,
-                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived
+                :guidance_partial, :prefix, :suffix, :requires_js, :fields_added, :derived, :check_answers_card_number
 
   module GuidancePosition
     TOP = 1
@@ -37,37 +37,38 @@ class Form::Question
       @suffix = hsh["suffix"]
       @requires_js = hsh["requires_js"]
       @fields_added = hsh["fields_added"]
+      @check_answers_card_number = hsh["check_answers_card_number"] || 0
     end
   end
 
   delegate :subsection, to: :page
   delegate :form, to: :subsection
 
-  def answer_label(case_log)
-    return checkbox_answer_label(case_log) if type == "checkbox"
-    return case_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
+  def answer_label(lettings_log)
+    return checkbox_answer_label(lettings_log) if type == "checkbox"
+    return lettings_log[id]&.to_formatted_s(:govuk_date).to_s if type == "date"
 
-    answer = label_from_value(case_log[id]) if case_log[id].present?
-    answer_label = [prefix, format_value(answer), suffix_label(case_log)].join("") if answer
+    answer = label_from_value(lettings_log[id]) if lettings_log[id].present?
+    answer_label = [prefix, format_value(answer), suffix_label(lettings_log)].join("") if answer
     return answer_label if answer_label
 
-    has_inferred_check_answers_value?(case_log) ? inferred_check_answers_value["value"] : ""
+    has_inferred_check_answers_value?(lettings_log) ? inferred_check_answers_value["value"] : ""
   end
 
-  def get_inferred_answers(case_log)
+  def get_inferred_answers(lettings_log)
     return [] unless inferred_answers
 
-    enabled_inferred_answers(inferred_answers, case_log).keys.map do |question_id|
-      question = form.get_question(question_id, case_log)
+    enabled_inferred_answers(inferred_answers, lettings_log).keys.map do |question_id|
+      question = form.get_question(question_id, lettings_log)
       if question.present?
-        question.label_from_value(case_log[question_id])
+        question.label_from_value(lettings_log[question_id])
       else
-        Array(question_id.to_s.split(".")).inject(case_log) { |log, method| log.present? ? log.public_send(*method) : "" }
+        Array(question_id.to_s.split(".")).inject(lettings_log) { |log, method| log.present? ? log.public_send(*method) : "" }
       end
     end
   end
 
-  def get_extra_check_answer_value(_case_log)
+  def get_extra_check_answer_value(_lettings_log)
     nil
   end
 
@@ -75,59 +76,59 @@ class Form::Question
     !!readonly
   end
 
-  def enabled?(case_log)
+  def enabled?(lettings_log)
     return true if conditional_on.blank?
 
-    conditional_on.all? { |condition| evaluate_condition(condition, case_log) }
+    conditional_on.all? { |condition| evaluate_condition(condition, lettings_log) }
   end
 
-  def hidden_in_check_answers?(case_log, _current_user = nil)
+  def hidden_in_check_answers?(lettings_log, _current_user = nil)
     if hidden_in_check_answers.is_a?(Hash)
-      form.depends_on_met(hidden_in_check_answers["depends_on"], case_log)
+      form.depends_on_met(hidden_in_check_answers["depends_on"], lettings_log)
     else
       hidden_in_check_answers
     end
   end
 
-  def displayed_to_user?(case_log)
-    page.routed_to?(case_log, nil) && enabled?(case_log)
+  def displayed_to_user?(lettings_log)
+    page.routed_to?(lettings_log, nil) && enabled?(lettings_log)
   end
 
   def derived?
     !!derived
   end
 
-  def has_inferred_check_answers_value?(case_log)
-    return true if selected_answer_option_is_derived?(case_log)
-    return inferred_check_answers_value["condition"].values[0] == case_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
+  def has_inferred_check_answers_value?(lettings_log)
+    return true if selected_answer_option_is_derived?(lettings_log)
+    return inferred_check_answers_value["condition"].values[0] == lettings_log[inferred_check_answers_value["condition"].keys[0]] if inferred_check_answers_value.present?
 
     false
   end
 
-  def displayed_answer_options(case_log)
+  def displayed_answer_options(lettings_log)
     answer_options.select do |_key, val|
-      !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], case_log)
+      !val.is_a?(Hash) || !val["depends_on"] || form.depends_on_met(val["depends_on"], lettings_log)
     end
   end
 
-  def action_text(case_log)
-    if has_inferred_check_answers_value?(case_log)
+  def action_text(lettings_log)
+    if has_inferred_check_answers_value?(lettings_log)
       "Change"
     elsif type == "checkbox"
-      answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } ? "Change" : "Answer"
+      answer_options.keys.any? { |key| value_is_yes?(lettings_log[key]) } ? "Change" : "Answer"
     else
-      case_log[id].blank? ? "Answer" : "Change"
+      lettings_log[id].blank? ? "Answer" : "Change"
     end
   end
 
-  def action_href(case_log, page_id)
-    "/logs/#{case_log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
+  def action_href(lettings_log, page_id)
+    "/logs/#{lettings_log.id}/#{page_id.to_s.dasherize}?referrer=check_answers"
   end
 
-  def completed?(case_log)
-    return answer_options.keys.any? { |key| value_is_yes?(case_log[key]) } if type == "checkbox"
+  def completed?(lettings_log)
+    return answer_options.keys.any? { |key| value_is_yes?(lettings_log[key]) } if type == "checkbox"
 
-    case_log[id].present? || !case_log.respond_to?(id.to_sym) || has_inferred_display_value?(case_log)
+    lettings_log[id].present? || !lettings_log.respond_to?(id.to_sym) || has_inferred_display_value?(lettings_log)
   end
 
   def value_from_label(label)
@@ -202,7 +203,7 @@ class Form::Question
     I18n.t("validations.not_answered", question: display_label.downcase)
   end
 
-  def suffix_label(case_log)
+  def suffix_label(lettings_log)
     return "" unless suffix
     return suffix if suffix.is_a?(String)
 
@@ -212,7 +213,7 @@ class Form::Question
       condition = s["depends_on"]
       next unless condition
 
-      answer = case_log.send(condition.keys.first)
+      answer = lettings_log.send(condition.keys.first)
       if answer == condition.values.first
         label = s["label"]
       end
@@ -238,10 +239,10 @@ class Form::Question
     resource.hint
   end
 
-  def answer_selected?(case_log, answer)
+  def answer_selected?(lettings_log, answer)
     return false unless type == "select"
 
-    case_log[id].to_s == answer.id.to_s
+    lettings_log[id].to_s == answer.id.to_s
   end
 
   def top_guidance?
@@ -254,20 +255,20 @@ class Form::Question
 
 private
 
-  def selected_answer_option_is_derived?(case_log)
-    selected_option = answer_options&.dig(case_log[id].to_s.presence)
-    selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], case_log)
+  def selected_answer_option_is_derived?(lettings_log)
+    selected_option = answer_options&.dig(lettings_log[id].to_s.presence)
+    selected_option.is_a?(Hash) && selected_option["depends_on"] && form.depends_on_met(selected_option["depends_on"], lettings_log)
   end
 
-  def has_inferred_display_value?(case_log)
-    inferred_check_answers_value.present? && case_log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first
+  def has_inferred_display_value?(lettings_log)
+    inferred_check_answers_value.present? && lettings_log[inferred_check_answers_value["condition"].keys.first] == inferred_check_answers_value["condition"].values.first
   end
 
-  def checkbox_answer_label(case_log)
+  def checkbox_answer_label(lettings_log)
     answer = []
-    return "Yes" if id == "declaration" && value_is_yes?(case_log["declaration"])
+    return "Yes" if id == "declaration" && value_is_yes?(lettings_log["declaration"])
 
-    answer_options.each { |key, options| value_is_yes?(case_log[key]) ? answer << options["value"] : nil }
+    answer_options.each { |key, options| value_is_yes?(lettings_log[key]) ? answer << options["value"] : nil }
     answer.join(", ")
   end
 
@@ -281,21 +282,21 @@ private
     end
   end
 
-  def evaluate_condition(condition, case_log)
+  def evaluate_condition(condition, lettings_log)
     case page.questions.find { |q| q.id == condition[:from] }.type
     when "numeric"
       operator = condition[:cond][/[<>=]+/].to_sym
       operand = condition[:cond][/\d+/].to_i
-      case_log[condition[:from]].present? && case_log[condition[:from]].send(operator, operand)
+      lettings_log[condition[:from]].present? && lettings_log[condition[:from]].send(operator, operand)
     when "text", "radio", "select"
-      case_log[condition[:from]].present? && condition[:cond].include?(case_log[condition[:from]])
+      lettings_log[condition[:from]].present? && condition[:cond].include?(lettings_log[condition[:from]])
     else
       raise "Not implemented yet"
     end
   end
 
-  def enabled_inferred_answers(inferred_answers, case_log)
-    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| case_log[condition_key] == condition_value } }
+  def enabled_inferred_answers(inferred_answers, lettings_log)
+    inferred_answers.filter { |_key, value| value.all? { |condition_key, condition_value| lettings_log[condition_key] == condition_value } }
   end
 
   RADIO_YES_VALUE = {

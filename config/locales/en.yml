@@ -122,10 +122,10 @@ en:
       mrcdate:
         before_tenancy_start: "Enter a major repairs date that is before the tenancy start date"
         not_first_let: "Major repairs date must not be completed if the tenancy is a first let"
-        730_days_before_tenancy_start: "Enter a major repairs completion date that is no more than 730 days before the tenancy start date"
+        ten_years_before_tenancy_start: "Enter a major repairs completion date that is no more than 10 years before the tenancy start date"
       void_date:
-        ten_years_before_tenancy_start: "Enter a void date must no more than 10 years before the tenancy start date"
-        before_tenancy_start: "Enter a void date must that is before the tenancy start date"
+        ten_years_before_tenancy_start: "Enter a void date no more than 10 years before the tenancy start date"
+        before_tenancy_start: "Enter a void date that is before the tenancy start date"
         after_mrcdate: "Void date must be before the major repairs date if provided"
       offered:
         relet_number: "Enter a number between 0 and 20 for the amount of times the property has been re-let"
@@ -319,6 +319,10 @@ en:
       title: "You told us somebody in the household is pregnant"
       no_females: "You also told us there are no female tenants living at the property."
       females_not_in_soft_age_range: "You also told us that any female tenants living at the property are in the following age ranges:<ul><li>11 to 16</li><li>50 to 65</li></ul>"
+    major_repairs_date:
+      title_text: "You told us the time between the start of the tenancy and the major repairs completion date is more than 2 years"
+    void_date:
+      title_text: "You told us the time between the start of the tenancy and the void date is more than 2 years"
 
   devise:
     two_factor_authentication:

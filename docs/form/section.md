@@ -29,6 +29,6 @@ An example section might look something like this:
 
 In the above example the section id would be `tenancy_and_property` and its subsections would be `property_information` and `tenancy_information`.
 
-The label contains the text that users will see for that section in the task list page of a case log.
+The label contains the text that users will see for that section in the task list page of a lettings log.
 
 Sections can contain one or more [subsections](subsection).

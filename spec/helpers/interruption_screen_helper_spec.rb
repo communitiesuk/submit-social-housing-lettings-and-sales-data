@@ -5,9 +5,9 @@ RSpec.describe InterruptionScreenHelper do
   let(:form) { form_handler.get_form("test_form") }
   let(:subsection) { form.get_subsection("household_characteristics") }
   let(:user) { FactoryBot.create(:user) }
-  let(:case_log) do
+  let(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :in_progress,
       ecstat1: 1,
       earnings: 750,
@@ -35,8 +35,8 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_informative_text(informative_text, case_log))
-          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase, earnings: case_log.form.get_question("earnings", case_log).answer_label(case_log)))
+        expect(display_informative_text(informative_text, lettings_log))
+          .to eq(I18n.t("soft_validations.net_income.hint_text", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase, earnings: lettings_log.form.get_question("earnings", lettings_log).answer_label(lettings_log)))
       end
     end
 
@@ -52,8 +52,8 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_informative_text(informative_text, case_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
+        expect(display_informative_text(informative_text, lettings_log))
+          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
       end
     end
 
@@ -74,8 +74,8 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_informative_text(informative_text, case_log))
-          .to eq(I18n.t("test.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
+        expect(display_informative_text(informative_text, lettings_log))
+          .to eq(I18n.t("test.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
       end
     end
 
@@ -91,7 +91,7 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_informative_text(informative_text, case_log))
+        expect(display_informative_text(informative_text, lettings_log))
           .to eq("")
       end
     end
@@ -101,7 +101,7 @@ RSpec.describe InterruptionScreenHelper do
     context "when title text has no arguments" do
       it "returns the correct title text" do
         title_text = { "translation" => "test.title_text.no_argument" }
-        expect(display_title_text(title_text, case_log))
+        expect(display_title_text(title_text, lettings_log))
           .to eq(I18n.t("test.title_text.no_argument"))
       end
     end
@@ -118,20 +118,20 @@ RSpec.describe InterruptionScreenHelper do
             },
           ],
         }
-        expect(display_title_text(title_text, case_log))
-          .to eq(I18n.t("test.title_text.one_argument", ecstat1: case_log.form.get_question("ecstat1", case_log).answer_label(case_log).downcase))
+        expect(display_title_text(title_text, lettings_log))
+          .to eq(I18n.t("test.title_text.one_argument", ecstat1: lettings_log.form.get_question("ecstat1", lettings_log).answer_label(lettings_log).downcase))
       end
     end
 
     context "when title text is not defined" do
       it "returns an empty string" do
-        expect(display_title_text(nil, case_log)).to eq("")
+        expect(display_title_text(nil, lettings_log)).to eq("")
       end
     end
 
     context "when title text is empty string" do
       it "returns an empty string" do
-        expect(display_title_text("", case_log)).to eq("")
+        expect(display_title_text("", lettings_log)).to eq("")
       end
     end
   end

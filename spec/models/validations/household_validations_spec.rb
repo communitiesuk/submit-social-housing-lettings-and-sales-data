@@ -4,7 +4,7 @@ RSpec.describe Validations::HouseholdValidations do
   subject(:household_validator) { validator_class.new }
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
-  let(:record) { FactoryBot.create(:case_log) }
+  let(:record) { FactoryBot.create(:lettings_log) }
 
   describe "reasonable preference validations" do
     context "when reasonable preference is homeless" do
@@ -572,46 +572,6 @@ RSpec.describe Validations::HouseholdValidations do
       record.illness_type_3 = 1
       household_validator.validate_condition_effects(record)
       expect(record.errors["condition_effects"]).to be_empty
-    end
-  end
-
-  describe "accessibility requirement validations" do
-    it "validates that mutually exclusive options can't be selected together" do
-      record.housingneeds_a = 1
-      record.housingneeds_b = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-      record.housingneeds_a = 0
-      record.housingneeds_b = 0
-      record.housingneeds_g = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-      record.housingneeds_a = 1
-      record.housingneeds_g = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"])
-        .to include(match I18n.t("validations.household.housingneeds_a.one_or_two_choices"))
-    end
-
-    it "validates that non-mutually exclusive options can be selected together" do
-      record.housingneeds_a = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
-      record.housingneeds_a = 0
-      record.housingneeds_b = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
-      record.housingneeds_b = 0
-      record.housingneeds_c = 1
-      record.housingneeds_f = 1
-      household_validator.validate_accessibility_requirements(record)
-      expect(record.errors["accessibility_requirements"]).to be_empty
     end
   end
 

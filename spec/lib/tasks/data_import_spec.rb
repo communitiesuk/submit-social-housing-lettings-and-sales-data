@@ -5,16 +5,16 @@ describe "rake core:data_import", type: :task do
   subject(:task) { Rake::Task["core:data_import"] }
 
   let(:instance_name) { "paas_import_instance" }
-  let(:storage_service) { instance_double(S3StorageService) }
-  let(:paas_config_service) { instance_double(PaasConfigurationService) }
+  let(:storage_service) { instance_double(Storage::S3Service) }
+  let(:paas_config_service) { instance_double(Configuration::PaasConfigurationService) }
 
   before do
     Rake.application.rake_require("tasks/data_import")
     Rake::Task.define_task(:environment)
     task.reenable
 
-    allow(S3StorageService).to receive(:new).and_return(storage_service)
-    allow(PaasConfigurationService).to receive(:new).and_return(paas_config_service)
+    allow(Storage::S3Service).to receive(:new).and_return(storage_service)
+    allow(Configuration::PaasConfigurationService).to receive(:new).and_return(paas_config_service)
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("IMPORT_PAAS_INSTANCE").and_return(instance_name)
   end
@@ -29,7 +29,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates an organisation from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::OrganisationImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_organisations).with(fixture_path)
 
@@ -47,7 +47,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates a user from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::UserImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_users).with(fixture_path)
 
@@ -65,7 +65,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates an organisation from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::DataProtectionConfirmationImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_data_protection_confirmations).with(fixture_path)
 
@@ -83,7 +83,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates an organisation la from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::OrganisationRentPeriodImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_organisation_rent_periods).with(fixture_path)
 
@@ -91,18 +91,18 @@ describe "rake core:data_import", type: :task do
     end
   end
 
-  context "when importing case logs" do
-    let(:type) { "case-logs" }
-    let(:import_service) { instance_double(Imports::CaseLogsImportService) }
-    let(:fixture_path) { "spec/fixtures/imports/case_logs" }
+  context "when importing lettings logs" do
+    let(:type) { "lettings-logs" }
+    let(:import_service) { instance_double(Imports::LettingsLogsImportService) }
+    let(:fixture_path) { "spec/fixtures/imports/lettings_logs" }
 
     before do
-      allow(Imports::CaseLogsImportService).to receive(:new).and_return(import_service)
+      allow(Imports::LettingsLogsImportService).to receive(:new).and_return(import_service)
     end
 
-    it "creates case logs from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
-      expect(Imports::CaseLogsImportService).to receive(:new).with(storage_service)
+    it "creates lettings logs from the given XML file" do
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
+      expect(Imports::LettingsLogsImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_logs).with(fixture_path)
 
       task.invoke(type, fixture_path)
@@ -119,7 +119,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates a scheme from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::SchemeImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_schemes).with(fixture_path)
 
@@ -137,7 +137,7 @@ describe "rake core:data_import", type: :task do
     end
 
     it "creates a scheme location from the given XML file" do
-      expect(S3StorageService).to receive(:new).with(paas_config_service, instance_name)
+      expect(Storage::S3Service).to receive(:new).with(paas_config_service, instance_name)
       expect(Imports::SchemeLocationImportService).to receive(:new).with(storage_service)
       expect(import_service).to receive(:create_scheme_locations).with(fixture_path)
 

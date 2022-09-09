@@ -2,7 +2,7 @@ class Scheme < ApplicationRecord
   belongs_to :owning_organisation, class_name: "Organisation"
   belongs_to :managing_organisation, optional: true, class_name: "Organisation"
   has_many :locations, dependent: :delete_all
-  has_many :case_logs, dependent: :delete_all
+  has_many :lettings_logs, class_name: "LettingsLog", dependent: :delete_all
 
   has_paper_trail
 
@@ -112,7 +112,7 @@ class Scheme < ApplicationRecord
 
   def check_details_attributes
     [
-      { name: "Service code", value: id_to_display, id: "id" },
+      { name: "Scheme code", value: id_to_display, id: "id" },
       { name: "Name", value: service_name, id: "service_name" },
       { name: "Confidential information", value: sensitive, id: "sensitive" },
       { name: "Type of scheme", value: scheme_type, id: "scheme_type" },

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "form/page" do
-  let(:case_log) { FactoryBot.create(:case_log, :in_progress) }
-  let(:form) { case_log.form }
+  let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress) }
+  let(:form) { lettings_log.form }
   let(:subsection) { form.get_subsection("income_and_benefits") }
   let(:page) { form.get_page("net_income") }
   let(:question) { page.questions.find { |q| q.id == "earnings" } }
@@ -18,7 +18,7 @@ RSpec.describe "form/page" do
   end
 
   before do
-    assign(:case_log, case_log)
+    assign(:lettings_log, lettings_log)
     assign(:page, page)
     assign(:subsection, subsection)
     assign_attributes(page, page_attributes)

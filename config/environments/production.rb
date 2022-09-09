@@ -128,4 +128,23 @@ Rails.application.configure do
   # in a proc. See guides for an example.
   # config.active_record.shard_selector = { lock: true }
   # config.active_record.shard_resolver = ->(request) { Tenant.find_by!(host: request.host).shard }
+
+  # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
+  config.active_record.yaml_column_permitted_classes = [Time]
+
+  # From https://github.com/paper-trail-gem/paper_trail/wiki/Setting-whodunnit-in-the-rails-console
+  console do
+    PaperTrail.request.whodunnit = lambda {
+      @paper_trail_whodunnit ||= begin
+        email = nil
+        until email.present?
+          # rubocop:disable Rails/Output
+          puts "Enter your email address for PaperTrail"
+          # rubocop:enable Rails/Output
+          email = gets.chomp
+        end
+        email
+      end
+    }
+  end
 end

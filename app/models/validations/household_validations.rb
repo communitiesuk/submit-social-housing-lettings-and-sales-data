@@ -54,16 +54,6 @@ module Validations::HouseholdValidations
     validate_person_age_matches_economic_status(record, 1)
   end
 
-  def validate_accessibility_requirements(record)
-    all_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c, record.housingneeds_f, record.housingneeds_g, record.housingneeds_h]
-    if all_options.count(1) > 1
-      mobility_accessibility_options = [record.housingneeds_a, record.housingneeds_b, record.housingneeds_c]
-      unless all_options.count(1) == 2 && record.housingneeds_f == 1 && mobility_accessibility_options.any? { |x| x == 1 }
-        record.errors.add :accessibility_requirements, I18n.t("validations.household.housingneeds_a.one_or_two_choices")
-      end
-    end
-  end
-
   def validate_condition_effects(record)
     all_options = [record.illness_type_1, record.illness_type_2, record.illness_type_3, record.illness_type_4, record.illness_type_5, record.illness_type_6, record.illness_type_7, record.illness_type_8, record.illness_type_9, record.illness_type_10]
     if all_options.count(1) >= 1 && household_no_illness?(record)

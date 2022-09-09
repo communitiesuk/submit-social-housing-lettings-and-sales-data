@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       format.html
       format.csv do
         if current_user.support?
-          send_data filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
+          send_data byte_order_mark + filtered_users.to_csv, filename: "users-#{Time.zone.now}.csv"
         else
           head :unauthorized
         end

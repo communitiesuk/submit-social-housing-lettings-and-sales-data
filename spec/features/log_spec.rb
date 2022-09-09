@@ -4,9 +4,9 @@ RSpec.describe "Log Features" do
   context "when searching for specific logs" do
     context "when I am signed in and there are logs in the database" do
       let(:user) { FactoryBot.create(:user, last_sign_in_at: Time.zone.now) }
-      let!(:log_to_search) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
-      let!(:same_organisation_log) { FactoryBot.create(:case_log, owning_organisation: user.organisation) }
-      let!(:another_organisation_log) { FactoryBot.create(:case_log) }
+      let!(:log_to_search) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
+      let!(:same_organisation_log) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
+      let!(:another_organisation_log) { FactoryBot.create(:lettings_log) }
 
       before do
         visit("/logs")
@@ -82,9 +82,9 @@ RSpec.describe "Log Features" do
         visit("/logs")
         click_button("Create a new lettings log")
         click_link("Set up this lettings log")
-        select(support_user.organisation.name, from: "case-log-owning-organisation-id-field")
+        select(support_user.organisation.name, from: "lettings-log-owning-organisation-id-field")
         click_button("Save and continue")
-        select(support_user.name, from: "case-log-created-by-id-field")
+        select(support_user.name, from: "lettings-log-created-by-id-field")
         click_button("Save and continue")
         log_id = page.current_path.scan(/\d/).join
         visit("logs/#{log_id}/setup/check-answers")

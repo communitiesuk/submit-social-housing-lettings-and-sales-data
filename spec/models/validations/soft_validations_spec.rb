@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Validations::SoftValidations do
   let(:organisation) { FactoryBot.create(:organisation, provider_type: "PRP") }
-  let(:record) { FactoryBot.create(:case_log, owning_organisation: organisation) }
+  let(:record) { FactoryBot.create(:lettings_log, owning_organisation: organisation) }
 
   describe "rent min max validations" do
     before do
@@ -202,6 +202,38 @@ RSpec.describe Validations::SoftValidations do
         record.update!(preg_occ: 1, hhmemb: 2)
         expect(record.no_females_in_a_pregnant_household?).to be false
         expect(record.female_in_pregnant_household_in_soft_validation_range?).to be false
+      end
+    end
+  end
+
+  describe "major repairs date soft validations" do
+    context "when the major repairs date is within 10 years of the tenancy start date" do
+      it "shows the interruption screen" do
+        record.update!(startdate: Time.zone.local(2022, 2, 1), mrcdate: Time.zone.local(2013, 2, 1))
+        expect(record.major_repairs_date_in_soft_range?).to be true
+      end
+    end
+
+    context "when the major repairs date is less than 2 years before the tenancy start date" do
+      it "does not show the interruption screen" do
+        record.update!(startdate: Time.zone.local(2022, 2, 1), mrcdate: Time.zone.local(2021, 2, 1))
+        expect(record.major_repairs_date_in_soft_range?).to be false
+      end
+    end
+  end
+
+  describe "void date soft validations" do
+    context "when the void date is within 10 years of the tenancy start date" do
+      it "shows the interruption screen" do
+        record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2013, 2, 1))
+        expect(record.voiddate_in_soft_range?).to be true
+      end
+    end
+
+    context "when the void date is less than 2 years before the tenancy start date" do
+      it "does not show the interruption screen" do
+        record.update!(startdate: Time.zone.local(2022, 2, 1), voiddate: Time.zone.local(2021, 2, 1))
+        expect(record.voiddate_in_soft_range?).to be false
       end
     end
   end

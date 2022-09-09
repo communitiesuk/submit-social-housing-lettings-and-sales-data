@@ -73,7 +73,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_logs, path: "/logs" do
+  resources :lettings_logs, path: "/logs" do
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"

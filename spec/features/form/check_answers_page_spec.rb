@@ -9,9 +9,9 @@ RSpec.describe "Form Check Answers Page" do
   let(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
   let(:location) { FactoryBot.create(:location, scheme:, mobility_type: "N") }
 
-  let(:case_log) do
+  let(:lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
@@ -20,9 +20,9 @@ RSpec.describe "Form Check Answers Page" do
       location:,
     )
   end
-  let(:empty_case_log) do
+  let(:empty_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       previous_la_known: 1,
       prevloc: "E09000033",
       is_previous_la_inferred: false,
@@ -30,15 +30,15 @@ RSpec.describe "Form Check Answers Page" do
       managing_organisation: user.organisation,
     )
   end
-  let(:completed_case_log) do
+  let(:completed_lettings_log) do
     FactoryBot.create(
-      :case_log,
+      :lettings_log,
       :completed,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
     )
   end
-  let(:id) { case_log.id }
+  let(:id) { lettings_log.id }
 
   before do
     sign_in user
@@ -66,10 +66,10 @@ RSpec.describe "Form Check Answers Page" do
     end
 
     it "displays answers given by the user for the question in the subsection" do
-      fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
-      choose("case-log-sex1-x-field")
+      fill_in_number_question(empty_lettings_log.id, "age1", 28, "person-1-age")
+      choose("lettings-log-sex1-x-field")
       click_button("Save and continue")
-      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
+      visit("/logs/#{empty_lettings_log.id}/#{subsection}/check-answers")
       expect(page).to have_content("28")
       expect(page).to have_content("Non-binary")
     end
@@ -77,31 +77,31 @@ RSpec.describe "Form Check Answers Page" do
     # Regex explanation: match the string "Answer" but not if it's follow by "the missing questions"
     # This way only the links in the table will get picked up
     it "has an answer link for questions missing an answer" do
-      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers?referrer=check_answers")
+      visit("/logs/#{empty_lettings_log.id}/#{subsection}/check-answers?referrer=check_answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 5
       assert_selector "a", text: "Change", count: 0
-      expect(page).to have_link("Answer", href: "/logs/#{empty_case_log.id}/person-1-age?referrer=check_answers")
+      expect(page).to have_link("Answer", href: "/logs/#{empty_lettings_log.id}/person-1-age?referrer=check_answers")
     end
 
     it "has a change link for answered questions" do
-      fill_in_number_question(empty_case_log.id, "age1", 28, "person-1-age")
-      visit("/logs/#{empty_case_log.id}/#{subsection}/check-answers")
+      fill_in_number_question(empty_lettings_log.id, "age1", 28, "person-1-age")
+      visit("/logs/#{empty_lettings_log.id}/#{subsection}/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 4
       assert_selector "a", text: "Change", count: 1
-      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/person-1-age?referrer=check_answers")
+      expect(page).to have_link("Change", href: "/logs/#{empty_lettings_log.id}/person-1-age?referrer=check_answers")
     end
 
     it "updates the change/answer link when answers get updated" do
-      visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
+      visit("/logs/#{empty_lettings_log.id}/household-needs/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 3
       assert_selector "a", text: "Change", count: 1
-      visit("/logs/#{empty_case_log.id}/accessibility-requirements")
-      check("case-log-accessibility-requirements-housingneeds-c-field")
+      visit("/logs/#{empty_lettings_log.id}/accessibility-requirements")
+      check("lettings-log-accessibility-requirements-housingneeds-c-field")
       click_button("Save and continue")
-      visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
+      visit("/logs/#{empty_lettings_log.id}/household-needs/check-answers")
       assert_selector "a", text: /Answer (?!the missing questions)/, count: 2
       assert_selector "a", text: "Change", count: 2
-      expect(page).to have_link("Change", href: "/logs/#{empty_case_log.id}/accessibility-requirements?referrer=check_answers")
+      expect(page).to have_link("Change", href: "/logs/#{empty_lettings_log.id}/accessibility-requirements?referrer=check_answers")
     end
 
     it "does not display conditional questions that were not visited" do
@@ -119,7 +119,7 @@ RSpec.describe "Form Check Answers Page" do
 
     it "displays conditional question that were visited" do
       visit("/logs/#{id}/conditional-question")
-      choose("case-log-preg-occ-2-field", allow_label_click: true)
+      choose("lettings-log-preg-occ-2-field", allow_label_click: true)
       click_button("Save and continue")
       visit("/logs/#{id}/#{conditional_subsection}/check-answers")
       question_labels = ["Has the condition been met?", "Has the condition not been met?"]
@@ -133,20 +133,33 @@ RSpec.describe "Form Check Answers Page" do
       end
     end
 
+    it "does not group questions into summary cards if the questions in the subsection don't have a check_answers_card_number attribute" do
+      visit("/logs/#{completed_lettings_log.id}/household-needs/check-answers")
+      assert_selector ".x-govuk-summary-card__title", count: 0
+    end
+
+    context "when the user is checking their answers for the household characteristics subsection" do
+      it "they see a seperate summary card for each member of the household" do
+        visit("/logs/#{completed_lettings_log.id}/#{subsection}/check-answers")
+        assert_selector ".x-govuk-summary-card__title", text: "Lead tenant", count: 1
+        assert_selector ".x-govuk-summary-card__title", text: "Person 2", count: 1
+      end
+    end
+
     context "when viewing setup section answers" do
       before do
         FactoryBot.create(:location, scheme:)
       end
 
       it "displays inferred postcode with the location id" do
-        case_log.update!(location:)
+        lettings_log.update!(location:)
         visit("/logs/#{id}/setup/check-answers")
         expect(page).to have_content("Location")
         expect(page).to have_content(location.name)
       end
 
       it "displays inferred postcode with the location_admin_district" do
-        case_log.update!(location:)
+        lettings_log.update!(location:)
         visit("/logs/#{id}/setup/check-answers")
         expect(page).to have_content("Location")
         expect(page).to have_content(location.location_admin_district)
@@ -155,22 +168,22 @@ RSpec.describe "Form Check Answers Page" do
 
     context "when the user changes their answer from check answer page" do
       it "routes back to check answers" do
-        visit("/logs/#{empty_case_log.id}/accessibility-requirements")
-        check("case-log-accessibility-requirements-housingneeds-c-field")
+        visit("/logs/#{empty_lettings_log.id}/accessibility-requirements")
+        check("lettings-log-accessibility-requirements-housingneeds-c-field")
         click_button("Save and continue")
-        visit("/logs/#{empty_case_log.id}/household-needs/check-answers")
+        visit("/logs/#{empty_lettings_log.id}/household-needs/check-answers")
         first("a", text: /Change/).click
-        uncheck("case-log-accessibility-requirements-housingneeds-c-field")
-        check("case-log-accessibility-requirements-housingneeds-b-field")
+        uncheck("lettings-log-accessibility-requirements-housingneeds-c-field")
+        check("lettings-log-accessibility-requirements-housingneeds-b-field")
         click_button("Save changes")
-        expect(page).to have_current_path("/logs/#{empty_case_log.id}/household-needs/check-answers")
+        expect(page).to have_current_path("/logs/#{empty_lettings_log.id}/household-needs/check-answers")
       end
     end
 
     context "when the user wants to bypass the tasklist page from check answers" do
-      let(:section_completed_case_log) do
+      let(:section_completed_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
@@ -181,9 +194,9 @@ RSpec.describe "Form Check Answers Page" do
         )
       end
 
-      let(:next_section_in_progress_case_log) do
+      let(:next_section_in_progress_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
@@ -196,9 +209,9 @@ RSpec.describe "Form Check Answers Page" do
         )
       end
 
-      let(:skip_section_case_log) do
+      let(:skip_section_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
@@ -214,9 +227,9 @@ RSpec.describe "Form Check Answers Page" do
         )
       end
 
-      let(:cycle_sections_case_log) do
+      let(:cycle_sections_lettings_log) do
         FactoryBot.create(
-          :case_log,
+          :lettings_log,
           :in_progress,
           owning_organisation: user.organisation,
           managing_organisation: user.organisation,
@@ -234,27 +247,27 @@ RSpec.describe "Form Check Answers Page" do
       end
 
       it "they can click a button to move onto the first page of the next (not started) incomplete section" do
-        visit("/logs/#{section_completed_case_log.id}/household-characteristics/check-answers")
+        visit("/logs/#{section_completed_lettings_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{section_completed_case_log.id}/armed-forces")
+        expect(page).to have_current_path("/logs/#{section_completed_lettings_log.id}/armed-forces")
       end
 
       it "they can click a button to move onto the check answers page of the next (in progress) incomplete section" do
-        visit("/logs/#{next_section_in_progress_case_log.id}/household-characteristics/check-answers")
+        visit("/logs/#{next_section_in_progress_lettings_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{next_section_in_progress_case_log.id}/household-needs/check-answers")
+        expect(page).to have_current_path("/logs/#{next_section_in_progress_lettings_log.id}/household-needs/check-answers")
       end
 
       it "they can click a button to skip sections until the next incomplete section" do
-        visit("/logs/#{skip_section_case_log.id}/household-characteristics/check-answers")
+        visit("/logs/#{skip_section_lettings_log.id}/household-characteristics/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{skip_section_case_log.id}/property-information/check-answers")
+        expect(page).to have_current_path("/logs/#{skip_section_lettings_log.id}/property-information/check-answers")
       end
 
       it "they can click a button to cycle around to the next incomplete section" do
-        visit("/logs/#{cycle_sections_case_log.id}/declaration/check-answers")
+        visit("/logs/#{cycle_sections_lettings_log.id}/declaration/check-answers")
         click_link("Save and go to next incomplete section")
-        expect(page).to have_current_path("/logs/#{cycle_sections_case_log.id}/tenant-code-test")
+        expect(page).to have_current_path("/logs/#{cycle_sections_lettings_log.id}/tenant-code-test")
       end
     end
   end

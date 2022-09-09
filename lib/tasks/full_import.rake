@@ -6,9 +6,9 @@ namespace :core do
     archive_path = args[:archive_path]
     raise "Usage: rake core:full_import['path/to/archive']" if archive_path.blank?
 
-    s3_service = S3StorageService.new(PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
+    s3_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["IMPORT_PAAS_INSTANCE"])
     archive_io = s3_service.get_file_io(archive_path)
-    archive_service = ArchiveStorageService.new(archive_io)
+    archive_service = Storage::ArchiveService.new(archive_io)
 
     import_list = [
       Import.new(Imports::OrganisationImportService, :create_organisations, "institution"),
@@ -17,11 +17,12 @@ namespace :core do
       Import.new(Imports::UserImportService, :create_users, "user"),
       Import.new(Imports::DataProtectionConfirmationImportService, :create_data_protection_confirmations, "dataprotect"),
       Import.new(Imports::OrganisationRentPeriodImportService, :create_organisation_rent_periods, "rent-period"),
-      Import.new(Imports::CaseLogsImportService, :create_logs, "logs"),
+      Import.new(Imports::LettingsLogsImportService, :create_logs, "logs"),
     ]
 
     import_list.each do |step|
       if archive_service.folder_present?(step.folder)
+        Rails.logger.info("Start importing folder #{step.folder}")
         step.import_class.new(archive_service).send(step.import_method, step.folder)
       else
         Rails.logger.info("#{step.folder} does not exist, skipping #{step.import_class}")

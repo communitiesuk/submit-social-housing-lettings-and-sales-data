@@ -12,10 +12,10 @@ export default class extends Controller {
 
       Object.entries(conditionalFor).forEach(([targetQuestion, conditions]) => {
         if (!conditions.map(String).includes(String(selectedValue))) {
-          const textNumericInput = document.getElementById(`case-log-${targetQuestion.replaceAll('_', '-')}-field`)
+          const textNumericInput = document.getElementById(`lettings-log-${targetQuestion.replaceAll('_', '-')}-field`)
           if (textNumericInput == null) {
             const dateInputs = [1, 2, 3].map((idx) => {
-              return document.getElementById(`case_log_${targetQuestion}_${idx}i`)
+              return document.getElementById(`lettings_log_${targetQuestion}_${idx}i`)
             })
             this.clearDateInputs(dateInputs)
           } else {

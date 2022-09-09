@@ -7,7 +7,7 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
   let(:page_definition) { nil }
   let(:subsection) { instance_double(Form::Subsection) }
   let(:form) { instance_double(Form) }
-  let(:case_log) { instance_double(CaseLog) }
+  let(:lettings_log) { instance_double(LettingsLog) }
 
   it "has correct subsection" do
     expect(page.subsection).to eq(subsection)
@@ -37,7 +37,7 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
     let(:support_user) { FactoryBot.build(:user, :support) }
 
     it "is shown" do
-      expect(page.routed_to?(case_log, support_user)).to be true
+      expect(page.routed_to?(lettings_log, support_user)).to be true
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.describe Form::Setup::Pages::CreatedBy, type: :model do
     let(:user) { FactoryBot.build(:user) }
 
     it "is not shown" do
-      expect(page.routed_to?(case_log, user)).to be false
+      expect(page.routed_to?(lettings_log, user)).to be false
     end
   end
 end
