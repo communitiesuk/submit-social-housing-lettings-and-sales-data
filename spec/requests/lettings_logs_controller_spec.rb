@@ -49,7 +49,12 @@ RSpec.describe LettingsLogsController, type: :request do
       end
 
       before do
+        Timecop.freeze(Time.utc(2022, 2, 8))
         post "/logs", headers:, params: params.to_json
+      end
+
+      after do
+        Timecop.unfreeze
       end
 
       it "returns http success" do

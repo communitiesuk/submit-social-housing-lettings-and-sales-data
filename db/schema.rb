@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_23_083657) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -232,40 +232,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_23_083657) do
     t.integer "void_date_value_check"
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
-    t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
-    t.index ["location_id"], name: "index_case_logs_on_location_id"
-    t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
-    t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
-    t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
-    t.index ["scheme_id"], name: "index_case_logs_on_scheme_id"
-  end
-
-  create_table "data_protection_confirmations", force: :cascade do |t|
-    t.bigint "organisation_id"
-    t.bigint "data_protection_officer_id"
-    t.boolean "confirmed"
-    t.string "old_id"
-    t.string "old_org_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["data_protection_officer_id"], name: "dpo_user_id"
-    t.index ["organisation_id", "data_protection_officer_id", "confirmed"], name: "data_protection_confirmations_unique", unique: true
-    t.index ["organisation_id"], name: "index_data_protection_confirmations_on_organisation_id"
-  end
-
-  create_table "la_rent_ranges", force: :cascade do |t|
-    t.integer "ranges_rent_id"
-    t.integer "lettype"
-    t.string "la"
-    t.integer "beds"
-    t.decimal "soft_min", precision: 10, scale: 2
-    t.decimal "soft_max", precision: 10, scale: 2
-    t.decimal "hard_min", precision: 10, scale: 2
-    t.decimal "hard_max", precision: 10, scale: 2
-    t.integer "start_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+    t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
+    t.index ["location_id"], name: "index_lettings_logs_on_location_id"
+    t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
+    t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
+    t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -415,6 +387,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_23_083657) do
     t.string "whodunnit"
     t.text "object"
     t.datetime "created_at"
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
