@@ -1,23 +1,21 @@
 module Modules::LettingsLogsFilter
-  def filtered_lettings_logs(logs)
-    if session[:lettings_logs_filters].present?
-      filters = JSON.parse(session[:lettings_logs_filters])
-      filters.each do |category, values|
-        next if Array(values).reject(&:empty?).blank?
-        next if category == "organisation" && params["organisation_select"] == "all"
-
-        logs = logs.public_send("filter_by_#{category}", values, current_user)
-      end
-    end
-    logs = logs.order(created_at: :desc)
-    current_user.support? ? logs.all.includes(:owning_organisation, :managing_organisation) : logs
+  def filtered_lettings_logs(logs, search_term, filters)
+    all_orgs = params["organisation_select"] == "all"
+    FilterService.filter_lettings_logs(logs, search_term, filters, all_orgs, current_user)
   end
 
-  def set_session_filters(specific_org: false)
-    new_filters = session[:lettings_logs_filters].present? ? JSON.parse(session[:lettings_logs_filters]) : {}
+  def load_session_filters(specific_org: false)
+    current_filters = session[:lettings_logs_filters]
+    new_filters = current_filters.present? ? JSON.parse(current_filters) : {}
     current_user.lettings_logs_filters(specific_org:).each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
-    new_filters = new_filters.except("organisation") if params["organisation_select"] == "all"
+    @session_filters = params["organisation_select"] == "all" ? new_filters.except("organisation") : new_filters
+  end
 
-    session[:lettings_logs_filters] = new_filters.to_json
+  def session_filters(specific_org: false)
+    @session_filters ||= load_session_filters(specific_org:)
+  end
+
+  def set_session_filters
+    session[:lettings_logs_filters] = @session_filters.to_json
   end
 end

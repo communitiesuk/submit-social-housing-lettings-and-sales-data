@@ -6,6 +6,8 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
+  before_action { session_filters(specific_org: true) if support_user? }
+  before_action :set_session_filters, if: :support_user?
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -89,26 +91,37 @@ class OrganisationsController < ApplicationController
 
   def logs
     if current_user.support?
-      set_session_filters(specific_org: true)
-
       organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-      unpaginated_filtered_logs = filtered_lettings_logs(filtered_collection(organisation_logs, search_term))
+      unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
 
       respond_to do |format|
         format.html do
+          @search_term = search_term
           @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
           @searched = search_term.presence
           @total_count = organisation_logs.size
           render "logs", layout: "application"
         end
-
-        format.csv do
-          send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
-        end
       end
     else
       redirect_to(lettings_logs_path)
     end
+  end
+
+  def download_csv
+    if current_user.support?
+      organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+      unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
+
+      render "lettings_logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
+    else
+      redirect_to(download_csv_lettings_logs_path)
+    end
+  end
+
+  def email_csv
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation)
+    redirect_to logs_csv_confirmation_organisation_path
   end
 
 private
@@ -131,5 +144,9 @@ private
 
   def find_resource
     @organisation = Organisation.find(params[:id])
+  end
+
+  def support_user?
+    current_user.support?
   end
 end

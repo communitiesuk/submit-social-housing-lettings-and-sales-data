@@ -383,6 +383,12 @@ RSpec.describe LettingsLogsController, type: :request do
             end
           end
 
+          it "includes the search on the CSV link" do
+            search_term = "test search term"
+            get "/logs?search=#{search_term}", headers: headers, params: {}
+            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download?search=#{search_term}")
+          end
+
           context "when more than one results with matching postcode" do
             let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
@@ -491,8 +497,8 @@ RSpec.describe LettingsLogsController, type: :request do
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
-          it "shows the download csv link" do
-            expect(page).to have_link("Download (CSV)", href: "/logs.csv")
+          it "shows the CSV download link" do
+            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download?search=")
           end
 
           it "does not show the organisation filter" do
@@ -729,89 +735,41 @@ RSpec.describe LettingsLogsController, type: :request do
         expect(CGI.unescape_html(response.body)).to include("You didn’t answer this question")
       end
     end
-  end
 
-  describe "CSV download" do
-    let(:headers) { { "Accept" => "text/csv" } }
-    let(:user) { FactoryBot.create(:user) }
-    let(:organisation) { user.organisation }
-    let(:other_organisation) { FactoryBot.create(:organisation) }
-
-    context "when a log exists" do
-      let!(:lettings_log) do
-        FactoryBot.create(
-          :lettings_log,
-          owning_organisation: organisation,
-          managing_organisation: organisation,
-          ecstat1: 1,
-        )
-      end
+    context "when requesting CSV download" do
+      let(:headers) { { "Accept" => "text/html" } }
+      let(:search_term) { "test search term" }
 
       before do
         sign_in user
-        FactoryBot.create(:lettings_log)
-        FactoryBot.create(:lettings_log,
-                          :completed,
-                          owning_organisation: organisation,
-                          managing_organisation: organisation,
-                          created_by: user)
-        get "/logs", headers:, params: {}
+        get "/logs/csv-download?search=#{search_term}", headers:
       end
 
-      it "downloads a CSV file with headers" do
-        csv = CSV.parse(response.body)
-        expect(csv.first.first).to eq("\uFEFFid")
-        expect(csv.second.first).to eq(lettings_log.id.to_s)
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
       end
 
-      it "does not download other orgs logs" do
-        csv = CSV.parse(response.body)
-        expect(csv.count).to eq(3)
+      it "shows a confirmation button" do
+        expect(page).to have_button("Send email")
       end
 
-      it "downloads answer labels rather than values" do
-        csv = CSV.parse(response.body)
-        expect(csv.second[15]).to eq("Full-time – 30 hours or more")
-      end
-
-      it "downloads filtered logs" do
-        get "/logs?status[]=completed", headers:, params: {}
-        csv = CSV.parse(response.body)
-        expect(csv.count).to eq(2)
-      end
-
-      it "dowloads searched logs" do
-        get "/logs?search=#{lettings_log.id}", headers:, params: {}
-        csv = CSV.parse(response.body)
-        expect(csv.count).to eq(LettingsLog.search_by(lettings_log.id.to_s).count + 1)
-      end
-
-      context "when both filter and search applied" do
-        let(:postcode) { "XX1 1TG" }
-
-        before do
-          FactoryBot.create(:lettings_log, :in_progress, postcode_full: postcode, owning_organisation: organisation, created_by: user)
-          FactoryBot.create(:lettings_log, :completed, postcode_full: postcode, owning_organisation: organisation, created_by: user)
-        end
-
-        it "downloads logs matching both csv and filter logs" do
-          get "/logs?status[]=completed&search=#{postcode}", headers:, params: {}
-          csv = CSV.parse(response.body)
-          expect(csv.count).to eq(2)
-        end
+      it "includes the search term" do
+        expect(page).to have_field("search", type: "hidden", with: search_term)
       end
     end
 
-    context "when there are more than 20 logs" do
-      before do
-        sign_in user
-        FactoryBot.create_list(:lettings_log, 26, owning_organisation: organisation)
-        get "/logs", headers:, params: {}
-      end
+    context "when confirming the CSV email" do
+      let(:headers) { { "Accept" => "text/html" } }
 
-      it "does not paginate, it downloads all the user's logs" do
-        csv = CSV.parse(response.body)
-        expect(csv.count).to eq(27)
+      context "when a log exists" do
+        before do
+          sign_in user
+        end
+
+        it "confirms that the user will receive an email with the requested CSV" do
+          get "/logs/csv-confirmation"
+          expect(CGI.unescape_html(response.body)).to include("We're sending you an email")
+        end
       end
     end
   end
@@ -963,6 +921,62 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "returns an unprocessable entity 422" do
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe "POST #email-csv" do
+    let(:other_organisation) { FactoryBot.create(:organisation) }
+
+    context "when a log exists" do
+      let!(:lettings_log) do
+        FactoryBot.create(
+          :lettings_log,
+          owning_organisation:,
+          managing_organisation: owning_organisation,
+          ecstat1: 1,
+        )
+      end
+
+      before do
+        sign_in user
+        FactoryBot.create(:lettings_log)
+        FactoryBot.create(:lettings_log,
+                          :completed,
+                          owning_organisation:,
+                          managing_organisation: owning_organisation,
+                          created_by: user)
+      end
+
+      it "creates an E-mail job" do
+        expect {
+          post "/logs/email-csv", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false)
+      end
+
+      it "redirects to the confirmation page" do
+        post "/logs/email-csv", headers:, params: {}
+        expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
+      end
+
+      it "passes the search term" do
+        expect {
+          post "/logs/email-csv?search=#{lettings_log.id}", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false)
+      end
+
+      it "passes filter parameters" do
+        expect {
+          post "/logs/email-csv?status[]=completed", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false)
+      end
+
+      it "passes a combination of search term and filter parameters" do
+        postcode = "XX1 1TG"
+
+        expect {
+          post "/logs/email-csv?status[]=completed&search=#{postcode}", headers:, params: {}
+        }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false)
       end
     end
   end

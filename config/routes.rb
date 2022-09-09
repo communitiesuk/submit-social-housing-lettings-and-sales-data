@@ -69,6 +69,9 @@ Rails.application.routes.draw do
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
       get "logs", to: "organisations#logs"
+      get "logs/csv-download", to: "organisations#download_csv"
+      post "logs/email-csv", to: "organisations#email_csv"
+      get "logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
     end
   end
@@ -77,6 +80,9 @@ Rails.application.routes.draw do
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
+      get "csv-download", to: "lettings_logs#download_csv"
+      post "email-csv", to: "lettings_logs#email_csv"
+      get "csv-confirmation", to: "lettings_logs#csv_confirmation"
     end
 
     member do

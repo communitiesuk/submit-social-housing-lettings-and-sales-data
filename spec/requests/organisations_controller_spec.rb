@@ -1035,11 +1035,10 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       it "has a CSV download button with the correct path" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs.csv")
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download?search=")
       end
 
       context "when you download the CSV" do
-        let(:headers) { { "Accept" => "text/csv" } }
         let(:other_organisation) { FactoryBot.create(:organisation) }
 
         before do
@@ -1048,9 +1047,15 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/logs", headers:, params: {}
-          csv = CSV.parse(response.body)
-          expect(csv.count).to eq(4)
+          get "/organisations/#{organisation.id}/logs/csv-download"
+
+          expect(page).to have_text("You've selected 3 logs.")
+        end
+
+        it "provides the organisation to the mail job" do
+          expect {
+            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed", headers:, params: {}
+          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation)
         end
       end
     end
