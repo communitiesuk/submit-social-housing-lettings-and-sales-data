@@ -420,6 +420,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_08_153924) do
       lettings_logs.tenancycode,
       lettings_logs.propcode,
       lettings_logs.created_by_id,
+      lettings_logs.owning_organisation_id,
+      lettings_logs.managing_organisation_id,
       'lettings'::text AS log_type
      FROM lettings_logs
   UNION
@@ -429,6 +431,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_08_153924) do
       NULL::character varying AS tenancycode,
       NULL::character varying AS propcode,
       sales_logs.created_by_id,
+      sales_logs.owning_organisation_id,
+      sales_logs.managing_organisation_id,
       'sales'::text AS log_type
      FROM sales_logs;
   SQL

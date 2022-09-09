@@ -6,7 +6,7 @@ module NavigationItemsHelper
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
-        NavigationItem.new("Logs", lettings_logs_path, logs_current?(path)),
+        NavigationItem.new("Logs", logs_path, logs_current?(path)),
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
       ]
     elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?

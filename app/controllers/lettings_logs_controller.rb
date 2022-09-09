@@ -9,7 +9,7 @@ class LettingsLogsController < LogsController
 
     respond_to do |format|
       format.html do
-        @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
         render "logs/index"
@@ -26,11 +26,11 @@ class LettingsLogsController < LogsController
   end
 
   def update
-    if @lettings_log
-      if @lettings_log.update(api_log_params)
-        render json: @lettings_log, status: :ok
+    if @log
+      if @log.update(api_log_params)
+        render json: @log, status: :ok
       else
-        render json: { errors: @lettings_log.errors.messages }, status: :unprocessable_entity
+        render json: { errors: @log.errors.messages }, status: :unprocessable_entity
       end
     else
       render_not_found_json("Log", params[:id])
@@ -42,8 +42,8 @@ class LettingsLogsController < LogsController
       # We don't have a dedicated non-editable show view
       format.html { render "logs/edit" }
       format.json do
-        if @lettings_log
-          render json: @lettings_log, status: :ok
+        if @log
+          render json: @log, status: :ok
         else
           render_not_found_json("Log", params[:id])
         end
@@ -52,8 +52,8 @@ class LettingsLogsController < LogsController
   end
 
   def edit
-    @lettings_log = current_user.lettings_logs.find_by(id: params[:id])
-    if @lettings_log
+    @log = current_user.lettings_logs.find_by(id: params[:id])
+    if @log
       render "logs/edit", locals: { current_user: }
     else
       render_not_found
@@ -61,11 +61,11 @@ class LettingsLogsController < LogsController
   end
 
   def destroy
-    if @lettings_log
-      if @lettings_log.delete
+    if @log
+      if @log.delete
         head :no_content
       else
-        render json: { errors: @lettings_log.errors.messages }, status: :unprocessable_entity
+        render json: { errors: @log.errors.messages }, status: :unprocessable_entity
       end
     else
       render_not_found_json("Log", params[:id])
@@ -79,7 +79,7 @@ private
   end
 
   def find_resource
-    @lettings_log = LettingsLog.find_by(id: params[:id])
+    @log = LettingsLog.find_by(id: params[:id])
   end
 
   def post_create_redirect_url(log)

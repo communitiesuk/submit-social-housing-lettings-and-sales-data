@@ -1,4 +1,4 @@
-<% content_for :title, "Log #{@lettings_log.id}" %>
+<% content_for :title, "Log #{@log.id}" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Logs" => "/logs",
   content_for(:title) => "",
@@ -10,10 +10,10 @@
       <%= content_for(:title) %>
     </h1>
 
-    <% if @lettings_log.status == "in_progress" %>
-      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@lettings_log, :completed) %> of <%= get_subsections_count(@lettings_log, :all) %> sections completed.</p>
+    <% if @log.status == "in_progress" %>
+      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@log, :completed) %> of <%= get_subsections_count(@log, :all) %> sections completed.</p>
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <% next_incomplete_section = get_next_incomplete_section(@lettings_log) %>
+        <% next_incomplete_section = get_next_incomplete_section(@log) %>
       </p>
       <p>
         <% if next_incomplete_section.present? %>
@@ -22,14 +22,14 @@
           </a>
         <% end %>
       </p>
-    <% elsif @lettings_log.status == "not_started" %>
+    <% elsif @log.status == "not_started" %>
       <p class="govuk-body">This log has not been started.</p>
-    <% elsif @lettings_log.status == "completed" %>
+    <% elsif @log.status == "completed" %>
       <p class="govuk-body">
-        <%= status_tag(@lettings_log.status) %>
+        <%= status_tag(@log.status) %>
       </p>
       <p class="govuk-body">
-        You can <%= govuk_link_to "review and make changes to this log", "/logs/#{@lettings_log.id}/review" %> until 2nd June <%= @lettings_log.collection_start_year.present? ? @lettings_log.collection_start_year + 1 : "" %>.
+        You can <%= govuk_link_to "review and make changes to this log", "/logs/#{@log.id}/review" %> until 2nd June <%= @log.collection_start_year.present? ? @log.collection_start_year + 1 : "" %>.
       </p>
     <% end %>
     <%= render "tasklist" %>

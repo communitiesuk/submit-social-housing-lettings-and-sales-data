@@ -5,13 +5,13 @@ class SalesLogsController < LogsController
 
   def show
     respond_to do |format|
-      format.html { "logs/edit" }
+      format.html { edit }
     end
   end
 
   def edit
-    @sales_log = current_user.sales_logs.find_by(id: params[:id])
-    if @sales_log
+    @log = current_user.sales_logs.find_by(id: params[:id])
+    if @log
       render "logs/edit", locals: { current_user: }
     else
       render_not_found

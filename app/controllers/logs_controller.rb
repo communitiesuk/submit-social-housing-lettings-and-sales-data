@@ -15,7 +15,7 @@ class LogsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
       end

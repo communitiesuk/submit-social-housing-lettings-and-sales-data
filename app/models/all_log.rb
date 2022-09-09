@@ -4,6 +4,10 @@ class AllLog < ApplicationRecord
   STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   enum status: STATUS
 
+  belongs_to :owning_organisation, class_name: "Organisation", optional: true
+  belongs_to :managing_organisation, class_name: "Organisation", optional: true
+  belongs_to :created_by, class_name: "User", optional: true
+
   def read_only?
     true
   end
@@ -25,6 +29,14 @@ class AllLog < ApplicationRecord
   end
 
   def created_by
-    User.find(created_by_id)
+    User.find(created_by_id) if created_by_id.present?
+  end
+
+  def owning_organisation
+    Organisation.find(owning_organisation_id) if owning_organisation_id.present?
+  end
+
+  def managing_organisation
+    Organisation.find(managing_organisation_id) if managing_organisation_id.present?
   end
 end
