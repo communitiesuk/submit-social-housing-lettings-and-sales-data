@@ -57,7 +57,11 @@ class LocationsController < ApplicationController
     render_not_found and return unless @location && @scheme
 
     page = params[:location][:page]
-    if @location.update(location_params)
+    if page == "edit-local-authority" && !valid_location_admin_district?(location_params)
+      error_message = I18n.t("validations.location_admin_district")
+      @location.errors.add :location_admin_district, error_message
+      render :edit_local_authority, status: :unprocessable_entity
+    elsif @location.update(location_params)
       case page
       when "edit"
         if @location.location_admin_district.nil?
@@ -70,21 +74,12 @@ class LocationsController < ApplicationController
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
       when "edit-local-authority"
-        if valid_location_admin_district?(location_params)
-          @uri_query = URI.parse(request.referer).query
-          @query_hash = @uri_query ? CGI.parse(@uri_query) : { "add_another_location": [] }
-          @add_another_location = @query_hash["add_another_location"].try(:first)
-          if @add_another_location == "Yes"
-            redirect_to(new_location_path(@location.scheme))
-          else
-            redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
-          end
+        if params[:add_another_location] == "Yes"
+          redirect_to(new_location_path(@location.scheme))
         else
-          error_message = I18n.t("validations.location_admin_district")
-          @location.errors.add :location_admin_district, error_message
-          render :edit_local_authority, status: :unprocessable_entity
+          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
         end
-      end
+        end
     else
       render :edit, status: :unprocessable_entity
     end
