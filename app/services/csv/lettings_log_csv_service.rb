@@ -13,7 +13,13 @@ module Csv
 
         LettingsLog.all.find_each do |record|
           csv << @attributes.map do |att|
-            record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
+            if %w[la prevloc].include? att
+              label_from_value(record.send(att))
+            elsif %w[la_label prevloc_label].include? att
+              record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att.remove("_label"))) || label_from_value(record.send(att.remove("_label")))
+            else
+              record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
+            end
           end
         end
       end
@@ -38,7 +44,7 @@ module Csv
       remaining_attributes = LettingsLog.attribute_names - intersecting_attributes - scheme_and_location_ids
 
       @attributes = (metadata_fields + intersecting_attributes + remaining_attributes - metadata_id_fields + %w[unittype_sh] + scheme_attributes + location_attributes).uniq
-      move_is_inferred_fields
+      move_la_fields
 
       @attributes -= CSV_FIELDS_TO_OMIT if @user.present? && !@user.support?
     end
@@ -61,10 +67,12 @@ module Csv
       attributes
     end
 
-    def move_is_inferred_fields
-      { la: "is_la_inferred", prevloc: "is_previous_la_inferred" }.each do |inferred_field, field|
-        @attributes.delete(field)
-        @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
+    def move_la_fields
+      { la: %w[is_la_inferred la_label], prevloc: %w[is_previous_la_inferred prevloc_label] }.each do |inferred_field, fields|
+        fields.each do |field|
+          @attributes.delete(field)
+          @attributes.insert(@attributes.find_index(inferred_field.to_s), field)
+        end
       end
     end
   end

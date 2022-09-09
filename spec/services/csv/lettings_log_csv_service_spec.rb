@@ -29,6 +29,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    postcode_known
                                    postcode_full
                                    is_la_inferred
+                                   la_label
                                    la
                                    first_time_property_let_as_social_housing
                                    unitletas
@@ -131,6 +132,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    ppostcode_full
                                    previous_la_known
                                    is_previous_la_inferred
+                                   prevloc_label
                                    prevloc
                                    reasonpref
                                    rp_homeless
