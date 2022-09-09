@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LettingsLogsController, type: :request do
+RSpec.describe LogsController, type: :request do
   describe "index" do
     let(:user) { FactoryBot.create(:user) }
     let(:page) { Capybara::Node::Simple.new(response.body) }
