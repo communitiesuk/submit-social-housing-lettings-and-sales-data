@@ -1,6 +1,6 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
-  include Modules::LettingsLogsFilter
+  include Modules::LogsFilter
   include Modules::SearchFilter
 
   before_action :authenticate_user!
