@@ -16,7 +16,7 @@ module Csv
             if %w[la prevloc].include? att
               label_from_value(record.send(att))
             elsif %w[la_label prevloc_label].include? att
-              record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
+              record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att.remove("_label"))) || label_from_value(record.send(att.remove("_label")))
             else
               record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
             end
