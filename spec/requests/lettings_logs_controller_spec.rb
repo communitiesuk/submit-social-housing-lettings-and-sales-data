@@ -50,7 +50,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       before do
         Timecop.freeze(Time.utc(2022, 2, 8))
-        post "/logs", headers:, params: params.to_json
+        post "/lettings-logs", headers:, params: params.to_json
       end
 
       after do
@@ -132,7 +132,7 @@ RSpec.describe LettingsLogsController, type: :request do
       before do
         RequestHelper.stub_http_requests
         sign_in user
-        post "/logs", headers:
+        post "/lettings-logs", headers:
       end
 
       it "tracks who created the record" do
@@ -826,7 +826,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:id) { lettings_log.id }
 
     before do
-      patch "/logs/#{id}", headers:, params: params.to_json
+      patch "/lettings-logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -884,7 +884,7 @@ RSpec.describe LettingsLogsController, type: :request do
     let(:id) { lettings_log.id }
 
     before do
-      put "/logs/#{id}", headers:, params: params.to_json
+      put "/lettings-logs/#{id}", headers:, params: params.to_json
     end
 
     it "returns http success" do
@@ -924,7 +924,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when deleting a lettings log" do
       before do
-        delete "/logs/#{id}", headers:
+        delete "/lettings-logs/#{id}", headers:
       end
 
       it "returns http success" do
@@ -958,7 +958,7 @@ RSpec.describe LettingsLogsController, type: :request do
       before do
         allow(LettingsLog).to receive(:find_by).and_return(lettings_log)
         allow(lettings_log).to receive(:delete).and_return(false)
-        delete "/logs/#{id}", headers:
+        delete "/lettings-logs/#{id}", headers:
       end
 
       it "returns an unprocessable entity 422" do

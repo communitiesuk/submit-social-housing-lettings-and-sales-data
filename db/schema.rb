@@ -417,12 +417,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_08_153924) do
       SELECT lettings_logs.id,
       lettings_logs.status,
       lettings_logs.created_at,
+      lettings_logs.tenancycode,
+      lettings_logs.propcode,
+      lettings_logs.created_by_id,
       'lettings'::text AS log_type
      FROM lettings_logs
   UNION
    SELECT sales_logs.id,
       sales_logs.status,
       sales_logs.created_at,
+      NULL::character varying AS tenancycode,
+      NULL::character varying AS propcode,
+      sales_logs.created_by_id,
       'sales'::text AS log_type
      FROM sales_logs;
   SQL

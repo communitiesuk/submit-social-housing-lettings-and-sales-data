@@ -9,7 +9,7 @@ module Modules::LogsFilter
         logs = logs.public_send("filter_by_#{category}", values, current_user)
       end
     end
-    logs = logs.sort_by(&:created_at)
+    logs = logs.order(created_at: :desc)
     current_user.support? ? logs.all.includes(:owning_organisation, :managing_organisation) : logs
   end
 

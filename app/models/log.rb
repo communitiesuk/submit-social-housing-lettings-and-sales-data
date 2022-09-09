@@ -5,6 +5,9 @@ class Log < ApplicationRecord
   belongs_to :managing_organisation, class_name: "Organisation", optional: true
   belongs_to :created_by, class_name: "User", optional: true
 
+  STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
+  enum status: STATUS
+
   scope :combined, -> { ActiveRecord::Base.connection.execute("SELECT * FROM logs") }
 
   def collection_start_year

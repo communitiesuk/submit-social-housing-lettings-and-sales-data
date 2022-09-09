@@ -10,9 +10,6 @@ class SalesLog < Log
 
   scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
 
-  STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
-  enum status: STATUS
-
   OPTIONAL_FIELDS = [].freeze
 
   def startdate

@@ -12,6 +12,7 @@ class LettingsLogsController < LogsController
         @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
+        render "logs/index"
       end
 
       format.csv do
@@ -39,7 +40,7 @@ class LettingsLogsController < LogsController
   def show
     respond_to do |format|
       # We don't have a dedicated non-editable show view
-      format.html { edit }
+      format.html { render "logs/edit" }
       format.json do
         if @lettings_log
           render json: @lettings_log, status: :ok
@@ -53,7 +54,7 @@ class LettingsLogsController < LogsController
   def edit
     @lettings_log = current_user.lettings_logs.find_by(id: params[:id])
     if @lettings_log
-      render :edit, locals: { current_user: }
+      render "logs/edit", locals: { current_user: }
     else
       render_not_found
     end
