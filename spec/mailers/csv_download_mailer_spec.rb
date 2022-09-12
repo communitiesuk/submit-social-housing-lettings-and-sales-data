@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CsvDownloadMailer do
-  describe "Intercept mail" do
+  describe "#send_csv_download_mail" do
     let(:notify_client) { instance_double(Notifications::Client) }
     let(:user) { FactoryBot.create(:user, email: "user@example.com") }
 
