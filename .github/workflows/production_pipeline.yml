@@ -238,6 +238,7 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           IMPORT_PAAS_INSTANCE: ${{ secrets.IMPORT_PAAS_INSTANCE }}
           EXPORT_PAAS_INSTANCE: ${{ secrets.EXPORT_PAAS_INSTANCE }}
+          CSV_DOWNLOAD_PAAS_INSTANCE: ${{ secrets.CSV_DOWNLOAD_PAAS_INSTANCE }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
         run: |
           cf api $CF_API_ENDPOINT
@@ -248,5 +249,6 @@ jobs:
           cf set-env $APP_NAME RAILS_MASTER_KEY $RAILS_MASTER_KEY
           cf set-env $APP_NAME IMPORT_PAAS_INSTANCE $IMPORT_PAAS_INSTANCE
           cf set-env $APP_NAME EXPORT_PAAS_INSTANCE $EXPORT_PAAS_INSTANCE
+          cf set-env $APP_NAME CSV_DOWNLOAD_PAAS_INSTANCE $CSV_DOWNLOAD_PAAS_INSTANCE
           cf set-env $APP_NAME SENTRY_DSN $SENTRY_DSN
           cf push $APP_NAME --strategy rolling
