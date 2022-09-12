@@ -384,7 +384,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "includes the search on the CSV link" do
-            search_term = "test search term"
+            search_term = "foo"
             get "/logs?search=#{search_term}", headers: headers, params: {}
             expect(page).to have_link("Download (CSV)", href: "/logs/csv-download?search=#{search_term}")
           end
@@ -498,7 +498,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows the CSV download link" do
-            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download?search=")
+            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download")
           end
 
           it "does not show the organisation filter" do
@@ -738,7 +738,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
     context "when requesting CSV download" do
       let(:headers) { { "Accept" => "text/html" } }
-      let(:search_term) { "test search term" }
+      let(:search_term) { "foo" }
 
       before do
         sign_in user
