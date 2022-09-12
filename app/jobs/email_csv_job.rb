@@ -16,6 +16,6 @@ class EmailCsvJob < ApplicationJob
 
     url = storage_service.get_presigned_url(filename, EXPIRATION_TIME)
 
-    CsvDownloadMailer.new.send_email(user, url, duration)
+    CsvDownloadMailer.new.send_email(user, url, EXPIRATION_TIME)
   end
 end

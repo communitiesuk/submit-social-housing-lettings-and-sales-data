@@ -127,7 +127,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new logs download_csv].include? action_name
+    if %w[create new logs download_csv email_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found

@@ -24,7 +24,7 @@ RSpec.describe CsvDownloadMailer do
         },
       )
 
-      described_class.new.send_email(user, link, duration)
+      described_class.new.send_csv_download_mail(user, link, duration)
     end
   end
 end

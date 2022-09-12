@@ -352,26 +352,30 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when viewing logs for other organisation" do
-        before do
+        it "does not display the logs" do
           get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
         end
 
-        it "returns not found 404 from org details route" do
-          expect(response).to have_http_status(:not_found)
-        end
-
-        it "shows the 404 view" do
-          expect(page).to have_content("Page not found")
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{unauthorised_organisation.id}/logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
       context "when viewing logs for your organisation" do
-        before do
+        it "does not display the logs" do
           get "/organisations/#{organisation.id}/logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
         end
 
-        it "redirects to /logs page" do
-          expect(response).to redirect_to("/logs")
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{organisation.id}/logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
@@ -495,26 +499,30 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when viewing logs for other organisation" do
-        before do
+        it "does not display the logs" do
           get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
         end
 
-        it "returns not found 404 from org details route" do
-          expect(response).to have_http_status(:not_found)
-        end
-
-        it "shows the 404 view" do
-          expect(page).to have_content("Page not found")
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{unauthorised_organisation.id}/logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
       context "when viewing logs for your organisation" do
-        before do
+        it "does not display the logs" do
           get "/organisations/#{organisation.id}/logs", headers:, params: {}
+          expect(response).to have_http_status(:unauthorized)
         end
 
-        it "redirects to /logs page" do
-          expect(response).to redirect_to("/logs")
+        it "prevents CSV download" do
+          expect {
+            post "/organisations/#{organisation.id}/logs/email-csv", headers:, params: {}
+          }.not_to enqueue_job(EmailCsvJob)
+          expect(response).to have_http_status(:unauthorized)
         end
       end
     end
@@ -1035,7 +1043,7 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       it "has a CSV download button with the correct path" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download?search=")
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download")
       end
 
       context "when you download the CSV" do

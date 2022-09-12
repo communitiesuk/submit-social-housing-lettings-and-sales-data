@@ -3,9 +3,9 @@ class CsvDownloadMailer < NotifyMailer
 
   def send_csv_download_mail(user, link, duration)
     send_email(
-      email_address: user.email,
-      template_id: CSV_DOWNLOAD_TEMPLATE_ID,
-      personalisation: { name: user.name, link:, duration: ActiveSupport::Duration.build(duration).inspect },
+      user.email,
+      CSV_DOWNLOAD_TEMPLATE_ID,
+      { name: user.name, link:, duration: ActiveSupport::Duration.build(duration).inspect },
     )
   end
 end
