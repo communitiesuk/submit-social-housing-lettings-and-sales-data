@@ -60,7 +60,7 @@ describe EmailCsvJob do
 
       def expect_csv
         expect(storage_service).to receive(:write_file) do |_filename, data|
-          # Ignore BOM
+          # Ignore byte order marker
           csv = CSV.parse(data[1..])
           yield(csv)
         end

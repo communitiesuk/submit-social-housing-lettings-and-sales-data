@@ -8,7 +8,7 @@ module Modules::LettingsLogsFilter
     current_filters = session[:lettings_logs_filters]
     new_filters = current_filters.present? ? JSON.parse(current_filters) : {}
     current_user.lettings_logs_filters(specific_org:).each { |filter| new_filters[filter] = params[filter] if params[filter].present? }
-    @session_filters = params["organisation_select"] == "all" ? new_filters.except("organisation") : new_filters
+    params["organisation_select"] == "all" ? new_filters.except("organisation") : new_filters
   end
 
   def session_filters(specific_org: false)
