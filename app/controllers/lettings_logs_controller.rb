@@ -100,9 +100,7 @@ class LettingsLogsController < ApplicationController
     redirect_to csv_confirmation_lettings_logs_path
   end
 
-  def csv_confirmation
-    render "csv_confirmation"
-  end
+  def csv_confirmation; end
 
 private
 

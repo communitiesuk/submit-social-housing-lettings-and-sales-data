@@ -1,4 +1,4 @@
-<% content_for :title, "CSV Confirmation" %>
+<% content_for :title, "We've sending you an email" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= govuk_panel(title_text: "We're sending you an email") %>
@@ -9,7 +9,7 @@
     <p class="govuk-body">Open your email inbox and click the link to download your CSV file.</p>
 
     <p class="govuk-body">
-      <%= govuk_link_to "Return to logs", "#{request.path}/.." %>
+      <%= govuk_link_to "Return to logs", lettings_logs_path %>
     </p>
   </div>
 </div>

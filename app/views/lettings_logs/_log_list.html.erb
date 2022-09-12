@@ -1,6 +1,6 @@
 <h2 class="govuk-body">
   <%= render(SearchResultCaptionComponent.new(searched:, count: pagy.count, item_label:, total_count:, item: "logs", path: request.path)) %>
-  <%= govuk_link_to "Download (CSV)", "#{request.path}/csv-download?search=#{@search_term}", type: "text/csv" %>
+  <%= govuk_link_to "Download (CSV)", csv_download_url, type: "text/csv" %>
 </h2>
 
 <% lettings_logs.map do |log| %>
