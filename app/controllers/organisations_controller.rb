@@ -6,8 +6,8 @@ class OrganisationsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
-  before_action { session_filters(specific_org: true) if support_user? }
-  before_action :set_session_filters, if: :support_user?
+  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? }
+  before_action :set_session_filters, if: -> { current_user.support? }
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -90,33 +90,25 @@ class OrganisationsController < ApplicationController
   end
 
   def logs
-    if current_user.support?
-      organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-      unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
+    organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
 
-      respond_to do |format|
-        format.html do
-          @search_term = search_term
-          @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
-          @searched = search_term.presence
-          @total_count = organisation_logs.size
-          render "logs", layout: "application"
-        end
+    respond_to do |format|
+      format.html do
+        @search_term = search_term
+        @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = organisation_logs.size
+        render "logs", layout: "application"
       end
-    else
-      redirect_to(lettings_logs_path)
     end
   end
 
   def download_csv
-    if current_user.support?
-      organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-      unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
+    organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
 
-      render "lettings_logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
-    else
-      redirect_to(download_csv_lettings_logs_path)
-    end
+    render "lettings_logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
   end
 
   def email_csv
@@ -135,7 +127,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new].include? action_name
+    if %w[create new logs download_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found
@@ -144,9 +136,5 @@ private
 
   def find_resource
     @organisation = Organisation.find(params[:id])
-  end
-
-  def support_user?
-    current_user.support?
   end
 end
