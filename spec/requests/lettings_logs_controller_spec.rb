@@ -400,8 +400,8 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "includes the search on the CSV link" do
             search_term = "foo"
-            get "/logs?search=#{search_term}", headers: headers, params: {}
-            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download?search=#{search_term}")
+            get "/lettings-logs?search=#{search_term}", headers: headers, params: {}
+            expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download?search=#{search_term}")
           end
 
           context "when more than one results with matching postcode" do
@@ -476,7 +476,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
           it "shows a table of logs" do
             expect(CGI.unescape_html(response.body)).to match(/<article class="app-log-summary">/)
-            expect(CGI.unescape_html(response.body)).to match(/logs/)
+            expect(CGI.unescape_html(response.body)).to match(/lettings-logs/)
           end
 
           it "only shows lettings logs for your organisation" do
@@ -513,7 +513,7 @@ RSpec.describe LettingsLogsController, type: :request do
           end
 
           it "shows the CSV download link" do
-            expect(page).to have_link("Download (CSV)", href: "/logs/csv-download")
+            expect(page).to have_link("Download (CSV)", href: "/lettings-logs/csv-download")
           end
 
           it "does not show the organisation filter" do
@@ -757,7 +757,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
       before do
         sign_in user
-        get "/logs/csv-download?search=#{search_term}", headers:
+        get "/lettings-logs/csv-download?search=#{search_term}", headers:
       end
 
       it "returns http success" do
@@ -782,7 +782,7 @@ RSpec.describe LettingsLogsController, type: :request do
         end
 
         it "confirms that the user will receive an email with the requested CSV" do
-          get "/logs/csv-confirmation"
+          get "/lettings-logs/csv-confirmation"
           expect(CGI.unescape_html(response.body)).to include("We're sending you an email")
         end
       end
@@ -965,24 +965,24 @@ RSpec.describe LettingsLogsController, type: :request do
 
       it "creates an E-mail job" do
         expect {
-          post "/logs/email-csv", headers:, params: {}
+          post "/lettings-logs/email-csv", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, {}, false)
       end
 
       it "redirects to the confirmation page" do
-        post "/logs/email-csv", headers:, params: {}
+        post "/lettings-logs/email-csv", headers:, params: {}
         expect(response).to redirect_to(csv_confirmation_lettings_logs_path)
       end
 
       it "passes the search term" do
         expect {
-          post "/logs/email-csv?search=#{lettings_log.id}", headers:, params: {}
+          post "/lettings-logs/email-csv?search=#{lettings_log.id}", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, lettings_log.id.to_s, {}, false)
       end
 
       it "passes filter parameters" do
         expect {
-          post "/logs/email-csv?status[]=completed", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false)
       end
 
@@ -990,7 +990,7 @@ RSpec.describe LettingsLogsController, type: :request do
         postcode = "XX1 1TG"
 
         expect {
-          post "/logs/email-csv?status[]=completed&search=#{postcode}", headers:, params: {}
+          post "/lettings-logs/email-csv?status[]=completed&search=#{postcode}", headers:, params: {}
         }.to enqueue_job(EmailCsvJob).with(user, postcode, { "status" => %w[completed] }, false)
       end
     end
