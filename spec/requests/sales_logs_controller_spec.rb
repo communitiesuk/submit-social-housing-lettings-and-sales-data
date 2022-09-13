@@ -355,10 +355,6 @@ RSpec.describe SalesLogsController, type: :request do
             expect(page).to have_title("Logs - Submit social housing lettings and sales data (CORE) - GOV.UK")
           end
 
-          it "shows the download csv link" do
-            expect(page).to have_link("Download (CSV)", href: "/sales-logs.csv")
-          end
-
           it "does not show the organisation filter" do
             expect(page).not_to have_field("organisation-field")
           end
