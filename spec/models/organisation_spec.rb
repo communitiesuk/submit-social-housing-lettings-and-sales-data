@@ -131,6 +131,35 @@ RSpec.describe Organisation, type: :model do
     end
   end
 
+  describe "delete cascade" do
+    context "when the organisation is deleted" do
+      let!(:organisation) { FactoryBot.create(:organisation) }
+      let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+      let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
+      let!(:sales_log_to_delete) { FactoryBot.create(:sales_log, owning_organisation: user.organisation, managing_organisation: user.organisation) }
+
+      context "when organisation is deleted" do
+        it "child relationships ie logs, schemes and users are deleted too - application" do
+          organisation.destroy!
+          expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { SalesLog.find(sales_log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "child relationships ie logs, schemes and users are deleted too - database" do
+          ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
+          expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+          expect { SalesLog.find(sales_log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+  end
+
   describe "scopes" do
     before do
       FactoryBot.create(:organisation, name: "Joe Bloggs")

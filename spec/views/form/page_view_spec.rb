@@ -18,7 +18,7 @@ RSpec.describe "form/page" do
   end
 
   before do
-    assign(:lettings_log, lettings_log)
+    assign(:log, lettings_log)
     assign(:page, page)
     assign(:subsection, subsection)
     assign_attributes(page, page_attributes)

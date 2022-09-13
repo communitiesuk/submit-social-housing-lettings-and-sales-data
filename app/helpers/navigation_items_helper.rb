@@ -6,39 +6,44 @@ module NavigationItemsHelper
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
-        NavigationItem.new("Logs", lettings_logs_path, logs_current?(path)),
+        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
-      ]
+      ].compact
     elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?
       [
-        NavigationItem.new("Logs", lettings_logs_path, logs_current?(path)),
+        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-      ]
+      ].compact
     else
       [
-        NavigationItem.new("Logs", lettings_logs_path, logs_current?(path)),
+        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
-      ]
+      ].compact
     end
   end
 
   def secondary_items(path, current_organisation_id)
     if current_user.organisation.holds_own_stock?
       [
-        NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+        NavigationItem.new("Lettings Logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
+        FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-      ]
+      ].compact
     else
       [
-        NavigationItem.new("Logs", "/organisations/#{current_organisation_id}/logs", subnav_logs_path?(path)),
+        NavigationItem.new("Lettings Logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
+        FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
-      ]
+      ].compact
     end
   end
 
@@ -51,8 +56,12 @@ module NavigationItemsHelper
 
 private
 
-  def logs_current?(path)
-    path == "/logs"
+  def lettings_logs_current?(path)
+    path == "/lettings-logs"
+  end
+
+  def sales_logs_current?(path)
+    path == "/sales-logs"
   end
 
   def users_current?(path)
@@ -76,7 +85,7 @@ private
   end
 
   def subnav_logs_path?(path)
-    path.include?("/organisations") && path.include?("/logs")
+    path.include?("/organisations") && path.include?("/lettings-logs")
   end
 
   def subnav_details_path?(path)

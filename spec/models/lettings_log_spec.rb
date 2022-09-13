@@ -5,6 +5,16 @@ RSpec.describe LettingsLog do
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
 
+  it "inherits from log" do
+    expect(described_class).to be < Log
+    expect(described_class).to be < ApplicationRecord
+  end
+
+  it "is a lettings log" do
+    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    expect(lettings_log).to be_lettings
+  end
+
   describe "#form" do
     let(:lettings_log) { FactoryBot.build(:lettings_log, created_by: created_by_user) }
     let(:lettings_log_2) { FactoryBot.build(:lettings_log, startdate: Time.zone.local(2022, 1, 1), created_by: created_by_user) }
