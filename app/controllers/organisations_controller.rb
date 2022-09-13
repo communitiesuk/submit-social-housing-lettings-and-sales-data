@@ -110,7 +110,7 @@ class OrganisationsController < ApplicationController
 
   def download_csv
     organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-    unpaginated_filtered_logs = filtered_lettings_logs(organisation_logs, search_term, @session_filters)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
 
     render "lettings_logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
   end
