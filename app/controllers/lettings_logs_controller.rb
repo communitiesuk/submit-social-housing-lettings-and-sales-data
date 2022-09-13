@@ -7,22 +7,19 @@ class LettingsLogsController < ApplicationController
   before_action :authenticate, if: :json_api_request?
   before_action :authenticate_user!, unless: :json_api_request?
   before_action :find_resource, except: %i[create index edit]
+  before_action :session_filters, if: :current_user
+  before_action :set_session_filters, if: :current_user
 
   def index
-    set_session_filters
-
-    all_logs = current_user.lettings_logs
-    unpaginated_filtered_logs = filtered_lettings_logs(filtered_collection(all_logs, search_term))
-
     respond_to do |format|
       format.html do
+        all_logs = current_user.lettings_logs
+        unpaginated_filtered_logs = filtered_lettings_logs(all_logs, search_term, @session_filters)
+
+        @search_term = search_term
         @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
         @searched = search_term.presence
         @total_count = all_logs.size
-      end
-
-      format.csv do
-        send_data byte_order_mark + unpaginated_filtered_logs.to_csv(current_user), filename: "logs-#{Time.zone.now}.csv"
       end
     end
   end
@@ -90,6 +87,20 @@ class LettingsLogsController < ApplicationController
       render_not_found_json("Log", params[:id])
     end
   end
+
+  def download_csv
+    unpaginated_filtered_logs = filtered_lettings_logs(current_user.lettings_logs, search_term, @session_filters)
+
+    render "download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: email_csv_lettings_logs_path }
+  end
+
+  def email_csv
+    all_orgs = params["organisation_select"] == "all"
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, all_orgs)
+    redirect_to csv_confirmation_lettings_logs_path
+  end
+
+  def csv_confirmation; end
 
 private
 
