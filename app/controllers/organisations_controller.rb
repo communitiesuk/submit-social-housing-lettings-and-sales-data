@@ -101,10 +101,6 @@ class OrganisationsController < ApplicationController
         @total_count = organisation_logs.size
         render "logs", layout: "application"
       end
-
-      format.csv do
-        send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "lettings-logs-#{@organisation.name}-#{Time.zone.now}.csv"
-      end
     end
   end
 
@@ -112,7 +108,7 @@ class OrganisationsController < ApplicationController
     organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
     unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
 
-    render "lettings_logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
   end
 
   def email_csv
@@ -150,7 +146,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new logs download_csv email_csv].include? action_name
+    if %w[create new lettings_logs download_csv email_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found

@@ -520,7 +520,7 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "prevents CSV download" do
           expect {
-            post "/organisations/#{organisation.id}/lettings-logs/email-csv", headers:, params: {}
+            post "/organisations/#{organisation.id}/logs/email-csv", headers:, params: {}
           }.not_to enqueue_job(EmailCsvJob)
           expect(response).to have_http_status(:unauthorized)
         end
