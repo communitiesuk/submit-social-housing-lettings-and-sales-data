@@ -32,7 +32,7 @@
       <%= f.govuk_submit "Save and return to log" do %>
         <% next_incomplete_section_redirect_path = @log.form.next_incomplete_section_redirect_path(subsection, @log) %>
         <% if @log.status == "in_progress" && next_incomplete_section_redirect_path != "error" %>
-          <%= govuk_button_link_to "Save and go to next incomplete section", send(next_incomplete_section_path(@log,next_incomplete_section_redirect_path), @log), secondary: true %>
+          <%= govuk_button_link_to "Save and go to next incomplete section", send(next_incomplete_section_path(@log, next_incomplete_section_redirect_path), @log), secondary: true %>
         <% end %>
       <% end %>
     <% end %>
