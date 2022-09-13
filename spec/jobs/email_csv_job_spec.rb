@@ -35,7 +35,7 @@ describe EmailCsvJob do
       allow(storage_service).to receive(:get_presigned_url).and_return(test_url)
 
       allow(CsvDownloadMailer).to receive(:new).and_return(mailer)
-      allow(mailer).to receive(:send_email)
+      allow(mailer).to receive(:send_csv_download_mail)
     end
 
     it "uses an appropriate filename in S3" do
@@ -49,7 +49,7 @@ describe EmailCsvJob do
     end
 
     it "sends an E-mail with the presigned URL and duration" do
-      expect(mailer).to receive(:send_email).with(user, test_url, instance_of(Integer))
+      expect(mailer).to receive(:send_csv_download_mail).with(user, test_url, instance_of(Integer))
       job.perform(user)
     end
 
