@@ -254,6 +254,39 @@ RSpec.describe "User Features" do
           end
         end
       end
+
+      describe "delete cascade" do
+        context "when the organisation is deleted" do
+          let!(:organisation) { FactoryBot.create(:organisation) }
+          let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+          let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+          let!(:log_to_delete) { FactoryBot.create(:lettings_log, owning_organisation: user.organisation) }
+
+          context "when organisation is deleted" do
+            it "child relationships ie logs, schemes and users are deleted too - application" do
+              organisation.destroy!
+              expect { organisation.reload }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+              expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+            end
+
+            context "when the organisation is deleted" do
+              let!(:organisation) { FactoryBot.create(:organisation) }
+              let!(:user) { FactoryBot.create(:user, :support, last_sign_in_at: Time.zone.now, organisation:) }
+              let!(:scheme_to_delete) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+              let!(:log_to_delete) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1, owning_organisation: user.organisation) }
+
+              it "child relationships ie logs, schemes and users are deleted too - database" do
+                ActiveRecord::Base.connection.exec_query("DELETE FROM organisations WHERE id = #{organisation.id};")
+                expect { LettingsLog.find(log_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                expect { Scheme.find(scheme_to_delete.id) }.to raise_error(ActiveRecord::RecordNotFound)
+                expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+              end
+            end
+          end
+        end
+      end
     end
   end
 end
