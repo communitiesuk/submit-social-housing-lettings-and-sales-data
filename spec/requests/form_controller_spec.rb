@@ -5,13 +5,6 @@ RSpec.describe FormController, type: :request do
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   let(:other_organisation) { FactoryBot.create(:organisation) }
-  let!(:lettings_log) do
-    FactoryBot.create(
-      :lettings_log,
-      owning_organisation: organisation,
-      managing_organisation: organisation,
-    )
-  end
   let!(:unauthorized_lettings_log) do
     FactoryBot.create(
       :lettings_log,
@@ -38,12 +31,21 @@ RSpec.describe FormController, type: :request do
     )
   end
   let(:headers) { { "Accept" => "text/html" } }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
   before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   context "when a user is not signed in" do
+    let!(:lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
+
     describe "GET" do
       it "does not let you get lettings logs pages you don't have access to" do
         get "/lettings-logs/#{lettings_log.id}/person-1-age", headers: headers, params: {}
@@ -65,6 +67,14 @@ RSpec.describe FormController, type: :request do
   end
 
   context "when a user is signed in" do
+    let!(:lettings_log) do
+      FactoryBot.create(
+        :lettings_log,
+        owning_organisation: organisation,
+        managing_organisation: organisation,
+      )
+    end
+
     before do
       allow(user).to receive(:need_two_factor_authentication?).and_return(false)
       sign_in user

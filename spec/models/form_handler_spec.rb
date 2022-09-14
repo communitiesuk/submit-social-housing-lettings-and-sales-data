@@ -32,17 +32,11 @@ RSpec.describe FormHandler do
     it "is able to load all the forms" do
       all_forms = form_handler.forms
       expect(all_forms.count).to be >= 1
-      expect(all_forms[test_form_name]["form"]).to be_a(Form)
+      expect(all_forms["current_sales"]["form"]).to be_a(Form)
     end
   end
 
   describe "Get specific form" do
-    it "is able to load a specific form" do
-      form = form_handler.get_form(test_form_name)
-      expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(45)
-    end
-
     it "is able to load a current lettings form" do
       form = form_handler.get_form("current_lettings")
       expect(form).to be_a(Form)
@@ -80,12 +74,8 @@ RSpec.describe FormHandler do
 
   it "loads the form once at boot time" do
     form_handler = described_class.instance
-    expect(Form).not_to receive(:new).with(:any, test_form_name)
-    expect(form_handler.get_form(test_form_name)).to be_a(Form)
-  end
-
-  it "can get a saleslog form" do
-    expect(form_handler.get_form("2022_2023_sales")).to be_a(Form)
+    expect(Form).not_to receive(:new).with(:any, "current_sales")
+    expect(form_handler.get_form("current_sales")).to be_a(Form)
   end
 
   it "keeps track of form type and start year" do

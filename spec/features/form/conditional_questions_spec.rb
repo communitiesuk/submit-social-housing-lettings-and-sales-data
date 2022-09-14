@@ -13,10 +13,11 @@ RSpec.describe "Form Conditional Questions" do
     )
   end
   let(:id) { lettings_log.id }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
   before do
     sign_in user
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   context "with a page where some questions are only conditionally shown, depending on how you answer the first question" do

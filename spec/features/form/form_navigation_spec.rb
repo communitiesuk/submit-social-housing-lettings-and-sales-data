@@ -32,10 +32,11 @@ RSpec.describe "Form Navigation" do
       hhmemb: { type: "numeric", answer: 1, path: "household-number-of-members" },
     }
   end
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
   before do
     sign_in user
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   describe "Create a new lettings log" do

@@ -22,8 +22,7 @@ class FormHandler
     sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
     current_form = Form.new(nil, "#{current_collection_start_year}_#{current_collection_start_year + 1}_sales", sales_sections, "sales")
     previous_form = Form.new(nil, "#{current_collection_start_year - 1}_#{current_collection_start_year}_sales", sales_sections, "sales")
-    { "2022_2023_sales" => { "form" => Form.new(nil, "2022_2023_sales", sales_sections, "sales"), "type" => "sales" },
-      "current_sales" => { "form" => current_form, "type" => "sales", "start_year" => current_form.start_date.year },
+    { "current_sales" => { "form" => current_form, "type" => "sales", "start_year" => current_form.start_date.year },
       "previous_sales" => { "form" => previous_form, "type" => "sales", "start_year" => previous_form.start_date.year } }
   end
 
@@ -34,7 +33,6 @@ class FormHandler
         form_name = File.basename(form_path, ".json")
         form = Form.new(form_path, form_name)
         lettings_form_definition = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
-        forms[form_name] = lettings_form_definition
 
         form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }
         form_to_set = form_mappings[current_collection_start_year - form.start_date.year]

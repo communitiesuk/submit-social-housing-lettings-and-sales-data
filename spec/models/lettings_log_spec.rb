@@ -4,9 +4,10 @@ RSpec.describe LettingsLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
   before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   it "inherits from log" do

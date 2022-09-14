@@ -5,9 +5,10 @@ RSpec.describe Validations::HouseholdValidations do
 
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
   before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   describe "reasonable preference validations" do
