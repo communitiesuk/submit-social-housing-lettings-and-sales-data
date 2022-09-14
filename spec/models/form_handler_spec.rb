@@ -3,6 +3,32 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:test_form_name) { "2021_2022" }
 
+  before { Singleton.__init__(described_class) }
+
+  context "when accessing a form in a different year" do
+    before do
+      Timecop.freeze(Time.utc(2021, 8, 3))
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    it "is able to load a current lettings form" do
+      form_handler = described_class.instance
+      form = form_handler.get_form("current_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(45)
+    end
+
+    it "is able to load a next lettings form" do
+      form_handler = described_class.instance
+      form = form_handler.get_form("next_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(12)
+    end
+  end
+
   describe "Get all forms" do
     it "is able to load all the forms" do
       form_handler = described_class.instance
@@ -16,6 +42,20 @@ RSpec.describe FormHandler do
     it "is able to load a specific form" do
       form_handler = described_class.instance
       form = form_handler.get_form(test_form_name)
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(45)
+    end
+
+    it "is able to load a current lettings form" do
+      form_handler = described_class.instance
+      form = form_handler.get_form("current_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(12)
+    end
+
+    it "is able to load a previous lettings form" do
+      form_handler = described_class.instance
+      form = form_handler.get_form("previous_lettings")
       expect(form).to be_a(Form)
       expect(form.pages.count).to eq(45)
     end
