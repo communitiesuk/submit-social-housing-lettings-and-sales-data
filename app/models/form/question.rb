@@ -63,7 +63,7 @@ class Form::Question
       if question.present?
         question.label_from_value(log[question_id])
       else
-        Array(question_id.to_s.split(".")).inject(log) { |log, method| log.present? ? log.public_send(*method) : "" }
+        Array(question_id.to_s.split(".")).inject(log) { |l, method| l.present? ? l.public_send(*method) : "" }
       end
     end
   end
