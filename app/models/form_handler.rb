@@ -33,14 +33,12 @@ class FormHandler
       Dir.glob("#{directory}/*.json").each do |form_path|
         form_name = File.basename(form_path, ".json")
         form = Form.new(form_path, form_name)
-        forms[form_name] = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
-        if form.start_date.year + 1 == current_collection_start_year && forms["previous_lettings"].blank?
-          forms["previous_lettings"] = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
-        elsif form.start_date.year == current_collection_start_year && forms["current_lettings"].blank?
-          forms["current_lettings"] = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
-        elsif form.start_date.year - 1 == current_collection_start_year && forms["next_lettings"].blank?
-          forms["next_lettings"] = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
-        end
+        lettings_form_definition = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
+        forms[form_name] = lettings_form_definition
+
+        form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }
+        form_to_set = form_mappings[current_collection_start_year - form.start_date.year]
+        forms[form_to_set] = lettings_form_definition if forms[form_to_set].blank?
       end
     end
     forms
