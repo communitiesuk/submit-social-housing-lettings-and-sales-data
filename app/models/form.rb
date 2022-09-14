@@ -155,6 +155,30 @@ class Form
     questions.reject { |q| q.page.routed_to?(log, current_user) || q.derived? || callback_questions.include?(q.id) } || []
   end
 
+  def reset_not_routed_questions(log)
+    enabled_questions = enabled_page_questions(log)
+    enabled_question_ids = enabled_questions.map(&:id)
+
+    invalidated_page_questions(log).each do |question|
+      if %w[radio checkbox].include?(question.type)
+        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
+        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(log.public_send(question.id).to_s) : false
+        if !current_answer_option_valid && log.respond_to?(question.id.to_s)
+          Rails.logger.debug("Cleared #{question.id} value")
+          log.public_send("#{question.id}=", nil)
+        else
+          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
+            Rails.logger.debug("Cleared #{invalid_answer_option} value")
+            log.public_send("#{invalid_answer_option}=", nil) if log.respond_to?(invalid_answer_option)
+          end
+        end
+      else
+        Rails.logger.debug("Cleared #{question.id} value")
+        log.public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
+      end
+    end
+  end
+
   def enabled_page_questions(log)
     questions - invalidated_page_questions(log)
   end
