@@ -11,7 +11,7 @@ class EmailCsvJob < ApplicationJob
 
     filename = organisation.present? ? "logs-#{organisation.name}-#{Time.zone.now}.csv" : "logs-#{Time.zone.now}.csv"
 
-    storage_service = Storage::S3Service.new(Configuration::PaasConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
+    storage_service = Storage::S3Service.new(Configuration::EnvConfigurationService.new, ENV["CSV_DOWNLOAD_PAAS_INSTANCE"])
     storage_service.write_file(filename, BYTE_ORDER_MARK + filtered_logs.to_csv(user))
 
     url = storage_service.get_presigned_url(filename, EXPIRATION_TIME)
