@@ -16,7 +16,10 @@ class FormHandler
 
   def sales_forms
     sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
-    { "2022_2023_sales" => Form.new(nil, "2022_2023_sales", sales_sections, "sales") }
+    { "2022_2023_sales" => Form.new(nil, "2022_2023_sales", sales_sections, "sales"),
+      "current_sales" => Form.new(nil, "#{current_collection_start_year}_#{current_collection_start_year + 1}_sales", sales_sections, "sales"),
+      "previous_sales" => Form.new(nil, "#{current_collection_start_year - 1}_#{current_collection_start_year}_sales", sales_sections, "sales"),
+      "next_sales" => Form.new(nil, "#{current_collection_start_year + 1}_#{current_collection_start_year + 2}_sales", sales_sections, "sales") }
   end
 
   def lettings_forms
