@@ -17,40 +17,40 @@ class Form::Subsection
     @questions ||= pages.flat_map(&:questions)
   end
 
-  def enabled?(lettings_log)
+  def enabled?(log)
     return true unless depends_on
 
     depends_on.any? do |conditions_set|
       conditions_set.all? do |subsection_id, dependent_status|
-        form.get_subsection(subsection_id).status(lettings_log) == dependent_status.to_sym
+        form.get_subsection(subsection_id).status(log) == dependent_status.to_sym
       end
     end
   end
 
-  def status(lettings_log)
-    unless enabled?(lettings_log)
+  def status(log)
+    unless enabled?(log)
       return :cannot_start_yet
     end
 
-    qs = applicable_questions(lettings_log)
-    qs_optional_removed = qs.reject { |q| lettings_log.optional_fields.include?(q.id) }
-    return :not_started if qs.count.positive? && qs.all? { |question| lettings_log[question.id].blank? || question.read_only? || question.derived? }
-    return :completed if qs_optional_removed.all? { |question| question.completed?(lettings_log) }
+    qs = applicable_questions(log)
+    qs_optional_removed = qs.reject { |q| log.optional_fields.include?(q.id) }
+    return :not_started if qs.count.positive? && qs.all? { |question| log[question.id].blank? || question.read_only? || question.derived? }
+    return :completed if qs_optional_removed.all? { |question| question.completed?(log) }
 
     :in_progress
   end
 
-  def is_incomplete?(lettings_log)
-    %i[not_started in_progress].include?(status(lettings_log))
+  def is_incomplete?(log)
+    %i[not_started in_progress].include?(status(log))
   end
 
-  def is_started?(lettings_log)
-    %i[in_progress completed].include?(status(lettings_log))
+  def is_started?(log)
+    %i[in_progress completed].include?(status(log))
   end
 
-  def applicable_questions(lettings_log)
+  def applicable_questions(log)
     questions.select do |q|
-      (q.displayed_to_user?(lettings_log) && !q.derived?) || q.has_inferred_check_answers_value?(lettings_log)
+      (q.displayed_to_user?(log) && !q.derived?) || q.has_inferred_check_answers_value?(log)
     end
   end
 end

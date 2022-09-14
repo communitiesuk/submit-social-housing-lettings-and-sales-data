@@ -19,10 +19,10 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     end
   end
 
-  def displayed_answer_options(lettings_log)
-    return answer_options unless lettings_log.owning_organisation
+  def displayed_answer_options(log)
+    return answer_options unless log.owning_organisation
 
-    user_ids = lettings_log.owning_organisation.users.pluck(:id) + [""]
+    user_ids = log.owning_organisation.users.pluck(:id) + [""]
     answer_options.select { |k, _v| user_ids.include?(k) }
   end
 
@@ -32,7 +32,7 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
     answer_options[value]
   end
 
-  def hidden_in_check_answers?(_lettings_log, current_user)
+  def hidden_in_check_answers?(_log, current_user)
     !current_user.support?
   end
 
@@ -42,7 +42,7 @@ class Form::Setup::Questions::CreatedById < ::Form::Question
 
 private
 
-  def selected_answer_option_is_derived?(_lettings_log)
+  def selected_answer_option_is_derived?(_log)
     false
   end
 end
