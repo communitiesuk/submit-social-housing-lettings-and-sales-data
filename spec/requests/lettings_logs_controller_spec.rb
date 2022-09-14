@@ -783,7 +783,7 @@ RSpec.describe LettingsLogsController, type: :request do
 
         it "confirms that the user will receive an email with the requested CSV" do
           get "/lettings-logs/csv-confirmation"
-          expect(CGI.unescape_html(response.body)).to include("We're sending you an email")
+          expect(CGI.unescape_html(response.body)).to include("We’re sending you an email")
         end
       end
     end
