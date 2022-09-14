@@ -44,13 +44,13 @@ class FormHandler
     forms
   end
 
-private
-
   def current_collection_start_year
     today = Time.zone.now
     window_end_date = Time.zone.local(today.year, 4, 1)
     today < window_end_date ? today.year - 1 : today.year
   end
+
+private
 
   def get_all_forms
     lettings_forms.merge(sales_forms)

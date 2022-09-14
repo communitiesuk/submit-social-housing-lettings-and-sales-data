@@ -35,8 +35,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     FactoryBot.create(:location, old_visible_id: 10, postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W")
 
     # Stub the form handler to use the real form
-    allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
-    allow(FormHandler.instance).to receive(:get_form).with("2022_2023").and_return(real_2022_2023_form)
+    allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
   end
 
   context "when importing lettings logs" do
