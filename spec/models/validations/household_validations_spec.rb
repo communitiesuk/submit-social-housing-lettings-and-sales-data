@@ -6,6 +6,10 @@ RSpec.describe Validations::HouseholdValidations do
   let(:validator_class) { Class.new { include Validations::HouseholdValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   describe "reasonable preference validations" do
     context "when reasonable preference is homeless" do
       context "when the tenant was not previously homeless" do

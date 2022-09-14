@@ -27,7 +27,7 @@ class SalesLog < Log
   end
 
   def form
-    FormHandler.instance.get_form(form_name) || FormHandler.instance.get_form("2022_2023_sales")
+    FormHandler.instance.get_form(form_name) || FormHandler.instance.current_sales_form
   end
 
   def optional_fields

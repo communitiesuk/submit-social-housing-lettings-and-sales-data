@@ -4,6 +4,7 @@ require_relative "helpers"
 RSpec.describe "validations" do
   before do
     sign_in user
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
   end
 
   include Helpers

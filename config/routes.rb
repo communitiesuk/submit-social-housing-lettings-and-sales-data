@@ -93,11 +93,11 @@ Rails.application.routes.draw do
     end
 
     FormHandler.instance.lettings_forms.each do |_key, form|
-      form.pages.map do |page|
+      form["form"].pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
       end
 
-      form.subsections.map do |subsection|
+      form["form"].subsections.map do |subsection|
         get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
       end
     end
@@ -105,11 +105,11 @@ Rails.application.routes.draw do
 
   resources :sales_logs, path: "/sales-logs" do
     FormHandler.instance.sales_forms.each do |_key, form|
-      form.pages.map do |page|
+      form["form"].pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"
       end
 
-      form.subsections.map do |subsection|
+      form["form"].subsections.map do |subsection|
         get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
       end
     end

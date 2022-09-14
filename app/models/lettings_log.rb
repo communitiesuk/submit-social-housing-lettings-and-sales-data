@@ -55,7 +55,7 @@ class LettingsLog < Log
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
 
   def form
-    FormHandler.instance.get_form(form_name) || FormHandler.instance.forms.first.second
+    FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
   end
 
   def recalculate_start_year!

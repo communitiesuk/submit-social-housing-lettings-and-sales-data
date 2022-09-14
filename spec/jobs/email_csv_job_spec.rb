@@ -10,6 +10,10 @@ describe EmailCsvJob do
   let(:organisation) { user.organisation }
   let(:other_organisation) { FactoryBot.create(:organisation) }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   context "when a log exists" do
     let!(:lettings_log) do
       FactoryBot.create(

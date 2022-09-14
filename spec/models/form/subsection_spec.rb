@@ -14,6 +14,7 @@ RSpec.describe Form::Subsection, type: :model do
 
   before do
     RequestHelper.stub_http_requests
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
   end
 
   it "has an id" do

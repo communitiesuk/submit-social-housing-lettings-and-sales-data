@@ -5,6 +5,10 @@ RSpec.describe QuestionAttributeHelper do
   let(:form) { lettings_log.form }
   let(:questions) { form.get_page("rent").questions }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   describe "html attributes" do
     it "returns empty hash if fields-to-add or result-field are empty " do
       question = form.get_page("weekly_net_income").questions.find { |q| q.id == "earnings" }

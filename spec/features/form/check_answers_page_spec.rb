@@ -42,6 +42,7 @@ RSpec.describe "Form Check Answers Page" do
 
   before do
     sign_in user
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
   end
 
   context "when the user needs to check their answers for a subsection" do

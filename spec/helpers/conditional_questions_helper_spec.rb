@@ -4,6 +4,10 @@ RSpec.describe ConditionalQuestionsHelper do
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:page) { lettings_log.form.get_page("armed_forces") }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   describe "conditional questions for page" do
     let(:conditional_pages) { %w[leftreg] }
 

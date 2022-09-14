@@ -39,6 +39,10 @@ RSpec.describe FormController, type: :request do
   end
   let(:headers) { { "Accept" => "text/html" } }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   context "when a user is not signed in" do
     describe "GET" do
       it "does not let you get lettings logs pages you don't have access to" do

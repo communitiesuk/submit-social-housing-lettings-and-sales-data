@@ -8,6 +8,10 @@ RSpec.describe Form::Section, type: :model do
   let(:section_id) { "household" }
   let(:section_definition) { form.form_definition["sections"][section_id] }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   it "has an id" do
     expect(section.id).to eq(section_id)
   end

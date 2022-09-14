@@ -17,6 +17,10 @@ RSpec.describe Form::Question, type: :model do
   let(:question_id) { "earnings" }
   let(:question_definition) { page_definition["questions"][question_id] }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   it "has an id" do
     expect(question.id).to eq(question_id)
   end

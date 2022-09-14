@@ -5,7 +5,7 @@ RSpec.describe RentPeriod, type: :model do
     let(:form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
 
     before do
-      allow(FormHandler.instance).to receive(:current_form).and_return(form)
+      allow(FormHandler.instance).to receive(:current_lettings_form).and_return(form)
     end
 
     it "maps rent period id to display names" do

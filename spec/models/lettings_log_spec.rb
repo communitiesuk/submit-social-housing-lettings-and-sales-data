@@ -5,6 +5,10 @@ RSpec.describe LettingsLog do
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
 
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(FormHandler.instance.forms["2021_2022"]["form"])
+  end
+
   it "inherits from log" do
     expect(described_class).to be < Log
     expect(described_class).to be < ApplicationRecord
