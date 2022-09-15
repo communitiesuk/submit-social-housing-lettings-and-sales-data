@@ -71,6 +71,84 @@ RSpec.describe FormHandler do
     end
   end
 
+  describe "Current collection start year" do
+    context "when the date is after 1st of April" do
+      before do
+        Timecop.freeze(Time.utc(2022, 8, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "returns the same year as the the current start year" do
+        expect(form_handler.current_collection_start_year).to eq(2022)
+      end
+
+      it "returns the correct current lettings form name" do
+        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("current_lettings")
+      end
+
+      it "returns the correct previous lettings form name" do
+        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("previous_lettings")
+      end
+
+      it "returns the correct next lettings form name" do
+        expect(form_handler.form_name_from_start_year(2023, "lettings")).to eq("next_lettings")
+      end
+
+      it "returns the correct current sales form name" do
+        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("current_sales")
+      end
+
+      it "returns the correct previous sales form name" do
+        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("previous_sales")
+      end
+
+      it "returns the correct next sales form name" do
+        expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("next_sales")
+      end
+    end
+
+    context "with the date before 1st of April" do
+      before do
+        Timecop.freeze(Time.utc(2022, 2, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "returns the previous year as the current start year" do
+        expect(form_handler.current_collection_start_year).to eq(2021)
+      end
+
+      it "returns the correct current lettings form name" do
+        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("current_lettings")
+      end
+
+      it "returns the correct previous lettings form name" do
+        expect(form_handler.form_name_from_start_year(2020, "lettings")).to eq("previous_lettings")
+      end
+
+      it "returns the correct next lettings form name" do
+        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("next_lettings")
+      end
+
+      it "returns the correct current sales form name" do
+        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("current_sales")
+      end
+
+      it "returns the correct previous sales form name" do
+        expect(form_handler.form_name_from_start_year(2020, "sales")).to eq("previous_sales")
+      end
+
+      it "returns the correct next sales form name" do
+        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("next_sales")
+      end
+    end
+  end
+
   it "loads the form once at boot time" do
     form_handler = described_class.instance
     expect(Form).not_to receive(:new).with(:any, "current_sales")

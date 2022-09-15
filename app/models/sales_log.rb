@@ -21,7 +21,7 @@ class SalesLog < Log
   end
 
   def form_name
-    return unless startdate
+    return unless saledate
 
     FormHandler.instance.form_name_from_start_year(collection_start_year, "sales")
   end
