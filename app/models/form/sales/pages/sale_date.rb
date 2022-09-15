@@ -1,7 +1,7 @@
 class Form::Sales::Pages::SaleDate < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "sale_date"
+    @id = "completion_date"
     @header = ""
     @description = ""
     @subsection = subsection
