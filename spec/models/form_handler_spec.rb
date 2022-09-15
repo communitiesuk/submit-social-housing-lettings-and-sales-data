@@ -3,15 +3,15 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
 
-  before { Singleton.__init__(described_class) } # reload FormHandler Instance to update form definitions between runs
-
   context "when accessing a form in a different year" do
     before do
       Timecop.freeze(Time.utc(2021, 8, 3))
+      Singleton.__init__(described_class)
     end
 
     after do
       Timecop.unfreeze
+      Singleton.__init__(described_class) # reload FormHandler Instance to update form definitions between runs
     end
 
     it "is able to load a current lettings form" do
