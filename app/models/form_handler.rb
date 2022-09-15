@@ -7,7 +7,7 @@ class FormHandler
   end
 
   def get_form(form)
-    @forms[form].present? ? @forms[form]["form"] : nil
+    @forms[form]["form"] if @forms[form].present?
   end
 
   def current_lettings_form
