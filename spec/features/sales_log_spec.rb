@@ -32,6 +32,37 @@ RSpec.describe "Sales Log Features" do
           expect(page).to have_current_path("/sales-logs")
         end
       end
+
+      context "when completing the setup sales log section" do
+        it "includes the purchaser code and sale completion date questions" do
+          visit("/sales-logs")
+          click_button("Create a new sales log")
+          click_link("Set up this sales log")
+          fill_in("sales_log[purchid]", with: "PC123")
+          click_button("Save and continue")
+          fill_in("sales_log[saledate(1i)]", with: "2022")
+          fill_in("sales_log[saledate(2i)]", with: "08")
+          fill_in("sales_log[saledate(3i)]", with: "10")
+          click_button("Save and continue")
+          log_id = page.current_path.scan(/\d/).join
+          visit("sales-logs/#{log_id}/setup/check-answers")
+          expect(page).to have_content("Purchaser code")
+          expect(page).to have_content("PC123")
+          expect(page).to have_content("Sale completion date")
+          expect(page).to have_content("2022")
+        end
+      end
+
+      context "when the sales log feature flag is toggled" do
+        before do
+          allow(Rails.env).to receive(:production?).and_return(true)
+        end
+
+        it "hides the create sales log button in production" do
+          visit("/sales-logs")
+          expect(page).not_to have_content("Create a new sales log")
+        end
+      end
     end
   end
 end

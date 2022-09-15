@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Setup::Subsections::Setup, type: :model do
 
   it "has correct pages" do
     expect(setup.pages.map(&:id)).to eq(
-      %w[sale_date],
+      %w[purchaser_code sale_date],
     )
   end
 
