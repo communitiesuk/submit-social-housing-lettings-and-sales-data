@@ -3,12 +3,10 @@ class Form
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
 
-  include Form::Setup
-
   def initialize(form_path, name, sections_in_form = [], type = "lettings")
     if type == "sales"
       @name = name
-      @setup_sections = [Form::Sales::Setup::Sections::Setup.new(nil, nil, self)]
+      @setup_sections = [Form::Sales::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = "sales"
       @sections = setup_sections + form_sections
@@ -27,7 +25,7 @@ class Form
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
       @name = name
-      @setup_sections = [Form::Setup::Sections::Setup.new(nil, nil, self)]
+      @setup_sections = [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_definition = JSON.parse(File.open(form_path).read)
       @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
       @type = form_definition["form_type"]
