@@ -7,23 +7,23 @@ class FormHandler
   end
 
   def get_form(form)
-    @forms[form]["form"] if @forms[form].present?
+    @forms[form]
   end
 
   def current_lettings_form
-    forms["current_lettings"]["form"]
+    forms["current_lettings"]
   end
 
   def current_sales_form
-    forms["current_sales"]["form"]
+    forms["current_sales"]
   end
 
   def sales_forms
     sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
     previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
-    { "current_sales" => { "form" => current_form, "type" => "sales", "start_year" => current_form.start_date.year },
-      "previous_sales" => { "form" => previous_form, "type" => "sales", "start_year" => previous_form.start_date.year } }
+    { "current_sales" => current_form,
+      "previous_sales" => previous_form }
   end
 
   def lettings_forms
@@ -31,10 +31,9 @@ class FormHandler
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
         form = Form.new(form_path)
-        lettings_form_definition = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
 
         form_to_set = form_name_from_start_year(form.start_date.year, "lettings")
-        forms[form_to_set] = lettings_form_definition if forms[form_to_set].blank?
+        forms[form_to_set] = form if forms[form_to_set].blank?
       end
     end
     forms

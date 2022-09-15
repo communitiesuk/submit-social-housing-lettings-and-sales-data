@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
 
-  before { Singleton.__init__(described_class) } #reload FormHandler Instance to update form definitions between runs
+  before { Singleton.__init__(described_class) } # reload FormHandler Instance to update form definitions between runs
 
   context "when accessing a form in a different year" do
     before do
@@ -31,7 +31,7 @@ RSpec.describe FormHandler do
     it "is able to load all the forms" do
       all_forms = form_handler.forms
       expect(all_forms.count).to be >= 1
-      expect(all_forms["current_sales"]["form"]).to be_a(Form)
+      expect(all_forms["current_sales"]).to be_a(Form)
     end
   end
 
@@ -155,9 +155,9 @@ RSpec.describe FormHandler do
     expect(form_handler.get_form("current_sales")).to be_a(Form)
   end
 
-  it "keeps track of form type and start year" do
+  it "correctly sets form type and start year" do
     form = form_handler.forms["current_lettings"]
-    expect(form["type"]).to eq("lettings")
-    expect(form["start_year"]).to eq(2022)
+    expect(form.type).to eq("lettings")
+    expect(form.start_date.year).to eq(2022)
   end
 end
