@@ -5,7 +5,6 @@ class Form
 
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
-      @name = "#{start_year}_#{start_year + 1}_sales"
       @setup_sections = [Form::Sales::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = "sales"
@@ -34,8 +33,8 @@ class Form
       @questions = pages.flat_map(&:questions)
       @start_date = Time.iso8601(form_definition["start_date"])
       @end_date = Time.iso8601(form_definition["end_date"])
-      @name = "#{start_date.year}_#{end_date.year}"
     end
+    @name = "#{start_date.year}_#{end_date.year}_#{type}"
   end
 
   def get_subsection(id)
