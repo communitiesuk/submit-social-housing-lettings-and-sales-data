@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
 
-  before { Singleton.__init__(described_class) }
+  before { Singleton.__init__(described_class) } #reload FormHandler Instance to update form definitions between runs
 
   context "when accessing a form in a different year" do
     before do
