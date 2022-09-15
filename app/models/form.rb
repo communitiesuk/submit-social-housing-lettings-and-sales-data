@@ -5,7 +5,7 @@ class Form
 
   include Form::Setup
 
-  def initialize(form_path, name, sections_in_form = [], type = "lettings")
+  def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
       @name = "#{start_year}_#{start_year + 1}_sales"
       @setup_sections = [Form::Sales::Sections::Setup.new(nil, nil, self)]
