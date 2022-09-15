@@ -3,8 +3,6 @@ class Form
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
 
-  include Form::Setup
-
   def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
       @name = "#{start_year}_#{start_year + 1}_sales"
