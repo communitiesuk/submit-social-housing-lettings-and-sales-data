@@ -23,8 +23,7 @@ class SalesLog < Log
   def form_name
     return unless startdate
 
-    form_mappings = { 0 => "current_sales", 1 => "previous_sales", -1 => "next_sales" }
-    form_mappings[FormHandler.instance.current_collection_start_year - collection_start_year] if collection_start_year.present?
+    FormHandler.instance.form_name_from_start_year(collection_start_year, "sales")
   end
 
   def form

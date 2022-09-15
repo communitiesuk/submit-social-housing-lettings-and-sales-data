@@ -53,8 +53,7 @@ module Csv
       downloaded_form_years = LettingsLog.all.map(&:collection_start_year).uniq.compact
 
       if downloaded_form_years.count == 1 && downloaded_form_years[0].present?
-        form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }
-        form_name = form_mappings[FormHandler.instance.current_collection_start_year - downloaded_form_years[0]]
+        form_name = FormHandler.instance.form_name_from_start_year(downloaded_form_years[0], "lettings")
         downloaded_form_fields = FormHandler.instance.get_form(form_name).questions
       else
         downloaded_form_fields = FormHandler.instance.current_lettings_form.questions

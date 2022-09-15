@@ -66,8 +66,7 @@ class LettingsLog < Log
   def form_name
     return unless startdate
 
-    form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }
-    form_mappings[FormHandler.instance.current_collection_start_year - collection_start_year] if collection_start_year.present?
+    FormHandler.instance.form_name_from_start_year(collection_start_year, "lettings")
   end
 
   def self.editable_fields

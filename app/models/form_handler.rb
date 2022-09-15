@@ -33,8 +33,7 @@ class FormHandler
         form = Form.new(form_path)
         lettings_form_definition = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
 
-        form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }
-        form_to_set = form_mappings[current_collection_start_year - form.start_date.year]
+        form_to_set = form_name_from_start_year(form.start_date.year, "lettings")
         forms[form_to_set] = lettings_form_definition if forms[form_to_set].blank?
       end
     end
@@ -45,6 +44,11 @@ class FormHandler
     today = Time.zone.now
     window_end_date = Time.zone.local(today.year, 4, 1)
     today < window_end_date ? today.year - 1 : today.year
+  end
+
+  def form_name_from_start_year(year, type)
+    form_mappings = { 0 => "current_#{type}", 1 => "previous_#{type}", -1 => "next_#{type}" }
+    form_mappings[current_collection_start_year - year]
   end
 
 private
