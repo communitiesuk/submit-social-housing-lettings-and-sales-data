@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe FormHandler do
-  let(:test_form_name) { "2021_2022" }
   let(:form_handler) { described_class.instance }
 
   before { Singleton.__init__(described_class) }
