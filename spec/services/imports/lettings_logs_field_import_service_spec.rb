@@ -6,7 +6,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }

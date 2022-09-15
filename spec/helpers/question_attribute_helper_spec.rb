@@ -4,7 +4,7 @@ RSpec.describe QuestionAttributeHelper do
   let(:lettings_log) { FactoryBot.build(:lettings_log) }
   let(:form) { lettings_log.form }
   let(:questions) { form.get_page("rent").questions }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)

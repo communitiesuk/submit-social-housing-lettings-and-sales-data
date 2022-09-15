@@ -20,8 +20,8 @@ class FormHandler
 
   def sales_forms
     sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
-    current_form = Form.new(nil, "#{current_collection_start_year}_#{current_collection_start_year + 1}_sales", sales_sections, "sales")
-    previous_form = Form.new(nil, "#{current_collection_start_year - 1}_#{current_collection_start_year}_sales", sales_sections, "sales")
+    current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
+    previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
     { "current_sales" => { "form" => current_form, "type" => "sales", "start_year" => current_form.start_date.year },
       "previous_sales" => { "form" => previous_form, "type" => "sales", "start_year" => previous_form.start_date.year } }
   end
@@ -30,8 +30,7 @@ class FormHandler
     forms = {}
     directories.each do |directory|
       Dir.glob("#{directory}/*.json").each do |form_path|
-        form_name = File.basename(form_path, ".json")
-        form = Form.new(form_path, form_name)
+        form = Form.new(form_path)
         lettings_form_definition = { "form" => form, "type" => "lettings", "start_year" => form.start_date.year }
 
         form_mappings = { 0 => "current_lettings", 1 => "previous_lettings", -1 => "next_lettings" }

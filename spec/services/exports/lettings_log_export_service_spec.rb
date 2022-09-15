@@ -8,8 +8,8 @@ RSpec.describe Exports::LettingsLogExportService do
   let(:xml_export_file) { File.open("spec/fixtures/exports/general_needs_log.xml", "r:UTF-8") }
   let(:local_manifest_file) { File.open("spec/fixtures/exports/manifest.xml", "r:UTF-8") }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
-  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
 
   let(:expected_master_manifest_filename) { "Manifest_2022_05_01_0001.csv" }
   let(:expected_master_manifest_rerun) { "Manifest_2022_05_01_0002.csv" }

@@ -31,7 +31,7 @@ RSpec.describe FormController, type: :request do
     )
   end
   let(:headers) { { "Accept" => "text/html" } }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)

@@ -2,7 +2,7 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "validations" do
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
     FactoryBot.create(

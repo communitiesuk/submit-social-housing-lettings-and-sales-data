@@ -39,7 +39,7 @@ RSpec.describe "Form Check Answers Page" do
     )
   end
   let(:id) { lettings_log.id }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     sign_in user

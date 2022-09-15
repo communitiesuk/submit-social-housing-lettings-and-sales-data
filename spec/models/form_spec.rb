@@ -209,9 +209,9 @@ RSpec.describe Form, type: :model do
   describe "when creating a sales log" do
     it "creates a valid sales form" do
       sections = []
-      form = described_class.new(nil, "2022_23_sales", sections, "sales")
+      form = described_class.new(nil, 2022, sections, "sales")
       expect(form.type).to eq("sales")
-      expect(form.name).to eq("2022_23_sales")
+      expect(form.name).to eq("2022_2023_sales")
       expect(form.setup_sections.count).to eq(1)
       expect(form.setup_sections[0].class).to eq(Form::Sales::Sections::Setup)
       expect(form.sections.count).to eq(1)

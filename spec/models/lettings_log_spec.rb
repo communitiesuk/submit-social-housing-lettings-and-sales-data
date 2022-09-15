@@ -4,7 +4,7 @@ RSpec.describe LettingsLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
@@ -1652,7 +1652,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a lettings log is a supported housing log" do
-      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
       before do
         lettings_log.needstype = 2

@@ -6,8 +6,8 @@ RSpec.describe Imports::LettingsLogsImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
-  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }

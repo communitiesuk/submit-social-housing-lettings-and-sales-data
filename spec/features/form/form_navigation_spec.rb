@@ -32,7 +32,7 @@ RSpec.describe "Form Navigation" do
       hhmemb: { type: "numeric", answer: 1, path: "household-number-of-members" },
     }
   end
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     sign_in user

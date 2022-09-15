@@ -11,7 +11,7 @@ RSpec.describe Form::Subsection, type: :model do
   let(:section) { Form::Section.new(section_id, section_definition, form) }
   let(:subsection_id) { "household_characteristics" }
   let(:subsection_definition) { section_definition["subsections"][subsection_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     RequestHelper.stub_http_requests

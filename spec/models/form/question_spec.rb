@@ -16,7 +16,7 @@ RSpec.describe Form::Question, type: :model do
   let(:page) { Form::Page.new(page_id, page_definition, subsection) }
   let(:question_id) { "earnings" }
   let(:question_definition) { page_definition["questions"][question_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
