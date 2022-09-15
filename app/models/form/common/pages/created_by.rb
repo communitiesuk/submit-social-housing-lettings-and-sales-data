@@ -1,7 +1,7 @@
-class Form::Lettings::Pages::Organisation < ::Form::Page
+class Form::Common::Pages::CreatedBy < ::Form::Page
   def initialize(id, hsh, subsection)
     super
-    @id = "organisation"
+    @id = "created_by"
     @header = ""
     @description = ""
     @subsection = subsection
@@ -9,7 +9,7 @@ class Form::Lettings::Pages::Organisation < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Lettings::Questions::OwningOrganisationId.new(nil, nil, self),
+      Form::Common::Questions::CreatedById.new(nil, nil, self),
     ]
   end
 

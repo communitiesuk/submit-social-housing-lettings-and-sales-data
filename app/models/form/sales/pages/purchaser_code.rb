@@ -1,4 +1,4 @@
-class Form::Sales::Setup::Pages::PurchaserCode < ::Form::Page
+class Form::Sales::Pages::PurchaserCode < ::Form::Page
   def initialize(id, hsh, subsection)
     super
     @id = "purchaser_code"
@@ -9,7 +9,7 @@ class Form::Sales::Setup::Pages::PurchaserCode < ::Form::Page
 
   def questions
     @questions ||= [
-      Form::Sales::Setup::Questions::PurchaserCode.new(nil, nil, self),
+      Form::Sales::Questions::PurchaserCode.new(nil, nil, self),
     ]
   end
 end

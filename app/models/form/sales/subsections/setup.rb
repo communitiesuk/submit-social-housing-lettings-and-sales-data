@@ -8,8 +8,8 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Sales::Setup::Pages::PurchaserCode.new(nil, nil, self),
-      Form::Sales::Setup::Pages::SaleDate.new(nil, nil, self),
+      Form::Sales::Pages::PurchaserCode.new(nil, nil, self),
+      Form::Sales::Pages::SaleDate.new(nil, nil, self),
     ]
   end
 end

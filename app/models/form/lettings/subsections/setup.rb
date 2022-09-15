@@ -8,8 +8,8 @@ class Form::Lettings::Subsections::Setup < ::Form::Subsection
 
   def pages
     @pages ||= [
-      Form::Lettings::Pages::Organisation.new(nil, nil, self),
-      Form::Lettings::Pages::CreatedBy.new(nil, nil, self),
+      Form::Common::Pages::Organisation.new(nil, nil, self),
+      Form::Common::Pages::CreatedBy.new(nil, nil, self),
       Form::Lettings::Pages::NeedsType.new(nil, nil, self),
       Form::Lettings::Pages::Scheme.new(nil, nil, self),
       Form::Lettings::Pages::Location.new(nil, nil, self),

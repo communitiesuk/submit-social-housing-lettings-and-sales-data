@@ -1,4 +1,4 @@
-class Form::Sales::Setup::Questions::PurchaserCode < ::Form::Question
+class Form::Sales::Questions::PurchaserCode < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "purchid"

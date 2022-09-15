@@ -1,9 +1,9 @@
-class Form::Lettings::Questions::CreatedById < ::Form::Question
+class Form::Common::Questions::OwningOrganisationId < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "created_by_id"
-    @check_answer_label = "User"
-    @header = "Which user are you creating this log for?"
+    @id = "owning_organisation_id"
+    @check_answer_label = "Owning organisation"
+    @header = "Which organisation owns this log?"
     @hint_text = ""
     @type = "select"
     @page = page
@@ -13,17 +13,14 @@ class Form::Lettings::Questions::CreatedById < ::Form::Question
     answer_opts = { "" => "Select an option" }
     return answer_opts unless ActiveRecord::Base.connected?
 
-    User.select(:id, :name).each_with_object(answer_opts) do |user, hsh|
-      hsh[user.id] = user.name
+    Organisation.select(:id, :name).each_with_object(answer_opts) do |organisation, hsh|
+      hsh[organisation.id] = organisation.name
       hsh
     end
   end
 
-  def displayed_answer_options(log)
-    return answer_options unless log.owning_organisation
-
-    user_ids = log.owning_organisation.users.pluck(:id) + [""]
-    answer_options.select { |k, _v| user_ids.include?(k) }
+  def displayed_answer_options(_log)
+    answer_options
   end
 
   def label_from_value(value)
