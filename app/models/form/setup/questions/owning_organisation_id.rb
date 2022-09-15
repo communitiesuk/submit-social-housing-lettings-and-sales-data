@@ -19,7 +19,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     end
   end
 
-  def displayed_answer_options(_lettings_log)
+  def displayed_answer_options(_log)
     answer_options
   end
 
@@ -29,7 +29,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
     answer_options[value]
   end
 
-  def hidden_in_check_answers?(_lettings_log, current_user)
+  def hidden_in_check_answers?(_log, current_user)
     !current_user.support?
   end
 
@@ -39,7 +39,7 @@ class Form::Setup::Questions::OwningOrganisationId < ::Form::Question
 
 private
 
-  def selected_answer_option_is_derived?(_lettings_log)
+  def selected_answer_option_is_derived?(_log)
     false
   end
 end

@@ -13,7 +13,7 @@ class Form::Setup::Pages::Organisation < ::Form::Page
     ]
   end
 
-  def routed_to?(_lettings_log, current_user)
+  def routed_to?(_log, current_user)
     !!current_user&.support?
   end
 end

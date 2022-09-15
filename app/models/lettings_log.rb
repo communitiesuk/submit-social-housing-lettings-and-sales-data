@@ -505,30 +505,6 @@ private
 
   PIO = PostcodeService.new
 
-  def reset_not_routed_questions
-    enabled_questions = form.enabled_page_questions(self)
-    enabled_question_ids = enabled_questions.map(&:id)
-
-    form.invalidated_page_questions(self).each do |question|
-      if %w[radio checkbox].include?(question.type)
-        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
-        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(public_send(question.id).to_s) : false
-        if !current_answer_option_valid && respond_to?(question.id.to_s)
-          Rails.logger.debug("Cleared #{question.id} value")
-          public_send("#{question.id}=", nil)
-        else
-          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
-            Rails.logger.debug("Cleared #{invalid_answer_option} value")
-            public_send("#{invalid_answer_option}=", nil) if respond_to?(invalid_answer_option)
-          end
-        end
-      else
-        Rails.logger.debug("Cleared #{question.id} value")
-        public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
-      end
-    end
-  end
-
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
                             referral: [{ key: :renewal, value: 0 }],
@@ -546,12 +522,6 @@ private
     end
   end
 
-  def reset_created_by
-    return unless created_by && owning_organisation
-
-    self.created_by = nil if created_by.organisation != owning_organisation
-  end
-
   def reset_scheme
     return unless scheme && owning_organisation
 
@@ -559,11 +529,10 @@ private
   end
 
   def reset_invalidated_dependent_fields!
-    return unless form
+    super
 
     reset_created_by
     reset_scheme
-    reset_not_routed_questions
     reset_derived_questions
   end
 
