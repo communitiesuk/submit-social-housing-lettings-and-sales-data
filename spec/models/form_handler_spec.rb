@@ -1,43 +1,163 @@
 require "rails_helper"
 
 RSpec.describe FormHandler do
-  let(:test_form_name) { "2021_2022" }
+  let(:form_handler) { described_class.instance }
+
+  before { Singleton.__init__(described_class) } # reload FormHandler Instance to update form definitions between runs
+
+  context "when accessing a form in a different year" do
+    before do
+      Timecop.freeze(Time.utc(2021, 8, 3))
+    end
+
+    after do
+      Timecop.unfreeze
+    end
+
+    it "is able to load a current lettings form" do
+      form = form_handler.get_form("current_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(45)
+    end
+
+    it "is able to load a next lettings form" do
+      form = form_handler.get_form("next_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(12)
+    end
+  end
 
   describe "Get all forms" do
     it "is able to load all the forms" do
-      form_handler = described_class.instance
       all_forms = form_handler.forms
       expect(all_forms.count).to be >= 1
-      expect(all_forms[test_form_name]).to be_a(Form)
+      expect(all_forms["current_sales"]).to be_a(Form)
     end
   end
 
   describe "Get specific form" do
-    it "is able to load a specific form" do
-      form_handler = described_class.instance
-      form = form_handler.get_form(test_form_name)
+    it "is able to load a current lettings form" do
+      form = form_handler.get_form("current_lettings")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(12)
+    end
+
+    it "is able to load a previous lettings form" do
+      form = form_handler.get_form("previous_lettings")
       expect(form).to be_a(Form)
       expect(form.pages.count).to eq(45)
+    end
+
+    it "is able to load a current sales form" do
+      form = form_handler.get_form("current_sales")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(4)
+      expect(form.name).to eq("2022_2023_sales")
+    end
+
+    it "is able to load a previous sales form" do
+      form = form_handler.get_form("previous_sales")
+      expect(form).to be_a(Form)
+      expect(form.pages.count).to eq(4)
+      expect(form.name).to eq("2021_2022_sales")
     end
   end
 
   describe "Current form" do
     it "returns the latest form by date" do
-      form_handler = described_class.instance
-      form = form_handler.current_form
+      form = form_handler.current_lettings_form
       expect(form).to be_a(Form)
       expect(form.start_date.year).to eq(2022)
     end
   end
 
-  it "loads the form once at boot time" do
-    form_handler = described_class.instance
-    expect(Form).not_to receive(:new).with(:any, test_form_name)
-    expect(form_handler.get_form(test_form_name)).to be_a(Form)
+  describe "Current collection start year" do
+    context "when the date is after 1st of April" do
+      before do
+        Timecop.freeze(Time.utc(2022, 8, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "returns the same year as the the current start year" do
+        expect(form_handler.current_collection_start_year).to eq(2022)
+      end
+
+      it "returns the correct current lettings form name" do
+        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("current_lettings")
+      end
+
+      it "returns the correct previous lettings form name" do
+        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("previous_lettings")
+      end
+
+      it "returns the correct next lettings form name" do
+        expect(form_handler.form_name_from_start_year(2023, "lettings")).to eq("next_lettings")
+      end
+
+      it "returns the correct current sales form name" do
+        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("current_sales")
+      end
+
+      it "returns the correct previous sales form name" do
+        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("previous_sales")
+      end
+
+      it "returns the correct next sales form name" do
+        expect(form_handler.form_name_from_start_year(2023, "sales")).to eq("next_sales")
+      end
+    end
+
+    context "with the date before 1st of April" do
+      before do
+        Timecop.freeze(Time.utc(2022, 2, 3))
+      end
+
+      after do
+        Timecop.unfreeze
+      end
+
+      it "returns the previous year as the current start year" do
+        expect(form_handler.current_collection_start_year).to eq(2021)
+      end
+
+      it "returns the correct current lettings form name" do
+        expect(form_handler.form_name_from_start_year(2021, "lettings")).to eq("current_lettings")
+      end
+
+      it "returns the correct previous lettings form name" do
+        expect(form_handler.form_name_from_start_year(2020, "lettings")).to eq("previous_lettings")
+      end
+
+      it "returns the correct next lettings form name" do
+        expect(form_handler.form_name_from_start_year(2022, "lettings")).to eq("next_lettings")
+      end
+
+      it "returns the correct current sales form name" do
+        expect(form_handler.form_name_from_start_year(2021, "sales")).to eq("current_sales")
+      end
+
+      it "returns the correct previous sales form name" do
+        expect(form_handler.form_name_from_start_year(2020, "sales")).to eq("previous_sales")
+      end
+
+      it "returns the correct next sales form name" do
+        expect(form_handler.form_name_from_start_year(2022, "sales")).to eq("next_sales")
+      end
+    end
   end
 
-  it "can get a saleslog form" do
+  it "loads the form once at boot time" do
     form_handler = described_class.instance
-    expect(form_handler.get_form("2022_2023_sales")).to be_a(Form)
+    expect(Form).not_to receive(:new).with(:any, "current_sales")
+    expect(form_handler.get_form("current_sales")).to be_a(Form)
+  end
+
+  it "correctly sets form type and start year" do
+    form = form_handler.forms["current_lettings"]
+    expect(form.type).to eq("lettings")
+    expect(form.start_date.year).to eq(2022)
   end
 end

@@ -23,11 +23,11 @@ class SalesLog < Log
   def form_name
     return unless saledate
 
-    "#{collection_start_year}_#{collection_start_year + 1}_sales"
+    FormHandler.instance.form_name_from_start_year(collection_start_year, "sales")
   end
 
   def form
-    FormHandler.instance.get_form(form_name) || FormHandler.instance.get_form("2022_2023_sales")
+    FormHandler.instance.get_form(form_name) || FormHandler.instance.current_sales_form
   end
 
   def optional_fields

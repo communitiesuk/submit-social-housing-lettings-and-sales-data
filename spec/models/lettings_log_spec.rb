@@ -4,6 +4,11 @@ RSpec.describe LettingsLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
 
   it "inherits from log" do
     expect(described_class).to be < Log
@@ -23,9 +28,9 @@ RSpec.describe LettingsLog do
     it "has returns the correct form based on the start date" do
       expect(lettings_log.form_name).to be_nil
       expect(lettings_log.form).to be_a(Form)
-      expect(lettings_log_2.form_name).to eq("2021_2022")
+      expect(lettings_log_2.form_name).to eq("previous_lettings")
       expect(lettings_log_2.form).to be_a(Form)
-      expect(lettings_log_year_2.form_name).to eq("2023_2024")
+      expect(lettings_log_year_2.form_name).to eq("next_lettings")
       expect(lettings_log_year_2.form).to be_a(Form)
     end
 
@@ -1647,7 +1652,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a lettings log is a supported housing log" do
-      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
       before do
         lettings_log.needstype = 2

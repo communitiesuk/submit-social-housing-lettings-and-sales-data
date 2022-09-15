@@ -55,7 +55,7 @@ class LettingsLog < Log
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
 
   def form
-    FormHandler.instance.get_form(form_name) || FormHandler.instance.forms.first.second
+    FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
   end
 
   def recalculate_start_year!
@@ -66,7 +66,7 @@ class LettingsLog < Log
   def form_name
     return unless startdate
 
-    "#{collection_start_year}_#{collection_start_year + 1}"
+    FormHandler.instance.form_name_from_start_year(collection_start_year, "lettings")
   end
 
   def self.editable_fields

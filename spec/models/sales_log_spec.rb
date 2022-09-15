@@ -34,7 +34,7 @@ RSpec.describe SalesLog, type: :model do
     it "has returns the correct form based on the start date" do
       expect(sales_log.form_name).to be_nil
       expect(sales_log.form).to be_a(Form)
-      expect(sales_log_2.form_name).to eq("2022_2023_sales")
+      expect(sales_log_2.form_name).to eq("current_sales")
       expect(sales_log_2.form).to be_a(Form)
     end
   end

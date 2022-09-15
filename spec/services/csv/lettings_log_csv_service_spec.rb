@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Csv::LettingsLogCsvService do
   context "when the user is support" do
     let(:user) { FactoryBot.create(:user, :support) }
-    let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+    let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
     before do
       LettingsLog.create!(startdate: "2021-10-10", created_at: Time.utc(2022, 2, 8, 16, 52, 15))

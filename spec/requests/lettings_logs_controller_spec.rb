@@ -18,11 +18,13 @@ RSpec.describe LettingsLogsController, type: :request do
       "Authorization" => basic_credentials,
     }
   end
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   before do
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("API_USER").and_return(api_username)
     allow(ENV).to receive(:[]).with("API_KEY").and_return(api_password)
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
   end
 
   describe "POST #create" do

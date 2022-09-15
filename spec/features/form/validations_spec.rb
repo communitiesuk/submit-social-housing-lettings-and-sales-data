@@ -2,11 +2,7 @@ require "rails_helper"
 require_relative "helpers"
 
 RSpec.describe "validations" do
-  before do
-    sign_in user
-  end
-
-  include Helpers
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
   let(:user) { FactoryBot.create(:user) }
   let(:lettings_log) do
     FactoryBot.create(
@@ -34,6 +30,13 @@ RSpec.describe "validations" do
     )
   end
   let(:id) { lettings_log.id }
+
+  before do
+    sign_in user
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
+
+  include Helpers
 
   describe "Question validation" do
     context "when the tenant age is invalid" do

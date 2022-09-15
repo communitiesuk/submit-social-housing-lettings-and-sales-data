@@ -14,6 +14,11 @@ RSpec.describe Form::Page, type: :model do
   let(:subsection) { Form::Subsection.new(subsection_id, subsection_definition, section) }
   let(:page_id) { "net_income" }
   let(:page_definition) { subsection_definition["pages"][page_id] }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
 
   it "has an id" do
     expect(page.id).to eq(page_id)

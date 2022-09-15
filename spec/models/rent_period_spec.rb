@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe RentPeriod, type: :model do
   describe "rent period mapping" do
-    let(:form) { Form.new("spec/fixtures/forms/2021_2022.json", "2021_2022") }
+    let(:form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
     before do
-      allow(FormHandler.instance).to receive(:current_form).and_return(form)
+      allow(FormHandler.instance).to receive(:current_lettings_form).and_return(form)
     end
 
     it "maps rent period id to display names" do

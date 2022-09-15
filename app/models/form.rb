@@ -3,9 +3,8 @@ class Form
               :start_date, :end_date, :type, :name, :setup_definition,
               :setup_sections, :form_sections
 
-  def initialize(form_path, name, sections_in_form = [], type = "lettings")
+  def initialize(form_path, start_year = "", sections_in_form = [], type = "lettings")
     if type == "sales"
-      @name = name
       @setup_sections = [Form::Sales::Sections::Setup.new(nil, nil, self)]
       @form_sections = sections_in_form.map { |sec| sec.new(nil, nil, self) }
       @type = "sales"
@@ -13,8 +12,8 @@ class Form
       @subsections = sections.flat_map(&:subsections)
       @pages = subsections.flat_map(&:pages)
       @questions = pages.flat_map(&:questions)
-      @start_date = Time.zone.local(name[0..3], 4, 1)
-      @end_date = Time.zone.local(start_date.year + 1, 7, 1)
+      @start_date = Time.zone.local(start_year, 4, 1)
+      @end_date = Time.zone.local(start_year + 1, 7, 1)
       @form_definition = {
         "form_type" => type,
         "start_date" => start_date,
@@ -24,7 +23,6 @@ class Form
     else
       raise "No form definition file exists for given year".freeze unless File.exist?(form_path)
 
-      @name = name
       @setup_sections = [Form::Lettings::Sections::Setup.new(nil, nil, self)]
       @form_definition = JSON.parse(File.open(form_path).read)
       @form_sections = form_definition["sections"].map { |id, s| Form::Section.new(id, s, self) }
@@ -36,6 +34,7 @@ class Form
       @start_date = Time.iso8601(form_definition["start_date"])
       @end_date = Time.iso8601(form_definition["end_date"])
     end
+    @name = "#{start_date.year}_#{end_date.year}_#{type}"
   end
 
   def get_subsection(id)
