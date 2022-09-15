@@ -6,6 +6,7 @@ FactoryBot.define do
     created_at { Time.utc(2022, 2, 8, 16, 52, 15) }
     updated_at { Time.utc(2022, 2, 8, 16, 52, 15) }
     trait :completed do
+      purchid { "PC123" }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
     end
   end
