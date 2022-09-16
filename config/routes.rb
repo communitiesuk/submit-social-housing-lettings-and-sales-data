@@ -106,6 +106,11 @@ Rails.application.routes.draw do
   end
 
   resources :sales_logs, path: "/sales-logs" do
+    collection do
+      get "create-new-log", to: "sales_logs#create"
+      get "new-log", to: "sales_logs#show"
+    end
+
     FormHandler.instance.sales_forms.each do |_key, form|
       form.pages.map do |page|
         get page.id.to_s.dasherize, to: "form#show_page"

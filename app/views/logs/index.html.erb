@@ -11,7 +11,7 @@
       <%= govuk_button_to "Create a new lettings log", create_new_log_lettings_logs_path, method: :get %>
     <% end %>
     <% if FeatureToggle.sales_log_enabled? && current_page?(:controller => 'sales_logs', :action => 'index') %>
-      <%= govuk_button_to "Create a new sales log", sales_logs_path %>
+      <%= govuk_button_to "Create a new sales log", create_new_log_sales_logs_path, method: :get %>
     <% end %>
     <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
   </div>
