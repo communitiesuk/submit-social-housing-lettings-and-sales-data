@@ -112,7 +112,7 @@ RSpec.describe "User Features" do
         visit("/lettings-logs")
         click_link("About your organisation")
         expect(page).to have_current_path("/organisations/#{org_id}/details")
-        expect(page).to have_link("Logs")
+        expect(page).to have_link("Lettings logs")
         expect(page).to have_link("Users")
         expect(page).to have_link("About your organisation")
       end
@@ -237,7 +237,7 @@ RSpec.describe "User Features" do
             it "shows submenu for selected organisation" do
               expect(page).to have_css('[aria-current="page"]', text: "Users")
               expect(page).to have_current_path("/organisations/#{org_id}/users")
-              expect(page).to have_link("Logs")
+              expect(page).to have_link("Lettings logs")
               expect(page).to have_link("About this organisation")
             end
 

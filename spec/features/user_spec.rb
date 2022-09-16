@@ -512,7 +512,7 @@ RSpec.describe "User Features" do
         click_button("Sign in")
         fill_in("code", with: otp)
         click_button("Submit")
-        expect(page).to have_content("Logs")
+        expect(page).to have_content("Lettings logs")
       end
 
       context "but it is more than 15 minutes old" do
