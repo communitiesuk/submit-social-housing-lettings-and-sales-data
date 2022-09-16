@@ -16,7 +16,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the logs page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
@@ -31,7 +31,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the users page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
@@ -46,7 +46,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on their organisation details page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, true),
@@ -61,7 +61,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the account page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
@@ -76,7 +76,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the individual user's page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
@@ -91,7 +91,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the individual scheme's page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
               NavigationItemsHelper::NavigationItem.new("About your organisation", organisation_path, false),
@@ -112,7 +112,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
@@ -127,7 +127,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
@@ -142,7 +142,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
@@ -157,7 +157,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
           end
@@ -172,7 +172,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
           end
@@ -187,7 +187,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
           end
@@ -210,7 +210,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
           end
@@ -235,14 +235,14 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
             end
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", true),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", true),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
@@ -261,14 +261,14 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
             end
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
@@ -287,14 +287,14 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
             end
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", false),
@@ -313,14 +313,14 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
             end
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
                 NavigationItemsHelper::NavigationItem.new("About this organisation", "/organisations/#{current_user.organisation.id}", true),
@@ -341,7 +341,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the lettings logs page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
@@ -357,7 +357,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the sales logs page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", true),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
@@ -373,7 +373,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the users page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, true),
@@ -389,7 +389,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on their organisation details page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", users_path, false),
@@ -405,7 +405,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the account page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -421,7 +421,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the individual user's page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
@@ -437,7 +437,7 @@ RSpec.describe NavigationItemsHelper do
         context "when the user is on the individual scheme's page" do
           let(:expected_navigation_items) do
             [
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
               NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -459,7 +459,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", true),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", true),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
@@ -475,7 +475,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", true),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
@@ -491,7 +491,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
@@ -507,7 +507,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
@@ -523,7 +523,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
@@ -539,7 +539,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", true),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
             ]
@@ -555,7 +555,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
@@ -579,7 +579,7 @@ RSpec.describe NavigationItemsHelper do
             [
               NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", false),
               NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-              NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+              NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
               NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
               NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", true),
             ]
@@ -605,7 +605,7 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
@@ -613,7 +613,7 @@ RSpec.describe NavigationItemsHelper do
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", true),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", true),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/organisations/#{current_user.organisation.id}/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -633,7 +633,7 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
@@ -641,7 +641,7 @@ RSpec.describe NavigationItemsHelper do
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/organisations/#{current_user.organisation.id}/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", true),
@@ -661,7 +661,7 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
@@ -669,7 +669,7 @@ RSpec.describe NavigationItemsHelper do
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/organisations/#{current_user.organisation.id}/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),
@@ -689,7 +689,7 @@ RSpec.describe NavigationItemsHelper do
               [
                 NavigationItemsHelper::NavigationItem.new("Organisations", "/organisations", true),
                 NavigationItemsHelper::NavigationItem.new("Users", "/users", false),
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/schemes", false),
               ]
@@ -697,7 +697,7 @@ RSpec.describe NavigationItemsHelper do
 
             let(:expected_secondary_navigation_items) do
               [
-                NavigationItemsHelper::NavigationItem.new("Lettings Logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
+                NavigationItemsHelper::NavigationItem.new("Lettings logs", "/organisations/#{current_user.organisation.id}/lettings-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Sales logs", "/organisations/#{current_user.organisation.id}/sales-logs", false),
                 NavigationItemsHelper::NavigationItem.new("Schemes", "/organisations/#{current_user.organisation.id}/schemes", false),
                 NavigationItemsHelper::NavigationItem.new("Users", "/organisations/#{current_user.organisation.id}/users", false),

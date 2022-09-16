@@ -6,13 +6,13 @@ module NavigationItemsHelper
       [
         NavigationItem.new("Organisations", organisations_path, organisations_current?(path)),
         NavigationItem.new("Users", "/users", users_current?(path)),
-        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/schemes", supported_housing_schemes_current?(path)),
       ].compact
     elsif current_user.data_coordinator? && current_user.organisation.holds_own_stock?
       [
-        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
@@ -20,7 +20,7 @@ module NavigationItemsHelper
       ].compact
     else
       [
-        NavigationItem.new("Lettings Logs", lettings_logs_path, lettings_logs_current?(path)),
+        NavigationItem.new("Lettings logs", lettings_logs_path, lettings_logs_current?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", sales_logs_path, sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", users_organisation_path(current_user.organisation), subnav_users_path?(path)),
         NavigationItem.new("About your organisation", "/organisations/#{current_user.organisation.id}", subnav_details_path?(path)),
@@ -31,7 +31,7 @@ module NavigationItemsHelper
   def secondary_items(path, current_organisation_id)
     if current_user.organisation.holds_own_stock?
       [
-        NavigationItem.new("Lettings Logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
+        NavigationItem.new("Lettings logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Schemes", "/organisations/#{current_organisation_id}/schemes", subnav_supported_housing_schemes_path?(path)),
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
@@ -39,7 +39,7 @@ module NavigationItemsHelper
       ].compact
     else
       [
-        NavigationItem.new("Lettings Logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
+        NavigationItem.new("Lettings logs", "/organisations/#{current_organisation_id}/lettings-logs", subnav_logs_path?(path)),
         FeatureToggle.sales_log_enabled? ? NavigationItem.new("Sales logs", "/organisations/#{current_organisation_id}/sales-logs", sales_logs_current?(path)) : nil,
         NavigationItem.new("Users", "/organisations/#{current_organisation_id}/users", subnav_users_path?(path)),
         NavigationItem.new("About this organisation", "/organisations/#{current_organisation_id}", subnav_details_path?(path)),
