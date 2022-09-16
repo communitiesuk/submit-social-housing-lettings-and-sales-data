@@ -1,4 +1,4 @@
-<% content_for :title, "Log #{@log.id}" %>
+<% content_for :title, "Log #{@log.id ? @log.id : "new"}" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Logs" => @log.lettings? ? lettings_logs_path : sales_logs_path,
   content_for(:title) => "",

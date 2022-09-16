@@ -15,8 +15,7 @@ private
 
     respond_to do |format|
       format.html do
-        log.save!
-        redirect_to post_create_redirect_url(log)
+        redirect_to new_log_lettings_logs_path
       end
       format.json do
         if log.save

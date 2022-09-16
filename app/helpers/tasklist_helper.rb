@@ -16,8 +16,12 @@ module TasklistHelper
              "#{log.class.name.underscore}_#{subsection.id}_check_answers_path"
            else
              "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
-           end
-    send(path, log)
+             end
+    if log.id
+      send(path, log)
+    else
+      "/logs/new/#{next_question_page(subsection, log, current_user)}"
+    end
   end
 
   def next_question_page(subsection, log, current_user)
