@@ -16,7 +16,7 @@ RSpec.describe Form::Sales::Pages::SaleDate, type: :model do
   end
 
   it "has the correct id" do
-    expect(page.id).to eq("sale_date")
+    expect(page.id).to eq("completion_date")
   end
 
   it "has the correct header" do
