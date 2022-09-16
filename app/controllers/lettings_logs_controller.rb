@@ -49,7 +49,11 @@ class LettingsLogsController < LogsController
   end
 
   def edit
-    @log = current_user.lettings_logs.find_by(id: params[:id])
+    @log = if new_log_request?
+             LettingsLog.new
+           else
+             current_user.lettings_logs.find_by(id: params[:id])
+           end
     if @log
       render "logs/edit", locals: { current_user: }
     else
@@ -84,6 +88,9 @@ class LettingsLogsController < LogsController
   def csv_confirmation; end
 
 private
+  def new_log_request?
+    request.path.include?("new")
+  end
 
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)

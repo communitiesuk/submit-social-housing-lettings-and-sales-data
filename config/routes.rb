@@ -80,6 +80,8 @@ Rails.application.routes.draw do
 
   resources :lettings_logs, path: "/lettings-logs" do
     collection do
+      get "create-new-log", to: "lettings_logs#create"
+      get "new-log", to: "lettings_logs#show"
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
       get "csv-download", to: "lettings_logs#download_csv"
