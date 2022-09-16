@@ -28,7 +28,11 @@ class SalesLogsController < LogsController
   end
 
   def edit
-    @log = current_user.sales_logs.find_by(id: params[:id])
+    @log = if new_log_request?
+             SalesLog.new
+           else
+             current_user.sales_logs.find_by(id: params[:id])
+           end
     if @log
       render "logs/edit", locals: { current_user: }
     else
@@ -42,5 +46,11 @@ class SalesLogsController < LogsController
 
   def permitted_log_params
     params.require(:sales_log).permit(SalesLog.editable_fields)
+  end
+
+private
+
+  def new_log_request?
+    request.path.include?("new")
   end
 end
