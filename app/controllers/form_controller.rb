@@ -142,14 +142,14 @@ private
 
   def find_resource_by_named_id
     @log = if params[:sales_log_id].present?
-             if new_log_request?
-               SalesLog.new
-             else
                current_user.sales_logs.find_by(id: params[:sales_log_id])
-             end
            else
              if new_log_request?
-               LettingsLog.new
+               if request.path.include? ("sales-logs")
+                 SalesLog.new
+               else
+                 LettingsLog.new
+               end
              else
                current_user.lettings_logs.find_by(id: params[:lettings_log_id])
              end
