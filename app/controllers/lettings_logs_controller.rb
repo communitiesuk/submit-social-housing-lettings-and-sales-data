@@ -88,8 +88,9 @@ class LettingsLogsController < LogsController
   def csv_confirmation; end
 
 private
+
   def new_log_request?
-    request.path.include?("new")
+    request.path.include?("new-log")
   end
 
   def permitted_log_params

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   root to: "start#index"
 
   get "/logs", to: redirect("/lettings-logs")
+  get "/logs/new/organisation", to: "form#show_new_page"
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
@@ -82,11 +83,17 @@ Rails.application.routes.draw do
     collection do
       get "create-new-log", to: "lettings_logs#create"
       get "new-log", to: "lettings_logs#show"
+      post "new-form", to: "form#submit_form"
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
       get "csv-download", to: "lettings_logs#download_csv"
       post "email-csv", to: "lettings_logs#email_csv"
       get "csv-confirmation", to: "lettings_logs#csv_confirmation"
+      FormHandler.instance.forms.each do |_key, form|
+        form.pages.map do |page|
+          get "new/#{page.id.to_s.dasherize}", to: "form#show_new_page"
+        end
+      end
     end
 
     member do
