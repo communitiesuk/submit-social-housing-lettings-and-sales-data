@@ -51,6 +51,6 @@ class SalesLogsController < LogsController
 private
 
   def new_log_request?
-    request.path.include?("new")
+    request.path.include?("new-log")
   end
 end

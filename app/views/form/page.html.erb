@@ -4,8 +4,10 @@
   <%= govuk_back_link(href: "javascript:history.back()") %>
 <% end %>
 
+<% path_url = @log.id ? form_lettings_log_path(@log) : new_form_lettings_logs_path %>
+
 <div data-controller="govukfrontend"></div>
-<%= form_with model: @log, url: form_lettings_log_path(@log), method: "post", local: true do |f| %>
+<%= form_with model: @log, url: path_url, method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
       <% remove_other_page_errors(@log, @page) %>

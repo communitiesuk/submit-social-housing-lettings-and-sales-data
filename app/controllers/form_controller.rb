@@ -60,7 +60,33 @@ class FormController < ApplicationController
     end
   end
 
+  def show_new_page
+    page_id = request.path.split("/")[-1].underscore
+    save_new_log page_id
+    if @log
+      restore_error_field_values
+      page_id = request.path.split("/")[-1].underscore
+      @page = @log.form.get_page(page_id)
+      @subsection = @log.form.subsection_for_page(@page)
+      if @page.routed_to?(@log, current_user)
+        render "form/page"
+      else
+        redirect_to lettings_log_path(@log)
+      end
+    else
+      render_not_found
+    end
+  end
+
 private
+
+  def save_new_log(page_id)
+    if current_user.support?
+      @log.save! unless page_id.eql?("organisation") && @log.id.nil?
+    else
+      @log.save! unless page_id.eql?("needs_type") && @log.id.nil?
+    end
+  end
 
   def restore_error_field_values
     if session["errors"]
@@ -105,20 +131,37 @@ private
     end
   end
 
+
   def find_resource
-    @log = if params.key?("sales_log")
-             current_user.sales_logs.find_by(id: params[:id])
+    @log = if is_new_log_request? || new_log_referrer?
+             LettingsLog.new(owning_organisation: current_user.support? ? nil : current_user.organisation)
            else
-             current_user.lettings_logs.find_by(id: params[:id])
+             params.key?("sales_log") ? current_user.sales_logs.find_by(id: params[:id]) : current_user.lettings_logs.find_by(id: params[:id])
            end
   end
 
   def find_resource_by_named_id
     @log = if params[:sales_log_id].present?
-             current_user.sales_logs.find_by(id: params[:sales_log_id])
+             if new_log_request?
+               SalesLog.new
+             else
+               current_user.sales_logs.find_by(id: params[:sales_log_id])
+             end
            else
-             current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+             if new_log_request?
+               LettingsLog.new
+             else
+               current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+             end
            end
+  end
+
+  def new_log_request?
+    request.path.split("/").include?("new")
+  end
+
+  def new_log_request_referrer?
+    request.referer.split("/").include?("new")
   end
 
   def is_referrer_check_answers?
