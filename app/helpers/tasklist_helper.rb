@@ -16,11 +16,11 @@ module TasklistHelper
              "#{log.class.name.underscore}_#{subsection.id}_check_answers_path"
            else
              "#{log.class.name.underscore}_#{next_question_page(subsection, log, current_user)}_path"
-             end
+           end
     if log.id
       send(path, log)
     else
-      "/#{log.lettings? ? "lettings" : "sales"}-logs/new/#{next_question_page(subsection, log, current_user)}"
+      "/#{log.lettings? ? 'lettings' : 'sales'}-logs/new/#{next_question_page(subsection, log, current_user)}"
     end
   end
 

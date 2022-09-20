@@ -131,28 +131,31 @@ private
     end
   end
 
-
   def find_resource
-    @log = if new_log_request? || new_log_request_referrer?
+    @log = if params.key?("sales_log")
+             if new_log_request? || new_log_request_referrer?
+               SalesLog.new(owning_organisation: current_user.support? ? nil : current_user.organisation)
+             else
+               current_user.sales_logs.find_by(id: params[:id])
+             end
+           elsif new_log_request? || new_log_request_referrer?
              LettingsLog.new(owning_organisation: current_user.support? ? nil : current_user.organisation)
            else
-             params.key?("sales_log") ? current_user.sales_logs.find_by(id: params[:id]) : current_user.lettings_logs.find_by(id: params[:id])
+             current_user.lettings_logs.find_by(id: params[:id])
            end
   end
 
   def find_resource_by_named_id
     @log = if params[:sales_log_id].present?
-               current_user.sales_logs.find_by(id: params[:sales_log_id])
-           else
-             if new_log_request?
-               if request.path.include? ("sales-logs")
-                 SalesLog.new
-               else
-                 LettingsLog.new
-               end
+             current_user.sales_logs.find_by(id: params[:sales_log_id])
+           elsif new_log_request?
+             if request.path.include?("sales-logs")
+               SalesLog.new
              else
-               current_user.lettings_logs.find_by(id: params[:lettings_log_id])
+               LettingsLog.new
              end
+           else
+             current_user.lettings_logs.find_by(id: params[:lettings_log_id])
            end
   end
 
