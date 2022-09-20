@@ -7,6 +7,9 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page
+    @conditional_for = {
+      "othtype": [12],
+    }
   end
 
   ANSWER_OPTIONS = {

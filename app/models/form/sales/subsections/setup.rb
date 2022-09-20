@@ -14,8 +14,8 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
       Form::Sales::Pages::PurchaserCode.new(nil, nil, self),
       Form::Sales::Pages::OwnershipScheme.new(nil, nil, self),
       Form::Sales::Pages::SharedOwnershipType.new(nil, nil, self),
-      Form::Sales::Pages::OutrightOwnershipType.new(nil, nil, self),
       Form::Sales::Pages::DiscountedOwnershipType.new(nil, nil, self),
+      Form::Sales::Pages::OutrightOwnershipType.new(nil, nil, self),
       Form::Sales::Pages::JointPurchase.new(nil, nil, self),
     ]
   end

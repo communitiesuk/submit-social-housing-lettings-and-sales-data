@@ -37,4 +37,10 @@ RSpec.describe Form::Sales::Questions::OutrightOwnershipType, type: :model do
       "12" => { "value" => "Other sale" },
     })
   end
+
+  it "has correct conditional for" do
+    expect(question.conditional_for).to eq({
+      "othtype": [12],
+    })
+  end
 end

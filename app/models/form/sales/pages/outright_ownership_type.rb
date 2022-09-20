@@ -13,6 +13,7 @@ class Form::Sales::Pages::OutrightOwnershipType < ::Form::Page
   def questions
     @questions ||= [
       Form::Sales::Questions::OutrightOwnershipType.new(nil, nil, self),
+      Form::Sales::Questions::OtherOwnershipType.new(nil, nil, self),
     ]
   end
 end
