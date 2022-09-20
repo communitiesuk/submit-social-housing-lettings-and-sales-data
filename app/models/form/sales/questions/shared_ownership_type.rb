@@ -4,7 +4,7 @@ class Form::Sales::Questions::SharedOwnershipType < ::Form::Question
     @id = "type"
     @check_answer_label = "Type of shared ownership sale"
     @header = "What is the type of shared ownership sale?"
-    @hint_text = "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent ro the Private Registered Provider (PRP) on the remaining portion"
+    @hint_text = "A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
     @page = page

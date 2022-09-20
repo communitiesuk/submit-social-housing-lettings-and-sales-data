@@ -32,7 +32,7 @@ RSpec.describe Form::Sales::Questions::SharedOwnershipType, type: :model do
   end
 
   it "has the correct hint_text" do
-    expect(question.hint_text).to eq("A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent ro the Private Registered Provider (PRP) on the remaining portion")
+    expect(question.hint_text).to eq("A shared ownership sale is when the purchaser buys up to 75% of the property value and pays rent to the Private Registered Provider (PRP) on the remaining portion")
   end
 
   it "has the correct answer_options" do
