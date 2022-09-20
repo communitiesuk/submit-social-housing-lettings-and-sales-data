@@ -3,6 +3,16 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
 
+  before do
+    Timecop.freeze(Time.utc(2022, 9, 20))
+    Singleton.__init__(described_class)
+  end
+
+  after do
+    Timecop.unfreeze
+    Singleton.__init__(described_class)
+  end
+
   context "when accessing a form in a different year" do
     before do
       Timecop.freeze(Time.utc(2021, 8, 3))
@@ -51,14 +61,14 @@ RSpec.describe FormHandler do
     it "is able to load a current sales form" do
       form = form_handler.get_form("current_sales")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(4)
+      expect(form.pages.count).to eq(5)
       expect(form.name).to eq("2022_2023_sales")
     end
 
     it "is able to load a previous sales form" do
       form = form_handler.get_form("previous_sales")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(4)
+      expect(form.pages.count).to eq(5)
       expect(form.name).to eq("2021_2022_sales")
     end
   end

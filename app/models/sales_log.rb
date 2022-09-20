@@ -3,6 +3,7 @@ class SalesLogValidator < ActiveModel::Validator
 end
 
 class SalesLog < Log
+  self.inheritance_column = :_type_disabled
   has_paper_trail
 
   validates_with SalesLogValidator
