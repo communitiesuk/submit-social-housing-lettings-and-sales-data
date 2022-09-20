@@ -1,7 +1,7 @@
 class Form::Sales::Questions::JointPurchase < ::Form::Question
   def initialize(id, hsh, page)
     super
-    @id = "type"
+    @id = "jointpur"
     @check_answer_label = "Joint purchase"
     @header = "Is this a joint purchase?"
     @hint_text = ""
@@ -12,6 +12,6 @@ class Form::Sales::Questions::JointPurchase < ::Form::Question
 
   ANSWER_OPTIONS = {
     "1" => { "value" => "Yes" },
-    "0" => { "value" => "No" },
+    "2" => { "value" => "No" },
   }.freeze
 end

@@ -12,7 +12,7 @@ RSpec.describe Form::Sales::Pages::JointPurchase, type: :model do
   end
 
   it "has correct questions" do
-    expect(page.questions.map(&:id)).to eq(%w[type])
+    expect(page.questions.map(&:id)).to eq(%w[jointpur])
   end
 
   it "has the correct id" do
