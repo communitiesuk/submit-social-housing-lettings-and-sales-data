@@ -1,0 +1,21 @@
+<% item_label = format_label(@pagy.count, "log") %>
+<% title = format_title(@searched, "Logs", current_user, item_label, @pagy.count, nil) %>
+
+<% content_for :title, title %>
+
+<%= render partial: "organisations/headings", locals: current_user.support? ? { main: "Logs", sub: nil } : { main: "Logs", sub: current_user.organisation.name } %>
+
+<div class="app-filter-layout" data-controller="filter-layout">
+  <div class="govuk-button-group app-filter-toggle">
+    <%= govuk_button_to "Create a new lettings log", lettings_logs_path %>
+    <%#= govuk_link_to "Upload logs", bulk_upload_lettings_logs_path %>
+  </div>
+
+  <%= render partial: "log_filters" %>
+  <div class="app-filter-layout__content">
+    <%= render SearchComponent.new(current_user:, search_label: "Search by log ID, tenant code, property reference or postcode", value: @searched) %>
+    <%= govuk_section_break(visible: true, size: "m") %>
+    <%= render partial: "log_list", locals: { lettings_logs: @lettings_logs, title: "Logs", pagy: @pagy, searched: @searched, item_label:, total_count: @total_count } %>
+    <%== render partial: "pagy/nav", locals: { pagy: @pagy, item_name: "logs" } %>
+  </div>
+</div>

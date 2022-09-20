@@ -5,13 +5,8 @@ RSpec.describe Validations::SharedValidations do
 
   let(:validator_class) { Class.new { include Validations::SharedValidations } }
   let(:record) { FactoryBot.create(:lettings_log) }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
 
   describe "numeric min max validations" do
-    before do
-      allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
-    end
-
     context "when validating age" do
       it "validates that person 1's age is a number" do
         record.age1 = "random"

@@ -3,11 +3,6 @@ require "rails_helper"
 RSpec.describe TasklistHelper do
   let(:empty_lettings_log) { FactoryBot.create(:lettings_log) }
   let(:lettings_log) { FactoryBot.create(:lettings_log, :in_progress, needstype: 1) }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-
-  before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
-  end
 
   describe "get next incomplete section" do
     it "returns the first subsection name if it is not completed" do

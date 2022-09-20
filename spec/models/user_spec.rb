@@ -115,7 +115,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter lettings logs by user, year and status" do
-        expect(user.logs_filters).to eq(%w[status years user])
+        expect(user.lettings_logs_filters).to eq(%w[status years user])
       end
     end
 
@@ -140,7 +140,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter lettings logs by user, year, status and organisation" do
-        expect(user.logs_filters).to eq(%w[status years user organisation])
+        expect(user.lettings_logs_filters).to eq(%w[status years user organisation])
       end
     end
 
@@ -266,40 +266,6 @@ RSpec.describe User, type: :model do
       it "validates email uniqueness" do
         expect { FactoryBot.create(:user, email: user.email) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
-      end
-    end
-  end
-
-  describe "delete" do
-    let(:user) { FactoryBot.create(:user) }
-
-    before do
-      FactoryBot.create(
-        :lettings_log,
-        :completed,
-        owning_organisation: user.organisation,
-        managing_organisation: user.organisation,
-        created_by: user,
-      )
-
-      FactoryBot.create(
-        :sales_log,
-        owning_organisation: user.organisation,
-        created_by: user,
-      )
-    end
-
-    context "when the user is deleted" do
-      it "owned lettings logs are not deleted as a result" do
-        expect { user.destroy! }
-          .to change(described_class, :count).from(1).to(0)
-          .and change(LettingsLog, :count).by(0)
-      end
-
-      it "owned sales logs are not deleted as a result" do
-        expect { user.destroy! }
-          .to change(described_class, :count).from(1).to(0)
-          .and change(SalesLog, :count).by(0)
       end
     end
   end

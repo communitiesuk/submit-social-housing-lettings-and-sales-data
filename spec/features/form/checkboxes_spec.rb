@@ -22,14 +22,14 @@ RSpec.describe "Checkboxes" do
 
   context "when exclusive checkbox is selected", js: true do
     it "deselects all other checkboxes" do
-      visit("/lettings-logs/#{id}/accessibility-requirements")
+      visit("/logs/#{id}/accessibility-requirements")
       page.check("lettings-log-accessibility-requirements-housingneeds-a-field", allow_label_click: true)
       click_button("Save and continue")
 
       lettings_log.reload
       expect(lettings_log["housingneeds_a"]).to eq(1)
 
-      visit("/lettings-logs/#{id}/accessibility-requirements")
+      visit("/logs/#{id}/accessibility-requirements")
       page.check("lettings-log-accessibility-requirements-housingneeds-h-field", allow_label_click: true)
       click_button("Save and continue")
 
@@ -46,7 +46,7 @@ RSpec.describe "Checkboxes" do
     end
 
     it "shows an error summary" do
-      visit("/lettings-logs/#{id}/condition-effects")
+      visit("/logs/#{id}/condition-effects")
       page.check("lettings-log-condition-effects-illness-type-1-field")
       page.check("lettings-log-condition-effects-illness-type-2-field")
       click_button("Save and continue")
@@ -54,7 +54,7 @@ RSpec.describe "Checkboxes" do
     end
 
     it "persists the original selections" do
-      visit("/lettings-logs/#{id}/condition-effects")
+      visit("/logs/#{id}/condition-effects")
       page.check("lettings-log-condition-effects-illness-type-1-field")
       page.check("lettings-log-condition-effects-illness-type-2-field")
       click_button("Save and continue")

@@ -51,13 +51,7 @@ module Csv
 
     def ordered_form_questions
       downloaded_form_years = LettingsLog.all.map(&:collection_start_year).uniq.compact
-
-      if downloaded_form_years.count == 1 && downloaded_form_years[0].present?
-        form_name = FormHandler.instance.form_name_from_start_year(downloaded_form_years[0], "lettings")
-        downloaded_form_fields = FormHandler.instance.get_form(form_name).questions
-      else
-        downloaded_form_fields = FormHandler.instance.current_lettings_form.questions
-      end
+      downloaded_form_fields = downloaded_form_years.count == 1 && downloaded_form_years[0].present? ? FormHandler.instance.get_form("#{downloaded_form_years[0]}_#{downloaded_form_years[0] + 1}").questions : FormHandler.instance.forms.first.second.questions
       move_checkbox_answer_options(downloaded_form_fields)
     end
 

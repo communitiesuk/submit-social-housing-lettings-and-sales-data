@@ -16,26 +16,26 @@ RSpec.describe "User Features" do
 
   context "when the user navigates to lettings logs" do
     it "is required to log in" do
-      visit("/lettings-logs")
+      visit("/logs")
       expect(page).to have_current_path("/account/sign-in")
       expect(page).to have_content("Sign in to your account to submit CORE data")
     end
 
     it "does not see the default devise error message" do
-      visit("/lettings-logs")
+      visit("/logs")
       expect(page).to have_no_content("You need to sign in or sign up before continuing.")
     end
 
     it "is redirected to lettings logs after signing in" do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/lettings-logs")
+      expect(page).to have_current_path("/logs")
     end
 
     it "can log out again", js: true do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
@@ -45,7 +45,7 @@ RSpec.describe "User Features" do
     end
 
     it "can log out again with js disabled" do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
@@ -57,7 +57,7 @@ RSpec.describe "User Features" do
 
   context "when the user has forgotten their password" do
     it "is redirected to the reset password page when they click the reset password link" do
-      visit("/lettings-logs")
+      visit("/logs")
       click_link("reset your password")
       expect(page).to have_current_path("/account/password/new")
     end
@@ -121,7 +121,7 @@ RSpec.describe "User Features" do
 
   context "when the user is not logged in" do
     it "'Your account' link does not display" do
-      visit("/lettings-logs")
+      visit("/logs")
       expect(page).to have_no_link("Your account")
     end
 
@@ -132,7 +132,7 @@ RSpec.describe "User Features" do
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
-      expect(page).to have_current_path("/lettings-logs")
+      expect(page).to have_current_path("/logs")
     end
 
     it "tries to access account page, redirects to log in page" do
@@ -143,7 +143,7 @@ RSpec.describe "User Features" do
 
   context "when the user is trying to log in with incorrect credentials" do
     it "shows a gov uk error summary and no flash message" do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "nonsense")
       click_button("Sign in")
@@ -153,7 +153,7 @@ RSpec.describe "User Features" do
     end
 
     it "show specific field error messages if a field was omitted" do
-      visit("/lettings-logs")
+      visit("/logs")
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
       expect(page).to have_selector("#user-email-field-error")
@@ -162,7 +162,7 @@ RSpec.describe "User Features" do
     end
 
     it "show specific field error messages if an invalid email address is entered" do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: "thisisn'tanemail")
       click_button("Sign in")
       expect(page).to have_selector("#error-summary-title")
@@ -178,7 +178,7 @@ RSpec.describe "User Features" do
     end
 
     it "shows a gov uk error summary and no flash message" do
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: "pAssword1")
       click_button("Sign in")
@@ -191,7 +191,7 @@ RSpec.describe "User Features" do
   context "when signed in as a data provider" do
     context "when viewing your account" do
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -216,7 +216,7 @@ RSpec.describe "User Features" do
 
     context "when viewing users" do
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -232,7 +232,7 @@ RSpec.describe "User Features" do
 
     context "when viewing your organisation details" do
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -248,14 +248,14 @@ RSpec.describe "User Features" do
 
     context "when viewing your account" do
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
       end
 
       it "shows 'Your account' link in navigation if logged in and redirect to correct page" do
-        visit("/lettings-logs")
+        visit("/logs")
         expect(page).to have_link("Your account")
         click_link("Your account")
         expect(page).to have_current_path("/account")
@@ -295,7 +295,7 @@ RSpec.describe "User Features" do
 
     context "when adding a new user" do
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -343,7 +343,7 @@ RSpec.describe "User Features" do
       let!(:other_user) { FactoryBot.create(:user, name: "Other name", is_dpo: false, organisation: user.organisation) }
 
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -392,7 +392,7 @@ RSpec.describe "User Features" do
       let!(:other_user) { FactoryBot.create(:user, name: "Other name", organisation: user.organisation) }
 
       before do
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -429,7 +429,7 @@ RSpec.describe "User Features" do
 
       before do
         other_user.update!(confirmation_token: "abc")
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -465,7 +465,7 @@ RSpec.describe "User Features" do
       allow(DeviseNotifyMailer).to receive(:new).and_return(devise_notify_mailer)
       allow(devise_notify_mailer).to receive(:notify_client).and_return(notify_client)
       allow(notify_client).to receive(:send_email).and_return(true)
-      visit("/lettings-logs")
+      visit("/logs")
       fill_in("user[email]", with: support_user.email)
       fill_in("user[password]", with: "pAssword1")
     end
@@ -512,7 +512,7 @@ RSpec.describe "User Features" do
         click_button("Sign in")
         fill_in("code", with: otp)
         click_button("Submit")
-        expect(page).to have_content("Lettings logs")
+        expect(page).to have_content("Logs")
       end
 
       context "but it is more than 15 minutes old" do
@@ -568,7 +568,7 @@ RSpec.describe "User Features" do
         fill_in("code", with: otp)
         click_button("Submit")
         click_link("Sign out")
-        visit("/lettings-logs")
+        visit("/logs")
         fill_in("user[email]", with: support_user.email)
         fill_in("user[password]", with: "pAssword1")
         click_button("Sign in")
@@ -638,15 +638,15 @@ RSpec.describe "User Features" do
         end
 
         it "clears the previously selected organisation value" do
-          visit("/lettings-logs")
+          visit("/logs")
           choose("organisation-select-specific-org-field", allow_label_click: true)
           expect(page).to have_field("organisation-field", with: "")
           find("#organisation-field").click.native.send_keys("F", "i", "l", "t", :down, :enter)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=specific_org&organisation=#{organisation.id}")
+          expect(page).to have_current_path("/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=specific_org&organisation=#{organisation.id}")
           choose("organisation-select-all-field", allow_label_click: true)
           click_button("Apply filters")
-          expect(page).to have_current_path("/lettings-logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all")
+          expect(page).to have_current_path("/logs?%5Byears%5D%5B%5D=&%5Bstatus%5D%5B%5D=&user=all&organisation_select=all")
         end
       end
     end

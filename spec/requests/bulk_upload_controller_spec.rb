@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BulkUploadController, type: :request do
-  let(:url) { "/lettings-logs/bulk-upload" }
+  let(:url) { "/logs/bulk-upload" }
   let(:user) { FactoryBot.create(:user) }
   let(:organisation) { user.organisation }
   let(:valid_file) { fixture_file_upload("2021_22_lettings_bulk_upload.xlsx", "application/vnd.ms-excel") }

@@ -6,8 +6,8 @@ RSpec.describe Imports::LettingsLogsImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
-  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+  let(:real_2022_2023_form) { Form.new("config/forms/2022_2023.json", "2022_2023") }
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:organisation) { FactoryBot.create(:organisation, old_visible_id: "1", provider_type: "PRP") }
@@ -35,8 +35,8 @@ RSpec.describe Imports::LettingsLogsImportService do
     FactoryBot.create(:location, old_visible_id: 10, postcode: "LS166FT", scheme_id: scheme2.id, mobility_type: "W")
 
     # Stub the form handler to use the real form
-    allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
-    allow(FormHandler.instance).to receive(:get_form).with("current_lettings").and_return(real_2022_2023_form)
+    allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("2022_2023").and_return(real_2022_2023_form)
   end
 
   context "when importing lettings logs" do

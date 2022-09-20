@@ -58,8 +58,6 @@ gem "sentry-ruby"
 gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
-# Use sidekiq for background processing
-gem "sidekiq"
 
 group :development, :test do
   # Check gems for known vulnerabilities

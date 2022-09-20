@@ -33,7 +33,5 @@ module DataCollector
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.exceptions_app = routes
-
-    config.active_job.queue_adapter = :sidekiq
   end
 end

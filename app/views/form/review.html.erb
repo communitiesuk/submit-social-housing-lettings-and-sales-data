@@ -1,7 +1,7 @@
 <% content_for :title, "Review lettings log" %>
 <% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
   "Logs" => "/logs",
-  "Log #{@log.id}" => "/logs/#{@log.id}",
+  "Log #{@lettings_log.id}" => "/logs/#{@lettings_log.id}",
   "Review lettings log" => "",
 }) %>
 
@@ -11,9 +11,9 @@
       <%= content_for(:title) %>
     </h1>
     <p class="govuk-body">
-      You can review and make changes to this log until 2nd June <%= @log.collection_start_year.present? ? @log.collection_start_year + 1 : "" %>.
+      You can review and make changes to this log until 2nd June <%= @lettings_log.collection_start_year.present? ? @lettings_log.collection_start_year + 1 : "" %>.
     </p>
-    <% @log.form.sections.map do |section| %>
+    <% @lettings_log.form.sections.map do |section| %>
       <h2 class="govuk-heading-m"><%= section.label %></h2>
       <% section.subsections.map do |subsection| %>
         <div class="x-govuk-summary-card govuk-!-margin-bottom-6">
@@ -23,7 +23,7 @@
           <div class="x-govuk-summary-card__body">
             <%= render partial: "form/check_answers_summary_list", locals: {
               subsection:,
-              lettings_log: @log,
+              lettings_log: @lettings_log,
             } %>
           </div>
         </div>

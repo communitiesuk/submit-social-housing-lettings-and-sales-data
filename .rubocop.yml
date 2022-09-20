@@ -20,10 +20,3 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
-
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - staging
-    - development
-    - test

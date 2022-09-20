@@ -3,7 +3,7 @@ class BulkUploadController < ApplicationController
 
   def show
     @bulk_upload = BulkUpload.new(nil, nil)
-    render "logs/bulk_upload"
+    render "lettings_logs/bulk_upload"
   end
 
   def bulk_upload
@@ -12,7 +12,7 @@ class BulkUploadController < ApplicationController
     @bulk_upload = BulkUpload.new(file, content_type)
     @bulk_upload.process(current_user)
     if @bulk_upload.errors.present?
-      render "logs/bulk_upload", status: :unprocessable_entity
+      render "lettings_logs/bulk_upload", status: :unprocessable_entity
     else
       redirect_to(lettings_logs_path)
     end

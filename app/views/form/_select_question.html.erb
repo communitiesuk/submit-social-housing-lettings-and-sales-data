@@ -1,7 +1,7 @@
 <%= render partial: "form/guidance/#{question.guidance_partial}" if question.top_guidance? %>
 
-<% selected = @log.public_send(question.id) || "" %>
-<% answers = question.displayed_answer_options(@log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
+<% selected = @lettings_log.public_send(question.id) || "" %>
+<% answers = question.displayed_answer_options(@lettings_log).map { |key, value| OpenStruct.new(id: key, name: value.respond_to?(:service_name) ? value.service_name : nil, resource: value) } %>
 <%= f.govuk_select(question.id.to_sym,
   label: legend(question, page_header, conditional),
   "data-controller": "accessible-autocomplete",
@@ -12,7 +12,7 @@
       data-synonyms="<%= question.answer_option_synonyms(answer.resource) %>"
       data-append="<%= question.answer_option_append(answer.resource) %>"
       data-hint="<%= question.answer_option_hint(answer.resource) %>"
-      <%= question.answer_selected?(@log, answer) ? "selected" : "" %>
+      <%= question.answer_selected?(@lettings_log, answer) ? "selected" : "" %>
       <%= answer.id == "" ? "disabled" : "" %>><%= answer.name || answer.resource %></option>
   <% end %>
   <% end %>

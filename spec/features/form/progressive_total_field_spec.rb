@@ -18,12 +18,12 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   it "does not show when js is not enabled" do
-    visit("/lettings-logs/#{lettings_log.id}/rent")
+    visit("/logs/#{lettings_log.id}/rent")
     expect(page).to have_selector("#tcharge_div", visible: :all)
   end
 
   it "does show when js is enabled and calculates the total", js: true do
-    visit("/lettings-logs/#{lettings_log.id}/rent")
+    visit("/logs/#{lettings_log.id}/rent")
     expect(page).to have_selector("#tcharge_div")
     fill_in("lettings-log-brent-field", with: 5)
     expect(find("#lettings-log-tcharge-field").value).to eq("5.00")
@@ -32,7 +32,7 @@ RSpec.describe "Accessible Automcomplete" do
   end
 
   it "total displays despite error message", js: true do
-    visit("/lettings-logs/#{lettings_log.id}/rent")
+    visit("/logs/#{lettings_log.id}/rent")
     choose("lettings-log-period-1-field", allow_label_click: true)
     fill_in("lettings-log-brent-field", with: 500)
     fill_in("lettings-log-scharge-field", with: 50)

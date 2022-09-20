@@ -16,11 +16,6 @@ RSpec.describe Form::Question, type: :model do
   let(:page) { Form::Page.new(page_id, page_definition, subsection) }
   let(:question_id) { "earnings" }
   let(:question_definition) { page_definition["questions"][question_id] }
-  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
-
-  before do
-    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
-  end
 
   it "has an id" do
     expect(question.id).to eq(question_id)
@@ -238,7 +233,7 @@ RSpec.describe Form::Question, type: :model do
 
     it "has an update answer link href helper" do
       lettings_log.id = 1
-      expect(question.action_href(lettings_log, page.id)).to eq("/lettings-logs/1/net-income?referrer=check_answers")
+      expect(question.action_href(lettings_log, page.id)).to eq("/logs/1/net-income?referrer=check_answers")
     end
 
     context "when the question has an inferred answer" do

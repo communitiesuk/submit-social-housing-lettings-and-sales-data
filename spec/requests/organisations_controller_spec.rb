@@ -352,30 +352,26 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when viewing logs for other organisation" do
-        it "does not display the lettings logs" do
-          get "/organisations/#{unauthorised_organisation.id}/lettings-logs", headers:, params: {}
-          expect(response).to have_http_status(:unauthorized)
+        before do
+          get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
         end
 
-        it "prevents CSV download" do
-          expect {
-            post "/organisations/#{unauthorised_organisation.id}/logs/email-csv", headers:, params: {}
-          }.not_to enqueue_job(EmailCsvJob)
-          expect(response).to have_http_status(:unauthorized)
+        it "returns not found 404 from org details route" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "shows the 404 view" do
+          expect(page).to have_content("Page not found")
         end
       end
 
       context "when viewing logs for your organisation" do
-        it "does not display the logs" do
-          get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
-          expect(response).to have_http_status(:unauthorized)
+        before do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
         end
 
-        it "prevents CSV download" do
-          expect {
-            post "/organisations/#{organisation.id}/logs/email-csv", headers:, params: {}
-          }.not_to enqueue_job(EmailCsvJob)
-          expect(response).to have_http_status(:unauthorized)
+        it "redirects to /logs page" do
+          expect(response).to redirect_to("/logs")
         end
       end
 
@@ -499,30 +495,26 @@ RSpec.describe OrganisationsController, type: :request do
       end
 
       context "when viewing logs for other organisation" do
-        it "does not display the logs" do
-          get "/organisations/#{unauthorised_organisation.id}/lettings-logs", headers:, params: {}
-          expect(response).to have_http_status(:unauthorized)
+        before do
+          get "/organisations/#{unauthorised_organisation.id}/logs", headers:, params: {}
         end
 
-        it "prevents CSV download" do
-          expect {
-            post "/organisations/#{unauthorised_organisation.id}/logs/email-csv", headers:, params: {}
-          }.not_to enqueue_job(EmailCsvJob)
-          expect(response).to have_http_status(:unauthorized)
+        it "returns not found 404 from org details route" do
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "shows the 404 view" do
+          expect(page).to have_content("Page not found")
         end
       end
 
       context "when viewing logs for your organisation" do
-        it "does not display the logs" do
-          get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
-          expect(response).to have_http_status(:unauthorized)
+        before do
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
         end
 
-        it "prevents CSV download" do
-          expect {
-            post "/organisations/#{organisation.id}/logs/email-csv", headers:, params: {}
-          }.not_to enqueue_job(EmailCsvJob)
-          expect(response).to have_http_status(:unauthorized)
+        it "redirects to /logs page" do
+          expect(response).to redirect_to("/logs")
         end
       end
     end
@@ -565,8 +557,8 @@ RSpec.describe OrganisationsController, type: :request do
 
         it "shows all organisations" do
           total_number_of_orgs = Organisation.all.count
-          expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/lettings-logs"
-          expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/lettings-logs"
+          expect(page).to have_link organisation.name, href: "organisations/#{organisation.id}/logs"
+          expect(page).to have_link unauthorised_organisation.name, href: "organisations/#{unauthorised_organisation.id}/logs"
           expect(page).to have_content("#{total_number_of_orgs} total organisations")
         end
 
@@ -574,7 +566,7 @@ RSpec.describe OrganisationsController, type: :request do
           expect(page).to have_field("search", type: "search")
         end
 
-        context "when viewing a specific organisation's lettings logs" do
+        context "when viewing a specific organisation's logs" do
           let(:number_of_org1_lettings_logs) { 2 }
           let(:number_of_org2_lettings_logs) { 4 }
 
@@ -582,17 +574,17 @@ RSpec.describe OrganisationsController, type: :request do
             FactoryBot.create_list(:lettings_log, number_of_org1_lettings_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
             FactoryBot.create_list(:lettings_log, number_of_org2_lettings_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
 
-            get "/organisations/#{organisation.id}/lettings-logs", headers:, params: {}
+            get "/organisations/#{organisation.id}/logs", headers:, params: {}
           end
 
           it "only shows logs for that organisation" do
             expect(page).to have_content("#{number_of_org1_lettings_logs} total logs")
             organisation.lettings_logs.map(&:id).each do |lettings_log_id|
-              expect(page).to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
+              expect(page).to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
             end
 
             unauthorised_organisation.lettings_logs.map(&:id).each do |lettings_log_id|
-              expect(page).not_to have_link lettings_log_id.to_s, href: "/lettings-logs/#{lettings_log_id}"
+              expect(page).not_to have_link lettings_log_id.to_s, href: "/logs/#{lettings_log_id}"
             end
           end
 
@@ -616,12 +608,12 @@ RSpec.describe OrganisationsController, type: :request do
             let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
             it "has search results in the title" do
-              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
             end
 
             it "shows lettings logs matching the id" do
-              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.id}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.id}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
@@ -629,7 +621,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows lettings logs matching the tenant code" do
-              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.tenancycode}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
@@ -637,7 +629,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows lettings logs matching the property reference" do
-              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.propcode}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.propcode}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
@@ -645,7 +637,7 @@ RSpec.describe OrganisationsController, type: :request do
             end
 
             it "shows lettings logs matching the property postcode" do
-              get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+              get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
               expect(page).to have_link(log_to_search.id.to_s)
               logs.each do |log|
                 expect(page).not_to have_link(log.id.to_s)
@@ -656,7 +648,7 @@ RSpec.describe OrganisationsController, type: :request do
               let!(:matching_postcode_log) { FactoryBot.create(:lettings_log, :completed, owning_organisation: user.organisation, postcode_full: log_to_search.postcode_full) }
 
               it "displays all matching logs" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
+                get "/organisations/#{organisation.id}/logs?search=#{log_to_search.postcode_full}", headers: headers, params: {}
                 expect(page).to have_link(log_to_search.id.to_s)
                 expect(page).to have_link(matching_postcode_log.id.to_s)
                 logs.each do |log|
@@ -671,19 +663,19 @@ RSpec.describe OrganisationsController, type: :request do
               let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
 
               it "has title with pagination details for page 1" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
+                get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}", headers: headers, params: {}
                 expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 1 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
 
               it "has title with pagination details for page 2" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
+                get "/organisations/#{organisation.id}/logs?search=#{logs[0].postcode_full}&page=2", headers: headers, params: {}
                 expect(page).to have_title("#{organisation.name} (#{logs.count} logs matching ‘#{postcode}’) (page 2 of 2) - Submit social housing lettings and sales data (CORE) - GOV.UK")
               end
             end
 
             context "when search query doesn't match any logs" do
               it "doesn't display any logs" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=foobar", headers:, params: {}
+                get "/organisations/#{organisation.id}/logs?search=foobar", headers:, params: {}
                 logs.each do |log|
                   expect(page).not_to have_link(log.id.to_s)
                 end
@@ -693,7 +685,7 @@ RSpec.describe OrganisationsController, type: :request do
 
             context "when search query is empty" do
               it "doesn't display any logs" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=", headers:, params: {}
+                get "/organisations/#{organisation.id}/logs?search=", headers:, params: {}
                 logs.each do |log|
                   expect(page).not_to have_link(log.id.to_s)
                 end
@@ -707,98 +699,7 @@ RSpec.describe OrganisationsController, type: :request do
               let!(:log_matching_filter_and_search) { FactoryBot.create(:lettings_log, :in_progress, owning_organisation: user.organisation, postcode_full: matching_postcode, created_by: user) }
 
               it "shows only logs matching both search and filters" do
-                get "/organisations/#{organisation.id}/lettings-logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
-                expect(page).to have_link(log_matching_filter_and_search.id.to_s)
-                expect(page).not_to have_link(log_to_search.id.to_s)
-                logs.each do |log|
-                  expect(page).not_to have_link(log.id.to_s)
-                end
-              end
-            end
-          end
-        end
-
-        context "when viewing a specific organisation's sales logs" do
-          let(:number_of_org1_sales_logs) { 2 }
-          let(:number_of_org2_sales_logs) { 4 }
-
-          before do
-            FactoryBot.create_list(:sales_log, number_of_org1_sales_logs, owning_organisation_id: organisation.id, managing_organisation_id: organisation.id)
-            FactoryBot.create_list(:sales_log, number_of_org2_sales_logs, owning_organisation_id: unauthorised_organisation.id, managing_organisation_id: unauthorised_organisation.id)
-
-            get "/organisations/#{organisation.id}/sales-logs", headers:, params: {}
-          end
-
-          it "only shows logs for that organisation" do
-            expect(page).to have_content("#{number_of_org1_sales_logs} total logs")
-            organisation.sales_logs.map(&:id).each do |sales_log_id|
-              expect(page).to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
-            end
-
-            unauthorised_organisation.sales_logs.map(&:id).each do |sales_log_id|
-              expect(page).not_to have_link sales_log_id.to_s, href: "/sales-logs/#{sales_log_id}"
-            end
-          end
-
-          it "has filters" do
-            expect(page).to have_content("Filters")
-            expect(page).to have_content("Collection year")
-          end
-
-          it "does not have specific organisation filter" do
-            expect(page).not_to have_content("Specific organisation")
-          end
-
-          it "has a sub-navigation with correct tabs" do
-            expect(page).to have_css(".app-sub-navigation")
-            expect(page).to have_content("About this organisation")
-          end
-
-          context "when using a search query" do
-            let(:logs) { FactoryBot.create_list(:sales_log, 3, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_to_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
-            let(:log_total_count) { LettingsLog.where(owning_organisation: user.organisation).count }
-
-            it "has search results in the title" do
-              get "/organisations/#{organisation.id}/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_title("#{organisation.name} (1 log matching ‘#{log_to_search.id}’) - Submit social housing lettings and sales data (CORE) - GOV.UK")
-            end
-
-            it "shows sales logs matching the id" do
-              get "/organisations/#{organisation.id}/sales-logs?search=#{log_to_search.id}", headers: headers, params: {}
-              expect(page).to have_link(log_to_search.id.to_s)
-              logs.each do |log|
-                expect(page).not_to have_link(log.id.to_s)
-              end
-            end
-
-            context "when search query doesn't match any logs" do
-              it "doesn't display any logs" do
-                get "/organisations/#{organisation.id}/sales-logs?search=foobar", headers:, params: {}
-                logs.each do |log|
-                  expect(page).not_to have_link(log.id.to_s)
-                end
-                expect(page).not_to have_link(log_to_search.id.to_s)
-              end
-            end
-
-            context "when search query is empty" do
-              it "doesn't display any logs" do
-                get "/organisations/#{organisation.id}/sales-logs?search=", headers:, params: {}
-                logs.each do |log|
-                  expect(page).not_to have_link(log.id.to_s)
-                end
-                expect(page).not_to have_link(log_to_search.id.to_s)
-              end
-            end
-
-            context "when search and filter is present" do
-              let(:matching_status) { "completed" }
-              let!(:log_matching_filter_and_search) { FactoryBot.create(:sales_log, :completed, owning_organisation: user.organisation, created_by: user) }
-              let(:matching_id) { log_matching_filter_and_search.id }
-
-              it "shows only logs matching both search and filters" do
-                get "/organisations/#{organisation.id}/sales-logs?search=#{matching_id}&status[]=#{matching_status}", headers: headers, params: {}
+                get "/organisations/#{organisation.id}/logs?search=#{matching_postcode}&status[]=#{matching_status}", headers: headers, params: {}
                 expect(page).to have_link(log_matching_filter_and_search.id.to_s)
                 expect(page).not_to have_link(log_to_search.id.to_s)
                 logs.each do |log|
@@ -1130,14 +1031,15 @@ RSpec.describe OrganisationsController, type: :request do
 
     context "when they view the logs tab" do
       before do
-        get "/organisations/#{organisation.id}/lettings-logs"
+        get "/organisations/#{organisation.id}/logs"
       end
 
       it "has a CSV download button with the correct path" do
-        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs/csv-download")
+        expect(page).to have_link("Download (CSV)", href: "/organisations/#{organisation.id}/logs.csv")
       end
 
       context "when you download the CSV" do
+        let(:headers) { { "Accept" => "text/csv" } }
         let(:other_organisation) { FactoryBot.create(:organisation) }
 
         before do
@@ -1146,15 +1048,9 @@ RSpec.describe OrganisationsController, type: :request do
         end
 
         it "only includes logs from that organisation" do
-          get "/organisations/#{organisation.id}/logs/csv-download"
-
-          expect(page).to have_text("You've selected 3 logs.")
-        end
-
-        it "provides the organisation to the mail job" do
-          expect {
-            post "/organisations/#{organisation.id}/logs/email-csv?status[]=completed", headers:, params: {}
-          }.to enqueue_job(EmailCsvJob).with(user, nil, { "status" => %w[completed] }, false, organisation)
+          get "/organisations/#{organisation.id}/logs", headers:, params: {}
+          csv = CSV.parse(response.body)
+          expect(csv.count).to eq(4)
         end
       end
     end

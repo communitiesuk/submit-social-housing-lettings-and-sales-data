@@ -124,12 +124,10 @@ When a pull request is opened to `main` only the Test stage runs.
     cf target -o dluhc-core -s staging
     ```
 
-3. Create required Postgres, Redis and S3 bucket backing services (this will take ~15 mins to finish creating):
+3. Create required Postgres and S3 bucket backing services (this will take ~15 mins to finish creating):
 
     ```bash
     cf create-service postgres tiny-unencrypted-13 dluhc-core-staging-postgres
-    cf create-service redis micro-6.x dluhc-core-staging-redis
-    cf create-service aws-s3-bucket default dluhc-core-staging-csv-bucket
     cf create-service aws-s3-bucket default dluhc-core-staging-import-bucket
     cf create-service aws-s3-bucket default dluhc-core-staging-export-bucket
     ```
@@ -143,8 +141,6 @@ When a pull request is opened to `main` only the Test stage runs.
 5. Bind S3 services to app:
 
     ```bash
-    cf bind-service dluhc-core-staging dluhc-core-staging-csv-bucket
-    cf bind-service dluhc-core-staging dluhc-core-staging-redis
     cf bind-service dluhc-core-staging dluhc-core-staging-import-bucket -c '{"permissions": "read-only"}'
     cf bind-service dluhc-core-staging dluhc-core-staging-export-bucket -c '{"permissions": "read-write"}'
     ```
@@ -152,7 +148,6 @@ When a pull request is opened to `main` only the Test stage runs.
 6. Create a service keys for accessing the S3 bucket from outside Gov PaaS:
 
     ```bash
-    cf create-service-key dluhc-core-staging-csv-bucket csv-bucket -c '{"allow_external_access": true}'
     cf create-service-key dluhc-core-staging-import-bucket data-import -c '{"allow_external_access": true}'
     cf create-service-key dluhc-core-staging-export-bucket data-export -c '{"allow_external_access": true, "permissions": "read-only"}'
     ```
@@ -171,12 +166,10 @@ When a pull request is opened to `main` only the Test stage runs.
     cf target -o dluhc-core -s production
     ```
 
-3. Create required Postgres, Redis and S3 bucket backing services (this will take ~15 mins to finish creating):
+3. Create required Postgres and S3 bucket backing services (this will take ~15 mins to finish creating):
 
     ```bash
     cf create-service postgres small-ha-13 dluhc-core-production-postgres
-    cf create-service redis micro-ha-6.x dluhc-core-production-redis
-    cf create-service aws-s3-bucket default dluhc-core-production-csv-bucket
     cf create-service aws-s3-bucket default dluhc-core-production-import-bucket
     cf create-service aws-s3-bucket default dluhc-core-production-export-bucket
     ```
@@ -190,8 +183,6 @@ When a pull request is opened to `main` only the Test stage runs.
 5. Bind S3 services to app:
 
     ```bash
-    cf bind-service dluhc-core-production dluhc-core-production-csv-bucket
-    cf bind-service dluhc-core-production dluhc-core-production-redis
     cf bind-service dluhc-core-production dluhc-core-production-import-bucket -c '{"permissions": "read-only"}'
     cf bind-service dluhc-core-production dluhc-core-production-export-bucket -c '{"permissions": "read-write"}'
     ```
@@ -199,7 +190,6 @@ When a pull request is opened to `main` only the Test stage runs.
 6. Create a service keys for accessing the S3 bucket from outside Gov PaaS:
 
     ```bash
-    cf create-service-key dluhc-core-production-csv-bucket dluhc-core-production-csv-bucket-service-key -c '{"allow_external_access": true}'
     cf create-service-key dluhc-core-production-import-bucket data-import -c '{"allow_external_access": true}'
     cf create-service-key dluhc-core-production-export-bucket data-export -c '{"allow_external_access": true, "permissions": "read-only"}'
     ```

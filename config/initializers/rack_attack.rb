@@ -5,7 +5,7 @@ if Rails.env.development? || Rails.env.test?
   Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   Rack::Attack.enabled = false
 else
-  redis_url = Configuration::PaasConfigurationService.new.redis_uris[:"dluhc-core-#{Rails.env}-redis"]
+  redis_url = Configuration::PaasConfigurationService.new.redis_uris[:"dluhc-core-#{Rails.env}-redis-rate-limit"]
   Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(url: redis_url)
 end
 

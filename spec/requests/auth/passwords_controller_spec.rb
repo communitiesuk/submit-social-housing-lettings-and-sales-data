@@ -133,7 +133,7 @@ RSpec.describe Auth::PasswordsController, type: :request do
         it "sends you to the 2FA page and does not allow bypassing 2FA code" do
           put "/account/password", headers: headers, params: params
           expect(response).to redirect_to("/account/two-factor-authentication")
-          get "/lettings-logs", headers: headers
+          get "/logs", headers: headers
           expect(response).to redirect_to("/account/two-factor-authentication")
         end
 

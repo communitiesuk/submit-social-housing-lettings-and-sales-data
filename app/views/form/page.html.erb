@@ -5,10 +5,10 @@
 <% end %>
 
 <div data-controller="govukfrontend"></div>
-<%= form_with model: @log, url: form_lettings_log_path(@log), method: "post", local: true do |f| %>
+<%= form_with model: @lettings_log, url: form_lettings_log_path(@lettings_log), method: "post", local: true do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-<%= @page.questions[0].type == "interruption_screen" ? "full-from-desktop" : "two-thirds-from-desktop" %>">
-      <% remove_other_page_errors(@log, @page) %>
+      <% remove_other_page_errors(@lettings_log, @page) %>
       <%= f.govuk_error_summary %>
 
       <% if @page.header.present? %>
@@ -30,9 +30,9 @@
             <%= govuk_section_break(visible: true, size: "m") %>
           <% end %>
           <% if question.type == "interruption_screen" %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @lettings_log, title_text: @page.title_text, informative_text: @page.informative_text, form: @form, f:, conditional: false } %>
           <% else %>
-            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @log, f:, conditional: false } %>
+            <%= render partial: "form/#{question.type}_question", locals: { question:, caption_text: @subsection.label, page_header: @page.header, lettings_log: @lettings_log, f:, conditional: false } %>
           <% end %>
         </div>
       <% end %>
@@ -42,10 +42,10 @@
       <div class="govuk-button-group">
         <% if !@page.id.include?("value_check") && if request.query_parameters["referrer"] != "check_answers" %>
           <%= f.govuk_submit "Save and continue" %>
-          <%= govuk_link_to "Skip for now", send(@log.form.next_page_redirect_path(@page, @log, current_user), @log) %>
+          <%= govuk_link_to "Skip for now", send(@lettings_log.form.next_page_redirect_path(@page, @lettings_log, current_user), @lettings_log) %>
           <% else %>
           <%= f.govuk_submit "Save changes" %>
-            <%= govuk_link_to "Cancel", send(@log.form.cancel_path(@page, @log), @log) %>
+            <%= govuk_link_to "Cancel", "/logs/#{@lettings_log.id}/setup/check-answers" %>
           <% end %>
         <% end %>
       </div>
