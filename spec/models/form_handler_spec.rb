@@ -3,6 +3,16 @@ require "rails_helper"
 RSpec.describe FormHandler do
   let(:form_handler) { described_class.instance }
 
+  before do
+    Timecop.freeze(Time.utc(2022, 9, 20))
+    Singleton.__init__(described_class)
+  end
+
+  after do
+    Timecop.unfreeze
+    Singleton.__init__(described_class)
+  end
+
   context "when accessing a form in a different year" do
     before do
       Timecop.freeze(Time.utc(2021, 8, 3))
