@@ -133,7 +133,7 @@ private
 
 
   def find_resource
-    @log = if is_new_log_request? || new_log_referrer?
+    @log = if new_log_request? || new_log_request_referrer?
              LettingsLog.new(owning_organisation: current_user.support? ? nil : current_user.organisation)
            else
              params.key?("sales_log") ? current_user.sales_logs.find_by(id: params[:id]) : current_user.lettings_logs.find_by(id: params[:id])
