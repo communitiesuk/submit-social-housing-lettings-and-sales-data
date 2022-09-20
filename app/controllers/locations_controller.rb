@@ -79,7 +79,7 @@ class LocationsController < ApplicationController
         else
           redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
         end
-        end
+      end
     else
       render :edit, status: :unprocessable_entity
     end
