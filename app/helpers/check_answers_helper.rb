@@ -28,6 +28,10 @@ module CheckAnswersHelper
     subsection.applicable_questions(lettings_log).map(&:check_answers_card_number).compact.length.positive?
   end
 
+  def next_incomplete_section_path(log, redirect_path)
+    "#{log.class.name.underscore}_#{redirect_path.underscore.tr('/', '_')}_path"
+  end
+
 private
 
   def answered_questions_count(subsection, lettings_log, current_user)

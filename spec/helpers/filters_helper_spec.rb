@@ -11,7 +11,7 @@ RSpec.describe FiltersHelper do
 
     context "when the filter is the user filter but session filters is empty" do
       before do
-        session[:lettings_logs_filters] = {}.to_json
+        session[:logs_filters] = {}.to_json
       end
 
       context "when looking at the all value" do
@@ -24,7 +24,7 @@ RSpec.describe FiltersHelper do
 
     context "when one filter is selected" do
       before do
-        session[:lettings_logs_filters] = { "status": "in_progress" }.to_json
+        session[:logs_filters] = { "status": "in_progress" }.to_json
       end
 
       it "returns false for non selected filters" do
@@ -38,7 +38,7 @@ RSpec.describe FiltersHelper do
 
     context "when support user is using the organisation filter" do
       before do
-        session[:lettings_logs_filters] = { "organisation": "1" }.to_json
+        session[:logs_filters] = { "organisation": "1" }.to_json
       end
 
       it "returns true for the parent organisation_select filter" do
@@ -49,7 +49,7 @@ RSpec.describe FiltersHelper do
 
     context "when support user has not set the organisation_select filter" do
       before do
-        session[:lettings_logs_filters] = {}.to_json
+        session[:logs_filters] = {}.to_json
       end
 
       it "defaults to all organisations" do
@@ -60,7 +60,7 @@ RSpec.describe FiltersHelper do
 
     context "when the specific organisation filter is not set" do
       before do
-        session[:lettings_logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
+        session[:logs_filters] = { "status" => [""], "years" => [""], "user" => "all" }.to_json
       end
 
       it "marks the all options as checked" do
@@ -72,7 +72,7 @@ RSpec.describe FiltersHelper do
 
   describe "#selected_option" do
     before do
-      session[:lettings_logs_filters] = {}.to_json
+      session[:logs_filters] = {}.to_json
     end
 
     context "when nothing has been selected" do

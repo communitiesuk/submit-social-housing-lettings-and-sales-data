@@ -16,18 +16,18 @@
           <% row.key { question.check_answer_label.to_s.presence || question.header.to_s } %>
           <% row.value do %>
             <span class="govuk-!-margin-right-4"><%= get_answer_label(question) %></span>
-            <% extra_value = question.get_extra_check_answer_value(lettings_log) %>
+            <% extra_value = question.get_extra_check_answer_value(log) %>
             <% if extra_value %>
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= extra_value %></span>
             <% end %>
             <br>
-            <% question.get_inferred_answers(lettings_log).each do |inferred_answer| %>
+            <% question.get_inferred_answers(log).each do |inferred_answer| %>
               <span class="govuk-!-font-weight-regular app-!-colour-muted"><%= inferred_answer %></span>
             <% end %>
           <% end %>
           <% row.action(
-            text: question.action_text(lettings_log),
-            href: question.action_href(lettings_log, question.page.id),
+            text: question.action_text(log),
+            href: question.action_href(log, question.page.id),
             visually_hidden_text: question.check_answer_label.to_s.downcase,
           ) %>
         <% end %>

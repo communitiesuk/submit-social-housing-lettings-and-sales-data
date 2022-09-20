@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_16_125704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -313,6 +313,22 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
+  create_table "sales_logs", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.datetime "saledate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "owning_organisation_id"
+    t.bigint "managing_organisation_id"
+    t.bigint "created_by_id"
+    t.string "purchid"
+    t.integer "type"
+    t.integer "ownershipsch"
+    t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
+    t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
+    t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
+  end
+
   create_table "schemes", force: :cascade do |t|
     t.string "service_name"
     t.bigint "owning_organisation_id", null: false
@@ -395,6 +411,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "users", "organisations", on_delete: :cascade

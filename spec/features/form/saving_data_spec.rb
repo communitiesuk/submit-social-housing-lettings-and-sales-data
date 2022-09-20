@@ -39,7 +39,7 @@ RSpec.describe "Form Saving Data" do
       answer = hsh[:answer].respond_to?(:keys) ? hsh[:answer].keys.first : hsh[:answer]
       path = hsh[:path]
       original_value = lettings_log.send(question)
-      visit("/logs/#{id}/#{path.to_s.dasherize}")
+      visit("/lettings-logs/#{id}/#{path.to_s.dasherize}")
       case type
       when "text"
         fill_in("lettings-log-#{question.to_s.dasherize}-field", with: answer)
@@ -55,7 +55,7 @@ RSpec.describe "Form Saving Data" do
   end
 
   it "updates total value of the rent", js: true do
-    visit("/logs/#{id}/rent")
+    visit("/lettings-logs/#{id}/rent")
 
     fill_in("lettings-log-brent-field", with: 3.02)
     expect(page.find("#lettings-log-tcharge-field")).to have_content("3.02")
@@ -71,17 +71,17 @@ RSpec.describe "Form Saving Data" do
   end
 
   it "displays number answers in inputs if they are already saved" do
-    visit("/logs/#{id}/property-postcode")
+    visit("/lettings-logs/#{id}/property-postcode")
     expect(page).to have_field("lettings-log-postcode-full-field", with: lettings_log.postcode_full)
   end
 
   it "displays text answers in inputs if they are already saved" do
-    visit("/logs/#{id}/person-1-age")
+    visit("/lettings-logs/#{id}/person-1-age")
     expect(page).to have_field("lettings-log-age1-field", with: "17")
   end
 
   it "displays checkbox answers in inputs if they are already saved" do
-    visit("/logs/#{lettings_log_with_checkbox_questions_answered.id.to_s.dasherize}/accessibility-requirements")
+    visit("/lettings-logs/#{lettings_log_with_checkbox_questions_answered.id.to_s.dasherize}/accessibility-requirements")
     expect(page).to have_checked_field(
       "lettings-log-accessibility-requirements-housingneeds-a-field",
       visible: :all,
