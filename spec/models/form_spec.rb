@@ -205,4 +205,25 @@ RSpec.describe Form, type: :model do
       end
     end
   end
+
+  describe "when creating a sales log" do
+    it "creates a valid sales form" do
+      sections = []
+      form = described_class.new(nil, 2022, sections, "sales")
+      expect(form.type).to eq("sales")
+      expect(form.name).to eq("2022_2023_sales")
+      expect(form.setup_sections.count).to eq(1)
+      expect(form.setup_sections[0].class).to eq(Form::Sales::Sections::Setup)
+      expect(form.sections.count).to eq(1)
+      expect(form.sections[0].class).to eq(Form::Sales::Sections::Setup)
+      expect(form.subsections.count).to eq(1)
+      expect(form.subsections.first.id).to eq("setup")
+      expect(form.pages.count).to eq(5)
+      expect(form.pages.first.id).to eq("organisation")
+      expect(form.questions.count).to eq(5)
+      expect(form.questions.first.id).to eq("owning_organisation_id")
+      expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
+      expect(form.end_date).to eq(Time.zone.parse("2023-07-01"))
+    end
+  end
 end
