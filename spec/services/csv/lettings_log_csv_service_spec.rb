@@ -176,7 +176,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    purchaser_code
                                    property_relet
                                    incref
-                                   sale_completion_date
                                    renttype
                                    lettype
                                    totchild
