@@ -8,6 +8,7 @@ FactoryBot.define do
     trait :completed do
       purchid { "PC123" }
       ownershipsch { 2 }
+      type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
       jointpur { 1 }
     end
