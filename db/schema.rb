@@ -190,7 +190,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_153206) do
     t.integer "age7_known"
     t.integer "age8_known"
     t.integer "ethnic_group"
-    t.string "ethnic_other"
     t.integer "letting_allocation_unknown"
     t.integer "details_known_2"
     t.integer "details_known_3"
