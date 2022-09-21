@@ -184,7 +184,6 @@ class BulkUpload
       rent_type: row[130],
       irproduct_other: row[131],
       # data_protection: row[132],
-      sale_or_letting: "letting",
       declaration: 1,
     }
   end

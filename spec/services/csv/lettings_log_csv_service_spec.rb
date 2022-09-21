@@ -173,7 +173,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    housingneeds_h
                                    property_owner_organisation
                                    property_manager_organisation
-                                   sale_or_letting
                                    purchaser_code
                                    property_relet
                                    incref

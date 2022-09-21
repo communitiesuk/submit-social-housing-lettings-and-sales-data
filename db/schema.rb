@@ -135,7 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_153206) do
     t.integer "net_income_value_check"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
-    t.string "sale_or_letting"
     t.string "irproduct_other"
     t.string "purchaser_code"
     t.integer "reason"
