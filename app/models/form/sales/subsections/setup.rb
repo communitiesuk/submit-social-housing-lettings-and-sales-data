@@ -12,6 +12,7 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
       Form::Common::Pages::CreatedBy.new(nil, nil, self),
       Form::Sales::Pages::SaleDate.new(nil, nil, self),
       Form::Sales::Pages::PurchaserCode.new(nil, nil, self),
+      Form::Sales::Pages::OwnershipScheme.new(nil, nil, self),
       Form::Sales::Pages::SharedOwnershipType.new(nil, nil, self),
       Form::Sales::Pages::JointPurchase.new(nil, nil, self),
     ]
