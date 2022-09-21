@@ -148,7 +148,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_23_093628) do
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
     t.integer "incref"
-    t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
