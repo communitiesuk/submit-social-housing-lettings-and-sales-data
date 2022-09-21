@@ -13,15 +13,7 @@ module Csv
 
         LettingsLog.all.find_each do |record|
           csv << @attributes.map do |att|
-            if %w[la prevloc].include? att
-              label_from_value(record.send(att))
-            elsif %w[la_label prevloc_label].include? att
-              record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att.remove("_label"))) || label_from_value(record.send(att.remove("_label")))
-            elsif %w[mrcdate startdate voiddate].include? att
-              record.send(att)&.to_formatted_s(:govuk_date)
-            else
-              record.form.get_question(att, record)&.label_from_value(record.send(att)) || label_from_value(record.send(att))
-            end
+            label_from_value(record, att)
           end
         end
       end
@@ -29,7 +21,17 @@ module Csv
 
   private
 
-    def label_from_value(value)
+    def label_from_value(record, att)
+      if %w[la prevloc].include? att
+        label_from_boolean_value(record.send(att))
+      elsif %w[mrcdate startdate voiddate].include? att
+        record.send(att)&.to_formatted_s(:govuk_date)
+      else
+        record.form.get_question(att.remove("_label"), record)&.label_from_value(record.send(att.remove("_label"))) || label_from_boolean_value(record.send(att.remove("_label")))
+      end
+    end
+
+    def label_from_boolean_value(value)
       return "Yes" if value == true
       return "No" if value == false
 
