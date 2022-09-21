@@ -19,6 +19,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    is_dpo
                                    owning_organisation_name
                                    managing_organisation_name
+                                   collection_start_year
                                    needstype
                                    renewal
                                    startdate
