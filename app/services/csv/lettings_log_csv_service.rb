@@ -35,7 +35,7 @@ module Csv
     end
 
     def set_csv_attributes
-      metadata_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name managing_organisation_name]
+      metadata_fields = %w[id status created_at updated_at created_by_name is_dpo owning_organisation_name managing_organisation_name collection_start_year]
       metadata_id_fields = %w[managing_organisation_id owning_organisation_id created_by_id]
       scheme_and_location_ids = %w[scheme_id location_id]
       scheme_attributes = %w[scheme_code scheme_service_name scheme_sensitive scheme_type scheme_registered_under_care_act scheme_owning_organisation_name scheme_managing_organisation_name scheme_primary_client_group scheme_has_other_client_group scheme_secondary_client_group scheme_support_type scheme_intended_stay scheme_created_at]

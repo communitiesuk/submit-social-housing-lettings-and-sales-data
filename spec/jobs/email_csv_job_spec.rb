@@ -106,7 +106,7 @@ describe EmailCsvJob do
 
       it "writes answer labels rather than values" do
         expect_csv do |csv|
-          expect(csv.second[15]).to eq("Full-time – 30 hours or more")
+          expect(csv.second[16]).to eq("Full-time – 30 hours or more")
         end
 
         job.perform(user)
