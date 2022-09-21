@@ -8,7 +8,7 @@ class Form::Sales::Questions::OutrightOwnershipType < ::Form::Question
     @answer_options = ANSWER_OPTIONS
     @page = page
     @conditional_for = {
-      "othtype": [12],
+      "othtype" => [12],
     }
   end
 
