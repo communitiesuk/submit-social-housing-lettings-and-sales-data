@@ -2378,7 +2378,7 @@ RSpec.describe LettingsLog do
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
-      lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
+      lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2)
       expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
       expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
       expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)

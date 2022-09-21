@@ -23,7 +23,7 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    needstype
                                    renewal
                                    startdate
-                                   rent_type
+                                   rent_type_detail
                                    irproduct_other
                                    tenancycode
                                    propcode
