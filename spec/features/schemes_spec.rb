@@ -10,7 +10,7 @@ RSpec.describe "Schemes scheme Features" do
       let!(:scheme_to_search) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
 
       before do
-        visit("/logs")
+        visit("/lettings-logs")
         fill_in("user[email]", with: user.email)
         fill_in("user[password]", with: user.password)
         click_button("Sign in")
@@ -82,7 +82,7 @@ RSpec.describe "Schemes scheme Features" do
       allow(Devise).to receive(:friendly_token).and_return(confirmation_token)
       allow(notify_client).to receive(:send_email).and_return(true)
       allow(SecureRandom).to receive(:random_number).and_return(otp)
-      visit("/logs")
+      visit("/lettings-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")
@@ -882,7 +882,7 @@ RSpec.describe "Schemes scheme Features" do
     let!(:schemes) { FactoryBot.create_list(:scheme, 5, owning_organisation_id: user.organisation_id) }
 
     before do
-      visit("/logs")
+      visit("/lettings-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")
@@ -939,7 +939,7 @@ RSpec.describe "Schemes scheme Features" do
       FactoryBot.create(:location, scheme: schemes[1], startdate: nil)
       FactoryBot.create(:location, scheme: schemes[1], startdate: nil)
       FactoryBot.create(:location, scheme: schemes[1], startdate: Time.utc(2023, 6, 3))
-      visit("/logs")
+      visit("/lettings-logs")
       fill_in("user[email]", with: user.email)
       fill_in("user[password]", with: user.password)
       click_button("Sign in")
@@ -950,31 +950,31 @@ RSpec.describe "Schemes scheme Features" do
     end
 
     it "does not display the schemes without a location" do
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
       expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does not display the schemes with a location with a startdate in the future" do
       location.update!(startdate: Time.utc(2022, 7, 4))
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
       expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(3)
     end
 
     it "does display the schemes with a location with a startdate in the past" do
       location.update!(startdate: Time.utc(2022, 5, 2))
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
       expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does display the schemes with a location with a startdate being today" do
       location.update!(startdate: Time.utc(2022, 6, 3))
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
       expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(4)
     end
 
     it "does display the schemes that are not completed" do
       schemes[2].update!(confirmed: false)
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
       expect(find("#lettings-log-scheme-id-field").all("option").count).to eq(3)
     end
   end

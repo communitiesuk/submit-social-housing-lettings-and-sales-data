@@ -60,19 +60,19 @@ module Validations::DateValidations
 private
 
   def first_collection_start_date
-    @first_collection_start_date ||= FormHandler.instance.forms.map { |form| form.second.start_date }.compact.min
+    @first_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.min
   end
 
   def first_collection_end_date
-    @first_collection_end_date ||= FormHandler.instance.forms.map { |form| form.second.end_date }.compact.min
+    @first_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.min
   end
 
   def second_collection_start_date
-    @second_collection_start_date ||= FormHandler.instance.forms.map { |form| form.second.start_date }.compact.max
+    @second_collection_start_date ||= FormHandler.instance.forms.map { |_name, form| form.start_date }.compact.max
   end
 
   def second_collection_end_date
-    @second_collection_end_date ||= FormHandler.instance.forms.map { |form| form.second.end_date }.compact.max
+    @second_collection_end_date ||= FormHandler.instance.forms.map { |_name, form| form.end_date }.compact.max
   end
 
   def date_valid?(question, record)

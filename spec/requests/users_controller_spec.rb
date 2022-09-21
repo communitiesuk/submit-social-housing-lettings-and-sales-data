@@ -41,7 +41,7 @@ RSpec.describe UsersController, type: :request do
 
     describe "#patch" do
       it "does not let you update user details" do
-        patch "/logs/#{user.id}", params: {}
+        patch "/lettings-logs/#{user.id}", params: {}
         expect(response).to redirect_to("/account/sign-in")
       end
     end
@@ -106,7 +106,7 @@ RSpec.describe UsersController, type: :request do
         sign_in user
         get "/", headers:, params: {}
         follow_redirect!
-        expect(path).to include("/logs")
+        expect(path).to include("/lettings-logs")
         expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
         expect(CGI.unescape_html(response.body)).to include(expected_link)
       end
@@ -1672,7 +1672,7 @@ RSpec.describe UsersController, type: :request do
     it "routes user to the /logs page" do
       get "/", headers:, params: {}
       follow_redirect!
-      expect(path).to include("/logs")
+      expect(path).to include("/lettings-logs")
       expected_link = "<a class=\"govuk-header__link govuk-header__link--homepage\" href=\"/\">"
       expect(CGI.unescape_html(response.body)).to include(expected_link)
     end
