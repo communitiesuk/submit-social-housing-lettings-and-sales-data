@@ -183,7 +183,6 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    totelder
                                    totadult
                                    nocharge
-                                   ethnic_other
                                    has_benefits
                                    wrent
                                    wscharge
