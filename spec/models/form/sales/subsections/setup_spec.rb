@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Subsections::Setup, type: :model do
 
   it "has correct pages" do
     expect(setup.pages.map(&:id)).to eq(
-      %w[organisation created_by completion_date purchaser_code ownership_scheme shared_ownership_type discounted_ownership_type outright_ownership_type joint_purchase number_joint_buyers],
+      %w[organisation created_by completion_date purchaser_code ownership_scheme shared_ownership_type discounted_ownership_type outright_ownership_type buyer_live joint_purchase number_joint_buyers],
     )
   end
 
