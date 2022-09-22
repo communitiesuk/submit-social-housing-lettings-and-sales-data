@@ -19,7 +19,7 @@ class FormHandler
   end
 
   def sales_forms
-    sales_sections = [] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
+    sales_sections = [Form::Sales::Property::Sections::PropertyInformation] # Add section classes here e.g. Form::Sales::Property::Sections::PropertyInformation
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")
     previous_form = Form.new(nil, current_collection_start_year - 1, sales_sections, "sales")
     { "current_sales" => current_form,
