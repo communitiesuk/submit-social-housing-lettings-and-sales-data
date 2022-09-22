@@ -10,6 +10,7 @@ FactoryBot.define do
       ownershipsch { 2 }
       type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
+      companybuy { 1 }
       jointpur { 1 }
     end
   end
