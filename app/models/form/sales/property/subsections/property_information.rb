@@ -4,12 +4,12 @@ class Form::Sales::Property::Subsections::PropertyInformation < ::Form::Subsecti
     @id = "property_information"
     @label = "Property information"
     @section = section
-    @depends_on = [ { "setup" => "completed" } ]
+    @depends_on = [{ "setup" => "completed" }]
   end
 
   def pages
     @pages ||= [
-      Form::Sales::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
+      Form::Sales::Property::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
     ]
   end
 end
