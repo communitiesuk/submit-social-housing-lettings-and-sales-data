@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "#new" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:user, old_user_id: "3") }
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let!(:owned_lettings_log) do
       FactoryBot.create(
@@ -72,6 +72,14 @@ RSpec.describe User, type: :model do
 
     it "does not require 2FA" do
       expect(user.need_two_factor_authentication?(nil)).to be false
+    end
+
+    it "can have one or more legacy users" do
+      expect(user.old_user_id).to eq("3")
+
+      user.legacy_users.destroy_all
+      user.update!(old_user_id: "2")
+      expect(user.old_user_id).to eq("2")
     end
 
     it "is confirmable" do

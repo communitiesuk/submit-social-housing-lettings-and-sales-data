@@ -5,7 +5,6 @@ FactoryBot.define do
     password { "pAssword1" }
     organisation
     role { "data_provider" }
-    old_user_id { 2 }
     trait :data_coordinator do
       role { "data_coordinator" }
     end
@@ -19,5 +18,15 @@ FactoryBot.define do
     confirmed_at { Time.zone.now }
     created_at { Time.zone.now }
     updated_at { Time.zone.now }
+
+    transient do
+      old_user_id { SecureRandom.uuid }
+    end
+
+    after(:create) do |user, evaulator|
+      FactoryBot.create(:legacy_user, old_user_id: evaulator.old_user_id, user:)
+
+      user.reload
+    end
   end
 end

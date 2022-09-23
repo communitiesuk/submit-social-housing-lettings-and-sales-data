@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_20_132907) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_23_093628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_20_132907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "legacy_users", force: :cascade do |t|
+    t.string "old_user_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["old_user_id"], name: "index_legacy_users_on_old_user_id", unique: true
   end
 
   create_table "lettings_logs", force: :cascade do |t|
@@ -232,12 +240,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_20_132907) do
     t.integer "void_date_value_check"
     t.integer "housingneeds_type"
     t.integer "housingneeds_other"
-    t.index ["created_by_id"], name: "index_lettings_logs_on_created_by_id"
-    t.index ["location_id"], name: "index_lettings_logs_on_location_id"
-    t.index ["managing_organisation_id"], name: "index_lettings_logs_on_managing_organisation_id"
-    t.index ["old_id"], name: "index_lettings_logs_on_old_id", unique: true
-    t.index ["owning_organisation_id"], name: "index_lettings_logs_on_owning_organisation_id"
-    t.index ["scheme_id"], name: "index_lettings_logs_on_scheme_id"
+    t.index ["created_by_id"], name: "index_case_logs_on_created_by_id"
+    t.index ["location_id"], name: "index_case_logs_on_location_id"
+    t.index ["managing_organisation_id"], name: "index_case_logs_on_managing_organisation_id"
+    t.index ["old_id"], name: "index_case_logs_on_old_id", unique: true
+    t.index ["owning_organisation_id"], name: "index_case_logs_on_owning_organisation_id"
+    t.index ["scheme_id"], name: "index_case_logs_on_scheme_id"
   end
 
   create_table "locations", force: :cascade do |t|
