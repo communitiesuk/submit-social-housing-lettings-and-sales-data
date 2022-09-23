@@ -23,8 +23,8 @@ FactoryBot.define do
       old_user_id { SecureRandom.uuid }
     end
 
-    after(:create) do |user, evaulator|
-      FactoryBot.create(:legacy_user, old_user_id: evaulator.old_user_id, user:)
+    after(:create) do |user, evaluator|
+      FactoryBot.create(:legacy_user, old_user_id: evaluator.old_user_id, user:)
 
       user.reload
     end
