@@ -87,7 +87,7 @@ module Imports
         attributes["details_known_#{index}"] = details_known(index, attributes)
 
         # Trips validation
-        if attributes["age#{index}"] < 16 && attributes["relat#{index}"] != "C"
+        if attributes["age#{index}"].present? && attributes["age#{index}"] < 16 && attributes["relat#{index}"] != "C"
           attributes["age#{index}"] = nil
           attributes["relat#{index}"] = nil
         end
