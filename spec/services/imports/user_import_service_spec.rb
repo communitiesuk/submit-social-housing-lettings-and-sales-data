@@ -78,7 +78,7 @@ RSpec.describe Imports::UserImportService do
         FactoryBot.create(:organisation, old_org_id:)
         import_service.create_users("user_directory")
 
-        user = LegacyUser.find_by(old_user_id: )&.user
+        user = LegacyUser.find_by(old_user_id:)&.user
         expect(user.is_key_contact?).to be true
       end
     end
