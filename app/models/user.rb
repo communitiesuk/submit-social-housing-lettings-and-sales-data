@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :managed_lettings_logs, through: :organisation
   has_many :owned_sales_logs, through: :organisation
   has_many :managed_sales_logs, through: :organisation
+  has_many :legacy_users
 
   validates :name, presence: true
   validates :email, presence: true
@@ -113,7 +114,7 @@ class User < ApplicationRecord
   end
 
   def was_migrated_from_softwire?
-    old_user_id.present?
+    legacy_users.any? || old_user_id.present?
   end
 
   def send_confirmation_instructions

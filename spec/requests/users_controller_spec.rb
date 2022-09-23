@@ -1381,7 +1381,7 @@ RSpec.describe UsersController, type: :request do
           end
 
           before do
-            user.update(old_user_id: nil)
+            user.legacy_users.destroy_all
           end
 
           it "allows changing email and dpo" do

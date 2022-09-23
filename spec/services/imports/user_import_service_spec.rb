@@ -32,7 +32,7 @@ RSpec.describe Imports::UserImportService do
       FactoryBot.create(:organisation, old_org_id:)
       import_service.create_users("user_directory")
 
-      user = User.find_by(old_user_id:)
+      user = LegacyUser.find_by(old_user_id:)&.user
       expect(user.name).to eq("John Doe")
       expect(user.email).to eq("john.doe@gov.uk")
       expect(user.encrypted_password).not_to be_nil
@@ -54,7 +54,8 @@ RSpec.describe Imports::UserImportService do
       it "sets their role correctly" do
         FactoryBot.create(:organisation, old_org_id:)
         import_service.create_users("user_directory")
-        expect(User.find_by(old_user_id:)).to be_data_coordinator
+        user = LegacyUser.find_by(old_user_id:)&.user
+        expect(user).to be_data_coordinator
       end
     end
 
@@ -65,7 +66,7 @@ RSpec.describe Imports::UserImportService do
         FactoryBot.create(:organisation, old_org_id:)
         import_service.create_users("user_directory")
 
-        user = User.find_by(old_user_id:)
+        user = LegacyUser.find_by(old_user_id:)&.user
         expect(user.is_data_protection_officer?).to be true
       end
     end
@@ -77,7 +78,7 @@ RSpec.describe Imports::UserImportService do
         FactoryBot.create(:organisation, old_org_id:)
         import_service.create_users("user_directory")
 
-        user = User.find_by(old_user_id:)
+        user = LegacyUser.find_by(old_user_id:)&.user
         expect(user.is_key_contact?).to be true
       end
     end
@@ -89,7 +90,7 @@ RSpec.describe Imports::UserImportService do
         FactoryBot.create(:organisation, old_org_id:)
         import_service.create_users("user_directory")
 
-        user = User.find_by(old_user_id:)
+        user = LegacyUser.find_by(old_user_id:)&.user
         expect(user.is_key_contact?).to be true
       end
     end
@@ -118,9 +119,18 @@ RSpec.describe Imports::UserImportService do
           expect(user.reload).to be_data_coordinator
         end
 
-        it "does not create a new record" do
+        it "does not create a new user record" do
           expect { import_service.create_users("user_directory") }
             .not_to change(User, :count)
+        end
+
+        it "creates a new legacy user record" do
+          expect { import_service.create_users("user_directory") }.to change(LegacyUser, :count)
+        end
+
+        it "associates the legacy user with the existing user" do
+          import_service.create_users("user_directory")
+          expect(LegacyUser.find_by(old_user_id:)&.user).to eq(user)
         end
       end
 
@@ -159,7 +169,8 @@ RSpec.describe Imports::UserImportService do
 
         it "marks them as not active" do
           import_service.create_users("user_directory")
-          expect(User.find_by(old_user_id:).active).to be false
+          user = LegacyUser.find_by(old_user_id:)&.user
+          expect(user.active).to be false
         end
       end
     end
