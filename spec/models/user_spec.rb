@@ -75,11 +75,7 @@ RSpec.describe User, type: :model do
     end
 
     it "can have one or more legacy users" do
-      expect(user.old_user_id).to eq("3")
-
-      user.legacy_users.destroy_all
-      user.update!(old_user_id: "2")
-      expect(user.old_user_id).to eq("2")
+      expect(user.legacy_users.size).to eq(1)
     end
 
     it "is confirmable" do

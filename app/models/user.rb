@@ -113,12 +113,8 @@ class User < ApplicationRecord
     end
   end
 
-  def old_user_id
-    legacy_users&.first&.old_user_id || read_attribute(:old_user_id)
-  end
-
   def was_migrated_from_softwire?
-    old_user_id.present?
+    legacy_users.any? || old_user_id.present?
   end
 
   def send_confirmation_instructions
