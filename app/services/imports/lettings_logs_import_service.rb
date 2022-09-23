@@ -85,6 +85,8 @@ module Imports
       (2..8).each do |index|
         attributes["relat#{index}"] = relat(xml_doc, index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
+
+        # Trips validation
         if attributes["age#{index}"] < 16 && attributes["relat#{index}"] != "C"
           attributes["age#{index}"] = nil
           attributes["relat#{index}"] = nil
@@ -140,6 +142,12 @@ module Imports
       attributes["rp_medwel"] = unsafe_string_as_integer(xml_doc, "Q14b3").present? ? 1 : nil
       attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4").present? ? 1 : nil
       attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5").present? ? 1 : nil
+
+      # Trips validation
+      if attributes["homeless"] == 1 && attributes["rp_homeless"] == 1
+        attributes["homeless"] = nil
+        attributes["rp_homeless"] = nil
+      end
 
       attributes["cbl"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CBL"))
       attributes["chr"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CHR"))
