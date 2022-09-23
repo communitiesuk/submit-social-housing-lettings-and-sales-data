@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_09_21_125813) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +41,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_21_125813) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "legacy_users", force: :cascade do |t|
+    t.string "old_user_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["old_user_id"], name: "index_legacy_users_on_old_user_id", unique: true
   end
 
   create_table "lettings_logs", force: :cascade do |t|
@@ -324,9 +333,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_21_125813) do
     t.string "purchid"
     t.integer "type"
     t.integer "ownershipsch"
-    t.integer "jointpur"
     t.string "othtype"
     t.integer "beds"
+    t.integer "jointpur"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
