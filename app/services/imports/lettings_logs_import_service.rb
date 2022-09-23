@@ -85,6 +85,10 @@ module Imports
       (2..8).each do |index|
         attributes["relat#{index}"] = relat(xml_doc, index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
+        if attributes["age#{index}"] < 16 && attributes["relat#{index}"] != "C"
+          attributes["age#{index}"] = nil
+          attributes["relat#{index}"] = nil
+        end
       end
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
