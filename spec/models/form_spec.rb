@@ -225,5 +225,14 @@ RSpec.describe Form, type: :model do
       expect(form.start_date).to eq(Time.zone.parse("2022-04-01"))
       expect(form.end_date).to eq(Time.zone.parse("2023-07-01"))
     end
+
+    it "can correctly define sections in the sales form" do
+      sections = [Form::Sales::Property::Sections::PropertyInformation]
+      form = described_class.new(nil, 2022, sections, "sales")
+      expect(form.type).to eq("sales")
+      expect(form.name).to eq("2022_2023_sales")
+      expect(form.sections.count).to eq(2)
+      expect(form.sections[1].class).to eq(Form::Sales::Property::Sections::PropertyInformation)
+    end
   end
 end
