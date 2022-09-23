@@ -226,7 +226,10 @@ module Imports
       # Sets the log creator
       owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
       if owner_id.present?
-        attributes["created_by"] = LegacyUser.find_by(old_user_id: owner_id)&.user
+        user = LegacyUser.find_by(old_user_id: owner_id)&.user
+        @logger.warn "Missing user! We expected to find a legacy user with old_user_id #{owner_id}" unless user
+
+        attributes["created_by"] = user
       end
 
       apply_date_consistency!(attributes)
