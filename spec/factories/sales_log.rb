@@ -11,6 +11,7 @@ FactoryBot.define do
       type { 8 }
       saledate { Time.utc(2022, 2, 2, 10, 36, 49) }
       jointpur { 1 }
+      beds { 2 }
     end
   end
 end
