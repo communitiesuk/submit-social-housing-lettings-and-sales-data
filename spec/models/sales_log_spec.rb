@@ -41,23 +41,23 @@ RSpec.describe SalesLog, type: :model do
 
   describe "status" do
     let!(:empty_sales_log) { FactoryBot.create(:sales_log) }
-    # let!(:in_progress_sales_log) { FactoryBot.create(:sales_log, :in_progress) }
+    let!(:in_progress_sales_log) { FactoryBot.create(:sales_log, :in_progress) }
     let!(:completed_sales_log) { FactoryBot.create(:sales_log, :completed) }
 
     it "is set to not started for an empty sales log" do
       expect(empty_sales_log.not_started?).to be(true)
-      # expect(empty_sales_log.in_progress?).to be(false)
+      expect(empty_sales_log.in_progress?).to be(false)
       expect(empty_sales_log.completed?).to be(false)
     end
 
-    # it "is set to in progress for a started sales log" do
-    #   expect(in_progress_sales_log.in_progress?).to be(true)
-    #   expect(in_progress_sales_log.not_started?).to be(false)
-    #   expect(in_progress_sales_log.completed?).to be(false)
-    # end
+    it "is set to in progress for a started sales log" do
+      expect(in_progress_sales_log.in_progress?).to be(true)
+      expect(in_progress_sales_log.not_started?).to be(false)
+      expect(in_progress_sales_log.completed?).to be(false)
+    end
 
     it "is set to completed for a completed sales log" do
-      # expect(completed_sales_log.in_progress?).to be(false)
+      expect(completed_sales_log.in_progress?).to be(false)
       expect(completed_sales_log.not_started?).to be(false)
       expect(completed_sales_log.completed?).to be(true)
     end
