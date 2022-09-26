@@ -9,6 +9,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
   def pages
     @pages ||= [
       Form::Sales::Pages::Age1.new(nil, nil, self),
+      Form::Sales::Pages::GenderIdentity1.new(nil, nil, self),
     ]
   end
 end
