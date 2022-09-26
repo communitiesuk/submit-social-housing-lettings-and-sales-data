@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   it "has correct pages" do
     expect(household_characteristics.pages.map(&:id)).to eq(
-      %w[buyer_1_age],
+      %w[buyer_1_age buyer_1_gender_identity],
     )
   end
 
@@ -23,5 +23,9 @@ RSpec.describe Form::Sales::Subsections::HouseholdCharacteristics, type: :model 
 
   it "has the correct label" do
     expect(household_characteristics.label).to eq("Household characteristics")
+  end
+
+  it "has correct depends on" do
+    expect(household_characteristics.depends_on).to eq([{ "setup" => "completed" }])
   end
 end

@@ -4,6 +4,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
     @id = "household_characteristics"
     @label = "Household characteristics"
     @section = section
+    @depends_on = [{ "setup" => "completed" }]
   end
 
   def pages
