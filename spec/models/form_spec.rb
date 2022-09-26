@@ -227,12 +227,12 @@ RSpec.describe Form, type: :model do
     end
 
     it "can correctly define sections in the sales form" do
-      sections = [Form::Sales::Property::Sections::PropertyInformation]
+      sections = [Form::Sales::Sections::PropertyInformation]
       form = described_class.new(nil, 2022, sections, "sales")
       expect(form.type).to eq("sales")
       expect(form.name).to eq("2022_2023_sales")
       expect(form.sections.count).to eq(2)
-      expect(form.sections[1].class).to eq(Form::Sales::Property::Sections::PropertyInformation)
+      expect(form.sections[1].class).to eq(Form::Sales::Sections::PropertyInformation)
     end
   end
 end
