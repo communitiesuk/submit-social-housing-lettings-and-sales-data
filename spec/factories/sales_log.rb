@@ -19,6 +19,8 @@ FactoryBot.define do
       jointpur { 1 }
       beds { 2 }
       jointmore { 1 }
+      age1_known { 0 }
+      age1 { 30 }
     end
   end
 end
