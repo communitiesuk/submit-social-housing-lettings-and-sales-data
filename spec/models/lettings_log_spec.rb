@@ -1395,6 +1395,7 @@ RSpec.describe LettingsLog do
           renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
           created_at: Time.utc(2022, 2, 8, 16, 52, 15),
+          needstype: 2,
         })
       end
 
@@ -1430,6 +1431,12 @@ RSpec.describe LettingsLog do
         record_from_db = ActiveRecord::Base.connection.execute("select referral from lettings_logs where id=#{lettings_log.id}").to_a[0]
         expect(record_from_db["referral"]).to eq(0)
         expect(lettings_log["referral"]).to eq(0)
+      end
+
+      it "correctly derives and saves vacdays" do
+        record_from_db = ActiveRecord::Base.connection.execute("select vacdays from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db["vacdays"]).to eq(0)
+        expect(lettings_log["vacdays"]).to eq(0)
       end
     end
 
