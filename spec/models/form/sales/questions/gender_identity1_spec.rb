@@ -34,4 +34,13 @@ RSpec.describe Form::Sales::Questions::GenderIdentity1, type: :model do
   it "has the correct hint" do
     expect(question.hint_text).to eq("Buyer 1 is the person in the household who does the most paid work. If it’s a joint purchase and the buyers do the same amount of paid work, buyer 1 is whoever is the oldest.")
   end
+
+  it "has the correct answer_options" do
+    expect(question.answer_options).to eq({
+      "F" => { "value" => "Female" },
+      "M" => { "value" => "Male" },
+      "X" => { "value" => "Non-binary" },
+      "R" => { "value" => "Prefers not to say " },
+    })
+  end
 end
