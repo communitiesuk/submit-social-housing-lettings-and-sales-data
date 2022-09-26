@@ -21,6 +21,7 @@ FactoryBot.define do
       jointmore { 1 }
       age1_known { 0 }
       age1 { 30 }
+      sex1 { "X" }
     end
   end
 end
