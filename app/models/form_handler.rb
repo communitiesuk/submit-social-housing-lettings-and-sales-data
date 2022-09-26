@@ -20,7 +20,7 @@ class FormHandler
 
   def sales_forms
     sales_sections = [
-      Form::Sales::Property::Sections::PropertyInformation,
+      Form::Sales::Sections::PropertyInformation,
       Form::Sales::Sections::Household,
     ]
     current_form = Form.new(nil, current_collection_start_year, sales_sections, "sales")

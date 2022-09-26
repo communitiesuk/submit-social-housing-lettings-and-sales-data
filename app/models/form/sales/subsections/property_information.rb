@@ -1,4 +1,4 @@
-class Form::Sales::Property::Subsections::PropertyInformation < ::Form::Subsection
+class Form::Sales::Subsections::PropertyInformation < ::Form::Subsection
   def initialize(id, hsh, section)
     super
     @id = "property_information"
@@ -9,7 +9,7 @@ class Form::Sales::Property::Subsections::PropertyInformation < ::Form::Subsecti
 
   def pages
     @pages ||= [
-      Form::Sales::Property::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
+      Form::Sales::Pages::PropertyNumberOfBedrooms.new(nil, nil, self),
     ]
   end
 end
