@@ -1,4 +1,4 @@
-class Form::Sales::Property::Questions::PropertyNumberOfBedrooms < ::Form::Question
+class Form::Sales::Questions::PropertyNumberOfBedrooms < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "beds"
