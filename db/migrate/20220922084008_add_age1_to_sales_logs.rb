@@ -1,6 +1,8 @@
 class AddAge1ToSalesLogs < ActiveRecord::Migration[7.0]
   def change
-    add_column :sales_logs, :age1, :integer
-    add_column :sales_logs, :age1_known, :integer
+    change_table :sales_logs, bulk: true do |t|
+      t.column :age1, :integer
+      t.column :age1_known, :integer
+    end
   end
 end
