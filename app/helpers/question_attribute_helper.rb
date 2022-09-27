@@ -27,7 +27,7 @@ private
     {
       "data-controller": "conditional-question",
       "data-action": "click->conditional-question#displayConditional",
-      "data-info": question.conditional_for.to_json,
+      "data-info": { conditional_questions: question.conditional_for, log_type: question.form.type }.to_json,
     }
   end
 end
