@@ -347,6 +347,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_29_125204) do
     t.integer "age2_known"
     t.integer "ethnic"
     t.integer "ethnic_group"
+    t.integer "national"
+    t.string "othernational"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
