@@ -20,7 +20,7 @@ RSpec.describe Form::Sales::Questions::BuildingType, type: :model do
   end
 
   it "has the correct check_answer_label" do
-    expect(question.check_answer_label).to eq("Building type")
+    expect(question.check_answer_label).to eq("Type of building")
   end
 
   it "has the correct type" do

@@ -61,7 +61,7 @@ RSpec.describe FormHandler do
     it "is able to load a current sales form" do
       form = form_handler.get_form("current_sales")
       expect(form).to be_a(Form)
-      expect(form.pages.count).to eq(17)
+      expect(form.pages.count).to eq(18)
       expect(form.name).to eq("2022_2023_sales")
     end
 
