@@ -11,7 +11,7 @@ class SalesLog < Log
   scope :filter_by_year, ->(year) { where(saledate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
   scope :search_by, ->(param) { filter_by_id(param) }
 
-  OPTIONAL_FIELDS = [].freeze
+  OPTIONAL_FIELDS = %w[purchid].freeze
 
   def startdate
     saledate
