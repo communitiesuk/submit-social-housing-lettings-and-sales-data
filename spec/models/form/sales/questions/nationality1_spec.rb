@@ -40,8 +40,8 @@ RSpec.describe Form::Sales::Questions::Nationality1, type: :model do
       "18" => { "value" => "United Kingdom" },
       "17" => { "value" => "Republic of Ireland" },
       "19" => { "value" => "European Economic Area (EEA), excluding ROI" },
-      "12" => { "value" => "Other " },
-      "13" => { "value" => "Buyer prefers not to say " },
+      "12" => { "value" => "Other" },
+      "13" => { "value" => "Buyer prefers not to say" },
     })
   end
 
