@@ -40,7 +40,7 @@ RSpec.describe QuestionAttributeHelper do
           "conditional_for" => {
             "next_question": ">1",
           },
-        }, nil)
+        }, form.get_page("rent"))
       end
       let(:expected_attribs) do
         {
@@ -48,7 +48,7 @@ RSpec.describe QuestionAttributeHelper do
           "data-action": "input->numeric-question#calculateFields click->conditional-question#displayConditional",
           "data-target": "lettings-log-#{question.result_field.to_s.dasherize}-field",
           "data-calculated": question.fields_to_add.to_json,
-          "data-info": question.conditional_for.to_json,
+          "data-info": { conditional_questions: question.conditional_for, log_type: "lettings" }.to_json
         }
       end
 
