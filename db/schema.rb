@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_27_105552) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_133123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -330,13 +330,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_105552) do
     t.integer "type"
     t.integer "ownershipsch"
     t.string "othtype"
-    t.integer "jointpur"
     t.integer "jointmore"
+    t.integer "jointpur"
     t.integer "beds"
+    t.integer "companybuy"
     t.integer "age1"
     t.integer "age1_known"
     t.string "sex1"
     t.integer "buy1livein"
+    t.integer "buylivein"
     t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
     t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
     t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
