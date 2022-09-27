@@ -19,10 +19,11 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    is_dpo
                                    owning_organisation_name
                                    managing_organisation_name
+                                   collection_start_year
                                    needstype
                                    renewal
                                    startdate
-                                   rent_type
+                                   rent_type_detail
                                    irproduct_other
                                    tenancycode
                                    propcode
@@ -172,18 +173,15 @@ RSpec.describe Csv::LettingsLogCsvService do
                                    housingneeds_h
                                    property_owner_organisation
                                    property_manager_organisation
-                                   sale_or_letting
                                    purchaser_code
                                    property_relet
                                    incref
-                                   sale_completion_date
                                    renttype
                                    lettype
                                    totchild
                                    totelder
                                    totadult
                                    nocharge
-                                   ethnic_other
                                    has_benefits
                                    wrent
                                    wscharge

@@ -53,10 +53,6 @@ module Validations::DateValidations
     end
   end
 
-  def validate_sale_completion_date(record)
-    date_valid?("sale_completion_date", record)
-  end
-
 private
 
   def first_collection_start_date

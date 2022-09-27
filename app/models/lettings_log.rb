@@ -501,6 +501,10 @@ class LettingsLog < Log
     true
   end
 
+  def rent_type_detail
+    form.get_question("rent_type", self)&.label_from_value(rent_type)
+  end
+
 private
 
   PIO = PostcodeService.new

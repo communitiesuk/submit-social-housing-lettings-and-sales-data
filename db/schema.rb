@@ -135,7 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_105552) do
     t.integer "net_income_value_check"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
-    t.string "sale_or_letting"
     t.string "irproduct_other"
     t.string "purchaser_code"
     t.integer "reason"
@@ -148,7 +147,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_105552) do
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
     t.integer "incref"
-    t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
@@ -190,7 +188,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_27_105552) do
     t.integer "age7_known"
     t.integer "age8_known"
     t.integer "ethnic_group"
-    t.string "ethnic_other"
     t.integer "letting_allocation_unknown"
     t.integer "details_known_2"
     t.integer "details_known_3"
