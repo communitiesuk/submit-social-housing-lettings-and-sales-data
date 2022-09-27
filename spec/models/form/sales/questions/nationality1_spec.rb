@@ -50,4 +50,14 @@ RSpec.describe Form::Sales::Questions::Nationality1, type: :model do
       "othernational" => [12],
     })
   end
+
+  it "has correct hidden in check answers" do
+    expect(question.hidden_in_check_answers).to eq({
+      "depends_on" => [
+        {
+          "national" => 12,
+        },
+      ],
+    })
+  end
 end
