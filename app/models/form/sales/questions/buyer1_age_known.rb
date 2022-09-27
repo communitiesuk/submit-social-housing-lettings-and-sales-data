@@ -16,5 +16,6 @@ class Form::Sales::Questions::Buyer1AgeKnown < ::Form::Question
   ANSWER_OPTIONS = {
     "0" => { "value" => "Yes" },
     "1" => { "value" => "No" },
+    "2" => { "value" => "Buyer prefers not to say" },
   }.freeze
 end
