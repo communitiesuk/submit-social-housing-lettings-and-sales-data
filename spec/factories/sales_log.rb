@@ -26,6 +26,7 @@ FactoryBot.define do
       proptype { 1 }
       age2_known { 0 }
       age2 { 35 }
+      builtype { 1 }
     end
   end
 end
