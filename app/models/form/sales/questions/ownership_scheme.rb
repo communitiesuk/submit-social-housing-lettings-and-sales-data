@@ -10,8 +10,8 @@ class Form::Sales::Questions::OwnershipScheme < ::Form::Question
   end
 
   ANSWER_OPTIONS = {
-    "1" => { "value" => "Shared ownership" },
-    "2" => { "value" => "Discounted ownership" },
-    "3" => { "value" => "Outright or other" },
+    "1" => { "value" => "Yes - a shared ownership scheme" },
+    "2" => { "value" => "Yes - a discounted ownership scheme" },
+    "3" => { "value" => "No - this is an outright or other sale" },
   }.freeze
 end
