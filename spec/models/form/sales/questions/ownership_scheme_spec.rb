@@ -33,9 +33,9 @@ RSpec.describe Form::Sales::Questions::OwnershipScheme, type: :model do
 
   it "has the correct answer_options" do
     expect(question.answer_options).to eq({
-      "1" => { "value" => "Shared ownership" },
-      "2" => { "value" => "Discounted ownership" },
-      "3" => { "value" => "Outright or other" },
+      "1" => { "value" => "Yes - a shared ownership scheme" },
+      "2" => { "value" => "Yes - a discounted ownership scheme" },
+      "3" => { "value" => "No - this is an outright or other sale" },
     })
   end
 end
