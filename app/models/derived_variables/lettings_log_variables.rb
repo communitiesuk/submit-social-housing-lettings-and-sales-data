@@ -59,14 +59,10 @@ module DerivedVariables::LettingsLogVariables
     self.hhtype = household_type
     self.new_old = new_or_existing_tenant
 
-    if is_supported_housing?
-      if location
-        self.wchair = location.mobility_type_before_type_cast == "W" ? 1 : 2
-      end
-      if is_renewal?
-        self.voiddate = startdate
-      end
+    if is_supported_housing? && location
+      self.wchair = location.mobility_type_before_type_cast == "W" ? 1 : 2
     end
+    self.voiddate = startdate if is_renewal?
     self.vacdays = property_vacant_days
 
     set_housingneeds_fields if housingneeds?

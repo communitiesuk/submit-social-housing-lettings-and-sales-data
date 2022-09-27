@@ -10,6 +10,7 @@ RSpec.describe "validations" do
       :in_progress,
       owning_organisation: user.organisation,
       managing_organisation: user.organisation,
+      renewal: 0,
     )
   end
   let(:empty_lettings_log) do

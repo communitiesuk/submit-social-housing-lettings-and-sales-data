@@ -1395,7 +1395,6 @@ RSpec.describe LettingsLog do
           renewal: 1,
           startdate: Time.zone.local(2021, 4, 10),
           created_at: Time.utc(2022, 2, 8, 16, 52, 15),
-          needstype: 2,
         })
       end
 

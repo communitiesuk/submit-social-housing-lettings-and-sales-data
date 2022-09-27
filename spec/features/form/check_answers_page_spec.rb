@@ -245,6 +245,7 @@ RSpec.describe "Form Check Answers Page" do
           reason: 4,
           ppostcode_full: "SE2 6RT",
           mrcdate: Time.zone.parse("03/11/2019"),
+          renewal: 0,
         )
       end
 
