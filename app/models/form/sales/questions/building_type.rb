@@ -2,7 +2,7 @@ class Form::Sales::Questions::BuildingType < ::Form::Question
   def initialize(id, hsh, page)
     super
     @id = "builtype"
-    @check_answer_label = "Type of building"
+    @check_answer_label = "Building type"
     @header = "What type of building is the property?"
     @type = "radio"
     @answer_options = ANSWER_OPTIONS
