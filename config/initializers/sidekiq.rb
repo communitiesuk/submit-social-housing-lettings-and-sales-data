@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 if Rails.env.staging? || Rails.env.production?
   redis_url = Configuration::PaasConfigurationService.new.redis_uris[:"dluhc-core-#{Rails.env}-redis"]
 
