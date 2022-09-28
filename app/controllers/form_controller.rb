@@ -1,7 +1,8 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, only: %i[submit_form review]
-  before_action :find_resource_by_named_id, except: %i[submit_form review]
+  before_action :find_resource_by_named_id, except: %i[submit_form review show_new_page]
+  before_action :create_new_resource, only: %i[show_new_page]
 
   def submit_form
     if @log
@@ -13,7 +14,7 @@ class FormController < ApplicationController
         session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
-        redirect_path = "#{@log.model_name.param_key}_#{@page.id}_path"
+        redirect_path = @log.status == "not_started" ? "#{@log.model_name.param_key}s_new_#{@page.id}_path" : "#{@log.model_name.param_key}_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message
         end
@@ -62,7 +63,6 @@ class FormController < ApplicationController
 
   def show_new_page
     page_id = request.path.split("/")[-1].underscore
-    save_new_log page_id
     if @log
       restore_error_field_values
       page_id = request.path.split("/")[-1].underscore
@@ -157,6 +157,14 @@ private
            else
              current_user.lettings_logs.find_by(id: params[:lettings_log_id])
            end
+  end
+
+  def create_new_resource
+    @log = if request.path.include?("sales-logs")
+      SalesLog.new
+    else
+      LettingsLog.new
+    end
   end
 
   def new_log_request?

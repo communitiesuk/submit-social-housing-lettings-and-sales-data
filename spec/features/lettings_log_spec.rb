@@ -124,6 +124,13 @@ RSpec.describe "Lettings Log Features" do
       end
     end
 
+    context "when creating a new log" do
+      it "creates a log after answering at least 1 question" do
+        visit("/lettings-logs")
+        expect { click_button("Create a new lettings log") }.to change(LettingsLog, :count).by(0)
+       end
+    end
+
     context "when returning to the list of logs via breadcrumbs link" do
       before do
         visit("/lettings-logs")
