@@ -1,8 +1,7 @@
 class FormController < ApplicationController
   before_action :authenticate_user!
   before_action :find_resource, only: %i[submit_form review]
-  before_action :find_resource_by_named_id, except: %i[submit_form review show_new_page]
-  before_action :create_new_resource, only: %i[show_new_page]
+  before_action :find_resource_by_named_id, except: %i[submit_form review]
 
   def submit_form
     if @log
@@ -61,32 +60,8 @@ class FormController < ApplicationController
     end
   end
 
-  def show_new_page
-    page_id = request.path.split("/")[-1].underscore
-    if @log
-      restore_error_field_values
-      page_id = request.path.split("/")[-1].underscore
-      @page = @log.form.get_page(page_id)
-      @subsection = @log.form.subsection_for_page(@page)
-      if @page.routed_to?(@log, current_user)
-        render "form/page"
-      else
-        redirect_to lettings_log_path(@log)
-      end
-    else
-      render_not_found
-    end
-  end
 
 private
-
-  def save_new_log(page_id)
-    if current_user.support?
-      @log.save! unless page_id.eql?("organisation") && @log.id.nil?
-    else
-      @log.save! unless page_id.eql?("needs_type") && @log.id.nil?
-    end
-  end
 
   def restore_error_field_values
     if session["errors"]
@@ -149,18 +124,14 @@ private
     @log = if params[:sales_log_id].present?
              current_user.sales_logs.find_by(id: params[:sales_log_id])
            elsif new_log_request?
-             if request.path.include?("sales-logs")
-               SalesLog.new
-             else
-               LettingsLog.new
-             end
+              create_new_resource
            else
              current_user.lettings_logs.find_by(id: params[:lettings_log_id])
            end
   end
 
   def create_new_resource
-    @log = if request.path.include?("sales-logs")
+    if request.path.include?("sales-logs")
       SalesLog.new
     else
       LettingsLog.new
