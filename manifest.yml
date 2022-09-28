@@ -30,6 +30,10 @@ applications:
         command: bundle exec rake cf:on_first_instance db:migrate && bin/rails server
         instances: 4
         memory: 1G
+      - type: worker
+        command: bundle exec sidekiq
+        health-check-type: process
+        instances: 2
     env:
       RAILS_ENV: production
     host: submit-social-housing-lettings-sales-data
