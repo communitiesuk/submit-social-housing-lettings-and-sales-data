@@ -89,10 +89,6 @@ class LettingsLogsController < LogsController
 
 private
 
-  def new_log_request?
-    request.path.include?("new-log")
-  end
-
   def permitted_log_params
     params.require(:lettings_log).permit(LettingsLog.editable_fields)
   end

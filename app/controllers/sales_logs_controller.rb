@@ -47,10 +47,4 @@ class SalesLogsController < LogsController
   def permitted_log_params
     params.require(:sales_log).permit(SalesLog.editable_fields)
   end
-
-private
-
-  def new_log_request?
-    request.path.include?("new-log")
-  end
 end

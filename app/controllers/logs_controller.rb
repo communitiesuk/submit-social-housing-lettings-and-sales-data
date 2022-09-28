@@ -69,4 +69,8 @@ private
   def search_term
     params["search"]
   end
+
+  def new_log_request?
+    request.path.include?("new-log")
+  end
 end
