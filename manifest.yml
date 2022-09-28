@@ -7,6 +7,10 @@ defaults: &defaults
       command: bundle exec rake cf:on_first_instance db:migrate && bin/rails server
       instances: 2
       memory: 1G
+    - type: worker
+      command: bundle exec sidekiq
+      health-check-type: process
+      instances: 2
   health-check-type: http
   health-check-http-endpoint: /health
 
@@ -17,7 +21,7 @@ applications:
       RAILS_ENV: staging
     services:
       - dluhc-core-staging-postgres
-      - dluhc-core-staging-redis-rate-limit
+      - dluhc-core-staging-redis
 
   - name: dluhc-core-production
     <<: *defaults
@@ -26,9 +30,13 @@ applications:
         command: bundle exec rake cf:on_first_instance db:migrate && bin/rails server
         instances: 4
         memory: 1G
+      - type: worker
+        command: bundle exec sidekiq
+        health-check-type: process
+        instances: 2
     env:
       RAILS_ENV: production
     host: submit-social-housing-lettings-sales-data
     services:
       - dluhc-core-production-postgres
-      - dluhc-core-production-redis-rate-limit
+      - dluhc-core-production-redis

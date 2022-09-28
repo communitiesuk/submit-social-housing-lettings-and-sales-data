@@ -85,6 +85,12 @@ module Imports
       (2..8).each do |index|
         attributes["relat#{index}"] = relat(xml_doc, index)
         attributes["details_known_#{index}"] = details_known(index, attributes)
+
+        # Trips validation
+        if attributes["age#{index}"].present? && attributes["age#{index}"] < 16 && attributes["relat#{index}"].present? && attributes["relat#{index}"] != "C" && attributes["relat#{index}"] != "R"
+          attributes["age#{index}"] = nil
+          attributes["relat#{index}"] = nil
+        end
       end
       attributes["ethnic"] = unsafe_string_as_integer(xml_doc, "P1Eth")
       attributes["ethnic_group"] = ethnic_group(attributes["ethnic"])
@@ -113,6 +119,7 @@ module Imports
       attributes["housingneeds_type"] = 0 if attributes["housingneeds_a"] == 1
       attributes["housingneeds_type"] = 1 if attributes["housingneeds_b"] == 1
       attributes["housingneeds_type"] = 2 if attributes["housingneeds_c"] == 1
+      attributes["housingneeds_type"] = 3 if attributes["housingneeds_f"] == 1 && [attributes["housingneeds_a"], attributes["housingneeds_b"], attributes["housingneeds_c"]].all? { |housingneed| housingneed != 1 }
       attributes["housingneeds_other"] = attributes["housingneeds_f"] == 1 ? 1 : 0
 
       attributes["illness"] = unsafe_string_as_integer(xml_doc, "Q10ia")
@@ -135,6 +142,12 @@ module Imports
       attributes["rp_medwel"] = unsafe_string_as_integer(xml_doc, "Q14b3").present? ? 1 : nil
       attributes["rp_hardship"] = unsafe_string_as_integer(xml_doc, "Q14b4").present? ? 1 : nil
       attributes["rp_dontknow"] = unsafe_string_as_integer(xml_doc, "Q14b5").present? ? 1 : nil
+
+      # Trips validation
+      if attributes["homeless"] == 1 && attributes["rp_homeless"] == 1
+        attributes["homeless"] = nil
+        attributes["rp_homeless"] = nil
+      end
 
       attributes["cbl"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CBL"))
       attributes["chr"] = allocation_system(unsafe_string_as_integer(xml_doc, "Q15CHR"))
@@ -225,7 +238,10 @@ module Imports
       # Sets the log creator
       owner_id = field_value(xml_doc, "meta", "owner-user-id").strip
       if owner_id.present?
-        attributes["created_by"] = User.find_by(old_user_id: owner_id)
+        user = LegacyUser.find_by(old_user_id: owner_id)&.user
+        @logger.warn "Missing user! We expected to find a legacy user with old_user_id #{owner_id}" unless user
+
+        attributes["created_by"] = user
       end
 
       apply_date_consistency!(attributes)

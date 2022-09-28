@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe User, type: :model do
   describe "#new" do
-    let(:user) { FactoryBot.create(:user) }
+    let(:user) { FactoryBot.create(:user, old_user_id: "3") }
     let(:other_organisation) { FactoryBot.create(:organisation) }
     let!(:owned_lettings_log) do
       FactoryBot.create(
@@ -74,6 +74,10 @@ RSpec.describe User, type: :model do
       expect(user.need_two_factor_authentication?(nil)).to be false
     end
 
+    it "can have one or more legacy users" do
+      expect(user.legacy_users.size).to eq(1)
+    end
+
     it "is confirmable" do
       allow(DeviseNotifyMailer).to receive(:confirmation_instructions).and_return(OpenStruct.new(deliver: true))
       expect(DeviseNotifyMailer).to receive(:confirmation_instructions).once
@@ -115,7 +119,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter lettings logs by user, year and status" do
-        expect(user.lettings_logs_filters).to eq(%w[status years user])
+        expect(user.logs_filters).to eq(%w[status years user])
       end
     end
 
@@ -140,7 +144,7 @@ RSpec.describe User, type: :model do
       end
 
       it "can filter lettings logs by user, year, status and organisation" do
-        expect(user.lettings_logs_filters).to eq(%w[status years user organisation])
+        expect(user.logs_filters).to eq(%w[status years user organisation])
       end
     end
 
@@ -266,6 +270,40 @@ RSpec.describe User, type: :model do
       it "validates email uniqueness" do
         expect { FactoryBot.create(:user, email: user.email) }
           .to raise_error(ActiveRecord::RecordInvalid, error_message)
+      end
+    end
+  end
+
+  describe "delete" do
+    let(:user) { FactoryBot.create(:user) }
+
+    before do
+      FactoryBot.create(
+        :lettings_log,
+        :completed,
+        owning_organisation: user.organisation,
+        managing_organisation: user.organisation,
+        created_by: user,
+      )
+
+      FactoryBot.create(
+        :sales_log,
+        owning_organisation: user.organisation,
+        created_by: user,
+      )
+    end
+
+    context "when the user is deleted" do
+      it "owned lettings logs are not deleted as a result" do
+        expect { user.destroy! }
+          .to change(described_class, :count).from(1).to(0)
+          .and change(LettingsLog, :count).by(0)
+      end
+
+      it "owned sales logs are not deleted as a result" do
+        expect { user.destroy! }
+          .to change(described_class, :count).from(1).to(0)
+          .and change(SalesLog, :count).by(0)
       end
     end
   end

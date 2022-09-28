@@ -1,5 +1,8 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
+  mount_sidekiq = -> { mount Sidekiq::Web => "/sidekiq" }
+  authenticate(:user, :support?.to_proc, &mount_sidekiq)
+
   devise_for :users, {
     path: :account,
     controllers: {
@@ -27,6 +30,7 @@ Rails.application.routes.draw do
 
   root to: "start#index"
 
+  get "/logs", to: redirect("/lettings-logs")
   get "/accessibility-statement", to: "content#accessibility_statement"
   get "/privacy-notice", to: "content#privacy_notice"
   get "/data-sharing-agreement", to: "content#data_sharing_agreement"
@@ -69,15 +73,22 @@ Rails.application.routes.draw do
       get "details", to: "organisations#details"
       get "users", to: "organisations#users"
       get "users/invite", to: "users/account#new"
-      get "logs", to: "organisations#logs"
+      get "lettings-logs", to: "organisations#lettings_logs"
+      get "sales-logs", to: "organisations#sales_logs"
+      get "logs/csv-download", to: "organisations#download_csv"
+      post "logs/email-csv", to: "organisations#email_csv"
+      get "logs/csv-confirmation", to: "lettings_logs#csv_confirmation"
       get "schemes", to: "organisations#schemes"
     end
   end
 
-  resources :lettings_logs, path: "/logs" do
+  resources :lettings_logs, path: "/lettings-logs" do
     collection do
       post "bulk-upload", to: "bulk_upload#bulk_upload"
       get "bulk-upload", to: "bulk_upload#show"
+      get "csv-download", to: "lettings_logs#download_csv"
+      post "email-csv", to: "lettings_logs#email_csv"
+      get "csv-confirmation", to: "lettings_logs#csv_confirmation"
     end
 
     member do
@@ -85,9 +96,21 @@ Rails.application.routes.draw do
       get "review", to: "form#review"
     end
 
-    FormHandler.instance.forms.each do |_key, form|
+    FormHandler.instance.lettings_forms.each do |_key, form|
       form.pages.map do |page|
-        get page.id.to_s.dasherize, to: "form##{page.id}"
+        get page.id.to_s.dasherize, to: "form#show_page"
+      end
+
+      form.subsections.map do |subsection|
+        get "#{subsection.id.to_s.dasherize}/check-answers", to: "form#check_answers"
+      end
+    end
+  end
+
+  resources :sales_logs, path: "/sales-logs" do
+    FormHandler.instance.sales_forms.each do |_key, form|
+      form.pages.map do |page|
+        get page.id.to_s.dasherize, to: "form#show_page"
       end
 
       form.subsections.map do |subsection|

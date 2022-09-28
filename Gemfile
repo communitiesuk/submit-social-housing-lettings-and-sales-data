@@ -13,7 +13,7 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Bundle and transpile JavaScript [https://github.com/rails/propshaft/]
+# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
@@ -58,6 +58,8 @@ gem "sentry-ruby"
 gem "possessive"
 # Strip whitespace from active record attributes
 gem "auto_strip_attributes"
+# Use sidekiq for background processing
+gem "sidekiq"
 
 group :development, :test do
   # Check gems for known vulnerabilities

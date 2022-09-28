@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_133123) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["start_year", "lettype", "beds", "la"], name: "index_la_rent_ranges_on_start_year_and_lettype_and_beds_and_la", unique: true
+  end
+
+  create_table "legacy_users", force: :cascade do |t|
+    t.string "old_user_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["old_user_id"], name: "index_legacy_users_on_old_user_id", unique: true
   end
 
   create_table "lettings_logs", force: :cascade do |t|
@@ -127,7 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.integer "net_income_value_check"
     t.string "property_owner_organisation"
     t.string "property_manager_organisation"
-    t.string "sale_or_letting"
     t.string "irproduct_other"
     t.string "purchaser_code"
     t.integer "reason"
@@ -140,7 +147,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.integer "property_relet"
     t.datetime "mrcdate", precision: nil
     t.integer "incref"
-    t.datetime "sale_completion_date", precision: nil
     t.datetime "startdate", precision: nil
     t.integer "armedforces"
     t.integer "first_time_property_let_as_social_housing"
@@ -182,7 +188,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.integer "age7_known"
     t.integer "age8_known"
     t.integer "ethnic_group"
-    t.string "ethnic_other"
     t.integer "letting_allocation_unknown"
     t.integer "details_known_2"
     t.integer "details_known_3"
@@ -313,6 +318,32 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
     t.index ["old_visible_id"], name: "index_organisations_on_old_visible_id", unique: true
   end
 
+  create_table "sales_logs", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.datetime "saledate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "owning_organisation_id"
+    t.bigint "managing_organisation_id"
+    t.bigint "created_by_id"
+    t.string "purchid"
+    t.integer "type"
+    t.integer "ownershipsch"
+    t.string "othtype"
+    t.integer "jointmore"
+    t.integer "jointpur"
+    t.integer "beds"
+    t.integer "companybuy"
+    t.integer "age1"
+    t.integer "age1_known"
+    t.string "sex1"
+    t.integer "buy1livein"
+    t.integer "buylivein"
+    t.index ["created_by_id"], name: "index_sales_logs_on_created_by_id"
+    t.index ["managing_organisation_id"], name: "index_sales_logs_on_managing_organisation_id"
+    t.index ["owning_organisation_id"], name: "index_sales_logs_on_owning_organisation_id"
+  end
+
   create_table "schemes", force: :cascade do |t|
     t.string "service_name"
     t.bigint "owning_organisation_id", null: false
@@ -395,6 +426,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_02_082245) do
   add_foreign_key "lettings_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "lettings_logs", "schemes"
   add_foreign_key "locations", "schemes"
+  add_foreign_key "sales_logs", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "schemes", "organisations", column: "managing_organisation_id"
   add_foreign_key "schemes", "organisations", column: "owning_organisation_id", on_delete: :cascade
   add_foreign_key "users", "organisations", on_delete: :cascade

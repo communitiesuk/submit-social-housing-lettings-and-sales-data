@@ -1,7 +1,7 @@
 {
   "form_type": "lettings",
   "start_date": "2021-04-01T00:00:00.000+01:00",
-  "end_date": "2022-07-01T00:00:00.000+01:00",
+  "end_date": "2022-09-05T00:00:00.000+01:00",
   "sections": {
     "tenancy_and_property": {
       "label": "Property and tenancy information",
@@ -1812,6 +1812,7 @@
                   },
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
+                  "check_answers_card_number": 1,
                   "answer_options": {
                     "0": {
                       "value": "Yes"
@@ -1865,6 +1866,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 1,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2328,6 +2330,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 2,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2383,6 +2386,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 2,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2843,6 +2847,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 3,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -2898,6 +2903,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 3,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3355,6 +3361,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 4,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3410,6 +3417,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 4,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3864,6 +3872,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 5,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -3919,6 +3928,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 5,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4370,6 +4380,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 6,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4425,6 +4436,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 6,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4873,6 +4885,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 7,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -4928,6 +4941,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 7,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -5373,6 +5387,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 8,
                   "header": "Are you sure this person is retired?",
                   "type": "interruption_screen",
                   "answer_options": {
@@ -5428,6 +5443,7 @@
                       }
                     ]
                   },
+                  "check_answers_card_number": 8,
                   "header": "Are you sure this person isn’t retired?",
                   "type": "interruption_screen",
                   "answer_options": {

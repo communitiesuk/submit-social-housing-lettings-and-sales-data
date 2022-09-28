@@ -18,10 +18,10 @@ class Form::Page
 
   delegate :form, to: :subsection
 
-  def routed_to?(lettings_log, _current_user)
+  def routed_to?(log, _current_user)
     return true unless depends_on || subsection.depends_on
 
-    subsection.enabled?(lettings_log) && form.depends_on_met(depends_on, lettings_log)
+    subsection.enabled?(log) && form.depends_on_met(depends_on, log)
   end
 
   def non_conditional_questions

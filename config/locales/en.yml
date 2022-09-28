@@ -137,8 +137,8 @@ en:
         first_let_not_social: "Enter a reason for vacancy that is not 'first let' if unit has been previously let as social housing"
         first_let_social: "Reason for vacancy must be first let if unit has been previously let as social housing"
         previous_let_social: "Property cannot have a previous let type if being let as social housing for the first time"
-        non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us this accommodation is not temporary"
-        referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as you already told us a different source of referral for this letting"
+        non_temp_accommodation: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as this accommodation is not temporary"
+        referral_invalid: "Answer cannot be re-let to tenant who occupied the same property as temporary accommodation as a different source of referral for this letting"
       unittype_gn:
         one_bedroom_bedsit: "A bedsit can only have one bedroom"
         one_seven_bedroom_shared: "A shared house must have 1 to 7 bedrooms"
@@ -208,7 +208,7 @@ en:
         not_provided: "Enter how much rent and other charges the household pays %{period}"
     household:
       reasonpref:
-        not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as you already told us the tenant was not homeless immediately prior to this letting"
+        not_homeless: "Answer cannot be ‘homeless or about to lose their home’ as the tenant was not homeless immediately prior to this letting"
       reasonable_preference_reason:
         reason_required: "Enter a reason if you've answered 'yes' to reasonable preference"
         reason_not_required: "Do not enter a reason if you've answered 'no' to reasonable preference"
@@ -246,31 +246,31 @@ en:
       housingneeds_a:
         one_or_two_choices: "You can only select one option or ‘other disabled access needs’ plus ‘wheelchair-accessible housing’, ‘wheelchair access to essential rooms’ or ‘level access housing’"
       prevten:
-        non_temp_accommodation: "Answer cannot be non-temporary accommodation as you already told us this is a re-let to a tenant who occupied the same property as temporary accommodation"
+        non_temp_accommodation: "Answer cannot be non-temporary accommodation as this is a re-let to a tenant who occupied the same property as temporary accommodation"
         over_20_foster_care: "Answer cannot be a children’s home or foster care as the lead tenant is 20 or older"
         male_refuge: "Answer cannot be a refuge as the lead tenant identifies as male"
-        internal_transfer: "Answer cannot be %{prevten} as you already told us this tenancy is an internal transfer"
+        internal_transfer: "Answer cannot be %{prevten} as this tenancy is an internal transfer"
         la_general_needs:
-          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as you already told us it’s an internal transfer and a private registered provider is on the tenancy agreement"
+          internal_transfer: "Answer cannot be a fixed-term or lifetime local authority general needs tenancy as it’s an internal transfer and a private registered provider is on the tenancy agreement"
       referral:
-        secure_tenancy: "Answer must be internal transfer as you already told us this is a secure tenancy"
-        rsnvac_non_temp: "Answer cannot be this source of referral as you already told us this is a re-let to tenant who occupied the same property as temporary accommodation"
-        cannot_be_secure_tenancy: "Answer cannot be secure tenancy as you already told us this is not an internal transfer"
-        assessed_homeless: "Answer cannot be internal transfer as you already told us the tenant was assessed as homeless"
-        other_homeless: "Answer cannot be internal transfer as you already told us the tenant was considered homeless by their landlord"
-        prevten_invalid: "Answer cannot be internal transfer as you already told us the household situation immediately before this letting was %{prevten}"
-        reason_permanently_decanted: "Answer must be internal transfer as you already told us the tenant was permanently decanted from another property owned by this landlord"
+        secure_tenancy: "Answer must be internal transfer as this is a secure tenancy"
+        rsnvac_non_temp: "Answer cannot be this source of referral as this is a re-let to tenant who occupied the same property as temporary accommodation"
+        cannot_be_secure_tenancy: "Answer cannot be secure tenancy as this is not an internal transfer"
+        assessed_homeless: "Answer cannot be internal transfer as the tenant was assessed as homeless"
+        other_homeless: "Answer cannot be internal transfer as the tenant was considered homeless by their landlord"
+        prevten_invalid: "Answer cannot be internal transfer as the household situation immediately before this letting was %{prevten}"
+        reason_permanently_decanted: "Answer must be internal transfer as the tenant was permanently decanted from another property owned by this landlord"
         la_general_needs:
-          internal_transfer: "Answer cannot be internal transfer as you already told us it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
+          internal_transfer: "Answer cannot be internal transfer as it’s the same landlord on the tenancy agreement and the household had either a fixed-term or lifetime local authority general needs tenancy immediately before this letting"
         prp:
-          local_housing_referral: "Answer cannot be ‘nominated by a local housing authority’ as you already told us a local authority is on the tenancy agreement"
+          local_housing_referral: "Answer cannot be ‘nominated by a local housing authority’ as a local authority is on the tenancy agreement"
       homeless:
         assessed:
-          internal_transfer: "Answer cannot be 'assessed as homeless' as you already told us this tenancy is an internal transfer"
+          internal_transfer: "Answer cannot be 'assessed as homeless' as this tenancy is an internal transfer"
         other:
-          internal_transfer: "Answer cannot be 'other homelessness' as you already told us this tenancy was an internal transfer"
+          internal_transfer: "Answer cannot be 'other homelessness' as this tenancy was an internal transfer"
         reasonpref:
-          not_homeless: "Answer cannot be ‘no’ as you already told us the tenant was homeless or about to lose their home"
+          not_homeless: "Answer cannot be ‘no’ as the tenant was homeless or about to lose their home"
       previous_la_known: "Enter name of local authority"
       gender:
         retired_male: "Answer cannot be ‘male’ as tenant is under 65 and retired"
@@ -286,8 +286,8 @@ en:
         fixed_term_not_required: "You must only answer the length of the tenancy if it's fixed-term"
         shorthold: "Enter a tenancy length between 2 and 99 years for a Fixed Term – Assured Shorthold Tenancy (AST)"
         secure: "Enter a tenancy length between 2 and 99 years (or don't specify the length) for a Secure (including flexible) tenancy"
-      internal_transfer: "Answer must be secure tenancy as you already told us this tenancy is an internal transfer"
-      cannot_be_internal_transfer: "Answer cannot be internal transfer as you already told us this is not a secure tenancy"
+      internal_transfer: "Answer must be secure tenancy as this tenancy is an internal transfer"
+      cannot_be_internal_transfer: "Answer cannot be internal transfer as this is not a secure tenancy"
       not_joint: "This cannot be a joint tenancy as you've told us there's only one person in the household"
       joint_more_than_one_member: "There must be more than one person in the household as you've told us this is a joint tenancy"
 
