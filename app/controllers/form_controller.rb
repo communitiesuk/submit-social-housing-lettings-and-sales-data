@@ -5,7 +5,8 @@ class FormController < ApplicationController
 
   def submit_form
     if @log
-      @page = @log.form.get_page(params[@log.model_name.param_key][:page])
+      log_type = @log.model_name.param_key
+      @page = @log.form.get_page(params[log_type][:page])
       responses_for_page = responses_for_page(@page)
       mandatory_questions_with_no_response = mandatory_questions_with_no_response(responses_for_page)
 
@@ -13,7 +14,7 @@ class FormController < ApplicationController
         session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
-        redirect_path = @log.not_started? ? "#{@log.model_name.param_key}_new_#{@page.id}_path" : "#{@log.model_name.param_key}_#{@page.id}_path"
+        redirect_path = @log.not_started? ? "#{log_type}_new_#{@page.id}_path" : "#{log_type}_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message
         end
