@@ -7,10 +7,7 @@ export default class extends Controller {
 
   displayConditional () {
     if (this.element.checked) {
-      console.log(this.element)
-
       const selectedValue = this.element.value
-
       const dataInfo = JSON.parse(this.element.dataset.info)
       const conditionalFor = dataInfo.conditional_questions
       const logType = dataInfo.log_type
