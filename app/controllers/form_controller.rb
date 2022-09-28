@@ -60,7 +60,6 @@ class FormController < ApplicationController
     end
   end
 
-
 private
 
   def restore_error_field_values
@@ -143,7 +142,7 @@ private
   end
 
   def new_log_request_referrer?
-    request.referer.split("/").include?("new")
+    request.referer&.split("/").include?("new")
   end
 
   def is_referrer_check_answers?

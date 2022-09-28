@@ -101,7 +101,7 @@ private
     @log = LettingsLog.find_by(id: params[:id])
   end
 
-  def post_create_redirect_url(log)
-    lettings_log_url(log)
+  def post_create_redirect_url
+    new_log_lettings_logs_path
   end
 end

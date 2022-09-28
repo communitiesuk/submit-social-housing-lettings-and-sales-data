@@ -15,7 +15,7 @@ private
 
     respond_to do |format|
       format.html do
-        redirect_to(request.path.include?("sales") ? new_log_sales_logs_path : new_log_lettings_logs_path)
+        redirect_to(post_create_redirect_url)
       end
       format.json do
         if log.save
