@@ -90,9 +90,7 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   # see https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
-  config.active_record.yaml_column_permitted_classes = [Time]
-
-  config.active_job.queue_adapter = :resque  
+  config.active_record.yaml_column_permitted_classes = [Time] 
 
   Rack::MiniProfiler.config.storage = Rack::MiniProfiler::MemoryStore
 end
