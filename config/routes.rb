@@ -1,5 +1,8 @@
 # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 Rails.application.routes.draw do
+  mount_sidekiq = -> { mount Sidekiq::Web => "/sidekiq" }
+  authenticate(:user, :support?.to_proc, &mount_sidekiq)
+
   devise_for :users, {
     path: :account,
     controllers: {
