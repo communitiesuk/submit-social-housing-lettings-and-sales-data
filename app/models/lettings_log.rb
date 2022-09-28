@@ -15,7 +15,7 @@ class LettingsLogValidator < ActiveModel::Validator
   end
 end
 
-class LettingsLog < ApplicationRecord
+class LettingsLog < Log
   include Validations::SoftValidations
   include DerivedVariables::LettingsLogVariables
 
@@ -32,31 +32,11 @@ class LettingsLog < ApplicationRecord
   before_validation :reset_location_fields!, unless: :postcode_known?
   before_validation :reset_previous_location_fields!, unless: :previous_postcode_known?
   before_validation :set_derived_fields!
-  before_save :update_status!
 
-  belongs_to :owning_organisation, class_name: "Organisation", optional: true
-  belongs_to :managing_organisation, class_name: "Organisation", optional: true
-  belongs_to :created_by, class_name: "User", optional: true
   belongs_to :scheme, optional: true
   belongs_to :location, optional: true
 
-  scope :filter_by_organisation, ->(org, _user = nil) { where(owning_organisation: org).or(where(managing_organisation: org)) }
-  scope :filter_by_status, ->(status, _user = nil) { where status: }
-  scope :filter_by_years, lambda { |years, _user = nil|
-    first_year = years.shift
-    query = filter_by_year(first_year)
-    years.each { |year| query = query.or(filter_by_year(year)) }
-    query.all
-  }
   scope :filter_by_year, ->(year) { where(startdate: Time.zone.local(year.to_i, 4, 1)...Time.zone.local(year.to_i + 1, 4, 1)) }
-
-  scope :filter_by_user, lambda { |selected_user, user|
-                           if !selected_user.include?("all") && user.present?
-                             where(created_by: user)
-                           end
-                         }
-
-  scope :filter_by_id, ->(id) { where(id:) }
   scope :filter_by_tenant_code, ->(tenant_code) { where("tenancycode ILIKE ?", "%#{tenant_code}%") }
   scope :filter_by_propcode, ->(propcode) { where("propcode ILIKE ?", "%#{propcode}%") }
   scope :filter_by_postcode, ->(postcode_full) { where("REPLACE(postcode_full, ' ', '') ILIKE ?", "%#{postcode_full.delete(' ')}%") }
@@ -73,22 +53,12 @@ class LettingsLog < ApplicationRecord
   OPTIONAL_FIELDS = %w[first_time_property_let_as_social_housing tenancycode propcode].freeze
   RENT_TYPE_MAPPING_LABELS = { 1 => "Social Rent", 2 => "Affordable Rent", 3 => "Intermediate Rent" }.freeze
   HAS_BENEFITS_OPTIONS = [1, 6, 8, 7].freeze
-  STATUS = { "not_started" => 0, "in_progress" => 1, "completed" => 2 }.freeze
   NUM_OF_WEEKS_FROM_PERIOD = { 2 => 26, 3 => 13, 4 => 12, 5 => 50, 6 => 49, 7 => 48, 8 => 47, 9 => 46, 1 => 52 }.freeze
   SUFFIX_FROM_PERIOD = { 2 => "every 2 weeks", 3 => "every 4 weeks", 4 => "every month" }.freeze
   RETIREMENT_AGES = { "M" => 67, "F" => 60, "X" => 67 }.freeze
-  enum status: STATUS
 
   def form
-    FormHandler.instance.get_form(form_name) || FormHandler.instance.forms.first.second
-  end
-
-  def collection_start_year
-    return @start_year if @start_year
-    return unless startdate
-
-    window_end_date = Time.zone.local(startdate.year, 4, 1)
-    @start_year = startdate < window_end_date ? startdate.year - 1 : startdate.year
+    FormHandler.instance.get_form(form_name) || FormHandler.instance.current_lettings_form
   end
 
   def recalculate_start_year!
@@ -99,7 +69,7 @@ class LettingsLog < ApplicationRecord
   def form_name
     return unless startdate
 
-    "#{collection_start_year}_#{collection_start_year + 1}"
+    FormHandler.instance.form_name_from_start_year(collection_start_year, "lettings")
   end
 
   def self.editable_fields
@@ -530,43 +500,17 @@ class LettingsLog < ApplicationRecord
     location.type_of_unit_before_type_cast if location
   end
 
+  def lettings?
+    true
+  end
+
+  def rent_type_detail
+    form.get_question("rent_type", self)&.label_from_value(rent_type)
+  end
+
 private
 
   PIO = PostcodeService.new
-
-  def update_status!
-    self.status = if all_fields_completed? && errors.empty?
-                    "completed"
-                  elsif all_fields_nil?
-                    "not_started"
-                  else
-                    "in_progress"
-                  end
-  end
-
-  def reset_not_routed_questions
-    enabled_questions = form.enabled_page_questions(self)
-    enabled_question_ids = enabled_questions.map(&:id)
-
-    form.invalidated_page_questions(self).each do |question|
-      if %w[radio checkbox].include?(question.type)
-        enabled_answer_options = enabled_question_ids.include?(question.id) ? enabled_questions.find { |q| q.id == question.id }.answer_options : {}
-        current_answer_option_valid = enabled_answer_options.present? ? enabled_answer_options.key?(public_send(question.id).to_s) : false
-        if !current_answer_option_valid && respond_to?(question.id.to_s)
-          Rails.logger.debug("Cleared #{question.id} value")
-          public_send("#{question.id}=", nil)
-        else
-          (question.answer_options.keys - enabled_answer_options.keys).map do |invalid_answer_option|
-            Rails.logger.debug("Cleared #{invalid_answer_option} value")
-            public_send("#{invalid_answer_option}=", nil) if respond_to?(invalid_answer_option)
-          end
-        end
-      else
-        Rails.logger.debug("Cleared #{question.id} value")
-        public_send("#{question.id}=", nil) unless enabled_question_ids.include?(question.id)
-      end
-    end
-  end
 
   def reset_derived_questions
     dependent_questions = { waityear: [{ key: :renewal, value: 0 }],
@@ -585,12 +529,6 @@ private
     end
   end
 
-  def reset_created_by
-    return unless created_by && owning_organisation
-
-    self.created_by = nil if created_by.organisation != owning_organisation
-  end
-
   def reset_scheme
     return unless scheme && owning_organisation
 
@@ -598,11 +536,10 @@ private
   end
 
   def reset_invalidated_dependent_fields!
-    return unless form
+    super
 
     reset_created_by
     reset_scheme
-    reset_not_routed_questions
     reset_derived_questions
   end
 
@@ -693,17 +630,6 @@ private
         owning_organisation[:provider_type] == "PRP" ? 9 : 11
       end
     end
-  end
-
-  def all_fields_completed?
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
-    subsection_statuses == [:completed]
-  end
-
-  def all_fields_nil?
-    not_started_statuses = %i[not_started cannot_start_yet]
-    subsection_statuses = form.subsections.map { |subsection| subsection.status(self) }.uniq
-    subsection_statuses.all? { |status| not_started_statuses.include?(status) }
   end
 
   def age_refused?

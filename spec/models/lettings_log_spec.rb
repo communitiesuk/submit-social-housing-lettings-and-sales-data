@@ -4,6 +4,21 @@ RSpec.describe LettingsLog do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:different_managing_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
+
+  it "inherits from log" do
+    expect(described_class).to be < Log
+    expect(described_class).to be < ApplicationRecord
+  end
+
+  it "is a lettings log" do
+    lettings_log = FactoryBot.build(:lettings_log, created_by: created_by_user)
+    expect(lettings_log).to be_lettings
+  end
 
   describe "#form" do
     let(:lettings_log) { FactoryBot.build(:lettings_log, created_by: created_by_user) }
@@ -13,9 +28,9 @@ RSpec.describe LettingsLog do
     it "has returns the correct form based on the start date" do
       expect(lettings_log.form_name).to be_nil
       expect(lettings_log.form).to be_a(Form)
-      expect(lettings_log_2.form_name).to eq("2021_2022")
+      expect(lettings_log_2.form_name).to eq("previous_lettings")
       expect(lettings_log_2.form).to be_a(Form)
-      expect(lettings_log_year_2.form_name).to eq("2023_2024")
+      expect(lettings_log_year_2.form_name).to eq("next_lettings")
       expect(lettings_log_year_2.form).to be_a(Form)
     end
 
@@ -1416,6 +1431,12 @@ RSpec.describe LettingsLog do
         expect(record_from_db["referral"]).to eq(0)
         expect(lettings_log["referral"]).to eq(0)
       end
+
+      it "correctly derives and saves vacdays" do
+        record_from_db = ActiveRecord::Base.connection.execute("select vacdays from lettings_logs where id=#{lettings_log.id}").to_a[0]
+        expect(record_from_db["vacdays"]).to eq(0)
+        expect(lettings_log["vacdays"]).to eq(0)
+      end
     end
 
     context "when answering the household characteristics questions" do
@@ -1637,7 +1658,7 @@ RSpec.describe LettingsLog do
     end
 
     context "when a lettings log is a supported housing log" do
-      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+      let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
 
       before do
         lettings_log.needstype = 2
@@ -2357,7 +2378,7 @@ RSpec.describe LettingsLog do
 
     before do
       Timecop.freeze(Time.utc(2022, 6, 5))
-      lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user)
+      lettings_log = FactoryBot.create(:lettings_log, needstype: 2, scheme:, location:, owning_organisation: scheme.owning_organisation, created_by: user, rent_type: 2, startdate: Time.zone.local(2021, 10, 2))
       expected_content.sub!(/\{id\}/, lettings_log["id"].to_s)
       expected_content.sub!(/\{scheme_code\}/, "S#{scheme['id']}")
       expected_content.sub!(/\{scheme_service_name\}/, scheme["service_name"].to_s)

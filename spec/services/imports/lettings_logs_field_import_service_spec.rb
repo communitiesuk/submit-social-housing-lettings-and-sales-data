@@ -6,7 +6,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
   let(:storage_service) { instance_double(Storage::S3Service) }
   let(:logger) { instance_double(ActiveSupport::Logger) }
 
-  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json", "2021_2022") }
+  let(:real_2021_2022_form) { Form.new("config/forms/2021_2022.json") }
   let(:fixture_directory) { "spec/fixtures/imports/logs" }
 
   let(:lettings_log_id) { "0ead17cb-1668-442d-898c-0d52879ff592" }
@@ -27,7 +27,7 @@ RSpec.describe Imports::LettingsLogsFieldImportService do
     FactoryBot.create(:user, old_user_id:, organisation:)
 
     # Stub the form handler to use the real form
-    allow(FormHandler.instance).to receive(:get_form).with("2021_2022").and_return(real_2021_2022_form)
+    allow(FormHandler.instance).to receive(:get_form).with("previous_lettings").and_return(real_2021_2022_form)
 
     WebMock.stub_request(:get, /api.postcodes.io\/postcodes\/LS166FT/)
            .to_return(status: 200, body: '{"status":200,"result":{"codes":{"admin_district":"E08000035"}}}', headers: {})

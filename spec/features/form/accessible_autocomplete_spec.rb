@@ -24,7 +24,7 @@ RSpec.describe "Accessible Automcomplete" do
 
   context "when using accessible autocomplete" do
     before do
-      visit("/logs/#{lettings_log.id}/accessible-select")
+      visit("/lettings-logs/#{lettings_log.id}/accessible-select")
     end
 
     it "allows type ahead filtering", js: true do
@@ -66,7 +66,7 @@ RSpec.describe "Accessible Automcomplete" do
       FactoryBot.create(:location, scheme:, postcode: "W6 0ST")
       FactoryBot.create(:location, scheme:, postcode: "SE6 1LB")
       lettings_log.update!(needstype: 2)
-      visit("/logs/#{lettings_log.id}/scheme")
+      visit("/lettings-logs/#{lettings_log.id}/scheme")
     end
 
     it "can match on synonyms", js: true do
@@ -88,7 +88,7 @@ RSpec.describe "Accessible Automcomplete" do
 
   it "has the correct option selected if one has been saved" do
     lettings_log.update!(postcode_known: 0, previous_la_known: 1, prevloc: "E07000178")
-    visit("/logs/#{lettings_log.id}/accessible-select")
+    visit("/lettings-logs/#{lettings_log.id}/accessible-select")
     expect(page).to have_select("lettings-log-prevloc-field", selected: %w[Oxford])
   end
 end

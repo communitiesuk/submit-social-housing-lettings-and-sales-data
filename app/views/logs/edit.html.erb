@@ -1,0 +1,37 @@
+<% content_for :title, "Log #{@log.id}" %>
+<% content_for :breadcrumbs, govuk_breadcrumbs(breadcrumbs: {
+  "Logs" => @log.lettings? ? lettings_logs_path : sales_logs_path,
+  content_for(:title) => "",
+}) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-xl">
+      <%= content_for(:title) %>
+    </h1>
+
+    <% if @log.status == "in_progress" %>
+      <p class="govuk-body govuk-!-margin-bottom-7"><%= get_subsections_count(@log, :completed) %> of <%= get_subsections_count(@log, :all) %> sections completed.</p>
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        <% next_incomplete_section = get_next_incomplete_section(@log) %>
+      </p>
+      <p>
+        <% if next_incomplete_section.present? %>
+          <a class="app-section-skip-link" href="#<%= next_incomplete_section.id.dasherize %>">
+            Skip to next incomplete section: <%= next_incomplete_section.label %>
+          </a>
+        <% end %>
+      </p>
+    <% elsif @log.status == "not_started" %>
+      <p class="govuk-body">This log has not been started.</p>
+    <% elsif @log.status == "completed" %>
+      <p class="govuk-body">
+        <%= status_tag(@log.status) %>
+      </p>
+      <p class="govuk-body">
+        You can <%= govuk_link_to "review and make changes to this log", "/lettings-logs/#{@log.id}/review" %> until 2nd June <%= @log.collection_start_year.present? ? @log.collection_start_year + 1 : "" %>.
+      </p>
+    <% end %>
+    <%= render "tasklist" %>
+  </div>
+</div>

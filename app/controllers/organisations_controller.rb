@@ -1,11 +1,13 @@
 class OrganisationsController < ApplicationController
   include Pagy::Backend
-  include Modules::LettingsLogsFilter
+  include Modules::LogsFilter
   include Modules::SearchFilter
 
   before_action :authenticate_user!
   before_action :find_resource, except: %i[index new create]
   before_action :authenticate_scope!, except: [:index]
+  before_action -> { session_filters(specific_org: true) }, if: -> { current_user.support? }
+  before_action :set_session_filters, if: -> { current_user.support? }
 
   def index
     redirect_to organisation_path(current_user.organisation) unless current_user.support?
@@ -87,27 +89,49 @@ class OrganisationsController < ApplicationController
     end
   end
 
-  def logs
-    if current_user.support?
-      set_session_filters(specific_org: true)
+  def lettings_logs
+    organisation_logs = LettingsLog.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
 
-      organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
-      unpaginated_filtered_logs = filtered_lettings_logs(filtered_collection(organisation_logs, search_term))
-
-      respond_to do |format|
-        format.html do
-          @pagy, @lettings_logs = pagy(unpaginated_filtered_logs)
-          @searched = search_term.presence
-          @total_count = organisation_logs.size
-          render "logs", layout: "application"
-        end
-
-        format.csv do
-          send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "logs-#{@organisation.name}-#{Time.zone.now}.csv"
-        end
+    respond_to do |format|
+      format.html do
+        @search_term = search_term
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = organisation_logs.size
+        render "logs", layout: "application"
       end
-    else
-      redirect_to(lettings_logs_path)
+    end
+  end
+
+  def download_csv
+    organisation_logs = LettingsLog.all.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
+
+    render "logs/download_csv", locals: { search_term:, count: unpaginated_filtered_logs.size, post_path: logs_email_csv_organisation_path }
+  end
+
+  def email_csv
+    EmailCsvJob.perform_later(current_user, search_term, @session_filters, false, @organisation)
+    redirect_to logs_csv_confirmation_organisation_path
+  end
+
+  def sales_logs
+    organisation_logs = SalesLog.where(owning_organisation_id: @organisation.id)
+    unpaginated_filtered_logs = filtered_logs(organisation_logs, search_term, @session_filters)
+
+    respond_to do |format|
+      format.html do
+        @search_term = search_term
+        @pagy, @logs = pagy(unpaginated_filtered_logs)
+        @searched = search_term.presence
+        @total_count = organisation_logs.size
+        render "logs", layout: "application"
+      end
+
+      format.csv do
+        send_data byte_order_mark + unpaginated_filtered_logs.to_csv, filename: "sales-logs-#{@organisation.name}-#{Time.zone.now}.csv"
+      end
     end
   end
 
@@ -122,7 +146,7 @@ private
   end
 
   def authenticate_scope!
-    if %w[create new].include? action_name
+    if %w[create new lettings_logs download_csv email_csv].include? action_name
       head :unauthorized and return unless current_user.support?
     elsif current_user.organisation != @organisation && !current_user.support?
       render_not_found
