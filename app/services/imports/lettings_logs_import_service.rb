@@ -42,9 +42,8 @@ module Imports
         Rack::MiniProfiler.step("Start Processing file #{filename}") do
           # Generate background job to process file completely          
           xml_document = Nokogiri::XML(File.open(filename))
-          
 
-          LettingsLogImportJob.perform_now(@run_id, xml_document.to_s)
+          LettingsLogImportJob.perform_later(@run_id, xml_document.to_s)
           #send(:create_log, xml_document)
         end
       rescue StandardError => e
