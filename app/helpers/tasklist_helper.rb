@@ -20,7 +20,7 @@ module TasklistHelper
     if log.id
       send(path, log)
     else
-      "/#{log.lettings? ? 'lettings' : 'sales'}-logs/new/#{next_question_page(subsection, log, current_user)}"
+      "/#{log.class.name.underscore.dasherize}/new/#{next_question_page(subsection, log, current_user)}"
     end
   end
 

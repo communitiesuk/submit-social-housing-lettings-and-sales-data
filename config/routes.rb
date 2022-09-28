@@ -31,8 +31,8 @@ Rails.application.routes.draw do
 
   FormHandler.instance.forms.each do |_key, form|
     form.pages.map do |page|
-      get "/lettings-logs/new/#{page.id.to_s.dasherize}", to: "form#show_page"
-      get "/sales-logs/new/#{page.id.to_s.dasherize}", to: "form#show_page"
+      get "/lettings-log/new/#{page.id.to_s.dasherize}", to: "form#show_page"
+      get "/sales-log/new/#{page.id.to_s.dasherize}", to: "form#show_page"
     end
   end
 

@@ -13,7 +13,7 @@ class FormController < ApplicationController
         session[:errors] = session[:fields] = nil
         redirect_to(successful_redirect_path)
       else
-        redirect_path = @log.not_started? ? "#{@log.model_name.param_key}s_new_#{@page.id}_path" : "#{@log.model_name.param_key}_#{@page.id}_path"
+        redirect_path = @log.not_started? ? "#{@log.model_name.param_key}_new_#{@page.id}_path" : "#{@log.model_name.param_key}_#{@page.id}_path"
         mandatory_questions_with_no_response.map do |question|
           @log.errors.add question.id.to_sym, question.unanswered_error_message
         end

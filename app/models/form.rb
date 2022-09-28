@@ -76,7 +76,7 @@ class Form
     if nxt_page == :check_answers
       "#{type}_log_#{subsection_for_page(page).id}_check_answers_path"
     else
-      log.id ? "#{type}_log_#{nxt_page}_path" : "#{type}_logs_new_#{nxt_page}_path"
+      log.id ? "#{type}_log_#{nxt_page}_path" : "#{type}_log_new_#{nxt_page}_path"
     end
   end
 
