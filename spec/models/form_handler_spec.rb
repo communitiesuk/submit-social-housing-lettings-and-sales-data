@@ -91,7 +91,7 @@ RSpec.describe FormHandler do
         Timecop.unfreeze
       end
 
-      it "returns the same year as the the current start year" do
+      it "returns the same year as the current start year" do
         expect(form_handler.current_collection_start_year).to eq(2022)
       end
 

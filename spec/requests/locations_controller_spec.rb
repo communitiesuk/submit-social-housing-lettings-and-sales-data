@@ -4,6 +4,11 @@ RSpec.describe LocationsController, type: :request do
   let(:page) { Capybara::Node::Simple.new(response.body) }
   let(:user) { FactoryBot.create(:user, :support) }
   let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+  let(:fake_2021_2022_form) { Form.new("spec/fixtures/forms/2021_2022.json") }
+
+  before do
+    allow(FormHandler.instance).to receive(:current_lettings_form).and_return(fake_2021_2022_form)
+  end
 
   describe "#new" do
     context "when not signed in" do
@@ -264,6 +269,29 @@ RSpec.describe LocationsController, type: :request do
           expect(page).to have_content("Check your answers before creating this scheme")
         end
       end
+
+      context "when postcodes.io doesn't return a la_code" do
+        let!(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            mobility_type: "N",
+            add_another_location: "No",
+            postcode: "AA1 4AA",
+            "startdate(3i)" => "",
+            "startdate(2i)" => "",
+            "startdate(1i)" => "",
+          } }
+        end
+
+        it "redirects to la_fallback" do
+          post "/schemes/#{scheme.id}/locations", params: params
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the local authority of AA1 4AA?")
+        end
+      end
     end
 
     context "when signed in as a support user" do
@@ -412,6 +440,29 @@ RSpec.describe LocationsController, type: :request do
           follow_redirect!
           expect(response).to have_http_status(:ok)
           expect(page).to have_content("Check your answers before creating this scheme")
+        end
+      end
+
+      context "when postcodes.io doesn't return a la_code" do
+        let!(:params) do
+          { location: {
+            name: "Test",
+            units: "5",
+            type_of_unit: "Bungalow",
+            mobility_type: "N",
+            add_another_location: "No",
+            postcode: "AA1 4AA",
+            "startdate(3i)" => "",
+            "startdate(2i)" => "",
+            "startdate(1i)" => "",
+          } }
+        end
+
+        it "redirects to la_fallback" do
+          post "/schemes/#{scheme.id}/locations", params: params
+          follow_redirect!
+          expect(response).to have_http_status(:ok)
+          expect(page).to have_content("What is the local authority of AA1 4AA?")
         end
       end
     end
@@ -1076,6 +1127,80 @@ RSpec.describe LocationsController, type: :request do
       it "returns a template for a new location" do
         expect(response).to have_http_status(:ok)
         expect(page).to have_content("Location name for #{location.postcode}")
+      end
+
+      context "when the requested location does not exist" do
+        let(:location) { OpenStruct.new(id: (Location.maximum(:id) || 0) + 1) }
+
+        it "returns not found" do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+  end
+
+  describe "#edit-local-authority" do
+    context "when not signed in" do
+      it "redirects to the sign in page" do
+        get "/schemes/1/locations/1/edit-local-authority"
+        expect(response).to redirect_to("/account/sign-in")
+      end
+    end
+
+    context "when signed in as a data provider" do
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        sign_in user
+        get "/schemes/1/locations/1/edit-local-authority"
+      end
+
+      it "returns 401 unauthorized" do
+        request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "when signed in as a data coordinator" do
+      let(:user) { FactoryBot.create(:user, :data_coordinator) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-local-authority"
+      end
+
+      it "returns a template for an edit-local-authority" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the local authority of #{location.postcode}?")
+      end
+
+      context "when trying to edit location name of location that belongs to another organisation" do
+        let(:another_scheme)  { FactoryBot.create(:scheme) }
+        let(:another_location)  { FactoryBot.create(:location, scheme: another_scheme) }
+
+        it "displays the new page with an error message" do
+          get "/schemes/#{another_scheme.id}/locations/#{another_location.id}/edit-local-authority"
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context "when signed in as a support user" do
+      let(:user) { FactoryBot.create(:user, :support) }
+      let!(:scheme) { FactoryBot.create(:scheme, owning_organisation: user.organisation) }
+      let!(:location) { FactoryBot.create(:location, scheme:) }
+
+      before do
+        allow(user).to receive(:need_two_factor_authentication?).and_return(false)
+        sign_in user
+        get "/schemes/#{scheme.id}/locations/#{location.id}/edit-local-authority"
+      end
+
+      it "returns a template for a new location" do
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("What is the local authority of #{location.postcode}?")
       end
 
       context "when the requested location does not exist" do
