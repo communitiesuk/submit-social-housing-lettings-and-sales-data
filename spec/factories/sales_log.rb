@@ -24,6 +24,7 @@ FactoryBot.define do
       sex1 { "X" }
       buy1livein { 1 }
       la { "Adur" }
+      proptype { 1 }
     end
   end
 end

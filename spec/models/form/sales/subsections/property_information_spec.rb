@@ -13,7 +13,7 @@ RSpec.describe Form::Sales::Subsections::PropertyInformation, type: :model do
 
   it "has correct pages" do
     expect(property_information.pages.map(&:id)).to eq(
-      %w[property_number_of_bedrooms],
+      %w[property_number_of_bedrooms property_unit_type],
     )
   end
 
