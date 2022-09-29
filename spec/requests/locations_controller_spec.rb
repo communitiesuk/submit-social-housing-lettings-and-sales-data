@@ -271,7 +271,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcodes.io doesn't return a la_code" do
-        let!(:params) do
+        let(:params) do
           { location: {
             name: "Test",
             units: "5",
@@ -444,7 +444,7 @@ RSpec.describe LocationsController, type: :request do
       end
 
       context "when postcodes.io doesn't return a la_code" do
-        let!(:params) do
+        let(:params) do
           { location: {
             name: "Test",
             units: "5",
