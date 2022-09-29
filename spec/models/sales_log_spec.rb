@@ -1,8 +1,11 @@
 require "rails_helper"
+require "shared/shared_examples_for_derived_fields"
 
 RSpec.describe SalesLog, type: :model do
   let(:owning_organisation) { FactoryBot.create(:organisation) }
   let(:created_by_user) { FactoryBot.create(:user) }
+
+  include_examples "shared examples for derived fields", :sales_log
 
   it "inherits from log" do
     expect(described_class).to be < Log
