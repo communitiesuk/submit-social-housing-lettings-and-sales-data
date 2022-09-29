@@ -24,6 +24,8 @@ FactoryBot.define do
       sex1 { "X" }
       buy1livein { 1 }
       proptype { 1 }
+      age2_known { 0 }
+      age2 { 35 }
     end
   end
 end
