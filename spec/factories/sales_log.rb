@@ -21,6 +21,8 @@ FactoryBot.define do
       jointmore { 1 }
       age1_known { 0 }
       age1 { 30 }
+      ethnic { 3 }
+      ethnic_group { 12 }
     end
   end
 end
