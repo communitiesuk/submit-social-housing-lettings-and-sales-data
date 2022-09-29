@@ -12,6 +12,7 @@ class Form::Sales::Subsections::HouseholdCharacteristics < ::Form::Subsection
       Form::Sales::Pages::Age1.new(nil, nil, self),
       Form::Sales::Pages::GenderIdentity1.new(nil, nil, self),
       Form::Sales::Pages::Buyer1LiveInProperty.new(nil, nil, self),
+      Form::Sales::Pages::Buyer2RelationshipToBuyer1.new(nil, nil, self),
     ]
   end
 end
