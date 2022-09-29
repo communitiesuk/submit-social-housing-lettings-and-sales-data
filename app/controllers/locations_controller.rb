@@ -22,7 +22,9 @@ class LocationsController < ApplicationController
     if date_params_missing?(location_params) || valid_date_params?(location_params)
       @location = Location.new(location_params)
       if @location.save
-        if location_params[:add_another_location] == "Yes"
+        if @location.location_admin_district.nil?
+          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+        elsif location_params[:add_another_location] == "Yes"
           redirect_to new_location_path(@scheme)
         else
           check_answers_path = @scheme.confirmed? ? scheme_check_answers_path(@scheme, anchor: "locations") : scheme_check_answers_path(@scheme)
@@ -47,16 +49,36 @@ class LocationsController < ApplicationController
     render_not_found and return unless @location && @scheme
   end
 
+  def edit_local_authority
+    render_not_found and return unless @location && @scheme
+  end
+
   def update
     render_not_found and return unless @location && @scheme
 
     page = params[:location][:page]
-    if @location.update(location_params)
+    if page == "edit-local-authority" && !valid_location_admin_district?(location_params)
+      error_message = I18n.t("validations.location_admin_district")
+      @location.errors.add :location_admin_district, error_message
+      render :edit_local_authority, status: :unprocessable_entity
+    elsif @location.update(location_params)
       case page
       when "edit"
-        location_params[:add_another_location] == "Yes" ? redirect_to(new_location_path(@location.scheme)) : redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        if @location.location_admin_district.nil?
+          redirect_to(location_edit_local_authority_path(id: @scheme.id, location_id: @location.id, add_another_location: location_params[:add_another_location]))
+        elsif location_params[:add_another_location] == "Yes"
+          redirect_to(new_location_path(@location.scheme))
+        else
+          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        end
       when "edit-name"
         redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+      when "edit-local-authority"
+        if params[:add_another_location] == "Yes"
+          redirect_to(new_location_path(@location.scheme))
+        else
+          redirect_to(scheme_check_answers_path(@scheme, anchor: "locations"))
+        end
       end
     else
       render :edit, status: :unprocessable_entity
@@ -95,18 +117,22 @@ private
   end
 
   def authenticate_action!
-    if %w[new edit update create index edit_name].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
+    if %w[new edit update create index edit_name edit_local_authority].include?(action_name) && !((current_user.organisation == @scheme&.owning_organisation) || current_user.support?)
       render_not_found and return
     end
   end
 
   def location_params
-    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type).merge(scheme_id: @scheme.id)
+    required_params = params.require(:location).permit(:postcode, :name, :units, :type_of_unit, :add_another_location, :startdate, :mobility_type, :location_admin_district).merge(scheme_id: @scheme.id)
     required_params[:postcode] = PostcodeService.clean(required_params[:postcode]) if required_params[:postcode]
     required_params
   end
 
   def search_term
     params["search"]
+  end
+
+  def valid_location_admin_district?(location_params)
+    location_params["location_admin_district"] != "Select an option"
   end
 end
