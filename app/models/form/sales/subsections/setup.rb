@@ -19,6 +19,7 @@ class Form::Sales::Subsections::Setup < ::Form::Subsection
       Form::Sales::Pages::BuyerLive.new(nil, nil, self),
       Form::Sales::Pages::JointPurchase.new(nil, nil, self),
       Form::Sales::Pages::NumberJointBuyers.new(nil, nil, self),
+      Form::Sales::Pages::LocalAuthority.new(nil, nil, self),
     ]
   end
 end
