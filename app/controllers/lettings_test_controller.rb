@@ -6,7 +6,7 @@ class LettingsTestController < ApplicationController
   def index
     folder = '/Users/mohseeadmin/development-meta/CORE/CLDC-1222'
     stash_folder = Time.now.to_i.to_s
-    generate_fixtures(folder, stash_folder, 500)
+    generate_fixtures(folder, stash_folder, 1000)
     
     LettingsLog.connection.truncate(LettingsLog.table_name)
     Imports::LettingsLogsImportService.new(Storage::S3Service).local_load("#{folder}/#{stash_folder}")
